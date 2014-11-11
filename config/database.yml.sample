@@ -1,0 +1,11 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: bakecycle_development
+  pool: 5
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: bakecycle_test
+  pool: 5
