@@ -1,0 +1,51 @@
+<%= form_for @ingredient do |f| %>
+  <% if @ingredient.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ingredient.errors.count, "error") %> prohibited
+        this ingredient from being saved:</h2>
+      <ul>
+      <% @ingredient.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-4 columns">
+      <%= f.label :price %>
+      <%= f.text_field :price %>
+    </div>
+    <div class="small-4 columns">
+      <%= f.label :measure %>
+      <%= f.text_field :measure %>
+    </div>
+    <div class="small-4 columns">
+      <%= f.label :unit %>
+      <%= f.select(:unit, Ingredient.units.keys.to_a, :prompt => 'Select One') %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :description%><br>
+      <%= f.text_area :description%>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@ingredient.new_record? ? "Create" : "Update"), class: "button" %>
+      <% unless @ingredient.new_record? %>
+        <%= link_to 'Delete', ingredient_path(@ingredient), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

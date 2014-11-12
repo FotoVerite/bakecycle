@@ -1,5 +1,13 @@
 == README
 
+* Heroku Remote
+
+Add heroku remote
+* heroku git: remote -a APP_NAME -r REMOTE_NAME*
+
+heroku git:remote -a bakecycle-staging -r staging
+heroku git:remote -a bakecycle-production -r production
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
