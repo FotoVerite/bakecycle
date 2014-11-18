@@ -11,7 +11,6 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'bower-rails'
 gem 'foundation-rails'
-gem 'spring',        group: :development
 
 group :test, :development do
   gem 'rspec-rails'
@@ -21,6 +20,14 @@ group :test, :development do
   gem 'selenium-webdriver'
   gem 'guard'
   gem 'guard-livereload'
+  gem 'faker'
+  gem 'pry'
+  gem 'shoulda-matchers', require: false
+  gem 'cucumber-rails', require: false
+end
+
+group :development do
+  gem 'spring'
 end
 
 group :doc do

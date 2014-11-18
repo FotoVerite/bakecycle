@@ -23,5 +23,10 @@ module Bakecycle
     config.assets.paths << Rails.root.join("vendor","assets","bower_components")
     config.assets.precompile += %w( vendor/modernizr.js )
     config.assets.precompile << %r(.*.(?:eot|svg|ttf|woff)$)
+
+    config.generators do |g|
+      g.factory_girl true
+      g.test_framework :rspec
+    end
   end
 end
