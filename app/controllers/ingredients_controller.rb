@@ -11,7 +11,8 @@ class IngredientsController < ApplicationController
     @ingredient = Ingredient.new(ingredient_params)
 
     if @ingredient.save
-      redirect_to ingredients_path
+      flash[:notice] = "You have created #{@ingredient.name}."
+      redirect_to edit_ingredient_path(@ingredient)
     else
       render 'new'
     end
@@ -23,9 +24,9 @@ class IngredientsController < ApplicationController
 
   def update
     @ingredient = Ingredient.find(params[:id])
-
     if @ingredient.update(ingredient_params)
-      redirect_to ingredients_path
+      flash[:notice] = "You have updated #{@ingredient.name}."
+      redirect_to edit_ingredient_path(@ingredient)
     else
       render 'edit'
     end
@@ -39,6 +40,6 @@ class IngredientsController < ApplicationController
   private
 
   def ingredient_params
-    params.require(:ingredient).permit(:name, :price, :measure, :unit, :description)
+    params.require(:ingredient).permit(:name, :price, :measure, :unit, :ingredient_type, :description)
   end
 end

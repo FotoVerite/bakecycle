@@ -6,6 +6,7 @@ FactoryGirl.define do
     price { Faker::Number.decimal(l_digits = 3) }
     measure { Faker::Number.decimal(l_digits = 0, r_digits = 3) }
     unit [:oz, :lb, :g, :kg].sample
+    ingredient_type [:flour, :ingredient].sample
     description {Faker::Lorem.sentence(1)}
   end
 end

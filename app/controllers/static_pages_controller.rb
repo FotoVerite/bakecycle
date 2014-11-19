@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController
   def index
-    @ingredients_size = Ingredient.all.size
+    @ingredients_size = Ingredient.count
+    @recipes_size = Recipe.count
   end
 end
