@@ -1,0 +1,75 @@
+<%= form_for @recipe do |f| %>
+  <% if @recipe.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@recipe.errors.count, "error") %> prohibited
+        this recipe from being saved:</h2>
+      <ul>
+      <% @recipe.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :note %>
+      <%= f.text_field :note %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-6 columns">
+      <%= f.label :mix_size %>
+      <%= f.text_field :mix_size %>
+    </div>
+    <div class="small-6 columns">
+      <%= f.label :mix_size_unit %>
+      <%= f.select(:mix_size_unit, Recipe.mix_size_units.keys.to_a, prompt: 'Select One') %>
+    </div>
+  </div>
+
+   <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :recipe_type %>
+      <%= f.select(:recipe_type, Recipe.recipe_types.keys.to_a, prompt: 'Select One') %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :lead_days %>
+      <%= f.text_field :lead_days %>
+    </div>
+  </div>
+
+  <div ng-controller="RecipeItemCtrl">
+    <%= f.fields_for :recipe_items do |builder| %>
+      <%= render "recipe_item_fields", f: builder %>
+    <% end %>
+    <div ng-repeat="recipeItem in recipeItems">
+      <%= f.fields_for :recipe_items, RecipeItem.new do |builder| %>
+         <%= render "new_recipe_item_fields", f: builder %>
+      <% end %>
+    </div>
+    <%= link_to 'Add Ingredient', '', :'ng-click' => "add()"%>
+
+
+  </div>
+
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@recipe.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @recipe.new_record? %>
+        <%= link_to 'Delete', recipe_path(@recipe), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -8,6 +8,7 @@ describe Ingredient do
     it { expect(ingredient).to respond_to(:price) }
     it { expect(ingredient).to respond_to(:measure) }
     it { expect(ingredient).to respond_to(:unit) }
+    it { expect(ingredient).to respond_to(:ingredient_type)}
     it { expect(ingredient).to respond_to(:description) }
   end
 
@@ -30,14 +31,6 @@ describe Ingredient do
         expect(build(:ingredient, name: "this is our test", price: "not a number")).to_not be_valid
       end
 
-      it "has a length no higher than 9" do
-        expect(build(:ingredient, price: 123456.89)).to be_valid
-      end
-
-      it "has a length higher than 9" do
-        expect(build(:ingredient, price: 12345678.90)).to_not be_valid
-      end
-
       it "has more than 2 decimals" do
         expect(build(:ingredient, price: 0.123)).to_not be_valid
       end
@@ -58,25 +51,32 @@ describe Ingredient do
         expect(build(:ingredient, name: "this is our test", measure: "not a number")).to_not be_valid
       end
 
-      it "has a length no higher than 9" do
-        expect(build(:ingredient, measure: 123456.76)).to be_valid
-      end
-
-      it "has a length higher than 9" do
-        expect(build(:ingredient, measure: 12345678.90)).to_not be_valid
-      end
-
       it "has more than 3 decimals" do
         expect(build(:ingredient, measure: 0.1234)).to_not be_valid
       end
 
       it "has less than 3 decimals" do
         expect(build(:ingredient, measure: 0.12)).to be_valid
+        expect(build(:ingredient, measure: 0.1)).to be_valid
+        expect(build(:ingredient, measure: 1)).to be_valid
+
       end
+    end
+
+    describe "ingredient_type" do
+      it { expect(ingredient).to validate_presence_of(:ingredient_type) }
+      it { expect(build(:ingredient, ingredient_type: nil)).to_not be_valid }
+      it { expect(build(:ingredient, ingredient_type: 0)).to be_valid }
     end
 
     describe "description" do
       it { expect(ingredient).to ensure_length_of(:description).is_at_most(500) }
+    end
+
+    describe "unit" do
+      it { expect(ingredient).to validate_presence_of(:unit) }
+      it { expect(build(:ingredient, unit: nil)).to_not be_valid }
+      it { expect(build(:ingredient, unit: 0)).to be_valid }
     end
   end
 end
