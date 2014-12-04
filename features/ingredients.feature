@@ -1,5 +1,5 @@
 Feature: Ingredients Index
-  @javascript
+
 	Scenario: As a visitor, I should be able to view ingredients index
 		Given I am a visitor
 		And There are ingredients named "celery","carrot" and "almond"
@@ -8,7 +8,6 @@ Feature: Ingredients Index
 		When I click on "celery"
 		Then I should be redirected to an ingredient page
 
-  @javascript
 	Scenario: As a visitor, I should be able to add an ingredient
 		Given I am a visitor
 		When I go to the ingredients page
