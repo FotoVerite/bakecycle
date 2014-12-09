@@ -43,7 +43,9 @@ class RecipesController < ApplicationController
   private
 
   def recipe_params
-    params.require(:recipe).permit(:name, :note, :mix_size, :mix_size_unit, :recipe_type, :lead_days,
-      recipe_items_attributes: [:id, :inclusionable_id_type, :bakers_percentage, :_destroy])
+    params.require(:recipe).permit(
+      :name, :note, :mix_size, :mix_size_unit, :recipe_type, :lead_days,
+      recipe_items_attributes: [:id, :inclusionable_id_type, :bakers_percentage, :_destroy]
+    )
   end
 end

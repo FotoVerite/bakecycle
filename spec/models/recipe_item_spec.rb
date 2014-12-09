@@ -14,7 +14,7 @@ describe RecipeItem do
       it { expect(recipe_item_recipe).to respond_to(:inclusionable_id) }
       it { expect(recipe_item_recipe).to respond_to(:inclusionable_type) }
       it { expect(recipe_item_recipe).to respond_to(:bakers_percentage) }
-      it { expect(recipe_item_recipe).to belong_to(:recipe)}
+      it { expect(recipe_item_recipe).to belong_to(:recipe) }
 
     end
 

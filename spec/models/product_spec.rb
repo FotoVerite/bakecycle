@@ -30,7 +30,7 @@ describe Product do
     end
 
     describe "weight" do
-      it { expect(product).to validate_numericality_of(:weight)}
+      it { expect(product).to validate_numericality_of(:weight) }
 
       it "is a number with 3 decimals" do
         expect(build(:product, weight: 12.011)).to be_valid
@@ -58,7 +58,7 @@ describe Product do
     end
 
     describe "extra_amount" do
-      it { expect(product).to validate_numericality_of(:extra_amount)}
+      it { expect(product).to validate_numericality_of(:extra_amount) }
 
       it "is a number with 3 decimals" do
         expect(build(:product, extra_amount: 12.011)).to be_valid

@@ -1,5 +1,4 @@
 class Product < ActiveRecord::Base
-
   PRODUCT_TYPE_OPTIONS = [:bread, :vienoisserie, :cookie, :tart, :quiche, :sandwich, :pot_pie, :dry_goods, :other]
   UNIT_OPTIONS = [:oz, :lb, :g, :kg]
 

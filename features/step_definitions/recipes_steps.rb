@@ -46,21 +46,23 @@ Then(/^I should see that the recipe name is "(.*?)"$/) do |arg1|
 end
 
 When(/^I fill out recipe item with:$/) do |table|
-  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]["inclusionable_id_type" ]}']").click
+  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['inclusionable_id_type']}']").click
   all("input[type=text]").last.set(table.hashes[0]["percentage"])
 end
 
 When(/^I fill out a second recipe item with:$/) do |table|
-  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]["inclusionable_id_type" ]}']").click
+  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['inclusionable_id_type']}']").click
   all("input[type=text]").last.set(table.hashes[0]["percentage"])
 end
 
 When(/^I delete "(.*?)" ingredient$/) do |name|
-  find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..").find('a', text:"Remove").click
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..")
+  form.find('a', text: "Remove").click
 end
 
 When(/^I edit "(.*?)" baker's percentage$/) do |name|
-  find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..").find_field("Baker\'s %").set("10.5")
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..")
+  form.find_field("Baker\'s %").set("10.5")
 end
 
 Then(/^the recipe item "(.*?)" should be present$/) do |name|

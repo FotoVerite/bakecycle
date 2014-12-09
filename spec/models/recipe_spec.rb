@@ -21,7 +21,7 @@ describe Recipe do
     end
 
     describe "mix_size" do
-      it { expect(recipe).to validate_numericality_of(:mix_size)}
+      it { expect(recipe).to validate_numericality_of(:mix_size) }
 
       it "is a number with 3 decimals" do
         expect(build(:recipe, mix_size: 12.011)).to be_valid
@@ -47,7 +47,7 @@ describe Recipe do
     end
 
     describe "lead_days" do
-      it { expect(recipe).to validate_numericality_of(:lead_days)}
+      it { expect(recipe).to validate_numericality_of(:lead_days) }
     end
 
     describe "mix_size_unit" do

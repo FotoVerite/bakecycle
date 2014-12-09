@@ -15,4 +15,3 @@ namespace :db do
     FactoryGirl.create_list(:product, 10)
   end
 end
-

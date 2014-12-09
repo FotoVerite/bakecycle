@@ -25,6 +25,7 @@ group :test, :development do
   gem 'pry'
   gem 'shoulda-matchers', require: false
   gem 'cucumber-rails', require: false
+  gem 'rubocop'
 end
 
 group :development do

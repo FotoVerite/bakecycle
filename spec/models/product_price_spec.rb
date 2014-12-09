@@ -8,7 +8,7 @@ describe ProductPrice do
       it { expect(product_price).to respond_to(:price) }
       it { expect(product_price).to respond_to(:quantity) }
       it { expect(product_price).to respond_to(:effective_date) }
-      it { expect(product_price).to belong_to(:product)}
+      it { expect(product_price).to belong_to(:product) }
     end
 
     describe "validations" do

@@ -85,7 +85,7 @@ Feature: Products Index
       | 10.23  | 83      | 2014-12-12  |
     And I click on "Create"
     Then "You have created almond cookies" should be present
-    And I click on the last "remove"
+    And I click on the last price's remove button
     And I edit the remaining price to "12.00"
     And I click on "Update"
     Then "You have updated almond cookies" should be present

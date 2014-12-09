@@ -11,7 +11,6 @@ When(/^I fill out product form with:$/) do |table|
   fill_in "product_extra_amount", with: table.hashes[0]["extra_amount"]
 end
 
-
 Then(/^I should see a list of products including "(.*?)", "(.*?)" and "(.*?)"$/) do |arg1, arg2, arg3|
   expect(page).to have_content(arg1)
   expect(page).to have_content(arg2)
@@ -58,7 +57,7 @@ When(/^I fill out a second product price form with:$/) do |table|
   all('.js-datepicker').last.set(table.hashes[0]["date"])
 end
 
-Then(/^I click on the last "(.*?)"$/) do |arg1|
+Then(/^I click on the last price's remove button$/) do
   all('.remove_product_price').last.click
 end
 
