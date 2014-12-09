@@ -20,7 +20,6 @@ group :test, :development do
   gem 'selenium-webdriver'
   gem 'guard'
   gem 'guard-livereload'
-  gem 'faker'
   gem 'pry'
   gem 'shoulda-matchers', require: false
   gem 'cucumber-rails', require: false
@@ -29,6 +28,7 @@ end
 
 group :test, :development, :staging do
   gem 'factory_girl_rails'
+  gem 'faker'
 end
 
 group :development do
