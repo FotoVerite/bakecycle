@@ -8,7 +8,7 @@ describe Ingredient do
     it { expect(ingredient).to respond_to(:price) }
     it { expect(ingredient).to respond_to(:measure) }
     it { expect(ingredient).to respond_to(:unit) }
-    it { expect(ingredient).to respond_to(:ingredient_type)}
+    it { expect(ingredient).to respond_to(:ingredient_type) }
     it { expect(ingredient).to respond_to(:description) }
   end
 
@@ -21,7 +21,7 @@ describe Ingredient do
     end
 
     describe "price" do
-      it { expect(ingredient).to validate_numericality_of(:price)}
+      it { expect(ingredient).to validate_numericality_of(:price) }
 
       it "is a number with 2 decimals" do
         expect(build(:ingredient, price: 12.01)).to be_valid
@@ -41,7 +41,7 @@ describe Ingredient do
     end
 
     describe "measure" do
-      it { expect(ingredient).to validate_numericality_of(:measure)}
+      it { expect(ingredient).to validate_numericality_of(:measure) }
 
       it "is a number with 3 decimals" do
         expect(build(:ingredient, measure: 12.011)).to be_valid

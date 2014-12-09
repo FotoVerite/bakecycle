@@ -2,14 +2,16 @@ Given(/^I am a visitor$/) do
 end
 
 When(/^I pry$/) do
+  # rubocop:disable Lint/Debugger
   binding.pry
+  # rubocop:enable Lint/Debugger
 end
 
-When (/^I confirm popup$/) do
+When(/^I confirm popup$/) do
   page.driver.browser.switch_to.alert.accept
 end
 
-When (/^I dismiss popup$/) do
+When(/^I dismiss popup$/) do
   page.driver.browser.switch_to.alert.dismiss
 end
 

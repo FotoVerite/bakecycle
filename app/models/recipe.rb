@@ -1,5 +1,4 @@
 class Recipe < ActiveRecord::Base
-
   has_many :recipe_items, dependent: :destroy, inverse_of: :recipe
   accepts_nested_attributes_for :recipe_items, allow_destroy: true
   has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
@@ -32,5 +31,4 @@ class Recipe < ActiveRecord::Base
   def self.inclusions
     where("recipe_type = ?", Recipe.recipe_types[:inclusion])
   end
-
 end
