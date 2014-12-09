@@ -1,0 +1,87 @@
+<%= form_for @product do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited
+        this product from being saved:</h2>
+      <ul>
+      <% @product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :product_type %>
+      <%= f.select(:product_type, Product.product_types.keys.to_a, :prompt => 'Select One') %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :weight%>
+      <%= f.text_field :weight%>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :unit %>
+      <%= f.select(:unit, Product.units.keys.to_a, :prompt => 'Select One') %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :description%>
+      <%= f.text_area :description%>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-4 columns">
+      <%= f.label :extra_amount%>
+      <%= f.text_field :extra_amount%>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :inclusion_id, "Inclusions" %>
+      <%= collection_select(:product, :inclusion_id, @recipes.inclusions, :id, :name, :prompt => 'Select One') %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :motherdough_id, "Mother Dough" %>
+      <%= collection_select(:product, :motherdough_id, @recipes.motherdoughs, :id, :name, :prompt => 'Select One') %>
+    </div>
+  </div>
+
+  <div ng-controller="RecipeItemCtrl">
+    <%= f.fields_for :product_prices do |builder| %>
+      <%= render "product_price_fields", f: builder %>
+    <% end %>
+    <div ng-repeat="recipeItem in recipeItems">
+      <%= f.fields_for :product_prices, ProductPrice.new do |builder| %>
+         <%= render "new_product_price_fields", f: builder %>
+      <% end %>
+    </div>
+    <%= link_to 'Add Price', '', :'ng-click' => "add()"%>
+  </div>
+
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@product.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @product.new_record? %>
+        <%= link_to 'Delete', product_path(@product), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

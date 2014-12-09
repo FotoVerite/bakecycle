@@ -6,8 +6,13 @@ namespace :db do
 
     Ingredient.delete_all
     Recipe.delete_all
+    Product.delete_all
     FactoryGirl.create_list(:ingredient, 20)
-    FactoryGirl.create_list(:recipe, 20)
+    FactoryGirl.create_list(:recipe_motherdough, 5)
+    FactoryGirl.create_list(:recipe_inclusion, 5)
+    FactoryGirl.create_list(:recipe_preferment, 5)
+    FactoryGirl.create_list(:recipe_ingredient, 5)
+    FactoryGirl.create_list(:product, 10)
   end
 end
 

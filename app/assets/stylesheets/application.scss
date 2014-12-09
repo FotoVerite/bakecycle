@@ -13,4 +13,9 @@
  *= require_tree .
  *= require_self
  //= require foundation_and_overrides
+
  */
+
+@import 'jquery.ui.core'; // you always want that stylesheet
+@import 'jquery.ui.theme'; // import this when you want to build on jQuery UI's themeing
+@import 'jquery.ui.datepicker'; // import all the modules you need
