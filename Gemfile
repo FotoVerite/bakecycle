@@ -15,7 +15,6 @@ gem 'foundation-rails'
 
 group :test, :development do
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
@@ -26,6 +25,10 @@ group :test, :development do
   gem 'shoulda-matchers', require: false
   gem 'cucumber-rails', require: false
   gem 'rubocop'
+end
+
+group :test, :development, :staging do
+  gem 'factory_girl_rails'
 end
 
 group :development do
