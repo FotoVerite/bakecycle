@@ -48,11 +48,11 @@
     </div>
   </div>
 
-  <div ng-controller="RecipeItemCtrl">
+  <div ng-controller="NestedItemCtrl">
     <%= f.fields_for :recipe_items do |builder| %>
       <%= render "recipe_item_fields", f: builder %>
     <% end %>
-    <div ng-repeat="recipeItem in recipeItems">
+    <div ng-repeat="nestedItem in nestedItems">
       <%= f.fields_for :recipe_items, RecipeItem.new do |builder| %>
          <%= render "new_recipe_item_fields", f: builder %>
       <% end %>
