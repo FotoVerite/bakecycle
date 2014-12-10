@@ -1,7 +1,14 @@
-<h1>BakeCycle</h1>
 <% if current_user %>
-  <h2>Welcome to BakeCycle</h2>
-  <%= link_to 'Ingredients', controller: 'ingredients' %> | <%= @ingredients_size %>
-  <%= link_to 'Recipes', controller: 'recipes' %> | <%= @recipes_size %>
-  <%= link_to 'Products', controller: 'products' %> | <%= @products_size %>
+  <h2>Dashboard</h2>
+  <h3>Welcome <%= current_user.name %></h3>
+  <ul class="no-bullet">
+    <li><%= link_to("Ingredients | #{@ingredients_size}", ingredients_path) %></li>
+    <li><%= link_to("Recipes | #{@recipes_size}", recipes_path) %></li>
+    <li><%= link_to("Products | #{@products_size}", products_path) %></li>
+  </ul>
+<% else %>
+  <div class="centered-text">
+    <h1>BakeCycle</h1>
+      <%= link_to('Login', new_user_session_path, class: "large button") %>
+  </div>
 <% end %>

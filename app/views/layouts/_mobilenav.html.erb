@@ -1,0 +1,17 @@
+<nav class="tab-bar show-for-small">
+  <a class="left-off-canvas-toggle menu-icon" aria-expanded="false">
+    <span>Bakecycle</span>
+  </a>
+</nav>
+
+<aside class="left-off-canvas-menu">
+  <ul class="off-canvas-list">
+    <li><label>Bakecycle</label></li>
+    <% if current_user %>
+        <%= render "layouts/navitems" %>
+        <li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
+      <% else %>
+        <li><%= link_to('Login', new_user_session_path) %></li>
+      <% end %>
+  </ul>
+</aside>
