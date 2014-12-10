@@ -90,3 +90,30 @@ Feature: Products Index
     And I click on "Update"
     Then "You have updated almond cookies" should be present
     And there should only be one price
+
+  @javascript
+  Scenario: As a visitor, If I try to create a new product with empty price fields, I should see validation errors
+    Given I am a visitor
+    When I go to the products page
+    And I click on "Add New Product"
+    And I fill out product form with:
+      | name           | product_type | description | weight | unit | extra_amount|
+      | almond cookies | cookie       | delicious   | 10     | g    | 10          |
+    And I click on "Add Price"
+    And I click on "Create"
+    Then "Product prices quantity can't be blank" should be present
+    And "Product prices quantity is not a number" should be present
+    And "Product prices effective date can't be blank" should be present
+
+  @javascript
+  Scenario: As a visitor, If I try to edit a product with empty price fields, I should see validation errors
+    Given I am a visitor
+    And There are products named "baguette cookie","donut tart" and "croissant sandwich"
+    When I go to the products page
+    When I click on "baguette cookie"
+    And I click on "Add Price"
+    And I click on "Update"
+    Then "Product prices quantity can't be blank" should be present
+    And "Product prices quantity is not a number" should be present
+    And "Product prices effective date can't be blank" should be present
+

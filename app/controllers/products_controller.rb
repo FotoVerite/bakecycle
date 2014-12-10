@@ -10,11 +10,11 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
-
     if @product.save
       flash[:notice] = "You have created #{@product.name}."
       redirect_to edit_product_path(@product)
     else
+      @recipes = Recipe.all
       render 'new'
     end
   end
@@ -30,6 +30,7 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have updated #{@product.name}."
       redirect_to edit_product_path(@product)
     else
+      @recipes = Recipe.all
       render 'edit'
     end
   end
