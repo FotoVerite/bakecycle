@@ -1,4 +1,5 @@
 Given(/^I am a visitor$/) do
+  logout(:user)
 end
 
 When(/^I pry$/) do
@@ -15,18 +16,36 @@ When(/^I dismiss popup$/) do
   page.driver.browser.switch_to.alert.dismiss
 end
 
-When(/^I click on "(.*?)"$/) do |arg1|
-  click_on arg1
+When(/^I click on "(.*?)"$/) do |linkable_text|
+  click_on linkable_text
 end
 
-Then(/^"(.*?)" should not be present$/) do |name|
-  expect(page).to_not have_content(name)
+Then(/^"(.*?)" should not be present$/) do |content|
+  expect(page).to_not have_content(content)
 end
 
-Then(/^"(.*?)" should be present$/) do |arg1|
-  expect(page).to have_content(arg1)
+Then(/^"(.*?)" should be present$/) do |content|
+  expect(page).to have_content(content)
 end
 
-Then(/^I should be on the "(.*?)" index page$/) do |arg1|
-  expect(page).to have_content(arg1)
+Then(/^I should be on the "(.*?)" index page$/) do |model|
+  expect(page).to have_content(model)
+end
+
+When(/^I go to the home page$/) do
+  visit root_path
+end
+
+Given(/^I am logged in as an? (user)$/) do |user_type|
+  user = FactoryGirl.create(:"#{user_type}")
+  login_as(user, scope: :user)
+end
+
+When(/^I go to the "(.*?)" page$/) do |page|
+  path_string = "#{page}_path"
+  visit send(path_string.to_sym)
+end
+
+Then(/^"(.*?)" page header should be present$/) do |page_header|
+  expect(page).to have_selector('h1', text: page_header)
 end

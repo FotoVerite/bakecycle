@@ -1,18 +1,18 @@
-Feature: Recipes Index
+Feature: Recipes
 
   Background:
-    Given I am a visitor
+    Given I am logged in as a user
     And There are recipes named "baguette","donut" and "croissant"
     And There are ingredients named "celery","carrot" and "almond"
 
-  Scenario: As a visitor, I should be able to view recipes index
-    When I go to the recipes page
+  Scenario: As a user, I should be able to view recipes index
+    When I go to the "recipes" page
     Then I should see a list of recipes including "baguette", "donut" and "croissant"
     When I click on "baguette"
     Then I should be redirected to an recipe page
 
-  Scenario: As a visitor, I should be able to add an recipe
-    When I go to the recipes page
+  Scenario: As a user, I should be able to add an recipe
+    When I go to the "recipes" page
     And I click on "Add New Recipe"
     And I fill out recipe form with:
       | name | mix_size | mix_size_unit| lead_days | recipe_type | note                  |
@@ -21,14 +21,14 @@ Feature: Recipes Index
     Then "You have created apple" should be present
 
   @javascript
-  Scenario: As a visitor, I should be able to delete an recipe
+  Scenario: As a user, I should be able to delete an recipe
     When I am on the edit page for "baguette" recipe
     And I click on "Delete"
     And I confirm popup
     Then I should be redirected to the recipes page
     And "baguette" should not be present
 
-  Scenario: As a visitor, I should be able to edit an recipe
+  Scenario: As a user, I should be able to edit an recipe
     When I am on the edit page for "baguette" recipe
     And I change the recipe name to "danish"
     And I click on "Update"
@@ -39,7 +39,7 @@ Feature: Recipes Index
     And "baguette" should not be present
 
   @javascript
-  Scenario: As a visitor, I should get an error if I try to add an empty recipe item to a recipe
+  Scenario: As a user, I should get an error if I try to add an empty recipe item to a recipe
     When I am on the edit page for "baguette" recipe
     When I click on "Add Ingredient"
     And I click on "Update"
@@ -47,7 +47,7 @@ Feature: Recipes Index
     And "Recipe items bakers percentage must be greater than 0.001" should be present
 
   @javascript
-  Scenario: As a visitor, I should be able to add recipe items to an existing recipe
+  Scenario: As a user, I should be able to add recipe items to an existing recipe
     When I am on the edit page for "baguette" recipe
     When I click on "Add Ingredient"
     And I fill out recipe item with:
@@ -57,8 +57,8 @@ Feature: Recipes Index
     Then "You have updated baguette" should be present
 
   @javascript
-  Scenario: As a visitor, I should be able to add a recipe with multiple items
-    When I go to the recipes page
+  Scenario: As a user, I should be able to add a recipe with multiple items
+    When I go to the "recipes" page
     And I click on "Add New Recipe"
     And I fill out recipe form with:
       | name | mix_size | mix_size_unit| lead_days | recipe_type | note                 |
@@ -75,8 +75,8 @@ Feature: Recipes Index
     Then "You have created apple" should be present
 
   @javascript
-  Scenario: As a visitor, I should be able to edit a recipe and delete another recipe
-    When I go to the recipes page
+  Scenario: As a user, I should be able to edit a recipe and delete another recipe
+    When I go to the "recipes" page
     And I click on "Add New Recipe"
     And I fill out recipe form with:
       | name | mix_size | mix_size_unit| lead_days | recipe_type  | note                 |
