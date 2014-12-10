@@ -13,6 +13,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'bower-rails'
 gem 'foundation-rails'
 gem 'devise'
+gem 'airbrake'
 
 group :test, :development do
   gem 'rspec-rails'
