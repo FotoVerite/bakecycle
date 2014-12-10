@@ -62,11 +62,11 @@
     </div>
   </div>
 
-  <div ng-controller="RecipeItemCtrl">
+  <div ng-controller="NestedItemCtrl">
     <%= f.fields_for :product_prices do |builder| %>
       <%= render "product_price_fields", f: builder %>
     <% end %>
-    <div ng-repeat="recipeItem in recipeItems">
+    <div ng-repeat="nestedItem in nestedItems">
       <%= f.fields_for :product_prices, ProductPrice.new do |builder| %>
          <%= render "new_product_price_fields", f: builder %>
       <% end %>

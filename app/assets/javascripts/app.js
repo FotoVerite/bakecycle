@@ -1,15 +1,11 @@
 app = angular.module('bakecycle',[]);
 
-app.controller("RecipeItemCtrl", function($scope){
+app.controller("NestedItemCtrl", [ '$scope', function($scope){
   var date = new Date();
-  $scope.recipeItems = [];
-
-  $scope.isRemovable = function() {
-    return true;
-  };
+  $scope.nestedItems = [];
 
   $scope.add = function() {
-    $scope.recipeItems.push({});
+    $scope.nestedItems.push({});
   };
 
   $scope.remove = function($event){
@@ -25,4 +21,4 @@ app.controller("RecipeItemCtrl", function($scope){
   $scope.getRandomId = function($index) {
    return $index + date.getTime();
   }
-});
+}]);
