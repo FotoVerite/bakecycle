@@ -13,9 +13,14 @@
   </head>
 
   <body ng-app="bakecycle">
-    <% flash.each do |name, msg| -%>
+    <% if current_user %>
+     <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+    <% else %>
+      <%= link_to('Login', new_user_session_path) %>
+    <% end %>
+    <% flash.each do |name, msg| %>
       <%= content_tag :div, msg, class: name %>
-    <% end -%>
+    <% end %>
     <%= yield %>
   </body>
 </html>

@@ -1,17 +1,13 @@
-Given(/^There are ingredients named "(.*?)","(.*?)" and "(.*?)"$/) do |arg1, arg2, arg3|
-  FactoryGirl.create(:ingredient, name: arg1)
-  FactoryGirl.create(:ingredient, name: arg2)
-  FactoryGirl.create(:ingredient, name: arg3)
+Given(/^There are ingredients named "(.*?)","(.*?)" and "(.*?)"$/) do |ingredient1, ingredient2, ingredient3|
+  FactoryGirl.create(:ingredient, name: ingredient1)
+  FactoryGirl.create(:ingredient, name: ingredient2)
+  FactoryGirl.create(:ingredient, name: ingredient3)
 end
 
-When(/^I go to the ingredients page$/) do
-  visit ingredients_path
-end
-
-Then(/^I should see a list of ingredients including "(.*?)", "(.*?)" and "(.*?)"$/) do |arg1, arg2, arg3|
-  expect(page).to have_content(arg1)
-  expect(page).to have_content(arg2)
-  expect(page).to have_content(arg3)
+Then(/^I should see a list of ingredients including "(.*?)", "(.*?)" and "(.*?)"$/) do |ing1, ing2, ing3|
+  expect(page).to have_content(ing1)
+  expect(page).to have_content(ing2)
+  expect(page).to have_content(ing3)
 end
 
 Then(/^I should be redirected to an ingredient page$/) do
@@ -33,15 +29,15 @@ Then(/^I should be redirected to the Ingredients page$/) do
   expect(page).to have_content("Ingredients")
 end
 
-Given(/^I am on the edit page for "(.*?)" ingredient$/) do |arg1|
-  ingredient = Ingredient.find_by(name: arg1)
+Given(/^I am on the edit page for "(.*?)" ingredient$/) do |name|
+  ingredient = Ingredient.find_by(name: name)
   visit edit_ingredient_path(ingredient)
 end
 
-When(/^I change the ingredient name to "(.*?)"$/) do |arg1|
-  fill_in "ingredient_name", with: arg1
+When(/^I change the ingredient name to "(.*?)"$/) do |name|
+  fill_in "ingredient_name", with: name
 end
 
-Then(/^I should see that the ingredient name is "(.*?)"$/) do |arg1|
-  expect(page).to have_content(arg1)
+Then(/^I should see that the ingredient name is "(.*?)"$/) do |name|
+  expect(page).to have_content(name)
 end
