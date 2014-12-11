@@ -1,21 +1,5 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require_tree .
- *= require_self
- //= require foundation_and_overrides
+/* Made by a Wizard */
 
- */
-
-@import 'jquery.ui.core'; // you always want that stylesheet
-@import 'jquery.ui.theme'; // import this when you want to build on jQuery UI's themeing
-@import 'jquery.ui.datepicker'; // import all the modules you need
+@import "foundation_and_overrides";
+@import "jquery_ui";
+@import "utilities";

@@ -19,6 +19,6 @@ Feature: Users
     And "Ingredients" page header should be present
 
   Scenario: As a user, if I can logout
-    And I go to the home page
-    When I click on "Logout"
+    When I go to the home page
+    And I click on "Logout"
     Then "Signed out successfully" should be present

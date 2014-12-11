@@ -2,6 +2,10 @@ Given(/^I am a visitor$/) do
   logout(:user)
 end
 
+When(/^I logout$/) do
+  click_link(link_name, match: :first)
+end
+
 When(/^I pry$/) do
   # rubocop:disable Lint/Debugger
   binding.pry
@@ -17,7 +21,7 @@ When(/^I dismiss popup$/) do
 end
 
 When(/^I click on "(.*?)"$/) do |linkable_text|
-  click_on linkable_text
+  click_on(linkable_text, match: :first)
 end
 
 Then(/^"(.*?)" should not be present$/) do |content|
