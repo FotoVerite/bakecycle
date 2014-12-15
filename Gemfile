@@ -14,6 +14,7 @@ gem 'bower-rails'
 gem 'foundation-rails'
 gem 'devise'
 gem 'airbrake'
+gem 'unicorn', require: false
 
 group :test, :development do
   gem 'rspec-rails'

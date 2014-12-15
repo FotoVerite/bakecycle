@@ -6,6 +6,7 @@ AllCops:
     - 'bin/**/*'
     - 'db/migrate/**/*'
     - 'vendor/bundle/**/*'
+    - 'config/unicorn.rb'
 
 Style/SignalException:
   Enabled: false
