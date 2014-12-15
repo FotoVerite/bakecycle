@@ -22,7 +22,6 @@ When(/^I fill out Ingredient form with:$/) do |table|
   select table.hashes[0]["unit"], from: "ingredient_unit"
   select table.hashes[0]["ingredient_type"], from: "ingredient_ingredient_type"
   fill_in "ingredient_description", with: table.hashes[0]["description"]
-  click_on "Create"
 end
 
 Then(/^I should be redirected to the Ingredients page$/) do

@@ -1,0 +1,55 @@
+<%= form_for @route do |f| %>
+  <% if @route.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@route.errors.count, "error") %> prohibited
+        this route from being saved:</h2>
+      <ul>
+      <% @route.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :active, "Active"%>
+      <%= f.radio_button(:active, "true") %>
+      <%= f.label(:active_true, "Yes") %>
+      <%= f.radio_button(:active, "false") %>
+      <%= f.label(:active_false, "No") %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-2 medium-3 small-6 columns select-time-wrapper">
+      <%= f.label :departure_time %>
+      <%= f.text_field(:departure_time, class: "js-timepicker") %>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :notes%>
+      <%= f.text_area :notes%>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@route.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @route.new_record? %>
+        <%= link_to 'Delete', route_path(@route), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -8,6 +8,7 @@ namespace :db do
     Ingredient.delete_all
     Recipe.delete_all
     Product.delete_all
+    Route.delete_all
 
     FactoryGirl.create(:user, email: 'user@example.com')
     FactoryGirl.create_list(:ingredient, 20)
@@ -16,5 +17,6 @@ namespace :db do
     FactoryGirl.create_list(:recipe_preferment, 5)
     FactoryGirl.create_list(:recipe_ingredient, 5)
     FactoryGirl.create_list(:product, 10)
+    FactoryGirl.create_list(:route, 5)
   end
 end

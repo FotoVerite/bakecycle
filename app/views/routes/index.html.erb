@@ -1,0 +1,19 @@
+<h1>Routes</h1>
+<p><%= link_to 'Add New Route', new_route_path %></p>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Departure Time</th>
+    <th>Active</th>
+    <th>Action</th>
+  </tr>
+
+  <% @routes.each do |route| %>
+    <tr>
+      <td><%= link_to "#{route.name}", edit_route_path(route) %></td>
+      <td><%= route.formatted_time %></td>
+      <td><%= route.active? %></td>
+      <td><%= link_to 'Edit', edit_route_path(route) %></td>
+    </tr>
+  <% end %>
+</table>

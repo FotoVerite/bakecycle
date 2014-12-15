@@ -1,0 +1,3 @@
+$(function(){
+  $('.js-timepicker').timepicker();
+});
