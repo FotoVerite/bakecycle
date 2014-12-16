@@ -15,6 +15,7 @@ gem 'foundation-rails'
 gem 'devise'
 gem 'airbrake'
 gem 'unicorn', require: false
+gem 'jquery-timepicker-rails'
 
 group :test, :development do
   gem 'rspec-rails'

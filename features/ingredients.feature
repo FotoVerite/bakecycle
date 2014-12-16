@@ -16,6 +16,7 @@ Feature: Ingredients
 		And I fill out Ingredient form with:
 		  | name  | price | measure | unit | ingredient_type | description        |
 		  | apple | 1.10  | 2.225   | lb   | flour           | I am sometimes red |
+    And I click on "Create"
     Then "You have created apple" should be present
 
   @javascript
