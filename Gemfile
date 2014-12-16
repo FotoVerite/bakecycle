@@ -12,6 +12,7 @@ gem 'jquery-ui-sass-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'bower-rails'
 gem 'foundation-rails'
+gem 'foundation-icons-sass-rails'
 gem 'devise'
 gem 'airbrake'
 gem 'unicorn', require: false

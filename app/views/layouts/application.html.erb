@@ -13,25 +13,24 @@
   </head>
 
   <body ng-app="bakecycle">
-    <div class="off-canvas-wrap" data-offcanvas>
-      <div class="inner-wrap">
-        <%= render "layouts/topnav"%>
-        <%= render "layouts/mobilenav"%>
-        <section>
-          <div class="row">
-            <% if user_signed_in? %>
-              <%= render "layouts/sidenav"%>
+    <div class="row full-width wrapper">
+      <div class="large-12 columns content-bg">
+        <% if user_signed_in? %>
+        <%= render 'layouts/topmenusection' %>
+        <% end %>
+        <div class="row">
+          <% if user_signed_in? %>
+          <%= render 'layouts/sidenav' %>
+          <% end %>
+          <div class= "<%= class_for_main_content %>">
+            <% flash.each do |name, msg| %>
+              <%= content_tag :div, msg, class: name %>
             <% end %>
-            <div class="<%= class_for_main_content %>">
-              <% flash.each do |name, msg| %>
-                <%= content_tag :div, msg, class: name %>
-              <% end %>
-              <%= yield %>
-            </div>
+            <%= yield %>
           </div>
-        </section>
-        <a class="exit-off-canvas"></a>
+        </div>
       </div>
     </div>
   </body>
 </html>
+

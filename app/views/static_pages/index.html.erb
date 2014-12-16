@@ -1,15 +1,51 @@
 <% if current_user %>
-  <h2>Dashboard</h2>
-  <h3>Welcome <%= current_user.name %></h3>
-  <ul class="no-bullet">
-    <li><%= link_to("Ingredients | #{@ingredients_size}", ingredients_path) %></li>
-    <li><%= link_to("Recipes | #{@recipes_size}", recipes_path) %></li>
-    <li><%= link_to("Products | #{@products_size}", products_path) %></li>
-    <li><%= link_to("Routes | #{@routes_size}", routes_path) %></li>
-  </ul>
+  <div class="dashboard">
+    <div class="row">
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Ingredients
+            <h3><%= @ingredients_size %></h3>
+          </div>
+          <i class="fi-info right ingredients"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Recipes
+            <h3><%= @recipes_size %></h3>
+          </div>
+          <i class="fi-info right recipes"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Products
+            <h3><%= @products_size %></h3>
+          </div>
+          <i class="fi-price-tag right products"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns end">
+        <div class="stats border">
+          <div class="left">
+            Routes
+            <h3><%= @routes_size %></h3>
+          </div>
+          <i class="fi-foundation right routes"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% else %>
   <div class="centered-text">
     <h1>BakeCycle</h1>
-      <%= link_to('Login', new_user_session_path, class: "large button") %>
+    <%= link_to('Login', new_user_session_path, class: "large button") %>
   </div>
 <% end %>
