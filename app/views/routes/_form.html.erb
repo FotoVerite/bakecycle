@@ -11,35 +11,31 @@
     </div>
   <% end %>
   <div class="row">
-    <div class="small-12 columns">
+    <div class="large-10 medium-9 small-6 columns">
       <%= f.label :name %>
       <%= f.text_field :name %>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :active, "Active"%>
-      <%= f.radio_button(:active, "true") %>
-      <%= f.label(:active_true, "Yes") %>
-      <%= f.radio_button(:active, "false") %>
-      <%= f.label(:active_false, "No") %>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="large-2 medium-3 small-6 columns select-time-wrapper">
       <%= f.label :departure_time %>
       <%= f.text_field(:departure_time, class: "js-timepicker") %>
     </div>
   </div>
 
-
-
   <div class="row">
     <div class="small-12 columns">
       <%= f.label :notes%>
       <%= f.text_area :notes%>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-6 columns">
+      <%= f.label :active, "Active"%>
+      <%= f.radio_button(:active, "true", :checked => true) %>
+      <%= f.label(:active_true, "Yes") %>
+      <%= f.radio_button(:active, "false") %>
+      <%= f.label(:active_false, "No") %>
     </div>
   </div>
 

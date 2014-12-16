@@ -27,6 +27,5 @@ describe Route do
         end
       end
     end
-
   end
 end
