@@ -3,7 +3,7 @@ Given(/^I am a visitor$/) do
 end
 
 When(/^I logout$/) do
-  click_link(link_name, match: :first)
+  find(".logout-icon").click
 end
 
 When(/^I pry$/) do

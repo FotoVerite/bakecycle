@@ -20,5 +20,5 @@ Feature: Users
 
   Scenario: As a user, if I can logout
     When I go to the home page
-    And I click on "Logout"
+    And I logout
     Then "Signed out successfully" should be present

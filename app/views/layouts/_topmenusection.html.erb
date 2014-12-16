@@ -1,0 +1,41 @@
+<div class="top-menu-section">
+  <div class="row">
+    <div class="large-2 medium-4 small-12 columns top-part-no-padding">
+      <div class="logo-bg">
+        <i class="fi-list js-toggles" data-toggle="hide"></i>
+      </div>
+    </div>
+    <div class="large-10 medium-8 small-12 columns top-menu">
+      <div class="row">
+        <div class="large-4 large-offset-8 medium-12 small-12 columns text-center">
+          <div class="row">
+            <div class="medium-3 small-3 columns">
+              <div class="notification">
+                <i class="fi-mail"></i>
+                <span class="mail">3</span>
+              </div>
+            </div>
+            <div class="medium-3 small-3 columns">
+              <div class="notification">
+                <i class="fi-calendar"></i>
+                <span class="calendar">5</span>
+              </div>
+            </div>
+            <div class="medium-3 small-3 columns">
+              <div class="notification">
+                <i class="fi-calendar"></i>
+                <span class="calendar">5</span>
+              </div>
+            </div>
+            <div class="medium-3 small-3 columns">
+              <%= link_to destroy_user_session_path, method: :delete, class: 'logout-icon' do %>
+                <i class="fi-power power-off"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
