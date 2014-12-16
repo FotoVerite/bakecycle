@@ -10,7 +10,6 @@ class RoutesController < ApplicationController
 
   def create
     @route = Route.new(route_params)
-
     if @route.save
       flash[:notice] = "You have created #{@route.name}."
       redirect_to edit_route_path(@route)
