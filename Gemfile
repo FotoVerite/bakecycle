@@ -23,12 +23,14 @@ group :test, :development do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
-  gem 'guard'
-  gem 'guard-livereload'
   gem 'pry'
   gem 'shoulda-matchers', require: false
   gem 'cucumber-rails', require: false
   gem 'rubocop'
+  gem 'guard-rails'
+  gem 'guard-livereload'
+  gem 'rack-livereload'
+  gem 'guard-bundler'
 end
 
 group :test, :development, :staging do
