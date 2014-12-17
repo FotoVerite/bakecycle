@@ -4,5 +4,6 @@ class StaticPagesController < ApplicationController
     @recipes_size = Recipe.count
     @products_size = Product.count
     @routes_size = Route.count
+    @clients_size = Client.count
   end
 end

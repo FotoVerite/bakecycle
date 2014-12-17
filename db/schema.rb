@@ -11,10 +11,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141215162540) do
+ActiveRecord::Schema.define(version: 20141217191843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "clients", force: true do |t|
+    t.string  "name"
+    t.string  "dba"
+    t.string  "business_phone"
+    t.string  "business_fax"
+    t.boolean "active"
+    t.string  "delivery_address_street_1"
+    t.string  "delivery_address_street_2"
+    t.string  "delivery_address_city"
+    t.string  "delivery_address_state"
+    t.string  "delivery_address_zipcode"
+    t.string  "billing_address_street_1"
+    t.string  "billing_address_street_2"
+    t.string  "billing_address_city"
+    t.string  "billing_address_state"
+    t.string  "billing_address_zipcode"
+    t.string  "accounts_payable_contact_name"
+    t.string  "accounts_payable_contact_phone"
+    t.string  "accounts_payable_contact_email"
+    t.string  "primary_contact_name"
+    t.string  "primary_contact_phone"
+    t.string  "primary_contact_email"
+    t.string  "secondary_contact_name"
+    t.string  "secondary_contact_phone"
+    t.string  "secondary_contact_email"
+  end
+
+  add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
+  add_index "clients", ["name"], name: "index_clients_on_name", unique: true, using: :btree
 
   create_table "ingredients", force: true do |t|
     t.string   "name"

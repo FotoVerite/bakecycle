@@ -15,6 +15,7 @@ gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
 gem 'devise'
 gem 'airbrake'
+gem 'draper', '~> 1.3'
 gem 'unicorn', require: false
 gem 'jquery-timepicker-rails'
 

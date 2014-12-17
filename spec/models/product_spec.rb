@@ -48,7 +48,6 @@ describe Product do
         expect(build(:product, weight: 0.12)).to be_valid
         expect(build(:product, weight: 0.1)).to be_valid
         expect(build(:product, weight: 1)).to be_valid
-
       end
     end
 
@@ -90,7 +89,5 @@ describe Product do
         expect(build(:product)).to belong_to(:inclusion)
       end
     end
-
   end
-
 end
