@@ -8,7 +8,7 @@
 
   <% @ingredients.each do |ingredient| %>
     <tr>
-      <td><%= link_to "#{ingredient.name}", edit_ingredient_path(ingredient) %></td>
+      <td><%= link_to ingredient.name, edit_ingredient_path(ingredient) %></td>
       <td><%= link_to 'Edit', edit_ingredient_path(ingredient) %></td>
     </tr>
   <% end %>

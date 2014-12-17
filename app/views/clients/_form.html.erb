@@ -1,0 +1,192 @@
+<%= form_for @client do |f| %>
+  <% if @client.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@client.errors.count, "error") %> prohibited
+        this client from being saved:</h2>
+      <ul>
+      <% @client.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :dba %>
+      <%= f.text_field :dba %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :business_phone %>
+      <%= f.text_field :business_phone %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :business_fax %>
+      <%= f.text_field :business_fax %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :active, "Active"%>
+      <%= f.radio_button(:active, "true", :checked => true) %>
+      <%= f.label(:active_true, "Yes") %>
+      <%= f.radio_button(:active, "false") %>
+      <%= f.label(:active_false, "No") %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :delivery_address_street_1 %>
+      <%= f.text_field :delivery_address_street_1 %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :delivery_address_street_2 %>
+      <%= f.text_field :delivery_address_street_2 %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :delivery_address_city %>
+      <%= f.text_field :delivery_address_city %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :delivery_address_state %>
+      <%= f.text_field :delivery_address_state %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :delivery_address_zipcode %>
+      <%= f.text_field :delivery_address_zipcode %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :billing_address_street_1 %>
+      <%= f.text_field :billing_address_street_1 %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :billing_address_street_2 %>
+      <%= f.text_field :billing_address_street_2 %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :billing_address_city %>
+      <%= f.text_field :billing_address_city %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :billing_address_state %>
+      <%= f.text_field :billing_address_state %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :billing_address_zipcode %>
+      <%= f.text_field :billing_address_zipcode %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :accounts_payable_contact_name %>
+      <%= f.text_field :accounts_payable_contact_name %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :accounts_payable_contact_phone %>
+      <%= f.text_field :accounts_payable_contact_phone %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :accounts_payable_contact_email %>
+      <%= f.text_field :accounts_payable_contact_email %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :primary_contact_name %>
+      <%= f.text_field :primary_contact_name %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :primary_contact_phone %>
+      <%= f.text_field :primary_contact_phone %>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :primary_contact_email %>
+      <%= f.text_field :primary_contact_email %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :secondary_contact_name %>
+      <%= f.text_field :secondary_contact_name %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :secondary_contact_phone %>
+      <%= f.text_field :secondary_contact_phone %>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.label :secondary_contact_email %>
+      <%= f.text_field :secondary_contact_email %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@client.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @client.new_record? %>
+        <%= link_to 'Delete', client_path(@client), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

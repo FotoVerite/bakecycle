@@ -10,9 +10,9 @@
 
   <% @routes.each do |route| %>
     <tr>
-      <td><%= link_to "#{route.name}", edit_route_path(route) %></td>
+      <td><%= link_to route.name, edit_route_path(route) %></td>
       <td><%= route.formatted_time %></td>
-      <td><%= route.active? %></td>
+      <td><%= route.active_status %></td>
       <td><%= link_to 'Edit', edit_route_path(route) %></td>
     </tr>
   <% end %>

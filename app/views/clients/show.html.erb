@@ -1,0 +1,30 @@
+<h1>Client: <%= @client.name %></h1>
+<%= link_to 'Edit', edit_client_path(@client) %> |
+<%= link_to 'Back', clients_path %>
+<br />
+<br />
+
+<p>Name: <%= @client.name %></p>
+<p>DBA: <%= @client.dba %></p>
+<p>Business Phone:<%= @client.business_phone %></p>
+<p>Business Fax: <%= @client.business_fax %></p>
+<p>Active: <%= @client.active_status %></p>
+<p>Delivery Address Street 1: <%= @client.delivery_address_street_1 %></p>
+<p>Delivery Address Street 2: <%= @client.delivery_address_street_2 %></p>
+<p>Delivery Address City: <%= @client.delivery_address_city %></p>
+<p>Delivery Address State: <%= @client.delivery_address_state %></p>
+<p>Delivery Address Zip: <%= @client.delivery_address_zipcode %></p>
+<p>Billing Address Street 1: <%= @client.billing_address_street_1 %></p>
+<p>Billing Address Street 2: <%= @client.billing_address_street_2 %></p>
+<p>Billing Address City: <%= @client.billing_address_city %></p>
+<p>Billing Address State: <%= @client.billing_address_state %></p>
+<p>Billing Address Zip: <%= @client.billing_address_zipcode %></p>
+<p>Accounts Payable Contact Name: <%= @client.accounts_payable_contact_name %></p>
+<p>Accounts Payable Contact Phone<%= @client.accounts_payable_contact_phone %></p>
+<p>Accounts Payable Contact Email<%= @client.accounts_payable_contact_email %></p>
+<p>Primary Contact Name: <%= @client.primary_contact_name %></p>
+<p>Primary Contact Phone<%= @client.primary_contact_phone %></p>
+<p>Primary Contact Email<%= @client.primary_contact_email %></p>
+<p>Secondary Contact Name: <%= @client.secondary_contact_name %></p>
+<p>Secondary Contact Phone<%= @client.secondary_contact_phone %></p>
+<p>Secondary Contact Email<%= @client.secondary_contact_email %></p>

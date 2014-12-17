@@ -9,7 +9,7 @@
 
   <% @recipes.each do |recipe| %>
     <tr>
-      <td><%= link_to "#{recipe.name}", edit_recipe_path(recipe) %></td>
+      <td><%= link_to recipe.name, edit_recipe_path(recipe) %></td>
       <td><%= recipe.recipe_type %></td>
       <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
     </tr>
