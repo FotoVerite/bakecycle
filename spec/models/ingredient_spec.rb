@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Ingredient do
-  let(:ingredient) { FactoryGirl.build(:ingredient) }
+  let(:ingredient) { build(:ingredient) }
 
   describe "model attributes" do
     it { expect(ingredient).to respond_to(:name) }

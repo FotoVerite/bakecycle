@@ -27,3 +27,8 @@ Feature: Navigation
     When I go to the home page
     And I click on "Clients"
     Then "Add New Client" should be present
+
+  Scenario: As a user, I should be able to view Orders index from the dashboard
+    When I go to the home page
+    And I click on "Orders"
+    Then "Add New Order" should be present

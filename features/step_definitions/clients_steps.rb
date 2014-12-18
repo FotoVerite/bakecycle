@@ -1,7 +1,7 @@
 Given(/^There are clients named "(.*?)","(.*?)" and "(.*?)"$/) do |client1, client2, client3|
-  FactoryGirl.create(:client, name: client1)
-  FactoryGirl.create(:client, name: client2)
-  FactoryGirl.create(:client, name: client3)
+  create(:client, name: client1)
+  create(:client, name: client2)
+  create(:client, name: client3)
 end
 
 Then(/^I should see a list of clients including "(.*?)", "(.*?)" and "(.*?)"$/) do |client1, client2, client3|

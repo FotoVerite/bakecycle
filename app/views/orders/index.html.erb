@@ -1,0 +1,19 @@
+<h1>Orders</h1>
+<p><%= link_to 'Add New Order', new_order_path %></p>
+<table>
+  <tr>
+    <th>Order Date</th>
+    <th>Client</th>
+    <th>Route</th>
+    <th>Action</th>
+  </tr>
+
+  <% @orders.each do |order| %>
+    <tr>
+      <td><%= order.start_date %></td>
+      <td><%= link_to order.client.name, edit_order_path(order) %></td>
+      <td><%= order.route.name %></td>
+      <td><%= link_to 'Edit', edit_order_path(order) %></td>
+    </tr>
+  <% end %>
+</table>

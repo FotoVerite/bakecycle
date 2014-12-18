@@ -1,0 +1,54 @@
+<%= form_for @order do |f| %>
+  <% if @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited
+        this order from being saved:</h2>
+      <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+     <div class="small-3 columns">
+       <%= f.label :start_date, "Effective Date" %>
+       <%= f.text_field :start_date, class: "js-datepicker" %>
+    </div>
+
+     <div class="small-3 columns end">
+       <%= f.label :end_date, "End Date" %>
+       <%= f.text_field :end_date, class: "js-datepicker" %>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="small-3 columns">
+       <%= f.label :route_id, "Route" %>
+       <%= collection_select(:order, :route_id, @routes, :id, :name, prompt: 'Select One') %>
+    </div>
+
+    <div class="small-3 columns end">
+       <%= f.label :client_id, "Client" %>
+       <%= collection_select(:order, :client_id, @clients, :id, :name, prompt: 'Select One') %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-6 columns">
+      <%= f.label :note, "Special Notes" %>
+      <%= f.text_area :note %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@order.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @order.new_record? %>
+        <%= link_to 'Delete', order_path(@order), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

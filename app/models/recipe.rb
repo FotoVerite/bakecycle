@@ -1,12 +1,12 @@
 class Recipe < ActiveRecord::Base
   has_many :recipe_items, dependent: :destroy, inverse_of: :recipe
-  accepts_nested_attributes_for :recipe_items, allow_destroy: true
   has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
-
   has_many :product
+  accepts_nested_attributes_for :recipe_items, allow_destroy: true
 
   RECIPE_TYPE_OPTIONS = [:dough, :pre_ferment, :inclusion, :ingredient]
   MIX_SIZE_UNIT_OPTIONS = [:oz, :lb, :g, :kg]
+
   enum recipe_type: RECIPE_TYPE_OPTIONS
   enum mix_size_unit: MIX_SIZE_UNIT_OPTIONS
 

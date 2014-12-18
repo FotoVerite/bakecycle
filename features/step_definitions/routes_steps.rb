@@ -1,7 +1,7 @@
 Given(/^There are routes named "(.*?)","(.*?)" and "(.*?)"$/) do |route1, route2, route3|
-  FactoryGirl.create(:route, name: route1)
-  FactoryGirl.create(:route, name: route2)
-  FactoryGirl.create(:route, name: route3)
+  create(:route, name: route1)
+  create(:route, name: route2)
+  create(:route, name: route3)
 end
 
 Then(/^I should see a list of routes including "(.*?)", "(.*?)" and "(.*?)"$/) do |route1, route2, route3|

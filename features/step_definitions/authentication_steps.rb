@@ -1,5 +1,5 @@
 Given(/^There is a user with email "(.*?)" and password "(.*?)"$/) do |email, password|
-  FactoryGirl.create(:user, email: email, password: password, password_confirmation: password)
+  create(:user, email: email, password: password, password_confirmation: password)
 end
 
 When(/^I fill in user form with:$/) do |table|

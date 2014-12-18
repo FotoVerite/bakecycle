@@ -1,7 +1,7 @@
 Given(/^There are ingredients named "(.*?)","(.*?)" and "(.*?)"$/) do |ingredient1, ingredient2, ingredient3|
-  FactoryGirl.create(:ingredient, name: ingredient1)
-  FactoryGirl.create(:ingredient, name: ingredient2)
-  FactoryGirl.create(:ingredient, name: ingredient3)
+  create(:ingredient, name: ingredient1)
+  create(:ingredient, name: ingredient2)
+  create(:ingredient, name: ingredient3)
 end
 
 Then(/^I should see a list of ingredients including "(.*?)", "(.*?)" and "(.*?)"$/) do |ing1, ing2, ing3|

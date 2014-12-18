@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Product do
-  let(:product) { FactoryGirl.build(:product) }
+  let(:product) { build(:product) }
 
   describe "model attributes" do
     it { expect(product).to respond_to(:name) }

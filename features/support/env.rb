@@ -10,6 +10,9 @@ require 'capybara/rspec'
 require 'cucumber/rspec/doubles'
 require 'shoulda/matchers'
 
+# To get the create and build methods without having to type FactoryGirl every time on cucumbers
+World(FactoryGirl::Syntax::Methods)
+
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
 # selectors in your step definitions to use the XPath syntax.

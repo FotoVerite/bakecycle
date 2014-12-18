@@ -1,4 +1,6 @@
 class Route < ActiveRecord::Base
+  has_many :orders
+
   validates :name, presence: true, length: { maximum: 150 }
   validates :departure_time, presence: true
 

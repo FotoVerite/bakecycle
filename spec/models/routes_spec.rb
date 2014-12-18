@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Route do
-  let(:route) { FactoryGirl.build(:route) }
+  let(:route) { build(:route) }
 
   describe "Route" do
     describe "model attributes" do

@@ -41,7 +41,7 @@ When(/^I go to the home page$/) do
 end
 
 Given(/^I am logged in as an? (user)$/) do |user_type|
-  user = FactoryGirl.create(:"#{user_type}")
+  user = create(:"#{user_type}")
   login_as(user, scope: :user)
 end
 
