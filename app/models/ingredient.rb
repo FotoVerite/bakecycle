@@ -1,5 +1,6 @@
 class Ingredient < ActiveRecord::Base
   has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
+
   UNIT_OPTIONS = [:oz, :lb, :g, :kg]
   INGREDIENT_TYPE_OPTIONS = [:flour, :ingredient]
 

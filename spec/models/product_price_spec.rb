@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ProductPrice do
-  let(:product_price) { FactoryGirl.build(:product_price) }
+  let(:product_price) { build(:product_price) }
 
   describe "Product Price" do
     describe "model attributes" do

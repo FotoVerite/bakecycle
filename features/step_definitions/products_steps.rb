@@ -19,9 +19,9 @@ Then(/^I should be redirected to a product page$/) do
 end
 
 Given(/^There are products named "(.*?)","(.*?)" and "(.*?)"$/) do |product1, product2, product3|
-  FactoryGirl.create(:product, name: product1)
-  FactoryGirl.create(:product, name: product2)
-  FactoryGirl.create(:product, name: product3)
+  create(:product, name: product1)
+  create(:product, name: product2)
+  create(:product, name: product3)
 end
 
 When(/^I am on the edit page for "(.*?)" product$/) do |name|

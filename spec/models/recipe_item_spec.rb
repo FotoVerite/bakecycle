@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe RecipeItem do
 
-  let(:recipe_item_ingredient) { FactoryGirl.build(:recipe_item_ingredient) }
-  let(:recipe_item_recipe) { FactoryGirl.build(:recipe_item_recipe) }
+  let(:recipe_item_ingredient) { build(:recipe_item_ingredient) }
+  let(:recipe_item_recipe) { build(:recipe_item_recipe) }
 
   describe "Recipe Item Recipe" do
 

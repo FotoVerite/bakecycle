@@ -1,4 +1,6 @@
 class Client < ActiveRecord::Base
+  has_many :orders
+
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
   validates :dba, length: { maximum: 150 }
   validates :business_phone, presence: true

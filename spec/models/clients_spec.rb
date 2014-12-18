@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Client do
-  let(:client) { FactoryGirl.build(:client) }
+  let(:client) { build(:client) }
 
   describe "model attributes" do
     it { expect(client).to respond_to(:name) }

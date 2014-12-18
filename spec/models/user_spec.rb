@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe User do
-  let(:user) { FactoryGirl.build(:user) }
+  let(:user) { build(:user) }
 
   describe "model attributes" do
     it { expect(user).to respond_to(:name) }

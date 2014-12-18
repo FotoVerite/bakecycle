@@ -1,15 +1,14 @@
 class Product < ActiveRecord::Base
+  belongs_to :inclusion, class_name: "Recipe"
+  belongs_to :motherdough, class_name: "Recipe"
+  has_many :product_prices
+  accepts_nested_attributes_for :product_prices, allow_destroy: true
+
   PRODUCT_TYPE_OPTIONS = [:bread, :vienoisserie, :cookie, :tart, :quiche, :sandwich, :pot_pie, :dry_goods, :other]
   UNIT_OPTIONS = [:oz, :lb, :g, :kg]
 
   enum product_type: PRODUCT_TYPE_OPTIONS
   enum unit: UNIT_OPTIONS
-
-  belongs_to :inclusion, class_name: "Recipe"
-  belongs_to :motherdough, class_name: "Recipe"
-
-  has_many :product_prices
-  accepts_nested_attributes_for :product_prices, allow_destroy: true
 
   validates :name, presence: true, uniqueness: true
   validates :product_type, presence: true
