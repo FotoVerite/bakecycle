@@ -35,6 +35,7 @@ Feature: Orders
     Then I should be redirected to the Orders page
     And "amyavocado" should not be present
 
+  @javascript
   Scenario: As a user, I should be able to edit an order
     When I am on the edit page for "amyavocado" order
     And I change the order name to "andysdecaf"
