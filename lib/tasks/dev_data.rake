@@ -12,15 +12,15 @@ namespace :db do
     Client.delete_all
     Order.delete_all
 
-    create(:user, email: 'user@example.com')
-    create_list(:ingredient, 20)
-    create_list(:recipe_motherdough, 5)
-    create_list(:recipe_inclusion, 5)
-    create_list(:recipe_preferment, 5)
-    create_list(:recipe_ingredient, 5)
-    create_list(:product, 10)
-    create_list(:route, 5)
-    create_list(:client, 5)
-    create_list(:order, 5)
+    FactoryGirl.create(:user, email: 'user@example.com')
+    FactoryGirl.create_list(:ingredient, 20)
+    FactoryGirl.create_list(:recipe_motherdough, 5)
+    FactoryGirl.create_list(:recipe_inclusion, 5)
+    FactoryGirl.create_list(:recipe_preferment, 5)
+    FactoryGirl.create_list(:recipe_ingredient, 5)
+    FactoryGirl.create_list(:product, 10)
+    FactoryGirl.create_list(:route, 5)
+    FactoryGirl.create_list(:client, 5)
+    FactoryGirl.create_list(:order, 5)
   end
 end

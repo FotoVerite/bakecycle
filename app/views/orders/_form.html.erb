@@ -42,6 +42,18 @@
     </div>
   </div>
 
+  <div ng-controller="NestedItemCtrl">
+    <%= f.fields_for :order_items do |builder| %>
+      <%= render "order_item_fields", f: builder %>
+    <% end %>
+    <div ng-repeat="nestedItem in nestedItems">
+      <%= f.fields_for :order_items, OrderItem.new do |builder| %>
+         <%= render "new_order_item_fields", f: builder %>
+      <% end %>
+    </div>
+    <%= link_to 'Add Order Item', '', :'ng-click' => "add()"%>
+  </div>
+
   <div class="row">
     <div class="small-12 columns">
       <%= f.submit (@order.new_record? ? "Create" : "Update"), class: "button", name: nil %>

@@ -8,6 +8,7 @@ class OrdersController < ApplicationController
     @order = Order.new
     @routes = Route.all
     @clients = Client.all
+    @products = Product.all
   end
 
   def create
@@ -18,6 +19,7 @@ class OrdersController < ApplicationController
     else
       @routes = Route.all
       @clients = Client.all
+      @products = Product.all
       render 'new'
     end
   end
@@ -26,6 +28,7 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
     @routes = Route.all
     @clients = Client.all
+    @products = Product.all
   end
 
   def update
@@ -36,6 +39,7 @@ class OrdersController < ApplicationController
     else
       @routes = Route.all
       @clients = Client.all
+      @products = Product.all
       render 'edit'
     end
   end
@@ -48,6 +52,7 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:start_date, :end_date, :client_id, :route_id, :note)
+    params.require(:order).permit(:start_date, :end_date, :client_id, :route_id, :note,
+      order_items_attributes: [:id, :product_id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :_destroy])
   end
 end
