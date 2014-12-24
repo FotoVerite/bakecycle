@@ -43,3 +43,32 @@ end
 Then(/^I should see that the order name is "(.*?)"$/) do |name|
   expect(page).to have_content(name)
 end
+
+When(/^I fill out the order item form with:$/) do |table|
+  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
+  all('.monday_input').last.set(table.hashes[0]["monday"])
+  all('.tuesday_input').last.set(table.hashes[0]["tuesday"])
+  all('.wednesday_input').last.set(table.hashes[0]["wednesday"])
+  all('.thursday_input').last.set(table.hashes[0]["thursday"])
+  all('.friday_input').last.set(table.hashes[0]["friday"])
+  all('.saturday_input').last.set(table.hashes[0]["saturday"])
+  all('.sunday_input').last.set(table.hashes[0]["sunday"])
+end
+
+When(/^I delete "(.*?)" order item$/) do |name|
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..")
+  form.find('a', text: "Remove").click
+end
+
+When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..")
+  form.find_field(day).set(quantity)
+end
+
+Then(/^the order item "(.*?)" should be present$/) do |name|
+  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to_not raise_error
+end
+
+Then(/^the order item "(.*?)" should not be present$/) do |name|
+  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to raise_error
+end
