@@ -5,4 +5,5 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :order_items, allow_destroy: true
 
   validates :route, :client, :start_date, presence: true
+  validates :order_items, presence: true
 end

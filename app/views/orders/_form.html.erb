@@ -11,12 +11,12 @@
     </div>
   <% end %>
   <div class="row">
-     <div class="small-3 columns">
+     <div class="small-6 columns">
        <%= f.label :start_date, "Effective Date" %>
        <%= f.text_field :start_date, class: "js-datepicker" %>
     </div>
 
-     <div class="small-3 columns end">
+     <div class="small-6 columns end">
        <%= f.label :end_date, "End Date" %>
        <%= f.text_field :end_date, class: "js-datepicker" %>
     </div>
@@ -24,19 +24,19 @@
   </div>
 
   <div class="row">
-    <div class="small-3 columns">
+    <div class="small-6 columns">
        <%= f.label :route_id, "Route" %>
-       <%= collection_select(:order, :route_id, @routes, :id, :name, prompt: 'Select One') %>
+       <%= collection_select(:order, :route_id, @order_creator.routes, :id, :name, prompt: 'Select One') %>
     </div>
 
-    <div class="small-3 columns end">
+    <div class="small-6 columns end">
        <%= f.label :client_id, "Client" %>
-       <%= collection_select(:order, :client_id, @clients, :id, :name, prompt: 'Select One') %>
+       <%= collection_select(:order, :client_id, @order_creator.clients, :id, :name, prompt: 'Select One') %>
     </div>
   </div>
 
   <div class="row">
-    <div class="small-6 columns">
+    <div class="small-12 columns">
       <%= f.label :note, "Special Notes" %>
       <%= f.text_area :note %>
     </div>

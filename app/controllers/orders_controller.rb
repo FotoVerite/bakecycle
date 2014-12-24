@@ -1,14 +1,13 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
+
   def index
     @orders = Order.all
   end
 
   def new
     @order = Order.new
-    @routes = Route.all
-    @clients = Client.all
-    @products = Product.all
+    @order_creator = OrderCreator.new
   end
 
   def create
@@ -17,18 +16,14 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have created an order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
-      @routes = Route.all
-      @clients = Client.all
-      @products = Product.all
+      @order_creator = OrderCreator.new
       render 'new'
     end
   end
 
   def edit
     @order = Order.find(params[:id])
-    @routes = Route.all
-    @clients = Client.all
-    @products = Product.all
+    @order_creator = OrderCreator.new
   end
 
   def update
@@ -37,9 +32,7 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have updated the order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
-      @routes = Route.all
-      @clients = Client.all
-      @products = Product.all
+      @order_creator = OrderCreator.new
       render 'edit'
     end
   end
@@ -52,7 +45,10 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:start_date, :end_date, :client_id, :route_id, :note,
-      order_items_attributes: [:id, :product_id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :_destroy])
+    params.require(:order).permit(
+      :start_date, :end_date, :client_id, :route_id, :note,
+      order_items_attributes:
+      [:id, :product_id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :_destroy]
+    )
   end
 end

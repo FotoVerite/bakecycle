@@ -106,4 +106,3 @@ Feature: Products
     Then "Product prices quantity can't be blank" should be present
     And "Product prices quantity is not a number" should be present
     And "Product prices effective date can't be blank" should be present
-
