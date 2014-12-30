@@ -1,0 +1,20 @@
+<div class="row fields" ng-show="true">
+  <div class="small-3 columns">
+    <%= f.label :price, "Price" %>
+    <%= f.text_field :price, id: "product_price_varients_attributes_{{getRandomId($index)}}_price", name: "product[price_varients_attributes][{{getRandomId($index)}}][price]",class: "price_input"%>
+  </div>
+  <div class="small-3 columns">
+    <%= f.label :quantity, "Quantity" %>
+    <%= f.text_field :quantity, id: "product_price_varients_attributes_{{getRandomId($index)}}_quantity", name: "product[price_varients_attributes][{{getRandomId($index)}}][quantity]", class: "quantity_input"  %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.label :effective_date, "Date" %>
+    <%= f.text_field :effective_date, class: "js-datepicker", id:"product_price_varients_attributes_{{getRandomId($index)}}_effective_date", name: "product[price_varients_attributes][{{getRandomId($index)}}][effective_date]" %>
+
+  </div>
+
+  <div class="small-3 columns">
+    <%= f.hidden_field :_destroy, name: "product[price_varients_attributes][{{getRandomId($index)}}][_destroy]" %>
+    <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_price_varient" %>
+  </div>
+</div>

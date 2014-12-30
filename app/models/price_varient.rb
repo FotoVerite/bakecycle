@@ -1,4 +1,4 @@
-class ProductPrice < ActiveRecord::Base
+class PriceVarient < ActiveRecord::Base
   belongs_to :product
 
   validates :price, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true

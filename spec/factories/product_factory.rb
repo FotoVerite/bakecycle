@@ -10,5 +10,6 @@ FactoryGirl.define do
     extra_amount { Faker::Number.decimal(0, 3) }
     association :inclusion, factory: :recipe_inclusion
     association :motherdough, factory: :recipe_motherdough
+    base_price { Faker::Number.decimal(2) }
   end
 end

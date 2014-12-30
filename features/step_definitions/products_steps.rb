@@ -5,6 +5,7 @@ When(/^I fill out product form with:$/) do |table|
   select table.hashes[0]["unit"], from: "product_unit"
   fill_in "product_description", with: table.hashes[0]["description"]
   fill_in "product_extra_amount", with: table.hashes[0]["extra_amount"]
+  fill_in "product_base_price", with: table.hashes[0]["base_price"]
 end
 
 Then(/^I should see a list of products including "(.*?)", "(.*?)" and "(.*?)"$/) do |product1, product2, product3|
@@ -41,20 +42,20 @@ Then(/^I should be redirected to the products page$/) do
   expect(page).to have_content("Products")
 end
 
-When(/^I fill out the product price form with:$/) do |table|
+When(/^I fill out the price varient form with:$/) do |table|
   all('.price_input').last.set(table.hashes[0]["price"])
   all('.quantity_input').last.set(table.hashes[0]["quantity"])
   all('.js-datepicker').last.set(table.hashes[0]["date"])
 end
 
-When(/^I fill out a second product price form with:$/) do |table|
+When(/^I fill out a second price varient form with:$/) do |table|
   all('.price_input').last.set(table.hashes[0]["price"])
   all('.quantity_input').last.set(table.hashes[0]["quantity"])
   all('.js-datepicker').last.set(table.hashes[0]["date"])
 end
 
 Then(/^I click on the last price's remove button$/) do
-  all('.remove_product_price').last.click
+  all('.remove_price_varient').last.click
 end
 
 Then(/^I edit the remaining price to "(.*?)"$/) do |price|
