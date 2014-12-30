@@ -47,7 +47,7 @@
       <%= render "order_item_fields", f: builder %>
     <% end %>
     <div ng-repeat="nestedItem in nestedItems">
-      <%= f.fields_for :order_items, OrderItem.new do |builder| %>
+      <%= f.fields_for :order_items, @order.order_items.build do |builder| %>
          <%= render "new_order_item_fields", f: builder %>
       <% end %>
     </div>

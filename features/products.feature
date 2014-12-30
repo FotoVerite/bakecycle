@@ -8,8 +8,8 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount|
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          |
+      | name           | product_type | description | weight | unit | extra_amount| base_price |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
     And I click on "Create"
     Then "You have created almond cookies" should be present
 
@@ -41,7 +41,7 @@ Feature: Products
     Then I should see a list of products including "baguette cookie", "donut tart" and "croissant sandwich"
     When I click on "baguette cookie"
     And I click on "Add Price"
-    And I fill out the product price form with:
+    And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
     And I click on "Update"
@@ -52,10 +52,10 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount|
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          |
+      | name           | product_type | description | weight | unit | extra_amount| base_price |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
     And I click on "Add Price"
-    And I fill out the product price form with:
+    And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
     And I click on "Create"
@@ -66,14 +66,14 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount|
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          |
+      | name           | product_type | description | weight | unit | extra_amount| base_price |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
     And I click on "Add Price"
-    And I fill out the product price form with:
+    And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
     And I click on "Add Price"
-    And I fill out a second product price form with:
+    And I fill out a second price varient form with:
       | price | quantity | date       |
       | 10.23  | 83      | 2014-12-12  |
     And I click on "Create"
@@ -89,20 +89,20 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount|
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          |
+      | name           | product_type | description | weight | unit | extra_amount| base_price |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
     And I click on "Add Price"
     And I click on "Create"
-    Then "Product prices quantity can't be blank" should be present
-    And "Product prices quantity is not a number" should be present
-    And "Product prices effective date can't be blank" should be present
+    Then "Price varients quantity can't be blank" should be present
+    And "Price varients quantity is not a number" should be present
+    And "Price varients effective date can't be blank" should be present
 
   @javascript
-  Scenario: As a user, If I try to edit a product with empty price fields, I should see validation errors
+  Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
     When I go to the "products" page
     When I click on "baguette cookie"
     And I click on "Add Price"
     And I click on "Update"
-    Then "Product prices quantity can't be blank" should be present
-    And "Product prices quantity is not a number" should be present
-    And "Product prices effective date can't be blank" should be present
+    Then "Price varients quantity can't be blank" should be present
+    And "Price varients quantity is not a number" should be present
+    And "Price varients effective date can't be blank" should be present

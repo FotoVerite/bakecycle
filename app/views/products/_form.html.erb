@@ -11,9 +11,13 @@
     </div>
   <% end %>
   <div class="row">
-    <div class="small-12 columns">
+    <div class="small-6 columns">
       <%= f.label :name %>
       <%= f.text_field :name %>
+    </div>
+    <div class="small-6 columns">
+      <%= f.label :base_price %>
+      <%= f.text_field :base_price %>
     </div>
   </div>
   <div class="row">
@@ -63,12 +67,12 @@
   </div>
 
   <div ng-controller="NestedItemCtrl">
-    <%= f.fields_for :product_prices do |builder| %>
-      <%= render "product_price_fields", f: builder %>
+    <%= f.fields_for :price_varients do |builder| %>
+      <%= render "price_varient_fields", f: builder %>
     <% end %>
     <div ng-repeat="nestedItem in nestedItems">
-      <%= f.fields_for :product_prices, ProductPrice.new do |builder| %>
-         <%= render "new_product_price_fields", f: builder %>
+      <%= f.fields_for :price_varients, @product.price_varients.build do |builder| %>
+         <%= render "new_price_varient_fields", f: builder %>
       <% end %>
     </div>
     <%= link_to 'Add Price', '', :'ng-click' => "add()"%>
