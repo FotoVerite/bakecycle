@@ -7,36 +7,36 @@
     <div class="row">
       <div class="medium-1 small-6 columns">
         <%= f.label :monday, "Mon" %>
-        <%= f.text_field :monday, class: "monday_input"%>
+        <%= f.text_field :monday, class: "monday_input", "ng-disabled"=>"eqStartDate(1)"%>
       </div>
       <div class="medium-1 small-6 columns">
         <%= f.label :tuesday, "Tue" %>
-        <%= f.text_field :tuesday, class: "tuesday_input"%>
+        <%= f.text_field :tuesday, class: "tuesday_input", "ng-disabled"=>"eqStartDate(2)"%>
       </div>
       <div class="medium-1 small-6 columns">
         <%= f.label :wednesday, "Wed" %>
-        <%= f.text_field :wednesday, class: "wednesday_input"%>
+        <%= f.text_field :wednesday, class: "wednesday_input", "ng-disabled"=>"eqStartDate(3)"%>
       </div>
       <div class="medium-1 small-6 columns">
         <%= f.label :thursday, "Thur" %>
-        <%= f.text_field :thursday, class: "thursday_input"%>
+        <%= f.text_field :thursday, class: "thursday_input", "ng-disabled"=>"eqStartDate(4)"%>
       </div>
       <div class="medium-1 small-6 columns">
         <%= f.label :friday, "Fri" %>
-        <%= f.text_field :friday, class: "friday_input"%>
+        <%= f.text_field :friday, class: "friday_input", "ng-disabled"=>"eqStartDate(5)"%>
       </div>
       <div class="medium-1 small-6 columns">
         <%= f.label :saturday, "Sat" %>
-        <%= f.text_field :saturday, class: "saturday_input"%>
+        <%= f.text_field :saturday, class: "saturday_input", "ng-disabled"=>"eqStartDate(6)"%>
       </div>
       <div class="medium-1 small-6 columns end">
         <%= f.label :sunday, "Sun" %>
-        <%= f.text_field :sunday, class: "sunday_input"%>
+        <%= f.text_field :sunday, class: "sunday_input", "ng-disabled"=>"eqStartDate(0)"%>
       </div>
     </div>
   </div>
   <div class="medium-1 small-12 columns">
-        <%= f.hidden_field :_destroy %>
-        <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_order_item" %>
-      </div>
+    <%= f.hidden_field :_destroy %>
+    <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_order_item" %>
+  </div>
 </div>

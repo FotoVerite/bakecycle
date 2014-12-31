@@ -22,5 +22,6 @@ namespace :db do
     FactoryGirl.create_list(:route, 5)
     FactoryGirl.create_list(:client, 5)
     FactoryGirl.create_list(:order, 5)
+    FactoryGirl.create_list(:temporary_order, 5)
   end
 end

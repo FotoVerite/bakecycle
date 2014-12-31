@@ -25,6 +25,7 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'selenium-webdriver'
   gem 'pry'
+  gem 'pry-byebug'
   gem 'shoulda-matchers', require: false
   gem 'cucumber-rails', require: false
   gem 'rubocop'

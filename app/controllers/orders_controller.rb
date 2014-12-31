@@ -6,14 +6,14 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = Order.new
+    @order = Order.new(order_type: 'standing', start_date: Date.today)
     @order_creator = OrderCreator.new
   end
 
   def create
     @order = Order.new(order_params)
     if @order.save
-      flash[:notice] = "You have created an order for #{@order.client.name}."
+      flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
       @order_creator = OrderCreator.new
@@ -29,7 +29,7 @@ class OrdersController < ApplicationController
   def update
     @order = Order.find(params[:id])
     if @order.update(order_params)
-      flash[:notice] = "You have updated the order for #{@order.client.name}."
+      flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
       @order_creator = OrderCreator.new
@@ -46,7 +46,7 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(
-      :start_date, :end_date, :client_id, :route_id, :note,
+      :start_date, :end_date, :client_id, :route_id, :note, :order_type,
       order_items_attributes:
       [:id, :product_id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :_destroy]
     )
