@@ -11,6 +11,7 @@ Feature: Recipes
     When I click on "baguette"
     Then I should be redirected to an recipe page
 
+  @javascript
   Scenario: As a user, I should be able to add an recipe
     When I go to the "recipes" page
     And I click on "Add New Recipe"
@@ -28,6 +29,7 @@ Feature: Recipes
     Then I should be redirected to the recipes page
     And "baguette" should not be present
 
+  @javascript
   Scenario: As a user, I should be able to edit an recipe
     When I am on the edit page for "baguette" recipe
     And I change the recipe name to "danish"

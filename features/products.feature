@@ -4,6 +4,7 @@ Feature: Products
     Given I am logged in as a user
     And There are products named "baguette cookie","donut tart" and "croissant sandwich"
 
+  @javascript
   Scenario: As a user, I should be able to create a product
     When I go to the "products" page
     And I click on "Add New Product"
@@ -19,6 +20,7 @@ Feature: Products
     When I click on "baguette cookie"
     Then I should be redirected to a product page
 
+  @javascript
   Scenario: As a user, I should be able to edit a product
     When I am on the edit page for "baguette cookie" product
     And I change the product name to "almond cookie"
