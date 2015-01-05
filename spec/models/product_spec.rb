@@ -70,4 +70,40 @@ describe Product do
       expect(build(:product)).to belong_to(:inclusion)
     end
   end
+  context 'when calculating weekly price' do
+    before do
+      @apple = FactoryGirl.create(:product, name: "Apple", base_price: 0.5)
+      @price_1 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 11, effective_date: "2015-01-01", price: 0.4)
+      @price_2 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 10, effective_date: "2015-01-07", price: 0.2)
+      @price_3 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 12, effective_date: "2015-01-05", price: 0.3)
+      @price_4 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 13, effective_date: "2015-01-07", price: 0.25)
+      @price_5 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 14, effective_date: "2015-01-10", price: 0.1)
+      @order_item = FactoryGirl.create(
+            :order_item,
+            product: @apple,
+            monday: 1,
+            tuesday: 1,
+            wednesday: 1,
+            thursday: 1,
+            friday: 1,
+            saturday: 1,
+            sunday: 1)
+    end
+
+    it "calculates weekly price for an order item" do
+      quantity = @order_item.weekly_quantity
+      expect(@order_item.product.weekly_price(quantity)).to eq(3.5)
+
+      quantity = 10
+      expect(@order_item.product.weekly_price(quantity)).to eq(2.0)
+
+      quantity = 20
+      expect(@order_item.product.weekly_price(quantity)).to eq(5)
+    end
+  end
 end

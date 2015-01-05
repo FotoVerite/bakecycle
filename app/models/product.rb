@@ -24,4 +24,33 @@ class Product < ActiveRecord::Base
   def self.product_type_options
     PRODUCT_TYPE_OPTIONS
   end
+
+  def weekly_price(quantity)
+    price(quantity) * quantity
+  end
+
+  def price(quantity)
+    return base_price if find_varients.empty?
+    return base_price if quantity_varient(quantity).empty?
+    quantity_varient(quantity).last.price
+  end
+
+  def find_varients
+    price_varients
+  end
+
+  def effective_date_varient
+    find_varients.where("effective_date <= ?", Date.today).order(:effective_date)
+  end
+
+  def quantity_varient(quantity)
+    effective_date_varient.where("quantity <= ?", quantity).order(:quantity)
+  end
+
+  def save(*args)
+    super
+  rescue ActiveRecord::RecordNotUnique
+    errors[:base] << "Identical date and quantity already exist for this product, try a different date."
+    false
+  end
 end

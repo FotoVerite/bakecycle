@@ -36,4 +36,23 @@ describe OrderItem do
     expect(order_item).to validate_numericality_of(:saturday)
     expect(order_item).to validate_numericality_of(:sunday)
   end
+
+  context 'when calculating weekly price' do
+    let(:order_item) do
+      build(
+        :order_item,
+        monday: 1,
+        tuesday: 2,
+        wednesday: 10,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0
+      )
+    end
+
+    it "calculates weekly total quantity for an order_item" do
+      expect(order_item.weekly_quantity).to eq(13)
+    end
+  end
 end
