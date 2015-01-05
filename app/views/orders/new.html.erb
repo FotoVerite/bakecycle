@@ -1,5 +1,7 @@
-<h1>new order</h1>
+<div ng-controller="OrderCtrl" ng-init="order=<%= @order.to_json %>">
+  <h1>new order</h1>
 
-<%= render 'form' %>
+  <%= render "form"%>
 
-<%= link_to 'Back', orders_path %>
+  <%= link_to 'Back', orders_path %>
+</div>

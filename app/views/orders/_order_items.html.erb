@@ -1,0 +1,11 @@
+<div ng-controller="NestedItemCtrl">
+  <%= f.fields_for :order_items do |builder| %>
+    <%= render "order_item_fields", f: builder %>
+  <% end %>
+  <div ng-repeat="nestedItem in nestedItems">
+    <%= f.fields_for :order_items, @order.order_items.build do |builder| %>
+       <%= render "new_order_item_fields", f: builder %>
+    <% end %>
+  </div>
+  <%= link_to 'Add Order Item', '', :'ng-click' => "add()"%>
+</div>

@@ -10,17 +10,36 @@
       </ul>
     </div>
   <% end %>
+
+  <% unless f.object.persisted? %>
+    <div class="row">
+      <div class="small-6 columns end">
+        <%= f.label :order_type, "Order Type"%>
+        <%= f.radio_button(:order_type, "standing", "ng-model" => "order.order_type") %>
+        <%= f.label(:order_type_standing, "Standing") %>
+        <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.order_type") %>
+        <%= f.label(:order_type_temporary, "Temporary") %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-6 columns">
+         <%= f.label :client_id, "Client" %>
+         <%= collection_select(:order, :client_id, @order_creator.clients, :id, :name, prompt: 'Select One') %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="row">
      <div class="small-6 columns">
        <%= f.label :start_date, "Effective Date" %>
-       <%= f.text_field :start_date, class: "js-datepicker" %>
+       <%= f.text_field :start_date, class: "js-datepicker", "ng-model" => "order.start_date"%>
     </div>
-
-     <div class="small-6 columns end">
+    <% unless f.object.temporary? %>
+     <div class="small-6 columns end" ng-hide="isTemporary()">
        <%= f.label :end_date, "End Date" %>
        <%= f.text_field :end_date, class: "js-datepicker" %>
     </div>
-
+    <% end %>
   </div>
 
   <div class="row">
@@ -28,31 +47,16 @@
        <%= f.label :route_id, "Route" %>
        <%= collection_select(:order, :route_id, @order_creator.routes, :id, :name, prompt: 'Select One') %>
     </div>
-
-    <div class="small-6 columns end">
-       <%= f.label :client_id, "Client" %>
-       <%= collection_select(:order, :client_id, @order_creator.clients, :id, :name, prompt: 'Select One') %>
-    </div>
   </div>
 
   <div class="row">
-    <div class="small-12 columns">
+    <div class="small-6 columns">
       <%= f.label :note, "Special Notes" %>
       <%= f.text_area :note %>
     </div>
   </div>
 
-  <div ng-controller="NestedItemCtrl">
-    <%= f.fields_for :order_items do |builder| %>
-      <%= render "order_item_fields", f: builder %>
-    <% end %>
-    <div ng-repeat="nestedItem in nestedItems">
-      <%= f.fields_for :order_items, @order.order_items.build do |builder| %>
-         <%= render "new_order_item_fields", f: builder %>
-      <% end %>
-    </div>
-    <%= link_to 'Add Order Item', '', :'ng-click' => "add()"%>
-  </div>
+  <%= render partial: "order_items", locals: {f: f} %>
 
   <div class="row">
     <div class="small-12 columns">

@@ -19,8 +19,17 @@ Then(/^I should be redirected to an order page$/) do
 end
 
 When(/^I fill out Order form with:$/) do |table|
+  choose "order_order_type_#{table.hashes[0]['order_type']}"
   fill_in "order_start_date", with: table.hashes[0]["start_date"]
   fill_in "order_end_date", with: table.hashes[0]["end_date"]
+  fill_in "order_note", with: table.hashes[0]["note"]
+  select table.hashes[0]["route"], from: "order_route_id"
+  select table.hashes[0]["client"], from: "order_client_id"
+end
+
+When(/^I fill out temporary order form with:$/) do |table|
+  choose "order_order_type_#{table.hashes[0]['order_type']}"
+  fill_in "order_start_date", with: table.hashes[0]["start_date"]
   fill_in "order_note", with: table.hashes[0]["note"]
   select table.hashes[0]["route"], from: "order_route_id"
   select table.hashes[0]["client"], from: "order_client_id"
@@ -53,6 +62,11 @@ When(/^I fill out the order item form with:$/) do |table|
   all('.friday_input').last.set(table.hashes[0]["friday"])
   all('.saturday_input').last.set(table.hashes[0]["saturday"])
   all('.sunday_input').last.set(table.hashes[0]["sunday"])
+end
+
+When(/^I fill out the temporary order item form with:$/) do |table|
+  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
+  all('.friday_input').last.set(table.hashes[0]["friday"])
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
