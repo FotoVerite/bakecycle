@@ -3,13 +3,33 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Action</th>
+    <th>DBA</th>
+    <th>Active</th>
+    <th>Actions</th>
   </tr>
 
   <% @clients.each do |client| %>
     <tr>
       <td><%= link_to client.name, client_path(client) %></td>
-      <td><%= link_to 'Edit', edit_client_path(client) %></td>
+      <td><%= client.dba %></td>
+      <td><%= client.active %></td>
+
+      <td>   
+      
+        <%= link_to edit_client_path(client) do %>
+          <span data-tooltip title="Edit Client"><i class="fi-page-edit"></i></span>
+        <% end %>
+        
+        <%= link_to client_path(client) do %>
+          <span data-tooltip title="View Client"><i class="fi-eye"></i></span>
+        <% end %>
+       
+        <%= link_to new_order_path do %>
+          <span data-tooltip title="Add Order For This Client"><i class="fi-page-add"></i></span>
+        <% end %>
+        
+          <span data-tooltip title="View Orders For This Client"><i class="fi-page-multiple"></i></span>        
+      </td>
     </tr>
   <% end %>
 </table>
