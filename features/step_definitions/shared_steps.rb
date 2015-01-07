@@ -53,3 +53,9 @@ end
 Then(/^"(.*?)" page header should be present$/) do |page_header|
   expect(page).to have_selector('h1', text: page_header)
 end
+
+Then(/^"(.*?)" should be present "(.*?)" times$/) do |keyword, count|
+  regexp = Regexp.new(keyword)
+  count = count.to_i
+  page.find(:xpath, '//body').text.split(regexp).length.should == count + 1
+end
