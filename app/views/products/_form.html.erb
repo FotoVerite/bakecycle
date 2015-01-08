@@ -10,61 +10,57 @@
       </ul>
     </div>
   <% end %>
-  <div class="row">
-    <div class="small-6 columns">
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+  <fieldset>
+    <legend>Product Information</legend>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
     </div>
-    <div class="small-6 columns">
-      <%= f.label :base_price %>
-      <%= f.text_field :base_price %>
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.label :product_type %>
+        <%= f.select(:product_type, Product.product_types.keys.to_a, :prompt => 'Select One') %>
+      </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.label :base_price %>
+        <%= f.text_field :base_price %>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :product_type %>
-      <%= f.select(:product_type, Product.product_types.keys.to_a, :prompt => 'Select One') %>
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.label :unit %>
+        <%= f.select(:unit, Product.units.keys.to_a, :prompt => 'Select One') %>
+      </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.label :weight%>
+        <%= f.text_field :weight%>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :weight%>
-      <%= f.text_field :weight%>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.label :extra_amount%>
+        <%= f.text_field :extra_amount%>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :unit %>
-      <%= f.select(:unit, Product.units.keys.to_a, :prompt => 'Select One') %>
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.label :inclusion_id, "Inclusions" %>
+        <%= collection_select(:product, :inclusion_id, @recipes.inclusions, :id, :name, :prompt => 'Select One') %>
+      </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.label :motherdough_id, "Mother Dough" %>
+        <%= collection_select(:product, :motherdough_id, @recipes.motherdoughs, :id, :name, :prompt => 'Select One') %>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :description%>
-      <%= f.text_area :description%>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.label :description%>
+        <%= f.text_area :description%>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="small-4 columns">
-      <%= f.label :extra_amount%>
-      <%= f.text_field :extra_amount%>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :inclusion_id, "Inclusions" %>
-      <%= collection_select(:product, :inclusion_id, @recipes.inclusions, :id, :name, :prompt => 'Select One') %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.label :motherdough_id, "Mother Dough" %>
-      <%= collection_select(:product, :motherdough_id, @recipes.motherdoughs, :id, :name, :prompt => 'Select One') %>
-    </div>
-  </div>
+  </fieldset>
 
   <div ng-controller="NestedItemCtrl">
     <%= f.fields_for :price_varients do |builder| %>
@@ -75,8 +71,9 @@
          <%= render "new_price_varient_fields", f: builder %>
       <% end %>
     </div>
-    <%= link_to 'Add Price', '', :'ng-click' => "add()"%>
+    <%= link_to 'Add Price', '', 'ng-click' => "add()", class: "button right" %>
   </div>
+</button>
 
 
   <div class="row">
