@@ -36,7 +36,7 @@
     </div>
   </div>
   <div class="medium-1 small-12 columns">
-    <%= f.hidden_field :_destroy %>
+    <%= f.hidden_field :_destroy, value: false %>
     <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_order_item" %>
   </div>
 </div>

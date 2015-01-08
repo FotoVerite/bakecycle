@@ -77,3 +77,17 @@ Feature: Orders
     And I click on "Update"
     Then the order item "baguette cookie" should be present
     And the order item "donut tart" should not be present
+
+    @javascript
+    Scenario: As a user, I should see an error if I click update after I delete the last order item. Then I should be able to add an order item, and see 2 order items.
+    When I am on the edit page for "amyavocado" order
+    And I click on "Remove"
+    And I click on "Update"
+    Then "prohibited" should be present
+    When I click on "Add Order Item"
+    And I fill out the order item form with:
+      | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
+      | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
+    And I click on "Update"
+    Then "Remove" should be present "2" times
+    
