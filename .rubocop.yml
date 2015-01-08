@@ -4,7 +4,7 @@ AllCops:
     - 'lib/tasks/cucumber.rake'
     - 'Guardfile'
     - 'bin/**/*'
-    - 'db/migrate/**/*'
+    - 'db/**/*'
     - 'vendor/bundle/**/*'
     - 'config/unicorn.rb'
 

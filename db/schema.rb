@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141231171348) do
+ActiveRecord::Schema.define(version: 20150108164338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,8 @@ ActiveRecord::Schema.define(version: 20141231171348) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "price_varients", ["product_id", "quantity", "effective_date"], name: "unique_price_varient", unique: true, using: :btree
 
   create_table "products", force: true do |t|
     t.string   "name"
