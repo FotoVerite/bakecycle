@@ -1,14 +1,16 @@
-<div class="row fields" ng-show="true">
- <div class="small-4 columns">
-    <%= f.label :inclusionable, "Ingredient" %>
-    <%= f.select :inclusionable_id_type, @inclusionable, include_blank: "--None--" %>
- </div>
- <div class="small-4 columns">
-    <%= f.label :bakers_percentage, "Baker's %" %>
-    <%= f.text_field :bakers_percentage %>
- </div>
- <div class="small-4 columns">
-    <%= f.hidden_field :_destroy %>
-    <%= link_to 'Remove', '', :'ng-click' => "remove($event)" %>
- </div>
+<div class="fields" ng-show"true">
+  <div class="row">
+   <div class="small-4 columns">
+      <%= f.label :inclusionable, "Ingredient" %>
+      <%= f.select :inclusionable_id_type, @inclusionable, include_blank: "--None--" %>
+   </div>
+   <div class="small-4 columns">
+      <%= f.label :bakers_percentage, "Baker's %" %>
+      <%= f.text_field :bakers_percentage %>
+   </div>
+   <div class="small-4 columns">
+      <%= f.hidden_field :_destroy %>
+      <%= link_to 'Remove', '', :'ng-click' => "remove($event)" %>
+   </div>
+  </div>
 </div>

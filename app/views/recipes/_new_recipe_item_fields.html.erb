@@ -1,14 +1,16 @@
-<div class="row fields" ng-show="true">
- <div class="small-4 columns">
-    <%= f.label :inclusionable, "Ingredient"%>
-    <%= f.select :inclusionable_id_type, @inclusionable, {include_blank: "--None--"} , id: "recipe_recipe_items_attributes_{{getRandomId($index)}}_inclusionable_id_type", name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][inclusionable_id_type]"%>
- </div>
- <div class="small-4 columns">
-    <%= f.label :bakers_percentage, "Baker's %" %>
-    <%= f.text_field :bakers_percentage,  id: "recipe_recipe_items_attributes_{{getRandomId($index)}}_bakers_percentage", name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][bakers_percentage]" %>
- </div>
- <div class="small-4 columns">
-    <%= f.hidden_field :_destroy, name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][_destroy]" %>
-    <%= link_to 'Remove', '', :'ng-click' => "remove($event)" %>
- </div>
+<div class="fields" ng-show="true">
+  <div class="row">
+   <div class="small-4 columns">
+      <%= f.label :inclusionable, "Ingredient"%>
+      <%= f.select :inclusionable_id_type, @inclusionable, {include_blank: "--None--"} , id: "recipe_recipe_items_attributes_{{getRandomId($index)}}_inclusionable_id_type", name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][inclusionable_id_type]"%>
+   </div>
+   <div class="small-4 columns">
+      <%= f.label :bakers_percentage, "Baker's %" %>
+      <%= f.text_field :bakers_percentage,  id: "recipe_recipe_items_attributes_{{getRandomId($index)}}_bakers_percentage", name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][bakers_percentage]" %>
+   </div>
+   <div class="small-4 columns">
+      <%= f.hidden_field :_destroy, name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][_destroy]" %>
+      <%= link_to 'Remove', '', :'ng-click' => "remove($event)" %>
+   </div>
+  </div>
 </div>

@@ -11,53 +11,97 @@
     </div>
   <% end %>
 
-  <% unless f.object.persisted? %>
-    <div class="row">
-      <div class="small-6 columns end">
-        <%= f.label :order_type, "Order Type"%>
-        <%= f.radio_button(:order_type, "standing", "ng-model" => "order.order_type") %>
-        <%= f.label(:order_type_standing, "Standing") %>
-        <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.order_type") %>
-        <%= f.label(:order_type_temporary, "Temporary") %>
+  <fieldset>
+    <legend>Order Information</legend>
+    <% unless f.object.persisted? %>
+      <div class="row">
+        <div class="small-12 columns">
+           <%= f.label :client_id, "Client" %>
+           <%= collection_select(:order, :client_id, @order_creator.clients, :id, :name, prompt: 'Select One') %>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-6 columns">
-         <%= f.label :client_id, "Client" %>
-         <%= collection_select(:order, :client_id, @order_creator.clients, :id, :name, prompt: 'Select One') %>
-      </div>
-    </div>
-  <% end %>
-
-  <div class="row">
-     <div class="small-6 columns">
-       <%= f.label :start_date, "Effective Date" %>
-       <%= f.text_field :start_date, class: "js-datepicker", "ng-model" => "order.start_date"%>
-    </div>
-    <% unless f.object.temporary? %>
-     <div class="small-6 columns end" ng-hide="isTemporary()">
-       <%= f.label :end_date, "End Date" %>
-       <%= f.text_field :end_date, class: "js-datepicker" %>
-    </div>
     <% end %>
-  </div>
 
-  <div class="row">
-    <div class="small-6 columns">
-       <%= f.label :route_id, "Route" %>
-       <%= collection_select(:order, :route_id, @order_creator.routes, :id, :name, prompt: 'Select One') %>
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+         <%= f.label :route_id, "Route" %>
+         <%= collection_select(:order, :route_id, @order_creator.routes, :id, :name, prompt: 'Select One') %>
+      </div>
+      <div class="small-12 medium-6 columns end">
+          <%= f.label :order_type, "Order Type"%>
+          <%= f.radio_button(:order_type, "standing", "ng-model" => "order.order_type") %>
+          <%= f.label(:order_type_standing, "Standing") %>
+          <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.order_type") %>
+          <%= f.label(:order_type_temporary, "Temporary") %>
+        </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="small-6 columns">
-      <%= f.label :note, "Special Notes" %>
-      <%= f.text_area :note %>
+    <div class="row">
+       <div class="small-12 medium-6 columns">
+         <%= f.label :start_date, "Effective Date" %>
+         <%= f.text_field :start_date, class: "js-datepicker", "ng-model" => "order.start_date"%>
+      </div>
+      <% unless f.object.temporary? %>
+       <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
+         <%= f.label :end_date, "End Date" %>
+         <%= f.text_field :end_date, class: "js-datepicker" %>
+      </div>
+      <% end %>
     </div>
-  </div>
 
-  <%= render partial: "order_items", locals: {f: f} %>
 
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.label :note, "Special Notes" %>
+        <%= f.text_area :note %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Product Infomation</legend>
+    <div class="row collapse hide-for-small-only">
+      <div class="small-12 medium-11 columns">
+        <div class="row collapse">
+          <div class="small-12 medium-2 columns">
+            <%= f.label :product_id, "Product" %>
+          </div>
+          <div class="small-12 medium-3 columns">
+            <div class="row collapse">
+              <div class="small-12 medium-7 columns">
+                <label>Price</label>
+              </div>
+              <div class="small-12 medium-5 columns end">
+                <label>Total</label>
+              </div>
+            </div>
+          </div>
+          <div class="small-12 medium-1 columns">
+            <%= f.label :monday, "Mon" %>
+          </div>
+          <div class="small-12 medium-1 columns">
+            <%= f.label :tuesday, "Tue" %>
+          </div>
+          <div class="small-12 medium-1 columns">
+            <%= f.label :wednesday, "Wed" %>
+          </div>
+          <div class="small-12 medium-1 columns">
+            <%= f.label :thursday, "Thur" %>
+          </div>
+          <div class="small-12 medium-1 columns">
+            <%= f.label :friday, "Fri" %>
+          </div>
+          <div class="small-12 medium-1 columns">
+            <%= f.label :saturday, "Sat" %>
+          </div>
+          <div class="small-12 medium-1 columns end">
+            <%= f.label :sunday, "Sun" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= render partial: "order_items", locals: {f: f} %>
+  </fieldset>
   <div class="row">
     <div class="small-12 columns">
       <%= f.submit (@order.new_record? ? "Create" : "Update"), class: "button", name: nil %>

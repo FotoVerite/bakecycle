@@ -5,3 +5,7 @@ fieldset legend {
 .remove-button {
   margin-top: 10px;
 }
+
+.fields {
+  @media #{$small-only} { margin-bottom: 30px;}
+}

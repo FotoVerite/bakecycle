@@ -1,42 +1,56 @@
-<div class="row fields" ng-show="true">
-  <div class="large-3 medium-3 small-12 columns">
-    <%= f.label :product_id, "Product" %>
-    <%= f.collection_select :product_id, @order_creator.products,:id, :name, {include_blank: "--None--"}, {id: "order_order_items_attributes_{{getRandomId($index)}}_product_id", name: "order[order_items_attributes][{{getRandomId($index)}}][product_id]"} %>
-  </div>
-  <div class="large-8 medium-8 small-12 columns">
-    <div class="row">
-      <div class="medium-1 small-6 columns">
-        <%= f.label :monday, "Mon" %>
-        <%= f.text_field :monday, id: "order_order_items_attributes_{{getRandomId($index)}}_monday", name: "order[order_items_attributes][{{getRandomId($index)}}][monday]", class: "monday_input", "ng-disabled"=>"eqStartDate(1)"%>
-      </div>
-      <div class="medium-1 small-6 columns">
-        <%= f.label :tuesday, "Tue" %>
-        <%= f.text_field :tuesday, id: "order_order_items_attributes_{{getRandomId($index)}}_tuesday", name: "order[order_items_attributes][{{getRandomId($index)}}][tuesday]", class: "tuesday_input", "ng-disabled"=>"eqStartDate(2)"%>
-      </div>
-      <div class="medium-1 small-6 columns">
-        <%= f.label :wednesday, "Wed" %>
-        <%= f.text_field :wednesday, id: "order_order_items_attributes_{{getRandomId($index)}}_wednesday", name: "order[order_items_attributes][{{getRandomId($index)}}][wednesday]", class: "wednesday_input", "ng-disabled"=>"eqStartDate(3)"%>
-      </div>
-      <div class="medium-1 small-6 columns">
-        <%= f.label :thursday, "Thur" %>
-        <%= f.text_field :thursday, id: "order_order_items_attributes_{{getRandomId($index)}}_thursday", name: "order[order_items_attributes][{{getRandomId($index)}}][thursday]", class: "thursday_input", "ng-disabled"=>"eqStartDate(4)"%>
-      </div>
-      <div class="medium-1 small-6 columns">
-        <%= f.label :friday, "Fri" %>
-        <%= f.text_field :friday, id: "order_order_items_attributes_{{getRandomId($index)}}_friday", name: "order[order_items_attributes][{{getRandomId($index)}}][friday]", class: "friday_input", "ng-disabled"=>"eqStartDate(5)"%>
-      </div>
-      <div class="medium-1 small-6 columns">
-        <%= f.label :saturday, "Sat" %>
-        <%= f.text_field :saturday, id: "order_order_items_attributes_{{getRandomId($index)}}_saturday", name: "order[order_items_attributes][{{getRandomId($index)}}][saturday]", class: "saturday_input", "ng-disabled"=>"eqStartDate(6)"%>
-      </div>
-      <div class="medium-1 small-6 columns end">
-        <%= f.label :sunday, "Sun" %>
-        <%= f.text_field :sunday, id: "order_order_items_attributes_{{getRandomId($index)}}_sunday", name: "order[order_items_attributes][{{getRandomId($index)}}][sunday]", class: "sunday_input", "ng-disabled"=>"eqStartDate(0)"%>
+<div class="fields" ng-show="true">
+  <div class="row collapse">
+    <div class="small-12 medium-11 columns">
+      <div class="row collapse">
+        <div class="small-12 medium-2 columns">
+          <%= f.label :product_id, "Product", class: "show-for-small-only" %>
+          <%= f.collection_select :product_id, @order_creator.products,:id, :name, {include_blank: "--None--"}, {id: "order_order_items_attributes_{{getRandomId($index)}}_product_id", name: "order[order_items_attributes][{{getRandomId($index)}}][product_id]"} %>
+        </div>
+        <div class="small-12 medium-3 columns">
+          <div class="row collapse">
+            <div class="small-12 medium-7 columns">
+              <label class="show-for-small-only">Price</label>
+              <input ng-disabled="true" type="text" />
+            </div>
+            <div class="small-12 medium-5 columns">
+              <label class="show-for-small-only">Total</label>
+              <input ng-disabled="true" type="text" />
+            </div>
+          </div>
+        </div>
+        <div class="small-12 medium-1 columns">
+          <%= f.label :monday, "Mon", class: "show-for-small-only" %>
+          <%= f.text_field :monday, id: "order_order_items_attributes_{{getRandomId($index)}}_monday", name: "order[order_items_attributes][{{getRandomId($index)}}][monday]", class: "monday_input", "ng-disabled"=>"eqStartDate(1)"%>
+        </div>
+        <div class="small-12 medium-1 columns">
+          <%= f.label :tuesday, "Tue", class: "show-for-small-only"  %>
+          <%= f.text_field :tuesday, id: "order_order_items_attributes_{{getRandomId($index)}}_tuesday", name: "order[order_items_attributes][{{getRandomId($index)}}][tuesday]", class: "tuesday_input", "ng-disabled"=>"eqStartDate(2)"%>
+        </div>
+        <div class="small-12 medium-1 columns">
+          <%= f.label :wednesday, "Wed", class: "show-for-small-only" %>
+          <%= f.text_field :wednesday, id: "order_order_items_attributes_{{getRandomId($index)}}_wednesday", name: "order[order_items_attributes][{{getRandomId($index)}}][wednesday]", class: "wednesday_input", "ng-disabled"=>"eqStartDate(3)"%>
+        </div>
+        <div class="small-12 medium-1 columns">
+          <%= f.label :thursday, "Thur", class: "show-for-small-only" %>
+          <%= f.text_field :thursday, id: "order_order_items_attributes_{{getRandomId($index)}}_thursday", name: "order[order_items_attributes][{{getRandomId($index)}}][thursday]", class: "thursday_input", "ng-disabled"=>"eqStartDate(4)"%>
+        </div>
+        <div class="small-12 medium-1 columns">
+          <%= f.label :friday, "Fri", class: "show-for-small-only" %>
+          <%= f.text_field :friday, id: "order_order_items_attributes_{{getRandomId($index)}}_friday", name: "order[order_items_attributes][{{getRandomId($index)}}][friday]", class: "friday_input", "ng-disabled"=>"eqStartDate(5)"%>
+        </div>
+        <div class="small-12 medium-1 columns">
+          <%= f.label :saturday, "Sat", class: "show-for-small-only" %>
+          <%= f.text_field :saturday, id: "order_order_items_attributes_{{getRandomId($index)}}_saturday", name: "order[order_items_attributes][{{getRandomId($index)}}][saturday]", class: "saturday_input", "ng-disabled"=>"eqStartDate(6)"%>
+        </div>
+        <div class="small-12 medium-1 columns end">
+          <%= f.label :sunday, "Sun", class: "show-for-small-only" %>
+          <%= f.text_field :sunday, id: "order_order_items_attributes_{{getRandomId($index)}}_sunday", name: "order[order_items_attributes][{{getRandomId($index)}}][sunday]", class: "sunday_input", "ng-disabled"=>"eqStartDate(0)"%>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="medium-1 small-12 columns end">
-    <%= f.hidden_field :_destroy, name: "order[order_items_attributes][{{getRandomId($index)}}][_destroy]"%>
-    <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_order_item" %>
+    <div class="small-12 medium-1 columns">
+      <%= f.hidden_field :_destroy, name: "order[order_items_attributes][{{getRandomId($index)}}][_destroy]"%>
+      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "remove_order_item button alert postfix" %>
+    </div>
   </div>
 </div>

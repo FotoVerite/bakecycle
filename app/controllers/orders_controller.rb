@@ -8,6 +8,7 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new(order_type: 'standing', start_date: Date.today)
     @order_creator = OrderCreator.new
+    @order.order_items.build
   end
 
   def create
