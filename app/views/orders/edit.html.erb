@@ -1,5 +1,6 @@
 <div ng-controller="OrderCtrl" ng-init="order=<%= @order.to_json %>">
-  <h1>Order your editing: <%= @order.client.name %></h1>
+  <h1>Editing Order: <%= @order.id %></h1>
+  <h3>Client Name: <%= @order.client.name %></h3>
   <p><%=@order.order_type.capitalize %> order</p>
 
   <%= render "form"%>

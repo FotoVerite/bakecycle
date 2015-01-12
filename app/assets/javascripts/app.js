@@ -9,13 +9,19 @@ app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
   };
 
   $scope.remove = function ($event) {
-    var hiddenElement, parentElement;
+    var hiddenElement, parentElementName, target;
 
     hiddenElement = $event.target.previousElementSibling;
     hiddenElement.value = true;
 
-    parentElement = $event.target.parentNode.parentNode;
-    parentElement.hidden = true;
+    parentElementName = "fields";
+    target = $event.target;
+
+    while (target.className !== parentElementName) {
+      target = target.parentNode;
+    }
+
+    target.hidden = true;
   };
 
   $scope.getRandomId = function ($index) {

@@ -70,12 +70,12 @@ When(/^I fill out the temporary order item form with:$/) do |table|
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..")
-  form.find('a', text: "Remove").click
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../..")
+  form.find('a', text: "X").click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../..")
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
   form.find_field(day).set(quantity)
 end
 
