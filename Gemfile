@@ -18,6 +18,7 @@ gem 'airbrake'
 gem 'draper', '~> 1.3'
 gem 'unicorn', require: false
 gem 'jquery-timepicker-rails'
+gem 'geocoder'
 
 group :test, :development do
   gem 'rspec-rails'

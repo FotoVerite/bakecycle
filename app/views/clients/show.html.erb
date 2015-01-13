@@ -4,23 +4,36 @@
 <br />
 <br />
 
+<div class="map-container" ng-controller="mapCtrl" ng-init="center = [<%= @client.latitude %>, <%= @client.longitude %>]">
+  <map
+    center="{{center}}"
+    visible = "true"
+    draggable = "false"
+    zoom-control = "true"
+    scrollwheel = "false"
+    max-zoom="15"
+    min-zoom="15">
+    <marker position = "{{center}}" on-click="openMap(center)"></marker>
+  </map>
+</div>
+
 <fieldset>
   <legend>Business Information</legend>
     <div class="row">
     <div class="small-12 large-6 columns">
       <p>Name: <%= @client.name %></p>
     </div>
-    
+
     <div class="small-12 large-6 columns">
       <p>DBA: <%= @client.dba %></p>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="small-12 large-6 columns">
       <p>Business Phone:<%= @client.business_phone %></p>
     </div>
-    
+
     <div class="small-12 large-6 columns">
       <p>Business Fax: <%= @client.business_fax %></p>
     </div>
@@ -37,7 +50,7 @@
   <div class="row">
     <div class="small-12 columns">
       <p><%= @client.delivery_address_street_1 %></p>
-      <p><%= @client.delivery_address_street_2 %></p> 
+      <p><%= @client.delivery_address_street_2 %></p>
       <p><%= @client.delivery_address_city %>, <%= @client.delivery_address_state %> <%= @client.delivery_address_zipcode %></p>
     </div>
   </div>
@@ -59,12 +72,12 @@
   <div class="small-12 large-4 columns">
     <fieldset>
       <legend>Accounts Payable Contact</legend>
-      
+
       <div class="row">
         <div class="small-12 columns">
           <p><%= @client.accounts_payable_contact_name %></p>
         </div>
-        
+
         <div class="small-12 columns">
           <p><%= @client.accounts_payable_contact_phone %></p>
         </div>
@@ -82,7 +95,7 @@
         <div class="small-12 columns">
           <p><%= @client.primary_contact_name %></p>
         </div>
-        
+
         <div class="small-12 columns">
           <p><%= @client.primary_contact_phone %></p>
         </div>
@@ -100,7 +113,7 @@
         <div class="small-12 columns">
           <p><%= @client.secondary_contact_name %></p>
         </div>
-        
+
         <div class="small-12 columns">
           <p><%= @client.secondary_contact_phone %></p>
         </div>

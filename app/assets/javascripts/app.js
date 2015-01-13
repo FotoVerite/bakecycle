@@ -1,4 +1,4 @@
-var app = angular.module('bakecycle', []);
+var app = angular.module('bakecycle', ['ngMap']);
 
 app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
   var date = new Date();
@@ -31,7 +31,6 @@ app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
 
 app.controller('OrderCtrl', [ '$scope', function ($scope) {
   $scope.order = {}; // filled by ng-init
-
   $scope.isTemporary = function () {
     return "temporary" === $scope.order.order_type;
   };
@@ -53,5 +52,36 @@ app.controller('OrderCtrl', [ '$scope', function ($scope) {
         return true;
       }
     }
+  };
+}]);
+
+app.controller('mapCtrl', [ '$window', '$scope', function ($window, $scope) {
+  $scope.$on('mapInitialized', function (event, map) {
+    angular.element($window).bind('resize', function () {
+      var resetCenter = debounce(function () {
+        var myLatLng = new google.maps.LatLng($scope.center[0], $scope.center[1]);
+        return map.setCenter(myLatLng);
+      }, 250);
+      resetCenter();
+    });
+  });
+
+  $scope.openMap = function (object, center) {
+    $window.open("https://www.google.com/maps?z=12&t=m&q=loc:" + center[0] + "+" + center[1]);
+  };
+
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
   };
 }]);
