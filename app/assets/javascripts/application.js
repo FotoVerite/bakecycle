@@ -15,6 +15,7 @@
 //= require jquery.ui.datepicker
 //= require jquery.timepicker.js
 //= require angular/angular
+//= require ngmap
 //= require foundation
 //= require_tree .
 
