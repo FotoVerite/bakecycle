@@ -4,17 +4,18 @@ class OrderItem < ActiveRecord::Base
 
   before_validation :zero_if_blank
 
-  DAYS_OF_WEEK = [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]
+  DAYS_OF_WEEK = [
+    :monday,
+    :tuesday,
+    :wednesday,
+    :thursday,
+    :friday,
+    :saturday,
+    :sunday
+  ]
 
   validates :product, presence: true
-  validates :monday,
-            :tuesday,
-            :wednesday,
-            :thursday,
-            :friday,
-            :saturday,
-            :sunday,
-            numericality: true
+  validates(*DAYS_OF_WEEK, numericality: true)
 
   def days_of_week
     DAYS_OF_WEEK
@@ -29,7 +30,7 @@ class OrderItem < ActiveRecord::Base
   def weekly_quantity
     qty = 0
     days_of_week.each do |day|
-      qty += send(day)
+      qty += send(day) || 0
     end
     qty
   end
