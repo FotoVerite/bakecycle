@@ -182,6 +182,8 @@ GEM
     pry-byebug (2.0.0)
       byebug (~> 3.4)
       pry (~> 0.10)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-livereload (0.3.15)
       rack
@@ -297,7 +299,6 @@ PLATFORMS
 DEPENDENCIES
   airbrake
   bower-rails
-  capybara
   coffee-rails (~> 4.0.0)
   cucumber-rails
   database_cleaner
@@ -318,6 +319,7 @@ DEPENDENCIES
   pg
   pry
   pry-byebug
+  quiet_assets
   rack-livereload
   rails (= 4.1.1)
   rails_12factor

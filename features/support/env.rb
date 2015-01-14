@@ -61,12 +61,3 @@ end
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
-
-# rake test is leaving data behind and it's letting us config it
-AfterConfiguration do |_config|
-  print "Cleaning the db for first use... "
-  DatabaseCleaner.strategy = :truncation
-  DatabaseCleaner.clean
-  DatabaseCleaner.strategy = :transaction
-  puts "done."
-end

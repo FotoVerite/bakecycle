@@ -1,10 +1,20 @@
-require 'faker'
-
 FactoryGirl.define do
   factory :route do
-    sequence(:name) { |n| "#{n}#{Faker::Lorem.word}" }
+    name { generate(:route_name) }
     departure_time { Faker::Time.forward(23, :morning) }
-    notes { Faker::Lorem.sentence(1) }
-    active 1
+    active true
   end
+
+  sequence :route_name do |n|
+    routes = [
+      "Uptown",
+      "Downtown",
+      "East Side",
+      "West Side",
+      "Midtown"
+    ]
+
+    "#{routes.sample} #{n}"
+  end
+
 end

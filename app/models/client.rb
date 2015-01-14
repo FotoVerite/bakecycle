@@ -18,6 +18,7 @@ class Client < ActiveRecord::Base
   validates :primary_contact_name, presence: true, length: { maximum: 150 }
   validates :primary_contact_phone, presence: true
   validates :primary_contact_email, presence: true, format: { with: /@/ }
+  validates :active, inclusion: [true, false]
 
   geocoded_by :full_delivery_address
   after_validation :geocode

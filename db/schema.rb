@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113160716) do
+ActiveRecord::Schema.define(version: 20150115204824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20150113160716) do
     t.string  "dba"
     t.string  "business_phone"
     t.string  "business_fax"
-    t.boolean "active"
+    t.boolean "active",                         null: false
     t.string  "delivery_address_street_1"
     t.string  "delivery_address_street_2"
     t.string  "delivery_address_city"
@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 20150113160716) do
   create_table "routes", force: true do |t|
     t.string  "name"
     t.text    "notes"
-    t.boolean "active"
+    t.boolean "active",         null: false
     t.time    "departure_time"
   end
 

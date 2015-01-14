@@ -14,6 +14,9 @@ describe Route do
     expect(route).to validate_presence_of(:name)
     expect(route).to ensure_length_of(:name).is_at_most(150)
     expect(route).to validate_presence_of(:departure_time)
+
+    route.active = nil
+    expect(route).to_not be_valid
   end
 
   it "it is a time" do

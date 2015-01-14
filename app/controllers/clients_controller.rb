@@ -5,7 +5,7 @@ class ClientsController < ApplicationController
   end
 
   def new
-    @client = Client.new
+    @client = Client.new(active: true)
   end
 
   def create
@@ -31,7 +31,7 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
     if @client.update(client_params)
       flash[:notice] = "You have updated #{@client.name}."
-      redirect_to edit_client_path(@client)
+      redirect_to client_path(@client)
     else
       render 'edit'
     end
