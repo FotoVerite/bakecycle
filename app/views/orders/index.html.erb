@@ -1,25 +1,29 @@
 <h1>Orders</h1>
 <p><%= link_to 'Add New Order', new_order_path %></p>
-<table>
-  <tr>
-    <th>Order Date</th>
-    <th>Client</th>
-    <th>Type</th>
-    <th>Route</th>
-    <th>Action</th>
-  </tr>
 
-  <% @orders.each do |order| %>
+<table class="responsive-table">
+  <thead>
     <tr>
-      <td><%= order.start_date %></td>
-      <td><%= link_to order.client.name, edit_order_path(order) %></td>
-      <td><%= order.order_type %></td>
-      <td><%= order.route.name %></td>
-      <td>
-        <%= link_to edit_order_path(order) do %>
-          <span data-tooltip title="Edit Order"><i class="fi-page-edit"></i></span>
-        <% end %>
-      </td>
+      <th scope="col">Order Date</th>
+      <th scope="col">Client</th>
+      <th scope="col">Type</th>
+      <th scope="col">Route</th>
+      <th scope="col">Action</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <th scope="row"><%= order.start_date %></th>
+        <td data-title="Client"><%= link_to order.client.name, edit_order_path(order) %></td>
+        <td data-title="Type"><%= order.order_type %></td>
+        <td data-title="Route"><%= order.route.name %></td>
+        <td data-title="Action">
+          <%= link_to edit_order_path(order) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Order"><i class="fi-page-edit"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>

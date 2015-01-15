@@ -1,23 +1,26 @@
 <h1>Products</h1>
 <p><%= link_to 'Add New Product', new_product_path, class: "button" %></p>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Product Type</th>
-    <th>Description</th>
-    <th>Action</th>
-  </tr>
-
-  <% @products.each do |product| %>
+<table class="responsive-table">
+  <thead>
     <tr>
-      <td><%= link_to product.name, edit_product_path(product) %></td>
-      <td><%= product.product_type %></td>
-      <td><%= product.description.truncate(30) %></td>
-      <td>
-      <%= link_to edit_product_path(product) do %>
-          <span data-tooltip title="Edit Product"><i class="fi-page-edit large"></i></span>
-        <% end %>
-      </td>
+      <th scope="col">Name</th>
+      <th scope="col">Product Type</th>
+      <th scope="col">Description</th>
+      <th scope="col">Action</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <th scope="row"><%= link_to product.name, edit_product_path(product) %></th>
+        <td data-title="Product Type"><%= product.product_type %></td>
+        <td data-title="Description"><%= product.description.truncate(30) %></td>
+        <td data-title="Action">
+        <%= link_to edit_product_path(product) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Product"><i class="fi-page-edit large"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
