@@ -1,15 +1,22 @@
 <h1>Ingredients</h1>
 <p><%= link_to 'Add New Ingredient', new_ingredient_path %></p>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Action</th>
-  </tr>
-
-  <% @ingredients.each do |ingredient| %>
+<table class="responsive-table">
+  <thead>
     <tr>
-      <td><%= link_to ingredient.name, edit_ingredient_path(ingredient) %></td>
-      <td><%= link_to 'Edit', edit_ingredient_path(ingredient) %></td>
+      <th scope="col">Name</th>
+      <th scope="col">Action</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @ingredients.each do |ingredient| %>
+      <tr>
+        <th scope="row"><%= link_to ingredient.name, edit_ingredient_path(ingredient) %></th>
+        <td data-title="Action">
+          <%= link_to edit_ingredient_path(ingredient) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Ingredient"><i class="fi-page-edit"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>

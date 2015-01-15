@@ -1,35 +1,38 @@
 <h1>Clients</h1>
 <p><%= link_to 'Add New Client', new_client_path %></p>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>DBA</th>
-    <th>Active</th>
-    <th>Actions</th>
-  </tr>
 
-  <% @clients.each do |client| %>
+<table class="responsive-table">
+  <thead>
     <tr>
-      <td><%= link_to client.name, client_path(client) %></td>
-      <td><%= client.dba %></td>
-      <td><%= client.active %></td>
-
-      <td>   
-      
-        <%= link_to edit_client_path(client) do %>
-          <span data-tooltip title="Edit Client"><i class="fi-page-edit"></i></span>
-        <% end %>
-        
-        <%= link_to client_path(client) do %>
-          <span data-tooltip title="View Client"><i class="fi-eye"></i></span>
-        <% end %>
-       
-        <%= link_to new_order_path do %>
-          <span data-tooltip title="Add Order For This Client"><i class="fi-page-add"></i></span>
-        <% end %>
-        
-          <span data-tooltip title="View Orders For This Client"><i class="fi-page-multiple"></i></span>        
-      </td>
+      <th scope="col">Name</th>
+      <th scope="col">DBA</th>
+      <th scope="col">Active</th>
+      <th scope="col">Actions</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @clients.each do |client| %>
+      <tr>
+        <th scope="row"><%= link_to client.name, client_path(client) %></th>
+        <td data-title="DBA"><%= client.dba %></td>
+        <td data-title="Active"><%= client.active %></td>
+        <td data-title="Actions">
+
+          <%= link_to edit_client_path(client) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Client"><i class="fi-page-edit"></i></span>
+          <% end %>
+
+          <%= link_to client_path(client) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="View Client"><i class="fi-eye"></i></span>
+          <% end %>
+
+          <%= link_to new_order_path do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Add Order For This Client"><i class="fi-page-add"></i></span>
+          <% end %>
+
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="View Orders For This Client"><i class="fi-page-multiple"></i></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
