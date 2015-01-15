@@ -1,13 +1,10 @@
-require 'faker'
-
 FactoryGirl.define do
   factory :recipe do
+    recipe_type { Recipe.recipe_type_options.sample }
     sequence(:name) { |n| "#{n}#{Faker::Lorem.word}" }
-    note { Faker::Lorem.sentence(1) }
     mix_size 12
     mix_size_unit [:oz, :lb, :g, :kg].sample
     lead_days 2
-    recipe_type [:dough, :pre_ferment, :inclusion, :ingredient].sample
 
     factory :recipe_motherdough do
       recipe_type :dough
@@ -25,4 +22,5 @@ FactoryGirl.define do
       recipe_type :ingredient
     end
   end
+
 end

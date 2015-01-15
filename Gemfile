@@ -22,12 +22,11 @@ gem 'geocoder'
 
 group :development do
   gem 'spring'
+  gem 'quiet_assets'
 end
 
 group :test, :development do
   gem 'rspec-rails'
-  gem 'capybara'
-  gem 'database_cleaner'
   gem 'selenium-webdriver'
   gem 'pry'
   gem 'pry-byebug'
@@ -41,6 +40,7 @@ group :test, :development do
 end
 
 group :test do
+  gem 'database_cleaner'
   gem 'webmock'
 end
 
