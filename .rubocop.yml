@@ -20,3 +20,5 @@ Style/Documentation:
   Enabled: false
 Style/NumericLiterals:
   Enabled: false
+Style/IndentHash:
+  Enabled: false

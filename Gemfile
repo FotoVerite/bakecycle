@@ -20,6 +20,10 @@ gem 'unicorn', require: false
 gem 'jquery-timepicker-rails'
 gem 'geocoder'
 
+group :development do
+  gem 'spring'
+end
+
 group :test, :development do
   gem 'rspec-rails'
   gem 'capybara'
@@ -36,13 +40,13 @@ group :test, :development do
   gem 'guard-bundler'
 end
 
+group :test do
+  gem 'webmock'
+end
+
 group :test, :development, :staging do
   gem 'factory_girl_rails'
   gem 'faker'
-end
-
-group :development do
-  gem 'spring'
 end
 
 group :production, :staging do

@@ -47,7 +47,7 @@ describe OrderItem do
         thursday: 0,
         friday: 0,
         saturday: 0,
-        sunday: 0
+        sunday: nil
       )
     end
 
