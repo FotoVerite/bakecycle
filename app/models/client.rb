@@ -14,10 +14,10 @@ class Client < ActiveRecord::Base
   validates :billing_address_zipcode, presence: true
   validates :accounts_payable_contact_name, presence: true, length: { maximum: 150 }
   validates :accounts_payable_contact_phone, presence: true
-  validates :accounts_payable_contact_email, presence: true, format: { with: /@/ }
+  validates :accounts_payable_contact_email, presence: true, format: { with: /\A.+@.+\..+\z/ }
   validates :primary_contact_name, presence: true, length: { maximum: 150 }
   validates :primary_contact_phone, presence: true
-  validates :primary_contact_email, presence: true, format: { with: /@/ }
+  validates :primary_contact_email, presence: true, format: { with: /\A.+@.+\..+\z/ }
   validates :active, inclusion: [true, false]
 
   geocoded_by :full_delivery_address
