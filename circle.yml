@@ -13,3 +13,4 @@ notify:
 test:
   pre:
     - bundle exec rubocop -D -c .rubocop.yml
+    - bundle exec brakeman -z
