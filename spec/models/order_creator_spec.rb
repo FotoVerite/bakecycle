@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe OrderCreator do
-
   let(:order_creator) { OrderCreator.new }
 
   it "has model attributes" do

@@ -13,7 +13,6 @@ describe Recipe do
   end
 
   describe "validations" do
-
     describe "name" do
       it { expect(recipe).to validate_presence_of(:name) }
       it { expect(recipe).to ensure_length_of(:name).is_at_most(150) }
@@ -54,6 +53,10 @@ describe Recipe do
       it { expect(recipe).to validate_presence_of(:mix_size_unit) }
       it { expect(build(:recipe, mix_size_unit: nil)).to_not be_valid }
       it { expect(build(:recipe, mix_size_unit: 0)).to be_valid }
+    end
+
+    describe "recipe_type" do
+      it { expect(recipe).to validate_presence_of(:recipe_type) }
     end
   end
 end

@@ -33,5 +33,4 @@ FactoryGirl.define do
     ]
     "#{ingredients.sample} ##{n}"
   end
-
 end

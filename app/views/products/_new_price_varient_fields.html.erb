@@ -1,22 +1,17 @@
-<fieldset>
-  <legend>Pricing</legend>
-  <div class="row fields" ng-show="true">
+<fieldset class="fields" ng-show="true">
+  <div class="row">
     <div class="small-12 medium-3 columns">
-      <%= f.label :price, "Price" %>
-      <%= f.text_field :price, id: "product_price_varients_attributes_{{getRandomId($index)}}_price", name: "product[price_varients_attributes][{{getRandomId($index)}}][price]",class: "price_input"%>
+      <%= f.input :price, as: :string,  input_html: { id: "product_price_varients_attributes_{{getRandomId($index)}}_price", name: "product[price_varients_attributes][{{getRandomId($index)}}][price]", class: "price_input" }%>
     </div>
     <div class="small-12 medium-3 columns">
-      <%= f.label :quantity, "Quantity" %>
-      <%= f.text_field :quantity, id: "product_price_varients_attributes_{{getRandomId($index)}}_quantity", name: "product[price_varients_attributes][{{getRandomId($index)}}][quantity]", class: "quantity_input"  %>
+      <%= f.input :quantity, as: :string, input_html: { id: "product_price_varients_attributes_{{getRandomId($index)}}_quantity", name: "product[price_varients_attributes][{{getRandomId($index)}}][quantity]", class: "quantity_input" }  %>
     </div>
     <div class="small-12 medium-3 columns">
-      <%= f.label :effective_date, "Date" %>
-      <%= f.text_field :effective_date, class: "js-datepicker", id:"product_price_varients_attributes_{{getRandomId($index)}}_effective_date", name: "product[price_varients_attributes][{{getRandomId($index)}}][effective_date]" %>
-
+      <%= f.input :effective_date, as: :string, placeholder: "select date", input_html: { id:"product_price_varients_attributes_{{getRandomId($index)}}_effective_date", name: "product[price_varients_attributes][{{getRandomId($index)}}][effective_date]", class: "js-datepicker" } %>
     </div>
 
     <div class="small-12 medium-3 columns">
-      <%= f.hidden_field :_destroy, name: "product[price_varients_attributes][{{getRandomId($index)}}][_destroy]" %>
+      <%= f.input :_destroy, as: :hidden, wrapper: false, input_html: { name: "product[price_varients_attributes][{{getRandomId($index)}}][_destroy]" } %>
       <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_price_varient button alert right remove-button" %>
     </div>
   </div>

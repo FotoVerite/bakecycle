@@ -75,7 +75,7 @@ Feature: Products
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
     And I click on "Add Price"
-    And I fill out a second price varient form with:
+    And I fill out the price varient form with:
       | price | quantity | date       |
       | 10.23  | 83      | 2014-12-12  |
     And I click on "Create"
@@ -95,9 +95,8 @@ Feature: Products
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
     And I click on "Add Price"
     And I click on "Create"
-    Then "Price varients quantity can't be blank" should be present
-    And "Price varients quantity is not a number" should be present
-    And "Price varients effective date can't be blank" should be present
+    Then "Quantity can't be blank" should be present
+    And "Effective date can't be blank" should be present
 
   @javascript
   Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
@@ -105,9 +104,8 @@ Feature: Products
     When I click on "baguette cookie"
     And I click on "Add Price"
     And I click on "Update"
-    Then "Price varients quantity can't be blank" should be present
-    And "Price varients quantity is not a number" should be present
-    And "Price varients effective date can't be blank" should be present
+    Then "Quantity can't be blank" should be present
+    And "Effective date can't be blank" should be present
 
   @javascript
   Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
@@ -118,8 +116,8 @@ Feature: Products
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
     And I click on "Add Price"
-    And I fill out a second price varient form with:
+    And I fill out the price varient form with:
       | price | quantity | date        |
       | 10.23  | 100     | 2014-12-11  |
     And I click on "Update"
-    And "quantity already exist for this product, try a different date" should be present
+    And "Identical date and quantity already exist for this product, try a different date." should be present

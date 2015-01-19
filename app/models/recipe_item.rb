@@ -1,7 +1,8 @@
 class RecipeItem < ActiveRecord::Base
   belongs_to :inclusionable, polymorphic: true
 
-  validates :inclusionable, :bakers_percentage, presence: true
+  validates :bakers_percentage, presence: true
+  validates :inclusionable_id_type, presence: true
   validates :bakers_percentage, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: { greater_than: 0.001 }
 
   def self.inclusionable_items
@@ -19,6 +20,6 @@ class RecipeItem < ActiveRecord::Base
   end
 
   def inclusionable_id_type
-    "#{inclusionable_id}-#{inclusionable_type}"
+    "#{inclusionable_id}-#{inclusionable_type}" if inclusionable
   end
 end

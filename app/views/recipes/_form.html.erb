@@ -1,65 +1,49 @@
-<%= form_for @recipe do |f| %>
+<%= simple_form_for @recipe do |f| %>
   <% if @recipe.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@recipe.errors.count, "error") %> prohibited
-        this recipe from being saved:</h2>
-      <ul>
-      <% @recipe.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+    <%= f.error_notification %>
   <% end %>
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+      <%= f.input :name, as: :string %>
     </div>
   </div>
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :note %>
-      <%= f.text_field :note %>
+      <%= f.input :note, as: :text %>
     </div>
   </div>
 
   <div class="row">
     <div class="small-6 columns">
-      <%= f.label :mix_size %>
-      <%= f.text_field :mix_size %>
+      <%= f.input :mix_size, as: :string %>
     </div>
     <div class="small-6 columns">
-      <%= f.label :mix_size_unit %>
-      <%= f.select(:mix_size_unit, Recipe.mix_size_units.keys.to_a, prompt: 'Select One') %>
+      <%= f.input :mix_size_unit, collection: Recipe.mix_size_units.keys.to_a, prompt: "Select One", as: :select %>
     </div>
   </div>
 
    <div class="row">
     <div class="small-12 columns">
-      <%= f.label :recipe_type %>
-      <%= f.select(:recipe_type, Recipe.recipe_types.keys.to_a, prompt: 'Select One') %>
+      <%= f.input :recipe_type, collection: Recipe.recipe_types.keys.to_a, prompt: "Select One", as: :select %>
     </div>
   </div>
 
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :lead_days %>
-      <%= f.text_field :lead_days %>
+      <%= f.input :lead_days, as: :string %>
     </div>
   </div>
 
   <div ng-controller="NestedItemCtrl">
-    <%= f.fields_for :recipe_items do |builder| %>
+    <%= f.simple_fields_for :recipe_items do |builder| %>
       <%= render "recipe_item_fields", f: builder %>
     <% end %>
     <div ng-repeat="nestedItem in nestedItems">
-      <%= f.fields_for :recipe_items, @recipe.recipe_items.build do |builder| %>
+      <%= f.simple_fields_for :recipe_items, @recipe.recipe_items.build do |builder| %>
          <%= render "new_recipe_item_fields", f: builder %>
       <% end %>
     </div>
     <%= link_to 'Add Ingredient', '', :'ng-click' => "add()"%>
-
-
   </div>
 
 

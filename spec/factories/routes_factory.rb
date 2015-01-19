@@ -16,5 +16,4 @@ FactoryGirl.define do
 
     "#{routes.sample} #{n}"
   end
-
 end

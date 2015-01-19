@@ -72,6 +72,5 @@ describe Client do
       client.active = nil
       expect(client).to_not be_valid
     end
-
   end
 end

@@ -1,15 +1,13 @@
-<div class="fields" ng-show"true">
+<div class="fields" ng-show="true">
   <div class="row">
    <div class="small-4 columns">
-      <%= f.label :inclusionable, "Ingredient" %>
-      <%= f.select :inclusionable_id_type, @inclusionable, include_blank: "--None--" %>
+      <%= f.input :inclusionable_id_type, collection: @inclusionable, label: "Ingredient", include_blank: "--None--", as: :select%>
    </div>
    <div class="small-4 columns">
-      <%= f.label :bakers_percentage, "Baker's %" %>
-      <%= f.text_field :bakers_percentage %>
+      <%= f.input :bakers_percentage, as: :string, label: "Baker's %", as: :string %>
    </div>
    <div class="small-4 columns">
-      <%= f.hidden_field :_destroy %>
+      <%= f.input :_destroy, as: :hidden, wrapper: false %>
       <%= link_to 'Remove', '', :'ng-click' => "remove($event)" %>
    </div>
   </div>
