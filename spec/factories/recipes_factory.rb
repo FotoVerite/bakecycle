@@ -21,6 +21,15 @@ FactoryGirl.define do
     factory :recipe_ingredient do
       recipe_type :ingredient
     end
-  end
 
+    trait :with_ingredients do
+      transient do
+        ingredient_count 3
+
+        after(:build) do |recipe, evaluator|
+          recipe.recipe_items = FactoryGirl.build_list(:recipe_item_ingredient, evaluator.ingredient_count)
+        end
+      end
+    end
+  end
 end
