@@ -72,11 +72,22 @@ describe Client do
       client.active = nil
       expect(client).to_not be_valid
     end
+  end
 
-    describe "billing_term" do
-      it { expect(client).to validate_presence_of(:billing_term) }
-      it { expect(build(:client, billing_term: nil)).to_not be_valid }
-      it { expect(build(:client, billing_term: 0)).to be_valid }
+  describe "#get_billing_term_days" do
+    it "reads billing_term from client and returns an integer" do
+      client = build(:client, billing_term: "net_30")
+      expect(Client.get_billing_term_days(client.billing_term)).to eq(30.days)
+    end
+  end
+
+  describe "#bill_today?" do
+    it "checks billing_term to determine if immediate payment is needed" do
+      client = build(:client, billing_term: "net_30")
+      expect(client.bill_today?).to eq(false)
+
+      client2 = build(:client, billing_term: "cod")
+      expect(client2.bill_today?).to eq(true)
     end
   end
 end

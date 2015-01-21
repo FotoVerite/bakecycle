@@ -1,0 +1,63 @@
+<%= simple_form_for @shipment do |f| %>
+  <%= f.error_notification %>
+
+  <fieldset>
+    <legend>Shipment Information</legend>
+
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.input :client_id, collection: @order_creator.clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.input :route_id, collection: @order_creator.routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.input :shipment_date, as: :string, label: "Shipment Date", input_html: { class: "js-datepicker" } %>
+      </div>
+    </div>
+
+    <% if f.object.persisted? %>
+
+      <div class="row">
+        <div class="small-12 medium-6 columns">
+          <%= f.input :payment_due_date, as: :string, label: "Payment Due Date", readonly: true %>
+        </div>
+      </div>
+
+    <% end %>
+  </fieldset>
+
+  <fieldset>
+    <legend>Shipment Items</legend>
+
+    <div ng-controller="NestedItemCtrl">
+      <%= f.simple_fields_for :shipment_items do |builder| %>
+        <%= render "shipment_item_fields", f: builder %>
+      <% end %>
+
+      <div ng-repeat="nestedItem in nestedItems">
+        <%= f.simple_fields_for :shipment_items, @shipment.shipment_items.build do |builder| %>
+          <%= render "new_shipment_item_fields", f: builder %>
+        <% end %>
+      </div>
+
+      <%= link_to 'Add Shipment Item', '', :'ng-click' => "add()"%>
+    </div>
+  </fieldset>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless f.object.new_record? %>
+        <%= link_to 'Delete', shipment_path(f.object), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

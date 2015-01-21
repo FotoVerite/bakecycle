@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :routes
   resources :clients
   resources :orders
+  resources :shipments
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
