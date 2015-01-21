@@ -10,11 +10,11 @@
           <div class="row collapse">
             <div class="small-12 medium-7 columns">
               <label class="show-for-small-only">Price</label>
-              <input ng-disabled="true" type="text" value='<%= "#{f.object.product.price(f.object.weekly_quantity)} @#{f.object.weekly_quantity}pc" unless f.object.id.nil? %>' />
+              <input ng-disabled="true" type="text" value='<%= f.object.product_price_and_quantity %>' />
             </div>
             <div class="small-12 medium-5 columns">
               <label class="show-for-small-only">Total</label>
-              <input ng-disabled="true" type="text" value='<%= "$#{f.object.product.weekly_price(f.object.weekly_quantity)}" unless f.object.id.nil? %>' />
+              <input ng-disabled="true" type="text" value='<%= f.object.display_total_quantity_price %>' />
             </div>
           </div>
         </div>

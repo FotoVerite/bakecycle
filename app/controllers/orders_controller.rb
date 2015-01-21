@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
+  decorates_assigned :order, :orders
 
   def index
     @orders = Order.all
