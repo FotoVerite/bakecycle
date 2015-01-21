@@ -3,8 +3,8 @@ FactoryGirl.define do
     name { generate(:ingredient_name) }
     price { Faker::Number.decimal(3) }
     measure { Faker::Number.decimal(0, 3) }
-    unit [:oz, :lb, :g, :kg].sample
-    ingredient_type [:flour, :ingredient].sample
+    unit { [:oz, :lb, :g, :kg].sample }
+    ingredient_type { [:flour, :ingredient].sample }
     description { Faker::Lorem.sentence(1) }
   end
 

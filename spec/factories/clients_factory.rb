@@ -24,6 +24,8 @@ FactoryGirl.define do
     primary_contact_phone { Faker::PhoneNumber.cell_phone }
     primary_contact_email { Faker::Internet.email }
 
+    billing_term { [:net_45, :net_30, :net_15, :net_7, :credit_card, :cod].sample }
+
     trait :with_secondary_contact do
       secondary_contact_name { Faker::Name.name }
       secondary_contact_phone { Faker::PhoneNumber.cell_phone }
