@@ -1,9 +1,9 @@
-<%= simple_form_for @order do |f| %>
-  <% if @order.errors.any? %>
+<%= simple_form_for order do |f| %>
+  <% if f.object.errors.any? %>
       <%= f.error_notification %>
       <div id="error_explanation">
         <ul>
-          <% @order.errors.each do |attribute, msg| %>
+          <% f.object.errors.each do |attribute, msg| %>
             <% if attribute == :order_items %>
               <li><%= msg %></li>
             <% end %>
@@ -99,9 +99,9 @@
   </fieldset>
   <div class="row">
     <div class="small-12 columns">
-      <%= f.submit (@order.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless @order.new_record? %>
-        <%= link_to 'Delete', order_path(@order), class: "button alert",
+      <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless f.object.new_record? %>
+        <%= link_to 'Delete', order_path(f.object), class: "button alert",
                                   method: :delete, data: { confirm: 'Are you sure?' } %>
       <% end %>
     </div>

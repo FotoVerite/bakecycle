@@ -25,10 +25,6 @@ class Product < ActiveRecord::Base
     PRODUCT_TYPE_OPTIONS
   end
 
-  def weekly_price(quantity)
-    price(quantity) * quantity
-  end
-
   def price(quantity)
     return base_price if find_varients.empty?
     return base_price if quantity_varient(quantity).empty?

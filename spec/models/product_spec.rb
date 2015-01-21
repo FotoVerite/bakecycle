@@ -94,15 +94,14 @@ describe Product do
             sunday: 1)
     end
 
-    it "calculates weekly price for an order item" do
-      quantity = @order_item.weekly_quantity
-      expect(@order_item.product.weekly_price(quantity)).to eq(3.5)
+    it "calculates total quantity price for an order item" do
+      expect(@order_item.total_quantity_price).to eq(3.5)
 
-      quantity = 10
-      expect(@order_item.product.weekly_price(quantity)).to eq(2.0)
+      @order_item.monday = 4
+      expect(@order_item.total_quantity_price).to eq(2.0)
 
-      quantity = 20
-      expect(@order_item.product.weekly_price(quantity)).to eq(5)
+      @order_item.tuesday = 11
+      expect(@order_item.total_quantity_price).to eq(5)
     end
   end
 end

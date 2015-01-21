@@ -27,6 +27,14 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
+  def product_price
+    product.price(weekly_quantity) if product
+  end
+
+  def total_quantity_price
+    product_price * weekly_quantity if product
+  end
+
   def weekly_quantity
     qty = 0
     days_of_week.each do |day|
