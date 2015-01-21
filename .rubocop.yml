@@ -7,6 +7,8 @@ AllCops:
     - 'db/**/*'
     - 'vendor/bundle/**/*'
     - 'config/unicorn.rb'
+    - 'config/initializers/simple_form.rb'
+    - 'config/initializers/simple_form_foundation.rb'
 
 Style/SignalException:
   Enabled: false

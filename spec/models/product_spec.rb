@@ -16,7 +16,6 @@ describe Product do
   end
 
   describe "validations" do
-
     it "has a name" do
       expect(product).to validate_presence_of(:name)
       expect(product).to validate_uniqueness_of(:name)

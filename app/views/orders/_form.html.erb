@@ -1,31 +1,29 @@
-<%= form_for @order do |f| %>
+<%= simple_form_for @order do |f| %>
   <% if @order.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@order.errors.count, "error") %> prohibited
-        this order from being saved:</h2>
-      <ul>
-      <% @order.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+      <%= f.error_notification %>
+      <div id="error_explanation">
+        <ul>
+          <% @order.errors.each do |attribute, msg| %>
+            <% if attribute == :order_items %>
+              <li><%= msg %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
   <fieldset>
     <legend>Order Information</legend>
     <% unless f.object.persisted? %>
       <div class="row">
         <div class="small-12 columns">
-           <%= f.label :client_id, "Client" %>
-           <%= collection_select(:order, :client_id, @order_creator.clients, :id, :name, prompt: 'Select One') %>
+          <%= f.input :client_id, collection: @order_creator.clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
         </div>
       </div>
     <% end %>
 
     <div class="row">
       <div class="small-12 medium-6 columns">
-         <%= f.label :route_id, "Route" %>
-         <%= collection_select(:order, :route_id, @order_creator.routes, :id, :name, prompt: 'Select One') %>
+         <%= f.input :route_id, collection: @order_creator.routes, label_method: :name, value_method: :id, include_blank: "Select One", as: :select %>
       </div>
       <div class="small-12 medium-6 columns end">
           <%= f.label :order_type, "Order Type"%>
@@ -37,23 +35,20 @@
     </div>
 
     <div class="row">
-       <div class="small-12 medium-6 columns">
-         <%= f.label :start_date, "Effective Date" %>
-         <%= f.text_field :start_date, class: "js-datepicker", "ng-model" => "order.start_date"%>
+      <div class="small-12 medium-6 columns">
+        <%= f.input :start_date, as: :string, label: "Effective Date", input_html: { class: "js-datepicker", "ng-model" => "order.start_date" } %>
       </div>
       <% unless f.object.temporary? %>
-       <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
-         <%= f.label :end_date, "End Date" %>
-         <%= f.text_field :end_date, class: "js-datepicker" %>
-      </div>
+        <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
+          <%= f.input :end_date, as: :string, label: "End Date", input_html: { class: "js-datepicker"} %>
+        </div>
       <% end %>
     </div>
 
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.label :note, "Special Notes" %>
-        <%= f.text_area :note %>
+        <%= f.input :note, label: "Special Notes", as: :text %>
       </div>
     </div>
   </fieldset>

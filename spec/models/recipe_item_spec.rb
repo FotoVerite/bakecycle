@@ -14,7 +14,7 @@ describe RecipeItem do
   it "has validations" do
     expect(recipe_item_recipe).to validate_numericality_of(:bakers_percentage)
     expect(recipe_item_recipe).to validate_presence_of(:bakers_percentage)
-    expect(recipe_item_recipe).to validate_presence_of(:inclusionable)
+    # expect(recipe_item_recipe).to validate_presence_of(:inclusionable_id_type)
   end
 
   describe "bakers_percentage" do

@@ -1,12 +1,13 @@
-<%= form_for @product do |f| %>
+<%= simple_form_for @product do |f| %>
   <% if @product.errors.any? %>
+    <%= f.error_notification %>
     <div id="error_explanation">
-      <h2><%= pluralize(@product.errors.count, "error") %> prohibited
-        this product from being saved:</h2>
       <ul>
-      <% @product.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
+        <% @product.errors.full_messages.each do |msg| %>
+          <% if msg == "Identical date and quantity already exist for this product, try a different date." %>
+            <li><%= msg %></li>
+          <% end %>
+        <% end %>
       </ul>
     </div>
   <% end %>
@@ -14,67 +15,56 @@
     <legend>Product Information</legend>
     <div class="row">
       <div class="small-12 columns">
-        <%= f.label :name %>
-        <%= f.text_field :name %>
+        <%= f.input :name, as: :string %>
       </div>
     </div>
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.label :product_type %>
-        <%= f.select(:product_type, Product.product_types.keys.to_a, :prompt => 'Select One') %>
+        <%= f.input :product_type, collection: Product.product_types.keys.to_a, prompt: "Select One", as: :select %>
       </div>
       <div class="small-12 medium-6 columns">
-        <%= f.label :base_price %>
-        <%= f.text_field :base_price %>
+        <%= f.input :base_price, as: :string %>
       </div>
     </div>
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.label :unit %>
-        <%= f.select(:unit, Product.units.keys.to_a, :prompt => 'Select One') %>
+        <%= f.input :unit, collection: Product.units.keys.to_a, prompt: 'Select One', as: :select %>
       </div>
       <div class="small-12 medium-6 columns">
-        <%= f.label :weight%>
-        <%= f.text_field :weight%>
+        <%= f.input :weight, as: :string%>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <%= f.label :extra_amount%>
-        <%= f.text_field :extra_amount%>
+        <%= f.input :extra_amount, as: :string%>
       </div>
     </div>
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.label :inclusion_id, "Inclusions" %>
-        <%= collection_select(:product, :inclusion_id, @recipes.inclusions, :id, :name, :prompt => 'Select One') %>
+        <%= f.input :inclusion_id, collection: @recipes.inclusions, label_method: :name, value_method: :id,include_blank: 'Select One', as: :select %>
       </div>
       <div class="small-12 medium-6 columns">
-        <%= f.label :motherdough_id, "Mother Dough" %>
-        <%= collection_select(:product, :motherdough_id, @recipes.motherdoughs, :id, :name, :prompt => 'Select One') %>
+        <%= f.input :motherdough_id, collection: @recipes.motherdoughs, label_method: :name, value_method: :id, include_blank: 'Select One', as: :select %>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <%= f.label :description%>
-        <%= f.text_area :description%>
+        <%= f.input :description, as: :text%>
       </div>
     </div>
   </fieldset>
 
   <div ng-controller="NestedItemCtrl">
-    <%= f.fields_for :price_varients do |builder| %>
+    <%= f.simple_fields_for :price_varients do |builder| %>
       <%= render "price_varient_fields", f: builder %>
     <% end %>
     <div ng-repeat="nestedItem in nestedItems">
-      <%= f.fields_for :price_varients, @product.price_varients.build do |builder| %>
+      <%= f.simple_fields_for :price_varients, @product.price_varients.build do |builder| %>
          <%= render "new_price_varient_fields", f: builder %>
       <% end %>
     </div>
     <%= link_to 'Add Price', '', 'ng-click' => "add()", class: "button right" %>
   </div>
-</button>
-
 
   <div class="row">
     <div class="small-12 columns">

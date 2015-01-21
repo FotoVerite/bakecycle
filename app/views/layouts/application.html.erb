@@ -25,7 +25,10 @@
           <% end %>
           <div class= "<%= class_for_main_content %>">
             <% flash.each do |name, msg| %>
-              <%= content_tag :div, msg, class: name %>
+              <div data-alert class="alert-box round <%= name.to_s == 'notice' ? 'success' : 'alert' %>">
+                <%= content_tag :div, msg %>
+                <a href="#" class="close">&times;</a>
+              </div>
             <% end %>
             <%= yield %>
           </div>

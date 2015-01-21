@@ -4,7 +4,7 @@
       <div class="row collapse">
         <div class="small-12 medium-2 columns">
           <%= f.label :product_id, "Product", class: "show-for-small-only" %>
-          <%= f.collection_select :product_id, @order_creator.products, :id, :name, include_blank: "--None--" %>
+          <%= f.input :product_id, collection: @order_creator.products, label_method: :name, value_method: :id, include_blank: '--None--', as: :select, label: false %>
         </div>
         <div class="small-12 medium-3 columns">
           <div class="row collapse">
@@ -20,31 +20,31 @@
         </div>
         <div class="small-12 medium-1 columns">
           <%= f.label :monday, "Mon", class: "show-for-small-only" %>
-          <%= f.text_field :monday, class: "monday_input", "ng-disabled"=>"eqStartDate(1)"%>
+          <%= f.input :monday, as: :string, label: false, input_html: { class: "monday_input", "ng-disabled" => "eqStartDate(1)" } %>
         </div>
         <div class="small-12 medium-1 columns">
           <%= f.label :tuesday, "Tue", class: "show-for-small-only" %>
-          <%= f.text_field :tuesday, class: "tuesday_input", "ng-disabled"=>"eqStartDate(2)"%>
+          <%= f.input :tuesday, as: :string, label: false, input_html: { class: "tuesday_input", "ng-disabled" => "eqStartDate(2)" } %>
         </div>
         <div class="small-12 medium-1 columns">
           <%= f.label :wednesday, "Wed", class: "show-for-small-only" %>
-          <%= f.text_field :wednesday, class: "wednesday_input", "ng-disabled"=>"eqStartDate(3)"%>
+          <%= f.input :wednesday, as: :string, label: false, input_html: { class: "wednesday_input", "ng-disabled" => "eqStartDate(3)" } %>
         </div>
         <div class="small-12 medium-1 columns">
           <%= f.label :thursday, "Thur", class: "show-for-small-only" %>
-          <%= f.text_field :thursday, class: "thursday_input", "ng-disabled"=>"eqStartDate(4)"%>
+          <%= f.input :thursday, as: :string, label: false, input_html: { class: "thursday_input", "ng-disabled" => "eqStartDate(4)" } %>
         </div>
         <div class="small-12 medium-1 columns">
           <%= f.label :friday, "Fri", class: "show-for-small-only" %>
-          <%= f.text_field :friday, class: "friday_input", "ng-disabled"=>"eqStartDate(5)"%>
+          <%= f.input :friday, as: :string, label: false, input_html: { class: "friday_input", "ng-disabled" => "eqStartDate(5)" } %>
         </div>
         <div class="small-12 medium-1 columns">
           <%= f.label :saturday, "Sat", class: "show-for-small-only" %>
-          <%= f.text_field :saturday, class: "saturday_input", "ng-disabled"=>"eqStartDate(6)"%>
+          <%= f.input :saturday, as: :string, label: false, input_html: { class: "saturday_input", "ng-disabled" => "eqStartDate(6)" } %>
         </div>
         <div class="small-12 medium-1 columns end">
           <%= f.label :sunday, "Sun", class: "show-for-small-only" %>
-          <%= f.text_field :sunday, class: "sunday_input", "ng-disabled"=>"eqStartDate(0)"%>
+          <%= f.input :sunday, as: :string, label: false, input_html: { class: "sunday_input", "ng-disabled" => "eqStartDate(0)" } %>
         </div>
       </div>
     </div>

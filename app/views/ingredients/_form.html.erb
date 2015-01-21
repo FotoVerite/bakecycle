@@ -1,48 +1,34 @@
-<%= form_for @ingredient do |f| %>
+<%= simple_form_for @ingredient do |f| %>
   <% if @ingredient.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@ingredient.errors.count, "error") %> prohibited
-        this ingredient from being saved:</h2>
-      <ul>
-      <% @ingredient.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+    <%= f.error_notification %>
   <% end %>
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+      <%= f.input :name, as: :string %>
     </div>
   </div>
 
   <div class="row">
     <div class="small-4 columns">
-      <%= f.label :price %>
-      <%= f.text_field :price %>
+      <%= f.input :price, as: :string %>
     </div>
     <div class="small-4 columns">
-      <%= f.label :measure %>
-      <%= f.text_field :measure %>
+      <%= f.input :measure, as: :string %>
     </div>
     <div class="small-4 columns">
-      <%= f.label :unit %>
-      <%= f.select(:unit, Ingredient.units.keys.to_a, :prompt => 'Select One') %>
+      <%= f.input :unit, collection: Ingredient.units.keys.to_a, prompt: 'Select One', as: :select%>
     </div>
   </div>
 
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :ingredient_type %>
-      <%= f.select(:ingredient_type, Ingredient.ingredient_types.keys.to_a, :prompt => 'Select One') %>
+      <%= f.input :ingredient_type, collection: Ingredient.ingredient_types.keys.to_a, prompt: 'Select One', as: :select %>
     </div>
   </div>
 
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :description%>
-      <%= f.text_area :description%>
+      <%= f.input :description, as: :text%>
     </div>
   </div>
 

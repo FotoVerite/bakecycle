@@ -13,9 +13,8 @@ Then(/^I should see a list of orders including clients named "(.*?)","(.*?)" and
   expect(page).to have_content(name3)
 end
 
-Then(/^I should be redirected to an order page$/) do
-  expect(page).to have_css('form')
-  expect(page).to have_content('Order')
+Then(/^I should be redirected to "(.*?)" page$/) do |name|
+  expect(page).to have_content(name)
 end
 
 When(/^I fill out Order form with:$/) do |table|
@@ -70,12 +69,12 @@ When(/^I fill out the temporary order item form with:$/) do |table|
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../..")
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../../..")
   form.find('a', text: "X").click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
+  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../../..")
   form.find_field(day).set(quantity)
 end
 

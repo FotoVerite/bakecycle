@@ -1,20 +1,16 @@
-<fieldset>
-  <legend>Pricing</legend>
-  <div class="row fields" ng-show="true">
-   <div class="small-12 medium-3 columns">
-      <%= f.label :price, "Price" %>
-      <%= f.text_field :price, class: "price_input"%>
-   </div>
-   <div class="small-12 medium-3 columns">
-      <%= f.label :quantity, "Quantity" %>
-      <%= f.text_field :quantity, class: "quantity_input" %>
-   </div>
+<fieldset class="fields" ng-show="true">
+  <div class="row">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :price, as: :string, input_html: { class: "price_input" }%>
+    </div>
+    <div class="small-12 medium-3 columns">
+      <%= f.input :quantity, as: :string, input_html: { class: "quantity_input" } %>
+    </div>
     <div class="small-12 medium-3  columns">
-      <%= f.label :effective_date, "Date" %>
-      <%= f.text_field :effective_date, class: "js-datepicker" %>
+      <%= f.input :effective_date, as: :string, placeholder: "Select Date", input_html: { class: "js-datepicker" } %>
    </div>
    <div class="small-12 medium-3 columns">
-      <%= f.hidden_field :_destroy %>
+      <%= f.input :_destroy, as: :hidden, wrapper: false %>
       <%= link_to 'Remove', '', :'ng-click' => "remove($event)", class: "remove_price_varient button alert right remove-button" %>
    </div>
   </div>

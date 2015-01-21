@@ -7,11 +7,12 @@ Feature: Orders
     And There are routes named "Canal","Chinatown" and "LES"
     And There are products named "baguette cookie","donut tart" and "croissant sandwich"
 
+  @javascript
   Scenario: As a user, I should be able to view orders index
     When I go to the "orders" page
     Then I should see a list of orders including clients named "amyavocado","andysdecaf" and "mandos"
     When I click on "amyavocado"
-    Then I should be redirected to an order page
+    Then I should be redirected to "amyavocado" page
 
   @javascript
   Scenario: As a user, I should be able to add an standing order
@@ -80,7 +81,7 @@ Feature: Orders
     When I am on the edit page for "amyavocado" order
     And I click on "X"
     And I click on "Update"
-    Then "prohibited" should be present
+    Then "You must choose a product before saving" should be present
     When I click on "Add Order Item"
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |

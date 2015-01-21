@@ -13,7 +13,6 @@ describe Ingredient do
   end
 
   describe "validations" do
-
     describe "name" do
       it { expect(ingredient).to validate_presence_of(:name) }
       it { expect(ingredient).to ensure_length_of(:name).is_at_most(150) }
@@ -59,7 +58,6 @@ describe Ingredient do
         expect(build(:ingredient, measure: 0.12)).to be_valid
         expect(build(:ingredient, measure: 0.1)).to be_valid
         expect(build(:ingredient, measure: 1)).to be_valid
-
       end
     end
 

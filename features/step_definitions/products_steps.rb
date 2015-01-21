@@ -48,12 +48,6 @@ When(/^I fill out the price varient form with:$/) do |table|
   all('.js-datepicker').last.set(table.hashes[0]["date"])
 end
 
-When(/^I fill out a second price varient form with:$/) do |table|
-  all('.price_input').last.set(table.hashes[0]["price"])
-  all('.quantity_input').last.set(table.hashes[0]["quantity"])
-  all('.js-datepicker').last.set(table.hashes[0]["date"])
-end
-
 Then(/^I click on the last price's remove button$/) do
   all('.remove_price_varient').last.click
 end

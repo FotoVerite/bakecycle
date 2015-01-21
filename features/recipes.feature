@@ -45,8 +45,8 @@ Feature: Recipes
     When I am on the edit page for "baguette" recipe
     When I click on "Add Ingredient"
     And I click on "Update"
-    Then "Recipe items inclusionable can't be blank" should be present
-    And "Recipe items bakers percentage must be greater than 0.001" should be present
+    Then "can't be blank" should be present
+    And "Baker's % must be greater than 0.001" should be present
 
   @javascript
   Scenario: As a user, I should be able to add recipe items to an existing recipe
@@ -70,7 +70,7 @@ Feature: Recipes
       |inclusionable_id_type| percentage |
       |baguette             | 22.5       |
     And I click on "Add Ingredient"
-    And I fill out a second recipe item with:
+    And I fill out recipe item with:
        |inclusionable_id_type| percentage |
        |donut                | 44.5       |
     And I click on "Create"
@@ -88,7 +88,7 @@ Feature: Recipes
       |inclusionable_id_type| percentage |
       |baguette             | 22.5       |
     And I click on "Add Ingredient"
-    And I fill out a second recipe item with:
+    And I fill out recipe item with:
        |inclusionable_id_type| percentage |
        |donut                | 44.5       |
     And I click on "Create"

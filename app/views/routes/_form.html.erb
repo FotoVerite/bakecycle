@@ -1,31 +1,20 @@
-<%= form_for @route do |f| %>
+<%= simple_form_for @route do |f| %>
   <% if @route.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@route.errors.count, "error") %> prohibited
-        this route from being saved:</h2>
-      <ul>
-      <% @route.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+    <%= f.error_notification %>
   <% end %>
   <div class="row">
     <div class="large-10 medium-9 small-6 columns">
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+      <%= f.input :name, as: :string %>
     </div>
 
     <div class="large-2 medium-3 small-6 columns select-time-wrapper">
-      <%= f.label :departure_time %>
-      <%= f.text_field(:departure_time, class: "js-timepicker") %>
+      <%= f.input :departure_time, as: :string, placeholder: "Select Time", input_html: { class: "js-timepicker" } %>
     </div>
   </div>
 
   <div class="row">
     <div class="small-12 columns">
-      <%= f.label :notes%>
-      <%= f.text_area :notes%>
+      <%= f.input :notes, as: :text%>
     </div>
   </div>
 

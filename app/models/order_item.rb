@@ -14,7 +14,7 @@ class OrderItem < ActiveRecord::Base
     :sunday
   ]
 
-  validates :product, presence: true
+  validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
   def days_of_week

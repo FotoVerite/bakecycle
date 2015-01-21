@@ -1,5 +1,4 @@
 namespace :db do
-
   task :dev_data, [:devdata]
 
   desc "Reset database with development data"

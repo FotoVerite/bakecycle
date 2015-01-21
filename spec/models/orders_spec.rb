@@ -15,11 +15,11 @@ describe Order do
 
   it "has validations" do
     expect(order).to belong_to(:client)
-    expect(order).to validate_presence_of(:client)
+    expect(order).to validate_presence_of(:client_id)
     expect(order).to belong_to(:route)
-    expect(order).to validate_presence_of(:route)
+    expect(order).to validate_presence_of(:route_id)
     expect(order).to validate_presence_of(:start_date)
-    expect(order).to validate_presence_of(:order_items)
+    expect(order).to validate_presence_of(:order_items).with_message(/You must choose a product before saving/)
     expect(order).to validate_presence_of(:order_type)
   end
 

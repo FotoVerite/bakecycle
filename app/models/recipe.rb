@@ -12,6 +12,7 @@ class Recipe < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
   validates :mix_size, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
+  validates :recipe_type, presence: true
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true
   validates :mix_size_unit, presence: true
