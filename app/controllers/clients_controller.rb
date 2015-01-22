@@ -5,7 +5,7 @@ class ClientsController < ApplicationController
   end
 
   def new
-    @client = Client.new(active: true)
+    @client = Client.new(active: true, billing_term: "net_30")
   end
 
   def create
@@ -53,6 +53,6 @@ class ClientsController < ApplicationController
       :billing_address_state, :billing_address_zipcode, :accounts_payable_contact_name,
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
-      :secondary_contact_phone, :secondary_contact_email)
+      :secondary_contact_phone, :secondary_contact_email, :billing_term)
   end
 end

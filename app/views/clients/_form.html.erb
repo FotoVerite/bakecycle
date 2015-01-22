@@ -141,7 +141,6 @@
   <fieldset>
     <legend>Secondary Contact</legend>
 
-
     <div class="row">
       <div class="small-12 large-4 columns">
         <%= f.input :secondary_contact_name %>
@@ -153,6 +152,16 @@
 
       <div class="small-12 large-4 columns">
         <%= f.input :secondary_contact_email %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Billing</legend>
+
+    <div class="row">
+      <div class="small-12 large-4 columns">
+        <%= f.input :billing_term, collection: Client.billing_terms.keys.to_a, as: :select %>
       </div>
     </div>
   </fieldset>

@@ -38,6 +38,7 @@ When(/^I fill out Client form with valid data$/) do
   fill_in "client_secondary_contact_name", with: "text"
   fill_in "client_secondary_contact_phone", with: "text"
   fill_in "client_secondary_contact_email", with: "text@email.com"
+  select "net_30", from: "client_billing_term"
   choose "client_active_true"
 end
 
