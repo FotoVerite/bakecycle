@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.5'
+ruby '2.2.0'
 
 gem 'rails', '4.1.9'
 gem 'pg'
@@ -20,25 +20,26 @@ gem 'draper', '~> 1.3'
 gem 'unicorn', require: false
 gem 'jquery-timepicker-rails'
 gem 'geocoder'
+gem 'chronic'
 
 group :development do
   gem 'spring'
   gem 'quiet_assets'
-  gem 'brakeman', require: false
 end
 
 group :test, :development do
-  gem 'rspec-rails'
-  gem 'selenium-webdriver'
+  gem 'brakeman', require: false
+  gem 'cucumber-rails', require: false
+  gem 'guard-bundler'
+  gem 'guard-livereload'
+  gem 'guard-rails'
   gem 'pry'
   gem 'pry-byebug'
-  gem 'shoulda-matchers', require: false
-  gem 'cucumber-rails', require: false
-  gem 'rubocop'
-  gem 'guard-rails'
-  gem 'guard-livereload'
   gem 'rack-livereload'
-  gem 'guard-bundler'
+  gem 'rspec-rails'
+  gem 'rubocop', require: false
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers', require: false
 end
 
 group :test do

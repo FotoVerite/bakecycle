@@ -52,9 +52,8 @@ namespace :db do
     FactoryGirl.create(:order, client: angels_deli)
     FactoryGirl.create(:order, client: tonys_brunch)
 
-    FactoryGirl.create(:shipment, client: johns_bakery)
-    FactoryGirl.create(:shipment, client: angels_deli)
-    FactoryGirl.create(:shipment, client: tonys_brunch)
-
+    FactoryGirl.create_list(:shipment, 10, client: johns_bakery)
+    FactoryGirl.create_list(:shipment, 10, client: angels_deli)
+    FactoryGirl.create_list(:shipment, 10, client: tonys_brunch)
   end
 end

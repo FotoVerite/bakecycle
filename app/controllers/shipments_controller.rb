@@ -2,7 +2,9 @@ class ShipmentsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @shipments = Shipment.all
+    @search_form = ShipmentSearchForm.new(search_params)
+    @shipments = Shipment.search(@search_form.to_h)
+    @order_creator = OrderCreator.new
   end
 
   def new
@@ -44,9 +46,14 @@ class ShipmentsController < ApplicationController
 
   private
 
+  def search_params
+    search = params.permit(:utf8, search: [:client_id, :date_from, :date_to])
+    search[:search]
+  end
+
   def shipment_params
     params.require(:shipment).permit(
-      :client_id, :route_id, :shipment_date, :payment_due_date,
+      :client_id, :route_id, :date, :payment_due_date,
       shipment_items_attributes:
       [:id, :product_id, :product_quantity, :price_per_item, :_destroy]
     )
