@@ -1,5 +1,6 @@
 class Client < ActiveRecord::Base
   has_many :orders
+  has_many :shipments
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
   validates :dba, length: { maximum: 150 }
@@ -24,7 +25,8 @@ class Client < ActiveRecord::Base
   geocoded_by :full_delivery_address
   after_validation :geocode
 
-  BILLING_TERM_OPTIONS = [:net_45, :net_30, :net_15, :net_7, :credit_card, :cod]
+  BILLING_TERM_OPTIONS = { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
+
   enum billing_term: BILLING_TERM_OPTIONS
 
   def full_delivery_address
@@ -33,5 +35,13 @@ class Client < ActiveRecord::Base
 
   def self.billing_term_options
     BILLING_TERM_OPTIONS
+  end
+
+  def self.get_billing_term_days(billing_term)
+    billing_terms[billing_term].days
+  end
+
+  def bill_today?
+    %w(credit_card, cod).include? billing_term
   end
 end

@@ -19,12 +19,6 @@ Then(/^I should be redirected to a product page$/) do
   expect(page).to have_content('Product')
 end
 
-Given(/^There are products named "(.*?)","(.*?)" and "(.*?)"$/) do |product1, product2, product3|
-  create(:product, name: product1)
-  create(:product, name: product2)
-  create(:product, name: product3)
-end
-
 When(/^I am on the edit page for "(.*?)" product$/) do |name|
   product = Product.find_by(name: name)
   visit edit_product_path(product)

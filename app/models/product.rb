@@ -1,7 +1,10 @@
 class Product < ActiveRecord::Base
   belongs_to :inclusion, class_name: "Recipe"
   belongs_to :motherdough, class_name: "Recipe"
+
   has_many :price_varients
+  has_many :shipment_items
+
   accepts_nested_attributes_for :price_varients, allow_destroy: true
 
   PRODUCT_TYPE_OPTIONS = [:bread, :vienoisserie, :cookie, :tart, :quiche, :sandwich, :pot_pie, :dry_goods, :other]

@@ -12,6 +12,7 @@ namespace :db do
     Route.delete_all
     Client.delete_all
     Order.delete_all
+    Shipment.delete_all
 
     FactoryGirl.create(:user, email: 'user@example.com')
 
@@ -50,5 +51,10 @@ namespace :db do
     FactoryGirl.create(:order, client: johns_bakery)
     FactoryGirl.create(:order, client: angels_deli)
     FactoryGirl.create(:order, client: tonys_brunch)
+
+    FactoryGirl.create(:shipment, client: johns_bakery)
+    FactoryGirl.create(:shipment, client: angels_deli)
+    FactoryGirl.create(:shipment, client: tonys_brunch)
+
   end
 end

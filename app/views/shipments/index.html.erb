@@ -1,0 +1,25 @@
+<h1>Shipments</h1>
+<p><%= link_to 'Add New Shipment', new_shipment_path, class: "button" %></p>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Shipment id</th>
+      <th scope="col">Client</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shipments.each do |shipment| %>
+      <tr>
+        <th scope="row"><%= link_to shipment.id, edit_shipment_path(shipment) %></th>
+        <th><%= link_to shipment.client.name, edit_client_path(shipment.client) %></th>
+        <td data-title="Action">
+          <%= link_to edit_shipment_path(shipment) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Recipe"><i class="fi-page-edit"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -59,3 +59,9 @@ Then(/^"(.*?)" should be present "(.*?)" times$/) do |keyword, count|
   count = count.to_i
   page.find(:xpath, '//body').text.split(regexp).length.should == count + 1
 end
+
+Given(/^There are products named "(.*?)","(.*?)" and "(.*?)"$/) do |product1, product2, product3|
+  create(:product, name: product1)
+  create(:product, name: product2)
+  create(:product, name: product3)
+end

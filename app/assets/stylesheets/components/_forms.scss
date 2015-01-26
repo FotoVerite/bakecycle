@@ -6,6 +6,10 @@ fieldset legend {
   margin-top: 10px;
 }
 
+.remove_shipment_item {
+  margin-top: 21px;
+}
+
 .fields {
   @media #{$small-only} { margin-bottom: 30px;}
 }
