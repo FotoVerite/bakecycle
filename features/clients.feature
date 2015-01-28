@@ -34,3 +34,10 @@ Feature: Clients
     And I go to the "clients" page
     Then "amymushroom" should be present
     And "amyavocado" should not be present
+
+  Scenario: As a user, I should be able to view a clients recent purchases in the client's index page and be able to click to see more shipments for that client
+    Given That there's shipments for "mandos" and "andysdecaf"
+    When I am on the view page for "mandos"
+    Then I should see recent shipments information
+    When I click on "View More Shipments"
+    Then I should be on the shipment's index page with "mandos" shipments and none from "andysdecaf"

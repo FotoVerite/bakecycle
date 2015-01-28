@@ -88,4 +88,19 @@ describe Shipment do
       expect(Shipment.search(search)).to contain_exactly(shipment_1)
     end
   end
+
+  describe "#client_recent_shipment" do
+    it "returns the latest 10 shipments for a client" do
+      client = create(:client, name: "Mando")
+
+      random_shipments = create_list(:shipment, 10)
+      client_shipment_1 = create(:shipment, client: client, date: Date.today - 2)
+      client_shipment_2 = create(:shipment, client: client, date: Date.today - 1)
+      client_shipments = create_list(:shipment, 10, client: client)
+
+      expect(Shipment.recent_shipments(client)).to contain_exactly(*client_shipments)
+      expect(Shipment.recent_shipments(client)).to_not include(client_shipment_1, client_shipment_2)
+      expect(Shipment.recent_shipments(client)).to_not include(*random_shipments)
+    end
+  end
 end

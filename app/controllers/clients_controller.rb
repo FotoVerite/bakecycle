@@ -25,6 +25,7 @@ class ClientsController < ApplicationController
 
   def show
     @client = Client.find(params[:id]).decorate
+    @shipments = Shipment.recent_shipments(@client)
   end
 
   def update
