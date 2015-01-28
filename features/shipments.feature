@@ -11,8 +11,11 @@ Feature: Shipments management
     And There are shipments with clients named "amyavocado","andysdecaf" and "mandos"
 
   Scenario: I should be able to view shipments
+    Given There are "30" shipments for "mandos"
     When I go to the "shipments" page
-    Then I should see a list of shipments including clients named "amyavocado","andysdecaf" and "mandos"
+    Then I should see shipments for "mandos"
+    When I click on "Next"
+    Then I should see shipments for "mandos"
 
   Scenario: I should be able to filter on the shipment index page
     When I go to the "shipments" page
@@ -109,3 +112,4 @@ Feature: Shipments management
     And I click on "Update"
     Then "You have updated the shipment" should be present
     And the shipment item "baguette cookie" should not be present
+

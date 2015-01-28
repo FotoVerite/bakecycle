@@ -123,3 +123,14 @@ end
 Then(/^I should see the search term "(.*?)" preserved in the client search box$/) do |client|
   find(:xpath, "//select/option[@selected='selected' and text()='#{client}']")
 end
+
+Given(/^There are "(.*?)" shipments for "(.*?)"$/) do |number, name|
+  client = Client.find_by(name: name)
+  create_list(:shipment, number.to_i, client: client)
+end
+
+Then(/^I should see shipments for "(.*?)"$/) do |name|
+  within '.responsive-table' do
+    expect(page).to have_content(name)
+  end
+end
