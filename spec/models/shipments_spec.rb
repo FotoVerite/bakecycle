@@ -31,6 +31,13 @@ describe Shipment do
     end
   end
 
+  describe "#price" do
+    it "sums all the items" do
+      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0)
+      expect(shipment.price).to eq(10.0)
+    end
+  end
+
   describe ".search" do
     it "returns everything when called without search terms" do
       shipments = create_list(:shipment, 2)
@@ -89,7 +96,7 @@ describe Shipment do
     end
   end
 
-  describe "#client_recent_shipment" do
+  describe ".client_recent_shipment" do
     it "returns the latest 10 shipments for a client" do
       client = create(:client, name: "Mando")
 

@@ -5,6 +5,6 @@ FactoryGirl.define do
     shipment
     product
     product_quantity { Faker::Number.number(2).to_i }
-    price_per_item { Faker::Number.decimal(2) }
+    product_price { Faker::Number.decimal(2) }
   end
 end

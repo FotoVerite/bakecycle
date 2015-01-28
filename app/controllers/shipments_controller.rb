@@ -55,7 +55,7 @@ class ShipmentsController < ApplicationController
     params.require(:shipment).permit(
       :client_id, :route_id, :date, :payment_due_date,
       shipment_items_attributes:
-      [:id, :product_id, :product_quantity, :price_per_item, :_destroy]
+      [:id, :product_id, :product_quantity, :product_price, :_destroy]
     )
   end
 end
