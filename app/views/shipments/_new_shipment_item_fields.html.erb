@@ -4,11 +4,11 @@
       <%= f.input :product_id, collection: @order_creator.products, input_html: { id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_id", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_id]" },  label: "Product", include_blank: "--None--", as: :select%>
     </div>
     <div class="small-3 columns">
-      <%= f.input :product_quantity, as: :string, input_html: { class: "product_quantity_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_quantity", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_quantity]" } , label: "Quantity", as: :string %>
+      <%= f.input :product_quantity, as: :string, input_html: { class: "product_quantity_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_quantity", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_quantity]" } , label: "Quantity"%>
     </div>
 
     <div class="small-3 columns">
-      <%= f.input :price_per_item, as: :string, input_html: { class: "price_per_item_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_price_per_item", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][price_per_item]" } , label: "Price", as: :string %>
+      <%= f.input :price_per_item, as: :string, input_html: { class: "price_per_item_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_price_per_item", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][price_per_item]" } , label: "Price"%>
     </div>
 
     <div class="small-3 columns">

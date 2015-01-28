@@ -32,5 +32,4 @@ describe ShipmentItem do
       expect(shipment_item.product_name).to eq("Product1")
     end
   end
-
 end

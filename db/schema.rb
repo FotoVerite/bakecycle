@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150122215014) do
+ActiveRecord::Schema.define(version: 20150126234624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20150122215014) do
   create_table "shipments", force: true do |t|
     t.integer "client_id"
     t.integer "route_id"
-    t.date    "shipment_date"
+    t.date    "date"
     t.date    "payment_due_date"
   end
 

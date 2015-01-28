@@ -13,3 +13,8 @@ fieldset legend {
 .fields {
   @media #{$small-only} { margin-bottom: 30px;}
 }
+
+.search_button {
+  margin-top: 20px;
+  width: 100%;
+}
