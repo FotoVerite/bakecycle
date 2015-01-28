@@ -15,6 +15,9 @@ namespace :db do
     Shipment.delete_all
 
     FactoryGirl.create(:user, email: 'user@example.com')
+    FactoryGirl.create(:user, email: 'nathan@biencuit.com')
+    FactoryGirl.create(:user, email: 'justin@biencuit.com')
+    FactoryGirl.create(:user, email: 'kate@biencuit.com')
 
     FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Baguette")
     FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Brioche")
