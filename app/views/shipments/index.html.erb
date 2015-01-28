@@ -1,8 +1,6 @@
 <h1>Shipments</h1>
 <p><%= link_to 'Add New Shipment', new_shipment_path, class: "button" %></p>
-
 <%= render partial: 'search_form', object: @search_form %>
-
 <table class="responsive-table">
   <thead>
     <tr>
@@ -12,7 +10,6 @@
       <th scope="col">Action</th>
     </tr>
   </thead>
-
   <tbody>
     <% @shipments.each do |shipment| %>
       <tr>
@@ -28,3 +25,7 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="shipment_pagination">
+  <%= will_paginate @shipments %>
+</div>

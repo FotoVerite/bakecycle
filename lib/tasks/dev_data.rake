@@ -48,15 +48,16 @@ namespace :db do
     johns_bakery = FactoryGirl.create(:client, name: "John's Bakery")
     angels_deli = FactoryGirl.create(:client, name: "Angel's Deli")
     tonys_brunch = FactoryGirl.create(:client, name: "Tony's Brunch")
+    marinas_cafe = FactoryGirl.create(:client, name: "Marina's Cafe")
     FactoryGirl.create(:client, name: "Michelle's Pretzels")
-    FactoryGirl.create(:client, name: "Marina's Cafe")
 
     FactoryGirl.create(:order, client: johns_bakery)
     FactoryGirl.create(:order, client: angels_deli)
     FactoryGirl.create(:order, client: tonys_brunch)
 
-    FactoryGirl.create_list(:shipment, 10, client: johns_bakery)
+    FactoryGirl.create_list(:shipment, 20, client: johns_bakery)
     FactoryGirl.create_list(:shipment, 10, client: angels_deli)
     FactoryGirl.create_list(:shipment, 10, client: tonys_brunch)
+    FactoryGirl.create_list(:shipment, 10, client: marinas_cafe)
   end
 end

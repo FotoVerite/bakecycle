@@ -21,6 +21,7 @@ gem 'unicorn', require: false
 gem 'jquery-timepicker-rails'
 gem 'geocoder'
 gem 'chronic'
+gem 'will_paginate', '~> 3.0.6'
 
 group :development do
   gem 'spring'

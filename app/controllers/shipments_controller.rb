@@ -3,7 +3,7 @@ class ShipmentsController < ApplicationController
 
   def index
     @search_form = ShipmentSearchForm.new(search_params)
-    @shipments = Shipment.search(@search_form.to_h)
+    @shipments = Shipment.search(@search_form.to_h).paginate(page: params[:page], per_page: 20)
     @order_creator = OrderCreator.new
   end
 
@@ -47,7 +47,7 @@ class ShipmentsController < ApplicationController
   private
 
   def search_params
-    search = params.permit(:utf8, search: [:client_id, :date_from, :date_to])
+    search = params.permit(:utf8, :page, search: [:client_id, :date_from, :date_to])
     search[:search]
   end
 
