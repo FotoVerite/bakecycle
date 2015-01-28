@@ -53,3 +53,27 @@ end
 When(/^I change the client name to "(.*?)"$/) do |name|
   fill_in "client_name", with: name
 end
+
+When(/^I am on the view page for "(.*?)"$/) do |name|
+  client = Client.find_by(name: name)
+  visit client_path(client)
+end
+
+Given(/^That there's shipments for "(.*?)" and "(.*?)"$/) do |name1, name2|
+  client1 = Client.find_by(name: name1)
+  client2 = Client.find_by(name: name2)
+
+  create_list(:shipment, 11, client: client1)
+  create_list(:shipment, 11, client: client2)
+end
+
+Then(/^I should see recent shipments information$/) do
+  expect(page).to have_css('.recent-shipment')
+end
+
+Then(/^I should be on the shipment's index page with "(.*?)" shipments and none from "(.*?)"$/) do |name1, name2|
+  within '.responsive-table' do
+    expect(page).to have_content(name1)
+    expect(page).to_not have_content(name2)
+  end
+end

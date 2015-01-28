@@ -17,6 +17,8 @@ class Shipment < ActiveRecord::Base
     search_by_client(fields[:client_id])
       .search_by_date_from(fields[:date_from])
       .search_by_date_to(fields[:date_to])
+      .includes(:client)
+      .order("date DESC")
   end
 
   def self.search_by_client(client)
@@ -32,6 +34,10 @@ class Shipment < ActiveRecord::Base
   def self.search_by_date_to(date_to)
     return all if date_to.blank?
     where('date <= ?', date_to)
+  end
+
+  def self.recent_shipments(client)
+    where(client_id: client).includes(:route).order("date DESC").limit(10)
   end
 
   def set_payment_due_date

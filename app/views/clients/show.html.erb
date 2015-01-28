@@ -125,3 +125,39 @@
     </fieldset>
   </div>
 </div>
+
+<fieldset>
+  <legend>Client's Recent Shipments</legend>
+  <div class="row">
+    <table class="responsive-table recent-shipment">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Number</th>
+          <th scope="col">Route</th>
+          <!-- <th scope="col">Total</th> -->
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @shipments.each do |shipment| %>
+          <tr>
+            <th scope="row"><%= shipment.date %></th>
+            <td data-title="Number"><%= shipment.id %></td>
+            <td data-title="Route"><%= shipment.route.name %></td>
+            <!-- <td data-title="Total">Total</td> -->
+            <td data-title="Action">
+              <%= link_to edit_shipment_path(shipment) do %>
+                <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Shipment"><i class="fi-page-edit"></i></span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+   <%= link_to 'View More Shipments', shipments_path(search: {client_id: @client.id}), class: "button small right" %>
+  </div>
+</fieldset>
