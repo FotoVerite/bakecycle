@@ -40,6 +40,12 @@ class Shipment < ActiveRecord::Base
     where(client_id: client).includes(:route).order("date DESC").limit(10)
   end
 
+  def price
+    shipment_items.reduce(0) do |sum, item|
+      sum + item.price
+    end
+  end
+
   def set_payment_due_date
     return self.payment_due_date = nil unless client
     return self.payment_due_date = date if client.bill_today?

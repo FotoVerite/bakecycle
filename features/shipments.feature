@@ -75,7 +75,7 @@ Feature: Shipments management
       | mandos  | 2015-01-12 | Canal  |
     And I click on "Add Shipment Item"
     And I fill out Shipment Item form with:
-      | product           | price_per_item    | quantity   |
+      | product           | product_price    | quantity   |
       | baguette cookie   | 10.00             | 50         |
     When I click on "Create"
     Then "You have created a shipment" should be present
@@ -86,7 +86,7 @@ Feature: Shipments management
     When I am on the edit page for "andysdecaf" shipment
     And I click on "Add Shipment Item"
     And I fill out Shipment Item form with:
-      | product           | price_per_item    | quantity   |
+      | product           | product_price    | quantity   |
       | baguette cookie   | 10.00             | 50         |
     When I click on "Update"
     Then "You have updated the shipment" should be present
@@ -101,7 +101,7 @@ Feature: Shipments management
     When I am on the edit page for "andysdecaf" shipment
     And I click on "Add Shipment Item"
     And I fill out Shipment Item form with:
-      | product           | price_per_item    | quantity   |
+      | product           | product_price    | quantity   |
       | baguette cookie   | 10.00             | 50         |
     When I click on "Update"
     Then "You have updated the shipment" should be present

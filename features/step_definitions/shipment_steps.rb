@@ -44,7 +44,7 @@ end
 When(/^I fill out Shipment Item form with:$/) do |table|
   all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
   all('.product_quantity_input').last.set(table.hashes[0]["quantity"])
-  all('.price_per_item_input').last.set(table.hashes[0]["price_per_item"])
+  all('.product_price_input').last.set(table.hashes[0]["product_price"])
 end
 
 When(/^I am on the edit page for "(.*?)" shipment$/) do |name|

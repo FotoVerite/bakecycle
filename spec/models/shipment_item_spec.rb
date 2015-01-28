@@ -8,7 +8,7 @@ describe ShipmentItem do
     expect(shipment_item).to respond_to(:product)
     expect(shipment_item).to respond_to(:product_name)
     expect(shipment_item).to respond_to(:product_quantity)
-    expect(shipment_item).to respond_to(:price_per_item)
+    expect(shipment_item).to respond_to(:product_price)
   end
 
   it "has association" do
@@ -20,9 +20,16 @@ describe ShipmentItem do
     expect(shipment_item).to validate_presence_of(:product)
     expect(shipment_item).to validate_presence_of(:product_name)
     expect(shipment_item).to validate_presence_of(:product_quantity)
-    expect(shipment_item).to validate_presence_of(:price_per_item)
+    expect(shipment_item).to validate_presence_of(:product_price)
     expect(shipment_item).to validate_numericality_of(:product_quantity)
-    expect(shipment_item).to validate_numericality_of(:price_per_item)
+    expect(shipment_item).to validate_numericality_of(:product_price)
+  end
+
+  describe "#price" do
+    it "returns the price" do
+      shipment_item = build(:shipment_item, product_price: 10, product_quantity: 10)
+      expect(shipment_item.price).to eq(100)
+    end
   end
 
   describe "#set_product_name" do

@@ -135,7 +135,7 @@
           <th scope="col">Date</th>
           <th scope="col">Number</th>
           <th scope="col">Route</th>
-          <!-- <th scope="col">Total</th> -->
+          <th scope="col">Total</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -146,7 +146,7 @@
             <th scope="row"><%= shipment.date %></th>
             <td data-title="Number"><%= shipment.id %></td>
             <td data-title="Route"><%= shipment.route.name %></td>
-            <!-- <td data-title="Total">Total</td> -->
+            <td data-title="Total"><%= number_to_currency(shipment.price, precision: 2) %></td>
             <td data-title="Action">
               <%= link_to edit_shipment_path(shipment) do %>
                 <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Shipment"><i class="fi-page-edit"></i></span>
