@@ -56,17 +56,21 @@
     </div>
   </fieldset>
 
-  <div ng-controller="NestedItemCtrl">
-    <%= f.simple_fields_for :price_varients do |builder| %>
-      <%= render "price_varient_fields", f: builder %>
-    <% end %>
-    <div ng-repeat="nestedItem in nestedItems">
-      <%= f.simple_fields_for :price_varients, @product.price_varients.build do |builder| %>
-         <%= render "new_price_varient_fields", f: builder %>
+  <fieldset>
+  <legend>Prices</legend>
+
+    <div ng-controller="NestedItemCtrl">
+      <%= f.simple_fields_for :price_varients do |builder| %>
+        <%= render "price_varient_fields", f: builder %>
       <% end %>
+      <div ng-repeat="nestedItem in nestedItems">
+        <%= f.simple_fields_for :price_varients, @product.price_varients.build do |builder| %>
+          <%= render "new_price_varient_fields", f: builder %>
+        <% end %>
+      </div>
+      <%= link_to 'Add New Price', '', 'ng-click' => "add()", class: "button" %>
     </div>
-    <%= link_to 'Add Price', '', 'ng-click' => "add()", class: "button right" %>
-  </div>
+  </fieldset>
 
   <div class="row">
     <div class="small-12 columns">

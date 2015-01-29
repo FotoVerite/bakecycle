@@ -43,7 +43,7 @@ Feature: Recipes
   @javascript
   Scenario: As a user, I should get an error if I try to add an empty recipe item to a recipe
     When I am on the edit page for "baguette" recipe
-    When I click on "Add Ingredient"
+    When I click on "Add New Ingredient"
     And I click on "Update"
     Then "can't be blank" should be present
     And "Baker's % must be greater than 0.001" should be present
@@ -51,7 +51,7 @@ Feature: Recipes
   @javascript
   Scenario: As a user, I should be able to add recipe items to an existing recipe
     When I am on the edit page for "baguette" recipe
-    When I click on "Add Ingredient"
+    When I click on "Add New Ingredient"
     And I fill out recipe item with:
        |inclusionable_id_type| percentage |
        |baguette             | 22.5       |
@@ -65,11 +65,11 @@ Feature: Recipes
     And I fill out recipe form with:
       | name | mix_size | mix_size_unit| lead_days | recipe_type | note                 |
       | apple | 1.10     | kg           | 2         | dough       | I am made with love  |
-    And I click on "Add Ingredient"
+    And I click on "Add New Ingredient"
     And I fill out recipe item with:
       |inclusionable_id_type| percentage |
       |baguette             | 22.5       |
-    And I click on "Add Ingredient"
+    And I click on "Add New Ingredient"
     And I fill out recipe item with:
        |inclusionable_id_type| percentage |
        |donut                | 44.5       |
@@ -83,11 +83,11 @@ Feature: Recipes
     And I fill out recipe form with:
       | name | mix_size | mix_size_unit| lead_days | recipe_type  | note                 |
       | apple | 1.10     | kg           | 2         | dough       | I am made with love  |
-    And I click on "Add Ingredient"
+    And I click on "Add New Ingredient"
     And I fill out recipe item with:
       |inclusionable_id_type| percentage |
       |baguette             | 22.5       |
-    And I click on "Add Ingredient"
+    And I click on "Add New Ingredient"
     And I fill out recipe item with:
        |inclusionable_id_type| percentage |
        |donut                | 44.5       |

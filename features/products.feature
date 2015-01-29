@@ -42,7 +42,7 @@ Feature: Products
     When I go to the "products" page
     Then I should see a list of products including "baguette cookie", "donut tart" and "croissant sandwich"
     When I click on "baguette cookie"
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
@@ -56,7 +56,7 @@ Feature: Products
     And I fill out product form with:
       | name           | product_type | description | weight | unit | extra_amount| base_price |
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
@@ -70,11 +70,11 @@ Feature: Products
     And I fill out product form with:
       | name           | product_type | description | weight | unit | extra_amount| base_price |
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity | date       |
       | 10.23  | 83      | 2014-12-12  |
@@ -93,7 +93,7 @@ Feature: Products
     And I fill out product form with:
       | name           | product_type | description | weight | unit | extra_amount| base_price |
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       |
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I click on "Create"
     Then "Quantity can't be blank" should be present
     And "Effective date can't be blank" should be present
@@ -102,7 +102,7 @@ Feature: Products
   Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
     When I go to the "products" page
     When I click on "baguette cookie"
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I click on "Update"
     Then "Quantity can't be blank" should be present
     And "Effective date can't be blank" should be present
@@ -111,11 +111,11 @@ Feature: Products
   Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
     When I go to the "products" page
     When I click on "baguette cookie"
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity | date       |
       | 1.99  | 100      | 2014-12-11 |
-    And I click on "Add Price"
+    And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity | date        |
       | 10.23  | 100     | 2014-12-11  |

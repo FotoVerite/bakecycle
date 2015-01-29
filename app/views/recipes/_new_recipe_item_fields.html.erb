@@ -1,14 +1,14 @@
 <div class="fields" ng-show="true">
-  <div class="row">
-   <div class="small-4 columns">
+  <div class="row collapse">
+   <div class="small-12 medium-4 columns">
       <%= f.input :inclusionable_id_type, collection: @inclusionable, input_html: { id: "recipe_recipe_items_attributes_{{getRandomId($index)}}_inclusionable_id_type", name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][inclusionable_id_type]" },  label: "Ingredient", include_blank: "--None--", as: :select%>
    </div>
-   <div class="small-4 columns">
+   <div class="small-12 medium-4 columns">
       <%= f.input :bakers_percentage, as: :string, input_html: { id: "recipe_recipe_items_attributes_{{getRandomId($index)}}_bakers_percentage", name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][bakers_percentage]" } , label: "Baker's %", as: :string %>
    </div>
-   <div class="small-4 columns">
+   <div class="small-12 medium-4 columns">
       <%= f.input :_destroy, as: :hidden, wrapper: false, input_html: { name: "recipe[recipe_items_attributes][{{getRandomId($index)}}][_destroy]" } %>
-      <%= link_to 'Remove', '', :'ng-click' => "remove($event)" %>
+      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "remove-button button alert postfix" %>
    </div>
   </div>
 </div>

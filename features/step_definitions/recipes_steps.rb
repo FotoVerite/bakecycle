@@ -48,7 +48,7 @@ end
 
 When(/^I delete "(.*?)" ingredient$/) do |name|
   form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
-  form.find('a', text: "Remove").click
+  form.find('a', text: "X").click
 end
 
 When(/^I edit "(.*?)" baker's percentage$/) do |name|

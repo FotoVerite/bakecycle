@@ -1,50 +1,55 @@
 <%= simple_form_for @recipe do |f| %>
 
   <%= f.error_notification %>
+  <fieldset>
+  <legend>Recipe Information</legend>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :name, as: :string %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :note, as: :text %>
+      </div>
+    </div>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :name, as: :string %>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.input :mix_size, as: :string %>
+      </div>
+      <div class="small-6 columns">
+        <%= f.input :mix_size_unit, collection: Recipe.mix_size_units.keys.to_a, prompt: "Select One", as: :select %>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :note, as: :text %>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="small-6 columns">
-      <%= f.input :mix_size, as: :string %>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :recipe_type, collection: Recipe.recipe_types.keys.to_a, prompt: "Select One", as: :select %>
+      </div>
     </div>
-    <div class="small-6 columns">
-      <%= f.input :mix_size_unit, collection: Recipe.mix_size_units.keys.to_a, prompt: "Select One", as: :select %>
-    </div>
-  </div>
 
-   <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :recipe_type, collection: Recipe.recipe_types.keys.to_a, prompt: "Select One", as: :select %>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :lead_days, as: :string %>
+      </div>
     </div>
-  </div>
+  </fieldset>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :lead_days, as: :string %>
-    </div>
-  </div>
-
-  <div ng-controller="NestedItemCtrl">
-    <%= f.simple_fields_for :recipe_items do |builder| %>
-      <%= render "recipe_item_fields", f: builder %>
-    <% end %>
-    <div ng-repeat="nestedItem in nestedItems">
-      <%= f.simple_fields_for :recipe_items, @recipe.recipe_items.build do |builder| %>
-         <%= render "new_recipe_item_fields", f: builder %>
+  <fieldset>
+  <legend>Ingredients</legend>
+    <div ng-controller="NestedItemCtrl">
+      <%= f.simple_fields_for :recipe_items do |builder| %>
+        <%= render "recipe_item_fields", f: builder %>
       <% end %>
+      <div ng-repeat="nestedItem in nestedItems">
+        <%= f.simple_fields_for :recipe_items, @recipe.recipe_items.build do |builder| %>
+          <%= render "new_recipe_item_fields", f: builder %>
+        <% end %>
+      </div>
+      <%= link_to 'Add New Ingredient', '', :'ng-click' => "add()", class: "button" %>
     </div>
-    <%= link_to 'Add Ingredient', '', :'ng-click' => "add()"%>
-  </div>
+  </fieldset>
 
 
   <div class="row">
