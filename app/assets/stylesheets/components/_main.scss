@@ -1,31 +1,29 @@
 body, html {
-    position: relative;
-    min-height: 100%;
+  position: relative;
+  min-height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Roboto', 'sans-serif';
-    font-weight: 300;
-    color: #555 !important;
+  font-weight: 300;
+  color: #555 !important;
 }
 
 p, div {
-    font-size: .90rem;
-    font-weight: 300;
+  font-size: .90rem;
+  font-weight: 300;
 }
 
 div {
-    line-height: 1.2rem;
+  line-height: 1.2rem;
 }
 
 table tr th, table tr td {
-    padding: 0.5625rem 0.625rem;
-    font-size: 0.875rem;
-    color: #555;
+  padding: 0.5625rem 0.625rem;
+  font-size: 0.875rem;
+  color: #555;
 }
 
 body {
-  font-family: 'Roboto', 'sans-serif';
   color: #555;
   background-color: #f3f3f3;
 }
@@ -33,7 +31,6 @@ body {
 a {
   color: #555;
   font-weight: 300;
-  font-family: 'Roboto', 'sans-serif';
 }
 
 .row.full-width {
@@ -59,8 +56,14 @@ input[type="text"] {
 
 .welcome-panel {
   @extend .panel;
+
   margin-top: 25px;
+
   .panel-heading {
     text-align: center;
   }
+}
+
+.alert-box {
+  margin-top: 20px;
 }

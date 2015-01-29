@@ -1,6 +1,8 @@
 <%= simple_form_for @product do |f| %>
+
+  <%= f.error_notification %>
+
   <% if @product.errors.any? %>
-    <%= f.error_notification %>
     <div id="error_explanation">
       <ul>
         <% @product.errors.full_messages.each do |msg| %>

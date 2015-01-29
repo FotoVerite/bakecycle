@@ -13,7 +13,7 @@
 
     <div class="small-3 columns">
       <%= f.hidden_field :_destroy, value: false, name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][_destroy]" %>
-      <%= link_to 'X', '', :'ng-click' => "remove($event)",class: "remove_shipment_item button alert postfix"  %>
+      <%= link_to 'X', '', :'ng-click' => "remove($event)",class: "remove-shipment-item-button button alert postfix"  %>
     </div>
   </div>
 </div>

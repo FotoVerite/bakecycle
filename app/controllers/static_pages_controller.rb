@@ -6,5 +6,6 @@ class StaticPagesController < ApplicationController
     @routes_size = Route.count
     @clients_size = Client.count
     @orders_size = Order.count
+    @shipments_size = Shipment.count
   end
 end
