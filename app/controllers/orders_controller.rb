@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
   decorates_assigned :order, :orders
 
   def index
-    @orders = Order.all
+    @orders = Order.all.decorate
   end
 
   def new

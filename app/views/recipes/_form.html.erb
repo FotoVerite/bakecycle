@@ -2,7 +2,7 @@
 
   <%= f.error_notification %>
   <fieldset>
-  <legend>Recipe Information</legend>
+    <legend>Recipe Information</legend>
     <div class="row">
       <div class="small-12 columns">
         <%= f.input :name, as: :string %>
@@ -37,7 +37,7 @@
   </fieldset>
 
   <fieldset>
-  <legend>Ingredients</legend>
+    <legend>Ingredients</legend>
     <div ng-controller="NestedItemCtrl">
       <%= f.simple_fields_for :recipe_items do |builder| %>
         <%= render "recipe_item_fields", f: builder %>

@@ -2,35 +2,38 @@
 
   <%= f.error_notification %>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :name, as: :string %>
+  <fieldset>
+    <legend>Ingredient Information</legend>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :name, as: :string %>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="small-4 columns">
-      <%= f.input :price, as: :string %>
+    <div class="row">
+      <div class="small-4 columns">
+        <%= f.input :price, as: :string %>
+      </div>
+      <div class="small-4 columns">
+        <%= f.input :measure, as: :string %>
+      </div>
+      <div class="small-4 columns">
+        <%= f.input :unit, collection: Ingredient.units_select, prompt: 'Select One', as: :select%>
+      </div>
     </div>
-    <div class="small-4 columns">
-      <%= f.input :measure, as: :string %>
-    </div>
-    <div class="small-4 columns">
-      <%= f.input :unit, collection: Ingredient.units.keys.to_a, prompt: 'Select One', as: :select%>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :ingredient_type, collection: Ingredient.ingredient_types.keys.to_a, prompt: 'Select One', as: :select %>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :ingredient_type, collection: Ingredient.ingredient_types_select, prompt: 'Select One', as: :select %>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :description, as: :text%>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :description, as: :text%>
+      </div>
     </div>
-  </div>
+  </fieldset>
 
   <div class="row">
     <div class="small-12 columns">

@@ -25,6 +25,14 @@ class Recipe < ActiveRecord::Base
     MIX_SIZE_UNIT_OPTIONS
   end
 
+  def self.recipe_types_select
+    recipe_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
+
+  def self.mix_size_units_select
+    mix_size_units.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
+
   def self.motherdoughs
     where("recipe_type = ?", Recipe.recipe_types[:dough])
   end

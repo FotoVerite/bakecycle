@@ -7,7 +7,18 @@ class Product < ActiveRecord::Base
 
   accepts_nested_attributes_for :price_varients, allow_destroy: true
 
-  PRODUCT_TYPE_OPTIONS = [:bread, :vienoisserie, :cookie, :tart, :quiche, :sandwich, :pot_pie, :dry_goods, :other]
+  PRODUCT_TYPE_OPTIONS = [
+    :bread,
+    :vienoisserie,
+    :cookie,
+    :tart_and_desert,
+    :quiche,
+    :sandwich_and_tartine,
+    :pot_pie,
+    :dry_goods,
+    :other
+  ]
+
   UNIT_OPTIONS = [:oz, :lb, :g, :kg]
 
   enum product_type: PRODUCT_TYPE_OPTIONS
@@ -26,6 +37,14 @@ class Product < ActiveRecord::Base
 
   def self.product_type_options
     PRODUCT_TYPE_OPTIONS
+  end
+
+  def self.units_select
+    units.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
+
+  def self.product_types_select
+    product_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
   end
 
   def price(quantity)

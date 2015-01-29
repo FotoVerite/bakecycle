@@ -13,8 +13,8 @@
     <% @products.each do |product| %>
       <tr>
         <th scope="row"><%= link_to product.name, edit_product_path(product) %></th>
-        <td data-title="Product Type"><%= product.product_type %></td>
-        <td data-title="Description"><%= product.description.truncate(30) %></td>
+        <td data-title="Product Type"><%= product.type %></td>
+        <td data-title="Description"><%= product.truncated_description %></td>
         <td data-title="Action">
         <%= link_to edit_product_path(product) do %>
             <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Product"><i class="fi-page-edit large"></i></span>

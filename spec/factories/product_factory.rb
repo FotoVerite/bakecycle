@@ -4,7 +4,7 @@ FactoryGirl.define do
     product_type { Product.product_type_options.sample }
     description { Faker::Lorem.sentence(1) }
     weight { Faker::Number.decimal(0, 3) }
-    unit { [:oz, :lb, :g, :kg].sample }
+    unit { Product.unit_options.sample }
     extra_amount { Faker::Number.decimal(0, 3) }
     base_price { Faker::Number.decimal(2) }
 
