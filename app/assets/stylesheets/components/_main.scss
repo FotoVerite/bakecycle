@@ -48,3 +48,19 @@ a {
 input[type="text"] {
   box-shadow: none;
 }
+
+.full-width {
+  width: 100%;
+}
+
+.login-button {
+  margin-top: 5%;
+}
+
+.welcome-panel {
+  @extend .panel;
+  margin-top: 25px;
+  .panel-heading {
+    text-align: center;
+  }
+}

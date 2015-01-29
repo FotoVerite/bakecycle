@@ -9,27 +9,11 @@
       <div class="row">
         <div class="large-4 large-offset-8 medium-12 small-12 columns text-center">
           <div class="row">
-            <div class="medium-3 small-3 columns">
-              <div class="notification">
-                <i class="fi-mail"></i>
-                <span class="mail">3</span>
-              </div>
-            </div>
-            <div class="medium-3 small-3 columns">
-              <div class="notification">
-                <i class="fi-calendar"></i>
-                <span class="calendar">5</span>
-              </div>
-            </div>
-            <div class="medium-3 small-3 columns">
-              <div class="notification">
-                <i class="fi-calendar"></i>
-                <span class="calendar">5</span>
-              </div>
-            </div>
-            <div class="medium-3 small-3 columns">
-              <%= link_to destroy_user_session_path, method: :delete, class: 'logout-icon' do %>
-                <i class="fi-power power-off"></i>
+            <div class="medium-3 small-3 columns right">
+              <% if current_user %>
+                <%= link_to destroy_user_session_path, method: :delete, class: 'logout-icon' do %>
+                  <i class="fi-power power-off"></i>
+                <% end %>
               <% end %>
             </div>
           </div>
