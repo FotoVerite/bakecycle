@@ -1,5 +1,6 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
+  authorize_resource
 
   def index
     @search_form = ShipmentSearchForm.new(search_params)

@@ -1,34 +1,59 @@
 Feature: Navigation
 
-  Background:
-    Given I am logged in as a user
-
   Scenario: As a user, I should be able to view ingredients index from the dashboard
+    Given I am logged in as a user
     When I go to the home page
     And I click on "Ingredients"
     Then "Add New Ingredient" should be present
 
   Scenario: As a user, I should be able to view recipes index from the dashboard
+    Given I am logged in as a user
     When I go to the home page
     And I click on "Recipes"
     Then "Add New Recipe" should be present
 
   Scenario: As a user, I should be able to view products index from the dashboard
+    Given I am logged in as a user
     When I go to the home page
     And I click on "Products"
     Then "Add New Product" should be present
 
   Scenario: As a user, I should be able to view routes index from the dashboard
+    Given I am logged in as a user
     When I go to the home page
     And I click on "Routes"
     Then "Add New Route" should be present
 
   Scenario: As a user, I should be able to view clients index from the dashboard
+    Given I am logged in as a user
     When I go to the home page
     And I click on "Clients"
     Then "Add New Client" should be present
 
   Scenario: As a user, I should be able to view Orders index from the dashboard
+    Given I am logged in as a user
     When I go to the home page
     And I click on "Orders"
     Then "Add New Order" should be present
+
+  Scenario: As a user, I should be able to view Shipments index from the dashboard
+    Given I am logged in as a user
+    When I go to the home page
+    And I click on "Shipments"
+    Then "Add New Shipment" should be present
+
+  Scenario: As a admin, I should be able to view Bakeries index from the dashboard
+    Given I am logged in as a admin
+    When I go to the home page
+    And I click on "Bakeries"
+    Then "Add New Bakery" should be present
+    When I go to the "ingredients" page
+    Then "You are not authorized to access this page." should be present
+
+  Scenario: As a admin_bakery, I should be able to see both admin and bakery navigation
+    Given I am logged in as a admin_bakery
+    When I go to the home page
+    And I click on "Bakeries"
+    Then "Add New Bakery" should be present
+    When I go to the "ingredients" page
+    Then "Add New Ingredient" should be present

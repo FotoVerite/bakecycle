@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   decorates_assigned :order, :orders
+  authorize_resource
 
   def index
     @orders = Order.all.decorate

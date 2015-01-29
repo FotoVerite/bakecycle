@@ -2,6 +2,9 @@ class Recipe < ActiveRecord::Base
   has_many :recipe_items, dependent: :destroy
   has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
   has_many :product
+
+  belongs_to :bakery
+
   accepts_nested_attributes_for :recipe_items, allow_destroy: true
 
   RECIPE_TYPE_OPTIONS = [:dough, :pre_ferment, :inclusion, :ingredient]

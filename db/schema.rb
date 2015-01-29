@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150128194735) do
+ActiveRecord::Schema.define(version: 20150202164354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bakeries", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree
 
   create_table "clients", force: true do |t|
     t.string  "name"
@@ -44,6 +52,7 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.float   "latitude"
     t.float   "longitude"
     t.integer "billing_term",                   null: false
+    t.integer "bakery_id"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
@@ -58,6 +67,7 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "bakery_id"
   end
 
   add_index "ingredients", ["name"], name: "index_ingredients_on_name", unique: true, using: :btree
@@ -81,6 +91,7 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.date    "end_date"
     t.string  "note"
     t.string  "order_type", null: false
+    t.integer "bakery_id"
   end
 
   create_table "price_varients", force: true do |t|
@@ -106,6 +117,7 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "base_price"
+    t.integer  "bakery_id"
   end
 
   add_index "products", ["name"], name: "index_products_on_name", unique: true, using: :btree
@@ -128,6 +140,7 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.integer  "lead_days",     default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "bakery_id"
   end
 
   add_index "recipes", ["name"], name: "index_recipes_on_name", unique: true, using: :btree
@@ -137,6 +150,7 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.text    "notes"
     t.boolean "active",         null: false
     t.time    "departure_time"
+    t.integer "bakery_id"
   end
 
   create_table "shipment_items", force: true do |t|
@@ -152,22 +166,25 @@ ActiveRecord::Schema.define(version: 20150128194735) do
     t.integer "route_id"
     t.date    "date"
     t.date    "payment_due_date"
+    t.integer "bakery_id"
   end
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "name",                   default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",    null: false
+    t.string   "name",                   default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "bakery_id"
+    t.boolean  "admin",                  default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

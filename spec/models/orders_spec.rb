@@ -13,6 +13,10 @@ describe Order do
     expect(order).to respond_to(:order_type)
   end
 
+  it "has association" do
+    expect(order).to belong_to(:bakery)
+  end
+
   it "has validations" do
     expect(order).to belong_to(:client)
     expect(order).to validate_presence_of(:client_id)

@@ -40,7 +40,7 @@ When(/^I go to the home page$/) do
   visit root_path
 end
 
-Given(/^I am logged in as an? (user)$/) do |user_type|
+Given(/^I am logged in as an? (user|admin|admin_bakery)$/) do |user_type|
   user = create(:"#{user_type}")
   login_as(user, scope: :user)
 end

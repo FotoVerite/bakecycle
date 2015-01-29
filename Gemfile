@@ -22,6 +22,7 @@ gem 'jquery-timepicker-rails'
 gem 'geocoder'
 gem 'chronic'
 gem 'will_paginate', '~> 3.0.6'
+gem 'cancancan', '~> 1.10'
 
 group :development do
   gem 'spring'
