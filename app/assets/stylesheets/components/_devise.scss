@@ -1,0 +1,8 @@
+.login-panel {
+  @extend .panel;
+  margin-top: 25px;
+
+  .panel-heading {
+    text-align: center;
+  }
+}
