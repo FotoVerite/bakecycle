@@ -51,7 +51,7 @@ Feature: Orders
   @javascript
   Scenario: As a user, I should be able to add multiple order item to a order
     When I am on the edit page for "amyavocado" order
-    And I click on "Add Order Item"
+    And I click on "Add New Order Item"
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
@@ -64,7 +64,7 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on "Add Order Item"
+    And I click on "Add New Order Item"
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
@@ -82,7 +82,7 @@ Feature: Orders
     And I click on "X"
     And I click on "Update"
     Then "You must choose a product before saving" should be present
-    When I click on "Add Order Item"
+    When I click on "Add New Order Item"
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |

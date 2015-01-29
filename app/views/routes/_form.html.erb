@@ -2,31 +2,35 @@
   <% if @route.errors.any? %>
     <%= f.error_notification %>
   <% end %>
-  <div class="row">
-    <div class="large-10 medium-9 small-6 columns">
-      <%= f.input :name, as: :string %>
+
+  <fieldset>
+  <legend>Route Information</legend>
+    <div class="row">
+      <div class="large-10 medium-9 small-6 columns">
+        <%= f.input :name, as: :string %>
+      </div>
+
+      <div class="large-2 medium-3 small-6 columns select-time-wrapper">
+        <%= f.input :departure_time, as: :string, placeholder: "Select Time", input_html: { class: "js-timepicker" } %>
+      </div>
     </div>
 
-    <div class="large-2 medium-3 small-6 columns select-time-wrapper">
-      <%= f.input :departure_time, as: :string, placeholder: "Select Time", input_html: { class: "js-timepicker" } %>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :notes, as: :text%>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.input :notes, as: :text%>
+    <div class="row">
+      <div class="large-6 columns">
+        <%= f.label :active, "Active"%>
+        <%= f.radio_button(:active, true) %>
+        <%= f.label(:active_true, "Yes") %>
+        <%= f.radio_button(:active, false) %>
+        <%= f.label(:active_false, "No") %>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="large-6 columns">
-      <%= f.label :active, "Active"%>
-      <%= f.radio_button(:active, true) %>
-      <%= f.label(:active_true, "Yes") %>
-      <%= f.radio_button(:active, false) %>
-      <%= f.label(:active_false, "No") %>
-    </div>
-  </div>
+  </fieldset>
 
   <div class="row">
     <div class="small-12 columns">
