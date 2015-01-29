@@ -3,7 +3,8 @@
   <h3>Client Name: <%= order.client.name %></h3>
   <p><%=order.order_type.capitalize %> order</p>
 
+  <%= link_to 'Back', orders_path %>
+
   <%= render "form"%>
 
-  <%= link_to 'Back', orders_path %>
 </div>

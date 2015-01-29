@@ -23,7 +23,7 @@
           <% end %>
           <div class= "<%= class_for_main_content %>">
             <% flash.each do |name, msg| %>
-              <div data-alert class="alert-box round <%= name.to_s == 'notice' ? 'success' : 'alert' %>">
+              <div data-alert class="alert-box radius <%= name.to_s == 'notice' ? 'success' : 'alert' %>">
                 <%= content_tag :div, msg %>
                 <a href="#" class="close">&times;</a>
               </div>

@@ -1,8 +1,6 @@
-<div>
-  <h1>Editing Shipment: <%= @shipment.id %></h1>
-  <h3>Client Name: <%= @shipment.client.name %></h3>
+<h1>Editing Shipment: <%= @shipment.id %></h1>
+<h3>Client Name: <%= @shipment.client.name %></h3>
 
-  <%= render "form"%>
+<%= link_to 'Back', shipments_path %>
 
-  <%= link_to 'Back', shipments_path %>
-</div>
+<%= render "form"%>

@@ -1,8 +1,7 @@
 <h1>Client: <%= @client.name %></h1>
+
 <%= link_to 'Edit', edit_client_path(@client) %> |
 <%= link_to 'Back', clients_path %>
-<br />
-<br />
 
 <div class="map-container" ng-controller="mapCtrl" ng-init="center = [<%= @client.latitude %>, <%= @client.longitude %>]">
   <map

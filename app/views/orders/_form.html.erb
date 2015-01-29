@@ -1,6 +1,6 @@
 <%= simple_form_for order do |f| %>
+  <%= f.error_notification %>
   <% if f.object.errors.any? %>
-      <%= f.error_notification %>
       <div id="error_explanation">
         <ul>
           <% f.object.errors.each do |attribute, msg| %>

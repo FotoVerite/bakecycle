@@ -2,11 +2,7 @@ fieldset legend {
   background: none;
 }
 
-.remove-button {
-  margin-top: 10px;
-}
-
-.remove_shipment_item {
+.remove-shipment-item-button, .search-button {
   margin-top: 21px;
 }
 
@@ -14,7 +10,6 @@ fieldset legend {
   @media #{$small-only} { margin-bottom: 30px;}
 }
 
-.search_button {
-  margin-top: 20px;
+.search-button {
   width: 100%;
 }

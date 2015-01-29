@@ -14,8 +14,8 @@
     <% @shipments.each do |shipment| %>
       <tr>
         <th scope="row"><%= shipment.id %></th>
-        <th><%= shipment.date %></th>
-        <th><%= shipment.client.name %></th>
+        <td data-title="Date"><%= shipment.date %></td>
+        <td data-title="Client Name"><%= shipment.client.name %></td>
         <td data-title="Action">
           <%= link_to edit_shipment_path(shipment) do %>
             <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Shipment"><i class="fi-page-edit"></i></span>
@@ -26,6 +26,6 @@
   </tbody>
 </table>
 
-<div class="shipment_pagination">
+<div class="shipment-pagination">
   <%= will_paginate @shipments %>
 </div>

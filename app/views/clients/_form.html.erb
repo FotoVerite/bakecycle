@@ -1,7 +1,6 @@
 <%= simple_form_for @client do |f| %>
-  <% if @client.errors.any? %>
-    <%= f.error_notification %>
-  <% end %>
+
+  <%= f.error_notification %>
 
   <fieldset>
     <legend>Business Information</legend>
