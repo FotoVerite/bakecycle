@@ -44,4 +44,8 @@ class Client < ActiveRecord::Base
   def bill_today?
     %w(credit_card, cod).include? billing_term
   end
+
+  def self.billing_terms_select
+    billing_terms.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
 end

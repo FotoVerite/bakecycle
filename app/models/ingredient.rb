@@ -21,4 +21,12 @@ class Ingredient < ActiveRecord::Base
   def self.ingredient_type_options
     INGREDIENT_TYPE_OPTIONS
   end
+
+  def self.units_select
+    units.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
+
+  def self.ingredient_types_select
+    ingredient_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
 end

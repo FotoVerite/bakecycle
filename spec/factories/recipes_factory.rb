@@ -3,7 +3,7 @@ FactoryGirl.define do
     recipe_type { Recipe.recipe_type_options.sample }
     sequence(:name) { |n| "#{n}#{Faker::Lorem.word}" }
     mix_size 12
-    mix_size_unit [:oz, :lb, :g, :kg].sample
+    mix_size_unit { Recipe.mix_size_unit_options.sample }
     lead_days 2
 
     factory :recipe_motherdough do

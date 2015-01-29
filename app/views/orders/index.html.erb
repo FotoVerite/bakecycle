@@ -16,7 +16,7 @@
       <tr>
         <th scope="row"><%= link_to order.start_date, edit_order_path(order) %></th>
         <td data-title="Client"><%= link_to order.client.name, client_path(order.client) %></td>
-        <td data-title="Type"><%= order.order_type %></td>
+        <td data-title="Type"><%= order.type %></td>
         <td data-title="Route"><%= order.route.name %></td>
         <td data-title="Action">
           <%= link_to edit_order_path(order) do %>
