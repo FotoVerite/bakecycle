@@ -46,6 +46,6 @@ class Client < ActiveRecord::Base
   end
 
   def self.billing_terms_select
-    billing_terms.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+    billing_terms.keys.to_a.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
   end
 end
