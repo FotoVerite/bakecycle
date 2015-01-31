@@ -1,14 +1,14 @@
 <div class="no-padding">
   <div class="large-2 medium-12 small-12 columns">
     <ul class="side-nav">
-      <li class="<%= active?(root_path) %>"><%= link_to("Dashboard", root_path) %></li>
-      <li class="<%= active?(ingredients_path) %>"><%= link_to("Ingredients", ingredients_path)%></li>
-      <li class="<%= active?(recipes_path) %>"><%= link_to("Recipes", recipes_path) %></li>
-      <li class="<%= active?(products_path) %>"><%= link_to("Products", products_path) %></li>
-      <li class="<%= active?(routes_path) %>"><%= link_to("Routes", routes_path) %></li>
-      <li class="<%= active?(clients_path) %>"><%= link_to("Clients", clients_path) %></li>
-      <li class="<%= active?(orders_path) %>"><%= link_to("Orders", orders_path) %></li>
-      <li class="<%= active?(shipments_path) %>"><%= link_to("Shipments", shipments_path) %></li>
+      <li class="<%= active_nav?(:dashboard) %>"><%= link_to("Dashboard", root_path) %></li>
+      <li class="<%= active_nav?(:ingredients) %>"><%= link_to("Ingredients", ingredients_path)%></li>
+      <li class="<%= active_nav?(:recipes) %>"><%= link_to("Recipes", recipes_path) %></li>
+      <li class="<%= active_nav?(:products) %>"><%= link_to("Products", products_path) %></li>
+      <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
+      <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
+      <li class="<%= active_nav?(:orders) %>"><%= link_to("Orders", orders_path) %></li>
+      <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
     </ul>
   </div>
 </div>

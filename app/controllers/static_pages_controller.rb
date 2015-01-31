@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController
   def index
+    active_nav(:dashboard)
     @ingredients_size = Ingredient.count
     @recipes_size = Recipe.count
     @products_size = Product.count
