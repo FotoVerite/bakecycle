@@ -1,11 +1,18 @@
 class Ability
   include CanCan::Ability
   def initialize(user)
+    return unless user && user.persisted?
+
+    # users
+    can :manage, User, id: user.id
+    can :manage, User, bakery: user.bakery if user.bakery
+    can :manage, User if user.admin?
+
     if user.admin?
-      can :manage, [Bakery, User]
+      can :manage, Bakery
     end
 
-    if user.bakery_id
+    if user.bakery
       can :manage, [
         Client,
         Ingredient,
@@ -18,7 +25,7 @@ class Ability
         RecipeItem,
         Route,
         Shipment,
-        ShipmentItem
+        ShipmentItem,
       ]
     end
   end

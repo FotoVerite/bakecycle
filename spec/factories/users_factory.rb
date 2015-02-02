@@ -7,12 +7,7 @@ FactoryGirl.define do
     admin false
     bakery
 
-    factory :admin do
-      admin true
-      bakery nil
-    end
-
-    factory :admin_bakery do
+    trait :as_admin do
       admin true
     end
   end

@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   resources :orders
   resources :shipments
   resources :bakeries
+  resources :users
 end

@@ -40,8 +40,19 @@ When(/^I go to the home page$/) do
   visit root_path
 end
 
-Given(/^I am logged in as an? (user|admin|admin_bakery)$/) do |user_type|
-  user = create(:"#{user_type}")
+Given(/^I am logged in as a user$/) do
+  user = create(:user)
+  login_as(user, scope: :user)
+end
+
+Given(/^I am logged in as an admin$/) do
+  user = create(:user, :as_admin)
+  login_as(user, scope: :user)
+end
+
+Given(/^I am logged in as a user with a bakery called "(.*?)"$/) do |name|
+  biencuit = create(:bakery, name: name)
+  user = create(:user, bakery: biencuit)
   login_as(user, scope: :user)
 end
 

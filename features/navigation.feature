@@ -43,15 +43,15 @@ Feature: Navigation
     Then "Add New Shipment" should be present
 
   Scenario: As a admin, I should be able to view Bakeries index from the dashboard
-    Given I am logged in as a admin
+    Given I am logged in as an admin
     When I go to the home page
     And I click on "Bakeries"
     Then "Add New Bakery" should be present
     When I go to the "ingredients" page
-    Then "You are not authorized to access this page." should be present
+    Then "Ingredients" should be present
 
   Scenario: As a admin_bakery, I should be able to see both admin and bakery navigation
-    Given I am logged in as a admin_bakery
+    Given I am logged in as an admin
     When I go to the home page
     And I click on "Bakeries"
     Then "Add New Bakery" should be present
