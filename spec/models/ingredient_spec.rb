@@ -12,6 +12,10 @@ describe Ingredient do
     it { expect(ingredient).to respond_to(:description) }
   end
 
+  it "has association" do
+    expect(ingredient).to belong_to(:bakery)
+  end
+
   describe "validations" do
     describe "name" do
       it { expect(ingredient).to validate_presence_of(:name) }

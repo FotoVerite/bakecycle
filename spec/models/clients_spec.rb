@@ -30,6 +30,10 @@ describe Client do
     it { expect(client).to respond_to(:secondary_contact_email) }
   end
 
+  it "has association" do
+    expect(client).to belong_to(:bakery)
+  end
+
   context "validations" do
     it { expect(client).to validate_presence_of(:name) }
     it { expect(client).to ensure_length_of(:name).is_at_most(150) }

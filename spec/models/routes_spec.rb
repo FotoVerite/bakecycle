@@ -10,6 +10,10 @@ describe Route do
     expect(route).to respond_to(:departure_time)
   end
 
+  it "has association" do
+    expect(route).to belong_to(:bakery)
+  end
+
   it "has validations" do
     expect(route).to validate_presence_of(:name)
     expect(route).to ensure_length_of(:name).is_at_most(150)

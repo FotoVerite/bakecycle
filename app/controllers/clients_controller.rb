@@ -1,5 +1,7 @@
 class ClientsController < ApplicationController
   before_action :authenticate_user!
+  authorize_resource
+
   def index
     @clients = Client.all.decorate
   end

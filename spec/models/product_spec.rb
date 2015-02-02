@@ -15,6 +15,10 @@ describe Product do
     expect(product).to respond_to(:base_price)
   end
 
+  it "has association" do
+    expect(product).to belong_to(:bakery)
+  end
+
   describe "validations" do
     it "has a name" do
       expect(product).to validate_presence_of(:name)

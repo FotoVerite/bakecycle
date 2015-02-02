@@ -2,13 +2,18 @@
   <div class="large-2 medium-12 small-12 columns">
     <ul class="side-nav">
       <li class="<%= active_nav?(:dashboard) %>"><%= link_to("Dashboard", root_path) %></li>
-      <li class="<%= active_nav?(:ingredients) %>"><%= link_to("Ingredients", ingredients_path)%></li>
-      <li class="<%= active_nav?(:recipes) %>"><%= link_to("Recipes", recipes_path) %></li>
-      <li class="<%= active_nav?(:products) %>"><%= link_to("Products", products_path) %></li>
-      <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
-      <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
-      <li class="<%= active_nav?(:orders) %>"><%= link_to("Orders", orders_path) %></li>
-      <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
+      <% if current_bakery %>
+        <li class="<%= active_nav?(:ingredients) %>"><%= link_to("Ingredients", ingredients_path)%></li>
+        <li class="<%= active_nav?(:recipes) %>"><%= link_to("Recipes", recipes_path) %></li>
+        <li class="<%= active_nav?(:products) %>"><%= link_to("Products", products_path) %></li>
+        <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
+        <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
+        <li class="<%= active_nav?(:orders) %>"><%= link_to("Orders", orders_path) %></li>
+        <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
+      <% end %>
+      <% if can? :manage, Bakery %>
+        <li class="<%= active_nav?(:bakeries) %>"><%= link_to("Bakeries", bakeries_path) %></li>
+      <% end %>
     </ul>
   </div>
 </div>

@@ -1,0 +1,23 @@
+<%= simple_form_for @bakery do |f| %>
+  <% if @bakery.errors.any? %>
+    <%= f.error_notification %>
+  <% end %>
+
+  <fieldset>
+  <legend>Bakery Information</legend>
+    <div class="row">
+      <div class="large-10 medium-9 small-6 columns">
+        <%= f.input :name, as: :string %>
+      </div>
+  </fieldset>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@bakery.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @bakery.new_record? %>
+        <%= link_to 'Delete', bakery_path(@bakery), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

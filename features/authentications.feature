@@ -1,5 +1,5 @@
 Feature: Authentication
-  @javascript
+
   Scenario: As a visitor, I can login and logout
     Given I am a visitor
     And There is a user with email "johndoe@example.com" and password "password1"
@@ -10,3 +10,4 @@ Feature: Authentication
       | johndoe@example.com | password1 |
     And I click on "Log in"
     Then "Signed in successfully" should be present
+

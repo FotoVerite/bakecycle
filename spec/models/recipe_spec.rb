@@ -12,6 +12,10 @@ describe Recipe do
     it { expect(recipe).to respond_to(:lead_days) }
   end
 
+  it "has association" do
+    expect(recipe).to belong_to(:bakery)
+  end
+
   describe "validations" do
     describe "name" do
       it { expect(recipe).to validate_presence_of(:name) }

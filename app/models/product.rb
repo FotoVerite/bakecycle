@@ -1,6 +1,7 @@
 class Product < ActiveRecord::Base
   belongs_to :inclusion, class_name: "Recipe"
   belongs_to :motherdough, class_name: "Recipe"
+  belongs_to :bakery
 
   has_many :price_varients
   has_many :shipment_items

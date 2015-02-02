@@ -1,6 +1,7 @@
 class Shipment < ActiveRecord::Base
   belongs_to :client
   belongs_to :route
+  belongs_to :bakery
 
   has_many :shipment_items
 

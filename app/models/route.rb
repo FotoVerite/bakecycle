@@ -2,6 +2,8 @@ class Route < ActiveRecord::Base
   has_many :orders
   has_many :shipments
 
+  belongs_to :bakery
+
   validates :name, presence: true, length: { maximum: 150 }
   validates :departure_time, presence: true
   validates :active, inclusion: [true, false]

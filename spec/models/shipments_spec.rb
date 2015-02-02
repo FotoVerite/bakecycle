@@ -14,6 +14,7 @@ describe Shipment do
   it "has association" do
     expect(shipment).to belong_to(:client)
     expect(shipment).to belong_to(:route)
+    expect(shipment).to belong_to(:bakery)
   end
 
   it "has validations" do

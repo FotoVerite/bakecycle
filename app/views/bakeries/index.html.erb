@@ -1,0 +1,22 @@
+<h1>Bakeries</h1>
+<p><%= link_to 'Add New Bakery', new_bakery_path, class: "button"%></p>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @bakeries.each do |bakery| %>
+      <tr>
+        <th scope="row"><%= link_to bakery.name, edit_bakery_path(bakery) %></th>
+        <td data-title="Action">
+          <%= link_to edit_bakery_path(bakery) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Bakery"><i class="fi-page-edit"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

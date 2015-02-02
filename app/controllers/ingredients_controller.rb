@@ -1,5 +1,7 @@
 class IngredientsController < ApplicationController
   before_action :authenticate_user!
+  authorize_resource
+
   def index
     @ingredients = Ingredient.all
   end
