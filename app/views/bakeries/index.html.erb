@@ -9,7 +9,7 @@
   </thead>
   <tbody>
     <% @bakeries.each do |bakery| %>
-      <tr>
+      <tr class="js-clickableRow" href='<%= "#{edit_bakery_path(bakery)}" %>'>
         <th scope="row"><%= link_to bakery.name, edit_bakery_path(bakery) %></th>
         <td data-title="Action">
           <%= link_to edit_bakery_path(bakery) do %>

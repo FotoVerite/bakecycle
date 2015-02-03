@@ -11,7 +11,7 @@
 
   <tbody>
     <% @recipes.each do |recipe| %>
-      <tr>
+      <tr class="js-clickableRow" href='<%= "#{edit_recipe_path(recipe)}" %>'>
         <th scope="row"><%= link_to recipe.name, edit_recipe_path(recipe) %></th>
         <td data-title="Type"><%= recipe.type %></td>
         <td data-title="Action">
