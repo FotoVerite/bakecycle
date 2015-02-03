@@ -1,0 +1,24 @@
+<h1>Users</h1>
+<p><%= link_to 'Add New User', new_user_path, class: "button"%></p>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <th scope="row"><%= link_to user.name, edit_user_path(user) %></th>
+        <td data-title="Email"><%= user.email %></td>
+        <td data-title="Action">
+          <%= link_to edit_user_path(user) do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit User"><i class="fi-page-edit"></i></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

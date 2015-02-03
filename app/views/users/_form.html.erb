@@ -1,0 +1,42 @@
+<%= simple_form_for @user do |f| %>
+  <% if @user.errors.any? %>
+    <%= f.error_notification %>
+  <% end %>
+
+  <fieldset>
+  <legend>User Information</legend>
+    <div class="row">
+      <div class="large-10 medium-9 small-6 columns">
+        <%= f.input :name, as: :string %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-10 medium-9 small-6 columns">
+        <%= f.input :email, as: :string %>
+      </div>
+    </div>
+
+    <% unless f.object.persisted? %>
+      <div class="row">
+        <div class="large-10 medium-9 small-6 columns">
+          <%= f.input :password, as: :password %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-10 medium-9 small-6 columns">
+          <%= f.input :password_confirmation, as: :password %>
+        </div>
+      </div>
+    <% end %>
+  </fieldset>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@user.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @user.new_record? %>
+        <%= link_to 'Delete', user_path(@user), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

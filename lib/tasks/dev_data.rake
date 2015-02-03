@@ -16,12 +16,14 @@ namespace :db do
     Bakery.delete_all
 
     biencuit = FactoryGirl.create(:bakery, name: "biencuit")
+    grumpy = FactoryGirl.create(:bakery, name: "grumpy")
 
-    FactoryGirl.create(:admin, email: 'admin@example.com')
-    FactoryGirl.create(:admin_bakery, email: 'user@example.com', bakery: biencuit)
+    FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'nathan@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'justin@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'kate@biencuit.com', bakery: biencuit)
+    FactoryGirl.create(:user, email: 'jane@grumpy.com', bakery: grumpy)
+    FactoryGirl.create(:user, email: 'john@grumpy.com', bakery: grumpy)
 
     FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Baguette")
     FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Brioche")

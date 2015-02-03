@@ -3,20 +3,11 @@ require "rails_helper"
 describe User do
   let(:user) { build(:user) }
   let(:admin) { build(:admin) }
-  let(:admin_bakery) { build(:admin_bakery) }
 
   it "has model attributes" do
     expect(user).to respond_to(:name)
     expect(user).to respond_to(:email)
-    expect(user).to respond_to(:password)
-    expect(user).to respond_to(:password_confirmation)
-  end
-
-  it "has user roles" do
-    expect(admin).to be_valid
-    expect(admin_bakery).to be_valid
-    expect(admin.bakery).to eq(nil)
-    expect(admin_bakery.bakery).to_not eq(nil)
+    expect(user).to respond_to(:admin?)
   end
 
   it "has association" do

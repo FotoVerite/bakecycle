@@ -1,7 +1,7 @@
 Feature: Bakery
 
   Background:
-    Given I am logged in as a admin
+    Given I am logged in as an admin
     And There are bakeries named "Biencuit","Grumpy" and "Wonder"]
 
   Scenario: As an Admin, I can view all bakeries
@@ -38,6 +38,6 @@ Feature: Bakery
     And "Wonder" should not be present
 
   Scenario: As an User, I cannot see bakeries
-    Given I am logged in as a admin
-    And I go to the "ingredients" page
+    Given I am logged in as a user
+    And I go to the "bakeries" page
     Then "You are not authorized to access this page." should be present

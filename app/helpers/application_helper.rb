@@ -7,8 +7,4 @@ module ApplicationHelper
   def active_nav?(section)
     'active' if section == @_active_nav
   end
-
-  def current_bakery
-    current_user.bakery if current_user
-  end
 end
