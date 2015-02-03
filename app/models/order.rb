@@ -12,6 +12,7 @@ class Order < ActiveRecord::Base
   validates :start_date, presence: true
   validates :order_items, presence: { message: "You must choose a product before saving" }
   validates :order_type, presence: true
+  validates :bakery, presence: true
 
   before_validation :set_end_date, if: :temporary?
 

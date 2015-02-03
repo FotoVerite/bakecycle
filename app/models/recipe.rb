@@ -19,6 +19,7 @@ class Recipe < ActiveRecord::Base
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true
   validates :mix_size_unit, presence: true
+  validates :bakery, presence: true
 
   def self.recipe_type_options
     RECIPE_TYPE_OPTIONS

@@ -5,8 +5,10 @@ Given(/^There are users named "(.*?)",(.*?)" and they belong to "(.*?)" bakery$/
 end
 
 Then(/^I should see a list of users including "(.*?)" and "(.*?)"$/) do |name1, name2|
-  expect(page).to have_content(name1)
-  expect(page).to have_content(name2)
+  within '.responsive-table' do
+    expect(page).to have_content(name1)
+    expect(page).to have_content(name2)
+  end
 end
 
 Then(/^I should be redirected to an user page$/) do
@@ -33,6 +35,14 @@ Then(/^I should see that the user name is "(.*?)"$/) do |name|
   expect(page).to have_content(name)
 end
 
-Then(/^I should be redirected to the Users page$/) do
-  expect(page).to have_content("Users")
+Then(/^The user "(.*?)" should not be present$/) do |user|
+  within '.responsive-table' do
+    expect(page).to_not have_content(user)
+  end
+end
+
+Then(/^I should see confirmation that the user "(.*?)" was deleted$/) do |user|
+  within '.alert-box' do
+    expect(page).to have_content("You have deleted #{user}")
+  end
 end

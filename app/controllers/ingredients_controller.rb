@@ -1,18 +1,14 @@
 class IngredientsController < ApplicationController
   before_action :authenticate_user!
-  authorize_resource
+  load_and_authorize_resource
 
   def index
-    @ingredients = Ingredient.all
   end
 
   def new
-    @ingredient = Ingredient.new
   end
 
   def create
-    @ingredient = Ingredient.new(ingredient_params)
-
     if @ingredient.save
       flash[:notice] = "You have created #{@ingredient.name}."
       redirect_to edit_ingredient_path(@ingredient)
@@ -22,11 +18,9 @@ class IngredientsController < ApplicationController
   end
 
   def edit
-    @ingredient = Ingredient.find(params[:id])
   end
 
   def update
-    @ingredient = Ingredient.find(params[:id])
     if @ingredient.update(ingredient_params)
       flash[:notice] = "You have updated #{@ingredient.name}."
       redirect_to edit_ingredient_path(@ingredient)
@@ -36,7 +30,8 @@ class IngredientsController < ApplicationController
   end
 
   def destroy
-    Ingredient.destroy(params[:id])
+    @ingredient.destroy!
+    flash[:notice] = "You have deleted #{@ingredient.name}"
     redirect_to ingredients_path
   end
 

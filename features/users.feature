@@ -54,5 +54,7 @@ Feature: Users
     When I am on the edit page for "andy" user
     And I click on "Delete"
     And I confirm popup
-    Then I should be redirected to the Users page
-    And "andy" should not be present
+    Then I should see confirmation that the user "andy" was deleted
+    And The user "andy" should not be present
+
+

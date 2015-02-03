@@ -20,4 +20,6 @@ class ShipmentSearchForm
       date_to: date_to
     }
   end
+
+  delegate :[], to: :to_h
 end

@@ -1,18 +1,16 @@
 class RecipesController < ApplicationController
   before_action :authenticate_user!
-  authorize_resource
+  load_and_authorize_resource
+  decorates_assigned :recipes, :recipe
 
   def index
-    @recipes = Recipe.all.decorate
   end
 
   def new
-    @recipe = Recipe.new
     @inclusionable = RecipeItem.inclusionable_items
   end
 
   def create
-    @recipe = Recipe.new(recipe_params)
     if @recipe.save
       flash[:notice] = "You have created #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
@@ -23,12 +21,10 @@ class RecipesController < ApplicationController
   end
 
   def edit
-    @recipe = Recipe.find(params[:id])
     @inclusionable = RecipeItem.inclusionable_items
   end
 
   def update
-    @recipe = Recipe.find(params[:id])
     if @recipe.update(recipe_params)
       flash[:notice] = "You have updated #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
@@ -39,7 +35,8 @@ class RecipesController < ApplicationController
   end
 
   def destroy
-    Recipe.destroy(params[:id])
+    @recipe.destroy!
+    flash[:notice] = "You have deleted #{@recipe.name}"
     redirect_to recipes_path
   end
 

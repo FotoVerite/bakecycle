@@ -23,6 +23,7 @@ class Client < ActiveRecord::Base
   validates :primary_contact_email, presence: true, format: { with: /\A.+@.+\..+\z/ }
   validates :active, inclusion: [true, false]
   validates :billing_term, presence: true
+  validates :bakery, presence: true
 
   geocoded_by :full_delivery_address
   after_validation :geocode

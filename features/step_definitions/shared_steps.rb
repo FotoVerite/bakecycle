@@ -16,10 +16,6 @@ When(/^I confirm popup$/) do
   page.driver.browser.switch_to.alert.accept
 end
 
-When(/^I dismiss popup$/) do
-  page.driver.browser.switch_to.alert.dismiss
-end
-
 When(/^I click on "(.*?)"$/) do |linkable_text|
   click_on(linkable_text, match: :first)
 end
@@ -51,8 +47,8 @@ Given(/^I am logged in as an admin$/) do
 end
 
 Given(/^I am logged in as a user with a bakery called "(.*?)"$/) do |name|
-  biencuit = create(:bakery, name: name)
-  user = create(:user, bakery: biencuit)
+  bakery = create(:bakery, name: name)
+  user = create(:user, bakery: bakery)
   login_as(user, scope: :user)
 end
 
@@ -76,8 +72,6 @@ Then(/^"(.*?)" should be present "(.*?)" times$/) do |keyword, count|
   page.find(:xpath, '//body').text.split(regexp).length.should == count + 1
 end
 
-Given(/^There are products named "(.*?)","(.*?)" and "(.*?)"$/) do |product1, product2, product3|
-  create(:product, name: product1)
-  create(:product, name: product2)
-  create(:product, name: product3)
+Then(/^I should see "(.*?)" information about "(.*?)"$/) do |object, name|
+  expect(page).to have_content("#{object}: #{name}")
 end

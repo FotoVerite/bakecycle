@@ -5,6 +5,7 @@ FactoryGirl.define do
     mix_size 12
     mix_size_unit { Recipe.mix_size_unit_options.sample }
     lead_days 2
+    bakery
 
     factory :recipe_motherdough do
       recipe_type :dough
@@ -25,10 +26,10 @@ FactoryGirl.define do
     trait :with_ingredients do
       transient do
         ingredient_count 3
+      end
 
-        after(:build) do |recipe, evaluator|
-          recipe.recipe_items = FactoryGirl.build_list(:recipe_item_ingredient, evaluator.ingredient_count)
-        end
+      after(:build) do |recipe, evaluator|
+        recipe.recipe_items = build_list(:recipe_item_ingredient, evaluator.ingredient_count, bakery: evaluator.bakery)
       end
     end
   end

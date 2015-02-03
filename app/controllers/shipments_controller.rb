@@ -1,20 +1,19 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  authorize_resource
+  load_and_authorize_resource
+  decorates_assigned :shipments, :shipment
 
   def index
     @search_form = ShipmentSearchForm.new(search_params)
-    @shipments = Shipment.search(@search_form.to_h).paginate(page: params[:page], per_page: 20)
+    @shipments = @shipments.search(@search_form).paginate(page: params[:page])
     @order_creator = OrderCreator.new
   end
 
   def new
-    @shipment = Shipment.new
     @order_creator = OrderCreator.new
   end
 
   def create
-    @shipment = Shipment.new(shipment_params)
     if @shipment.save
       flash[:notice] = "You have created a shipment for #{@shipment.client.name}."
       redirect_to edit_shipment_path(@shipment)
@@ -25,12 +24,10 @@ class ShipmentsController < ApplicationController
   end
 
   def edit
-    @shipment = Shipment.find(params[:id])
     @order_creator = OrderCreator.new
   end
 
   def update
-    @shipment = Shipment.find(params[:id])
     if @shipment.update(shipment_params)
       flash[:notice] = "You have updated the shipment for #{@shipment.client.name}."
       redirect_to edit_shipment_path(@shipment)
@@ -41,7 +38,8 @@ class ShipmentsController < ApplicationController
   end
 
   def destroy
-    Shipment.destroy(params[:id])
+    @shipment.destroy!
+    flash[:notice] = "You have deleted the shipment for #{@shipment.client.name}."
     redirect_to shipments_path
   end
 

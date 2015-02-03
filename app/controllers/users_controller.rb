@@ -36,7 +36,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.accessible_by(current_ability).destroy(params[:id])
+    user = User.accessible_by(current_ability).find(params[:id])
+    user.destroy
+    flash[:notice] = "You have deleted #{user.name}"
     redirect_to users_path
   end
 
