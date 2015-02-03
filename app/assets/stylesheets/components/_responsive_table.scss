@@ -5,6 +5,12 @@ $bp-medium: 48em;
 $bp-large: 62em;
 $bp-xlarge: 75em;
 
+.js-clickableRow {
+  &:hover {
+    cursor: pointer
+  }
+}
+
 .table-action-icon {
   margin-left: 10px;
   i {
