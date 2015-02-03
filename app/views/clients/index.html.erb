@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <% @clients.each do |client| %>
-      <tr>
+      <tr class="js-clickableRow" href='<%= "#{edit_client_path(client)}" %>'>
         <th scope="row"><%= link_to client.name, client_path(client) %></th>
         <td data-title="DBA"><%= client.dba %></td>
         <td data-title="Active"><%= client.active_status %></td>
