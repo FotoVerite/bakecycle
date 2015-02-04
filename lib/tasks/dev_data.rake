@@ -18,6 +18,7 @@ namespace :db do
     biencuit = FactoryGirl.create(:bakery, name: "biencuit")
     grumpy = FactoryGirl.create(:bakery, name: "grumpy")
 
+    FactoryGirl.create(:user, email: 'user@example.com', bakery: biencuit)
     FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'nathan@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'justin@biencuit.com', bakery: biencuit)
@@ -65,5 +66,6 @@ namespace :db do
     FactoryGirl.create_list(:shipment, 10, client: angels_deli)
     FactoryGirl.create_list(:shipment, 10, client: tonys_brunch)
     FactoryGirl.create_list(:shipment, 10, client: marinas_cafe)
+    puts "Dev Data loaded"
   end
 end

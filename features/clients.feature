@@ -22,8 +22,8 @@ Feature: Clients
     When I am on the edit page for "amyavocado" client
     And I click on "Delete"
     And I confirm popup
-    Then I should be redirected to the Clients page
-    And "amyavocado" should not be present
+    Then I should see confirmation the client was deleted
+    And the client "amyavocado" should not be present
 
   Scenario: As a user, I should be able to edit a client
     When I am on the edit page for "amyavocado" client
@@ -33,7 +33,7 @@ Feature: Clients
     When I click on "Back"
     And I go to the "clients" page
     Then "amymushroom" should be present
-    And "amyavocado" should not be present
+    And the client "amyavocado" should not be present
 
   Scenario: As a user, I should be able to view a clients recent purchases in the client's index page and be able to click to see more shipments for that client
     Given That there's shipments for "mandos" and "andysdecaf"
