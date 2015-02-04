@@ -41,8 +41,16 @@ When(/^I fill out Client form with valid data$/) do
   choose "client_active_true"
 end
 
-Then(/^I should be redirected to the Clients page$/) do
-  visit clients_path
+Then(/^I should see confirmation the client was deleted$/) do
+  within '.alert-box' do
+    expect(page).to have_content("You have deleted")
+  end
+end
+
+Then(/^the client "(.*?)" should not be present$/) do |client_name|
+  within '.responsive-table' do
+    expect(page).to_not have_content(client_name)
+  end
 end
 
 When(/^I am on the edit page for "(.*?)" client$/) do |name|
