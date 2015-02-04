@@ -5,10 +5,10 @@ Feature: Bakery
     And There are bakeries named "Biencuit","Grumpy" and "Wonder"]
 
   Scenario: As an Admin, I can view all bakeries
-    When I go to the "bakeries" page
+    Given I am on the "bakeries" page
     Then I should see a list of routes including "Biencuit", "Grumpy" and "Wonder"
     When I click on "Wonder"
-    Then I should be redirected to a bakery page
+    Then I should see information about the "Wonder" bakery
 
   Scenario: As an Admin, I can create a Bakery
     When I go to the "bakeries" page
@@ -20,8 +20,8 @@ Feature: Bakery
     Then "You have created Au Bon Pain" should be present
 
   Scenario: As an Admin, I can edit a Bakery
-    When I am on the edit page for "Grumpy" bakery
-    And I change the bakery name to "Cheeky's"
+    Given I am on the edit page for "Grumpy" bakery
+    When I change the bakery name to "Cheeky's"
     And I click on "Update"
     Then I should see that the bakery name is "Cheeky's"
     When I click on "Back"
@@ -31,11 +31,11 @@ Feature: Bakery
 
   @javascript
   Scenario: As an Admin, I can delete a Bakery
-    When I am on the edit page for "Wonder" bakery
-    And I click on "Delete"
+    Given I am on the edit page for "Wonder" bakery
+    When I click on "Delete"
     And I confirm popup
-    Then I should be redirected to the Bakeries page
-    And "Wonder" should not be present
+    Then I should see confirmation the bakery was deleted
+    And the bakery "Wonder" should not be present
 
   Scenario: As an User, I cannot see bakeries
     Given I am logged in as a user

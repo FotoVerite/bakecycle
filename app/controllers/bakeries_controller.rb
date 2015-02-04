@@ -35,7 +35,8 @@ class BakeriesController < ApplicationController
   end
 
   def destroy
-    Bakery.destroy(params[:id])
+    bakery = Bakery.destroy(params[:id])
+    flash[:notice] = "You have deleted #{bakery.name}"
     redirect_to bakeries_path
   end
 
