@@ -61,6 +61,11 @@ When(/^I go to the "(.*?)" page$/) do |page|
   visit send(path_string.to_sym)
 end
 
+Given(/^I am on the "(.*?)" page$/) do |page|
+  path_string = "#{page}_path"
+  visit send(path_string.to_sym)
+end
+
 Then(/^"(.*?)" page header should be present$/) do |page_header|
   expect(page).to have_selector('h1', text: page_header)
 end
