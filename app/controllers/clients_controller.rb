@@ -1,9 +1,9 @@
 class ClientsController < ApplicationController
   before_action :authenticate_user!
-  authorize_resource
+  load_and_authorize_resource except: [:new]
+  decorates_assigned :clients, :client
 
   def index
-    @clients = Client.all.decorate
   end
 
   def new
@@ -11,8 +11,6 @@ class ClientsController < ApplicationController
   end
 
   def create
-    @client = Client.new(client_params)
-
     if @client.save
       flash[:notice] = "You have created #{@client.name}."
       redirect_to client_path(@client)
@@ -22,16 +20,13 @@ class ClientsController < ApplicationController
   end
 
   def edit
-    @client = Client.find(params[:id])
   end
 
   def show
-    @client = Client.find(params[:id]).decorate
-    @shipments = Shipment.recent_shipments(@client)
+    @shipments = Shipment.accessible_by(current_ability).recent_shipments(@client)
   end
 
   def update
-    @client = Client.find(params[:id])
     if @client.update(client_params)
       flash[:notice] = "You have updated #{@client.name}."
       redirect_to client_path(@client)
@@ -41,8 +36,8 @@ class ClientsController < ApplicationController
   end
 
   def destroy
-    client = Client.destroy(params[:id])
-    flash[:notice] = "You have deleted #{client.name}"
+    @client.destroy!
+    flash[:notice] = "You have deleted #{@client.name}"
     redirect_to clients_path
   end
 
@@ -57,6 +52,7 @@ class ClientsController < ApplicationController
       :billing_address_state, :billing_address_zipcode, :accounts_payable_contact_name,
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
-      :secondary_contact_phone, :secondary_contact_email, :billing_term)
+      :secondary_contact_phone, :secondary_contact_email, :billing_term
+      )
   end
 end

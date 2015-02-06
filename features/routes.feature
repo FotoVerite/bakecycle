@@ -1,17 +1,17 @@
 Feature: Routes
 
   Background:
-    Given I am logged in as a user
-    And There are routes named "Canal","Chinatown" and "LES"
+    Given I am logged in as a user with a bakery called "biencuit"
+    And There are "biencuit" bakery routes named "Canal" and "Chinatown"
 
   Scenario: As a user, I should be able to view routes index
-    When I go to the "routes" page
-    Then I should see a list of routes including "Canal", "Chinatown" and "LES"
+    Given I am on the "routes" page
+    Then I should see a list of routes including "Canal" and "Chinatown"
     When I click on "Canal"
-    Then I should be redirected to a route page
+    Then I should see "Route" information about "Canal"
 
   Scenario: As a user, I should be able to add a route
-    When I go to the "routes" page
+    Given I am on the "routes" page
     And I click on "Add New Route"
     And I fill out Route form with:
       | name   | notes                 | active  | time   |
@@ -24,8 +24,9 @@ Feature: Routes
     When I am on the edit page for "Canal" route
     And I click on "Delete"
     And I confirm popup
-    Then I should be redirected to the Routes page
-    And "Canal" should not be present
+    Then I should see confirmation that the route "Canal" was deleted
+    And The route "Canal" should not be present
+
 
   Scenario: As a user, I should be able to edit a route
     When I am on the edit page for "Canal" route

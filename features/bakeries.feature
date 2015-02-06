@@ -2,17 +2,17 @@ Feature: Bakery
 
   Background:
     Given I am logged in as an admin
-    And There are bakeries named "Biencuit","Grumpy" and "Wonder"]
+    And There are bakeries named "Biencuit","Grumpy" and "Wonder"
 
   Scenario: As an Admin, I can view all bakeries
     Given I am on the "bakeries" page
-    Then I should see a list of routes including "Biencuit", "Grumpy" and "Wonder"
+    Then I should see a list of bakeries including "Biencuit", "Grumpy" and "Wonder"
     When I click on "Wonder"
-    Then I should see information about the "Wonder" bakery
+    Then I should see "Bakery" information about "Wonder"
 
   Scenario: As an Admin, I can create a Bakery
-    When I go to the "bakeries" page
-    And I click on "Add New Bakery"
+    Given I am on the "bakeries" page
+    When I click on "Add New Bakery"
     And I fill out Bakery form with:
       | name        |
       | Au Bon Pain |
@@ -37,7 +37,8 @@ Feature: Bakery
     Then I should see confirmation the bakery was deleted
     And the bakery "Wonder" should not be present
 
-  Scenario: As an User, I cannot see bakeries
-    Given I am logged in as a user
-    And I go to the "bakeries" page
-    Then "You are not authorized to access this page." should be present
+  Scenario: As an User, I can only see my bakery
+    Given I am logged in as a user with a bakery called "Wizard"
+    And I am on the "bakeries" page
+    When I click on "Wizard"
+    Then I should see "Bakery" information about "Wizard"

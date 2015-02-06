@@ -6,6 +6,7 @@ FactoryGirl.define do
     unit { Ingredient.unit_options.sample }
     ingredient_type { Ingredient.ingredient_type_options.sample }
     description { Faker::Lorem.sentence(1) }
+    bakery
   end
 
   sequence :ingredient_name do |n|

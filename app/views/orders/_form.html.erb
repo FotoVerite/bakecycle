@@ -55,7 +55,7 @@
   </fieldset>
 
   <fieldset>
-    <legend>Product Infomation</legend>
+    <legend>Product Information</legend>
     <div class="row collapse hide-for-small-only">
       <div class="small-12 medium-11 columns">
         <div class="row collapse">
@@ -102,8 +102,11 @@
     <div class="small-12 columns">
       <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
       <% unless f.object.new_record? %>
-        <%= link_to 'Delete', order_path(f.object), class: "button alert",
-                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', order_path(f.object),
+          class: "button alert",
+          method: :delete,
+          data: { confirm: 'Are you sure?' }
+        %>
       <% end %>
     </div>
   </div>

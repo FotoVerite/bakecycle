@@ -7,6 +7,7 @@ FactoryGirl.define do
     order_type "standing"
     start_date  { Date.today + Faker::Number.number(1).to_i.days }
     end_date  { Date.today + Faker::Number.number(3).to_i.days }
+    bakery
 
     transient do
       order_item_count 1

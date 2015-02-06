@@ -1,17 +1,21 @@
-Given(/^There are clients named "(.*?)","(.*?)" and "(.*?)"$/) do |client1, client2, client3|
-  create(:client, name: client1)
-  create(:client, name: client2)
-  create(:client, name: client3)
+Given(/^There are "(.*?)" bakery clients named "(.*?)" and "(.*?)"$/) do |bakery, name1, name2|
+  bakery = Bakery.find_by(name: bakery)
+  create(:client, name: name1, bakery: bakery)
+  create(:client, name: name2, bakery: bakery)
 end
 
-Then(/^I should see a list of clients including "(.*?)", "(.*?)" and "(.*?)"$/) do |client1, client2, client3|
+Given(/^there is a bakery called "(.*?)"$/) do |name|
+  create(:bakery, name: name)
+end
+
+Then(/^I should see a list of clients including "(.*?)" and "(.*?)"$/) do |client1, client2|
   expect(page).to have_content(client1)
   expect(page).to have_content(client2)
-  expect(page).to have_content(client3)
 end
 
-Then(/^I should be redirected to a client page with the name "(.*?)"$/) do |name|
-  expect(page).to have_content(name)
+Then(/^I should not see clients "(.*?)" and "(.*?)"$/) do |client1, client2|
+  expect(page).to_not have_content(client1)
+  expect(page).to_not have_content(client2)
 end
 
 When(/^I fill out Client form with valid data$/) do
@@ -41,12 +45,6 @@ When(/^I fill out Client form with valid data$/) do
   choose "client_active_true"
 end
 
-Then(/^I should see confirmation the client was deleted$/) do
-  within '.alert-box' do
-    expect(page).to have_content("You have deleted")
-  end
-end
-
 Then(/^the client "(.*?)" should not be present$/) do |client_name|
   within '.responsive-table' do
     expect(page).to_not have_content(client_name)
@@ -71,8 +69,8 @@ Given(/^That there's shipments for "(.*?)" and "(.*?)"$/) do |name1, name2|
   client1 = Client.find_by(name: name1)
   client2 = Client.find_by(name: name2)
 
-  create_list(:shipment, 11, client: client1)
-  create_list(:shipment, 11, client: client2)
+  create_list(:shipment, 11, client: client1, bakery: client1.bakery)
+  create_list(:shipment, 11, client: client2, bakery: client2.bakery)
 end
 
 Then(/^I should see recent shipments information$/) do
@@ -83,5 +81,17 @@ Then(/^I should be on the shipment's index page with "(.*?)" shipments and none 
   within '.responsive-table' do
     expect(page).to have_content(name1)
     expect(page).to_not have_content(name2)
+  end
+end
+
+Then(/^The client "(.*?)" should not be present$/) do |client|
+  within '.responsive-table' do
+    expect(page).to_not have_content(client)
+  end
+end
+
+Then(/^I should see confirmation that the client "(.*?)" was deleted$/) do |client|
+  within '.alert-box' do
+    expect(page).to have_content("You have deleted #{client}")
   end
 end

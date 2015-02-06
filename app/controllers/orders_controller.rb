@@ -1,10 +1,9 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  decorates_assigned :order, :orders
-  authorize_resource
+  load_and_authorize_resource except: [:new]
+  decorates_assigned :orders, :order
 
   def index
-    @orders = Order.all.decorate
   end
 
   def new
@@ -14,7 +13,6 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(order_params)
     if @order.save
       flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
@@ -25,12 +23,10 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    @order = Order.find(params[:id])
     @order_creator = OrderCreator.new
   end
 
   def update
-    @order = Order.find(params[:id])
     if @order.update(order_params)
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
@@ -41,7 +37,8 @@ class OrdersController < ApplicationController
   end
 
   def destroy
-    Order.destroy(params[:id])
+    @order.destroy!
+    flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client.name}."
     redirect_to orders_path
   end
 

@@ -7,6 +7,7 @@ FactoryGirl.define do
     unit { Product.unit_options.sample }
     extra_amount { Faker::Number.decimal(0, 3) }
     base_price { Faker::Number.decimal(2) }
+    bakery
 
     trait :with_inclusion do
       association :inclusion, factory: :recipe_inclusion

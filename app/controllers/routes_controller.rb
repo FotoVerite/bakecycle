@@ -1,9 +1,9 @@
 class RoutesController < ApplicationController
   before_action :authenticate_user!
-  authorize_resource
+  load_and_authorize_resource except: [:new]
+  decorates_assigned :routes, :route
 
   def index
-    @routes = Route.all.decorate
   end
 
   def new
@@ -11,7 +11,6 @@ class RoutesController < ApplicationController
   end
 
   def create
-    @route = Route.new(route_params)
     if @route.save
       flash[:notice] = "You have created #{@route.name}."
       redirect_to edit_route_path(@route)
@@ -21,11 +20,9 @@ class RoutesController < ApplicationController
   end
 
   def edit
-    @route = Route.find(params[:id])
   end
 
   def update
-    @route = Route.find(params[:id])
     if @route.update(route_params)
       flash[:notice] = "You have updated #{@route.name}."
       redirect_to edit_route_path(@route)
@@ -35,7 +32,8 @@ class RoutesController < ApplicationController
   end
 
   def destroy
-    Route.destroy(params[:id])
+    @route.destroy!
+    flash[:notice] = "You have deleted #{@route.name}"
     redirect_to routes_path
   end
 

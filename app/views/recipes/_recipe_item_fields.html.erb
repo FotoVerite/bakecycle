@@ -4,7 +4,7 @@
       <%= f.input :inclusionable_id_type, collection: @inclusionable, label: "Ingredient", include_blank: "--None--", as: :select%>
    </div>
    <div class="small-12 medium-4 columns">
-      <%= f.input :bakers_percentage, as: :string, label: "Baker's %", as: :string %>
+      <%= f.input :bakers_percentage, label: "Baker's %", as: :string %>
    </div>
    <div class="small-12 medium-4 columns">
       <%= f.input :_destroy, as: :hidden, wrapper: false %>

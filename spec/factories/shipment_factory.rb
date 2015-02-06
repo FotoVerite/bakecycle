@@ -5,6 +5,7 @@ FactoryGirl.define do
     client
     route
     date  { Date.today + Faker::Number.number(1).to_i.days }
+    bakery
 
     transient do
       shipment_item_count 1

@@ -1,20 +1,17 @@
-Given(/^There are orders with clients named "(.*?)","(.*?)" and "(.*?)"$/) do |name1, name2, name3|
-  client1 = create(:client, name: name1)
-  client2 = create(:client, name: name2)
-  client3 = create(:client, name: name3)
-  create(:order, client: client1)
-  create(:order, client: client2)
-  create(:order, client: client3)
+Given(/^There are "(.*?)" bakery orders with clients named "(.*?)" and "(.*?)"$/) do |bakery, name1, name2|
+  bakery = Bakery.find_by(name: bakery)
+  client1 = Client.find_by(name: name1)
+  client2 = Client.find_by(name: name2)
+
+  create(:order, client: client1, bakery: bakery)
+  create(:order, client: client2, bakery: bakery)
 end
 
-Then(/^I should see a list of orders including clients named "(.*?)","(.*?)" and "(.*?)"$/) do |name1, name2, name3|
-  expect(page).to have_content(name1)
-  expect(page).to have_content(name2)
-  expect(page).to have_content(name3)
-end
-
-Then(/^I should be redirected to "(.*?)" page$/) do |name|
-  expect(page).to have_content(name)
+Then(/^I should see a list of orders including clients named "(.*?)" and "(.*?)"$/) do |name1, name2|
+  within '.responsive-table' do
+    expect(page).to have_content(name1)
+    expect(page).to have_content(name2)
+  end
 end
 
 When(/^I fill out Order form with:$/) do |table|
@@ -38,18 +35,6 @@ When(/^I am on the edit page for "(.*?)" order$/) do |name|
   client = Client.find_by(name: name)
   order = Order.find_by(client: client)
   visit edit_order_path(order)
-end
-
-Then(/^I should be redirected to the Orders page$/) do
-  expect(page).to have_content("Orders")
-end
-
-When(/^I change the order name to "(.*?)"$/) do |name|
-  select name, from: "order_client_id"
-end
-
-Then(/^I should see that the order name is "(.*?)"$/) do |name|
-  expect(page).to have_content(name)
 end
 
 When(/^I fill out the order item form with:$/) do |table|
@@ -84,4 +69,26 @@ end
 
 Then(/^the order item "(.*?)" should not be present$/) do |name|
   expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to raise_error
+end
+
+Then(/^The order "(.*?)" should not be present$/) do |order|
+  within '.responsive-table' do
+    expect(page).to_not have_content(order)
+  end
+end
+
+Then(/^I should see confirmation that the "(.*?)" order "(.*?)" was deleted$/) do |order_type, order|
+  within '.alert-box' do
+    expect(page).to have_content("You have deleted the #{order_type} order for #{order}")
+  end
+end
+
+Then(/^I should see order information about "(.*?)"$/) do |name|
+  expect(page).to have_content("Client Name: #{name}")
+end
+
+When(/^I click on the first order$/) do
+  within '.responsive-table' do
+    page.execute_script("$('.js-clickableRow:first').click();")
+  end
 end

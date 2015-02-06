@@ -3,16 +3,16 @@ class ApplicationController < ActionController::Base
   before_action :active_nav
   helper_method :current_bakery
 
-  def active_nav(name = nil)
-    @_active_nav = name || controller_name.to_sym
-  end
-
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, alert: exception.message
   end
 
   rescue_from ActiveRecord::RecordNotFound do
     redirect_to root_url, alert: "Resource not found"
+  end
+
+  def active_nav(name = nil)
+    @_active_nav = name || controller_name.to_sym
   end
 
   def current_bakery

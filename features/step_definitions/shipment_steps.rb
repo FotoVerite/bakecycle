@@ -1,16 +1,11 @@
-Given(/^There are shipments with clients named "(.*?)","(.*?)" and "(.*?)"$/) do |name1, name2, name3|
-  client1 = create(:client, name: name1)
-  client2 = create(:client, name: name2)
-  client3 = create(:client, name: name3)
-  create(:shipment, client: client1)
-  create(:shipment, client: client2)
-  create(:shipment, client: client3)
-end
+Given(/^There are "(.*?)" shipments with clients named "(.*?)" and "(.*?)"$/) do |bakery, name1, name2|
+  bakery = Bakery.find_by(name: bakery)
 
-Then(/^I should see a list of shipments including clients named "(.*?)","(.*?)" and "(.*?)"$/) do |name1, name2, name3|
-  expect(page).to have_content(name1)
-  expect(page).to have_content(name2)
-  expect(page).to have_content(name3)
+  client1 = create(:client, name: name1, bakery: bakery)
+  client2 = create(:client, name: name2, bakery: bakery)
+
+  create(:shipment, client: client1, bakery: bakery)
+  create(:shipment, client: client2, bakery: bakery)
 end
 
 When(/^I fill out Shipment form with:$/) do |table|
@@ -31,10 +26,6 @@ end
 
 Then(/^I should see that the shipment's client name is "(.*?)"$/) do |name|
   expect(page).to have_content(name)
-end
-
-Then(/^I should be redirected to the Shipments page$/) do
-  expect(page).to have_content("Shipments")
 end
 
 When(/^I change the shipment date to "(.*?)"$/) do |date|
@@ -87,14 +78,15 @@ Then(/^I should not see shipments for the client "(.*?)"$/) do |client_name|
   end
 end
 
-Given(/^there are shipments for the past two weeks$/) do
-  create(:shipment, date: (Date.today))
-  create(:shipment, date: (Date.today - 2))
-  create(:shipment, date: (Date.today - 5))
-  create(:shipment, date: (Date.today - 7))
-  create(:shipment, date: (Date.today - 10))
-  create(:shipment, date: (Date.today - 11))
-  create(:shipment, date: (Date.today - 15))
+Given(/^there are "(.*?)" shipments for the past two weeks$/) do |bakery|
+  bakery = Bakery.find_by(name: bakery)
+  create(:shipment, bakery: bakery, date: (Date.today))
+  create(:shipment, bakery: bakery, date: (Date.today - 2))
+  create(:shipment, bakery: bakery, date: (Date.today - 5))
+  create(:shipment, bakery: bakery, date: (Date.today - 7))
+  create(:shipment, bakery: bakery, date: (Date.today - 10))
+  create(:shipment, bakery: bakery, date: (Date.today - 11))
+  create(:shipment, bakery: bakery, date: (Date.today - 15))
 end
 
 When(/^I filter shipments by to and from dates for the past week$/) do
@@ -115,22 +107,29 @@ Then(/^I should see a list of shipments for only the past week$/) do
   end
 end
 
-When(/^I fill out shipment search form with$/) do |table|
-  fill_in "search_date_from", with: table.hashes[0]["date_from"]
-  fill_in "search_date_to", with: table.hashes[0]["date_to"]
-end
-
 Then(/^I should see the search term "(.*?)" preserved in the client search box$/) do |client|
   find(:xpath, "//select/option[@selected='selected' and text()='#{client}']")
 end
 
 Given(/^There are "(.*?)" shipments for "(.*?)"$/) do |number, name|
   client = Client.find_by(name: name)
-  create_list(:shipment, number.to_i, client: client)
+  create_list(:shipment, number.to_i, client: client, bakery: client.bakery)
 end
 
 Then(/^I should see shipments for "(.*?)"$/) do |name|
   within '.responsive-table' do
     expect(page).to have_content(name)
+  end
+end
+
+Then(/^I should see confirmation the shipment for "(.*?)" was deleted$/) do |shipment|
+  within '.alert-box' do
+    expect(page).to have_content("You have deleted the shipment for #{shipment}")
+  end
+end
+
+Then(/^the shipment for "(.*?)" should not be present$/) do |shipment|
+  within '.responsive-table' do
+    expect(page).to_not have_content(shipment)
   end
 end

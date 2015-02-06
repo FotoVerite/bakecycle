@@ -15,6 +15,7 @@ class Ingredient < ActiveRecord::Base
   validates :description, length: { maximum: 500 }
   validates :unit, presence: true
   validates :ingredient_type, presence: true
+  validates :bakery, presence: true
 
   def self.unit_options
     UNIT_OPTIONS

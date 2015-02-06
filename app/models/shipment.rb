@@ -11,6 +11,7 @@ class Shipment < ActiveRecord::Base
   validates :client, :client_id, presence: true
   validates :date, presence: true
   validates :payment_due_date, presence: true
+  validates :bakery, presence: true
 
   before_validation :set_payment_due_date
 
@@ -52,4 +53,7 @@ class Shipment < ActiveRecord::Base
     return self.payment_due_date = date if client.bill_today?
     self.payment_due_date = date + Client.get_billing_term_days(client.billing_term) if date
   end
+
+  # will_paginate
+  self.per_page = 20
 end

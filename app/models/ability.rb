@@ -1,32 +1,38 @@
 class Ability
   include CanCan::Ability
+
   def initialize(user)
     return unless user && user.persisted?
 
-    # users
-    can :manage, User, id: user.id
+    # Users
+    can [:read, :update], User, id: user.id
     can :manage, User, bakery: user.bakery if user.bakery
+    cannot :destroy, User, id: user.id if user.bakery
     can :manage, User if user.admin?
 
-    if user.admin?
-      can :manage, Bakery
-    end
+    # Clients
+    can :manage, Client, bakery: user.bakery if user.bakery
 
-    if user.bakery
-      can :manage, [
-        Client,
-        Ingredient,
-        Order,
-        OrderCreator,
-        OrderItem,
-        PriceVarient,
-        Product,
-        Recipe,
-        RecipeItem,
-        Route,
-        Shipment,
-        ShipmentItem,
-      ]
-    end
+    # Shipments
+    can :manage, Shipment, bakery: user.bakery if user.bakery
+
+    # Ingredients
+    can :manage, Ingredient, bakery: user.bakery if user.bakery
+
+    # Recipes
+    can :manage, Recipe, bakery: user.bakery if user.bakery
+
+    # Routes
+    can :manage, Route, bakery: user.bakery if user.bakery
+
+    # Products
+    can :manage, Product, bakery: user.bakery if user.bakery
+
+    # Orders
+    can :manage, Order, bakery: user.bakery if user.bakery
+
+    # Bakeries
+    can [:read, :update], Bakery, id: user.bakery.id if user.bakery
+    can :manage, Bakery if user.admin?
   end
 end

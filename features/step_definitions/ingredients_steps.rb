@@ -1,18 +1,14 @@
-Given(/^There are ingredients named "(.*?)","(.*?)" and "(.*?)"$/) do |ingredient1, ingredient2, ingredient3|
-  create(:ingredient, name: ingredient1)
-  create(:ingredient, name: ingredient2)
-  create(:ingredient, name: ingredient3)
+Given(/^There are "(.*?)" bakery ingredients named "(.*?)" and "(.*?)"$/) do |bakery, ing1, ing2|
+  bakery = Bakery.find_by(name: bakery)
+  create(:ingredient, name: ing1, bakery: bakery)
+  create(:ingredient, name: ing2, bakery: bakery)
 end
 
-Then(/^I should see a list of ingredients including "(.*?)", "(.*?)" and "(.*?)"$/) do |ing1, ing2, ing3|
-  expect(page).to have_content(ing1)
-  expect(page).to have_content(ing2)
-  expect(page).to have_content(ing3)
-end
-
-Then(/^I should be redirected to an ingredient page$/) do
-  expect(page).to have_css('form')
-  expect(page).to have_content('Ingredient')
+Then(/^I should see a list of ingredients including "(.*?)" and "(.*?)"$/) do |ing1, ing2|
+  within '.responsive-table' do
+    expect(page).to have_content(ing1)
+    expect(page).to have_content(ing2)
+  end
 end
 
 When(/^I fill out Ingredient form with:$/) do |table|
@@ -22,10 +18,6 @@ When(/^I fill out Ingredient form with:$/) do |table|
   select table.hashes[0]["unit"], from: "ingredient_unit"
   select table.hashes[0]["ingredient_type"], from: "ingredient_ingredient_type"
   fill_in "ingredient_description", with: table.hashes[0]["description"]
-end
-
-Then(/^I should be redirected to the Ingredients page$/) do
-  expect(page).to have_content("Ingredients")
 end
 
 Given(/^I am on the edit page for "(.*?)" ingredient$/) do |name|
@@ -39,4 +31,16 @@ end
 
 Then(/^I should see that the ingredient name is "(.*?)"$/) do |name|
   expect(page).to have_content(name)
+end
+
+Then(/^The ingredient "(.*?)" should not be present$/) do |client|
+  within '.responsive-table' do
+    expect(page).to_not have_content(client)
+  end
+end
+
+Then(/^I should see confirmation that the ingredient "(.*?)" was deleted$/) do |client|
+  within '.alert-box' do
+    expect(page).to have_content("You have deleted #{client}")
+  end
 end

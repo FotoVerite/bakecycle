@@ -1,8 +1,8 @@
 Feature: Products
 
   Background:
-    Given I am logged in as a user
-    And There are products named "baguette cookie","donut tart" and "croissant sandwich"
+    Given I am logged in as a user with a bakery called "biencuit"
+    And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
 
   @javascript
   Scenario: As a user, I should be able to create a product
@@ -16,9 +16,9 @@ Feature: Products
 
   Scenario: As a user, I should be able to view the product index page
     When I go to the "products" page
-    Then I should see a list of products including "baguette cookie", "donut tart" and "croissant sandwich"
+    Then I should see a list of products including "baguette cookie" and "donut tart"
     When I click on "baguette cookie"
-    Then I should be redirected to a product page
+    Then I should see "Product" information about "baguette cookie"
 
   @javascript
   Scenario: As a user, I should be able to edit a product
@@ -34,13 +34,13 @@ Feature: Products
   Scenario: As a user, I should be able to delete a product
     When I am on the edit page for "baguette cookie" product
     And I click on "Delete"
-    Then I should be redirected to the products page
-    And "baguette cookie" should not be present
+    Then I should see confirmation that the product "baguette cookie" was deleted
+    And The product "baguette cookie" should not be present
 
   @javascript
   Scenario: As a user, I should be able to add a price to a product
     When I go to the "products" page
-    Then I should see a list of products including "baguette cookie", "donut tart" and "croissant sandwich"
+    Then I should see a list of products including "baguette cookie" and "donut tart"
     When I click on "baguette cookie"
     And I click on "Add New Price"
     And I fill out the price varient form with:
