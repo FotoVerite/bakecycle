@@ -4,7 +4,7 @@
       <div class="row collapse">
         <div class="small-12 medium-2 columns">
           <%= f.label :product_id, "Product", class: "show-for-small-only" %>
-          <%= f.input :product_id, collection: @order_creator.products, label_method: :name, value_method: :id, include_blank: '--None--', as: :select, label: false, input_html: {id: "order_order_items_attributes_{{getRandomId($index)}}_product_id", name: "order[order_items_attributes][{{getRandomId($index)}}][product_id]"}  %>
+          <%= f.input :product_id, collection: order.available_products, label_method: :name, value_method: :id, include_blank: '--None--', as: :select, label: false, input_html: {id: "order_order_items_attributes_{{getRandomId($index)}}_product_id", name: "order[order_items_attributes][{{getRandomId($index)}}][product_id]"}  %>
         </div>
         <div class="small-12 medium-3 columns">
           <div class="row collapse">

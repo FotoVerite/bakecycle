@@ -7,13 +7,13 @@
 
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :client_id, collection: @order_creator.clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
+        <%= f.input :client_id, collection: shipment.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
       </div>
     </div>
 
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :route_id, collection: @order_creator.routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
+        <%= f.input :route_id, collection: shipment.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
       </div>
     </div>
 

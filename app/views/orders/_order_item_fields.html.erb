@@ -4,7 +4,7 @@
       <div class="row collapse">
         <div class="small-12 medium-2 columns">
           <%= f.label :product_id, "Product", class: "show-for-small-only" %>
-          <%= f.input :product_id, collection: @order_creator.products, label_method: :name, value_method: :id, include_blank: '--None--', as: :select, label: false %>
+          <%= f.input :product_id, collection: order.available_products, label_method: :name, value_method: :id, include_blank: '--None--', as: :select, label: false %>
         </div>
         <div class="small-12 medium-3 columns">
           <div class="row collapse">

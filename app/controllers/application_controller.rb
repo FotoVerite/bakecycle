@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :active_nav
   helper_method :current_bakery
+  helper_method :item_finder
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, alert: exception.message
@@ -17,5 +18,9 @@ class ApplicationController < ActionController::Base
 
   def current_bakery
     current_user.bakery if current_user
+  end
+
+  def item_finder
+    @_item_finder ||= ItemFinder.new(current_ability)
   end
 end

@@ -8,7 +8,6 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new(order_type: 'standing', start_date: Date.today)
-    @order_creator = OrderCreator.new
     @order.order_items.build
   end
 
@@ -17,13 +16,11 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
-      @order_creator = OrderCreator.new
       render 'new'
     end
   end
 
   def edit
-    @order_creator = OrderCreator.new
   end
 
   def update
@@ -31,7 +28,6 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
-      @order_creator = OrderCreator.new
       render 'edit'
     end
   end

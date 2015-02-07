@@ -7,7 +7,6 @@ class ProductsController < ApplicationController
   end
 
   def new
-    @recipes = Recipe.accessible_by(current_ability)
   end
 
   def create
@@ -15,13 +14,11 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have created #{@product.name}."
       redirect_to edit_product_path(@product)
     else
-      @recipes = Recipe.accessible_by(current_ability)
       render 'new'
     end
   end
 
   def edit
-    @recipes = Recipe.accessible_by(current_ability)
   end
 
   def update
@@ -29,7 +26,6 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have updated #{@product.name}."
       redirect_to edit_product_path(@product)
     else
-      @recipes = Recipe.accessible_by(current_ability)
       render 'edit'
     end
   end

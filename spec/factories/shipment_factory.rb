@@ -13,7 +13,10 @@ FactoryGirl.define do
 
     after(:build) do |shipment, evaluator|
       shipment.shipment_items << FactoryGirl.build_list(
-        :shipment_item, evaluator.shipment_item_count, shipment: shipment
+        :shipment_item,
+        evaluator.shipment_item_count,
+        shipment: shipment,
+        bakery: evaluator.bakery
       )
     end
   end

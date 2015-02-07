@@ -1,7 +1,7 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
     <div class="small-12 medium-3 columns">
-      <%= f.input :product_id, collection: @order_creator.products, label: "Product", include_blank: "--None--", as: :select %>
+      <%= f.input :product_id, collection: item_finder.products, label: "Product", include_blank: "--None--", as: :select %>
     </div>
     <div class="small-12 medium-3 columns">
       <%= f.input :product_quantity, as: :string, label: "Quantity", input_html: { class: "product_quantity_input" } %>

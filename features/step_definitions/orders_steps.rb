@@ -2,9 +2,9 @@ Given(/^There are "(.*?)" bakery orders with clients named "(.*?)" and "(.*?)"$/
   bakery = Bakery.find_by(name: bakery)
   client1 = Client.find_by(name: name1)
   client2 = Client.find_by(name: name2)
-
-  create(:order, client: client1, bakery: bakery)
-  create(:order, client: client2, bakery: bakery)
+  route = create(:route, bakery: bakery)
+  create(:order, client: client1, bakery: bakery, route: route)
+  create(:order, client: client2, bakery: bakery, route: route)
 end
 
 Then(/^I should see a list of orders including clients named "(.*?)" and "(.*?)"$/) do |name1, name2|

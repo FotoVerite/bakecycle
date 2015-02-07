@@ -14,7 +14,12 @@ FactoryGirl.define do
     end
 
     after(:build) do |order, evaluator|
-      order.order_items << FactoryGirl.build_list(:order_item, evaluator.order_item_count, order: order)
+      order.order_items << FactoryGirl.build_list(
+        :order_item,
+        evaluator.order_item_count,
+        order: order,
+        bakery: evaluator.bakery
+      )
     end
 
     factory :temporary_order do

@@ -8,4 +8,12 @@ class ProductDecorator < Draper::Decorator
   def truncated_description
     description.truncate(30)
   end
+
+  def inclusions
+    h.item_finder.recipes.inclusions.order(:name)
+  end
+
+  def motherdoughs
+    h.item_finder.recipes.motherdoughs.order(:name)
+  end
 end

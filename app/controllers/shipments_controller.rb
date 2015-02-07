@@ -6,11 +6,9 @@ class ShipmentsController < ApplicationController
   def index
     @search_form = ShipmentSearchForm.new(search_params)
     @shipments = @shipments.search(@search_form).paginate(page: params[:page])
-    @order_creator = OrderCreator.new
   end
 
   def new
-    @order_creator = OrderCreator.new
   end
 
   def create
@@ -18,13 +16,11 @@ class ShipmentsController < ApplicationController
       flash[:notice] = "You have created a shipment for #{@shipment.client.name}."
       redirect_to edit_shipment_path(@shipment)
     else
-      @order_creator = OrderCreator.new
       render 'new'
     end
   end
 
   def edit
-    @order_creator = OrderCreator.new
   end
 
   def update
@@ -32,7 +28,6 @@ class ShipmentsController < ApplicationController
       flash[:notice] = "You have updated the shipment for #{@shipment.client.name}."
       redirect_to edit_shipment_path(@shipment)
     else
-      @order_creator = OrderCreator.new
       render 'edit'
     end
   end

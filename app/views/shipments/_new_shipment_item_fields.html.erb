@@ -1,7 +1,7 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
     <div class="small-12 medium-3 columns">
-      <%= f.input :product_id, collection: @order_creator.products, input_html: { id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_id", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_id]" },  label: "Product", include_blank: "--None--", as: :select%>
+      <%= f.input :product_id, collection: shipment.available_products, input_html: { id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_id", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_id]" },  label: "Product", include_blank: "--None--", as: :select%>
     </div>
     <div class="small-12 medium-3 columns">
       <%= f.input :product_quantity, as: :string, input_html: { class: "product_quantity_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_quantity", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_quantity]" } , label: "Quantity"%>

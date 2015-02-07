@@ -5,9 +5,7 @@ FactoryGirl.define do
       bakery { build(:bakery) }
     end
 
-    after(:build) do |recipe_item, evaluator|
-      recipe_item.inclusionable = build(:ingredient, bakery: evaluator.bakery)
-    end
+    inclusionable { build(:ingredient, bakery: bakery) }
   end
 
   factory :recipe_item_recipe, class: RecipeItem do
@@ -16,8 +14,6 @@ FactoryGirl.define do
       bakery { build(:bakery) }
     end
 
-    after(:build) do |recipe_item, evaluator|
-      recipe_item.inclusionable = build(:recipe, bakery: evaluator.bakery)
-    end
+    inclusionable { build(:recipe, bakery: bakery) }
   end
 end

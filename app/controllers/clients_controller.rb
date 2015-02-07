@@ -23,7 +23,7 @@ class ClientsController < ApplicationController
   end
 
   def show
-    @shipments = Shipment.accessible_by(current_ability).recent_shipments(@client)
+    @shipments = item_finder.shipments.recent_shipments(@client)
   end
 
   def update

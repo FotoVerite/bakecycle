@@ -7,7 +7,6 @@ class RecipesController < ApplicationController
   end
 
   def new
-    @inclusionable = RecipeItem.inclusionable_items
   end
 
   def create
@@ -15,13 +14,11 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have created #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
     else
-      @inclusionable = RecipeItem.inclusionable_items
       render 'new'
     end
   end
 
   def edit
-    @inclusionable = RecipeItem.inclusionable_items
   end
 
   def update
@@ -29,7 +26,6 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have updated #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
     else
-      @inclusionable = RecipeItem.inclusionable_items
       render 'edit'
     end
   end
