@@ -2,10 +2,11 @@ require "faker"
 
 FactoryGirl.define do
   factory :shipment do
-    client
-    route
     date  { Date.today + Faker::Number.number(1).to_i.days }
     bakery
+
+    client { create(:client, bakery: bakery) }
+    route { create(:route, bakery: bakery) }
 
     transient do
       shipment_item_count 1

@@ -50,15 +50,15 @@ namespace :db do
     angels_deli = FactoryGirl.create(:client, name: "Angel's Deli", bakery: biencuit)
     tonys_brunch = FactoryGirl.create(:client, name: "Tony's Brunch", bakery: biencuit)
     marinas_cafe = FactoryGirl.create(:client, name: "Marina's Cafe", bakery: biencuit)
-    FactoryGirl.create(:client, name: "Michelle's Pretzels")
 
-    FactoryGirl.create(:order, client: johns_bakery, bakery: biencuit)
-    FactoryGirl.create(:order, client: angels_deli, bakery: biencuit)
-    FactoryGirl.create(:order, client: tonys_brunch, bakery: biencuit)
+    route1 = FactoryGirl.create(:route, bakery: biencuit)
+    route2 = FactoryGirl.create(:route, bakery: biencuit)
+    route3 = FactoryGirl.create(:route, bakery: biencuit)
 
-    FactoryGirl.create(:route, bakery: biencuit)
-    FactoryGirl.create(:route, bakery: biencuit)
-    FactoryGirl.create(:route, bakery: biencuit)
+    FactoryGirl.create(:order, client: johns_bakery, bakery: biencuit, route: route1)
+    FactoryGirl.create(:order, client: angels_deli, bakery: biencuit, route: route2)
+    FactoryGirl.create(:order, client: tonys_brunch, bakery: biencuit, route: route3)
+    FactoryGirl.create(:order, bakery: biencuit)
 
     FactoryGirl.create_list(:shipment, 20, client: johns_bakery, bakery: biencuit)
     FactoryGirl.create_list(:shipment, 10, client: angels_deli, bakery: biencuit)
