@@ -51,6 +51,12 @@ describe Ability do
       expect(ability).to be_able_to(:read, user)
     end
 
+    it "allows creation of clients only for their own bakery" do
+      expect(ability).to be_able_to(:create, User.new(bakery: user.bakery))
+      expect(ability).to_not be_able_to(:create, User.new(bakery: competitor.bakery))
+      expect(ability.attributes_for(:create, User)).to eq(bakery: user.bakery)
+    end
+
     context "no bakery" do
       let(:user) { create(:user, bakery: nil) }
 
