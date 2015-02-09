@@ -46,6 +46,7 @@ namespace :db do
 
     FactoryGirl.create_list(:product, 10, bakery: biencuit)
 
+    FactoryGirl.create(:client, :with_delivery_fee, name: "Mando's Pizza", bakery: biencuit)
     johns_bakery = FactoryGirl.create(:client, name: "John's Bakery", bakery: biencuit)
     angels_deli = FactoryGirl.create(:client, name: "Angel's Deli", bakery: biencuit)
     tonys_brunch = FactoryGirl.create(:client, name: "Tony's Brunch", bakery: biencuit)

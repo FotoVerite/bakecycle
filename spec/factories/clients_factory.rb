@@ -33,5 +33,11 @@ FactoryGirl.define do
       secondary_contact_phone { Faker::PhoneNumber.cell_phone }
       secondary_contact_email { Faker::Internet.email }
     end
+
+    trait :with_delivery_fee do
+      charge_delivery_fee true
+      delivery_minimum { Faker::Number.decimal(3) }
+      delivery_fee { Faker::Number.decimal(2) }
+    end
   end
 end
