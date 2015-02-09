@@ -22,14 +22,14 @@ Feature: Clients
 
   @javascript
   Scenario: As a user, I should be able to delete a client
-    When I am on the edit page for "andysdecaf" client
+    Given I am on the edit page for "andysdecaf" client
     And I click on "Delete"
     And I confirm popup
     Then I should see confirmation that the client "andysdecaf" was deleted
     And The client "andysdecaf" should not be present
 
   Scenario: As a user, I should be able to edit a client
-    When I am on the edit page for "andysdecaf" client
+    Given I am on the edit page for "andysdecaf" client
     And I change the client name to "amymushroom"
     And I click on "Update"
     Then "amymushroom" should be present
