@@ -23,4 +23,14 @@ class Order < ActiveRecord::Base
   def temporary?
     order_type == "temporary"
   end
+
+  def lead_time
+    lead = [0]
+
+    order_items.each do |item|
+      lead << item.lead_time
+    end
+
+    lead.max
+  end
 end

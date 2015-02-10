@@ -52,45 +52,53 @@
         <%= f.input :note, label: "Special Notes", as: :text %>
       </div>
     </div>
+
+    <% if f.object.persisted? %>
+      <div class="row">
+        <div class="small-12 medium-6 columns">
+          <p><strong>Order Lead Time: <%= order.lead_time %></strong></p>
+        </div>
+      </div>
+    <% end %>
   </fieldset>
 
   <fieldset>
     <legend>Product Information</legend>
-    <div class="row collapse hide-for-small-only">
-      <div class="small-12 medium-11 columns">
+    <div class="row collapse show-for-large-up">
+      <div class="small-12 large-11 columns">
         <div class="row collapse">
-          <div class="small-12 medium-2 columns">
+          <div class="small-12 large-2 columns">
             <%= f.label :product_id, "Product" %>
           </div>
-          <div class="small-12 medium-3 columns">
+          <div class="small-12 large-3 columns">
             <div class="row collapse">
-              <div class="small-12 medium-7 columns">
+              <div class="small-12 large-7 columns">
                 <label>Price</label>
               </div>
-              <div class="small-12 medium-5 columns end">
+              <div class="small-12 large-5 columns end">
                 <label>Total</label>
               </div>
             </div>
           </div>
-          <div class="small-12 medium-1 columns">
+          <div class="small-12 large-1 columns">
             <%= f.label :monday, "Mon" %>
           </div>
-          <div class="small-12 medium-1 columns">
+          <div class="small-12 large-1 columns">
             <%= f.label :tuesday, "Tue" %>
           </div>
-          <div class="small-12 medium-1 columns">
+          <div class="small-12 large-1 columns">
             <%= f.label :wednesday, "Wed" %>
           </div>
-          <div class="small-12 medium-1 columns">
+          <div class="small-12 large-1 columns">
             <%= f.label :thursday, "Thur" %>
           </div>
-          <div class="small-12 medium-1 columns">
+          <div class="small-12 large-1 columns">
             <%= f.label :friday, "Fri" %>
           </div>
-          <div class="small-12 medium-1 columns">
+          <div class="small-12 large-1 columns">
             <%= f.label :saturday, "Sat" %>
           </div>
-          <div class="small-12 medium-1 columns end">
+          <div class="small-12 large-1 columns end">
             <%= f.label :sunday, "Sun" %>
           </div>
         </div>

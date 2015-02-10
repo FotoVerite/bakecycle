@@ -1,54 +1,54 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
-    <div class="small-12 medium-11 columns">
+    <div class="small-12 large-11 columns">
       <div class="row collapse">
-        <div class="small-12 medium-2 columns">
-          <%= f.label :product_id, "Product", class: "show-for-small-only" %>
+        <div class="small-12 large-2 columns">
+          <%= f.label :product_id, "Product", class: "hide-for-large-up" %>
           <%= f.input :product_id, collection: order.available_products, label_method: :name, value_method: :id, include_blank: '--None--', as: :select, label: false %>
         </div>
-        <div class="small-12 medium-3 columns">
+        <div class="small-12 large-3 columns">
           <div class="row collapse">
-            <div class="small-12 medium-7 columns">
-              <label class="show-for-small-only">Price</label>
+            <div class="small-12 large-7 columns">
+              <label class="hide-for-large-up">Price</label>
               <input ng-disabled="true" type="text" value='<%= f.object.product_price_and_quantity %>' />
             </div>
-            <div class="small-12 medium-5 columns">
-              <label class="show-for-small-only">Total</label>
+            <div class="small-12 large-5 columns">
+              <label class="hide-for-large-up">Total</label>
               <input ng-disabled="true" type="text" value='<%= number_to_currency(f.object.total_quantity_price, precision: 2) %>' />
             </div>
           </div>
         </div>
-        <div class="small-12 medium-1 columns">
-          <%= f.label :monday, "Mon", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns">
+          <%= f.label :monday, "Mon", class: "hide-for-large-up" %>
           <%= f.input :monday, as: :string, label: false, input_html: { class: "monday_input", "ng-disabled" => "eqStartDate(1)" } %>
         </div>
-        <div class="small-12 medium-1 columns">
-          <%= f.label :tuesday, "Tue", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns">
+          <%= f.label :tuesday, "Tue", class: "hide-for-large-up" %>
           <%= f.input :tuesday, as: :string, label: false, input_html: { class: "tuesday_input", "ng-disabled" => "eqStartDate(2)" } %>
         </div>
-        <div class="small-12 medium-1 columns">
-          <%= f.label :wednesday, "Wed", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns">
+          <%= f.label :wednesday, "Wed", class: "hide-for-large-up" %>
           <%= f.input :wednesday, as: :string, label: false, input_html: { class: "wednesday_input", "ng-disabled" => "eqStartDate(3)" } %>
         </div>
-        <div class="small-12 medium-1 columns">
-          <%= f.label :thursday, "Thur", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns">
+          <%= f.label :thursday, "Thur", class: "hide-for-large-up" %>
           <%= f.input :thursday, as: :string, label: false, input_html: { class: "thursday_input", "ng-disabled" => "eqStartDate(4)" } %>
         </div>
-        <div class="small-12 medium-1 columns">
-          <%= f.label :friday, "Fri", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns">
+          <%= f.label :friday, "Fri", class: "hide-for-large-up" %>
           <%= f.input :friday, as: :string, label: false, input_html: { class: "friday_input", "ng-disabled" => "eqStartDate(5)" } %>
         </div>
-        <div class="small-12 medium-1 columns">
-          <%= f.label :saturday, "Sat", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns">
+          <%= f.label :saturday, "Sat", class: "hide-for-large-up" %>
           <%= f.input :saturday, as: :string, label: false, input_html: { class: "saturday_input", "ng-disabled" => "eqStartDate(6)" } %>
         </div>
-        <div class="small-12 medium-1 columns end">
-          <%= f.label :sunday, "Sun", class: "show-for-small-only" %>
+        <div class="small-12 large-1 columns end">
+          <%= f.label :sunday, "Sun", class: "hide-for-large-up" %>
           <%= f.input :sunday, as: :string, label: false, input_html: { class: "sunday_input", "ng-disabled" => "eqStartDate(0)" } %>
         </div>
       </div>
     </div>
-    <div class="small-12 medium-1 columns">
+    <div class="small-12 large-1 columns">
       <%= f.hidden_field :_destroy, value: false %>
       <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "remove_order_item button alert postfix" %>
     </div>

@@ -34,4 +34,19 @@ describe Order do
       expect(temp_order.start_date).to eq(temp_order.end_date)
     end
   end
+
+  describe "#lead_time" do
+    it "returns lead time for order items" do
+      motherdough = create(:recipe_motherdough, lead_days: 5)
+      inclusion = create(:recipe_inclusion, lead_days: 3)
+      product_1 = create(:product, inclusion: inclusion)
+      product_2 = create(:product, motherdough: motherdough)
+
+      order = create(:order)
+      order.order_items << build(:order_item, order: nil, product: product_1)
+      order.order_items << build(:order_item, order: nil, product: product_2)
+
+      expect(order.lead_time).to eq(5)
+    end
+  end
 end
