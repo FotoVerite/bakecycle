@@ -12,6 +12,7 @@ class Shipment < ActiveRecord::Base
   validates :date, presence: true
   validates :payment_due_date, presence: true
   validates :bakery, presence: true
+  validates :delivery_fee, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
 
   before_validation :set_payment_due_date
 
@@ -42,10 +43,14 @@ class Shipment < ActiveRecord::Base
     where(client_id: client).includes(:route).order("date DESC").limit(10)
   end
 
-  def price
+  def subtotal
     shipment_items.reduce(0) do |sum, item|
       sum + item.price
     end
+  end
+
+  def price
+    subtotal + delivery_fee
   end
 
   def set_payment_due_date

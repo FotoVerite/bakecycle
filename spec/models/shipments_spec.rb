@@ -9,6 +9,7 @@ describe Shipment do
     expect(shipment).to respond_to(:date)
     expect(shipment).to respond_to(:payment_due_date)
     expect(shipment).to respond_to(:shipment_items)
+    expect(shipment).to respond_to(:delivery_fee)
   end
 
   it "has association" do
@@ -22,6 +23,12 @@ describe Shipment do
     expect(shipment).to validate_presence_of(:client)
     expect(shipment).to validate_presence_of(:date)
     expect(shipment).to validate_presence_of(:payment_due_date)
+    expect(shipment).to validate_presence_of(:delivery_fee)
+    expect(shipment).to validate_numericality_of(:delivery_fee)
+  end
+
+  it "is not a number" do
+    expect(build(:shipment, delivery_fee: "not a number")).to_not be_valid
   end
 
   describe "#set_payment_due_date" do
@@ -32,10 +39,19 @@ describe Shipment do
     end
   end
 
-  describe "#price" do
+  describe "#subtotal" do
     it "sums all the items" do
       shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0)
-      expect(shipment.price).to eq(10.0)
+      expect(shipment.subtotal).to eq(10.0)
+    end
+  end
+
+  describe "#price" do
+    it "adds subtotal and delivery fee" do
+      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0)
+      shipment.delivery_fee = 5
+      expect(shipment.subtotal).to eq(10.0)
+      expect(shipment.price).to eq(15.0)
     end
   end
 

@@ -61,10 +61,10 @@ namespace :db do
     FactoryGirl.create(:order, client: tonys_brunch, bakery: biencuit, route: route3)
     FactoryGirl.create(:order, bakery: biencuit)
 
-    FactoryGirl.create_list(:shipment, 20, client: johns_bakery, bakery: biencuit)
-    FactoryGirl.create_list(:shipment, 10, client: angels_deli, bakery: biencuit)
-    FactoryGirl.create_list(:shipment, 10, client: tonys_brunch, bakery: biencuit)
-    FactoryGirl.create_list(:shipment, 10, client: marinas_cafe, bakery: biencuit)
+    FactoryGirl.create_list(:shipment, 20, client: johns_bakery, bakery: biencuit, route: route1)
+    FactoryGirl.create_list(:shipment, 10, client: angels_deli, bakery: biencuit, route: route2)
+    FactoryGirl.create_list(:shipment, 10, client: tonys_brunch, bakery: biencuit, route: route3)
+    FactoryGirl.create_list(:shipment, 10, client: marinas_cafe, bakery: biencuit, route: route1)
     puts "Dev Data Loaded"
   end
 end

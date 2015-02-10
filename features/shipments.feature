@@ -35,11 +35,12 @@ Feature: Shipments management
     Given I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
-      | client    | date       | route |
-      | francesco | 2015-01-12 | Canal |
+      | client    | date       | route | delivery_fee |
+      | francesco | 2015-01-12 | Canal | 10.0         |
     And I click on "Create"
     Then "You have created a shipment for francesco." should be present
     And "Payment Due Date" should be present
+    And "Total Price: $10.00" should be present
 
   @javascript
   Scenario: I should be able to edit a shipment
@@ -75,8 +76,8 @@ Feature: Shipments management
     Given I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
-      | client | date       | route |
-      | mandos | 2015-01-12 | Canal |
+      | client | date       | route | delivery_fee |
+      | mandos | 2015-01-12 | Canal | 15           |
     And I click on "Add New Shipment Item"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
