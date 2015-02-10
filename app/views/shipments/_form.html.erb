@@ -32,6 +32,12 @@
       </div>
 
     <% end %>
+
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.input :delivery_fee %>
+      </div>
+    </div>
   </fieldset>
 
   <fieldset>
@@ -51,6 +57,17 @@
       <%= link_to 'Add New Shipment Item', '', :'ng-click' => "add()", class: "button" %>
     </div>
   </fieldset>
+
+  <div class="row">
+    <div class="small-12 medium-4 large-3 columns end">
+      <fieldset>
+        <legend>Shipment Price</legend>
+        <p><strong>Sub-total:</strong> <%= number_to_currency(shipment.subtotal, precision: 2) %></p>
+        <p><strong>Delivery Fee:</strong> <%= number_to_currency(shipment.delivery_fee, precision: 2) %></p>
+        <p><strong>Total Price:</strong> <%= number_to_currency(shipment.price, precision: 2) %></p>
+      </fieldset>
+    </div>
+  </div>
 
   <div class="row">
     <div class="small-12 columns">

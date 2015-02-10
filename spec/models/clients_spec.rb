@@ -90,6 +90,11 @@ describe Client do
     expect(client).to_not be_valid
   end
 
+  it "is not a number" do
+    expect(build(:client, delivery_minimum: "not a number")).to_not be_valid
+    expect(build(:client, delivery_fee: "not a number")).to_not be_valid
+  end
+
   describe "#get_billing_term_days" do
     it "reads billing_term from client and returns an integer" do
       client = build(:client, billing_term: "net_30")

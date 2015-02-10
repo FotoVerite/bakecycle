@@ -20,5 +20,9 @@ FactoryGirl.define do
         bakery: evaluator.bakery
       )
     end
+
+    trait :with_delivery_fee do
+      delivery_fee { Faker::Number.decimal(2) }
+    end
   end
 end
