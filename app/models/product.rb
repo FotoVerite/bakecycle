@@ -67,6 +67,13 @@ class Product < ActiveRecord::Base
     effective_date_varient.where("quantity <= ?", quantity).order(:quantity)
   end
 
+  def lead_time
+    lead = [1]
+    lead << inclusion.lead_days if inclusion
+    lead << motherdough.lead_days if motherdough
+    lead.max
+  end
+
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique

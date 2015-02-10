@@ -9,9 +9,7 @@
       <div class="small-12 medium-6 columns">
         <%= f.input :client_id, collection: shipment.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
       </div>
-    </div>
 
-    <div class="row">
       <div class="small-12 medium-6 columns">
         <%= f.input :route_id, collection: shipment.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
       </div>
@@ -21,21 +19,32 @@
       <div class="small-12 medium-6 columns">
         <%= f.input :date, as: :string, label: "Shipment Date", input_html: { class: "js-datepicker" } %>
       </div>
-    </div>
 
-    <% if f.object.persisted? %>
-
-      <div class="row">
+      <% if f.object.persisted? %>
         <div class="small-12 medium-6 columns">
           <%= f.input :payment_due_date, as: :string, label: "Payment Due Date", readonly: true %>
         </div>
-      </div>
-
-    <% end %>
+      <% end %>
+    </div>
 
     <div class="row">
       <div class="small-12 medium-6 columns">
         <%= f.input :delivery_fee %>
+      </div>
+    </div>
+
+  </fieldset>
+  <fieldset>
+    <legend>Shipment Price</legend>
+    <div class="row">
+      <div class="small-12 medium-4 columns">
+        <p><strong>Sub-total:</strong> <%= number_to_currency(shipment.subtotal, precision: 2) %></p>
+      </div>
+      <div class="small-12 medium-4 columns">
+        <p><strong>Delivery Fee:</strong> <%= number_to_currency(shipment.delivery_fee, precision: 2) %></p>
+      </div>
+      <div class="small-12 medium-4 columns">
+        <p><strong>Total Price:</strong> <%= number_to_currency(shipment.price, precision: 2) %></p>
       </div>
     </div>
   </fieldset>
@@ -57,17 +66,6 @@
       <%= link_to 'Add New Shipment Item', '', :'ng-click' => "add()", class: "button" %>
     </div>
   </fieldset>
-
-  <div class="row">
-    <div class="small-12 medium-4 large-3 columns end">
-      <fieldset>
-        <legend>Shipment Price</legend>
-        <p><strong>Sub-total:</strong> <%= number_to_currency(shipment.subtotal, precision: 2) %></p>
-        <p><strong>Delivery Fee:</strong> <%= number_to_currency(shipment.delivery_fee, precision: 2) %></p>
-        <p><strong>Total Price:</strong> <%= number_to_currency(shipment.price, precision: 2) %></p>
-      </fieldset>
-    </div>
-  </div>
 
   <div class="row">
     <div class="small-12 columns">

@@ -19,7 +19,7 @@ Feature: Orders
     When I go to the "orders" page
     And I click on "Add New Order"
     And I fill out Order form with:
-      | order_type | start_date | end_date   | route | client  | note          |
+      | order_type | start_date | end_date   | route | client  | note         |
       | standing   | 2014-12-12 | 2014-12-20 | Canal | mandos | Ring the door |
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |

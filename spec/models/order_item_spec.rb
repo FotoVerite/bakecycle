@@ -55,4 +55,51 @@ describe OrderItem do
       expect(order_item.weekly_quantity).to eq(13)
     end
   end
+  context 'when calculating weekly price' do
+    before do
+      @apple = FactoryGirl.create(:product, name: "Apple", base_price: 0.5)
+      @price_1 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 11, effective_date: (Date.today - 6), price: 0.4)
+      @price_2 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 10, effective_date: Date.today, price: 0.2)
+      @price_3 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 12, effective_date: (Date.today - 2), price: 0.3)
+      @price_4 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 13, effective_date: Date.today, price: 0.25)
+      @price_5 = FactoryGirl.create(
+        :price_varient, product: @apple, quantity: 14, effective_date: (Date.today + 3), price: 0.1)
+      @order_item = FactoryGirl.create(
+            :order_item,
+            product: @apple,
+            monday: 1,
+            tuesday: 1,
+            wednesday: 1,
+            thursday: 1,
+            friday: 1,
+            saturday: 1,
+            sunday: 1)
+    end
+
+    it "calculates total quantity price for an order item" do
+      expect(@order_item.total_quantity_price).to eq(3.5)
+
+      @order_item.monday = 4
+      expect(@order_item.total_quantity_price).to eq(2.0)
+
+      @order_item.tuesday = 11
+      expect(@order_item.total_quantity_price).to eq(5)
+    end
+  end
+
+  describe "#lead_time" do
+    it "returns max lead time for the order_item" do
+      motherdough = create(:recipe_motherdough, lead_days: 5)
+      inclusion = create(:recipe_inclusion, lead_days: 3)
+      product = create(:product, inclusion: inclusion, motherdough: motherdough)
+      order = create(:order)
+      order_item = create(:order_item, order: order, product: product)
+
+      expect(order_item.lead_time).to eq(5)
+    end
+  end
 end
