@@ -12,4 +12,8 @@ class ShipmentDecorator < Draper::Decorator
   def available_products
     h.item_finder.products.order(:name)
   end
+
+  def auto_generated?
+    auto_generated ? "Yes" : "No"
+  end
 end
