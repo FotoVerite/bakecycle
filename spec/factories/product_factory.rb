@@ -16,6 +16,10 @@ FactoryGirl.define do
     trait :with_motherdough do
       association :motherdough, factory: :recipe_motherdough
     end
+
+    trait :with_sku do
+      sku { Faker::Code.ean }
+    end
   end
 
   sequence :product_name do |n|

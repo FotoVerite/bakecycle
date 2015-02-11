@@ -13,6 +13,7 @@ describe Product do
     expect(product).to respond_to(:motherdough)
     expect(product).to respond_to(:inclusion)
     expect(product).to respond_to(:base_price)
+    expect(product).to respond_to(:sku)
   end
 
   it "has association" do

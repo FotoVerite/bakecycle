@@ -19,6 +19,7 @@ When(/^I fill out product form with:$/) do |table|
   fill_in "product_description", with: table.hashes[0]["description"]
   fill_in "product_extra_amount", with: table.hashes[0]["extra_amount"]
   fill_in "product_base_price", with: table.hashes[0]["base_price"]
+  fill_in "product_sku", with: table.hashes[0]["sku"]
 end
 
 When(/^I am on the edit page for "(.*?)" product$/) do |name|
