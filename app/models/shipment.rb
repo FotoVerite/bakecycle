@@ -53,6 +53,10 @@ class Shipment < ActiveRecord::Base
     subtotal + delivery_fee
   end
 
+  def invoice_number
+    "#{date.strftime('%Y%m%d')}-#{id}-#{client.id}-#{route.id}"
+  end
+
   def set_payment_due_date
     return self.payment_due_date = nil unless client
     return self.payment_due_date = date if client.bill_today?
