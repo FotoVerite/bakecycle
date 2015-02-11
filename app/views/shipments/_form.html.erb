@@ -31,6 +31,10 @@
       <div class="small-12 medium-6 columns">
         <%= f.input :delivery_fee %>
       </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.label :auto_generated %>
+        <input ng-disabled="true" type="text" value="<%= shipment.auto_generated? %>" />
+      </div>
     </div>
 
   </fieldset>

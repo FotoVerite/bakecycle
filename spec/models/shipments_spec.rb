@@ -10,6 +10,7 @@ describe Shipment do
     expect(shipment).to respond_to(:payment_due_date)
     expect(shipment).to respond_to(:shipment_items)
     expect(shipment).to respond_to(:delivery_fee)
+    expect(shipment).to respond_to(:auto_generated)
   end
 
   it "has association" do
