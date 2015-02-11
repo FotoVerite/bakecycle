@@ -4,9 +4,8 @@ FactoryGirl.define do
   factory :shipment do
     date  { Date.today + Faker::Number.number(1).to_i.days }
     bakery
-
-    client { create(:client, bakery: bakery) }
     route { create(:route, bakery: bakery) }
+    client { create(:client, bakery: bakery) }
 
     transient do
       shipment_item_count 1

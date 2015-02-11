@@ -1,5 +1,4 @@
 class Shipment < ActiveRecord::Base
-  belongs_to :client
   belongs_to :route
   belongs_to :bakery
 
@@ -7,26 +6,39 @@ class Shipment < ActiveRecord::Base
 
   accepts_nested_attributes_for :shipment_items, allow_destroy: true
 
+  before_validation :set_client_data
+  before_validation :set_payment_due_date
+
   validates :route, :route_id, presence: true
-  validates :client, :client_id, presence: true
-  validates :date, presence: true
+
+  validates :client_id,
+            :client_name,
+            :client_id,
+            :client_name,
+            :client_billing_term,
+            :client_delivery_address_street_1,
+            :client_delivery_address_city,
+            :client_billing_address_street_1,
+            :client_billing_address_city,
+            :client_billing_term_days, presence: true
   validates :payment_due_date, presence: true
+  validates :date, presence: true
   validates :bakery, presence: true
   validates :delivery_fee, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
 
-  before_validation :set_payment_due_date
+  # will_paginate
+  self.per_page = 20
 
   def self.search(fields)
     search_by_client(fields[:client_id])
       .search_by_date_from(fields[:date_from])
       .search_by_date_to(fields[:date_to])
-      .includes(:client)
       .order("date DESC")
   end
 
-  def self.search_by_client(client)
-    return all if client.blank?
-    where(client: client)
+  def self.search_by_client(client_id)
+    return all if client_id.blank?
+    where(client_id: client_id)
   end
 
   def self.search_by_date_from(date_from)
@@ -39,8 +51,8 @@ class Shipment < ActiveRecord::Base
     where('date <= ?', date_to)
   end
 
-  def self.recent_shipments(client)
-    where(client_id: client).includes(:route).order("date DESC").limit(10)
+  def self.recent_shipments(client_id)
+    where(client_id: client_id).includes(:route).order("date DESC").limit(10)
   end
 
   def subtotal
@@ -54,15 +66,28 @@ class Shipment < ActiveRecord::Base
   end
 
   def invoice_number
-    "#{date.strftime('%Y%m%d')}-#{id}-#{client.id}-#{route.id}"
+    "#{date.strftime('%Y%m%d')}-#{id}-#{client_id}-#{route.id}"
   end
 
   def set_payment_due_date
-    return self.payment_due_date = nil unless client
-    return self.payment_due_date = date if client.bill_today?
-    self.payment_due_date = date + Client.get_billing_term_days(client.billing_term) if date
+    return unless client_billing_term_days && date
+    self.payment_due_date = date + client_billing_term_days.days
   end
 
-  # will_paginate
-  self.per_page = 20
+  def set_client_data
+    self.client = Client.find(client_id) if client_id
+  end
+
+  def client=(client)
+    fields = [
+      :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
+      :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
+      :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2, :billing_address_city,
+      :billing_address_state, :billing_address_zipcode]
+
+    fields.each do |field|
+      assign_method = "client_#{field}=".to_sym
+      send(assign_method, client.send(field))
+    end
+  end
 end

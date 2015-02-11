@@ -17,7 +17,7 @@ end
 
 When(/^I am on the shipment edit page for the client "(.*?)"$/) do |name|
   client = Client.find_by(name: name)
-  shipment = Shipment.find_by(client: client)
+  shipment = Shipment.find_by(client_id: client)
   visit edit_shipment_path(shipment)
 end
 

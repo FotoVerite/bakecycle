@@ -4,8 +4,6 @@ describe Shipment do
   let(:shipment) { build(:shipment) }
 
   it "has model attributes" do
-    expect(shipment).to respond_to(:client)
-    expect(shipment).to respond_to(:route)
     expect(shipment).to respond_to(:date)
     expect(shipment).to respond_to(:payment_due_date)
     expect(shipment).to respond_to(:shipment_items)
@@ -14,17 +12,25 @@ describe Shipment do
   end
 
   it "has association" do
-    expect(shipment).to belong_to(:client)
     expect(shipment).to belong_to(:route)
     expect(shipment).to belong_to(:bakery)
   end
 
   it "has validations" do
     expect(shipment).to validate_presence_of(:route)
-    expect(shipment).to validate_presence_of(:client)
     expect(shipment).to validate_presence_of(:date)
     expect(shipment).to validate_presence_of(:payment_due_date)
     expect(shipment).to validate_presence_of(:delivery_fee)
+    expect(shipment).to validate_presence_of(:client_id)
+    expect(shipment).to validate_presence_of(:client_name)
+    expect(shipment).to validate_presence_of(:client_id)
+    expect(shipment).to validate_presence_of(:client_name)
+    expect(shipment).to validate_presence_of(:client_billing_term)
+    expect(shipment).to validate_presence_of(:client_delivery_address_street_1)
+    expect(shipment).to validate_presence_of(:client_delivery_address_city)
+    expect(shipment).to validate_presence_of(:client_billing_address_street_1)
+    expect(shipment).to validate_presence_of(:client_billing_address_city)
+    expect(shipment).to validate_presence_of(:client_billing_term_days)
     expect(shipment).to validate_numericality_of(:delivery_fee)
   end
 
@@ -35,8 +41,8 @@ describe Shipment do
   describe "#set_payment_due_date" do
     it "determines payment due date by reading client billing_term and appending days to date" do
       client = create(:client, billing_term: "net_30")
-      shipment_with_date = create(:shipment, client: client, date: "2015-01-01")
-      expect(shipment_with_date.payment_due_date).to eq(shipment_with_date.date + 30.days)
+      shipment = create(:shipment, client: client, date: "2015-01-01")
+      expect(shipment.payment_due_date).to eq(shipment.date + 30.days)
     end
   end
 
@@ -70,9 +76,9 @@ describe Shipment do
 
     it "returns shipments matching a client" do
       shipments = create_list(:shipment, 2)
-      client_order = shipments.first
-      client_id = client_order.client.id
-      expect(Shipment.search(client_id: client_id)).to eq([client_order])
+      shipment = shipments.first
+      client_id = shipment.client_id
+      expect(Shipment.search(client_id: client_id)).to eq([shipment])
     end
 
     it "returns shipments after and including a date_from" do
@@ -126,6 +132,36 @@ describe Shipment do
       expect(Shipment.recent_shipments(client)).to contain_exactly(*client_shipments)
       expect(Shipment.recent_shipments(client)).to_not include(client_shipment_1, client_shipment_2)
       expect(Shipment.recent_shipments(client)).to_not include(*random_shipments)
+    end
+  end
+
+  describe "#client=" do
+    it "sets client data on shipment" do
+      client = build_stubbed(:client, billing_term: :net_30)
+      shipment = Shipment.new
+      shipment.client = client
+
+      fields = [
+        :id,
+        :name,
+        :dba,
+        :billing_term,
+        :billing_term_days,
+        :delivery_address_street_1,
+        :delivery_address_street_2,
+        :delivery_address_city,
+        :delivery_address_state,
+        :delivery_address_zipcode,
+        :billing_address_street_1,
+        :billing_address_street_2,
+        :billing_address_city,
+        :billing_address_state,
+        :billing_address_zipcode
+      ]
+
+      fields.each do |field|
+        expect(shipment.send("client_#{field}".to_sym)).to eq(client.send(field))
+      end
     end
   end
 end
