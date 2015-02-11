@@ -4,7 +4,7 @@
 <table class="responsive-table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">Invoice</th>
       <th scope="col">Date</th>
       <th scope="col">Client</th>
       <th scope="col">Action</th>
@@ -13,7 +13,7 @@
   <tbody>
     <% @shipments.each do |shipment| %>
       <tr class="js-clickableRow" href='<%= "#{edit_shipment_path(shipment)}" %>'>
-        <th scope="row"><%= shipment.id %></th>
+        <th scope="row"><%= shipment.invoice_number %></th>
         <td data-title="Date"><%= shipment.date %></td>
         <td data-title="Client Name"><%= shipment.client.name %></td>
         <td data-title="Action">
