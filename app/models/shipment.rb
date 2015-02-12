@@ -1,5 +1,4 @@
 class Shipment < ActiveRecord::Base
-  belongs_to :route
   belongs_to :bakery
 
   has_many :shipment_items
@@ -7,13 +6,10 @@ class Shipment < ActiveRecord::Base
   accepts_nested_attributes_for :shipment_items, allow_destroy: true
 
   before_validation :set_client_data
+  before_validation :set_route_data
   before_validation :set_payment_due_date
 
-  validates :route, :route_id, presence: true
-
   validates :client_id,
-            :client_name,
-            :client_id,
             :client_name,
             :client_billing_term,
             :client_delivery_address_street_1,
@@ -21,6 +17,8 @@ class Shipment < ActiveRecord::Base
             :client_billing_address_street_1,
             :client_billing_address_city,
             :client_billing_term_days, presence: true
+
+  validates :route_id, :route_name, presence: true
   validates :payment_due_date, presence: true
   validates :date, presence: true
   validates :bakery, presence: true
@@ -52,7 +50,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def self.recent_shipments(client_id)
-    where(client_id: client_id).includes(:route).order("date DESC").limit(10)
+    where(client_id: client_id).order("date DESC").limit(10)
   end
 
   def subtotal
@@ -66,7 +64,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def invoice_number
-    "#{date.strftime('%Y%m%d')}-#{id}-#{client_id}-#{route.id}"
+    "#{date.strftime('%Y%m%d')}-#{id}-#{client_id}-#{route_id}"
   end
 
   def set_payment_due_date
@@ -88,6 +86,19 @@ class Shipment < ActiveRecord::Base
     fields.each do |field|
       assign_method = "client_#{field}=".to_sym
       send(assign_method, client.send(field))
+    end
+  end
+
+  def set_route_data
+    self.route = Route.find(route_id) if route_id
+  end
+
+  def route=(route)
+    fields = [:id, :name]
+
+    fields.each do |field|
+      assign_method = "route_#{field}=".to_sym
+      send(assign_method, route.send(field))
     end
   end
 end

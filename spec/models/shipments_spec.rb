@@ -9,15 +9,27 @@ describe Shipment do
     expect(shipment).to respond_to(:shipment_items)
     expect(shipment).to respond_to(:delivery_fee)
     expect(shipment).to respond_to(:auto_generated)
+    expect(shipment).to respond_to(:route_id)
+    expect(shipment).to respond_to(:route_name)
+    expect(shipment).to respond_to(:client_id)
+    expect(shipment).to respond_to(:client_name)
+    expect(shipment).to respond_to(:client_id)
+    expect(shipment).to respond_to(:client_name)
+    expect(shipment).to respond_to(:client_billing_term)
+    expect(shipment).to respond_to(:client_delivery_address_street_1)
+    expect(shipment).to respond_to(:client_delivery_address_city)
+    expect(shipment).to respond_to(:client_billing_address_street_1)
+    expect(shipment).to respond_to(:client_billing_address_city)
+    expect(shipment).to respond_to(:client_billing_term_days)
   end
 
   it "has association" do
-    expect(shipment).to belong_to(:route)
     expect(shipment).to belong_to(:bakery)
   end
 
   it "has validations" do
-    expect(shipment).to validate_presence_of(:route)
+    expect(shipment).to validate_presence_of(:route_id)
+    expect(shipment).to validate_presence_of(:route_name)
     expect(shipment).to validate_presence_of(:date)
     expect(shipment).to validate_presence_of(:payment_due_date)
     expect(shipment).to validate_presence_of(:delivery_fee)
@@ -162,6 +174,29 @@ describe Shipment do
       fields.each do |field|
         expect(shipment.send("client_#{field}".to_sym)).to eq(client.send(field))
       end
+    end
+  end
+
+  describe "#route=" do
+    it "sets route data on shipment" do
+      client = build_stubbed(:client)
+      route = build_stubbed(:route)
+      shipment = Shipment.new
+
+      shipment.client = client
+      shipment.route = route
+
+      fields = [:id, :name]
+
+      fields.each do |field|
+        expect(shipment.send("route_#{field}".to_sym)).to eq(route.send(field))
+      end
+    end
+
+    it "should set route_name from the name of the related route if that product exists" do
+      route = create(:route, name: "Route1")
+      shipment = create(:shipment, route: route)
+      expect(shipment.route_name).to eq("Route1")
     end
   end
 end
