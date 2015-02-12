@@ -13,7 +13,7 @@ class ShipmentsController < ApplicationController
 
   def create
     if @shipment.save
-      flash[:notice] = "You have created a shipment for #{@shipment.client.name}."
+      flash[:notice] = "You have created a shipment for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
       render 'new'
@@ -25,7 +25,7 @@ class ShipmentsController < ApplicationController
 
   def update
     if @shipment.update(shipment_params)
-      flash[:notice] = "You have updated the shipment for #{@shipment.client.name}."
+      flash[:notice] = "You have updated the shipment for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
       render 'edit'
@@ -34,7 +34,7 @@ class ShipmentsController < ApplicationController
 
   def destroy
     @shipment.destroy!
-    flash[:notice] = "You have deleted the shipment for #{@shipment.client.name}."
+    flash[:notice] = "You have deleted the shipment for #{@shipment.client_name}."
     redirect_to shipments_path
   end
 

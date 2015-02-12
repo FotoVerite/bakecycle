@@ -31,24 +31,15 @@ class Client < ActiveRecord::Base
   geocoded_by :full_delivery_address
   after_validation :geocode
 
-  BILLING_TERM_OPTIONS = { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
-
-  enum billing_term: BILLING_TERM_OPTIONS
+  enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
 
   def full_delivery_address
     "#{delivery_address_street_1} #{delivery_address_street_2} #{delivery_address_city} #{delivery_address_state}"
   end
 
-  def self.billing_term_options
-    BILLING_TERM_OPTIONS
-  end
-
-  def self.get_billing_term_days(billing_term)
-    billing_terms[billing_term].days
-  end
-
-  def bill_today?
-    %w(credit_card, cod).include? billing_term
+  def billing_term_days
+    return 0 if %w(credit_card cod).include? billing_term
+    self.class.billing_terms[billing_term]
   end
 
   def self.billing_terms_select

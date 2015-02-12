@@ -95,20 +95,19 @@ describe Client do
     expect(build(:client, delivery_fee: "not a number")).to_not be_valid
   end
 
-  describe "#get_billing_term_days" do
+  describe ".billing_term_days" do
     it "reads billing_term from client and returns an integer" do
-      client = build(:client, billing_term: "net_30")
-      expect(Client.get_billing_term_days(client.billing_term)).to eq(30.days)
-    end
-  end
+      client = build(:client, billing_term: :net_30)
+      expect(client.billing_term_days).to eq(30)
 
-  describe "#bill_today?" do
-    it "checks billing_term to determine if immediate payment is needed" do
-      client = build(:client, billing_term: "net_30")
-      expect(client.bill_today?).to eq(false)
+      client.billing_term = "cod"
+      expect(client.billing_term_days).to eq(0)
 
-      client2 = build(:client, billing_term: "cod")
-      expect(client2.bill_today?).to eq(true)
+      client.billing_term = :credit_card
+      expect(client.billing_term_days).to eq(0)
+
+      client.billing_term = "net_7"
+      expect(client.billing_term_days).to eq(7)
     end
   end
 end
