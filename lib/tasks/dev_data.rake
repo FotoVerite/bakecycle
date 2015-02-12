@@ -9,8 +9,8 @@ namespace :db do
     ActiveRecord::Base.descendants.map(&:destroy_all) # DESTROY ALL CLASSES
     puts "Dev Data Destroyed"
 
-    biencuit = FactoryGirl.create(:bakery, name: "biencuit")
-    grumpy = FactoryGirl.create(:bakery, name: "grumpy")
+    biencuit = FactoryGirl.create(:bakery, name: "Biencuit")
+    grumpy = FactoryGirl.create(:bakery, name: "Grumpy")
 
     FactoryGirl.create(:user, email: 'user@example.com', bakery: biencuit)
     FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: biencuit)

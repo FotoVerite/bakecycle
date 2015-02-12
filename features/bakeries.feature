@@ -13,9 +13,8 @@ Feature: Bakery
   Scenario: As an Admin, I can create a Bakery
     Given I am on the "bakeries" page
     When I click on "Add New Bakery"
-    And I fill out Bakery form with:
-      | name        |
-      | Au Bon Pain |
+    And I fill out Bakery form with valid data
+    And I upload my Bakery logo
     And I click on "Create"
     Then "You have created Au Bon Pain" should be present
 

@@ -5,6 +5,14 @@ describe Bakery do
 
   it "has model attributes" do
     expect(bakery).to respond_to(:name)
+    expect(bakery).to respond_to(:logo)
+    expect(bakery).to respond_to(:email)
+    expect(bakery).to respond_to(:phone_number)
+    expect(bakery).to respond_to(:address_street_1)
+    expect(bakery).to respond_to(:address_street_2)
+    expect(bakery).to respond_to(:address_city)
+    expect(bakery).to respond_to(:address_state)
+    expect(bakery).to respond_to(:address_zipcode)
     expect(bakery).to respond_to(:ingredients)
     expect(bakery).to respond_to(:clients)
     expect(bakery).to respond_to(:recipes)
