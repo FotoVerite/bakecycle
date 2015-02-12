@@ -162,7 +162,7 @@
           <tr>
             <th scope="row"><%= shipment.date %></th>
             <td data-title="Number"><%= shipment.id %></td>
-            <td data-title="Route"><%= shipment.route.name %></td>
+            <td data-title="Route"><%= shipment.route_name %></td>
             <td data-title="Total"><%= number_to_currency(shipment.price, precision: 2) %></td>
             <td data-title="Action">
               <%= link_to edit_shipment_path(shipment) do %>
