@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150211193126) do
+ActiveRecord::Schema.define(version: 20150212175452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 20150211193126) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email"
+    t.string   "phone_number"
+    t.string   "address_street_1"
+    t.string   "address_street_2"
+    t.string   "address_city"
+    t.string   "address_state"
+    t.string   "address_zipcode"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree
@@ -163,6 +174,7 @@ ActiveRecord::Schema.define(version: 20150211193126) do
     t.string  "product_name"
     t.integer "product_quantity", default: 0,   null: false
     t.decimal "product_price",    default: 0.0, null: false
+    t.string  "product_sku"
   end
 
   create_table "shipments", force: true do |t|
