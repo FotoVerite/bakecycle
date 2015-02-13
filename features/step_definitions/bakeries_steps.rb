@@ -25,8 +25,14 @@ Then(/^I should see that the bakery name is "(.*?)"$/) do |name|
   expect(page).to have_content(name)
 end
 
-When(/^I fill out Bakery form with:$/) do |table|
-  fill_in "bakery_name", with: table.hashes[0]["name"]
+When(/^I fill out Bakery form with valid data$/) do
+  fill_in "bakery_name", with: "Au Bon Pain"
+  fill_in "bakery_email", with: "test@example.com"
+  fill_in "bakery_phone_number", with: "999-888-7777"
+  fill_in "bakery_address_street_1", with: "123 Example St."
+  fill_in "bakery_address_city", with: "Bake"
+  fill_in "bakery_address_state", with: "NY"
+  fill_in "bakery_address_zipcode", with: "10001"
 end
 
 Then(/^I should see confirmation the bakery was deleted$/) do
@@ -39,4 +45,10 @@ Then(/^the bakery "(.*?)" should not be present$/) do |bakery_name|
   within ".responsive-table" do
     expect(page).to_not have_content(bakery_name)
   end
+end
+
+When(/^I upload my Bakery logo$/) do
+  field = :bakery_logo
+  path = File.join(Rails.root, 'app/assets/images/example_logo.png')
+  attach_file(field, path)
 end
