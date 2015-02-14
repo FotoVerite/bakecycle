@@ -7,4 +7,31 @@
 
   <%= render "form"%>
 
+  <% unless @shipments.empty? %>
+    <h3>Upcoming shipments for <%= order.client.name %> on <%= order.route.name %> route</h3>
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th scope="col">Invoice</th>
+          <th scope="col">Date</th>
+          <th scope="col">Client</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @shipments.each do |shipment| %>
+          <tr class="js-clickableRow" href='<%= "#{edit_shipment_path(shipment)}" %>'>
+            <th scope="row"><%= shipment.invoice_number %></th>
+            <td data-title="Date"><%= shipment.date %></td>
+            <td data-title="Client Name"><%= shipment.client_name %></td>
+            <td data-title="Action">
+              <%= link_to edit_shipment_path(shipment) do %>
+                <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Shipment"><i class="fi-page-edit"></i></span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 </div>

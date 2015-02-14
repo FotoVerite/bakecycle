@@ -6,6 +6,7 @@ Feature: Orders
     And There are "biencuit" bakery orders with clients named "andysdecaf" and "mandos"
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
     And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    And The client named "andysdecaf" has a shipment today
 
   @javascript
   Scenario: As a user, I should be able to view orders index
@@ -89,3 +90,7 @@ Feature: Orders
     And I click on "Update"
     Then "X" should be present "2" times
 
+    Scenario: As a user, I should see a list of todays shipments for an order with a matching client and route for today's date
+    When I am on the edit page for "andysdecaf" order
+    Then "Upcoming shipments for andysdecaf" should be present
+    And a shipments table should be present
