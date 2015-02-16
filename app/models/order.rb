@@ -20,7 +20,7 @@ class Order < ActiveRecord::Base
     temp_orders = temporary(date).where(client: client).to_a
     standing_orders = standing(date).where(client: client).to_a
 
-    return standing_orders.to_a if temp_orders.empty?
+    return standing_orders if temp_orders.empty?
 
     standing_orders.map do |order|
       temp_orders.find { |o| o.route_id == order.route_id } || order
