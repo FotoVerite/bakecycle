@@ -114,4 +114,3 @@ Feature: Shipments management
     And I click on "Update"
     Then "You have updated the shipment" should be present
     And the shipment item "baguette cookie" should not be present
-

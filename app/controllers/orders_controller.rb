@@ -21,6 +21,8 @@ class OrdersController < ApplicationController
   end
 
   def edit
+    @search_fields = search_fields(@order)
+    @shipments = Shipment.upcoming_shipments(@search_fields)
   end
 
   def update
@@ -28,6 +30,8 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client.name}."
       redirect_to edit_order_path(@order)
     else
+      @search_fields = search_fields(@order)
+      @shipments = Shipment.upcoming_shipments(@search_fields)
       render 'edit'
     end
   end
@@ -46,5 +50,13 @@ class OrdersController < ApplicationController
       order_items_attributes:
       [:id, :product_id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :_destroy]
     )
+  end
+
+  def search_fields(order)
+    {
+      route_id: order.route.id,
+      client_id: order.client.id,
+      date: Date.today
+    }
   end
 end

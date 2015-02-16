@@ -33,10 +33,20 @@ class Shipment < ActiveRecord::Base
       .search_by_date_to(fields[:date_to])
       .order("date DESC")
   end
+  def self.upcoming_shipments(fields)
+    search_by_client(fields[:client_id])
+      .search_by_route(fields[:route_id])
+      .search_by_date_from(fields[:date])
+  end
 
   def self.search_by_client(client_id)
     return all if client_id.blank?
     where(client_id: client_id)
+  end
+
+  def self.search_by_route(route_id)
+    return all if route_id.blank?
+    where(route_id: route_id)
   end
 
   def self.search_by_date_from(date_from)
