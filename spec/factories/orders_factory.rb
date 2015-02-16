@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :order do
     order_type "standing"
     start_date  { Date.today + Faker::Number.number(1).to_i.days }
-    end_date  { Date.today + Faker::Number.number(3).to_i.days }
+    end_date  nil
     bakery
 
     client { create(:client, bakery: bakery) }
@@ -12,6 +12,7 @@ FactoryGirl.define do
 
     transient do
       order_item_count 1
+      lead_time 2
     end
 
     after(:build) do |order, evaluator|
@@ -19,7 +20,8 @@ FactoryGirl.define do
         :order_item,
         evaluator.order_item_count,
         order: order,
-        bakery: evaluator.bakery
+        bakery: evaluator.bakery,
+        lead_time: evaluator.lead_time
       )
     end
 

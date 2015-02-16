@@ -6,7 +6,6 @@ Feature: Orders
     And There are "biencuit" bakery orders with clients named "andysdecaf" and "mandos"
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
     And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
-    And The client named "andysdecaf" has a shipment today
 
   @javascript
   Scenario: As a user, I should be able to view orders index
@@ -52,7 +51,7 @@ Feature: Orders
   @javascript
   Scenario: As a user, I should be able to add multiple order item to a order
     When I am on the edit page for "andysdecaf" order
-    And I click on "Add New Order Item"
+    And I click on "Add Product"
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
@@ -65,7 +64,7 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on "Add New Order Item"
+    And I click on "Add Product"
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
@@ -77,20 +76,16 @@ Feature: Orders
     Then the order item "baguette cookie" should be present
     And the order item "donut tart" should not be present
 
-    @javascript
-    Scenario: As a user, I should see an error if I click update after I delete the last order item. Then I should be able to add an order item, and see 2 order items.
+  @javascript
+  Scenario: As a user, I should see an error if I click update after I delete the last order item. Then I should be able to add an order item, and see 2 order items.
     When I am on the edit page for "andysdecaf" order
     And I click on "X"
     And I click on "Update"
     Then "You must choose a product before saving" should be present
-    When I click on "Add New Order Item"
+    When I click on "Add Product"
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
     And I click on "Update"
     Then "X" should be present "2" times
 
-    Scenario: As a user, I should see a list of todays shipments for an order with a matching client and route for today's date
-    When I am on the edit page for "andysdecaf" order
-    Then "Upcoming shipments for andysdecaf" should be present
-    And a shipments table should be present

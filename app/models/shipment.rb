@@ -31,12 +31,8 @@ class Shipment < ActiveRecord::Base
     search_by_client(fields[:client_id])
       .search_by_date_from(fields[:date_from])
       .search_by_date_to(fields[:date_to])
-      .order("date DESC")
-  end
-  def self.upcoming_shipments(fields)
-    search_by_client(fields[:client_id])
       .search_by_route(fields[:route_id])
-      .search_by_date_from(fields[:date])
+      .order("date DESC")
   end
 
   def self.search_by_client(client_id)
@@ -59,8 +55,12 @@ class Shipment < ActiveRecord::Base
     where('date <= ?', date_to)
   end
 
-  def self.recent_shipments(client_id)
+  def self.recent(client_id)
     where(client_id: client_id).order("date DESC").limit(10)
+  end
+
+  def self.upcoming(order, date = Date.today)
+    where(client_id: order.client.id, route_id: order.route.id).where('date >= ?', date).order("date ASC")
   end
 
   def subtotal

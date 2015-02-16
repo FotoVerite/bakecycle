@@ -3,7 +3,7 @@
   <%= f.error_notification %>
 
   <fieldset>
-    <legend>Shipment Information</legend>
+    <legend>Information</legend>
 
     <div class="row">
       <div class="small-12 medium-6 columns">
@@ -39,7 +39,7 @@
 
   </fieldset>
   <fieldset>
-    <legend>Shipment Price</legend>
+    <legend>Prices</legend>
     <div class="row">
       <div class="small-12 medium-4 columns">
         <p><strong>Sub-total:</strong> <%= number_to_currency(shipment.subtotal, precision: 2) %></p>
@@ -54,7 +54,7 @@
   </fieldset>
 
   <fieldset>
-    <legend>Shipment Items</legend>
+    <legend>Products</legend>
 
     <div ng-controller="NestedItemCtrl">
       <%= f.simple_fields_for :shipment_items do |builder| %>
@@ -67,7 +67,7 @@
         <% end %>
       </div>
 
-      <%= link_to 'Add New Shipment Item', '', :'ng-click' => "add()", class: "button" %>
+      <%= link_to 'Add Product', '', :'ng-click' => "add()", class: "button" %>
     </div>
   </fieldset>
 

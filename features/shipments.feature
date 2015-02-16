@@ -78,7 +78,7 @@ Feature: Shipments management
     And I fill out Shipment form with:
       | client | date       | route | delivery_fee |
       | mandos | 2015-01-12 | Canal | 15           |
-    And I click on "Add New Shipment Item"
+    And I click on "Add Product"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |
@@ -89,7 +89,7 @@ Feature: Shipments management
   @javascript
   Scenario: I should be able to edit a shipment item
     When I am on the edit page for "andysdecaf" shipment
-    And I click on "Add New Shipment Item"
+    And I click on "Add Product"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |
@@ -104,7 +104,7 @@ Feature: Shipments management
   @javascript
   Scenario: I should be able to edit a shipment item
     When I am on the edit page for "andysdecaf" shipment
-    And I click on "Add New Shipment Item"
+    And I click on "Add Product"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |

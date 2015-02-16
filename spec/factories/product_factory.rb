@@ -9,12 +9,16 @@ FactoryGirl.define do
     base_price { Faker::Number.decimal(2) }
     bakery
 
+    transient do
+      lead_time 2
+    end
+
     trait :with_inclusion do
-      association :inclusion, factory: :recipe_inclusion
+      inclusion { create(:recipe_inclusion, bakery: bakery, lead_days: lead_time) }
     end
 
     trait :with_motherdough do
-      association :motherdough, factory: :recipe_motherdough
+      inclusion { create(:recipe_motherdough, bakery: bakery, lead_days: lead_time) }
     end
 
     trait :with_sku do
@@ -27,9 +31,9 @@ FactoryGirl.define do
       "Almond Butter Cookie",
       "Almond Cookie",
       "Almond Croissant",
-      "Almond Croissant",
+      "Croissant",
       "Apple Butter Scone",
-      "Apple Cardamom Danish",
+      "Pear Danish",
       "Apple Cinnamon Muffin",
       "Apple Pumpkin Muffin"
     ]
