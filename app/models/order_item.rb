@@ -17,12 +17,8 @@ class OrderItem < ActiveRecord::Base
   validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
-  def days_of_week
-    DAYS_OF_WEEK
-  end
-
   def set_quantity_zero_if_blank
-    days_of_week.each do |day|
+    DAYS_OF_WEEK.each do |day|
       send(:"#{day}=", 0) unless send(day)
     end
   end
@@ -33,18 +29,21 @@ class OrderItem < ActiveRecord::Base
   end
 
   def product_price
-    product.price(weekly_quantity) if product
+    product.price(total_quantity) if product
   end
 
   def total_quantity_price
-    product_price * weekly_quantity if product
+    product_price * total_quantity if product
   end
 
-  def weekly_quantity
-    qty = 0
-    days_of_week.each do |day|
-      qty += send(day) || 0
+  def total_quantity
+    DAYS_OF_WEEK.reduce(0) do |sum, day|
+      sum + (send(day) || 0)
     end
-    qty
+  end
+
+  def quantity(date)
+    day = date.strftime('%A').downcase.to_sym
+    send(day) || 0
   end
 end
