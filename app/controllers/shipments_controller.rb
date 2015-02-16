@@ -11,6 +11,12 @@ class ShipmentsController < ApplicationController
   def new
   end
 
+  def show
+    pdf = InvoicePdf.new(@shipment)
+    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
+    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+  end
+
   def create
     if @shipment.save
       flash[:notice] = "You have created a shipment for #{@shipment.client_name}."
