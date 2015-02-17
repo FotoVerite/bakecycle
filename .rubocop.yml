@@ -25,3 +25,5 @@ Style/NumericLiterals:
   Enabled: false
 Style/IndentHash:
   Enabled: false
+Metrics/AbcSize:
+  Max: 16

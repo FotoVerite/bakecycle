@@ -12,7 +12,7 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    pdf = InvoicePdf.new(@shipment)
+    pdf = InvoicePdf.new(@shipment.decorate)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
   end

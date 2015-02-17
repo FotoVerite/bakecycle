@@ -9,7 +9,7 @@ namespace :db do
     ActiveRecord::Base.descendants.map(&:destroy_all) # DESTROY ALL CLASSES
     puts "Dev Data Destroyed"
 
-    biencuit = FactoryGirl.create(:bakery, name: "Biencuit")
+    biencuit = FactoryGirl.create(:bakery, :with_logo, name: "Biencuit")
     grumpy = FactoryGirl.create(:bakery, name: "Grumpy")
 
     FactoryGirl.create(:user, email: 'user@example.com', bakery: biencuit)
@@ -50,7 +50,7 @@ namespace :db do
     johns_bakery = FactoryGirl.create(:client, name: "John's Bakery", bakery: biencuit)
     angels_deli = FactoryGirl.create(:client, name: "Angel's Deli", bakery: biencuit)
     tonys_brunch = FactoryGirl.create(:client, name: "Tony's Brunch", bakery: biencuit)
-    marinas_cafe = FactoryGirl.create(:client, name: "Marina's Cafe", bakery: biencuit)
+    marinas_cafe = FactoryGirl.create(:client, name: "Marina's Cafe", dba: "Marina's", bakery: biencuit)
 
     route1 = FactoryGirl.create(:route, bakery: biencuit)
     route2 = FactoryGirl.create(:route, bakery: biencuit)
