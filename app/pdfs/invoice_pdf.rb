@@ -1,5 +1,3 @@
-require 'prawn/table'
-
 class InvoicePdf < Prawn::Document
   HEADER_ROW_COLOR = 'b9b9b9'
 
@@ -9,6 +7,7 @@ class InvoicePdf < Prawn::Document
     setup_grid
     header
     addresses
+    note
     information
     shipment_items
     totals
@@ -37,14 +36,21 @@ class InvoicePdf < Prawn::Document
   end
 
   def addresses
-    grid([2, 0], [3, 5]).bounding_box do
+    grid([2, 0], [3, 3]).bounding_box do
       text "Shipped To:", size: 14
       client_address(:delivery)
     end
 
-    grid([2, 6], [3, 12]).bounding_box do
+    grid([2, 4], [3, 6]).bounding_box do
       text "Billed To:", size: 14
       client_address(:billing)
+    end
+  end
+
+  def note
+    grid([2, 8], [3, 11]).bounding_box do
+      text "Notes:", size: 14
+      text @shipment.note, size: 10
     end
   end
 
@@ -64,7 +70,7 @@ class InvoicePdf < Prawn::Document
   end
 
   def client_address(type)
-    font_size 14
+    font_size 10
     text @shipment.send("client_#{type}_name"), style: :bold
     text @shipment.send("client_#{type}_address_street_1"), style: :bold
     if @shipment.send("client_#{type}_address_street_2")

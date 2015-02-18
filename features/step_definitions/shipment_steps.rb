@@ -13,6 +13,7 @@ When(/^I fill out Shipment form with:$/) do |table|
   select table.hashes[0]["route"], from: "shipment_route_id"
   select table.hashes[0]["client"], from: "shipment_client_id"
   fill_in "shipment_delivery_fee", with: table.hashes[0]["delivery_fee"]
+  fill_in "shipment_note", with: table.hashes[0]["note"]
 end
 
 When(/^I am on the shipment edit page for the client "(.*?)"$/) do |name|
