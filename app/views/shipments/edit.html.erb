@@ -1,5 +1,16 @@
-<h1>Editing Shipment: <%= @shipment.id %></h1>
-<h3>Client Name: <%= @shipment.client_name %></h3>
+<div class="row">
+  <div class="small-12 medium-10 column">
+    <h1>Editing Shipment: <%= @shipment.id %></h1>
+    <h3>Client Name: <%= @shipment.client_name %></h3>
+  </div>
+  <div class="small-12 medium-2 columns">
+    <div class="view-pdf-button small-only-text-center medium-text-right">
+      <%= link_to shipment_path(@shipment, format: :pdf), target: "_blank" do %>
+        <i class="fi-page-export-pdf"></i>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <%= link_to 'Back', shipments_path %>
 
