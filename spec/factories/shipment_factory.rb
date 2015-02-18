@@ -6,6 +6,7 @@ FactoryGirl.define do
     bakery
     route { create(:route, bakery: bakery) }
     client { create(:client, bakery: bakery) }
+    note { Faker::Lorem.sentence(1) }
 
     transient do
       shipment_item_count 1

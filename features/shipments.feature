@@ -35,8 +35,8 @@ Feature: Shipments management
     Given I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
-      | client    | date       | route | delivery_fee |
-      | francesco | 2015-01-12 | Canal | 10.0         |
+      | client    | date       | route | delivery_fee | note          |
+      | francesco | 2015-01-12 | Canal | 10.0         | leave at door |
     And I click on "Create"
     Then "You have created a shipment for francesco." should be present
     And "Payment Due Date" should be present
@@ -76,8 +76,8 @@ Feature: Shipments management
     Given I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
-      | client | date       | route | delivery_fee |
-      | mandos | 2015-01-12 | Canal | 15           |
+      | client | date       | route | delivery_fee | note          |
+      | mandos | 2015-01-12 | Canal | 15           | ask for mando |
     And I click on "Add Product"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |

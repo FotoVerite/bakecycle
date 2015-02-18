@@ -21,6 +21,7 @@ describe Shipment do
     expect(shipment).to respond_to(:client_billing_address_street_1)
     expect(shipment).to respond_to(:client_billing_address_city)
     expect(shipment).to respond_to(:client_billing_term_days)
+    expect(shipment).to respond_to(:note)
   end
 
   it "has association" do
