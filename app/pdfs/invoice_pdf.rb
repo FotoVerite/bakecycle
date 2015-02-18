@@ -49,7 +49,7 @@ class InvoicePdf < Prawn::Document
   end
 
   def bakery_logo
-    return image @shipment.bakery_logo_path, fit: [280, 60] if @shipment.bakery_logo
+    return image @shipment.bakery_logo_path, fit: [280, 60] if @shipment.bakery_logo.present?
     text_box @shipment.bakery_name.upcase, size: 80, overflow: :shrink_to_fit
   end
 
