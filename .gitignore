@@ -18,3 +18,5 @@ config/database.yml
 
 # Ignore files created on public systems
 /public/system
+
+.envrc

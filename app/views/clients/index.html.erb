@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <% clients.each do |client| %>
-      <tr class="js-clickableRow" href='<%= "#{edit_client_path(client)}" %>'>
+      <tr class="js-clickableRow" href='<%= "#{client_path(client)}" %>'>
         <th scope="row"><%= link_to client.name, client_path(client) %></th>
         <td data-title="DBA"><%= client.dba || "N/A" %></td>
         <td data-title="Active"><%= client.active_status %></td>
@@ -29,8 +29,6 @@
           <%= link_to new_order_path do %>
             <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Add Order For This Client"><i class="fi-page-add"></i></span>
           <% end %>
-
-            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="View Orders For This Client"><i class="fi-page-multiple"></i></span>
         </td>
       </tr>
     <% end %>
