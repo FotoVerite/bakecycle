@@ -23,7 +23,7 @@ class InvoicePdf < Prawn::Document
 
   def header
     bounding_box([0, cursor], width: 280, height: 60) do
-      bakery_logo
+      bakery_logo_display
     end
 
     grid([0, 6], [0, 8]).bounding_box do
@@ -36,26 +36,28 @@ class InvoicePdf < Prawn::Document
   end
 
   def addresses
-    grid([2, 0], [3, 3]).bounding_box do
+    grid([2, 0], [3, 4]).bounding_box do
       text "Shipped To:", size: 14
       client_address(:delivery)
     end
 
-    grid([2, 4], [3, 6]).bounding_box do
+    grid([2, 4], [3, 8]).bounding_box do
       text "Billed To:", size: 14
       client_address(:billing)
     end
   end
 
   def note
-    grid([2, 8], [3, 11]).bounding_box do
+    grid([2, 8], [3, 12]).bounding_box do
       text "Notes:", size: 14
       text @shipment.note, size: 10
     end
   end
 
-  def bakery_logo
-    return image @shipment.bakery_logo_path, fit: [280, 60] if @shipment.bakery_logo.present?
+  def bakery_logo_display
+    if @shipment.bakery_logo.present?
+      return image @shipment.bakery_logo_io, fit: [280, 60]
+    end
     text_box @shipment.bakery_name.upcase, size: 80, overflow: :shrink_to_fit
   end
 

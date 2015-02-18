@@ -8,3 +8,5 @@
 ## Bower
 
 List packages in the `Bowerfile` and then run  `rake bower:install` to install them.
+
+## Direnv
