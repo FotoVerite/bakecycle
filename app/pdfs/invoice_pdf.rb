@@ -85,7 +85,7 @@ class InvoicePdf < Prawn::Document
     table(information_rows, column_widths: [114.4, 114.4, 114.4, 114.4, 114.4])  do
       column(0..4).style(align: :center)
       row(0).style(background_color: HEADER_ROW_COLOR)
-      row(1).style(overflow: :shrink_to_fit, min_font_size: 10, height: 35)
+      row(1).style(overflow: :shrink_to_fit, min_font_size: 10)
     end
   end
 
