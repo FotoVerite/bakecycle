@@ -20,7 +20,14 @@ describe Ingredient do
     describe "name" do
       it { expect(ingredient).to validate_presence_of(:name) }
       it { expect(ingredient).to ensure_length_of(:name).is_at_most(150) }
-      it { expect(ingredient).to validate_uniqueness_of(:name) }
+      it { expect(ingredient).to validate_uniqueness_of(:name).scoped_to(:bakery_id) }
+
+      it "can have same name if are apart of different bakeries" do
+        biencuit = create(:bakery)
+        ingredient_name = "Carrots"
+        create(:ingredient, name: ingredient_name, bakery: biencuit)
+        expect(create(:ingredient, name: ingredient_name)).to be_valid
+      end
     end
 
     describe "price" do

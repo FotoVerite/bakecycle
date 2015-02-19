@@ -40,7 +40,7 @@ describe Client do
   it "has validations" do
     expect(client).to validate_presence_of(:name)
     expect(client).to ensure_length_of(:name).is_at_most(150)
-    expect(client).to validate_uniqueness_of(:name)
+    expect(client).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     expect(client).to ensure_length_of(:dba).is_at_most(150)
     expect(client).to validate_presence_of(:business_phone)
     expect(client).to validate_presence_of(:delivery_address_street_1)
@@ -63,6 +63,13 @@ describe Client do
     expect(client).to validate_numericality_of(:delivery_minimum)
     expect(client).to validate_presence_of(:delivery_fee)
     expect(client).to validate_numericality_of(:delivery_fee)
+  end
+
+  it "can have same name if are apart of different bakeries" do
+    biencuit = create(:bakery)
+    client_name = "Grumpy Cafe"
+    create(:client, name: client_name, bakery: biencuit)
+    expect(create(:client, name: client_name)).to be_valid
   end
 
   it "requires accounts_payable_contact_email to have an @ symbol" do

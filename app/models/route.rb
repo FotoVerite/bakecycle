@@ -4,7 +4,7 @@ class Route < ActiveRecord::Base
 
   belongs_to :bakery
 
-  validates :name, presence: true, length: { maximum: 150 }
+  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :departure_time, presence: true
   validates :active, inclusion: [true, false]
   validates :bakery, presence: true
