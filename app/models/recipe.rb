@@ -1,4 +1,6 @@
 class Recipe < ActiveRecord::Base
+  extend AlphabeticalOrder
+
   has_many :recipe_items, dependent: :destroy
   has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
   has_many :product

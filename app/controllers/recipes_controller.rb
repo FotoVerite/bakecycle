@@ -4,6 +4,7 @@ class RecipesController < ApplicationController
   decorates_assigned :recipes, :recipe
 
   def index
+    @recipes = @recipes.order_by_name
   end
 
   def new

@@ -1,4 +1,6 @@
 class Ingredient < ActiveRecord::Base
+  extend AlphabeticalOrder
+
   has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
 
   belongs_to :bakery

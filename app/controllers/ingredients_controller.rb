@@ -3,6 +3,7 @@ class IngredientsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @ingredients = @ingredients.order_by_name
   end
 
   def new
