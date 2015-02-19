@@ -19,3 +19,8 @@ fieldset legend {
     font-size: 50px;
   }
 }
+
+.js-datepicker {
+  position: relative;
+  z-index:100;
+}
