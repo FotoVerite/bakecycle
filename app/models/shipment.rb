@@ -3,7 +3,8 @@ class Shipment < ActiveRecord::Base
 
   has_many :shipment_items
 
-  accepts_nested_attributes_for :shipment_items, allow_destroy: true
+  accepts_nested_attributes_for :shipment_items, allow_destroy: true,
+                                                 reject_if: proc { |attributes| attributes['product_id'].blank? }
 
   before_validation :set_client_data
   before_validation :set_route_data

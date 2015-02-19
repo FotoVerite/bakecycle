@@ -82,6 +82,7 @@ Feature: Shipments management
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |
+    And I click on "Add Product" and don't enter any information
     When I click on "Create"
     Then "You have created a shipment" should be present
     And "baguette cookie" should be present
