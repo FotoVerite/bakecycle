@@ -16,4 +16,9 @@ class ProductDecorator < Draper::Decorator
   def motherdoughs
     h.item_finder.recipes.motherdoughs.order(:name)
   end
+
+  def sku_display
+    return "N/A" unless sku.present?
+    sku
+  end
 end
