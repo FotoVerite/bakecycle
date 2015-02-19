@@ -1,4 +1,6 @@
 class Product < ActiveRecord::Base
+  extend AlphabeticalOrder
+
   belongs_to :inclusion, class_name: "Recipe"
   belongs_to :motherdough, class_name: "Recipe"
   belongs_to :bakery

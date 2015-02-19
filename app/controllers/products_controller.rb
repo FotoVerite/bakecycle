@@ -4,6 +4,7 @@ class ProductsController < ApplicationController
   decorates_assigned :products, :product
 
   def index
+    @products = @products.order_by_name
   end
 
   def new
