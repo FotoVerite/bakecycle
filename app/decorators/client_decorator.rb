@@ -12,4 +12,9 @@ class ClientDecorator < Draper::Decorator
   def billing
     billing_term.humanize(capitalize: false).titleize
   end
+
+  def dba_display
+    return "N/A" unless dba.present?
+    dba
+  end
 end
