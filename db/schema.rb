@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150218202733) do
+ActiveRecord::Schema.define(version: 20150219173441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20150218202733) do
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
-  add_index "clients", ["name"], name: "index_clients_on_name", unique: true, using: :btree
+  add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "ingredients", force: true do |t|
     t.string   "name"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150218202733) do
     t.integer  "bakery_id"
   end
 
-  add_index "ingredients", ["name"], name: "index_ingredients_on_name", unique: true, using: :btree
+  add_index "ingredients", ["name", "bakery_id"], name: "index_ingredients_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "order_items", force: true do |t|
     t.integer "order_id"
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 20150218202733) do
     t.string   "sku"
   end
 
-  add_index "products", ["name"], name: "index_products_on_name", unique: true, using: :btree
+  add_index "products", ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "recipe_items", force: true do |t|
     t.integer  "recipe_id"
@@ -158,7 +158,7 @@ ActiveRecord::Schema.define(version: 20150218202733) do
     t.integer  "bakery_id"
   end
 
-  add_index "recipes", ["name"], name: "index_recipes_on_name", unique: true, using: :btree
+  add_index "recipes", ["name", "bakery_id"], name: "index_recipes_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "routes", force: true do |t|
     t.string  "name"
@@ -167,6 +167,8 @@ ActiveRecord::Schema.define(version: 20150218202733) do
     t.time    "departure_time"
     t.integer "bakery_id"
   end
+
+  add_index "routes", ["name", "bakery_id"], name: "index_routes_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "shipment_items", force: true do |t|
     t.integer "shipment_id"

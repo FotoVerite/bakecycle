@@ -4,7 +4,7 @@ class Client < ActiveRecord::Base
 
   belongs_to :bakery
 
-  validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
+  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :dba, length: { maximum: 150 }
   validates :business_phone, presence: true
   validates :delivery_address_street_1, presence: true

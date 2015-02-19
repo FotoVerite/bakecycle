@@ -23,7 +23,14 @@ describe Product do
   describe "validations" do
     it "has a name" do
       expect(product).to validate_presence_of(:name)
-      expect(product).to validate_uniqueness_of(:name)
+      expect(product).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    end
+
+    it "can have same name if are apart of different bakeries" do
+      biencuit = create(:bakery)
+      product_name = "Carrot Cake"
+      create(:product, name: product_name, bakery: biencuit)
+      expect(create(:product, name: product_name)).to be_valid
     end
 
     it "has a product type" do

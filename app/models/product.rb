@@ -25,7 +25,7 @@ class Product < ActiveRecord::Base
   enum product_type: PRODUCT_TYPE_OPTIONS
   enum unit: UNIT_OPTIONS
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { scope: :bakery }
   validates :product_type, presence: true
   validates :description, length: { maximum: 500 }
   validates :weight, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true

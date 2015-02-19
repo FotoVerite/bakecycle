@@ -9,7 +9,7 @@ class Ingredient < ActiveRecord::Base
   enum unit: UNIT_OPTIONS
   enum ingredient_type: INGREDIENT_TYPE_OPTIONS
 
-  validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
+  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
   validates :measure, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
   validates :description, length: { maximum: 500 }

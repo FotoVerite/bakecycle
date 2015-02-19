@@ -3,13 +3,13 @@ require "rails_helper"
 describe Recipe do
   let(:recipe) { build(:recipe) }
 
-  describe "model attributes" do
-    it { expect(recipe).to respond_to(:name) }
-    it { expect(recipe).to respond_to(:note) }
-    it { expect(recipe).to respond_to(:mix_size) }
-    it { expect(recipe).to respond_to(:mix_size_unit) }
-    it { expect(recipe).to respond_to(:recipe_type) }
-    it { expect(recipe).to respond_to(:lead_days) }
+  it "has model attributes" do
+    expect(recipe).to respond_to(:name)
+    expect(recipe).to respond_to(:note)
+    expect(recipe).to respond_to(:mix_size)
+    expect(recipe).to respond_to(:mix_size_unit)
+    expect(recipe).to respond_to(:recipe_type)
+    expect(recipe).to respond_to(:lead_days)
   end
 
   it "has association" do
@@ -17,10 +17,17 @@ describe Recipe do
   end
 
   describe "validations" do
-    describe "name" do
-      it { expect(recipe).to validate_presence_of(:name) }
-      it { expect(recipe).to ensure_length_of(:name).is_at_most(150) }
-      it { expect(recipe).to validate_uniqueness_of(:name) }
+    it "has a name" do
+      expect(recipe).to validate_presence_of(:name)
+      expect(recipe).to ensure_length_of(:name).is_at_most(150)
+      expect(recipe).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    end
+
+    it "can have same name if are apart of different bakeries" do
+      biencuit = create(:bakery)
+      recipe_name = "Carrot Baguette"
+      create(:recipe, name: recipe_name, bakery: biencuit)
+      expect(create(:recipe, name: recipe_name)).to be_valid
     end
 
     describe "mix_size" do
