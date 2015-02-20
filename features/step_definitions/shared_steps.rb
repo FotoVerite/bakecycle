@@ -75,3 +75,7 @@ end
 Then(/^I should see "(.*?)" information about "(.*?)"$/) do |object, name|
   expect(page).to have_content("#{object}: #{name}")
 end
+
+Given(/^I click on "(.*?)" and don't enter any information$/) do |linkable_text|
+  click_on(linkable_text, match: :first)
+end
