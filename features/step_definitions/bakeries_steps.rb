@@ -52,3 +52,17 @@ When(/^I upload my Bakery logo$/) do
   path = File.join(Rails.root, 'app/assets/images/example_logo.png')
   attach_file(field, path)
 end
+
+When(/^I am on the my bakery page for "(.*?)" user$/) do |name|
+  user = User.find_by(name: name)
+  visit edit_bakery_path(user.bakery)
+end
+
+When(/^I change name to "(.*?)"$/) do |name|
+  fill_in "bakery_name", with: name
+end
+
+Given(/^I go to the "(.*?)" edit bakery page$/) do |name|
+  bakery = Bakery.find_by(name: name)
+  visit edit_bakery_path(bakery)
+end
