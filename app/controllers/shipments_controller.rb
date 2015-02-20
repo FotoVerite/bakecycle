@@ -9,6 +9,7 @@ class ShipmentsController < ApplicationController
   end
 
   def new
+    @shipment.shipment_items.build
   end
 
   def show

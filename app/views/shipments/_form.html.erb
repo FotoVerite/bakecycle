@@ -61,20 +61,22 @@
 
   <fieldset>
     <legend>Products</legend>
-
-    <div ng-controller="NestedItemCtrl">
-      <%= f.simple_fields_for :shipment_items do |builder| %>
-        <%= render "shipment_item_fields", f: builder %>
-      <% end %>
-
-      <div ng-repeat="nestedItem in nestedItems">
-        <%= f.simple_fields_for :shipment_items, @shipment.shipment_items.build do |builder| %>
-          <%= render "new_shipment_item_fields", f: builder %>
-        <% end %>
+    <div class="row collapse show-for-large-up">
+      <div class="small-12 medium-9 columns">
+        <div class="row collapse">
+          <div class="small-12 medium-4 columns">
+            <%= f.label :product_id, "Product" %>
+          </div>
+          <div class="small-12 medium-4 columns">
+            <%= f.label :product_quantity, "Quantity" %>
+          </div>
+          <div class="small-12 medium-4 columns">
+            <%= f.label :product_price, "Price" %>
+          </div>
+        </div>
       </div>
-
-      <%= link_to 'Add Product', '', :'ng-click' => "add()", class: "button" %>
     </div>
+    <%= render partial: "shipment_items", locals: {f: f} %>
   </fieldset>
 
   <div class="row">
