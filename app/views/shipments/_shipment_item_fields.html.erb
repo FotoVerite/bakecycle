@@ -1,19 +1,22 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
     <div class="small-12 medium-3 columns">
-      <%= f.input :product_id, collection: item_finder.products, label: "Product", include_blank: "--None--", as: :select %>
+      <%= f.label :product_id, "Product", class: "hide-for-large-up" %>
+      <%= f.input :product_id, collection: item_finder.products, label: false, include_blank: "--None--", as: :select %>
     </div>
     <div class="small-12 medium-3 columns">
-      <%= f.input :product_quantity, as: :string, label: "Quantity", input_html: { class: "product_quantity_input" } %>
+      <%= f.label :product_quantity, "Quantity", class: "hide-for-large-up" %>
+      <%= f.input :product_quantity, as: :string, label: false, input_html: { class: "product_quantity_input" } %>
     </div>
 
     <div class="small-12 medium-3 columns">
-      <%= f.input :product_price, as: :string, label: "Price Per item", input_html: { class: "product_price_input" } %>
+      <%= f.label :product_price, "Price", class: "hide-for-large-up" %>
+      <%= f.input :product_price, as: :string, label: false, input_html: { class: "product_price_input" } %>
      </div>
 
     <div class="small-12 medium-3 columns">
       <%= f.hidden_field :_destroy, value: false %>
-      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "remove-button button alert postfix" %>
+      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
     </div>
   </div>
 </div>
