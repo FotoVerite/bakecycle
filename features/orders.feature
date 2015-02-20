@@ -24,6 +24,7 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
+    And I click on "Add Product" and don't enter any information
     And I click on "Create"
     Then "You have created a standing order for mandos." should be present
 

@@ -5,7 +5,8 @@ class Order < ActiveRecord::Base
 
   has_many :order_items
 
-  accepts_nested_attributes_for :order_items, allow_destroy: true
+  accepts_nested_attributes_for :order_items, allow_destroy: true,
+                                              reject_if: proc { |attributes| attributes['product_id'].blank? }
 
   validates :route, :route_id, presence: true
   validates :client, :client_id, presence: true
