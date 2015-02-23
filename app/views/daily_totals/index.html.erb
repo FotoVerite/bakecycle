@@ -1,0 +1,35 @@
+<h1>Daily Totals &mdash; <%= @recipes.date.strftime("%A %b. %e, %Y") %></h1>
+
+<%= simple_form_for :search, method: :get do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :date, input_html: { value: @recipes.date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
+    </div>
+  </div>
+<% end %>
+
+<h2><%= pluralize(@recipes.shipments.count, "Shipment") %> on the following Routes</h2>
+
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Route</th>
+      <th scope="col">Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @recipes.routes.each do |route| %>
+      <tr>
+        <td scope="row"><%= route.name %></td>
+        <td>
+          <%= route.departure_time.strftime("%I:%M%p") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to("Generate Daily Totals", print_daily_total_path(@recipes.date.strftime("%Y-%m-%d")), class: 'button', target: '_blank') %>

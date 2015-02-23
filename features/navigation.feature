@@ -68,3 +68,9 @@ Feature: Navigation
     Given I am logged in as an admin
     When I go to the home page
     Then "My Bakery" should not be present
+
+  Scenario: As a user, I should be able to view Daily Totals from the dashboard
+    Given I am logged in as a user
+    When I go to the home page
+    And I click on "Daily Totals"
+    Then "Generate Daily Total" should be present

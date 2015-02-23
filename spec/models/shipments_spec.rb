@@ -94,6 +94,13 @@ describe Shipment do
       expect(Shipment.search(client_id: client_id)).to eq([shipment])
     end
 
+    it "allows searching by a date" do
+      shipment_1 = create(:shipment, date: Date.today)
+      create(:shipment, date: Date.tomorrow)
+      search = { date: Date.today }
+      expect(Shipment.search(search)).to contain_exactly(shipment_1)
+    end
+
     it "returns shipments after and including a date_from" do
       shipment_1 = create(:shipment, date: Date.today)
       shipment_2 = create(:shipment, date: Date.tomorrow)
