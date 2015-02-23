@@ -1,5 +1,9 @@
 <h1>Bakeries</h1>
-<p><%= link_to 'Add New Bakery', new_bakery_path, class: "button"%></p>
+
+<% if can?(:create, Bakery) %>
+  <p><%= link_to 'Add New Bakery', new_bakery_path, class: "button"%></p>
+<% end %>
+
 <table class="responsive-table">
   <thead>
     <tr>
