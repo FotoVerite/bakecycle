@@ -23,7 +23,7 @@ class ClientsController < ApplicationController
   end
 
   def show
-    @shipments = item_finder.shipments.recent(@client)
+    @shipments = item_finder.shipments.recent(@client).includes(:shipment_items)
   end
 
   def update

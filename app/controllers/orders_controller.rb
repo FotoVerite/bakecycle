@@ -4,6 +4,7 @@ class OrdersController < ApplicationController
   decorates_assigned :orders, :order
 
   def index
+    @orders = @orders.includes(:client, :route)
   end
 
   def new
