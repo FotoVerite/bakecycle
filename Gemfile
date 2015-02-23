@@ -49,6 +49,7 @@ group :test, :development do
   gem 'rubocop', require: false
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', require: false
+  gem 'bullet'
 end
 
 group :test do
