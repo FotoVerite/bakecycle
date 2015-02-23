@@ -56,5 +56,3 @@ Feature: Users
     And I confirm popup
     Then I should see confirmation that the user "andy" was deleted
     And The user "andy" should not be present
-
-

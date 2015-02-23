@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   resources :clients
   resources :orders
   resources :shipments
-  resources :bakeries
   resources :users
+  resources :bakeries do
+    get 'mybakery', on: :collection, as: "my"
+  end
 end

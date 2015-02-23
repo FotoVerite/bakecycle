@@ -7,4 +7,9 @@ module ApplicationHelper
   def active_nav?(section)
     'active' if section == @_active_nav
   end
+
+  def bakery_link
+    return link_to("Bakeries", bakeries_path) if can? :manage, Bakery
+    link_to("My Bakery", my_bakeries_path)
+  end
 end

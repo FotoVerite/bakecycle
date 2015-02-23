@@ -20,6 +20,11 @@ class BakeriesController < ApplicationController
   def edit
   end
 
+  def mybakery
+    @bakery = current_bakery
+    render 'edit'
+  end
+
   def update
     if @bakery.update(bakery_params)
       flash[:notice] = "You have updated #{@bakery.name}."

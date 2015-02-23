@@ -1,5 +1,7 @@
 <h1>Editing Bakery: <%= @bakery.name %></h1>
 
-<%= link_to 'Back', bakeries_path %>
+<% if can? :manage, Bakery %>
+  <%= link_to "Back", bakeries_path %>
+<% end %>
 
 <%= render 'form' %>

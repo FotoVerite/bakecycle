@@ -57,3 +57,14 @@ Feature: Navigation
     Then "Add New Bakery" should be present
     When I go to the "ingredients" page
     Then "Add New Ingredient" should be present
+
+  Scenario: As a user, I should be able to view My Bakery from the dashboard
+    Given I am logged in as a user
+    When I go to the home page
+    And I click on "My Bakery"
+    Then "Editing Bakery" should be present
+
+  Scenario: As an admin, I should not see My Bakery on the dashboard
+    Given I am logged in as an admin
+    When I go to the home page
+    Then "My Bakery" should not be present

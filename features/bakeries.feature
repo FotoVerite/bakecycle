@@ -36,8 +36,14 @@ Feature: Bakery
     Then I should see confirmation the bakery was deleted
     And the bakery "Wonder" should not be present
 
-  Scenario: As an User, I can only see my bakery
+  Scenario: As a User, I can see my bakery
     Given I am logged in as a user with a bakery called "Wizard"
     And I am on the "bakeries" page
     When I click on "Wizard"
     Then I should see "Bakery" information about "Wizard"
+
+  @javascript
+  Scenario: As a User, I cannot see another bakery
+    Given I am logged in as a user with a bakery called "Wizard"
+    And I go to the "Grumpy" edit bakery page
+    Then "You are not authorized to access this page." should be present

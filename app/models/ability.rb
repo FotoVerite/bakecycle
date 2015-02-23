@@ -32,7 +32,7 @@ class Ability
     can :manage, Order, bakery: user.bakery if user.bakery
 
     # Bakeries
-    can [:read, :update], Bakery, id: user.bakery.id if user.bakery
+    can [:read, :update, :mybakery], Bakery, id: user.bakery.id if user.bakery
     can :manage, Bakery if user.admin?
   end
 end

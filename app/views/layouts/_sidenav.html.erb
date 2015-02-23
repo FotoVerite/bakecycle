@@ -13,9 +13,7 @@
         <li class="<%= active_nav?(:users) %>"><%= link_to("Users", users_path) %></li>
       <% end %>
 
-      <% if can? :manage, Bakery %>
-        <li class="<%= active_nav?(:bakeries) %>"><%= link_to("Bakeries", bakeries_path) %></li>
-      <% end %>
+      <li class="<%= active_nav?(:bakeries) %>"><%= bakery_link %></li>
     </ul>
   </div>
 </div>
