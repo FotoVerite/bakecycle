@@ -50,7 +50,7 @@ namespace :db do
     johns_bakery = FactoryGirl.create(:client, name: "John's Bakery", bakery: biencuit)
     angels_deli = FactoryGirl.create(:client, name: "Angel's Deli", bakery: biencuit)
     tonys_brunch = FactoryGirl.create(:client, name: "Tony's Brunch", bakery: biencuit)
-    marinas_cafe = FactoryGirl.create(:client, name: "Marina's Cafe", dba: "Marina's", bakery: biencuit)
+    FactoryGirl.create(:client, name: "Marina's Cafe", dba: "Marina's", bakery: biencuit)
 
     route1 = FactoryGirl.create(:route, bakery: biencuit)
     route2 = FactoryGirl.create(:route, bakery: biencuit)
@@ -61,10 +61,8 @@ namespace :db do
     FactoryGirl.create(:order, client: tonys_brunch, bakery: biencuit, route: route3)
     FactoryGirl.create(:order, bakery: biencuit)
 
-    FactoryGirl.create_list(:shipment, 20, client: johns_bakery, bakery: biencuit, route: route1)
-    FactoryGirl.create_list(:shipment, 10, client: angels_deli, bakery: biencuit, route: route2)
-    FactoryGirl.create_list(:shipment, 10, client: tonys_brunch, bakery: biencuit, route: route3)
-    FactoryGirl.create_list(:shipment, 10, client: marinas_cafe, bakery: biencuit, route: route1)
+    ShipmentService.run
+
     puts "Dev Data Loaded"
   end
 end

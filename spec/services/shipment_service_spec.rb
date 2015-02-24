@@ -2,11 +2,19 @@ require "rails_helper"
 
 describe ShipmentService do
   context "creates shipments" do
-    xit "creates shipments for orders and dates where the production date is today" do
-      order = create(:order, lead_time: 2)
+    it "creates shipments for orders and dates where the production date is today" do
+      order = create(:order, start_date: Date.today, lead_time: 2)
+      ShipmentService.run
+      expect(Shipment.count).to eq(2)
+      expect(Shipment.last.date).to eq(Date.today + order.lead_time.days)
+    end
+
+    it "doesn't create multiple shipments for the same client, route, and date" do
+      create(:order, start_date: Date.today, lead_time: 1)
       ShipmentService.run
       expect(Shipment.count).to eq(1)
-      expect(Shipemnt.first.date).to eq(Date.today + order.lead_time.days)
+      ShipmentService.run
+      expect(Shipment.count).to eq(1)
     end
   end
 
@@ -16,6 +24,7 @@ describe ShipmentService do
       date = Date.today
       shipment = ShipmentService.ship_order(order, date)
 
+      expect(shipment.auto_generated).to eq(true)
       expect(shipment.bakery).to eq(order.bakery)
       expect(shipment.client_id).to eq(order.client.id)
       expect(shipment.route_id).to eq(order.route.id)
