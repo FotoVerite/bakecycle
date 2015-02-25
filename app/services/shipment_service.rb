@@ -13,7 +13,8 @@ class ShipmentService
 
   def self.process_client(client)
     max_lead_time = client.orders.map(&:lead_time).max
-    (1..max_lead_time).each do |lead|
+    return if max_lead_time.nil?
+    (1..max_lead_time).to_a.each do |lead|
       ship_date = Date.today + lead.days
       Order.active(client, ship_date).each do |order|
         ship_order(order, ship_date)
@@ -22,13 +23,15 @@ class ShipmentService
   end
 
   def self.ship_order(order, ship_date)
-    Shipment.create!(
+    Shipment.where(
       bakery: order.bakery,
-      client: order.client,
-      route: order.route,
+      client_id: order.client.id,
+      route_id: order.route.id,
       date: ship_date,
-      shipment_items: shipment_items(order.order_items, ship_date)
-    )
+      auto_generated: true
+    ).first_or_create! do |shipment|
+      shipment.shipment_items = shipment_items(order.order_items, ship_date)
+    end
   end
 
   def self.shipment_items(order_items, ship_date)
