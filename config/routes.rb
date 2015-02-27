@@ -7,8 +7,12 @@ Rails.application.routes.draw do
   resources :routes
   resources :clients
   resources :orders
-  resources :shipments
   resources :users
+
+  resources :shipments do
+    get 'invoices', on: :collection
+  end
+
   resources :bakeries do
     get 'mybakery', on: :collection, as: "my"
   end

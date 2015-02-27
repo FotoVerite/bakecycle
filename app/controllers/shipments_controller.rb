@@ -18,6 +18,14 @@ class ShipmentsController < ApplicationController
     send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
   end
 
+  def invoices
+    search_form = ShipmentSearchForm.new(search_params)
+    @shipments = @shipments.search(search_form).includes(:shipment_items, :bakery)
+    pdf = InvoicesPdf.new(@shipments.decorate)
+    pdf_name = "invoices.pdf"
+    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+  end
+
   def create
     if @shipment.save
       flash[:notice] = "You have created a shipment for #{@shipment.client_name}."
