@@ -1,24 +1,21 @@
-class InvoicePdf < Prawn::Document
-  HEADER_ROW_COLOR = 'b9b9b9'
-
+class InvoicePdf < PdfReport
   def initialize(shipment)
-    super(pdf_margins)
     @shipment = shipment
-    setup_grid
+    super()
+  end
+
+  def setup
+    invoice
+    number_of_pages
+  end
+
+  def invoice
     header
     addresses
     note
     information
     shipment_items
     totals
-  end
-
-  def pdf_margins
-    { margin: [50, 20, 75, 20] }
-  end
-
-  def setup_grid
-    define_grid(columns: 12, rows: 12, gutter: 8)
   end
 
   def header
@@ -41,14 +38,14 @@ class InvoicePdf < Prawn::Document
       client_address(:delivery)
     end
 
-    grid([2, 4], [3, 8]).bounding_box do
+    grid([2, 4.2], [3, 8]).bounding_box do
       text "Billed To:", size: 14
       client_address(:billing)
     end
   end
 
   def note
-    grid([2, 8], [3, 12]).bounding_box do
+    grid([2, 8], [3, 11]).bounding_box do
       text "Notes:", size: 14
       text @shipment.note, size: 10
     end
