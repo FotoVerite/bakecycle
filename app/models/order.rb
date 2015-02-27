@@ -8,14 +8,16 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :order_items, allow_destroy: true,
                                               reject_if: proc { |attributes| attributes['product_id'].blank? }
 
+  before_validation :set_end_date_to_start, if: :temporary?
+
   validates :route, :route_id, presence: true
   validates :client, :client_id, presence: true
   validates :start_date, presence: true
+  validate  :end_date_is_not_before_start_date
   validates :order_items, presence: { message: "You must choose a product before saving" }
   validates :order_type, presence: true, inclusion: %w(standing temporary)
   validates :bakery, presence: true
-
-  before_validation :set_end_date_to_start, if: :temporary?
+  validate  :standing_order_date_can_not_overlap
 
   def self.active(client, date)
     temp_orders = temporary(date).where(client: client).to_a
@@ -36,6 +38,23 @@ class Order < ActiveRecord::Base
     where(order_type: 'standing')
       .where('start_date <= ? ', date)
       .where('end_date is null or end_date >= ? ', date)
+  end
+
+  def end_date_is_not_before_start_date
+    return unless end_date
+    errors.add(:end_date, 'The end date cannot be before the start date') if end_date < start_date
+  end
+
+  def standing_order_date_can_not_overlap
+    errors.add(:start_date, "This order overlaps with at least one other") if overlapping?
+  end
+
+  def overlapping?
+    overlapping = Order.where(client: client, route: route, order_type: order_type)
+      .where.not(id: id)
+      .where('end_date >= ? OR end_date is null', start_date)
+    overlapping = overlapping.where('start_date <= ?', end_date) if end_date
+    overlapping.count > 0
   end
 
   def set_end_date_to_start
