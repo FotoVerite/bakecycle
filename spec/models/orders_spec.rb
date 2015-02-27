@@ -4,6 +4,8 @@ describe Order do
   let(:order) { build(:order) }
   let(:today) { Date.today }
   let(:yesterday) { Date.today - 1.day }
+  let(:tomorrow) { Date.today + 1.day }
+  let(:next_week) { Date.today + 1.week }
 
   it "has model attributes" do
     expect(order).to respond_to(:client)
@@ -26,11 +28,29 @@ describe Order do
     expect(order).to validate_presence_of(:order_type)
   end
 
-  describe "#set_end_date" do
-    it "has a starting_date that ends on the same day" do
-      temp_order = build(:temporary_order)
-      temp_order.valid?
-      expect(temp_order.start_date).to eq(temp_order.end_date)
+  context "date validations" do
+    it "is invalid if the end date is before the start date" do
+      order.start_date = today
+      order.end_date = yesterday
+      expect(order).to_not be_valid
+      expect(order.errors[:end_date].count).to be > 0
+    end
+
+    describe "#standing_order_date_can_not_overlap" do
+      it "is invalid if two orders overlap" do
+        order = create(:order, start_date: today)
+        overlaping_order = build(:order, route: order.route, client: order.client, start_date: today)
+        expect(overlaping_order).to_not be_valid
+        expect(overlaping_order.errors[:start_date].count).to be > 0
+      end
+    end
+
+    describe "#set_end_date" do
+      it "has a starting_date that ends on the same day" do
+        temp_order = build(:temporary_order)
+        temp_order.valid?
+        expect(temp_order.start_date).to eq(temp_order.end_date)
+      end
     end
   end
 
@@ -46,6 +66,76 @@ describe Order do
       order.order_items << build(:order_item, order: nil, product: product_2)
 
       expect(order.lead_time).to eq(5)
+    end
+  end
+
+  describe "#overlapping?" do
+    it "returns true if there is an existing overlapping order for the same client and route" do
+      client = create(:client)
+      route = create(:route)
+      create(:order, start_date: today, end_date: tomorrow, route: route, client: client)
+
+      combinations = [
+        { start_date: yesterday, end_date: yesterday, result: false },
+        { start_date: yesterday, end_date: today, result: true },
+        { start_date: yesterday, end_date: tomorrow, result: true },
+        { start_date: yesterday, end_date: next_week, result: true },
+        { start_date: yesterday, end_date: nil, result: true },
+        { start_date: next_week, end_date: nil, result: false },
+        { start_date: next_week, end_date: next_week, result: false },
+        { start_date: today, end_date: today, result: true },
+        { start_date: today, end_date: tomorrow, result: true },
+        { start_date: today, end_date: next_week, result: true },
+        { start_date: today, end_date: nil, result: true },
+        { start_date: tomorrow, end_date: tomorrow, result: true },
+        { start_date: tomorrow, end_date: next_week, result: true },
+        { start_date: tomorrow, end_date: nil, result: true }
+      ]
+
+      combinations.each do |combo|
+        start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
+        order = build(:order, route: route, client: client, start_date: start_date, end_date: end_date)
+        msg = "expected start_date of #{start_date}, & end_date of #{end_date || 'nil'} to have overlapping? #{result}"
+        expect(order.overlapping?).to eq(result), msg
+      end
+    end
+
+    it "returns true if there is an existing overlapping order for the same client and route with no end date" do
+      client = create(:client)
+      route = create(:route)
+      create(:order, start_date: today, end_date: nil, route: route, client: client)
+
+      combinations = [
+        { start_date: yesterday, end_date: yesterday, result: false },
+        { start_date: yesterday, end_date: today, result: true },
+        { start_date: yesterday, end_date: tomorrow, result: true },
+        { start_date: yesterday, end_date: nil, result: true },
+        { start_date: today, end_date: today, result: true },
+        { start_date: today, end_date: tomorrow, result: true },
+        { start_date: today, end_date: nil, result: true },
+        { start_date: tomorrow, end_date: tomorrow, result: true },
+        { start_date: tomorrow, end_date: nil, result: true }
+      ]
+
+      combinations.each do |combo|
+        start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
+        order = build(:order, route: route, client: client, start_date: start_date, end_date: end_date)
+        msg = "expected start_date of #{start_date}, & end_date of #{end_date || 'nil'} to have overlapping? #{result}"
+        expect(order.overlapping?).to eq(result), msg
+      end
+    end
+
+    it "returns false if there are overlapping orders for other clients and temporary orders" do
+      order = build(:order, start_date: today, end_date: today)
+      create(:temporary_order, route: order.route, client: order.client, start_date: today)
+      create(:order, route: order.route, start_date: today)
+      create(:order, client: order.client, start_date: today)
+      expect(order).to_not be_overlapping
+    end
+
+    it "returns false if it overlaps with itself" do
+      order = create(:order, start_date: today, end_date: today)
+      expect(order).to_not be_overlapping
     end
   end
 
