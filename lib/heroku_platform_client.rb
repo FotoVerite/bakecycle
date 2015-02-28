@@ -31,14 +31,10 @@ class HerokuPlatformClient
   end
 
   def run(cmd)
+    cmdstr = { attach: "true", command: cmd }.to_json
     opt = {
-      body: {
-        attach: "true",
-        command: cmd
-      }.to_json,
-      headers: {
-        'Content-Type' => 'application/json'
-      }
+      body: cmdstr,
+      headers: { 'Content-Type' => 'application/json' }
     }
     response = self.class.post("/apps/#{app}/dynos", opt)
     session = Rendezvous.new(
