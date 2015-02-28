@@ -12,7 +12,18 @@ class Bakery < ActiveRecord::Base
   has_attached_file :logo, styles: { invoice: "1800x200>", thumb: "300x200>" }
   validates_attachment :logo, content_type: { content_type: /^image\/(jpeg|png|tiff|bmp)$/ }
 
-  def logo_io
-    Paperclip.io_adapters.for(logo)
+  def logo_local_file(style = logo.default_style)
+    return if logo.path(style).nil?
+    return logo.path(style) if logo.options[:storage] == :filesystem
+    return @_tempfile.path if @_tempfile
+
+    @_tempfile = write_logo_to_tempfile(style)
+    @_tempfile.path
+  end
+
+  def write_logo_to_tempfile(style)
+    tempfile = Tempfile.new('bakecycle-bakery-logo')
+    logo.copy_to_local_file(style, tempfile.path)
+    tempfile
   end
 end
