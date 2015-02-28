@@ -10,7 +10,7 @@ class InvoicePdf < PdfReport
   end
 
   def invoice
-    header
+    header_stamp
     addresses
     note
     information
@@ -18,15 +18,17 @@ class InvoicePdf < PdfReport
     totals
   end
 
+  def header_stamp
+    stamp_or_create("header") { header }
+  end
+
   def header
     bounding_box([0, cursor], width: 280, height: 60) do
       bakery_logo_display
     end
-
     grid([0, 6], [0, 8]).bounding_box do
       bakery_info
     end
-
     grid([0, 9], [0, 11]).bounding_box do
       text "Invoice", size: 40
     end
@@ -37,7 +39,6 @@ class InvoicePdf < PdfReport
       text "Shipped To:", size: 14
       client_address(:delivery)
     end
-
     grid([2, 4.2], [3, 8]).bounding_box do
       text "Billed To:", size: 14
       client_address(:billing)
@@ -52,13 +53,9 @@ class InvoicePdf < PdfReport
   end
 
   def bakery_logo_display
+    bakery_logo_image = @shipment.bakery_logo_local_file(:invoice)
     return image bakery_logo_image, fit: [280, 60] if bakery_logo_image
     text_box @shipment.bakery_name.upcase, size: 80, overflow: :shrink_to_fit
-  end
-
-  def bakery_logo_image
-    return unless @shipment.bakery_logo.present?
-    @shipment.bakery_logo_local_file(:invoice)
   end
 
   def bakery_info
@@ -107,10 +104,11 @@ class InvoicePdf < PdfReport
   end
 
   def shipment_items_row
-    [["Item Name", "Quantity", "Price Each", "Total"]] +
-      @shipment.shipment_items.map do |item|
-        [item.product_name, item.product_quantity, item.product_price, item.price]
-      end
+    header = ["Item Name", "Quantity", "Price Each", "Total"]
+    rows = @shipment.shipment_items.map do |item|
+      [item.product_name, item.product_quantity, item.product_price, item.price]
+    end
+    rows.unshift(header)
   end
 
   def totals
