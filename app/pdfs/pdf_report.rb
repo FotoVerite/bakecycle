@@ -5,10 +5,18 @@ class PdfReport < Prawn::Document
     super(default_margin)
     font_size 10
     setup_grid
+    @stamps = {}
     setup
   end
 
   def setup
+  end
+
+  def stamp_or_create(name, &block)
+    return stamp(name) if @stamps[name]
+    create_stamp(name, &block)
+    @stamps[name] = true
+    stamp(name)
   end
 
   def setup_grid
