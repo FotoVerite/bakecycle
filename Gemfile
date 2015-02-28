@@ -59,7 +59,7 @@ end
 
 group :test do
   gem 'database_cleaner'
-  gem 'webmock'
+  gem 'webmock', require: false
 end
 
 group :test, :development, :staging do
