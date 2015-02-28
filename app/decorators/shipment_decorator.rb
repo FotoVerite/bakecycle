@@ -61,7 +61,7 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   delegate :logo, to: :bakery, prefix: true
-  delegate :logo_io, to: :bakery, prefix: true
+  delegate :logo_local_file, to: :bakery, prefix: true
   delegate :name, to: :bakery, prefix: true
   delegate :address_street_1, to: :bakery, prefix: true
   delegate :address_street_2, to: :bakery, prefix: true

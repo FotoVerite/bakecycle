@@ -28,4 +28,15 @@ describe Bakery do
     expect(bakery).to ensure_length_of(:name).is_at_most(150)
     expect(bakery).to validate_uniqueness_of(:name)
   end
+
+  describe '#logo_local_file' do
+    it "gives the path of the logo" do
+      bakery = build(:bakery, :with_logo)
+      expect(bakery.logo_local_file).to include('.png')
+    end
+
+    it 'returns nil with no logo' do
+      expect(bakery.logo_local_file).to be_nil
+    end
+  end
 end

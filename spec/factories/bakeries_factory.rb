@@ -8,7 +8,7 @@ FactoryGirl.define do
     address_state { Faker::Address.state }
     address_zipcode { Faker::Address.zip_code }
     trait :with_logo do
-      logo { File.new(File.join(Rails.root, 'app/assets/images/example_logo.png')) }
+      logo { File.new(Rails.root.join('app/assets/images/example_logo.png')) }
     end
   end
 end

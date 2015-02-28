@@ -52,10 +52,13 @@ class InvoicePdf < PdfReport
   end
 
   def bakery_logo_display
-    if @shipment.bakery_logo.present?
-      return image @shipment.bakery_logo_io, fit: [280, 60]
-    end
+    return image bakery_logo_image, fit: [280, 60] if bakery_logo_image
     text_box @shipment.bakery_name.upcase, size: 80, overflow: :shrink_to_fit
+  end
+
+  def bakery_logo_image
+    return unless @shipment.bakery_logo.present?
+    @shipment.bakery_logo_local_file(:invoice)
   end
 
   def bakery_info
