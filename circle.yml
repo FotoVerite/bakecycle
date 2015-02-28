@@ -4,11 +4,7 @@ deployment:
   staging:
     branch: master
     commands:
-      - heroku maintenance:on --app bakecycle-staging
-      - git push -f git@heroku.com:bakecycle-staging.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run rake db:migrate --app bakecycle-staging
-      - heroku restart web --app bakecycle-staging
-      - heroku maintenance:off --app bakecycle-staging
+      - bundle exec rake deploy:staging
 notify:
   webhooks:
     - url: http://wizarddev-statusbot.herokuapp.com/circle

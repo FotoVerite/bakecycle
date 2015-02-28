@@ -28,6 +28,11 @@ gem 'aws-sdk', '< 2.0'
 gem 'prawn'
 gem 'prawn-table'
 
+# deployment
+gem 'httparty', require: false
+gem 'netrc', require: false
+gem 'rendezvous', require: false
+
 group :development do
   gem 'spring'
   gem 'quiet_assets'
