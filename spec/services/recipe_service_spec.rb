@@ -65,7 +65,7 @@ describe RecipeService do
   end
 
   describe '#product_counts' do
-    it "returns the count of products on each route" do
+    it 'returns the count of products on each route' do
       am = create(:route)
       pm = create(:route)
       shipment = create(:shipment, date: today, shipment_item_count: 0, route: am)
@@ -93,7 +93,7 @@ describe RecipeService do
       expect(recipe_service.product_counts).to eq(counts)
     end
 
-    it "caches the output" do
+    it 'caches the output' do
       create_list(:shipment, 2, date: today)
       expect(recipe_service.product_counts).to eq(recipe_service.product_counts)
     end

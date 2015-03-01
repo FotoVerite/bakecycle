@@ -15,15 +15,15 @@ class ShipmentsController < ApplicationController
   def show
     pdf = InvoicePdf.new(@shipment.decorate)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
-    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def invoices
     search_form = ShipmentSearchForm.new(search_params)
     @shipments = @shipments.search(search_form).includes(:shipment_items, :bakery)
     pdf = InvoicesPdf.new(@shipments.decorate)
-    pdf_name = "invoices.pdf"
-    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+    pdf_name = 'invoices.pdf'
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def create

@@ -7,7 +7,7 @@ class ClientsController < ApplicationController
   end
 
   def new
-    @client = Client.new(active: true, billing_term: "net_30")
+    @client = Client.new(active: true, billing_term: 'net_30')
   end
 
   def create

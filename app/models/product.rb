@@ -1,8 +1,8 @@
 class Product < ActiveRecord::Base
   extend AlphabeticalOrder
 
-  belongs_to :inclusion, class_name: "Recipe"
-  belongs_to :motherdough, class_name: "Recipe"
+  belongs_to :inclusion, class_name: 'Recipe'
+  belongs_to :motherdough, class_name: 'Recipe'
   belongs_to :bakery
 
   has_many :price_varients
@@ -62,11 +62,11 @@ class Product < ActiveRecord::Base
   end
 
   def effective_date_varient
-    find_varients.where("effective_date <= ?", Date.today).order(:effective_date)
+    find_varients.where('effective_date <= ?', Date.today).order(:effective_date)
   end
 
   def quantity_varient(quantity)
-    effective_date_varient.where("quantity <= ?", quantity).order(:quantity)
+    effective_date_varient.where('quantity <= ?', quantity).order(:quantity)
   end
 
   def lead_time
@@ -79,7 +79,7 @@ class Product < ActiveRecord::Base
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique
-    errors[:base] << "Identical date and quantity already exist for this product, try a different date."
+    errors[:base] << 'Identical date and quantity already exist for this product, try a different date.'
     false
   end
 end

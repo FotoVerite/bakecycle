@@ -3,7 +3,7 @@ Given(/^I am a visitor$/) do
 end
 
 When(/^I logout$/) do
-  find(".logout-icon").click
+  find('.logout-icon').click
 end
 
 When(/^I pry$/) do

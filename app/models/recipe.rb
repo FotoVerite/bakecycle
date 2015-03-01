@@ -2,7 +2,7 @@ class Recipe < ActiveRecord::Base
   extend AlphabeticalOrder
 
   has_many :recipe_items, dependent: :destroy
-  has_many :recipe_parts, as: :inclusionable, class_name: "RecipeItem"
+  has_many :recipe_parts, as: :inclusionable, class_name: 'RecipeItem'
   has_many :product
 
   belongs_to :bakery
@@ -40,10 +40,10 @@ class Recipe < ActiveRecord::Base
   end
 
   def self.motherdoughs
-    where("recipe_type = ?", Recipe.recipe_types[:dough])
+    where('recipe_type = ?', Recipe.recipe_types[:dough])
   end
 
   def self.inclusions
-    where("recipe_type = ?", Recipe.recipe_types[:inclusion])
+    where('recipe_type = ?', Recipe.recipe_types[:inclusion])
   end
 end

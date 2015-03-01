@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActiveRecord::RecordNotFound do
-    redirect_to root_url, alert: "Resource not found"
+    redirect_to root_url, alert: 'Resource not found'
   end
 
   def active_nav(name = nil)

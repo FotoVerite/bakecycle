@@ -18,7 +18,7 @@ Given(/^I am on the edit page for "(.*?)" bakery$/) do |name|
 end
 
 When(/^I change the bakery name to "(.*?)"$/) do |name|
-  fill_in "bakery_name", with: name
+  fill_in 'bakery_name', with: name
 end
 
 Then(/^I should see that the bakery name is "(.*?)"$/) do |name|
@@ -26,23 +26,23 @@ Then(/^I should see that the bakery name is "(.*?)"$/) do |name|
 end
 
 When(/^I fill out Bakery form with valid data$/) do
-  fill_in "bakery_name", with: "Au Bon Pain"
-  fill_in "bakery_email", with: "test@example.com"
-  fill_in "bakery_phone_number", with: "999-888-7777"
-  fill_in "bakery_address_street_1", with: "123 Example St."
-  fill_in "bakery_address_city", with: "Bake"
-  fill_in "bakery_address_state", with: "NY"
-  fill_in "bakery_address_zipcode", with: "10001"
+  fill_in 'bakery_name', with: 'Au Bon Pain'
+  fill_in 'bakery_email', with: 'test@example.com'
+  fill_in 'bakery_phone_number', with: '999-888-7777'
+  fill_in 'bakery_address_street_1', with: '123 Example St.'
+  fill_in 'bakery_address_city', with: 'Bake'
+  fill_in 'bakery_address_state', with: 'NY'
+  fill_in 'bakery_address_zipcode', with: '10001'
 end
 
 Then(/^I should see confirmation the bakery was deleted$/) do
   within '.alert-box' do
-    expect(page).to have_content("You have deleted")
+    expect(page).to have_content('You have deleted')
   end
 end
 
 Then(/^the bakery "(.*?)" should not be present$/) do |bakery_name|
-  within ".responsive-table" do
+  within '.responsive-table' do
     expect(page).to_not have_content(bakery_name)
   end
 end

@@ -1,5 +1,3 @@
-require "faker"
-
 FactoryGirl.define do
   factory :shipment do
     date  { Date.today + Faker::Number.number(1).to_i.days }

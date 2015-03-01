@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
 
   resources :bakeries do
-    get 'mybakery', on: :collection, as: "my"
+    get 'mybakery', on: :collection, as: 'my'
   end
 
   resources :daily_totals, only: [:index] do

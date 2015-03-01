@@ -12,14 +12,14 @@ Then(/^I should see a list of users including "(.*?)" and "(.*?)"$/) do |name1, 
 end
 
 Then(/^I should be redirected to an user page$/) do
-  expect(page).to have_content("Users")
+  expect(page).to have_content('Users')
 end
 
 When(/^I fill out User form with:$/) do |table|
-  fill_in "user_email", with: table.hashes[0]["email"]
-  fill_in "user_name", with: table.hashes[0]["name"]
-  fill_in "user_password", with: table.hashes[0]["password"]
-  fill_in "user_password_confirmation", with: table.hashes[0]["password_confirmation"]
+  fill_in 'user_email', with: table.hashes[0]['email']
+  fill_in 'user_name', with: table.hashes[0]['name']
+  fill_in 'user_password', with: table.hashes[0]['password']
+  fill_in 'user_password_confirmation', with: table.hashes[0]['password_confirmation']
 end
 
 When(/^I am on the edit page for "(.*?)" user$/) do |name|
@@ -28,7 +28,7 @@ When(/^I am on the edit page for "(.*?)" user$/) do |name|
 end
 
 When(/^I change the user name to "(.*?)"$/) do |name|
-  fill_in "user_name", with: name
+  fill_in 'user_name', with: name
 end
 
 Then(/^I should see that the user name is "(.*?)"$/) do |name|

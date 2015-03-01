@@ -19,7 +19,7 @@ class InvoicePdf < PdfReport
   end
 
   def header_stamp
-    stamp_or_create("header") { header }
+    stamp_or_create('header') { header }
   end
 
   def header
@@ -30,24 +30,24 @@ class InvoicePdf < PdfReport
       bakery_info
     end
     grid([0, 9], [0, 11]).bounding_box do
-      text "Invoice", size: 40
+      text 'Invoice', size: 40
     end
   end
 
   def addresses
     grid([2, 0], [3, 4]).bounding_box do
-      text "Shipped To:", size: 14
+      text 'Shipped To:', size: 14
       client_address(:delivery)
     end
     grid([2, 4.2], [3, 8]).bounding_box do
-      text "Billed To:", size: 14
+      text 'Billed To:', size: 14
       client_address(:billing)
     end
   end
 
   def note
     grid([2, 8], [3, 11]).bounding_box do
-      text "Notes:", size: 14
+      text 'Notes:', size: 14
       text @shipment.note, size: 10
     end
   end
@@ -87,7 +87,7 @@ class InvoicePdf < PdfReport
   end
 
   def information_rows
-    [["Invoice Number", "Invoice Date", "Terms", "Due Date", "Total Due"]] +
+    [['Invoice Number', 'Invoice Date', 'Terms', 'Due Date', 'Total Due']] +
       [[
         @shipment.invoice_number, @shipment.date, @shipment.terms,
         @shipment.payment_due_date, @shipment.price
@@ -104,7 +104,7 @@ class InvoicePdf < PdfReport
   end
 
   def shipment_items_row
-    header = ["Item Name", "Quantity", "Price Each", "Total"]
+    header = ['Item Name', 'Quantity', 'Price Each', 'Total']
     rows = @shipment.shipment_items.map do |item|
       [item.product_name, item.product_quantity, item.product_price, item.price]
     end
@@ -122,6 +122,6 @@ class InvoicePdf < PdfReport
   end
 
   def totals_row
-    [["Subtotal:", @shipment.subtotal], ["Delivery Fee:", @shipment.delivery_fee], ["Total:", @shipment.price]]
+    [['Subtotal:', @shipment.subtotal], ['Delivery Fee:', @shipment.delivery_fee], ['Total:', @shipment.price]]
   end
 end

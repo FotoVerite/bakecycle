@@ -12,12 +12,12 @@ Then(/^I should see a list of recipes including "(.*?)" and "(.*?)"$/) do |recip
 end
 
 When(/^I fill out recipe form with:$/) do |table|
-  fill_in "recipe_name", with: table.hashes[0]["name"]
-  fill_in "recipe_mix_size", with: table.hashes[0]["mix_size"]
-  select table.hashes[0]["mix_size_unit"], from: "recipe_mix_size_unit"
-  fill_in "recipe_lead_days", with: table.hashes[0]["lead_days"]
-  select table.hashes[0]["recipe_type"], from: "recipe_recipe_type"
-  fill_in "recipe_note", with: table.hashes[0]["note"]
+  fill_in 'recipe_name', with: table.hashes[0]['name']
+  fill_in 'recipe_mix_size', with: table.hashes[0]['mix_size']
+  select table.hashes[0]['mix_size_unit'], from: 'recipe_mix_size_unit'
+  fill_in 'recipe_lead_days', with: table.hashes[0]['lead_days']
+  select table.hashes[0]['recipe_type'], from: 'recipe_recipe_type'
+  fill_in 'recipe_note', with: table.hashes[0]['note']
 end
 
 Given(/^I am on the edit page for "(.*?)" recipe$/) do |name|
@@ -26,7 +26,7 @@ Given(/^I am on the edit page for "(.*?)" recipe$/) do |name|
 end
 
 When(/^I change the recipe name to "(.*?)"$/) do |name|
-  fill_in "recipe_name", with: name
+  fill_in 'recipe_name', with: name
 end
 
 Then(/^I should see that the recipe name is "(.*?)"$/) do |name|
@@ -34,18 +34,18 @@ Then(/^I should see that the recipe name is "(.*?)"$/) do |name|
 end
 
 When(/^I fill out recipe item with:$/) do |table|
-  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['inclusionable_id_type']}']").click
-  all("input[type=text]").last.set(table.hashes[0]["percentage"])
+  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['inclusionable_id_type']}']").click
+  all('input[type=text]').last.set(table.hashes[0]['percentage'])
 end
 
 When(/^I delete "(.*?)" ingredient$/) do |name|
   form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
-  form.find('a', text: "X").click
+  form.find('a', text: 'X').click
 end
 
 When(/^I edit "(.*?)" baker's percentage$/) do |name|
   form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
-  form.find_field("Baker\'s %").set("10.5")
+  form.find_field("Baker\'s %").set('10.5')
 end
 
 Then(/^the recipe item "(.*?)" should be present$/) do |name|

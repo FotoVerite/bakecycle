@@ -1,16 +1,16 @@
 namespace :db do
   task :dev_data, [:devdata]
 
-  desc "Reset database with development data"
+  desc 'Reset database with development data'
   task devdata: :environment do
     raise "don't run this here!" if Rails.env.production?
 
     Rails.application.eager_load! # load all classes
     ActiveRecord::Base.descendants.map(&:destroy_all) # DESTROY ALL CLASSES
-    puts "Dev Data Destroyed"
+    puts 'Dev Data Destroyed'
 
-    biencuit = FactoryGirl.create(:bakery, :with_logo, name: "Biencuit")
-    grumpy = FactoryGirl.create(:bakery, name: "Grumpy")
+    biencuit = FactoryGirl.create(:bakery, :with_logo, name: 'Biencuit')
+    grumpy = FactoryGirl.create(:bakery, name: 'Grumpy')
 
     FactoryGirl.create(:user, email: 'user@example.com', bakery: biencuit)
     FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: biencuit)
@@ -20,29 +20,29 @@ namespace :db do
     FactoryGirl.create(:user, email: 'jane@grumpy.com', bakery: grumpy)
     FactoryGirl.create(:user, email: 'john@grumpy.com', bakery: grumpy)
 
-    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Baguette", bakery: biencuit)
-    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Brioche", bakery: biencuit)
-    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Broa", bakery: biencuit)
-    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Campagne", bakery: biencuit)
-    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: "Challah", bakery: biencuit)
+    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: 'Baguette', bakery: biencuit)
+    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: 'Brioche', bakery: biencuit)
+    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: 'Broa', bakery: biencuit)
+    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: 'Campagne', bakery: biencuit)
+    FactoryGirl.create(:recipe_motherdough, :with_ingredients, name: 'Challah', bakery: biencuit)
 
-    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: "Black sesame petit pain", bakery: biencuit)
-    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: "Chive Lobster Roll", bakery: biencuit)
-    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: "Chive Pain au Lait", bakery: biencuit)
-    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: "Coriander petit pain", bakery: biencuit)
-    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: "Dark Rye", bakery: biencuit)
+    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: 'Black sesame petit pain', bakery: biencuit)
+    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: 'Chive Lobster Roll', bakery: biencuit)
+    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: 'Chive Pain au Lait', bakery: biencuit)
+    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: 'Coriander petit pain', bakery: biencuit)
+    FactoryGirl.create(:recipe_inclusion, :with_ingredients, name: 'Dark Rye', bakery: biencuit)
 
-    FactoryGirl.create(:recipe_preferment, :with_ingredients, name: "Baguette Poolish", bakery: biencuit)
-    FactoryGirl.create(:recipe_preferment, name: "Broa Biga", bakery: biencuit)
-    FactoryGirl.create(:recipe_preferment, name: "Challah Milk Poolish", bakery: biencuit)
-    FactoryGirl.create(:recipe_preferment, name: "Ciabatta Poolish", bakery: biencuit)
-    FactoryGirl.create(:recipe_preferment, name: "Ciabatta Wichcraft Poolish", bakery: biencuit)
+    FactoryGirl.create(:recipe_preferment, :with_ingredients, name: 'Baguette Poolish', bakery: biencuit)
+    FactoryGirl.create(:recipe_preferment, name: 'Broa Biga', bakery: biencuit)
+    FactoryGirl.create(:recipe_preferment, name: 'Challah Milk Poolish', bakery: biencuit)
+    FactoryGirl.create(:recipe_preferment, name: 'Ciabatta Poolish', bakery: biencuit)
+    FactoryGirl.create(:recipe_preferment, name: 'Ciabatta Wichcraft Poolish', bakery: biencuit)
 
-    FactoryGirl.create(:recipe_ingredient, :with_ingredients, name: "Fennel Seed", bakery: biencuit)
-    FactoryGirl.create(:recipe_ingredient, name: "Flour, All Purpose, Unbleached, 25#", bakery: biencuit)
-    FactoryGirl.create(:recipe_ingredient, name: "Green Peppercorn", bakery: biencuit)
-    FactoryGirl.create(:recipe_ingredient, name: "High Gluten Flour", bakery: biencuit)
-    FactoryGirl.create(:recipe_ingredient, name: "Milk Poolish", bakery: biencuit)
+    FactoryGirl.create(:recipe_ingredient, :with_ingredients, name: 'Fennel Seed', bakery: biencuit)
+    FactoryGirl.create(:recipe_ingredient, name: 'Flour, All Purpose, Unbleached, 25#', bakery: biencuit)
+    FactoryGirl.create(:recipe_ingredient, name: 'Green Peppercorn', bakery: biencuit)
+    FactoryGirl.create(:recipe_ingredient, name: 'High Gluten Flour', bakery: biencuit)
+    FactoryGirl.create(:recipe_ingredient, name: 'Milk Poolish', bakery: biencuit)
 
     FactoryGirl.create_list(:product, 10, bakery: biencuit)
 
@@ -63,6 +63,6 @@ namespace :db do
 
     ShipmentService.run
 
-    puts "Dev Data Loaded"
+    puts 'Dev Data Loaded'
   end
 end

@@ -16,19 +16,19 @@ end
 
 When(/^I fill out Order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
-  fill_in "order_start_date", with: table.hashes[0]["start_date"]
-  fill_in "order_end_date", with: table.hashes[0]["end_date"]
-  fill_in "order_note", with: table.hashes[0]["note"]
-  select table.hashes[0]["route"], from: "order_route_id"
-  select table.hashes[0]["client"], from: "order_client_id"
+  fill_in 'order_start_date', with: table.hashes[0]['start_date']
+  fill_in 'order_end_date', with: table.hashes[0]['end_date']
+  fill_in 'order_note', with: table.hashes[0]['note']
+  select table.hashes[0]['route'], from: 'order_route_id'
+  select table.hashes[0]['client'], from: 'order_client_id'
 end
 
 When(/^I fill out temporary order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
-  fill_in "order_start_date", with: table.hashes[0]["start_date"]
-  fill_in "order_note", with: table.hashes[0]["note"]
-  select table.hashes[0]["route"], from: "order_route_id"
-  select table.hashes[0]["client"], from: "order_client_id"
+  fill_in 'order_start_date', with: table.hashes[0]['start_date']
+  fill_in 'order_note', with: table.hashes[0]['note']
+  select table.hashes[0]['route'], from: 'order_route_id'
+  select table.hashes[0]['client'], from: 'order_client_id'
 end
 
 When(/^I am on the edit page for "(.*?)" order$/) do |name|
@@ -38,24 +38,24 @@ When(/^I am on the edit page for "(.*?)" order$/) do |name|
 end
 
 When(/^I fill out the order item form with:$/) do |table|
-  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
-  all('.monday_input').last.set(table.hashes[0]["monday"])
-  all('.tuesday_input').last.set(table.hashes[0]["tuesday"])
-  all('.wednesday_input').last.set(table.hashes[0]["wednesday"])
-  all('.thursday_input').last.set(table.hashes[0]["thursday"])
-  all('.friday_input').last.set(table.hashes[0]["friday"])
-  all('.saturday_input').last.set(table.hashes[0]["saturday"])
-  all('.sunday_input').last.set(table.hashes[0]["sunday"])
+  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
+  all('.monday_input').last.set(table.hashes[0]['monday'])
+  all('.tuesday_input').last.set(table.hashes[0]['tuesday'])
+  all('.wednesday_input').last.set(table.hashes[0]['wednesday'])
+  all('.thursday_input').last.set(table.hashes[0]['thursday'])
+  all('.friday_input').last.set(table.hashes[0]['friday'])
+  all('.saturday_input').last.set(table.hashes[0]['saturday'])
+  all('.sunday_input').last.set(table.hashes[0]['sunday'])
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|
-  all(:xpath, "//select").last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
-  all('.friday_input').last.set(table.hashes[0]["friday"])
+  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
+  all('.friday_input').last.set(table.hashes[0]['friday'])
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
   form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../../..")
-  form.find('a', text: "X").click
+  form.find('a', text: 'X').click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|

@@ -1,5 +1,3 @@
-require "faker"
-
 FactoryGirl.define do
   factory :price_varient do
     product

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe OrderItem do
   let(:order_item) { build(:order_item) }
 
-  it "has model attributes" do
+  it 'has model attributes' do
     expect(order_item).to respond_to(:product)
     expect(order_item).to respond_to(:order)
     expect(order_item).to respond_to(:monday)
@@ -15,19 +15,19 @@ describe OrderItem do
     expect(order_item).to respond_to(:sunday)
   end
 
-  it "has days of week default to 0" do
+  it 'has days of week default to 0' do
     order_item = build(:order_item, monday: nil)
     expect(order_item.monday).to eq(nil)
     order_item.save
     expect(order_item.monday).to eq(0)
   end
 
-  it "has association" do
+  it 'has association' do
     expect(order_item).to belong_to(:order)
     expect(order_item).to belong_to(:product)
   end
 
-  it "has validations" do
+  it 'has validations' do
     expect(order_item).to validate_numericality_of(:monday)
     expect(order_item).to validate_numericality_of(:tuesday)
     expect(order_item).to validate_numericality_of(:wednesday)
@@ -66,7 +66,7 @@ describe OrderItem do
   end
 
   describe '#quantity' do
-    it "returns the quantity ordered on a date" do
+    it 'returns the quantity ordered on a date' do
       order_item = OrderItem.new(monday: 4)
       monday = Date.parse('16/02/2015')
       expect(order_item.quantity(monday)).to eq(order_item.monday)
@@ -75,7 +75,7 @@ describe OrderItem do
 
   context '#total_quantity_price' do
     it 'calculates total quantity price for an order item' do
-      apple = create(:product, name: "Apple", base_price: 0.5)
+      apple = create(:product, name: 'Apple', base_price: 0.5)
       create(:price_varient, product: apple, quantity: 11, effective_date: (Date.today - 6), price: 0.4)
       create(:price_varient, product: apple, quantity: 10, effective_date: Date.today, price: 0.2)
       create(:price_varient, product: apple, quantity: 12, effective_date: (Date.today - 2), price: 0.3)

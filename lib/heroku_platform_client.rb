@@ -31,7 +31,7 @@ class HerokuPlatformClient
   end
 
   def run(cmd)
-    cmdstr = { attach: "true", command: cmd }.to_json
+    cmdstr = { attach: 'true', command: cmd }.to_json
     opt = {
       body: cmdstr,
       headers: { 'Content-Type' => 'application/json' }

@@ -8,11 +8,11 @@ FactoryGirl.define do
 
   sequence :route_name do |n|
     routes = [
-      "Uptown",
-      "Downtown",
-      "East Side",
-      "West Side",
-      "Midtown"
+      'Uptown',
+      'Downtown',
+      'East Side',
+      'West Side',
+      'Midtown'
     ]
 
     "#{routes.sample} #{n}"

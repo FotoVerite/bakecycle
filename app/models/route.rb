@@ -10,10 +10,10 @@ class Route < ActiveRecord::Base
   validates :bakery, presence: true
 
   def formatted_time
-    departure_time.strftime("%I:%M %p")
+    departure_time.strftime('%I:%M %p')
   end
 
   def active?
-    active ? "Yes" : "No"
+    active ? 'Yes' : 'No'
   end
 end

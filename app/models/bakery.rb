@@ -9,7 +9,7 @@ class Bakery < ActiveRecord::Base
   has_many :users
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
-  has_attached_file :logo, styles: { invoice: "1800x200>", thumb: "300x200>" }
+  has_attached_file :logo, styles: { invoice: '1800x200>', thumb: '300x200>' }
   validates_attachment :logo, content_type: { content_type: /^image\/(jpeg|png|tiff|bmp)$/ }
 
   def logo_local_file(style = logo.default_style)
