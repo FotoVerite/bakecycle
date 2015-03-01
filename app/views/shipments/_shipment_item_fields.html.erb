@@ -2,7 +2,7 @@
   <div class="row collapse">
     <div class="small-12 large-3 columns">
       <%= f.label :product_id, "Product", class: "hide-for-large-up" %>
-      <%= f.input :product_id, collection: item_finder.products, label: false, include_blank: "--None--", as: :select %>
+      <%= f.input :product_id, collection: shipment.available_products, label: false, include_blank: "--None--", as: :select %>
     </div>
     <div class="small-12 large-3 columns">
       <%= f.label :product_quantity, "Quantity", class: "hide-for-large-up" %>
