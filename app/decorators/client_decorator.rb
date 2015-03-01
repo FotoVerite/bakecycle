@@ -2,11 +2,11 @@ class ClientDecorator < Draper::Decorator
   delegate_all
 
   def active_status
-    active ? "Yes" : "No"
+    active ? 'Yes' : 'No'
   end
 
   def charge_delivery_fee_status
-    charge_delivery_fee ? "Yes" : "No"
+    charge_delivery_fee ? 'Yes' : 'No'
   end
 
   def billing
@@ -14,7 +14,7 @@ class ClientDecorator < Draper::Decorator
   end
 
   def dba_display
-    return "N/A" unless dba.present?
+    return 'N/A' unless dba.present?
     dba
   end
 end

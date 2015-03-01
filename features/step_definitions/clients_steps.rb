@@ -19,33 +19,33 @@ Then(/^I should not see clients "(.*?)" and "(.*?)"$/) do |client1, client2|
 end
 
 When(/^I fill out Client form with valid data$/) do
-  fill_in "client_name", with: "Test"
-  fill_in "client_dba", with: "text"
-  fill_in "client_business_phone", with: "text"
-  fill_in "client_business_fax", with: "text"
-  fill_in "client_delivery_address_street_1", with: "text"
-  fill_in "client_delivery_address_street_2", with: "text"
-  fill_in "client_delivery_address_city", with: "text"
-  fill_in "client_delivery_address_state", with: "text"
-  fill_in "client_delivery_address_zipcode", with: "text"
-  fill_in "client_billing_address_street_1", with: "text"
-  fill_in "client_billing_address_street_2", with: "text"
-  fill_in "client_billing_address_city", with: "text"
-  fill_in "client_billing_address_state", with: "text"
-  fill_in "client_billing_address_zipcode", with: "text"
-  fill_in "client_accounts_payable_contact_name", with: "text"
-  fill_in "client_accounts_payable_contact_phone", with: "text"
-  fill_in "client_accounts_payable_contact_email", with: "text@email.com"
-  fill_in "client_primary_contact_name", with: "text"
-  fill_in "client_primary_contact_phone", with: "text"
-  fill_in "client_primary_contact_email", with: "text@email.com"
-  fill_in "client_secondary_contact_name", with: "text"
-  fill_in "client_secondary_contact_phone", with: "text"
-  fill_in "client_secondary_contact_email", with: "text@email.com"
-  choose "client_active_true"
-  choose "client_charge_delivery_fee_true"
-  fill_in "client_delivery_minimum", with: "310.00"
-  fill_in "client_delivery_fee", with: "20.85"
+  fill_in 'client_name', with: 'Test'
+  fill_in 'client_dba', with: 'text'
+  fill_in 'client_business_phone', with: 'text'
+  fill_in 'client_business_fax', with: 'text'
+  fill_in 'client_delivery_address_street_1', with: 'text'
+  fill_in 'client_delivery_address_street_2', with: 'text'
+  fill_in 'client_delivery_address_city', with: 'text'
+  fill_in 'client_delivery_address_state', with: 'text'
+  fill_in 'client_delivery_address_zipcode', with: 'text'
+  fill_in 'client_billing_address_street_1', with: 'text'
+  fill_in 'client_billing_address_street_2', with: 'text'
+  fill_in 'client_billing_address_city', with: 'text'
+  fill_in 'client_billing_address_state', with: 'text'
+  fill_in 'client_billing_address_zipcode', with: 'text'
+  fill_in 'client_accounts_payable_contact_name', with: 'text'
+  fill_in 'client_accounts_payable_contact_phone', with: 'text'
+  fill_in 'client_accounts_payable_contact_email', with: 'text@email.com'
+  fill_in 'client_primary_contact_name', with: 'text'
+  fill_in 'client_primary_contact_phone', with: 'text'
+  fill_in 'client_primary_contact_email', with: 'text@email.com'
+  fill_in 'client_secondary_contact_name', with: 'text'
+  fill_in 'client_secondary_contact_phone', with: 'text'
+  fill_in 'client_secondary_contact_email', with: 'text@email.com'
+  choose 'client_active_true'
+  choose 'client_charge_delivery_fee_true'
+  fill_in 'client_delivery_minimum', with: '310.00'
+  fill_in 'client_delivery_fee', with: '20.85'
 end
 
 Then(/^the client "(.*?)" should not be present$/) do |client_name|
@@ -60,7 +60,7 @@ When(/^I am on the edit page for "(.*?)" client$/) do |name|
 end
 
 When(/^I change the client name to "(.*?)"$/) do |name|
-  fill_in "client_name", with: name
+  fill_in 'client_name', with: name
 end
 
 When(/^I am on the view page for "(.*?)"$/) do |name|

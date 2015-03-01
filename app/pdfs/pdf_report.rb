@@ -35,6 +35,6 @@ class PdfReport < Prawn::Document
       start_count_at: 1,
       size: 8
     }
-    number_pages "Page <page> of <total>", options
+    number_pages 'Page <page> of <total>', options
   end
 end

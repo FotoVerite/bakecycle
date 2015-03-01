@@ -7,8 +7,8 @@ class DailyTotalsController < ApplicationController
 
   def print
     pdf = DailyTotalPdf.new(date_query)
-    pdf_name = "dailytotal.pdf"
-    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+    pdf_name = 'dailytotal.pdf'
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   private

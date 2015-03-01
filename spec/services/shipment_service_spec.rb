@@ -1,8 +1,8 @@
-require "rails_helper"
+require 'rails_helper'
 
 describe ShipmentService do
-  context "creates shipments" do
-    it "creates shipments for orders and dates where the production date is today" do
+  context 'creates shipments' do
+    it 'creates shipments for orders and dates where the production date is today' do
       order = create(:order, start_date: Date.today, lead_time: 2)
       ShipmentService.run
       expect(Shipment.count).to eq(2)
@@ -18,8 +18,8 @@ describe ShipmentService do
     end
   end
 
-  describe ".ship_order" do
-    it "creates a shipment for an order" do
+  describe '.ship_order' do
+    it 'creates a shipment for an order' do
       order = create(:order)
       date = Date.today
       shipment = ShipmentService.ship_order(order, date)
@@ -31,7 +31,7 @@ describe ShipmentService do
       expect(shipment.date).to eq(date)
     end
 
-    it "copies order items into shipment items" do
+    it 'copies order items into shipment items' do
       order = create(:order, order_item_count: 1)
       order_item = order.order_items.first
       date = Date.today

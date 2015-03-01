@@ -3,6 +3,6 @@ Given(/^There is a user with email "(.*?)" and password "(.*?)"$/) do |email, pa
 end
 
 When(/^I fill in user form with:$/) do |table|
-  fill_in "user_email", with: table.hashes[0]["email"]
-  fill_in "user_password", with: table.hashes[0]["password"]
+  fill_in 'user_email', with: table.hashes[0]['email']
+  fill_in 'user_password', with: table.hashes[0]['password']
 end

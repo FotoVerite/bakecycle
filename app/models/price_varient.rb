@@ -6,6 +6,6 @@ class PriceVarient < ActiveRecord::Base
   validates :effective_date, presence: true, uniqueness:
             {
               scope: [:quantity, :product],
-              message: "and quantity already exist for this product, try a different date"
+              message: 'and quantity already exist for this product, try a different date'
             }
 end

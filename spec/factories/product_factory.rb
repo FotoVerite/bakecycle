@@ -28,14 +28,14 @@ FactoryGirl.define do
 
   sequence :product_name do |n|
     products = [
-      "Almond Butter Cookie",
-      "Almond Cookie",
-      "Almond Croissant",
-      "Croissant",
-      "Apple Butter Scone",
-      "Pear Danish",
-      "Apple Cinnamon Muffin",
-      "Apple Pumpkin Muffin"
+      'Almond Butter Cookie',
+      'Almond Cookie',
+      'Almond Croissant',
+      'Croissant',
+      'Apple Butter Scone',
+      'Pear Danish',
+      'Apple Cinnamon Muffin',
+      'Apple Pumpkin Muffin'
     ]
 
     "#{products.sample} #{n}"

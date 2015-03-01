@@ -1,5 +1,3 @@
-require "faker"
-
 FactoryGirl.define do
   factory :shipment_item do
     shipment

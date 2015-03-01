@@ -1,9 +1,9 @@
-require "rails_helper"
+require 'rails_helper'
 
 describe Client do
   let(:client) { build(:client) }
 
-  it "has model attributes" do
+  it 'has model attributes' do
     expect(client).to respond_to(:name)
     expect(client).to respond_to(:dba)
     expect(client).to respond_to(:business_phone)
@@ -33,11 +33,11 @@ describe Client do
     expect(client).to respond_to(:delivery_fee)
   end
 
-  it "has association" do
+  it 'has association' do
     expect(client).to belong_to(:bakery)
   end
 
-  it "has validations" do
+  it 'has validations' do
     expect(client).to validate_presence_of(:name)
     expect(client).to ensure_length_of(:name).is_at_most(150)
     expect(client).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
@@ -65,55 +65,55 @@ describe Client do
     expect(client).to validate_numericality_of(:delivery_fee)
   end
 
-  it "can have same name if are apart of different bakeries" do
+  it 'can have same name if are apart of different bakeries' do
     biencuit = create(:bakery)
-    client_name = "Grumpy Cafe"
+    client_name = 'Grumpy Cafe'
     create(:client, name: client_name, bakery: biencuit)
     expect(create(:client, name: client_name)).to be_valid
   end
 
-  it "requires accounts_payable_contact_email to have an @ symbol" do
-    expect(build(:client, accounts_payable_contact_email: "not an email")).to_not be_valid
-    expect(build(:client, accounts_payable_contact_email: "user@example.com")).to be_valid
+  it 'requires accounts_payable_contact_email to have an @ symbol' do
+    expect(build(:client, accounts_payable_contact_email: 'not an email')).to_not be_valid
+    expect(build(:client, accounts_payable_contact_email: 'user@example.com')).to be_valid
   end
 
-  it "requires primary_contact_email to have an @ symbol" do
-    expect(build(:client, primary_contact_email: "not an email")).to_not be_valid
-    expect(build(:client, primary_contact_email: "user@example.com")).to be_valid
+  it 'requires primary_contact_email to have an @ symbol' do
+    expect(build(:client, primary_contact_email: 'not an email')).to_not be_valid
+    expect(build(:client, primary_contact_email: 'user@example.com')).to be_valid
   end
 
-  it "client active should never be nil" do
+  it 'client active should never be nil' do
     client.active = nil
     expect(client).to_not be_valid
   end
 
-  it "delivery fee should never be nil" do
+  it 'delivery fee should never be nil' do
     client.delivery_fee = nil
     expect(client).to_not be_valid
   end
 
-  it "delivery minimum should never be nil" do
+  it 'delivery minimum should never be nil' do
     client.delivery_minimum = nil
     expect(client).to_not be_valid
   end
 
-  it "is not a number" do
-    expect(build(:client, delivery_minimum: "not a number")).to_not be_valid
-    expect(build(:client, delivery_fee: "not a number")).to_not be_valid
+  it 'is not a number' do
+    expect(build(:client, delivery_minimum: 'not a number')).to_not be_valid
+    expect(build(:client, delivery_fee: 'not a number')).to_not be_valid
   end
 
-  describe ".billing_term_days" do
-    it "reads billing_term from client and returns an integer" do
+  describe '.billing_term_days' do
+    it 'reads billing_term from client and returns an integer' do
       client = build(:client, billing_term: :net_30)
       expect(client.billing_term_days).to eq(30)
 
-      client.billing_term = "cod"
+      client.billing_term = 'cod'
       expect(client.billing_term_days).to eq(0)
 
       client.billing_term = :credit_card
       expect(client.billing_term_days).to eq(0)
 
-      client.billing_term = "net_7"
+      client.billing_term = 'net_7'
       expect(client.billing_term_days).to eq(7)
     end
   end

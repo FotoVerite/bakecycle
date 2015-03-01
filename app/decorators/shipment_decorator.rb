@@ -16,7 +16,7 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def auto_generated?
-    auto_generated ? "Yes" : "No"
+    auto_generated ? 'Yes' : 'No'
   end
 
   def price

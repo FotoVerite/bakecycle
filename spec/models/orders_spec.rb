@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 describe Order do
   let(:order) { build(:order) }
@@ -7,7 +7,7 @@ describe Order do
   let(:tomorrow) { Date.today + 1.day }
   let(:next_week) { Date.today + 1.week }
 
-  it "has model attributes" do
+  it 'has model attributes' do
     expect(order).to respond_to(:client)
     expect(order).to respond_to(:route)
     expect(order).to respond_to(:start_date)
@@ -20,7 +20,7 @@ describe Order do
     expect(order).to belong_to(:route)
   end
 
-  it "has validations" do
+  it 'has validations' do
     expect(order).to validate_presence_of(:client)
     expect(order).to validate_presence_of(:route)
     expect(order).to validate_presence_of(:start_date)
@@ -28,16 +28,16 @@ describe Order do
     expect(order).to validate_presence_of(:order_type)
   end
 
-  context "date validations" do
-    it "is invalid if the end date is before the start date" do
+  context 'date validations' do
+    it 'is invalid if the end date is before the start date' do
       order.start_date = today
       order.end_date = yesterday
       expect(order).to_not be_valid
       expect(order.errors[:end_date].count).to be > 0
     end
 
-    describe "#standing_order_date_can_not_overlap" do
-      it "is invalid if two orders overlap" do
+    describe '#standing_order_date_can_not_overlap' do
+      it 'is invalid if two orders overlap' do
         order = create(:order, start_date: today)
         overlaping_order = build(:order, route: order.route, client: order.client, start_date: today)
         expect(overlaping_order).to_not be_valid
@@ -45,8 +45,8 @@ describe Order do
       end
     end
 
-    describe "#set_end_date" do
-      it "has a starting_date that ends on the same day" do
+    describe '#set_end_date' do
+      it 'has a starting_date that ends on the same day' do
         temp_order = build(:temporary_order)
         temp_order.valid?
         expect(temp_order.start_date).to eq(temp_order.end_date)
@@ -54,8 +54,8 @@ describe Order do
     end
   end
 
-  describe "#lead_time" do
-    it "returns lead time for order items" do
+  describe '#lead_time' do
+    it 'returns lead time for order items' do
       motherdough = create(:recipe_motherdough, lead_days: 5)
       inclusion = create(:recipe_inclusion, lead_days: 3)
       product_1 = create(:product, inclusion: inclusion)
@@ -69,8 +69,8 @@ describe Order do
     end
   end
 
-  describe "#overlapping?" do
-    it "returns true if there is an existing overlapping order for the same client and route" do
+  describe '#overlapping?' do
+    it 'returns true if there is an existing overlapping order for the same client and route' do
       client = create(:client)
       route = create(:route)
       create(:order, start_date: today, end_date: tomorrow, route: route, client: client)
@@ -100,7 +100,7 @@ describe Order do
       end
     end
 
-    it "returns true if there is an existing overlapping order for the same client and route with no end date" do
+    it 'returns true if there is an existing overlapping order for the same client and route with no end date' do
       client = create(:client)
       route = create(:route)
       create(:order, start_date: today, end_date: nil, route: route, client: client)
@@ -125,7 +125,7 @@ describe Order do
       end
     end
 
-    it "returns false if there are overlapping orders for other clients and temporary orders" do
+    it 'returns false if there are overlapping orders for other clients and temporary orders' do
       order = build(:order, start_date: today, end_date: today)
       create(:temporary_order, route: order.route, client: order.client, start_date: today)
       create(:order, route: order.route, start_date: today)
@@ -133,14 +133,14 @@ describe Order do
       expect(order).to_not be_overlapping
     end
 
-    it "returns false if it overlaps with itself" do
+    it 'returns false if it overlaps with itself' do
       order = create(:order, start_date: today, end_date: today)
       expect(order).to_not be_overlapping
     end
   end
 
-  describe ".temporary" do
-    it "returns all temporary orders on a date" do
+  describe '.temporary' do
+    it 'returns all temporary orders on a date' do
       temp_order = create(:temporary_order, start_date: today)
       create(:temporary_order, start_date: today + 1.day)
       create(:order)
@@ -149,8 +149,8 @@ describe Order do
     end
   end
 
-  describe ".standing" do
-    it "returns all standing orders active on a day" do
+  describe '.standing' do
+    it 'returns all standing orders active on a day' do
       order = create(:order, start_date: today, end_date: today)
       order2 = create(:order, start_date: yesterday, end_date: today + 1.day)
       order3 = create(:order, start_date: yesterday, end_date: nil)
@@ -161,8 +161,8 @@ describe Order do
     end
   end
 
-  describe ".active" do
-    it "returns all active orders for a client and date" do
+  describe '.active' do
+    it 'returns all active orders for a client and date' do
       order = create(:order, start_date: yesterday)
       client = order.client
       temp_order = create(:temporary_order, start_date: today, client: client, route: order.route)

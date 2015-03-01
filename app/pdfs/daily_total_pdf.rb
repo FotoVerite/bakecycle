@@ -27,13 +27,13 @@ class DailyTotalPdf < Prawn::Document
 
   def header_left
     bounding_box([bounds.left, bounds.top], width: (bounds.width / 2.0)) do
-      text "Daily Totals", size: 20, align: :left
+      text 'Daily Totals', size: 20, align: :left
     end
   end
 
   def header_right
     bounding_box([288, bounds.top], width: (bounds.width / 2.0)) do
-      text @recipes.date.strftime("%a %b. %e, %Y"), size: 20, align: :right
+      text @recipes.date.strftime('%a %b. %e, %Y'), size: 20, align: :right
     end
   end
 
@@ -59,7 +59,7 @@ class DailyTotalPdf < Prawn::Document
             start_count_at: 1,
             size: 8
     }
-    number_pages "Page <page> of <total>", options
+    number_pages 'Page <page> of <total>', options
   end
 
   def body

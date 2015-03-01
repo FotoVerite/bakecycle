@@ -14,7 +14,7 @@ class Order < ActiveRecord::Base
   validates :client, :client_id, presence: true
   validates :start_date, presence: true
   validate  :end_date_is_not_before_start_date
-  validates :order_items, presence: { message: "You must choose a product before saving" }
+  validates :order_items, presence: { message: 'You must choose a product before saving' }
   validates :order_type, presence: true, inclusion: %w(standing temporary)
   validates :bakery, presence: true
   validate  :standing_order_date_can_not_overlap
@@ -46,7 +46,7 @@ class Order < ActiveRecord::Base
   end
 
   def standing_order_date_can_not_overlap
-    errors.add(:start_date, "This order overlaps with at least one other") if overlapping?
+    errors.add(:start_date, 'This order overlaps with at least one other') if overlapping?
   end
 
   def overlapping?
@@ -62,11 +62,11 @@ class Order < ActiveRecord::Base
   end
 
   def temporary?
-    order_type == "temporary"
+    order_type == 'temporary'
   end
 
   def standing?
-    order_type == "standing"
+    order_type == 'standing'
   end
 
   def lead_time

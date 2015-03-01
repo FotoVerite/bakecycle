@@ -25,6 +25,8 @@ Style/IndentHash:
   Enabled: false
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
 Metrics/LineLength:
   Max: 120
 Metrics/MethodLength:
