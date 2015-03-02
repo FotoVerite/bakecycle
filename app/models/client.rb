@@ -10,20 +10,27 @@ class Client < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :dba, length: { maximum: 150 }
   validates :business_phone, presence: true
+
   validates :delivery_address_street_1, presence: true
   validates :delivery_address_city, presence: true
   validates :delivery_address_state, presence: true
   validates :delivery_address_zipcode, presence: true
+
   validates :billing_address_street_1, presence: true
   validates :billing_address_city, presence: true
   validates :billing_address_state, presence: true
   validates :billing_address_zipcode, presence: true
+
   validates :accounts_payable_contact_name, presence: true, length: { maximum: 150 }
   validates :accounts_payable_contact_phone, presence: true
   validates :accounts_payable_contact_email, presence: true, format: { with: /\A.+@.+\..+\z/ }
+
   validates :primary_contact_name, presence: true, length: { maximum: 150 }
   validates :primary_contact_phone, presence: true
   validates :primary_contact_email, presence: true, format: { with: /\A.+@.+\..+\z/ }
+  validates :secondary_contact_name, length: { maximum: 150 }
+  validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }
+
   validates :active, inclusion: [true, false]
   validates :billing_term, presence: true
   validates :bakery, presence: true
@@ -32,7 +39,7 @@ class Client < ActiveRecord::Base
   validates :delivery_fee, presence: true, numericality: true, if: :delivery_fee?
 
   geocoded_by :full_delivery_address
-  after_validation :geocode
+  after_validation :geocode, if: :needs_geocode?
 
   def delivery_fee?
     !no_delivery_fee?
@@ -40,6 +47,15 @@ class Client < ActiveRecord::Base
 
   def full_delivery_address
     "#{delivery_address_street_1} #{delivery_address_street_2} #{delivery_address_city} #{delivery_address_state}"
+  end
+
+  def needs_geocode?
+    changed = delivery_address_street_1_changed?
+    changed ||= delivery_address_street_2_changed?
+    changed ||= delivery_address_city_changed?
+    changed ||= delivery_address_state_changed?
+
+    changed || latitude.nil? || longitude.nil?
   end
 
   def billing_term_days

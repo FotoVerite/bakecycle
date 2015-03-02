@@ -69,9 +69,11 @@ ActiveRecord::Schema.define(version: 20150323005402) do
     t.integer  "delivery_fee_option",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string  "legacy_id"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
+  add_index "clients", ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "ingredients", force: true do |t|
