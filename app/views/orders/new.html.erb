@@ -1,7 +1,9 @@
+<% provide(:title, "New Order") %>
+
+<h1>New Order</h1>
+
+<%= link_to 'Back', orders_path %>
+
 <div ng-controller="OrderCtrl" ng-init="order=<%= @order.to_json %>">
-  <h1>New Order</h1>
-  <%= link_to 'Back', orders_path %>
-
   <%= render "form"%>
-
 </div>

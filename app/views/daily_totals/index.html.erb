@@ -1,3 +1,5 @@
+<% provide(:title, "Daily Totals - #{@recipes.date.strftime('%A %b. %e, %Y')}") %>
+
 <h1>Daily Totals &mdash; <%= @recipes.date.strftime("%A %b. %e, %Y") %></h1>
 
 <%= simple_form_for :search, method: :get do |f| %>

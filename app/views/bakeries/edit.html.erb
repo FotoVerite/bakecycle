@@ -1,3 +1,5 @@
+<% provide(:title, "Editing Bakery: #{@bakery.name}") %>
+
 <h1>Editing Bakery: <%= @bakery.name %></h1>
 
 <% if can? :manage, Bakery %>
