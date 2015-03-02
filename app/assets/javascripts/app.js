@@ -83,5 +83,5 @@ app.controller('mapCtrl', [ '$window', '$scope', function ($window, $scope) {
       timeout = setTimeout(later, wait);
       if (callNow) func.apply(context, args);
     };
-  };
+  }
 }]);
