@@ -1,7 +1,8 @@
 <% if current_user %>
+  <% provide(:title, "Dashboard") %>
   <div class="dashboard">
+    <h1>Dashboard</h1>
     <div class="row">
-      <% if current_bakery %>
         <div class="large-4 medium-6 small-12 columns">
           <div class="stats border">
             <div class="left">
@@ -83,7 +84,6 @@
             <div class="clearfix"></div>
           </div>
         </div>
-      <% end %>
       <% if can? :manage, Bakery %>
         <div class="large-4 medium-6 small-12 columns end">
           <div class="stats border">
@@ -100,14 +100,13 @@
   </div>
 <% else %>
   <div class="centered-text">
-
-  <div class="welcome-panel">
-    <div class="panel-heading">
-      <h1 class="panel-title">Welcome to BakeCycle</h1>
+    <div class="welcome-panel">
+      <div class="panel-heading">
+        <h1 class="panel-title">Welcome to BakeCycle</h1>
+      </div>
+      <div class="panel-body">
+        <%= link_to('Login', new_user_session_path, class: "large button full-width login-button") %>
+      </div>
     </div>
-    <div class="panel-body">
-      <%= link_to('Login', new_user_session_path, class: "large button full-width login-button") %>
-    </div>
-  </div>
   </div>
 <% end %>

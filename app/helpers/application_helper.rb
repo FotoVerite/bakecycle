@@ -12,4 +12,10 @@ module ApplicationHelper
     return link_to('Bakeries', bakeries_path) if can? :manage, Bakery
     link_to('My Bakery', my_bakeries_path)
   end
+
+  def full_title(page_title = nil)
+    base_title = 'Bakecycle'
+    return base_title if page_title.empty?
+    "#{page_title} - #{base_title}"
+  end
 end

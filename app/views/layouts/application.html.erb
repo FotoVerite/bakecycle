@@ -3,9 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title><%= content_for?(:title) ? yield(:title) : "Bakecycle" %></title>
-
+    <title><%= full_title(yield(:title)) %></title>
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
@@ -19,7 +17,7 @@
         <%= render 'layouts/topmenusection' %>
         <div class="row">
           <% if user_signed_in? %>
-          <%= render 'layouts/sidenav' %>
+            <%= render 'layouts/sidenav' %>
           <% end %>
           <div class= "<%= class_for_main_content %>">
             <% flash.each do |name, msg| %>
