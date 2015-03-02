@@ -6,12 +6,6 @@ describe RecipeService do
   let(:bakery) { create(:bakery) }
   let(:recipe_service) { RecipeService.new(today) }
 
-  describe '#new' do
-    it 'takes date parameter and returns a RecipeService object' do
-      expect(recipe_service).to be_an_instance_of RecipeService
-    end
-  end
-
   describe '#date' do
     it 'returns date' do
       expect(recipe_service.date).to eq(today)
