@@ -1,10 +1,14 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
+  before_action :access_search_form, only: [:index, :invoices]
   load_and_authorize_resource
   decorates_assigned :shipments, :shipment
 
-  def index
+  def access_search_form
     @search_form = ShipmentSearchForm.new(search_params)
+  end
+
+  def index
     @shipments = @shipments.search(@search_form).paginate(page: params[:page])
   end
 
@@ -19,8 +23,7 @@ class ShipmentsController < ApplicationController
   end
 
   def invoices
-    search_form = ShipmentSearchForm.new(search_params)
-    @shipments = @shipments.search(search_form).includes(:shipment_items, :bakery)
+    @shipments = @shipments.search(@search_form).includes(:shipment_items, :bakery)
     pdf = InvoicesPdf.new(@shipments.decorate)
     pdf_name = 'invoices.pdf'
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
