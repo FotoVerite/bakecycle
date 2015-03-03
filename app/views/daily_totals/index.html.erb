@@ -13,25 +13,31 @@
   </div>
 <% end %>
 
-<h2><%= pluralize(@recipes.shipments.count, "Shipment") %> on the following Routes</h2>
+<% if @recipes.routes.any? %>
+  <h2><%= pluralize(@recipes.shipments.count, "Shipment") %> on the following Routes</h2>
 
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Route</th>
-      <th scope="col">Time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @recipes.routes.each do |route| %>
+
+  <table class="responsive-table">
+    <thead>
       <tr>
-        <td scope="row"><%= route.name %></td>
-        <td>
-          <%= route.departure_time.strftime("%I:%M%p") %>
-        </td>
+        <th scope="col">Route</th>
+        <th scope="col">Time</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @recipes.routes.each do |route| %>
+        <tr>
+          <th scope="row"><%= route.name %></th>
+          <td data-title="Departure Time">
+            <%= route.departure_time.strftime("%I:%M%p") %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to("Generate Daily Totals", print_daily_total_path(@recipes.date.strftime("%Y-%m-%d")), class: 'button', target: '_blank') %>
+  <%= link_to("Generate Daily Totals", print_daily_total_path(@recipes.date.strftime("%Y-%m-%d")), class: 'button', target: '_blank') %>
+
+<% else %>
+  <h2>No daily totals for this date.</h2>
+<% end %>

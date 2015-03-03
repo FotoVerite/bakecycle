@@ -37,4 +37,16 @@ class PdfReport < Prawn::Document
     }
     number_pages 'Page <page> of <total>', options
   end
+
+  def printed_today
+    "Printed at #{current_date} at#{current_time}"
+  end
+
+  def current_date
+    Date.today.strftime('%A %B %e, %Y')
+  end
+
+  def current_time
+    Time.now.strftime('%l:%M%P')
+  end
 end

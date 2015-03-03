@@ -1,12 +1,13 @@
 class RecipeService
-  attr_reader :date
+  attr_reader :date, :bakery
 
-  def initialize(date)
+  def initialize(date, bakery)
+    @bakery = bakery
     @date = date
   end
 
   def shipments
-    @_shipments ||= Shipment.search_by_date(date)
+    @_shipments ||= Shipment.search_by_date(date).where(bakery: bakery)
   end
 
   def shipment_items
@@ -25,6 +26,11 @@ class RecipeService
     @_routes ||= Route.where(id: shipments.pluck(:route_id)).order('departure_time ASC')
   end
 
+  def route_shipment_clients(route)
+    clients_id = route.shipments.pluck(:client_id).uniq
+    Client.where(id: clients_id, bakery: bakery).decorate
+  end
+
   def product_counts
     return @_product_counts if @_product_counts
     @_product_counts = shipment_items.each_with_object({}) do |item, count|
@@ -34,6 +40,10 @@ class RecipeService
       count[product_id][route_id] += item.product_quantity
       count[product_id][:total] += item.product_quantity
     end
+  end
+
+  def date_formatted
+    date.strftime('%a %b. %e, %Y')
   end
 
   private

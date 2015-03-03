@@ -21,6 +21,8 @@ describe Shipment do
     expect(shipment).to respond_to(:client_billing_address_street_1)
     expect(shipment).to respond_to(:client_billing_address_city)
     expect(shipment).to respond_to(:client_billing_term_days)
+    expect(shipment).to respond_to(:client_primary_contact_name)
+    expect(shipment).to respond_to(:client_primary_contact_phone)
     expect(shipment).to respond_to(:note)
   end
 
@@ -44,6 +46,8 @@ describe Shipment do
     expect(shipment).to validate_presence_of(:client_billing_address_street_1)
     expect(shipment).to validate_presence_of(:client_billing_address_city)
     expect(shipment).to validate_presence_of(:client_billing_term_days)
+    expect(shipment).to validate_presence_of(:client_primary_contact_name)
+    expect(shipment).to validate_presence_of(:client_primary_contact_phone)
     expect(shipment).to validate_numericality_of(:delivery_fee)
   end
 
@@ -181,7 +185,9 @@ describe Shipment do
         :billing_address_street_2,
         :billing_address_city,
         :billing_address_state,
-        :billing_address_zipcode
+        :billing_address_zipcode,
+        :primary_contact_name,
+        :primary_contact_phone
       ]
 
       fields.each do |field|

@@ -1,21 +1,13 @@
-class DailyTotalPdf < Prawn::Document
-  HEADER_ROW_COLOR = 'b9b9b9'
+class DailyTotalPdf < PdfReport
+  def initialize(date, bakery)
+    @recipes = RecipeService.new(date, bakery)
+    super()
+  end
 
-  def initialize(date)
-    super(pdf_margins)
-    @recipes = RecipeService.new(date)
-    setup_grid
+  def setup
     header
     body
     footer
-  end
-
-  def setup_grid
-    define_grid(columns: 12, rows: 12, gutter: 8)
-  end
-
-  def pdf_margins
-    { margin: [20, 20, 20, 20] }
   end
 
   def header
@@ -33,33 +25,21 @@ class DailyTotalPdf < Prawn::Document
 
   def header_right
     bounding_box([288, bounds.top], width: (bounds.width / 2.0)) do
-      text @recipes.date.strftime('%a %b. %e, %Y'), size: 20, align: :right
+      text @recipes.date_formatted, size: 20, align: :right
     end
   end
 
   def footer
-    number_pages_settings
+    number_of_pages
     footer_right
   end
 
   def footer_right
     repeat :all do
       bounding_box([288, bounds.bottom + 10], width: (bounds.width / 2.0)) do
-        date = @recipes.date
-        text "Printed at #{date.strftime('%A %B %e, %Y')} at#{Time.now.strftime('%l:%M%P')}", size: 8, align: :right
+        text printed_today, size: 8, align: :right
       end
     end
-  end
-
-  def number_pages_settings
-    options = {
-            at: [bounds.left, bounds.bottom + 10],
-            width: bounds.width / 2.0,
-            align: :left,
-            start_count_at: 1,
-            size: 8
-    }
-    number_pages 'Page <page> of <total>', options
   end
 
   def body
@@ -80,7 +60,7 @@ class DailyTotalPdf < Prawn::Document
   end
 
   def column_width_sizes
-    item_name_column_width = 300.0
+    item_name_column_width = 180.0
 
     array = []
     columns = information_header[0].count
