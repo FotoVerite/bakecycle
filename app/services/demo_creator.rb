@@ -1,0 +1,223 @@
+# rubocop:disable Metrics/ClassLength
+class DemoCreator
+  def initialize(bakery)
+    @bakery = bakery
+  end
+
+  def run
+    create_multi_grain_loaf
+    create_nicoise_baguette
+    create_chive_pain_au_lait
+  end
+
+  def dark_rye_flour
+    @_dark_rye_flour ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'Dark Rye Flour',
+      price: 22.00,
+      measure: 40,
+      unit: :lb,
+      ingredient_type: :flour
+    )
+  end
+
+  def white_flour
+    @_white_flour ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'White Flour',
+      price: 1.10,
+      measure: 1,
+      unit: :kg,
+      ingredient_type: :flour
+    )
+  end
+
+  def whole_wheat_flour
+    @_whole_wheat_flour ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'Whole Wheat Flour',
+      price: 1.30,
+      measure: 1,
+      unit: :kg,
+      ingredient_type: :flour
+    )
+  end
+
+  def yeast
+    @_yeast ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'Yeast',
+      price: 75.00,
+      measure: 20,
+      unit: :lb,
+      ingredient_type: :ingredient
+    )
+  end
+
+  def water
+    @_water ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'Water',
+      price: 0.00,
+      measure: 0,
+      unit: :g,
+      ingredient_type: :ingredient
+    )
+  end
+
+  def nicoise_olives
+    @_nicoise_olives ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'Nicoise Olives',
+      price: 40.00,
+      measure: 1,
+      unit: :lb,
+      ingredient_type: :ingredient
+    )
+  end
+
+  def chives
+    @_chives ||= Ingredient.create!(
+      bakery: @bakery,
+      name: 'Chives',
+      price: 15.00,
+      measure: 1,
+      unit: :lb,
+      ingredient_type: :ingredient
+    )
+  end
+
+  def nicoise_olive_inclusion
+    @_nicoise_olive_inclusion ||= Recipe.create!(
+      bakery: @bakery,
+      recipe_type: :inclusion,
+      name: 'Nicoise Olives',
+      lead_days: 1,
+      recipe_items: [RecipeItem.create!(
+        bakers_percentage: 15,
+        inclusionable: nicoise_olives
+      )]
+    )
+  end
+
+  def dark_rye
+    @_dark_rype ||= Recipe.create!(
+      bakery: @bakery,
+      recipe_type: :inclusion,
+      name: 'Dark Rye',
+      lead_days: 2,
+      recipe_items: [RecipeItem.create!(
+        bakers_percentage: 1,
+        inclusionable: dark_rye_flour
+      )]
+    )
+  end
+
+  def chive_pain_au_lait_inclusion
+    Recipe.create!(
+      bakery: @bakery,
+      recipe_type: :inclusion,
+      name: 'Chive Pain au Lait',
+      lead_days: 1,
+      recipe_items: [RecipeItem.create!(
+        bakers_percentage: 2,
+        inclusionable: chives
+      )]
+    )
+  end
+
+  def multi_grain_dough
+    Recipe.create!(
+      bakery: @bakery,
+      recipe_type: :dough,
+      name: 'Multi-Grain',
+      mix_size: 12,
+      mix_size_unit: :kg,
+      lead_days: 2,
+      recipe_items: [
+        RecipeItem.create!(bakers_percentage: 80, inclusionable: white_flour),
+        RecipeItem.create!(bakers_percentage: 20, inclusionable: whole_wheat_flour),
+        RecipeItem.create!(bakers_percentage: 0.4, inclusionable: yeast),
+        RecipeItem.create!(bakers_percentage: 85, inclusionable: water)
+      ]
+    )
+  end
+
+  def baguette_dough
+    Recipe.create!(
+      bakery: @bakery,
+      recipe_type: :dough,
+      name: 'Baguette',
+      mix_size: 50,
+      mix_size_unit: :kg,
+      lead_days: 2,
+      recipe_items: [
+        RecipeItem.create!(bakers_percentage: 100, inclusionable: white_flour),
+        RecipeItem.create!(bakers_percentage: 0.4, inclusionable: yeast),
+        RecipeItem.create!(bakers_percentage: 40, inclusionable: water)
+      ]
+    )
+  end
+
+  def pain_au_lait_dough
+    Recipe.create!(
+      bakery: @bakery,
+      recipe_type: :dough,
+      name: 'Pain au Lait',
+      mix_size: 70,
+      mix_size_unit: :kg,
+      lead_days: 3,
+      recipe_items: [
+        RecipeItem.create!(bakers_percentage: 100, inclusionable: white_flour),
+        RecipeItem.create!(bakers_percentage: 2.2, inclusionable: yeast),
+        RecipeItem.create!(bakers_percentage: 30, inclusionable: water)
+      ]
+    )
+  end
+
+  def create_multi_grain_loaf
+    multi_grain_loaf = Product.create!(
+      bakery: @bakery,
+      name: 'Multi-Grain Loaf',
+      product_type: :bread,
+      description: 'A delicious loaf',
+      weight: 1200,
+      unit: :g,
+      extra_amount: 0,
+      base_price: 5.80,
+      motherdough: multi_grain_dough,
+      inclusion: dark_rye
+    )
+    PriceVarient.create!(product: multi_grain_loaf, price: 5.50, quantity: 10)
+  end
+
+  def create_nicoise_baguette
+    Product.create!(
+      bakery: @bakery,
+      name: 'Nicoise Baguette',
+      product_type: :bread,
+      description: 'The finest baguette',
+      weight: 50,
+      unit: :g,
+      extra_amount: 0,
+      base_price: 1.50,
+      motherdough: baguette_dough,
+      inclusion: nicoise_olive_inclusion
+    )
+  end
+
+  def create_chive_pain_au_lait
+    Product.create!(
+      bakery: @bakery,
+      name: 'Chive Pain Au Lait',
+      product_type: :bread,
+      weight: 40,
+      unit: :g,
+      extra_amount: 2,
+      base_price: 0.75,
+      motherdough: pain_au_lait_dough,
+      inclusion: chive_pain_au_lait_inclusion
+    )
+  end
+end
+# rubocop:enable Metrics/ClassLength

@@ -6,7 +6,6 @@ class Product < ActiveRecord::Base
   belongs_to :bakery
 
   has_many :price_varients
-  has_many :shipment_items
 
   accepts_nested_attributes_for :price_varients, allow_destroy: true
 
@@ -51,6 +50,13 @@ class Product < ActiveRecord::Base
     product_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
   end
 
+  def save(*args)
+    super
+  rescue ActiveRecord::RecordNotUnique
+    errors[:base] << 'Identical date and quantity already exist for this product, try a different date.'
+    false
+  end
+
   def price(quantity)
     return base_price if find_varients.empty?
     return base_price if quantity_varient(quantity).empty?
@@ -74,12 +80,5 @@ class Product < ActiveRecord::Base
     lead << inclusion.lead_days if inclusion
     lead << motherdough.lead_days if motherdough
     lead.max
-  end
-
-  def save(*args)
-    super
-  rescue ActiveRecord::RecordNotUnique
-    errors[:base] << 'Identical date and quantity already exist for this product, try a different date.'
-    false
   end
 end
