@@ -96,7 +96,6 @@ Feature: Products
     And I click on "Add New Price"
     And I click on "Create"
     Then "Quantity can't be blank" should be present
-    And "Effective date can't be blank" should be present
 
   @javascript
   Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
@@ -105,7 +104,6 @@ Feature: Products
     And I click on "Add New Price"
     And I click on "Update"
     Then "Quantity can't be blank" should be present
-    And "Effective date can't be blank" should be present
 
   @javascript
   Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors

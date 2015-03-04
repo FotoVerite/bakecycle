@@ -17,7 +17,8 @@ describe Recipe do
   end
 
   describe 'validations' do
-    it 'has a name' do
+    it 'has validations' do
+      expect(recipe).to validate_presence_of(:recipe_type)
       expect(recipe).to validate_presence_of(:name)
       expect(recipe).to ensure_length_of(:name).is_at_most(150)
       expect(recipe).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
@@ -61,13 +62,17 @@ describe Recipe do
     end
 
     describe 'mix_size_unit' do
-      it { expect(recipe).to validate_presence_of(:mix_size_unit) }
-      it { expect(build(:recipe, mix_size_unit: nil)).to_not be_valid }
-      it { expect(build(:recipe, mix_size_unit: 0)).to be_valid }
-    end
+      it 'is required when there is a mix_size' do
+        recipe = build(:recipe, mix_size: 1, mix_size_unit: :g)
+        expect(recipe).to be_valid
+        recipe.mix_size_unit = nil
+        expect(recipe).to_not be_valid
+      end
 
-    describe 'recipe_type' do
-      it { expect(recipe).to validate_presence_of(:recipe_type) }
+      it 'is not required when there is no mix size' do
+        recipe = build(:recipe, mix_size: nil, mix_size_unit: nil)
+        expect(recipe).to be_valid
+      end
     end
   end
 end

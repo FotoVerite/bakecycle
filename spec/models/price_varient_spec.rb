@@ -24,9 +24,5 @@ describe PriceVarient do
       expect(price_varient).to validate_numericality_of(:quantity)
       expect(price_varient).to validate_presence_of(:quantity)
     end
-
-    it 'has an effective date' do
-      expect(price_varient).to validate_presence_of(:effective_date)
-    end
   end
 end

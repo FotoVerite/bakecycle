@@ -14,8 +14,8 @@ class Ingredient < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
   validates :measure, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
-  validates :description, length: { maximum: 500 }
   validates :unit, presence: true
+  validates :description, length: { maximum: 500 }
   validates :ingredient_type, presence: true
   validates :bakery, presence: true
 
