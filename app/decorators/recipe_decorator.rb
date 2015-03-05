@@ -6,6 +6,8 @@ class RecipeDecorator < Draper::Decorator
   end
 
   def available_inclusions
-    h.item_finder.inclusionables
+    h.item_finder.inclusionables.delete_if do |item|
+      item[1] == "#{object.id}-#{object.class.name}"
+    end
   end
 end
