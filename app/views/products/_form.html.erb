@@ -6,7 +6,7 @@
     <div id="error_explanation">
       <ul>
         <% @product.errors.full_messages.each do |msg| %>
-          <% if msg == "Identical date and quantity already exist for this product, try a different date." %>
+          <% if msg == "Quantity must be unique" %>
             <li><%= msg %></li>
           <% end %>
         <% end %>

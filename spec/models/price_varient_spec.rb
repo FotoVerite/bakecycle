@@ -6,7 +6,6 @@ describe PriceVarient do
   it 'has model attributes' do
     expect(price_varient).to respond_to(:price)
     expect(price_varient).to respond_to(:quantity)
-    expect(price_varient).to respond_to(:effective_date)
     expect(price_varient).to belong_to(:product)
   end
 

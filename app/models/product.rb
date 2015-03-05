@@ -7,7 +7,7 @@ class Product < ActiveRecord::Base
 
   has_many :price_varients
 
-  accepts_nested_attributes_for :price_varients, allow_destroy: true
+  accepts_nested_attributes_for :price_varients, allow_destroy: true, reject_if: :reject_price_varients
 
   PRODUCT_TYPE_OPTIONS = [
     :bread,
@@ -34,6 +34,10 @@ class Product < ActiveRecord::Base
   validates :base_price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true, presence: true
   validates :bakery, presence: true
 
+  def reject_price_varients(attributed)
+    attributed['quantity'].blank? && (attributed['price'] == '0.0' || attributed['price'].blank?)
+  end
+
   def self.unit_options
     UNIT_OPTIONS
   end
@@ -53,7 +57,7 @@ class Product < ActiveRecord::Base
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique
-    errors[:base] << 'Identical date and quantity already exist for this product, try a different date.'
+    errors[:base] << 'Quantity must be unique'
     false
   end
 
@@ -67,12 +71,8 @@ class Product < ActiveRecord::Base
     price_varients
   end
 
-  def effective_date_varient
-    find_varients.where('effective_date <= ?', Date.today).order(:effective_date)
-  end
-
   def quantity_varient(quantity)
-    effective_date_varient.where('quantity <= ?', quantity).order(:quantity)
+    find_varients.where('quantity <= ?', quantity).order(:quantity)
   end
 
   def lead_time

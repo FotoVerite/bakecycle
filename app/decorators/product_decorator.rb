@@ -6,7 +6,8 @@ class ProductDecorator < Draper::Decorator
   end
 
   def truncated_description
-    description.truncate(30)
+    return description.truncate(30) if description
+    nil
   end
 
   def inclusions
