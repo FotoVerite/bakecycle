@@ -17,7 +17,9 @@ class Shipment < ActiveRecord::Base
             :client_delivery_address_city,
             :client_billing_address_street_1,
             :client_billing_address_city,
-            :client_billing_term_days, presence: true
+            :client_billing_term_days,
+            :client_primary_contact_name,
+            :client_primary_contact_phone, presence: true
 
   validates :route_id, :route_name, presence: true
   validates :payment_due_date, presence: true
@@ -98,7 +100,7 @@ class Shipment < ActiveRecord::Base
       :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
       :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
       :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2, :billing_address_city,
-      :billing_address_state, :billing_address_zipcode]
+      :billing_address_state, :billing_address_zipcode, :primary_contact_name, :primary_contact_phone]
 
     fields.each do |field|
       assign_method = "client_#{field}=".to_sym

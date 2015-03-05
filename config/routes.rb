@@ -20,4 +20,8 @@ Rails.application.routes.draw do
   resources :daily_totals, only: [:index] do
     get 'print', on: :member
   end
+
+  resources :delivery_lists, only: [:index] do
+    get 'print', on: :member
+  end
 end

@@ -1,4 +1,4 @@
-class DailyTotalsController < ApplicationController
+class DeliveryListsController < ApplicationController
   before_action :authenticate_user!
 
   def index
@@ -6,8 +6,8 @@ class DailyTotalsController < ApplicationController
   end
 
   def print
-    pdf = DailyTotalPdf.new(date_query, current_bakery)
-    pdf_name = 'dailytotal.pdf'
+    pdf = DeliveryListPdf.new(date_query, current_bakery)
+    pdf_name = 'deliverylist.pdf'
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 

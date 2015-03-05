@@ -12,7 +12,8 @@
         <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
         <li class="<%= active_nav?(:users) %>"><%= link_to("Users", users_path) %></li>
         <li class="<%= active_nav?(:bakeries) %>"><%= bakery_link %></li>
-        <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Daily Totals", daily_totals_path) %></li>
+        <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
+        <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
       <% end %>
     </ul>
   </div>
