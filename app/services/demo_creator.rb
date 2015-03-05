@@ -5,6 +5,7 @@ class DemoCreator
   end
 
   def run
+    create_default_route
     create_multi_grain_loaf
     create_nicoise_baguette
     create_chive_pain_au_lait
@@ -217,6 +218,15 @@ class DemoCreator
       base_price: 0.75,
       motherdough: pain_au_lait_dough,
       inclusion: chive_pain_au_lait_inclusion
+    )
+  end
+
+  def create_default_route
+    @_defaut_route ||= Route.create!(
+      bakery: @bakery,
+      name: 'default',
+      active: true,
+      departure_time: Chronic.parse('6 am')
     )
   end
 end
