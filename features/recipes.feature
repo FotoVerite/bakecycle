@@ -54,7 +54,7 @@ Feature: Recipes
     When I click on "Add New Ingredient"
     And I fill out recipe item with:
        | inclusionable_id_type | percentage |
-       | baguette              | 22.5       |
+       | almond                | 22.5       |
     And I click on "Update"
     Then "You have updated baguette" should be present
 
@@ -68,7 +68,7 @@ Feature: Recipes
     And I click on "Add New Ingredient"
     And I fill out recipe item with:
       | inclusionable_id_type| percentage |
-      | baguette             | 22.5       |
+      | almond               | 22.5       |
     And I click on "Add New Ingredient"
     And I fill out recipe item with:
        | inclusionable_id_type| percentage |
