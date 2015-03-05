@@ -76,11 +76,9 @@ describe OrderItem do
   context '#total_quantity_price' do
     it 'calculates total quantity price for an order item' do
       apple = create(:product, name: 'Apple', base_price: 0.5)
-      create(:price_varient, product: apple, quantity: 11, effective_date: (Date.today - 6), price: 0.4)
-      create(:price_varient, product: apple, quantity: 10, effective_date: Date.today, price: 0.2)
-      create(:price_varient, product: apple, quantity: 12, effective_date: (Date.today - 2), price: 0.3)
-      create(:price_varient, product: apple, quantity: 13, effective_date: Date.today, price: 0.25)
-      create(:price_varient, product: apple, quantity: 14, effective_date: (Date.today + 3), price: 0.1)
+      create(:price_varient, product: apple, quantity: 11, price: 0.4)
+      create(:price_varient, product: apple, quantity: 13, price: 0.2)
+      create(:price_varient, product: apple, quantity: 15, price: 0.1)
 
       order_item = create(
         :order_item,
@@ -97,10 +95,10 @@ describe OrderItem do
       expect(order_item.total_quantity_price).to eq(3.5)
 
       order_item.monday = 4
-      expect(order_item.total_quantity_price).to eq(2.0)
-
-      order_item.tuesday = 11
       expect(order_item.total_quantity_price).to eq(5)
+
+      order_item.monday = 11
+      expect(order_item.total_quantity_price).to eq(1.7)
     end
   end
 end

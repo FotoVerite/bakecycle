@@ -11,6 +11,7 @@ Feature: Products
     And I fill out product form with:
       | name           | product_type | description | weight | unit | extra_amount| base_price | sku             |
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
+    And I click on "Add New Price" and don't enter any information
     And I click on "Create"
     Then "You have created almond cookies" should be present
 
@@ -44,8 +45,8 @@ Feature: Products
     When I click on "baguette cookie"
     And I click on "Add New Price"
     And I fill out the price varient form with:
-      | price | quantity | date       |
-      | 1.99  | 100      | 2014-12-11 |
+      | price | quantity |
+      | 1.99  | 100      |
     And I click on "Update"
     Then "You have updated baguette cookie" should be present
 
@@ -58,8 +59,8 @@ Feature: Products
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
     And I fill out the price varient form with:
-      | price | quantity | date       |
-      | 1.99  | 100      | 2014-12-11 |
+      | price | quantity |
+      | 1.99  | 100      |
     And I click on "Create"
     Then "You have created almond cookies" should be present
 
@@ -72,12 +73,12 @@ Feature: Products
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
     And I fill out the price varient form with:
-      | price | quantity | date       |
-      | 1.99  | 100      | 2014-12-11 |
+      | price | quantity |
+      | 1.99  | 100      |
     And I click on "Add New Price"
     And I fill out the price varient form with:
-      | price | quantity | date       |
-      | 10.23  | 83      | 2014-12-12  |
+      | price | quantity |
+      | 10.23  | 83      |
     And I click on "Create"
     Then "You have created almond cookies" should be present
     And I click on the last price's remove button
@@ -94,28 +95,23 @@ Feature: Products
       | name           | product_type | description | weight | unit | extra_amount| base_price | sku             |
       | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
+    And I fill out the price varient form with:
+      | price | quantity |
+      | 10.23 |          |
     And I click on "Create"
     Then "Quantity can't be blank" should be present
 
   @javascript
-  Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
-    When I go to the "products" page
-    When I click on "baguette cookie"
-    And I click on "Add New Price"
-    And I click on "Update"
-    Then "Quantity can't be blank" should be present
-
-  @javascript
-  Scenario: As a user, If I try to edit a product with empty price varient fields, I should see validation errors
+  Scenario: As a user, If I try to add more price varients with the same quantity, I should see a validation error
     When I go to the "products" page
     When I click on "baguette cookie"
     And I click on "Add New Price"
     And I fill out the price varient form with:
-      | price | quantity | date       |
-      | 1.99  | 100      | 2014-12-11 |
+      | price | quantity |
+      | 1.99  | 100      |
     And I click on "Add New Price"
     And I fill out the price varient form with:
-      | price | quantity | date        |
-      | 10.23  | 100     | 2014-12-11  |
+      | price | quantity |
+      | 10.23  | 100     |
     And I click on "Update"
-    And "Identical date and quantity already exist for this product, try a different date." should be present
+    And "Quantity must be unique" should be present
