@@ -9,11 +9,8 @@ class Recipe < ActiveRecord::Base
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true
 
-  RECIPE_TYPE_OPTIONS = [:dough, :pre_ferment, :inclusion, :ingredient]
-  MIX_SIZE_UNIT_OPTIONS = [:oz, :lb, :g, :kg]
-
-  enum recipe_type: RECIPE_TYPE_OPTIONS
-  enum mix_size_unit: MIX_SIZE_UNIT_OPTIONS
+  enum recipe_type: [:dough, :pre_ferment, :inclusion, :ingredient]
+  enum mix_size_unit: [:oz, :lb, :g, :kg]
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :mix_size, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true, allow_nil: true
@@ -22,14 +19,6 @@ class Recipe < ActiveRecord::Base
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true
   validates :bakery, presence: true
-
-  def self.recipe_type_options
-    RECIPE_TYPE_OPTIONS
-  end
-
-  def self.mix_size_unit_options
-    MIX_SIZE_UNIT_OPTIONS
-  end
 
   def self.recipe_types_select
     recipe_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
@@ -40,10 +29,10 @@ class Recipe < ActiveRecord::Base
   end
 
   def self.motherdoughs
-    where('recipe_type = ?', Recipe.recipe_types[:dough])
+    where(recipe_type: Recipe.recipe_types[:dough])
   end
 
   def self.inclusions
-    where('recipe_type = ?', Recipe.recipe_types[:inclusion])
+    where(recipe_type: Recipe.recipe_types[:inclusion])
   end
 end

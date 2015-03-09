@@ -1,6 +1,5 @@
 Feature: DemoCreator
 
-  @javascript
   Scenario: As an Admin, I should be able to create bakery demo-data when creating a bakery
     Given I am logged in as an admin
     Given I am on the "bakeries" page
