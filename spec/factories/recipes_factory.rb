@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :recipe do
-    recipe_type { Recipe.recipe_type_options.sample }
+    recipe_type { Recipe.recipe_types.keys.sample }
     sequence(:name) { |n| "#{n}#{Faker::Lorem.word}" }
     mix_size 12
-    mix_size_unit { Recipe.mix_size_unit_options.sample }
+    mix_size_unit { Recipe.mix_size_units.keys.sample }
     lead_days 2
     bakery
 

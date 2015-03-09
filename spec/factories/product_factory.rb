@@ -18,7 +18,7 @@ FactoryGirl.define do
     end
 
     trait :with_motherdough do
-      inclusion { create(:recipe_motherdough, bakery: bakery, lead_days: lead_time) }
+      motherdough { create(:recipe_motherdough, bakery: bakery, lead_days: lead_time) }
     end
 
     trait :with_sku do
