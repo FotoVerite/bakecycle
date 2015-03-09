@@ -10,6 +10,7 @@ class BakeriesController < ApplicationController
 
   def create
     if @bakery.save
+      create_demo_data
       flash[:notice] = "You have created #{@bakery.name}."
       redirect_to bakeries_path
     else
@@ -41,6 +42,10 @@ class BakeriesController < ApplicationController
   end
 
   private
+
+  def create_demo_data
+    DemoCreator.new(@bakery).run if params[:set_demo_data]
+  end
 
   def bakery_params
     params.require(:bakery).permit(
