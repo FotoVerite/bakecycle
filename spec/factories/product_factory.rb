@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :product do
     name { generate(:product_name) }
-    product_type { Product.product_type_options.sample }
+    product_type { Product.product_types.keys.sample }
     description { Faker::Lorem.sentence(1) }
     weight { Faker::Number.decimal(0, 3) }
-    unit { Product.unit_options.sample }
+    unit { Product.units.keys.sample }
     extra_amount { Faker::Number.decimal(0, 3) }
     base_price { Faker::Number.decimal(2) }
     bakery

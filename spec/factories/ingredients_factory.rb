@@ -3,8 +3,8 @@ FactoryGirl.define do
     name { generate(:ingredient_name) }
     price { Faker::Number.decimal(3) }
     measure { Faker::Number.decimal(0, 3) }
-    unit { Ingredient.unit_options.sample }
-    ingredient_type { Ingredient.ingredient_type_options.sample }
+    unit { Ingredient.units.keys.sample }
+    ingredient_type { Ingredient.ingredient_types.keys.sample }
     description { Faker::Lorem.sentence(1) }
     bakery
   end

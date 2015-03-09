@@ -9,7 +9,7 @@ class Product < ActiveRecord::Base
 
   accepts_nested_attributes_for :price_varients, allow_destroy: true, reject_if: :reject_price_varients
 
-  PRODUCT_TYPE_OPTIONS = [
+  enum product_type: [
     :bread,
     :vienoisserie,
     :cookie,
@@ -21,10 +21,7 @@ class Product < ActiveRecord::Base
     :other
   ]
 
-  UNIT_OPTIONS = [:oz, :lb, :g, :kg]
-
-  enum product_type: PRODUCT_TYPE_OPTIONS
-  enum unit: UNIT_OPTIONS
+  enum unit: [:oz, :lb, :g, :kg]
 
   validates :name, presence: true, uniqueness: { scope: :bakery }
   validates :product_type, presence: true
@@ -36,14 +33,6 @@ class Product < ActiveRecord::Base
 
   def reject_price_varients(attributed)
     attributed['quantity'].blank? && (attributed['price'] == '0.0' || attributed['price'].blank?)
-  end
-
-  def self.unit_options
-    UNIT_OPTIONS
-  end
-
-  def self.product_type_options
-    PRODUCT_TYPE_OPTIONS
   end
 
   def self.units_select

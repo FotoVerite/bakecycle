@@ -51,7 +51,7 @@ class DailyTotalPdf < PdfReport
   def information
     @recipes.product_types.each do |type|
       move_down 20
-      text Product.product_type_options[type].to_s.titleize, size: 20
+      text Product.product_types.invert[type].titleize, size: 20
       table(information_data(type), column_widths: column_width_sizes, header: true, row_colors: %w(FFFFFF E3E3E3)) do
         row(0).style(background_color: HEADER_ROW_COLOR, size: 10)
         row(0..-1).column(1..-1).style(align: :center)
