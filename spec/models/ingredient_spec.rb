@@ -3,13 +3,13 @@ require 'rails_helper'
 describe Ingredient do
   let(:ingredient) { build(:ingredient) }
 
-  describe 'model attributes' do
-    it { expect(ingredient).to respond_to(:name) }
-    it { expect(ingredient).to respond_to(:price) }
-    it { expect(ingredient).to respond_to(:measure) }
-    it { expect(ingredient).to respond_to(:unit) }
-    it { expect(ingredient).to respond_to(:ingredient_type) }
-    it { expect(ingredient).to respond_to(:description) }
+  it 'has model attributes' do
+    expect(ingredient).to respond_to(:name)
+    expect(ingredient).to respond_to(:price)
+    expect(ingredient).to respond_to(:measure)
+    expect(ingredient).to respond_to(:unit)
+    expect(ingredient).to respond_to(:ingredient_type)
+    expect(ingredient).to respond_to(:description)
   end
 
   it 'has association' do

@@ -5,11 +5,8 @@ class Ingredient < ActiveRecord::Base
 
   belongs_to :bakery
 
-  UNIT_OPTIONS = [:oz, :lb, :g, :kg]
-  INGREDIENT_TYPE_OPTIONS = [:flour, :ingredient]
-
-  enum unit: UNIT_OPTIONS
-  enum ingredient_type: INGREDIENT_TYPE_OPTIONS
+  enum unit: [:oz, :lb, :g, :kg]
+  enum ingredient_type: [:flour, :ingredient]
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
@@ -18,14 +15,6 @@ class Ingredient < ActiveRecord::Base
   validates :description, length: { maximum: 500 }
   validates :ingredient_type, presence: true
   validates :bakery, presence: true
-
-  def self.unit_options
-    UNIT_OPTIONS
-  end
-
-  def self.ingredient_type_options
-    INGREDIENT_TYPE_OPTIONS
-  end
 
   def self.units_select
     units.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
