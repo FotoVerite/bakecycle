@@ -47,6 +47,19 @@
     </div>
   </fieldset>
 
+  <% unless f.object.persisted? %>
+    <fieldset>
+      <div class="row">
+        <div class="small-12 columns">
+          <label class="category-select">
+            Create Demo Data?
+            <%= check_box_tag("set_demo_data", true, true) %>
+          </label>
+        </div>
+      </div>
+    </fieldset>
+  <% end %>
+
   <fieldset>
     <legend>Bakery Logo</legend>
 
