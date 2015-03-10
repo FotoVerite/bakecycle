@@ -43,7 +43,8 @@ When(/^I fill out Client form with valid data$/) do
   fill_in 'client_secondary_contact_phone', with: 'text'
   fill_in 'client_secondary_contact_email', with: 'text@email.com'
   choose 'client_active_true'
-  choose 'client_charge_delivery_fee_true'
+  select 'Credit Card', from: 'client_billing_term'
+  select 'Daily Delivery Fee', from: 'client_delivery_fee_option'
   fill_in 'client_delivery_minimum', with: '310.00'
   fill_in 'client_delivery_fee', with: '20.85'
 end

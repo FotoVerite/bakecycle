@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150310161605) do
+ActiveRecord::Schema.define(version: 20150310212431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20150310161605) do
     t.string  "dba"
     t.string  "business_phone"
     t.string  "business_fax"
-    t.boolean "active",                                         null: false
+    t.boolean "active",                                       null: false
     t.string  "delivery_address_street_1"
     t.string  "delivery_address_street_2"
     t.string  "delivery_address_city"
@@ -62,11 +62,11 @@ ActiveRecord::Schema.define(version: 20150310161605) do
     t.string  "secondary_contact_email"
     t.float   "latitude"
     t.float   "longitude"
-    t.integer "billing_term",                                   null: false
+    t.integer "billing_term",                                 null: false
     t.integer "bakery_id"
-    t.boolean "charge_delivery_fee",            default: false
-    t.decimal "delivery_minimum",               default: 0.0,   null: false
-    t.decimal "delivery_fee",                   default: 0.0,   null: false
+    t.decimal "delivery_minimum",               default: 0.0, null: false
+    t.decimal "delivery_fee",                   default: 0.0, null: false
+    t.integer "delivery_fee_option"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree

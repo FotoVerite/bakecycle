@@ -24,14 +24,19 @@ class Client < ActiveRecord::Base
   validates :active, inclusion: [true, false]
   validates :billing_term, presence: true
   validates :bakery, presence: true
-  validates :charge_delivery_fee, inclusion: [true, false]
-  validates :delivery_minimum, presence: true, numericality: true
-  validates :delivery_fee, presence: true, numericality: true
+  validates :delivery_fee_option, presence: true
+  validates :delivery_minimum, presence: true, numericality: true, if: :delivery_fee?
+  validates :delivery_fee, presence: true, numericality: true, if: :delivery_fee?
 
   geocoded_by :full_delivery_address
   after_validation :geocode
 
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
+  enum delivery_fee_option: [:no_delivery_fee, :daily_delivery_fee, :weekly_delivery_fee]
+
+  def delivery_fee?
+    !no_delivery_fee?
+  end
 
   def full_delivery_address
     "#{delivery_address_street_1} #{delivery_address_street_2} #{delivery_address_city} #{delivery_address_state}"
@@ -44,5 +49,9 @@ class Client < ActiveRecord::Base
 
   def self.billing_terms_select
     billing_terms.keys.to_a.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
+  end
+
+  def self.delivery_fee_options_select
+    delivery_fee_options.keys.to_a.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
   end
 end

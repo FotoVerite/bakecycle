@@ -45,11 +45,7 @@
     <legend>Delivery Fee Information</legend>
     <div class="row">
       <div class="small-12 medium-4 columns">
-        <%= f.label :charge_delivery_fee, "Charge delivery fee?"%>
-        <%= f.radio_button(:charge_delivery_fee, "true") %>
-        <%= f.label(:charge_delivery_fee_true, "Yes") %>
-        <%= f.radio_button(:charge_delivery_fee, "false") %>
-        <%= f.label(:charge_delivery_fee_false, "No") %>
+        <%= f.input :delivery_fee_option, collection: Client.delivery_fee_options_select , as: :select, include_blank: false %>
       </div>
       <div class="small-12 medium-4 columns">
         <%= f.input :delivery_minimum %>

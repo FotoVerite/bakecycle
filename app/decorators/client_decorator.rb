@@ -5,12 +5,12 @@ class ClientDecorator < Draper::Decorator
     active ? 'Yes' : 'No'
   end
 
-  def charge_delivery_fee_status
-    charge_delivery_fee ? 'Yes' : 'No'
-  end
-
   def billing
     billing_term.humanize(capitalize: false).titleize
+  end
+
+  def delivery_fee_display
+    delivery_fee_option.humanize(capitalize: false).titleize
   end
 
   def delivery_name
