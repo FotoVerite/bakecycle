@@ -61,4 +61,26 @@ describe ShipmentItem do
       expect(shipment_item.product_sku).to eq(product.sku)
     end
   end
+
+  describe '#production_start' do
+    it 'sets production start date based on product lead time' do
+      product = create(:product)
+      shipment = create(:shipment)
+      shipment_item = ShipmentItem.new
+      shipment_item.product = product
+      shipment_item.shipment = shipment
+      production_start = shipment_item.shipment.date - product.lead_time
+      shipment_item.save
+      expect(shipment_item.production_start).to eq(production_start)
+    end
+  end
+
+  describe '.earliest_production_date' do
+    it 'returns the earliest production date for shipment items collection' do
+      shipment = create(:shipment, shipment_item_count: 5)
+      shipment_items = shipment.shipment_items
+      earliest_shipment_item = shipment_items.order('production_start ASC').first.production_start
+      expect(shipment.shipment_items.earliest_production_date).to eq(earliest_shipment_item)
+    end
+  end
 end
