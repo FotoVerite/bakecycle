@@ -40,6 +40,7 @@ describe ShipmentService do
       expect(shipment_item.product_id).to eq(order_item.product.id)
       expect(shipment_item.product_name).to eq(order_item.product.name)
       expect(shipment_item.product_sku).to eq(order_item.product.sku)
+      expect(shipment_item.production_start).to be < date
     end
   end
 end
