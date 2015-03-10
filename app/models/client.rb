@@ -4,6 +4,9 @@ class Client < ActiveRecord::Base
 
   belongs_to :bakery
 
+  enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
+  enum delivery_fee_option: [:no_delivery_fee, :daily_delivery_fee, :weekly_delivery_fee]
+
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :dba, length: { maximum: 150 }
   validates :business_phone, presence: true
@@ -30,9 +33,6 @@ class Client < ActiveRecord::Base
 
   geocoded_by :full_delivery_address
   after_validation :geocode
-
-  enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
-  enum delivery_fee_option: [:no_delivery_fee, :daily_delivery_fee, :weekly_delivery_fee]
 
   def delivery_fee?
     !no_delivery_fee?
