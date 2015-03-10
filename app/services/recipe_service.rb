@@ -7,7 +7,7 @@ class RecipeService
   end
 
   def shipments
-    @_shipments ||= Shipment.search_by_date(date).where(bakery: bakery)
+    @_shipments ||= Shipment.where(bakery: bakery).search_by_date(date)
   end
 
   def shipment_items
@@ -15,7 +15,7 @@ class RecipeService
   end
 
   def products
-    @_products ||= Product.where(id: shipment_items.pluck(:product_id))
+    @_products ||= Product.where(bakery: bakery, id: shipment_items.pluck(:product_id))
   end
 
   def product_types
@@ -23,12 +23,12 @@ class RecipeService
   end
 
   def routes
-    @_routes ||= Route.where(id: shipments.pluck(:route_id)).order('departure_time ASC')
+    @_routes ||= Route.where(bakery: bakery, id: shipments.pluck(:route_id)).order('departure_time ASC')
   end
 
   def route_shipment_clients(route)
     clients_id = route.shipments.pluck(:client_id).uniq
-    Client.where(id: clients_id, bakery: bakery).decorate
+    Client.where(bakery: bakery, id: clients_id).decorate
   end
 
   def product_counts

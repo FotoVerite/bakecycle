@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150310212431) do
+ActiveRecord::Schema.define(version: 20150310234313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20150310212431) do
     t.integer "bakery_id"
     t.decimal "delivery_minimum",               default: 0.0, null: false
     t.decimal "delivery_fee",                   default: 0.0, null: false
-    t.integer "delivery_fee_option"
+    t.integer "delivery_fee_option",                          null: false
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree

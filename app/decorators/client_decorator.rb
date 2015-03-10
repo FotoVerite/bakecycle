@@ -6,11 +6,11 @@ class ClientDecorator < Draper::Decorator
   end
 
   def billing
-    billing_term.humanize(capitalize: false).titleize
+    billing_term.humanize(capitalize: false).titleize if billing_term
   end
 
   def delivery_fee_display
-    delivery_fee_option.humanize(capitalize: false).titleize
+    delivery_fee_option.humanize(capitalize: false).titleize if delivery_fee_option
   end
 
   def delivery_name

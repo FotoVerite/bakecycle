@@ -5,6 +5,9 @@ namespace :db do
   task devdata: :environment do
     raise "don't run this here!" if Rails.env.production?
 
+    # Only run if we've migrated
+    ActiveRecord::Migration.maintain_test_schema!
+
     Rails.application.eager_load! # load all classes
     ActiveRecord::Base.descendants.map(&:destroy_all) # DESTROY ALL CLASSES
     puts 'Dev Data Destroyed'
@@ -15,11 +18,11 @@ namespace :db do
     grumpy = FactoryGirl.create(:bakery, name: 'Grumpy')
     DemoCreator.new(grumpy).run
 
+    FactoryGirl.create(:user, :as_admin, email: 'admin@example.com')
+    FactoryGirl.create(:user, :as_admin, email: 'kate@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'user@example.com', bakery: biencuit)
-    FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'nathan@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'justin@biencuit.com', bakery: biencuit)
-    FactoryGirl.create(:user, email: 'kate@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'jane@grumpy.com', bakery: grumpy)
     FactoryGirl.create(:user, email: 'john@grumpy.com', bakery: grumpy)
 
