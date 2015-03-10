@@ -95,6 +95,10 @@ class Shipment < ActiveRecord::Base
     self.client = Client.find(client_id) if client_id
   end
 
+  def production_start
+    shipment_items.earliest_production_date
+  end
+
   def client=(client)
     fields = [
       :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
