@@ -28,6 +28,8 @@ FactoryGirl.define do
 
     bakery
 
+    delivery_fee_option :no_delivery_fee
+
     trait :with_secondary_contact do
       secondary_contact_name { Faker::Name.name }
       secondary_contact_phone { Faker::PhoneNumber.cell_phone }
@@ -35,7 +37,7 @@ FactoryGirl.define do
     end
 
     trait :with_delivery_fee do
-      charge_delivery_fee true
+      delivery_fee_option { Client.delivery_fee_options.except(:no_delivery_fee).keys.sample }
       delivery_minimum { Faker::Number.decimal(3) }
       delivery_fee { Faker::Number.decimal(2) }
     end

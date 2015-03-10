@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Client do
   let(:client) { build(:client) }
+  let(:client_with_fee) { build(:client, :with_delivery_fee) }
 
   it 'has model attributes' do
     expect(client).to respond_to(:name)
@@ -28,7 +29,7 @@ describe Client do
     expect(client).to respond_to(:secondary_contact_name)
     expect(client).to respond_to(:secondary_contact_phone)
     expect(client).to respond_to(:secondary_contact_email)
-    expect(client).to respond_to(:charge_delivery_fee)
+    expect(client).to respond_to(:delivery_fee_option)
     expect(client).to respond_to(:delivery_minimum)
     expect(client).to respond_to(:delivery_fee)
   end
@@ -59,6 +60,7 @@ describe Client do
     expect(client).to ensure_length_of(:primary_contact_name).is_at_most(150)
     expect(client).to validate_presence_of(:primary_contact_phone)
     expect(client).to validate_presence_of(:primary_contact_email)
+    expect(client).to validate_presence_of(:delivery_fee_option)
     expect(client).to validate_presence_of(:delivery_minimum)
     expect(client).to validate_numericality_of(:delivery_minimum)
     expect(client).to validate_presence_of(:delivery_fee)
@@ -88,18 +90,18 @@ describe Client do
   end
 
   it 'delivery fee should never be nil' do
-    client.delivery_fee = nil
-    expect(client).to_not be_valid
+    client_with_fee.delivery_fee = nil
+    expect(client_with_fee).to_not be_valid
   end
 
   it 'delivery minimum should never be nil' do
-    client.delivery_minimum = nil
-    expect(client).to_not be_valid
+    client_with_fee.delivery_minimum = nil
+    expect(client_with_fee).to_not be_valid
   end
 
   it 'is not a number' do
-    expect(build(:client, delivery_minimum: 'not a number')).to_not be_valid
-    expect(build(:client, delivery_fee: 'not a number')).to_not be_valid
+    expect(build(:client, :with_delivery_fee, delivery_minimum: 'not a number')).to_not be_valid
+    expect(build(:client, :with_delivery_fee, delivery_fee: 'not a number')).to_not be_valid
   end
 
   describe '.billing_term_days' do
