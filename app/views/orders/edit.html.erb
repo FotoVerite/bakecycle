@@ -1,10 +1,5 @@
 <% provide(:title, "Editing Order: #{order.id}") %>
-
-<h1>Editing Order: <%= order.id %></h1>
-
-<h3>Client Name: <%= order.client.name %></h3>
-<p><%= order.order_type.capitalize %> order</p>
-
+<h1>Editing Order: <%= order.id %> - <%= order.client.name %></h1>
 <%= link_to 'Back', orders_path %>
 <div ng-controller="OrderCtrl" ng-init="order=<%= @order.to_json %>">
   <%= render "form"%>

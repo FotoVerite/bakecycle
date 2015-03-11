@@ -84,7 +84,7 @@ Then(/^I should see confirmation that the "(.*?)" order "(.*?)" was deleted$/) d
 end
 
 Then(/^I should see order information about "(.*?)"$/) do |name|
-  expect(page).to have_content("Client Name: #{name}")
+  expect(page).to have_content(name)
 end
 
 When(/^I click on the first order$/) do
