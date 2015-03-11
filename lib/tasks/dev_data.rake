@@ -5,9 +5,6 @@ namespace :db do
   task devdata: :environment do
     raise "don't run this here!" if Rails.env.production?
 
-    # Only run if we've migrated
-    ActiveRecord::Migration.maintain_test_schema!
-
     Rails.application.eager_load! # load all classes
     ActiveRecord::Base.descendants.map(&:destroy_all) # DESTROY ALL CLASSES
     puts 'Dev Data Destroyed'
