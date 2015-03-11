@@ -2,6 +2,7 @@ class DeliveryListPdf < PdfReport
   def initialize(date, bakery)
     @recipes = RecipeService.new(date, bakery)
     @bakery = bakery.decorate
+    @date = date
     super()
   end
 
@@ -13,7 +14,7 @@ class DeliveryListPdf < PdfReport
 
   def header
     repeat :all do
-      bounding_box([0, cursor], width: 280, height: 60) do
+      bounding_box([0, cursor], width: 260, height: 60) do
         bakery_logo_display
       end
       grid([0, 5.5], [0, 8]).bounding_box do
@@ -23,7 +24,7 @@ class DeliveryListPdf < PdfReport
         text 'Client Delivery List', size: 13, align: :right, style: :bold
       end
       grid([0.41, 8], [0.41, 11]).bounding_box do
-        text current_date, size: 13, align: :right, style: :italic
+        text delivery_date, size: 13, align: :right, style: :italic
       end
     end
   end
@@ -45,7 +46,7 @@ class DeliveryListPdf < PdfReport
   end
 
   def body
-    bounding_box([bounds.left, bounds.top - 60], width:  bounds.width, height: bounds.height - 50) do
+    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 50) do
       routes
     end
   end
@@ -92,5 +93,9 @@ class DeliveryListPdf < PdfReport
         text printed_today, size: 8, align: :right
       end
     end
+  end
+
+  def delivery_date
+    @date.strftime('%A %B %e, %Y')
   end
 end

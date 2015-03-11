@@ -17,14 +17,14 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    pdf = InvoicePdf.new(@shipment.decorate)
+    pdf = InvoicePdf.new(@shipment.decorate, current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def invoices
     @shipments = @shipments.search(@search_form).includes(:shipment_items, :bakery)
-    pdf = InvoicesPdf.new(@shipments.decorate)
+    pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
     pdf_name = 'invoices.pdf'
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
