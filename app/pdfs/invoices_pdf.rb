@@ -1,7 +1,8 @@
 class InvoicesPdf < InvoicePdf
-  def initialize(shipments)
+  def initialize(shipments, bakery)
     @shipments = shipments
-    super(nil)
+    @bakery = bakery.decorate
+    super(nil, @bakery)
   end
 
   def setup
