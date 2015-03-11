@@ -11,7 +11,7 @@
           <div class="row">
             <div class="medium-3 small-3 columns right">
               <% if current_user %>
-                <%= link_to destroy_user_session_path, method: :delete, class: 'logout-icon' do %>
+                <%= link_to destroy_user_session_path, method: :delete, class: 'logout-icon', title: current_user.email do %>
                   <i class="fi-power power-off"></i>
                 <% end %>
               <% end %>

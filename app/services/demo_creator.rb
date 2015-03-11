@@ -1,14 +1,18 @@
 # rubocop:disable Metrics/ClassLength
+# rubocop:disable Metrics/MethodLength
 class DemoCreator
   def initialize(bakery)
     @bakery = bakery
   end
 
   def run
-    create_default_route
-    create_multi_grain_loaf
-    create_nicoise_baguette
-    create_chive_pain_au_lait
+    default_route
+    multi_grain_loaf
+    nicoise_baguette
+    chive_pain_au_lait
+    client
+    order
+    ShipmentService.process_bakery(@bakery)
   end
 
   def dark_rye_flour
@@ -176,8 +180,9 @@ class DemoCreator
     )
   end
 
-  def create_multi_grain_loaf
-    multi_grain_loaf = Product.create!(
+  def multi_grain_loaf
+    return @_multi_grain_loaf if @_multi_grain_loaf
+    @_multi_grain_loaf = Product.create!(
       bakery: @bakery,
       name: 'Multi-Grain Loaf',
       product_type: :bread,
@@ -189,11 +194,11 @@ class DemoCreator
       motherdough: multi_grain_dough,
       inclusion: dark_rye
     )
-    PriceVarient.create!(product: multi_grain_loaf, price: 5.50, quantity: 10)
+    PriceVarient.create!(product: @_multi_grain_loaf, price: 5.50, quantity: 10)
   end
 
-  def create_nicoise_baguette
-    Product.create!(
+  def nicoise_baguette
+    @_nicoise_baguette ||= Product.create!(
       bakery: @bakery,
       name: 'Nicoise Baguette',
       product_type: :bread,
@@ -207,8 +212,8 @@ class DemoCreator
     )
   end
 
-  def create_chive_pain_au_lait
-    Product.create!(
+  def chive_pain_au_lait
+    @_chive_pain_au_lait ||= Product.create!(
       bakery: @bakery,
       name: 'Chive Pain Au Lait',
       product_type: :bread,
@@ -221,7 +226,7 @@ class DemoCreator
     )
   end
 
-  def create_default_route
+  def default_route
     @_defaut_route ||= Route.create!(
       bakery: @bakery,
       name: 'default',
@@ -229,5 +234,56 @@ class DemoCreator
       departure_time: Chronic.parse('6 am')
     )
   end
+
+  def client
+    @_client ||= Client.create!(
+      bakery: @bakery,
+      name: "Wizard's Coffee",
+      business_phone: '917-805-3079',
+      active: true,
+      delivery_address_street_1: '64 Allen St',
+      delivery_address_city: 'New York',
+      delivery_address_state: 'NY',
+      delivery_address_zipcode: '10002',
+
+      billing_address_street_1: '64 Allen St',
+      billing_address_city: 'New York',
+      billing_address_state: 'NY',
+      billing_address_zipcode: '10002',
+
+      accounts_payable_contact_name: 'Francis Gulotta',
+      accounts_payable_contact_phone: '917-805-3079',
+      accounts_payable_contact_email: 'francis@wizarddevelopment.com',
+
+      primary_contact_name: 'Francis Gulotta',
+      primary_contact_phone: '917-805-3079',
+      primary_contact_email: 'francis@wizarddevelopment.com',
+
+      billing_term: :net_30,
+      delivery_fee_option: :no_delivery_fee
+    )
+  end
+
+  def order
+    Order.create!(
+      bakery: @bakery,
+      order_type: 'standing',
+      start_date: Date.today,
+      end_date: nil,
+      client: client,
+      route: default_route,
+      order_items: [OrderItem.new(
+        product: nicoise_baguette,
+        monday: 5,
+        tuesday: 5,
+        wednesday: 4,
+        thursday: 5,
+        friday: 5,
+        saturday: 10,
+        sunday: 0
+      )]
+    )
+  end
 end
 # rubocop:enable Metrics/ClassLength
+# rubocop:enable Metrics/MethodLength
