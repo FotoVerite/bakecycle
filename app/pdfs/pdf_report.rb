@@ -49,4 +49,17 @@ class PdfReport < Prawn::Document
   def current_time
     Time.now.strftime('%l:%M%P')
   end
+
+  def timestamp
+    repeat :all do
+      bounding_box([288, bounds.bottom + 10], width: (bounds.width / 2.0)) do
+        text printed_today, size: 8, align: :right
+      end
+    end
+  end
+
+  def footer
+    number_of_pages
+    timestamp
+  end
 end

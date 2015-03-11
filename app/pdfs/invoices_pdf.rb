@@ -7,7 +7,7 @@ class InvoicesPdf < InvoicePdf
 
   def setup
     shipment_invoices
-    number_of_pages
+    timestamp
   end
 
   def shipment_invoices
