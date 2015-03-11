@@ -50,14 +50,6 @@ Feature: Navigation
     When I go to the "ingredients" page
     Then "Ingredients" should be present
 
-  Scenario: As a admin_bakery, I should be able to visit bakery navigation
-    Given I am logged in as an admin
-    When I go to the home page
-    And I click on "Bakeries"
-    Then "Add New Bakery" should be present
-    When I go to the "ingredients" page
-    Then "Add New Ingredient" should be present
-
   Scenario: As a user, I should be able to visit My Bakery from the dashboard
     Given I am logged in as a user
     When I go to the home page

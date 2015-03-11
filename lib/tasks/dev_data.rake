@@ -15,7 +15,7 @@ namespace :db do
     grumpy = FactoryGirl.create(:bakery, name: 'Grumpy')
     DemoCreator.new(grumpy).run
 
-    FactoryGirl.create(:user, :as_admin, email: 'admin@example.com')
+    FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: nil)
     FactoryGirl.create(:user, :as_admin, email: 'kate@biencuit.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'user@example.com', bakery: biencuit)
     FactoryGirl.create(:user, email: 'nathan@biencuit.com', bakery: biencuit)

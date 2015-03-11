@@ -42,7 +42,7 @@ Given(/^I am logged in as a user$/) do
 end
 
 Given(/^I am logged in as an admin$/) do
-  user = create(:user, :as_admin)
+  user = create(:user, :as_admin, bakery: nil)
   login_as(user, scope: :user)
 end
 
