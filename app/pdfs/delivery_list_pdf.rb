@@ -82,19 +82,6 @@ class DeliveryListPdf < PdfReport
     rows.unshift(header)
   end
 
-  def footer
-    number_of_pages
-    footer_right
-  end
-
-  def footer_right
-    repeat :all do
-      bounding_box([288, bounds.bottom + 10], width: (bounds.width / 2.0)) do
-        text printed_today, size: 8, align: :right
-      end
-    end
-  end
-
   def delivery_date
     @date.strftime('%A %B %e, %Y')
   end

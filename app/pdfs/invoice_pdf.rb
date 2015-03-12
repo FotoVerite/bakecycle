@@ -7,7 +7,7 @@ class InvoicePdf < PdfReport
 
   def setup
     invoice
-    number_of_pages
+    footer
   end
 
   def invoice

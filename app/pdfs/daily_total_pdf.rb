@@ -29,19 +29,6 @@ class DailyTotalPdf < PdfReport
     end
   end
 
-  def footer
-    number_of_pages
-    footer_right
-  end
-
-  def footer_right
-    repeat :all do
-      bounding_box([288, bounds.bottom + 10], width: (bounds.width / 2.0)) do
-        text printed_today, size: 8, align: :right
-      end
-    end
-  end
-
   def body
     bounding_box([bounds.left, bounds.top - 40], width:  bounds.width, height: bounds.height - 50) do
       information
