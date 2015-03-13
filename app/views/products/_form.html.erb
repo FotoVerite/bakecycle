@@ -41,8 +41,17 @@
       </div>
     </div>
     <div class="row">
-      <div class="small-12 columns">
+      <div class="small-12 medium-6 columns">
         <%= f.input :extra_amount, as: :string%>
+      </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.label :lead_time %>
+        <input ng-disabled="true" type="text" value="<%= product.lead_time %>" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.input :description, as: :text%>
       </div>
     </div>
     <div class="row">
@@ -51,11 +60,6 @@
       </div>
       <div class="small-12 medium-6 columns">
         <%= f.input :motherdough_id, collection: product.motherdoughs, label_method: :name, value_method: :id, include_blank: 'Select One', as: :select %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
-        <%= f.input :description, as: :text%>
       </div>
     </div>
   </fieldset>
