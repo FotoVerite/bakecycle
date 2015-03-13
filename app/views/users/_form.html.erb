@@ -6,28 +6,32 @@
   <fieldset>
   <legend>User Information</legend>
     <div class="row">
-      <div class="large-10 medium-9 small-6 columns">
+      <div class="large-6 small-12 columns">
         <%= f.input :name, as: :string %>
       </div>
-    </div>
-    <div class="row">
-      <div class="large-10 medium-9 small-6 columns">
+      <div class="large-6 small-12 columns">
         <%= f.input :email, as: :string %>
       </div>
     </div>
 
     <% unless f.object.persisted? %>
       <div class="row">
-        <div class="large-10 medium-9 small-6 columns">
+        <div class="large-6 small-12 columns">
           <%= f.input :password, as: :password %>
         </div>
-      </div>
-      <div class="row">
-        <div class="large-10 medium-9 small-6 columns">
+        <div class="large-6 small-12 columns">
           <%= f.input :password_confirmation, as: :password %>
         </div>
       </div>
     <% end %>
+
+    <div class="row">
+      <div class="large-6 small-12 columns">
+        <% if current_user.admin? %>
+          <%= f.input :bakery_id, collection: Bakery.all, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
+        <% end %>
+      </div>
+    </div>
   </fieldset>
 
   <div class="row">
