@@ -1,5 +1,6 @@
 class RecipeDecorator < Draper::Decorator
   delegate_all
+  decorates_association :recipe_items
 
   def type
     recipe_type.humanize(capitalize: false).titleize

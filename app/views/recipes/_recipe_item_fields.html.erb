@@ -1,14 +1,22 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
-   <div class="small-12 medium-4 columns">
-      <%= f.input :inclusionable_id_type, collection: recipe.available_inclusions, label: "Ingredient", include_blank: "--None--", as: :select%>
-   </div>
-   <div class="small-12 medium-4 columns">
+    <div class="small-12 medium-4 columns">
+      <%= f.input :inclusionable_id_type, collection: recipe.available_inclusions, label: "Ingredient", include_blank: "Select One", as: :select%>
+    </div>
+    <div class="small-12 medium-2 columns">
       <%= f.input :bakers_percentage, label: "Baker's %", as: :string %>
-   </div>
-   <div class="small-12 medium-4 columns">
+    </div>
+    <div class="small-12 medium-2 columns">
+      <%= f.label :inclusionable_type, "Type" %>
+      <input ng-disabled="true" type="text" value="<%= f.object.display_type %>" />
+    </div>
+    <div class="small-12 medium-2 columns">
+      <%= f.label :lead_time, "Lead time" %>
+      <input ng-disabled="true" type="text" value="<%= f.object.lead %>" />
+    </div>
+    <div class="small-12 medium-2 columns end">
       <%= f.input :_destroy, as: :hidden, wrapper: false %>
       <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "remove-button button alert postfix" %>
-   </div>
+    </div>
   </div>
 </div>
