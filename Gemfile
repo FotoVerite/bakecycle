@@ -52,6 +52,7 @@ group :test, :development do
   gem 'rack-livereload'
   gem 'rspec-rails'
   gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', require: false
   gem 'bullet'
