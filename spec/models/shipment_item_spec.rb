@@ -49,13 +49,13 @@ describe ShipmentItem do
       end
     end
 
-    it 'should set product_name from the name of the related product if that product exists' do
+    it 'sets product_name from the name of the related product if that product exists' do
       product = create(:product, name: 'Product1')
       shipment_item = create(:shipment_item, product: product)
       expect(shipment_item.product_name).to eq('Product1')
     end
 
-    it 'should set product_sku from the name of the related product if that product exists' do
+    it 'sets product_sku from the name of the related product if that product exists' do
       product = create(:product, :with_sku)
       shipment_item = create(:shipment_item, product: product)
       expect(shipment_item.product_sku).to eq(product.sku)

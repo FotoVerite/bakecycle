@@ -212,7 +212,7 @@ describe Shipment do
       end
     end
 
-    it 'should set route_name from the name of the related route if that product exists' do
+    it 'sets route_name from the name of the related route if that product exists' do
       route = create(:route, name: 'Route1')
       shipment = create(:shipment, route: route)
       expect(shipment.route_name).to eq('Route1')
