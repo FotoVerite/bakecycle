@@ -46,4 +46,8 @@ class OrderItem < ActiveRecord::Base
     day = date.strftime('%A').downcase.to_sym
     send(day) || 0
   end
+
+  def daily_subtotal(date)
+    quantity(date) * product.price(total_quantity)
+  end
 end

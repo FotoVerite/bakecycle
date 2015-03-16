@@ -1,16 +1,18 @@
 require 'rails_helper'
 
 describe ShipmentService do
+  let(:today) { Date.today }
+
   context 'creates shipments' do
     it 'creates shipments for orders and dates where the production date is today' do
-      order = create(:order, start_date: Date.today, lead_time: 2)
+      order = create(:order, start_date: today, lead_time: 2)
       ShipmentService.run
       expect(Shipment.count).to eq(2)
-      expect(Shipment.last.date).to eq(Date.today + order.lead_time.days)
+      expect(Shipment.last.date).to eq(today + order.lead_time.days)
     end
 
     it "doesn't create multiple shipments for the same client, route, and date" do
-      create(:order, start_date: Date.today, lead_time: 1)
+      create(:order, start_date: today, lead_time: 1)
       ShipmentService.run
       expect(Shipment.count).to eq(1)
       ShipmentService.run
@@ -21,26 +23,53 @@ describe ShipmentService do
   describe '.ship_order' do
     it 'creates a shipment for an order' do
       order = create(:order)
-      date = Date.today
-      shipment = ShipmentService.ship_order(order, date)
+      shipment = ShipmentService.ship_order(order, today)
 
       expect(shipment.auto_generated).to eq(true)
       expect(shipment.bakery).to eq(order.bakery)
       expect(shipment.client_id).to eq(order.client.id)
       expect(shipment.route_id).to eq(order.route.id)
-      expect(shipment.date).to eq(date)
+      expect(shipment.date).to eq(today)
     end
 
     it 'copies order items into shipment items' do
       order = create(:order, order_item_count: 1)
       order_item = order.order_items.first
-      date = Date.today
-      shipment_item = ShipmentService.ship_order(order, date).shipment_items.first
+      shipment_item = ShipmentService.ship_order(order, today).shipment_items.first
 
       expect(shipment_item.product_id).to eq(order_item.product.id)
       expect(shipment_item.product_name).to eq(order_item.product.name)
       expect(shipment_item.product_sku).to eq(order_item.product.sku)
-      expect(shipment_item.production_start).to be < date
+      expect(shipment_item.production_start).to be < today
+    end
+  end
+
+  describe '.delivery_fee' do
+    it 'sets delivery fee to 0 if client has no delivery fees' do
+      client = create(:client, delivery_fee_option: 0)
+      order = create(:order, start_date: today, client: client)
+      shipment = ShipmentService.ship_order(order, today)
+      expect(shipment.delivery_fee).to eq(0)
+    end
+
+    it 'sets delivery fee if client has delivery fees' do
+      client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25)
+      product = create(:product, base_price: 10)
+      order = create(:order, start_date: today, client: client)
+      order.order_items.first.update_attributes(
+        product: product,
+        monday: 1,
+        tuesday: 1,
+        wednesday: 1,
+        thursday: 1,
+        friday: 1,
+        saturday: 1,
+        sunday: 1)
+      shipment = ShipmentService.ship_order(order, today)
+
+      expect(order.client_daily_delivery_fee?).to eq(true)
+      expect(order.daily_subtotal(today)).to be < order.client_delivery_minimum
+      expect(shipment.delivery_fee).to eq(25)
     end
   end
 end
