@@ -82,6 +82,10 @@ class Shipment < ActiveRecord::Base
     subtotal + delivery_fee
   end
 
+  def total_quantity
+    shipment_items.pluck(:product_quantity).reduce(:+)
+  end
+
   def invoice_number
     "#{date.strftime('%Y%m%d')}-#{id}-#{client_id}-#{route_id}"
   end

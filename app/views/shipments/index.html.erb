@@ -1,15 +1,15 @@
 <% provide(:title, "Shipments") %>
 
 <div class="row">
-  <div class="small-12 medium-10 columns">
+  <div class="small-12 medium-8 columns">
     <h1>Shipments</h1>
     <p><%= link_to 'Add New Shipment', new_shipment_path, class: "button" %></p>
   </div>
   <% if @shipments.any? %>
-    <div class="small-12 medium-2 columns">
+    <div class="small-12 medium-4 columns">
       <div class="view-pdf-button small-only-text-center medium-text-right">
         <%= link_to invoices_shipments_path(search: params[:search]), target: '_blank' do %>
-          <i class="fi-page-export-pdf"></i>
+          <i class="fi-page-multiple"></i> View All Shipment Pdfs
         <% end %>
       </div>
     </div>
@@ -35,8 +35,11 @@
           <%= link_to edit_shipment_path(shipment) do %>
             <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Shipment"><i class="fi-page-edit"></i></span>
           <% end %>
-          <%= link_to shipment_path(shipment, format: :pdf), target: "_blank" do %>
-            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Shipment PDF"><i class="fi-page-export-pdf"></i></span>
+          <%= link_to invoice_shipment_path(shipment, format: :pdf), target: "_blank" do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Invoice"><i class="fi-page-export-pdf"></i></span>
+          <% end %>
+          <%= link_to packing_slip_shipment_path(shipment, format: :pdf), target: "_blank" do %>
+            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Packing Slip"><i class="fa fa-truck fa-1"></i></span>
           <% end %>
         </td>
       </tr>

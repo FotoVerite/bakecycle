@@ -27,6 +27,7 @@ gem 'paperclip', '~> 4.2'
 gem 'aws-sdk', '< 2.0'
 gem 'prawn'
 gem 'prawn-table'
+gem 'font-awesome-rails'
 
 # deployment
 gem 'httparty', require: false

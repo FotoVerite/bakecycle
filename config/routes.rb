@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   resources :orders
   resources :users
 
-  resources :shipments do
+  resources :shipments, except: [:show] do
+    get 'invoice', on: :member
+    get 'packing_slip', on: :member
     get 'invoices', on: :collection
   end
 
