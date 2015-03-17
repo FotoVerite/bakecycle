@@ -25,10 +25,10 @@ class InvoicePdf < PdfReport
 
   def header
     bounding_box([0, cursor], width: 260, height: 60) do
-      bakery_logo_display
+      bakery_logo_display(@bakery)
     end
     grid([0, 5.5], [0, 8]).bounding_box do
-      bakery_info
+      bakery_info(@bakery)
     end
     grid([0, 9], [0, 11]).bounding_box do
       text 'Invoice', size: 40
@@ -36,37 +36,21 @@ class InvoicePdf < PdfReport
   end
 
   def addresses
-    grid([2, 0], [3, 4]).bounding_box do
-      text 'Shipped To:', size: 14
+    grid([1.5, 0], [1.9, 3]).bounding_box do
+      text 'Shipped To:', size: 9
       client_address(:delivery)
     end
-    grid([2, 4.2], [3, 8]).bounding_box do
-      text 'Billed To:', size: 14
+    grid([1.5, 4], [1.9, 7]).bounding_box do
+      text 'Billed To:', size: 9
       client_address(:billing)
     end
   end
 
   def note
-    grid([2, 8], [3, 11]).bounding_box do
-      text 'Notes:', size: 14
+    grid([1.5, 8], [1.9, 11]).bounding_box do
+      text 'Notes:', size: 9
       text @shipment.note, size: 10
     end
-  end
-
-  def bakery_logo_display
-    bakery_logo_image = @bakery.logo_local_file(:invoice)
-    return image bakery_logo_image, fit: [260, 60] if bakery_logo_image
-    text_box @bakery.name.upcase, size: 60, overflow: :shrink_to_fit
-  end
-
-  def bakery_info
-    font_size 7
-    text @bakery.name
-    text @bakery.address_street_1
-    text @bakery.address_street_2 if @bakery.address_street_2.present?
-    text @bakery.city_state_zip
-    text @bakery.phone_number
-    text @bakery.email
   end
 
   def client_address(type)

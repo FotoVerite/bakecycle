@@ -58,6 +58,22 @@ class PdfReport < Prawn::Document
     end
   end
 
+  def bakery_logo_display(bakery)
+    bakery_logo_image = bakery.logo_local_file(:invoice)
+    return image bakery_logo_image, fit: [260, 60] if bakery_logo_image
+    text_box bakery.name.upcase, size: 60, overflow: :shrink_to_fit
+  end
+
+  def bakery_info(bakery)
+    font_size 7
+    text bakery.name
+    text bakery.address_street_1
+    text bakery.address_street_2 if bakery.address_street_2.present?
+    text bakery.city_state_zip
+    text bakery.phone_number
+    text bakery.email
+  end
+
   def footer
     number_of_pages
     timestamp

@@ -15,10 +15,10 @@ class DeliveryListPdf < PdfReport
   def header
     repeat :all do
       bounding_box([0, cursor], width: 260, height: 60) do
-        bakery_logo_display
+        bakery_logo_display(@bakery)
       end
       grid([0, 5.5], [0, 8]).bounding_box do
-        bakery_info
+        bakery_info(@bakery)
       end
       grid([0.2, 8], [0.2, 11]).bounding_box do
         text 'Client Delivery List', size: 13, align: :right, style: :bold
@@ -27,22 +27,6 @@ class DeliveryListPdf < PdfReport
         text delivery_date, size: 13, align: :right, style: :italic
       end
     end
-  end
-
-  def bakery_logo_display
-    bakery_logo_image = @bakery.logo_local_file(:invoice)
-    return image bakery_logo_image, fit: [260, 60] if bakery_logo_image
-    text_box @bakery.name.upcase, size: 60, overflow: :shrink_to_fit
-  end
-
-  def bakery_info
-    font_size 7
-    text @bakery.name
-    text @bakery.address_street_1
-    text @bakery.address_street_2 if @bakery.address_street_2.present?
-    text @bakery.city_state_zip
-    text @bakery.phone_number
-    text @bakery.email
   end
 
   def body
