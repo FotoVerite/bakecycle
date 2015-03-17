@@ -31,6 +31,7 @@ class ShipmentService
       auto_generated: true
     ).first_or_create! do |shipment|
       shipment.shipment_items = shipment_items(order.order_items, ship_date)
+      shipment.delivery_fee = delivery_fee(order, ship_date)
     end
   end
 
@@ -42,5 +43,11 @@ class ShipmentService
         product_price: item.product_price
       )
     end
+  end
+
+  def self.delivery_fee(order, ship_date)
+    return 0 unless order.client_daily_delivery_fee?
+    return 0 unless order.daily_subtotal(ship_date) < order.client_delivery_minimum
+    order.client_delivery_fee
   end
 end
