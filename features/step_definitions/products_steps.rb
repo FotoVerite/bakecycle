@@ -17,7 +17,7 @@ When(/^I fill out product form with:$/) do |table|
   fill_in 'product_weight', with: table.hashes[0]['weight']
   select table.hashes[0]['unit'], from: 'product_unit'
   fill_in 'product_description', with: table.hashes[0]['description']
-  fill_in 'product_extra_amount', with: table.hashes[0]['extra_amount']
+  fill_in 'product_over_bake', with: table.hashes[0]['over_bake']
   fill_in 'product_base_price', with: table.hashes[0]['base_price']
   fill_in 'product_sku', with: table.hashes[0]['sku']
 end

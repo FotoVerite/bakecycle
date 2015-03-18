@@ -27,7 +27,6 @@ Feature: Routes
     Then I should see confirmation that the route "Canal" was deleted
     And The route "Canal" should not be present
 
-
   Scenario: As a user, I should be able to edit a route
     When I am on the edit page for "Canal" route
     And I change the route name to "Flatbush"

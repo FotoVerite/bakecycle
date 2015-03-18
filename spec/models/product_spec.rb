@@ -9,7 +9,7 @@ describe Product do
     expect(product).to respond_to(:description)
     expect(product).to respond_to(:weight)
     expect(product).to respond_to(:unit)
-    expect(product).to respond_to(:extra_amount)
+    expect(product).to respond_to(:over_bake)
     expect(product).to respond_to(:motherdough)
     expect(product).to respond_to(:inclusion)
     expect(product).to respond_to(:base_price)
@@ -63,14 +63,14 @@ describe Product do
       expect(build(:product, unit: 0)).to be_valid
     end
 
-    it 'has an extra_amount that is a number' do
-      expect(product).to validate_numericality_of(:extra_amount)
-      expect(build(:product, extra_amount: 12.011)).to be_valid
-      expect(build(:product, name: 'this is our test', extra_amount: 'not a number')).to_not be_valid
-      expect(build(:product, extra_amount: 0.1234)).to_not be_valid
-      expect(build(:product, extra_amount: 0.12)).to be_valid
-      expect(build(:product, extra_amount: 0.1)).to be_valid
-      expect(build(:product, extra_amount: 1)).to be_valid
+    it 'has an over_bake that is a number' do
+      expect(product).to validate_numericality_of(:over_bake)
+      expect(build(:product, over_bake: 12.011)).to be_valid
+      expect(build(:product, name: 'this is our test', over_bake: 'not a number')).to_not be_valid
+      expect(build(:product, over_bake: 0.1234)).to_not be_valid
+      expect(build(:product, over_bake: 0.12)).to be_valid
+      expect(build(:product, over_bake: 0.1)).to be_valid
+      expect(build(:product, over_bake: 1)).to be_valid
     end
 
     it 'has a motherdough' do

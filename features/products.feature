@@ -9,8 +9,8 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount| base_price | sku             |
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
+      | name           | product_type | description | weight | unit | over_bake | base_price | sku             |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10        | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price" and don't enter any information
     And I click on "Create"
     Then "You have created almond cookies" should be present
@@ -55,8 +55,8 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount| base_price | sku             |
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
+      | name           | product_type | description | weight | unit | over_bake | base_price | sku             |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10        | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity |
@@ -69,8 +69,8 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount| base_price | sku             |
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
+      | name           | product_type | description | weight | unit | over_bake | base_price | sku             |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10        | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity |
@@ -92,8 +92,8 @@ Feature: Products
     When I go to the "products" page
     And I click on "Add New Product"
     And I fill out product form with:
-      | name           | product_type | description | weight | unit | extra_amount| base_price | sku             |
-      | almond cookies | cookie       | delicious   | 10     | g    | 10          | 1.10       | abc-123-xyz-890 |
+      | name           | product_type | description | weight | unit | over_bake | base_price | sku             |
+      | almond cookies | cookie       | delicious   | 10     | g    | 10        | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
     And I fill out the price varient form with:
       | price | quantity |

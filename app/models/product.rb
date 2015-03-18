@@ -27,7 +27,7 @@ class Product < ActiveRecord::Base
   validates :product_type, presence: true
   validates :description, length: { maximum: 500 }
   validates :weight, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
-  validates :extra_amount, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
+  validates :over_bake, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
   validates :base_price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true, presence: true
   validates :bakery, presence: true
 
