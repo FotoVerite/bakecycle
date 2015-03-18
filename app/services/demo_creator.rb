@@ -189,7 +189,7 @@ class DemoCreator
       description: 'A delicious loaf',
       weight: 1200,
       unit: :g,
-      extra_amount: 0,
+      over_bake: 0,
       base_price: 5.80,
       motherdough: multi_grain_dough,
       inclusion: dark_rye
@@ -205,7 +205,7 @@ class DemoCreator
       description: 'The finest baguette',
       weight: 50,
       unit: :g,
-      extra_amount: 0,
+      over_bake: 0,
       base_price: 1.50,
       motherdough: baguette_dough,
       inclusion: nicoise_olive_inclusion
@@ -219,7 +219,7 @@ class DemoCreator
       product_type: :bread,
       weight: 40,
       unit: :g,
-      extra_amount: 2,
+      over_bake: 2,
       base_price: 0.75,
       motherdough: pain_au_lait_dough,
       inclusion: chive_pain_au_lait_inclusion

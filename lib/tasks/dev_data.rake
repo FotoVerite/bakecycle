@@ -49,7 +49,7 @@ namespace :db do
 
     FactoryGirl.create(:client, :with_delivery_fee, name: "Mando's Pizza", bakery: biencuit)
     johns_bakery = FactoryGirl.create(:client, name: "John's Bakery", bakery: biencuit)
-    angels_deli = FactoryGirl.create(:client, :with_daily_delivery_fee, name: "Angel's Deli", bakery: biencuit)
+    angels_deli = FactoryGirl.create(:client, :with_delivery_fee, name: "Angel's Deli", bakery: biencuit)
     tonys_brunch = FactoryGirl.create(:client, name: "Tony's Brunch", bakery: biencuit)
     FactoryGirl.create(:client, name: "Marina's Cafe", dba: "Marina's", bakery: biencuit)
 
