@@ -24,7 +24,7 @@
 
     <div class="row">
       <div class="small-12 medium-6 columns">
-         <%= f.input :route_id, collection: order.available_routes, label_method: :name, value_method: :id, include_blank: "Select One", as: :select %>
+         <%= f.input :route_id, collection: order.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
       </div>
       <div class="small-12 medium-6 columns end">
           <%= f.label :order_type, "Order Type"%>
