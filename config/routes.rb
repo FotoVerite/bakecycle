@@ -26,4 +26,6 @@ Rails.application.routes.draw do
   resources :delivery_lists, only: [:index] do
     get 'print', on: :member
   end
+
+  resources :print_recipes, only: [:index]
 end
