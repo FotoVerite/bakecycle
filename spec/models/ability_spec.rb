@@ -54,7 +54,7 @@ describe Ability do
     it 'allows creation of clients only for their own bakery' do
       expect(ability).to be_able_to(:create, User.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, User.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, User)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, User)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'no bakery' do
@@ -117,7 +117,7 @@ describe Ability do
     it 'allows creation of clients only for their own bakery' do
       expect(ability).to be_able_to(:create, Client.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Client.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Client)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Client)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do
@@ -142,7 +142,7 @@ describe Ability do
     it 'allows creation of ingredients only for their own bakery' do
       expect(ability).to be_able_to(:create, Ingredient.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Ingredient.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Ingredient)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Ingredient)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do
@@ -166,7 +166,7 @@ describe Ability do
     it 'allows creation of orders only for their own bakery' do
       expect(ability).to be_able_to(:create, Order.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Order.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Order)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Order)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do
@@ -190,7 +190,7 @@ describe Ability do
     it 'allows creation of products only for their own bakery' do
       expect(ability).to be_able_to(:create, Product.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Product.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Product)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Product)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do
@@ -214,7 +214,7 @@ describe Ability do
     it 'allows creation of recipes only for their own bakery' do
       expect(ability).to be_able_to(:create, Recipe.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Recipe.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Recipe)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Recipe)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do
@@ -238,7 +238,7 @@ describe Ability do
     it 'allows creation of routes only for their own bakery' do
       expect(ability).to be_able_to(:create, Route.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Route.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Route)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Route)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do
@@ -262,7 +262,7 @@ describe Ability do
     it 'allows creation of shipment only for their own bakery' do
       expect(ability).to be_able_to(:create, Shipment.new(bakery: user.bakery))
       expect(ability).to_not be_able_to(:create, Shipment.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Shipment)).to eq(bakery: user.bakery)
+      expect(ability.attributes_for(:create, Shipment)).to eq(bakery_id: user.bakery.id)
     end
 
     context 'admins' do

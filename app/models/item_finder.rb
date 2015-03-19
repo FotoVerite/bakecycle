@@ -33,6 +33,10 @@ class ItemFinder
     Shipment.accessible_by(ability)
   end
 
+  def shipment_items
+    ShipmentItem.joins(:shipment).where(shipments: ability.attributes_for(:read, Shipment))
+  end
+
   def orders
     Order.accessible_by(ability)
   end
