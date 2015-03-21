@@ -29,7 +29,7 @@ class Client < ActiveRecord::Base
   validates :primary_contact_phone, presence: true
   validates :primary_contact_email, presence: true, format: { with: /\A.+@.+\..+\z/ }
   validates :secondary_contact_name, length: { maximum: 150 }
-  validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }
+  validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
 
   validates :active, inclusion: [true, false]
   validates :billing_term, presence: true
