@@ -11,7 +11,7 @@ class RecipeRun
     products = Product.where(id: counts.keys).order(:name)
     products.map do |product|
       count = counts[product.id]
-      over_bake_qty = (count + (count * product.over_bake)).ceil
+      over_bake_qty = (count + (count * product.over_bake / 100.0)).ceil
       OpenStruct.new(
         product: product,
         count: count,
