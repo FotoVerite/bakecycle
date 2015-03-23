@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318143356) do
+ActiveRecord::Schema.define(version: 20150323005402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,37 +36,39 @@ ActiveRecord::Schema.define(version: 20150318143356) do
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree
 
   create_table "clients", force: true do |t|
-    t.string  "name"
-    t.string  "dba"
-    t.string  "business_phone"
-    t.string  "business_fax"
-    t.boolean "active",                                       null: false
-    t.string  "delivery_address_street_1"
-    t.string  "delivery_address_street_2"
-    t.string  "delivery_address_city"
-    t.string  "delivery_address_state"
-    t.string  "delivery_address_zipcode"
-    t.string  "billing_address_street_1"
-    t.string  "billing_address_street_2"
-    t.string  "billing_address_city"
-    t.string  "billing_address_state"
-    t.string  "billing_address_zipcode"
-    t.string  "accounts_payable_contact_name"
-    t.string  "accounts_payable_contact_phone"
-    t.string  "accounts_payable_contact_email"
-    t.string  "primary_contact_name"
-    t.string  "primary_contact_phone"
-    t.string  "primary_contact_email"
-    t.string  "secondary_contact_name"
-    t.string  "secondary_contact_phone"
-    t.string  "secondary_contact_email"
-    t.float   "latitude"
-    t.float   "longitude"
-    t.integer "billing_term",                                 null: false
-    t.integer "bakery_id"
-    t.decimal "delivery_minimum",               default: 0.0, null: false
-    t.decimal "delivery_fee",                   default: 0.0, null: false
-    t.integer "delivery_fee_option",                          null: false
+    t.string   "name"
+    t.string   "dba"
+    t.string   "business_phone"
+    t.string   "business_fax"
+    t.boolean  "active",                                       null: false
+    t.string   "delivery_address_street_1"
+    t.string   "delivery_address_street_2"
+    t.string   "delivery_address_city"
+    t.string   "delivery_address_state"
+    t.string   "delivery_address_zipcode"
+    t.string   "billing_address_street_1"
+    t.string   "billing_address_street_2"
+    t.string   "billing_address_city"
+    t.string   "billing_address_state"
+    t.string   "billing_address_zipcode"
+    t.string   "accounts_payable_contact_name"
+    t.string   "accounts_payable_contact_phone"
+    t.string   "accounts_payable_contact_email"
+    t.string   "primary_contact_name"
+    t.string   "primary_contact_phone"
+    t.string   "primary_contact_email"
+    t.string   "secondary_contact_name"
+    t.string   "secondary_contact_phone"
+    t.string   "secondary_contact_email"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "billing_term",                                 null: false
+    t.integer  "bakery_id",                                    null: false
+    t.decimal  "delivery_minimum",               default: 0.0, null: false
+    t.decimal  "delivery_fee",                   default: 0.0, null: false
+    t.integer  "delivery_fee_option",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
@@ -81,31 +83,35 @@ ActiveRecord::Schema.define(version: 20150318143356) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "bakery_id"
+    t.integer  "bakery_id",       null: false
   end
 
   add_index "ingredients", ["name", "bakery_id"], name: "index_ingredients_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "order_items", force: true do |t|
-    t.integer "order_id"
-    t.integer "product_id"
-    t.integer "monday"
-    t.integer "tuesday"
-    t.integer "wednesday"
-    t.integer "thursday"
-    t.integer "friday"
-    t.integer "saturday"
-    t.integer "sunday"
+    t.integer  "order_id"
+    t.integer  "product_id"
+    t.integer  "monday"
+    t.integer  "tuesday"
+    t.integer  "wednesday"
+    t.integer  "thursday"
+    t.integer  "friday"
+    t.integer  "saturday"
+    t.integer  "sunday"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "orders", force: true do |t|
-    t.integer "client_id"
-    t.integer "route_id"
-    t.date    "start_date"
-    t.date    "end_date"
-    t.string  "note"
-    t.string  "order_type", null: false
-    t.integer "bakery_id"
+    t.integer  "client_id"
+    t.integer  "route_id"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "note"
+    t.string   "order_type", null: false
+    t.integer  "bakery_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "price_varients", force: true do |t|
@@ -130,7 +136,7 @@ ActiveRecord::Schema.define(version: 20150318143356) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "base_price"
-    t.integer  "bakery_id"
+    t.integer  "bakery_id",                    null: false
     t.string   "sku"
   end
 
@@ -154,57 +160,63 @@ ActiveRecord::Schema.define(version: 20150318143356) do
     t.integer  "lead_days",     default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "bakery_id"
+    t.integer  "bakery_id",                 null: false
   end
 
   add_index "recipes", ["name", "bakery_id"], name: "index_recipes_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "routes", force: true do |t|
-    t.string  "name"
-    t.text    "notes"
-    t.boolean "active",         null: false
-    t.time    "departure_time"
-    t.integer "bakery_id"
+    t.string   "name"
+    t.text     "notes"
+    t.boolean  "active",         null: false
+    t.time     "departure_time"
+    t.integer  "bakery_id",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "routes", ["name", "bakery_id"], name: "index_routes_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "shipment_items", force: true do |t|
-    t.integer "shipment_id"
-    t.integer "product_id"
-    t.string  "product_name"
-    t.integer "product_quantity", default: 0,   null: false
-    t.decimal "product_price",    default: 0.0, null: false
-    t.string  "product_sku"
-    t.date    "production_start",               null: false
+    t.integer  "shipment_id"
+    t.integer  "product_id"
+    t.string   "product_name"
+    t.integer  "product_quantity", default: 0,   null: false
+    t.decimal  "product_price",    default: 0.0, null: false
+    t.string   "product_sku"
+    t.date     "production_start",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "shipments", force: true do |t|
-    t.integer "client_id"
-    t.integer "route_id"
-    t.date    "date"
-    t.date    "payment_due_date"
-    t.integer "bakery_id"
-    t.decimal "delivery_fee",                     default: 0.0,   null: false
-    t.boolean "auto_generated",                   default: false, null: false
-    t.string  "client_name"
-    t.string  "client_dba"
-    t.string  "client_billing_term"
-    t.string  "client_delivery_address_street_1"
-    t.string  "client_delivery_address_street_2"
-    t.string  "client_delivery_address_city"
-    t.string  "client_delivery_address_state"
-    t.string  "client_delivery_address_zipcode"
-    t.string  "client_billing_address_street_1"
-    t.string  "client_billing_address_street_2"
-    t.string  "client_billing_address_city"
-    t.string  "client_billing_address_state"
-    t.string  "client_billing_address_zipcode"
-    t.integer "client_billing_term_days"
-    t.string  "route_name"
-    t.string  "note"
-    t.string  "client_primary_contact_name"
-    t.string  "client_primary_contact_phone"
+    t.integer  "client_id"
+    t.integer  "route_id"
+    t.date     "date"
+    t.date     "payment_due_date"
+    t.integer  "bakery_id",                                        null: false
+    t.decimal  "delivery_fee",                     default: 0.0,   null: false
+    t.boolean  "auto_generated",                   default: false, null: false
+    t.string   "client_name"
+    t.string   "client_dba"
+    t.string   "client_billing_term"
+    t.string   "client_delivery_address_street_1"
+    t.string   "client_delivery_address_street_2"
+    t.string   "client_delivery_address_city"
+    t.string   "client_delivery_address_state"
+    t.string   "client_delivery_address_zipcode"
+    t.string   "client_billing_address_street_1"
+    t.string   "client_billing_address_street_2"
+    t.string   "client_billing_address_city"
+    t.string   "client_billing_address_state"
+    t.string   "client_billing_address_zipcode"
+    t.integer  "client_billing_term_days"
+    t.string   "route_name"
+    t.string   "note"
+    t.string   "client_primary_contact_name"
+    t.string   "client_primary_contact_phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
