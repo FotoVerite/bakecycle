@@ -4,7 +4,7 @@ body, html {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #555 !important;
+  color: $bc-charcoal !important;
 }
 
 p, div {
@@ -18,16 +18,16 @@ div {
 table tr th, table tr td {
   padding: 0.5625rem 0.625rem;
   font-size: 0.875rem;
-  color: #555;
+  color: $bc-charcoal;
 }
 
 body {
-  color: #555;
-  background-color: #f3f3f3;
+  color: $bc-charcoal;
+  background-color: $bc-off-white;
 }
 
 a {
-  color: #555;
+  color: $bc-charcoal;
 }
 
 .row.full-width {
@@ -36,7 +36,7 @@ a {
 }
 
 .content-bg {
-  background: #f3f3f3;
+  background: $bc-off-white;
 }
 
 input[type="text"] {
@@ -45,10 +45,6 @@ input[type="text"] {
 
 .full-width {
   width: 100%;
-}
-
-.login-button {
-  margin-top: 5%;
 }
 
 .welcome-panel {

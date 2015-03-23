@@ -8,7 +8,7 @@
     padding-right: 0px;
 
     .logo-bg {
-      background-color: #18bc9c;
+      background-color: $bc-green;
       min-height: 70px;
       padding-top: 10px;
 
@@ -60,7 +60,7 @@
         text-align: center;
       }
       .mail {
-        background: #07a5bb;
+        background: $bc-green;
         color: #fff;
       }
 
@@ -82,7 +82,7 @@
       }
 
       &:hover {
-        color: #18bc9c;
+        color: $bc-green;
       }
     }
   }

@@ -1,0 +1,99 @@
+<% provide(:title, "Dashboard") %>
+<div class="dashboard">
+  <h1>Dashboard</h1>
+  <div class="row">
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Ingredients
+            <h3><%= item_finder.ingredients.count %></h3>
+          </div>
+          <i class="fi-info right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Recipes
+            <h3><%= item_finder.recipes.count %></h3>
+          </div>
+          <i class="fi-info right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Products
+            <h3><%= item_finder.products.count %></h3>
+          </div>
+          <i class="fi-price-tag right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Routes
+            <h3><%= item_finder.routes.count %></h3>
+          </div>
+          <i class="fi-foundation right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Clients
+            <h3><%= item_finder.clients.count %></h3>
+          </div>
+          <i class="fi-torsos-all right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Orders
+            <h3><%= item_finder.orders.count %></h3>
+          </div>
+          <i class="fi-shopping-bag right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Shipments
+            <h3><%= item_finder.shipments.count %></h3>
+          </div>
+          <i class="fi-calendar right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="large-4 medium-6 small-12 columns end">
+        <div class="stats border">
+          <div class="left">
+            Users
+            <h3><%= item_finder.users.count %></h3>
+          </div>
+          <i class="fi-torso right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    <% if can? :manage, Bakery %>
+      <div class="large-4 medium-6 small-12 columns end">
+        <div class="stats border">
+          <div class="left">
+            Bakeries
+            <h3><%= item_finder.bakeries.count %></h3>
+          </div>
+          <i class="fi-torsos-all right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

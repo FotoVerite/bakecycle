@@ -1,7 +1,7 @@
-<div class="no-padding">
+<div class="side-column">
   <div class="large-2 medium-12 small-12 columns">
     <ul class="side-nav">
-      <li class="<%= active_nav?(:dashboard) %>"><%= link_to("Dashboard", root_path) %></li>
+      <li class="<%= active_nav?(:dashboard) %>"><%= link_to("Dashboard", dashboard_path) %></li>
       <% if current_bakery %>
         <li class="<%= active_nav?(:ingredients) %>"><%= link_to("Ingredients", ingredients_path)%></li>
         <li class="<%= active_nav?(:recipes) %>"><%= link_to("Recipes", recipes_path) %></li>

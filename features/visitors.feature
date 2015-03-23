@@ -3,7 +3,7 @@ Feature: Visitors
   Scenario: As a visitor, I should be able to view the home page
     Given I am a visitor
     When I go to the home page
-    Then "BakeCycle" should be present
+    Then "Wholesale Bakery Management" should be present
     And "Login" should be present
 
   Scenario: As a visitor, I should not be able to view Ingredients
