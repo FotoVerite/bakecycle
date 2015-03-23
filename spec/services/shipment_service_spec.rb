@@ -6,16 +6,16 @@ describe ShipmentService do
   context 'creates shipments' do
     it 'creates shipments for orders and dates where the production date is today' do
       order = create(:order, start_date: today, lead_time: 2)
-      ShipmentService.run
+      ShipmentService.run(today)
       expect(Shipment.count).to eq(2)
       expect(Shipment.last.date).to eq(today + order.lead_time.days)
     end
 
     it "doesn't create multiple shipments for the same client, route, and date" do
       create(:order, start_date: today, lead_time: 1)
-      ShipmentService.run
+      ShipmentService.run(today)
       expect(Shipment.count).to eq(1)
-      ShipmentService.run
+      ShipmentService.run(today)
       expect(Shipment.count).to eq(1)
     end
   end
@@ -41,6 +41,36 @@ describe ShipmentService do
       expect(shipment_item.product_name).to eq(order_item.product.name)
       expect(shipment_item.product_sku).to eq(order_item.product.sku)
       expect(shipment_item.production_start).to be < today
+    end
+
+    it "doesn't create shipment items with a 0 quantity" do
+      order = create(:order, order_item_count: 2)
+      order.order_items.first.update!(
+        monday: 0,
+        tuesday: 0,
+        wednesday: 0,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0
+      )
+      shipment = ShipmentService.ship_order(order, today)
+      expect(shipment.shipment_items.count).to eq(1)
+    end
+
+    it "doesn't create shipments with 0 quantity" do
+      order = create(:order, order_item_count: 1)
+      order.order_items.first.update!(
+        monday: 0,
+        tuesday: 0,
+        wednesday: 0,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0
+      )
+      shipment = ShipmentService.ship_order(order, today)
+      expect(shipment).to be_nil
     end
   end
 

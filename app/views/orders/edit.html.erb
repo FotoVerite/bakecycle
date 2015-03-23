@@ -5,7 +5,7 @@
   <%= render "form"%>
 
   <% unless @shipments.empty? %>
-    <h3>Upcoming shipments for <%= order.client.name %> on <%= order.route.name %> route</h3>
+    <h3>Upcoming shipments for <%= order.client.name %> on <%= order.route_name %> route</h3>
     <table class="responsive-table">
       <thead>
         <tr>

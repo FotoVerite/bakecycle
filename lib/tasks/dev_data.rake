@@ -60,7 +60,7 @@ namespace :db do
     FactoryGirl.create(:order, client: johns_bakery, bakery: biencuit, route: route1)
     FactoryGirl.create(:order, client: angels_deli, bakery: biencuit, route: route2)
     FactoryGirl.create(:order, client: tonys_brunch, bakery: biencuit, route: route3)
-    FactoryGirl.create_list(:order, 12, bakery: biencuit, lead_time: 5)
+    FactoryGirl.create_list(:order, 12, bakery: biencuit, lead_time: 5, route: route1)
     FactoryGirl.create_list(:order, 12, lead_time: 5)
 
     ShipmentService.run

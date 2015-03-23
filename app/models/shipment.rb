@@ -83,7 +83,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def total_quantity
-    shipment_items.pluck(:product_quantity).reduce(:+)
+    shipment_items.pluck(:product_quantity).reduce(:+) || 0
   end
 
   def invoice_number

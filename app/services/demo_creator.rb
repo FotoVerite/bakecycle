@@ -12,7 +12,13 @@ class DemoCreator
     chive_pain_au_lait
     client
     order
-    ShipmentService.process_bakery(@bakery)
+    run_one_week_shipments
+  end
+
+  def run_one_week_shipments
+    (0..7).to_a.reverse.each do |days|
+      ShipmentService.process_bakery(@bakery, Date.today - days.days)
+    end
   end
 
   def dark_rye_flour
@@ -229,7 +235,7 @@ class DemoCreator
   def default_route
     @_defaut_route ||= Route.create!(
       bakery: @bakery,
-      name: 'default',
+      name: 'Default Route',
       active: true,
       departure_time: Chronic.parse('6 am')
     )
@@ -268,7 +274,7 @@ class DemoCreator
     Order.create!(
       bakery: @bakery,
       order_type: 'standing',
-      start_date: Date.today,
+      start_date: Date.today - 1.week,
       end_date: nil,
       client: client,
       route: default_route,
