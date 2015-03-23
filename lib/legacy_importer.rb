@@ -1,7 +1,7 @@
 require 'mysql2'
 require 'uri'
-
-require 'pry'
+require 'csv'
+require 'rubocop'
 
 class LegacyImporter
   attr_reader :connection, :bakery
@@ -91,12 +91,12 @@ class LegacyImporter
     clients.reject { |client| skip_client?(client) }.map { |client| import_client(client) }.partition(&:valid?)
   end
 
+  # rubocop:disable Lint/Debugger: Assignment Branch Condition size is too high
   def import_client(legacy_client)
-    return if
     client_attr = translate_fields(legacy_client)
 
     client_attr[:billing_term] = BILLING_TERMS_MAP[client_attr[:billing_term]]
-    client_attr[:active] = legacy_client[:active] == 'Y'
+    client_attr[:active] = legacy_client[:client_active] == 'Y'
     client_attr[:name] ||= legacy_client[:client_dba]
 
     client_attr[:business_phone] ||= 'unknown'
@@ -115,6 +115,7 @@ class LegacyImporter
     client.update(client_attr)
     client
   end
+  # rubocop:ensable Lint/Debugger
 
   def invalid_client_report(invalid_clients)
     invalid_client_info = []
@@ -125,11 +126,28 @@ class LegacyImporter
         invalid_client_info << "#{client.name}, #{client.dba}, #{invalid_attributes}\n"
       end
     end
-    # change this to create csv
-    puts invalid_client_info
+    invalid_client_csv(invalid_clients)
+    invalid_client_info.sort
+  end
+
+  def invalid_client_csv(invalid_clients)
+    csv_string = CSV.generate(headers: true) do |csv|
+      csv << ['Name', 'DBA', 'Invalid Attributes']
+      invalid_clients.sort_by(&:name).each do |invalid_client|
+        csv << report_row(invalid_client) unless  invalid_client.name.include?('Samples')
+      end
+    end
+
+    LegacyImporterMailer.invalid_clients_csv(csv_string).deliver!
   end
 
   private
+
+  def report_row(invalid_client)
+    invalid_keys = invalid_client.errors.messages.keys
+    invalid_attributes = invalid_keys.collect { |key| "#{key}: #{invalid_client[key]}" }
+    [invalid_client.name, invalid_client.dba, invalid_attributes].flatten
+  end
 
   def skip_client?(client)
     if client[:client_business_name].blank? && client[:client_dba].blank?

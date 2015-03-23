@@ -83,4 +83,13 @@ describe LegacyImporter do
       expect(client.name).to eq('New Name')
     end
   end
+
+  describe '#invalid_client_report' do
+    it 'returns invalid clients and delivers mailer' do
+      invalid_client = importer.import_client(legacy_client.merge(client_delivery_address1: nil))
+      invalid_client_row = ["#{invalid_client.name}, #{invalid_client.dba}, delivery_address_street_1: \n"]
+      expect(importer.invalid_client_report([invalid_client])).to eq(invalid_client_row)
+      expect(ActionMailer::Base.deliveries.last.subject).to eq('Invalid clients csv')
+    end
+  end
 end
