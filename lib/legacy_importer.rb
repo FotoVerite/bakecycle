@@ -1,7 +1,6 @@
 require 'mysql2'
 require 'uri'
 require 'csv'
-require 'rubocop'
 
 class LegacyImporter
   attr_reader :connection, :bakery
@@ -30,7 +29,6 @@ class LegacyImporter
   USER_FIELDS_MAP = %w(
     client_active             active
     client_business_name      name
-    client_chargedeliveryfee  charge_delivery_fee
     client_dba                dba
 
     client_billing_address1   billing_address_street_1
@@ -68,7 +66,6 @@ class LegacyImporter
   # client_createinvoices
   # client_deliverorpickup
   # client_deliveryend
-  # client_deliveryfeespan
   # client_deliverynotes
   # client_deliverystart
   # client_discountpct
@@ -91,13 +88,13 @@ class LegacyImporter
     clients.reject { |client| skip_client?(client) }.map { |client| import_client(client) }.partition(&:valid?)
   end
 
-  # rubocop:disable Lint/Debugger: Assignment Branch Condition size is too high
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def import_client(legacy_client)
     client_attr = translate_fields(legacy_client)
-
     client_attr[:billing_term] = BILLING_TERMS_MAP[client_attr[:billing_term]]
     client_attr[:active] = legacy_client[:client_active] == 'Y'
     client_attr[:name] ||= legacy_client[:client_dba]
+    client_attr[:delivery_fee_option] = "#{legacy_client[:client_deliveryfeespan]}_delivery_fee".to_sym
 
     client_attr[:business_phone] ||= 'unknown'
 
@@ -115,7 +112,7 @@ class LegacyImporter
     client.update(client_attr)
     client
   end
-  # rubocop:ensable Lint/Debugger
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def invalid_client_report(invalid_clients)
     invalid_client_info = []
@@ -126,11 +123,10 @@ class LegacyImporter
         invalid_client_info << "#{client.name}, #{client.dba}, #{invalid_attributes}\n"
       end
     end
-    invalid_client_csv(invalid_clients)
     invalid_client_info.sort
   end
 
-  def invalid_client_csv(invalid_clients)
+  def invalid_client_csv_email(invalid_clients)
     csv_string = CSV.generate(headers: true) do |csv|
       csv << ['Name', 'DBA', 'Invalid Attributes']
       invalid_clients.sort_by(&:name).each do |invalid_client|
@@ -153,8 +149,9 @@ class LegacyImporter
     if client[:client_business_name].blank? && client[:client_dba].blank?
       Rails.logger.info "Skipping Legacy ID #{client[:client_id]} due to blank name and dba"
       return true
+    elsif client[:client_business_name].include?('Samples')
+      return true
     end
-    return true if client[:client_business_name].include?('Samples')
     false
   end
 

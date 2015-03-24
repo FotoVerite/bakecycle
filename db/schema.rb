@@ -66,10 +66,10 @@ ActiveRecord::Schema.define(version: 20150323005402) do
     t.integer  "bakery_id",                                    null: false
     t.decimal  "delivery_minimum",               default: 0.0, null: false
     t.decimal  "delivery_fee",                   default: 0.0, null: false
+    t.string   "legacy_id"
     t.integer  "delivery_fee_option",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string  "legacy_id"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
