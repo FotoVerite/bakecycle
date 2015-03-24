@@ -37,6 +37,7 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Max: 16
 Metrics/ClassLength:
-  Max: 111
+  Max: 116
 RSpec/DescribedClass:
   Enabled: false
+

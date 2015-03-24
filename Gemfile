@@ -34,6 +34,9 @@ gem 'httparty', require: false
 gem 'netrc', require: false
 gem 'rendezvous', require: false
 
+# legacy import
+gem 'mysql2', require: false
+
 group :development do
   gem 'spring'
   gem 'quiet_assets'
