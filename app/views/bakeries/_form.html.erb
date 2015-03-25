@@ -66,14 +66,17 @@
     <% if f.object.persisted? %>
       <div class="row">
         <div class="small-12 columns">
-          <%= image_tag @bakery.logo.url(:thumb) %>
+          <%= image_tag bakery.logo(:thumb) if bakery.logo.present? && !bakery.logo_errors? %>
         </div>
       </div>
     <% end %>
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.file_field :logo%>
+        <%= f.file_field :logo %>
+        <% if bakery.logo_errors? %>
+          <small class="error">Images must be a JPEG, PNG, TIFF or BMP</small>
+        <% end %>
       </div>
     </div>
   </fieldset>
