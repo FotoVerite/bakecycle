@@ -1,6 +1,6 @@
 class RoutesController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource except: [:new]
+  load_and_authorize_resource
   decorates_assigned :routes, :route
 
   def index

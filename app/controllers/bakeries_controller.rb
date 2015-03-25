@@ -1,6 +1,7 @@
 class BakeriesController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
+  decorates_assigned :bakeries, :bakery
 
   def index
   end
