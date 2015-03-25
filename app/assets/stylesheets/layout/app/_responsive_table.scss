@@ -60,8 +60,8 @@ $bp-xlarge: 75em;
     }
 
     th {
-      background-color: #18bc9c;
-      border: 1px solid #18bc9c;
+      background-color: $bc-green;
+      border: 1px solid $bc-green;
       text-align: center;
       color: white;
 
@@ -121,7 +121,7 @@ $bp-xlarge: 75em;
 
     tr {
       margin-bottom: 1em;
-      border: 2px solid #18bc9c;
+      border: 2px solid $bc-green;
 
       @media (min-width: $bp-medium) {
         // Undo display: block
@@ -141,7 +141,7 @@ $bp-xlarge: 75em;
     }
 
     th[scope="row"] {
-      background-color: #18bc9c;
+      background-color: $bc-green;
       color: white;
 
       @media (min-width: $bp-medium) {

@@ -12,19 +12,9 @@
   </head>
 
   <body ng-app="bakecycle">
-    <div class="row full-width wrapper">
-      <div class="large-12 columns content-bg">
-        <%= render 'layouts/topmenusection' %>
-        <div class="row">
-          <% if user_signed_in? %>
-            <%= render 'layouts/sidenav' %>
-          <% end %>
-          <div class= "<%= class_for_main_content %>">
-            <%= render 'layouts/flash_messages' %>
-            <%= yield %>
-          </div>
-        </div>
-      </div>
+    <div>
+      <%= render 'layouts/flash_messages' %>
+      <%= yield %>
     </div>
   </body>
 </html>

@@ -1,0 +1,24 @@
+.cta-btn {
+  background-color: $bc-green;
+  border-radius: 3px;
+  box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.2) inset;
+  font-weight: 600; //OpenSans-Semibold
+  color: #FFFFFF;
+  font-size: 14px;
+  line-height: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 30px 0 30px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 300ms ease-out;
+  transition: color 300ms ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: darken( $bc-green, 5% );
+    color: rgba(255, 255, 255, .7);
+  }
+}

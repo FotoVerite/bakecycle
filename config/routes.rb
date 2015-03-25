@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
-  root 'static_pages#index'
+  root 'landing_pages#index'
+  get :dashboard, to: 'dashboard#index'
+
   resources :ingredients
   resources :recipes
   resources :products

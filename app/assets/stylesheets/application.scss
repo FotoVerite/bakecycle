@@ -1,7 +1,10 @@
 /* Made by a Wizard */
 
+@import "base/foundation_and_overrides";
+@import "base/variables";
+@import "base/buttons";
+@import "base/main.scss";
+@import "base/font_setup";
+@import "layout/base";
 @import "font-awesome";
-@import "typography";
-@import "foundation_and_overrides";
-@import "jquery_ui";
-@import "components/index";
+@import "vendor/jquery_ui";

@@ -23,4 +23,12 @@ class ApplicationController < ActionController::Base
   def item_finder
     @_item_finder ||= ItemFinder.new(current_ability)
   end
+
+  def after_sign_in_path_for(_resource)
+    dashboard_path
+  end
+
+  def after_sign_out_path_for(_resource)
+    root_path
+  end
 end
