@@ -3,6 +3,6 @@ namespace :bakecycle do
   task create_shipments: :environment do
     Rails.logger.info 'Creating shipments'
     ShipmentService.run
-    Rails.logger.info 'Creating done'
+    Rails.logger.info 'Creating shipments done'
   end
 end
