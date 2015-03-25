@@ -32,5 +32,15 @@ FactoryGirl.define do
         recipe.recipe_items = build_list(:recipe_item_ingredient, evaluator.ingredient_count, bakery: evaluator.bakery)
       end
     end
+
+    trait :with_nested_recipe do
+      transient do
+        recipe_lead_days 2
+      end
+
+      after(:build) do |recipe, evaluator|
+        recipe.recipe_items = [build(:recipe_item_recipe, recipe_lead_days: evaluator.recipe_lead_days)]
+      end
+    end
   end
 end

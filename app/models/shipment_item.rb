@@ -25,7 +25,7 @@ class ShipmentItem < ActiveRecord::Base
   def set_production_start
     return nil unless product_id
     product = Product.find(product_id)
-    self.production_start = shipment.date - product.lead_time
+    self.production_start = shipment.date - product.total_lead_days
   end
 
   def product=(product)

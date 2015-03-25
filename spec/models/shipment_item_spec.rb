@@ -69,7 +69,7 @@ describe ShipmentItem do
       shipment_item = ShipmentItem.new
       shipment_item.product = product
       shipment_item.shipment = shipment
-      production_start = shipment_item.shipment.date - product.lead_time
+      production_start = shipment_item.shipment.date - product.total_lead_days
       shipment_item.save
       expect(shipment_item.production_start).to eq(production_start)
     end

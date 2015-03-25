@@ -6,9 +6,9 @@ class RecipeItemDecorator < Draper::Decorator
     inclusionable.send(:"#{model_name}_type").capitalize
   end
 
-  def lead
-    return 'N/A' unless model_name == 'recipe'
-    inclusionable.lead_days
+  def total_lead_display
+    return 'N/A' unless inclusionable.class == Recipe
+    total_lead_days
   end
 
   def model_name

@@ -10,7 +10,7 @@ FactoryGirl.define do
 
     transient do
       order_item_count 1
-      lead_time 2
+      total_lead_days 2
     end
 
     after(:build) do |order, evaluator|
@@ -19,7 +19,7 @@ FactoryGirl.define do
         evaluator.order_item_count,
         order: order,
         bakery: evaluator.bakery,
-        lead_time: evaluator.lead_time
+        total_lead_days: evaluator.total_lead_days
       )
     end
 

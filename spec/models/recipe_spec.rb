@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe Recipe do
-  let(:recipe) { build(:recipe) }
+  let(:recipe) { build_stubbed(:recipe) }
+  let(:bakery) { recipe.bakery }
 
   it 'has model attributes' do
     expect(recipe).to respond_to(:name)
@@ -18,6 +19,7 @@ describe Recipe do
 
   describe 'validations' do
     it 'has validations' do
+      recipe = build(:recipe)
       expect(recipe).to validate_presence_of(:recipe_type)
       expect(recipe).to validate_presence_of(:name)
       expect(recipe).to ensure_length_of(:name).is_at_most(150)
@@ -59,6 +61,24 @@ describe Recipe do
 
     describe 'lead_days' do
       it { expect(recipe).to validate_numericality_of(:lead_days) }
+    end
+
+    describe 'total_lead_days' do
+      it 'checks the lead time of all included recipes, and adds the longest to its own total_lead_days' do
+        dough = build(:recipe_preferment, bakery: bakery, lead_days: 4)
+        recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
+        recipe.recipe_items = [recipe_item]
+
+        expect(recipe.total_lead_days).to eq(6)
+      end
+
+      it 'works with stacked recipes' do
+        dough = build(:recipe_preferment, :with_nested_recipe, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
+        recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
+        recipe.recipe_items = [recipe_item]
+
+        expect(recipe.total_lead_days).to eq(8)
+      end
     end
 
     describe 'mix_size_unit' do

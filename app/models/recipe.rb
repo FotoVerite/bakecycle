@@ -13,6 +13,7 @@ class Recipe < ActiveRecord::Base
   enum mix_size_unit: [:oz, :lb, :g, :kg]
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
+  validates :lead_days, presence: true
   validates :mix_size, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true, allow_nil: true
   validates :mix_size_unit, presence: true, unless: 'mix_size.blank?'
   validates :recipe_type, presence: true
@@ -34,5 +35,9 @@ class Recipe < ActiveRecord::Base
 
   def self.inclusions
     where(recipe_type: Recipe.recipe_types[:inclusion])
+  end
+
+  def total_lead_days
+    lead_days + recipe_items.max_lead_days
   end
 end

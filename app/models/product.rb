@@ -64,10 +64,7 @@ class Product < ActiveRecord::Base
     find_varients.where('quantity <= ?', quantity).order(:quantity)
   end
 
-  def lead_time
-    lead = [1]
-    lead << inclusion.lead_days if inclusion
-    lead << motherdough.lead_days if motherdough
-    lead.max
+  def total_lead_days
+    [1, inclusion.try(:total_lead_days), motherdough.try(:total_lead_days)].compact.max
   end
 end

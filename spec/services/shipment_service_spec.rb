@@ -5,14 +5,14 @@ describe ShipmentService do
 
   context 'creates shipments' do
     it 'creates shipments for orders and dates where the production date is today' do
-      order = create(:order, start_date: today, lead_time: 2)
+      order = create(:order, start_date: today, total_lead_days: 2)
       ShipmentService.run(today)
       expect(Shipment.count).to eq(2)
-      expect(Shipment.last.date).to eq(today + order.lead_time.days)
+      expect(Shipment.last.date).to eq(today + order.total_lead_days.days)
     end
 
     it "doesn't create multiple shipments for the same client, route, and date" do
-      create(:order, start_date: today, lead_time: 1)
+      create(:order, start_date: today, total_lead_days: 1)
       ShipmentService.run(today)
       expect(Shipment.count).to eq(1)
       ShipmentService.run(today)
