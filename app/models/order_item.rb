@@ -23,9 +23,9 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
-  def lead_time
-    return 0 unless product.lead_time
-    product.lead_time
+  def total_lead_days
+    return 0 unless product.total_lead_days
+    product.total_lead_days
   end
 
   def product_price

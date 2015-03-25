@@ -11,9 +11,9 @@ FactoryGirl.define do
 
     transient do
       bakery { build(:bakery) }
-      lead_time 2
+      total_lead_days 2
     end
 
-    product { create(:product, :with_motherdough, bakery: bakery, lead_time: lead_time) }
+    product { create(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
   end
 end

@@ -71,8 +71,8 @@ class Order < ActiveRecord::Base
     order_type == 'standing'
   end
 
-  def lead_time
-    order_items.map(&:lead_time).max || 0
+  def total_lead_days
+    order_items.map(&:total_lead_days).max || 0
   end
 
   def daily_subtotal(date)

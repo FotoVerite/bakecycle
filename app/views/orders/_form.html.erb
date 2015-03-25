@@ -56,7 +56,7 @@
     <% if f.object.persisted? %>
       <div class="row">
         <div class="small-12 medium-6 columns">
-          <p><strong>Order Lead Time: <%= order.lead_time %></strong></p>
+          <p><strong>Order Lead Time: <%= order.total_lead_days %></strong></p>
         </div>
       </div>
     <% end %>

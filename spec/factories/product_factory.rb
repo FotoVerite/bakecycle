@@ -10,15 +10,15 @@ FactoryGirl.define do
     bakery
 
     transient do
-      lead_time 2
+      total_lead_days 2
     end
 
     trait :with_inclusion do
-      inclusion { create(:recipe_inclusion, bakery: bakery, lead_days: lead_time) }
+      inclusion { create(:recipe_inclusion, bakery: bakery, lead_days: total_lead_days) }
     end
 
     trait :with_motherdough do
-      motherdough { create(:recipe_motherdough, bakery: bakery, lead_days: lead_time) }
+      motherdough { create(:recipe_motherdough, bakery: bakery, lead_days: total_lead_days) }
     end
 
     trait :with_sku do

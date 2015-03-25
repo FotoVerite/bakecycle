@@ -64,7 +64,7 @@ describe Recipe do
     end
 
     describe 'total_lead_days' do
-      it 'checks the lead to of all included recipes, and adds the longest to its own total_lead_days' do
+      it 'checks the lead time of all included recipes, and adds the longest to its own total_lead_days' do
         dough = build(:recipe_preferment, bakery: bakery, lead_days: 4)
         recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
         recipe.recipe_items = [recipe_item]

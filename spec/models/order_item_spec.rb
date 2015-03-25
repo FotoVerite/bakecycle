@@ -53,7 +53,7 @@ describe OrderItem do
     end
   end
 
-  describe '#lead_time' do
+  describe '#total_lead_days' do
     it 'returns max lead time for the order_item' do
       motherdough = create(:recipe_motherdough, lead_days: 5)
       inclusion = create(:recipe_inclusion, lead_days: 3)
@@ -61,7 +61,7 @@ describe OrderItem do
       order = create(:order)
       order_item = create(:order_item, order: order, product: product)
 
-      expect(order_item.lead_time).to eq(5)
+      expect(order_item.total_lead_days).to eq(5)
     end
   end
 

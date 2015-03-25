@@ -12,7 +12,7 @@ class ShipmentService
   end
 
   def self.process_client(client, date)
-    max_lead_time = client.orders.map(&:lead_time).max
+    max_lead_time = client.orders.map(&:total_lead_days).max
     return if max_lead_time.nil?
     (1..max_lead_time).to_a.each do |lead|
       ship_date = date + lead.days

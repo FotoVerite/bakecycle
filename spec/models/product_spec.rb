@@ -82,16 +82,16 @@ describe Product do
     end
   end
 
-  describe '#lead_time' do
+  describe '#total_lead_days' do
     it 'calculates lead time for a product' do
       motherdough = create(:recipe_motherdough, lead_days: 5)
       inclusion = create(:recipe_inclusion, lead_days: 2)
       product = create(:product, inclusion: inclusion, motherdough: motherdough)
-      expect(product.lead_time).to eq(5)
+      expect(product.total_lead_days).to eq(5)
     end
 
     it 'returns 1 if no recipes' do
-      expect(product.lead_time).to eq(1)
+      expect(product.total_lead_days).to eq(1)
     end
   end
 end
