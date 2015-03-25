@@ -1,0 +1,40 @@
+.cta-section {
+  padding: 100px 0 100px 0;
+
+  .headline {
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
+
+    .rwd-line {
+      display: block;
+      @media #{$medium-up} { display: inline }
+    }
+  }
+
+  .button-padding {
+    margin: 35px 0 35px 0;
+  }
+
+  .message {
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 32px;
+
+    .rwd-line {
+      display: inline;
+      @media #{$medium-up} { display: block }
+    }
+
+    .mailing-list {
+      font-weight: 700;
+      border-bottom: solid 1px $bc-charcoal;
+      display: inline;
+
+      &:hover,
+      &:focus  {
+        color: $bc-green;
+      }
+    }
+  }
+}
