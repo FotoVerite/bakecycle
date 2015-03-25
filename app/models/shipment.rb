@@ -1,7 +1,7 @@
 class Shipment < ActiveRecord::Base
   belongs_to :bakery
 
-  has_many :shipment_items
+  has_many :shipment_items, dependent: :destroy
 
   accepts_nested_attributes_for :shipment_items, allow_destroy: true,
                                                  reject_if: proc { |attributes| attributes['product_id'].blank? }

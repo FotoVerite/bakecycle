@@ -33,6 +33,11 @@ class RoutesController < ApplicationController
   end
 
   def destroy
+    if @route.orders.any?
+      flash[:error] = I18n.t :route_in_use, count: @route.orders.count
+      return redirect_to edit_route_path(@route)
+    end
+
     @route.destroy!
     flash[:notice] = "You have deleted #{@route.name}"
     redirect_to routes_path

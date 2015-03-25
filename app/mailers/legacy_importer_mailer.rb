@@ -1,5 +1,3 @@
-require 'digest/sha2'
-
 class LegacyImporterMailer < ActionMailer::Base
   default from: 'admin@bakecycle.com'
 

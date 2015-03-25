@@ -20,6 +20,11 @@ module Bakecycle
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    # new 4.2+ behavior
+    config.active_record.raise_in_transactional_callbacks = true
+
+    config.serve_static_files = true
+
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
     config.assets.precompile += %w( vendor/modernizr.js )
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/

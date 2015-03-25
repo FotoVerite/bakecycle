@@ -5,7 +5,7 @@ class Product < ActiveRecord::Base
   belongs_to :motherdough, class_name: 'Recipe'
   belongs_to :bakery
 
-  has_many :price_varients
+  has_many :price_varients, dependent: :destroy
 
   accepts_nested_attributes_for :price_varients, allow_destroy: true, reject_if: :reject_price_varients
 
@@ -31,8 +31,8 @@ class Product < ActiveRecord::Base
   validates :base_price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true, presence: true
   validates :bakery, presence: true
 
-  def reject_price_varients(attributed)
-    attributed['quantity'].blank? && (attributed['price'] == '0.0' || attributed['price'].blank?)
+  def reject_price_varients(attributes)
+    attributes['quantity'].blank? && (attributes['price'] == '0.0' || attributes['price'].blank?)
   end
 
   def self.units_select

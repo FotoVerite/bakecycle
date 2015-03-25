@@ -10,4 +10,3 @@ Feature: Authentication
       | johndoe@example.com | password1 |
     And I click on "Log in"
     Then "Signed in successfully" should be present
-

@@ -7,7 +7,6 @@ Feature: Orders
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
     And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
 
-  @javascript
   Scenario: As a user, I should be able to view orders index
     When I go to the "orders" page
     Then I should see a list of orders including clients named "andysdecaf" and "mandos"
@@ -42,25 +41,7 @@ Feature: Orders
     Then "You have created a temporary order for andysdecaf." should be present
 
   @javascript
-  Scenario: As a user, I should be able to delete an order
-    When I am on the edit page for "andysdecaf" order
-    And I click on "Delete"
-    And I confirm popup
-    Then I should see confirmation that the "standing" order "andysdecaf" was deleted
-    And The order "andysdecaf" should not be present
-
-  @javascript
-  Scenario: As a user, I should be able to add multiple order item to a order
-    When I am on the edit page for "andysdecaf" order
-    And I click on "Add Product"
-    And I fill out the order item form with:
-      | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
-      | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on "Update"
-    Then "You have updated the standing order for andysdecaf" should be present
-
-  @javascript
-  Scenario: As a user, I should be able to edit an order and delete an order item on a order
+  Scenario: As a user, I should be able to edit and delete an order and its items
     When I am on the edit page for "andysdecaf" order
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
@@ -76,6 +57,11 @@ Feature: Orders
     And I click on "Update"
     Then the order item "baguette cookie" should be present
     And the order item "donut tart" should not be present
+
+    And I click on "Delete"
+    And I confirm popup
+    Then I should see confirmation that the "standing" order "andysdecaf" was deleted
+    And The order "andysdecaf" should not be present
 
   @javascript
   Scenario: As a user, I should see an error if I click update after I delete the last order item. Then I should be able to add an order item, and see 2 order items.

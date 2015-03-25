@@ -134,7 +134,7 @@ class LegacyImporter
       end
     end
 
-    LegacyImporterMailer.invalid_clients_csv(csv_string).deliver!
+    LegacyImporterMailer.invalid_clients_csv(csv_string).deliver_now
   end
 
   private
