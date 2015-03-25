@@ -54,7 +54,7 @@ namespace :db do
     FactoryGirl.create(:client, name: "Marina's Cafe", dba: "Marina's", bakery: biencuit)
 
     route1 = FactoryGirl.create(:route, bakery: biencuit)
-    route2 = FactoryGirl.create(:route, bakery: biencuit)
+    route2 = FactoryGirl.create(:route, bakery: biencuit, active: false)
     route3 = FactoryGirl.create(:route, bakery: biencuit)
 
     FactoryGirl.create(:order, client: johns_bakery, bakery: biencuit, route: route1)

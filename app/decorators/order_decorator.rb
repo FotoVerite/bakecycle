@@ -15,7 +15,7 @@ class OrderDecorator < Draper::Decorator
   end
 
   def available_routes
-    h.item_finder.routes.order(:name)
+    h.item_finder.routes.active.order(:name)
   end
 
   def available_clients
