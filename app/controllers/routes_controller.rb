@@ -4,6 +4,7 @@ class RoutesController < ApplicationController
   decorates_assigned :routes, :route
 
   def index
+    @routes = @routes.order('active desc', :name)
   end
 
   def new

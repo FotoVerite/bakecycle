@@ -9,6 +9,10 @@ class Route < ActiveRecord::Base
   validates :active, inclusion: [true, false]
   validates :bakery, presence: true
 
+  def self.active
+    where(active: true)
+  end
+
   def formatted_time
     departure_time.strftime('%I:%M %p')
   end
