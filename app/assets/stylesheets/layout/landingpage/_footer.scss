@@ -1,0 +1,90 @@
+.marketing-footer {
+  background-color: #444444;
+  color: white;
+  padding: 21px 0 83px 0;
+
+  .underlined-link {
+    color: #fff;
+    font-weight: 700;
+    border-bottom: solid 1px #fff;
+    display: inline;
+    &:hover,
+    &:focus  {
+      color: $bc-green;
+    }
+  }
+
+  .left-section {
+    margin: 0 0 20px 0;
+    text-align: center;
+    @media #{$large-up} {
+      text-align: left;
+      padding: 0;
+    }
+
+    .logo {
+      display: block;
+      margin: 20px auto 10px auto;
+      width: 200px;
+      @media #{$medium-only} { width: 300px; }
+      @media #{$large-up} {
+        width: 240px;
+        margin: 16px 0 15px -2px;
+      }
+    }
+
+    .message {
+      font-weight: 300;
+      font-size: 10px;
+      color: #FFFFFF;
+
+      .strong {
+        font-weight: 700;
+      }
+    }
+  }
+
+  .right-section {
+    text-align: center;
+    @media #{$large-up} { text-align: left; }
+
+    .contact-info {
+      font-size: 10px;
+      font-weight: 300;
+      span {
+        font-weight: 700;
+      }
+    }
+
+    .footer-nav {
+      margin: 0 0 13px 0;
+
+      ul {
+        list-style: none;
+        text-align: left;
+        padding: 0;
+        margin: 0;
+
+        li {
+          display: inline-block;
+          margin-right: 15px;
+          padding: 10px 0 10px 0;
+
+          &:last-child {
+            margin-right: 0 !important;
+          }
+        }
+
+        a {
+          text-decoration: none;
+          font-size: 12px;
+          letter-spacing: 1px;
+          text-shadow: 0px 0px 2px rgba(0,0,0,0.80);
+          font-weight: 600;
+          text-transform: uppercase;
+          color: white;
+        }
+      }
+    }
+  }
+}
