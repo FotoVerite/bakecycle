@@ -10,6 +10,7 @@ notify:
     - url: http://wizarddev-statusbot.herokuapp.com/circle
 test:
   pre:
+    - bundle exec rake immigrant:check_keys
     - bundle exec 'bundle-audit update && bundle-audit check'
     - bundle exec rubocop -D -c .rubocop.yml
     - bundle exec brakeman -z

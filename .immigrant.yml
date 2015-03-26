@@ -1,0 +1,5 @@
+---
+- from_table: shipments
+  to_table: clients
+- from_table: shipments
+  to_table: routes
