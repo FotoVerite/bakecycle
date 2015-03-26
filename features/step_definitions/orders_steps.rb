@@ -38,14 +38,17 @@ When(/^I am on the edit page for "(.*?)" order$/) do |name|
 end
 
 When(/^I fill out the order item form with:$/) do |table|
-  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
-  all('.monday_input').last.set(table.hashes[0]['monday'])
-  all('.tuesday_input').last.set(table.hashes[0]['tuesday'])
-  all('.wednesday_input').last.set(table.hashes[0]['wednesday'])
-  all('.thursday_input').last.set(table.hashes[0]['thursday'])
-  all('.friday_input').last.set(table.hashes[0]['friday'])
-  all('.saturday_input').last.set(table.hashes[0]['saturday'])
-  all('.sunday_input').last.set(table.hashes[0]['sunday'])
+  form = table.hashes[0]
+  within('.fields:last-of-type') do
+    select(form['product'])
+    find('.monday_input').set(form['monday'])
+    find('.tuesday_input').set(form['tuesday'])
+    find('.wednesday_input').set(form['wednesday'])
+    find('.thursday_input').set(form['thursday'])
+    find('.friday_input').set(form['friday'])
+    find('.saturday_input').set(form['saturday'])
+    find('.sunday_input').set(form['sunday'])
+  end
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|
@@ -84,12 +87,12 @@ Then(/^I should see confirmation that the "(.*?)" order "(.*?)" was deleted$/) d
 end
 
 Then(/^I should see order information about "(.*?)"$/) do |name|
-  expect(page).to have_content(name)
+  expect(page).to have_content(/Editing Order: \d+ \- #{name}/)
 end
 
 When(/^I click on the first order$/) do
-  within '.responsive-table' do
-    page.execute_script("$('.js-clickableRow:first').click();")
+  within('.responsive-table') do
+    first('a, .fi-page-edit').click
   end
 end
 

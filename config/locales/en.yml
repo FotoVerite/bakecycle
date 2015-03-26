@@ -4,7 +4,7 @@
 #
 # To use the locales, use `I18n.t`:
 #
-#     I18n.t 'hello'
+#     I18n.t 'route_in_use'
 #
 # In views, this is aliased to just `t`:
 #
@@ -20,4 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  route_in_use:
+    one: 'This route is being used in an order. Please reassign it before deleting this route. Or consider marking this route inactive.'
+    other: 'This route is being used in %{count} orders. Please reassign them before deleting this route. Or consider marking this route inactive.'

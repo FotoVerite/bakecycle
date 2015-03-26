@@ -2,32 +2,32 @@ source 'https://rubygems.org'
 
 ruby '2.2.0'
 
-gem 'rails', '4.1.9'
-gem 'pg'
-gem 'sass-rails', '~> 4.0.3'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'jquery-rails'
-gem 'jquery-ui-sass-rails'
-gem 'jbuilder', '~> 2.0'
-gem 'bower-rails'
-gem 'foundation-rails'
-gem 'foundation-icons-sass-rails'
-gem 'simple_form'
-gem 'devise'
 gem 'airbrake'
-gem 'draper', '~> 1.3'
-gem 'unicorn', require: false
-gem 'jquery-timepicker-rails'
-gem 'geocoder'
-gem 'chronic'
-gem 'will_paginate', '~> 3.0.6'
-gem 'cancancan', '~> 1.10'
-gem 'paperclip', '~> 4.2'
 gem 'aws-sdk', '< 2.0'
+gem 'bower-rails'
+gem 'cancancan', '~> 1.10'
+gem 'chronic'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'devise'
+gem 'draper', '~> 1.3'
+gem 'font-awesome-rails'
+gem 'foundation-icons-sass-rails'
+gem 'foundation-rails'
+gem 'geocoder'
+gem 'jbuilder', '~> 2.0'
+gem 'jquery-rails'
+gem 'jquery-timepicker-rails'
+gem 'jquery-ui-sass-rails'
+gem 'paperclip', '~> 4.2'
+gem 'pg'
 gem 'prawn'
 gem 'prawn-table'
-gem 'font-awesome-rails'
+gem 'rails', '4.2.1'
+gem 'sass-rails', '~> 4.0.3'
+gem 'simple_form'
+gem 'uglifier', '>= 1.3.0'
+gem 'unicorn', require: false
+gem 'will_paginate', '~> 3.0.6'
 
 # deployment
 gem 'httparty', require: false
@@ -38,19 +38,22 @@ gem 'rendezvous', require: false
 gem 'mysql2', require: false
 
 group :development do
-  gem 'spring'
-  gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'quiet_assets'
+  gem 'spring'
+  gem 'web-console', '~> 2.0'
 end
 
 group :test, :development do
   gem 'brakeman', require: false
+  gem 'bullet'
   gem 'bundler-audit', require: false
   gem 'cucumber-rails', require: false
   gem 'guard-bundler'
   gem 'guard-livereload'
   gem 'guard-rails'
+  gem 'immigrant'
   gem 'pry'
   gem 'pry-byebug'
   gem 'rack-livereload'
@@ -59,7 +62,6 @@ group :test, :development do
   gem 'rubocop-rspec', require: false
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', require: false
-  gem 'bullet'
 end
 
 group :test do

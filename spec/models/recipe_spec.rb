@@ -24,6 +24,8 @@ describe Recipe do
       expect(recipe).to validate_presence_of(:name)
       expect(recipe).to ensure_length_of(:name).is_at_most(150)
       expect(recipe).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+      expect(recipe).to ensure_length_of(:note).is_at_most(500)
+      expect(recipe).to validate_numericality_of(:lead_days)
     end
 
     it 'can have same name if are apart of different bakeries' do
@@ -55,16 +57,10 @@ describe Recipe do
       end
     end
 
-    describe 'note' do
-      it { expect(recipe).to ensure_length_of(:note).is_at_most(500) }
-    end
-
-    describe 'lead_days' do
-      it { expect(recipe).to validate_numericality_of(:lead_days) }
-    end
-
     describe 'total_lead_days' do
       it 'checks the lead time of all included recipes, and adds the longest to its own total_lead_days' do
+        bakery = create(:bakery)
+        recipe = create(:recipe, bakery: bakery)
         dough = build(:recipe_preferment, bakery: bakery, lead_days: 4)
         recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
         recipe.recipe_items = [recipe_item]
@@ -73,10 +69,11 @@ describe Recipe do
       end
 
       it 'works with stacked recipes' do
+        bakery = create(:bakery)
+        recipe = create(:recipe, bakery: bakery)
         dough = build(:recipe_preferment, :with_nested_recipe, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
         recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
         recipe.recipe_items = [recipe_item]
-
         expect(recipe.total_lead_days).to eq(8)
       end
     end

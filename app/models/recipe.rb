@@ -7,7 +7,7 @@ class Recipe < ActiveRecord::Base
 
   belongs_to :bakery
 
-  accepts_nested_attributes_for :recipe_items, allow_destroy: true
+  accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
   enum recipe_type: [:dough, :pre_ferment, :inclusion, :ingredient]
   enum mix_size_unit: [:oz, :lb, :g, :kg]
@@ -20,6 +20,10 @@ class Recipe < ActiveRecord::Base
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true
   validates :bakery, presence: true
+
+  def reject_recipe_items(attributes)
+    attributes['inclusionable_id_type'].blank?
+  end
 
   def self.recipe_types_select
     recipe_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }

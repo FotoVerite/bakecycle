@@ -3,7 +3,7 @@ class Order < ActiveRecord::Base
   belongs_to :route
   belongs_to :bakery
 
-  has_many :order_items
+  has_many :order_items, dependent: :destroy
 
   accepts_nested_attributes_for :order_items, allow_destroy: true,
                                               reject_if: proc { |attributes| attributes['product_id'].blank? }
