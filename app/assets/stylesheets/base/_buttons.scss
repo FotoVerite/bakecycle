@@ -1,24 +1,48 @@
-.cta-btn {
-  background-color: $bc-green;
-  border-radius: 3px;
-  box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.2) inset;
-  font-weight: 600; //OpenSans-Semibold
-  color: #FFFFFF;
-  font-size: 14px;
+.default-btn {
+  border-radius: 5px;
+  font-weight: 600;
   line-height: 40px;
   height: 40px;
   cursor: pointer;
   display: inline-block;
-  padding: 0 30px 0 30px;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: background-color 300ms ease-out;
   transition: color 300ms ease-out;
+  &:hover,
+  &:focus {
+    transition: background-color 300ms ease-out;
+    transition: color 300ms ease-out;
+  }
+}
 
+.cta-btn {
+  @extend .default-btn;
+  background-color: $bc-green;
+  box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.2) inset;
+  color: #FFFFFF;
+  font-size: 14px;
+  padding: 0 30px 0 30px;
   &:hover,
   &:focus {
     background-color: darken( $bc-green, 5% );
     color: rgba(255, 255, 255, .7);
+  }
+}
+
+.white-outline-btn {
+  @extend .default-btn;
+  background-color: inherit;
+  border: 2px solid #FFFFFF;
+  text-shadow: 0px 0px 2px rgba(0,0,0,0.80) !important;
+  color: #FFFFFF;
+  font-size: 12px;
+  padding: 0 15px 0 15px;
+  &:hover,
+  &:focus {
+    background-color: white;
+    color: #555 !important;
+    text-shadow: 0px 0px 2px rgba(255,255,255,0.80) !important;
   }
 }
