@@ -1,11 +1,18 @@
 require 'httparty'
 require 'rendezvous'
+require 'netrc'
 
 class HerokuPlatformClient
   attr_reader :app
 
   include HTTParty
   base_uri 'https://api.heroku.com'
+
+  def self.local_auth(app)
+    auth = Netrc.read['api.heroku.com']
+    raise "Please make sure you have an up to date version of the heroku toolbelt and it's logged in" unless auth
+    new(auth.password, app)
+  end
 
   def initialize(oauth_key, app)
     @app = app
@@ -19,7 +26,7 @@ class HerokuPlatformClient
     resp = self.class.get(
       "/apps/#{app}/releases",
       headers: {
-        'Range' => 'id ..; order=desc, max=1'
+        'Range' => 'version ..; order=desc, max=1;'
       }
     )
     raise "Error fetching latest release: #{response.body}" unless resp.success?
@@ -45,5 +52,11 @@ class HerokuPlatformClient
     session.start
     session.output.rewind
     session.output.read
+  end
+
+  def run_with_code(cmd)
+    cmd = "#{cmd}; echo $?"
+    *output, code = run(cmd).split("\n")
+    [output.join("\n"), code.to_i]
   end
 end
