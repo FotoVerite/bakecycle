@@ -1,5 +1,4 @@
 require 'heroku_platform_client'
-require 'netrc'
 
 desc 'Deploy script usage information'
 task :deploy do
@@ -14,12 +13,12 @@ end
 namespace :deploy do
   opt = {
     app: nil,
-    auth_token: nil,
     github_repo: 'git@github.com:wizarddevelopment/bakecycle.git'
   }
 
   desc 'Deploy to Production'
   task production: [:set_production, :push_heroku, :migrate, :restart, :tag]
+
   desc 'Deploy to Staging'
   task staging: [:set_staging, :force_push_heroku, :migrate, :restart]
 
@@ -45,17 +44,8 @@ namespace :deploy do
     execute "git push -f git@heroku.com:#{opt[:app]}.git #{branch}:master"
   end
 
-  task :set_auth_token do
-    auth = Netrc.read['api.heroku.com']
-    unless auth
-      puts "Please make sure you have an up to date version of the heroku toolbelt and it's logged in"
-      exit(1)
-    end
-    opt[:auth_token] = auth.password
-  end
-
-  task tag: [:set_auth_token] do
-    heroku = HerokuPlatformClient.new(opt[:auth_token], opt[:app])
+  task :tag do
+    heroku = HerokuPlatformClient.local_auth(opt[:app])
     version = heroku.latest_release['version']
     release_name = "#{opt[:env]}/v#{version}"
     puts "Tagging release #{release_name}"
@@ -63,25 +53,33 @@ namespace :deploy do
     execute "git push #{opt[:github_repo]} #{release_name}"
   end
 
-  task migrate: [:set_auth_token] do
+  task :migrate do
     puts "Migrating #{opt[:app]}"
-    heroku = HerokuPlatformClient.new(opt[:auth_token], opt[:app])
-    output = heroku.run('rake db:migrate')
-    puts output.gsub(/^/, "#\t")
+    execute_remote(opt[:app], 'rake db:migrate')
   end
 
-  task restart: [:set_auth_token] do
+  task :restart do
     puts "Restarting #{opt[:app]}"
-    heroku = HerokuPlatformClient.new(opt[:auth_token], opt[:app])
+    heroku = HerokuPlatformClient.local_auth(opt[:app])
     heroku.restart_all
   end
 end
 
-def execute(command)
-  print "Executing '#{command}'\n"
-  success = system(command)
+def execute_remote(app, cmd)
+  print "Executing '#{cmd}' on #{app}\n"
+  heroku = HerokuPlatformClient.local_auth(app)
+  output, code = heroku.run_with_code(cmd)
+  puts output.gsub(/^/, "#\t")
+  return true if code == 0
+  puts "Failed to Execute #{cmd} with code #{code}"
+  exit(1)
+end
+
+def execute(cmd)
+  print "Executing '#{cmd}'\n"
+  success = system(cmd)
   return true if success
   code = $CHILD_STATUS.to_i
-  puts "Failed to Execute #{command} with code #{code}"
+  puts "Failed to Execute #{cmd} with code #{code}"
   exit(1)
 end
