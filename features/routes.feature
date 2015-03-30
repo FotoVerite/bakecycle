@@ -20,12 +20,16 @@ Feature: Routes
     Then "You have created Corona" should be present
 
   @javascript
-  Scenario: As a user, I should be able to delete a route
+  Scenario: As a user, I should be able to delete a route but not the last remaining route
     When I am on the edit page for "Canal" route
     And I click on "Delete"
     And I confirm popup
     Then I should see confirmation that the route "Canal" was deleted
     And The route "Canal" should not be present
+    When I am on the edit page for "Chinatown" route
+    And I click on "Delete"
+    And I confirm popup
+    Then "Cannot delete last remaining route" should be present
 
   Scenario: As a user, I should be able to edit a route
     When I am on the edit page for "Canal" route
