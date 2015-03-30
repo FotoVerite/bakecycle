@@ -1,0 +1,64 @@
+.about {
+  text-align: center;
+
+  .heading {
+    .headline {
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 40px;
+      margin: 33px 0 0 0;
+    }
+
+    .message {
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 32px;
+      margin: 0 0 33px 0;
+    }
+  }
+
+  .features {
+
+    .headline {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 40px;
+    }
+
+    .message {
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    .about-icons {
+      margin: 0 0 33px 0;
+      img {
+        max-height: 100px;
+        margin: 0 0 21px 0;
+      }
+    }
+  }
+
+  .footer {
+    margin: 40px 0 0 0;
+    @media #{$medium-up} { margin: 71px 0 0 0;};
+
+    .strong {
+      font-weight: 700;
+    }
+
+    .message {
+      font-weight: 300;
+      font-size: 12px;
+
+      .rwd-line {
+        @media #{$medium-up} { display: block }
+      }
+
+      .underlined_link {
+        @include underline_link($bc-charcoal);
+      }
+    }
+  }
+}
