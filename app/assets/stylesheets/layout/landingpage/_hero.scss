@@ -1,4 +1,5 @@
 .hero {
+  position: relative;
   background-image: image-url("marketing/home/hero_1.jpg");
   background-position: center center;
   background-repeat: no-repeat;
@@ -6,6 +7,8 @@
   background-color: #464646;
   padding: 170px 0 0 0;
   min-height: 900px;
+  margin: 0 0 60px 0;
+  overflow: hidden;
 
   .logo {
     max-width: 400px;
@@ -21,5 +24,28 @@
     line-height: 40px;
     text-shadow: 0px 1px 4px rgba(0,0,0,0.50);
     margin: 0 0 16px 0;
+  }
+
+  .arrow {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  .arrow:before, .arrow:after {
+    content:'';
+    position: absolute;
+    bottom: 100%;
+    width: 50%;
+    box-sizing: border-box;
+  }
+  .arrow:before {
+    right: 50%;
+    border-bottom: 40px solid $bc-off-white;
+    border-right: 40px solid transparent;
+  }
+  .arrow:after {
+    left: 50%;
+    border-bottom: 40px solid $bc-off-white;
+    border-left: 40px solid transparent;
   }
 }
