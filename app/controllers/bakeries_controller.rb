@@ -7,6 +7,7 @@ class BakeriesController < ApplicationController
   end
 
   def new
+    @bakery = Bakery.new(kickoff_time: Chronic.parse('2 pm'))
   end
 
   def create
@@ -50,8 +51,16 @@ class BakeriesController < ApplicationController
 
   def bakery_params
     params.require(:bakery).permit(
-      :name, :logo, :email, :phone_number, :address_street_1,
-      :address_street_2, :address_city, :address_state, :address_zipcode
+      :name,
+      :logo,
+      :email,
+      :phone_number,
+      :address_street_1,
+      :address_street_2,
+      :address_city,
+      :address_state,
+      :address_zipcode,
+      :kickoff_time
       )
   end
 end

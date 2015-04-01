@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325201230) do
+ActiveRecord::Schema.define(version: 20150331152443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20150325201230) do
     t.string   "logo_content_type", limit: 255
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
+    t.time     "kickoff_time",                  null: false
+    t.datetime "last_kickoff"
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree

@@ -33,6 +33,7 @@ When(/^I fill out Bakery form with valid data$/) do
   fill_in 'bakery_address_city', with: 'Bake'
   fill_in 'bakery_address_state', with: 'NY'
   fill_in 'bakery_address_zipcode', with: '10001'
+  fill_in 'bakery_kickoff_time', with: '3:00PM'
 end
 
 Then(/^I should see confirmation the bakery was deleted$/) do
