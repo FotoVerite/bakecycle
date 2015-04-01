@@ -21,6 +21,8 @@ describe Bakery do
     expect(bakery).to respond_to(:routes)
     expect(bakery).to respond_to(:shipments)
     expect(bakery).to respond_to(:users)
+    expect(bakery).to respond_to(:kickoff_time)
+    expect(bakery).to respond_to(:last_kickoff)
   end
 
   it 'has validations' do

@@ -95,14 +95,3 @@ When(/^I click on the first order$/) do
     first('a, .fi-page-edit').click
   end
 end
-
-Given(/^The client named "(.*?)" has a shipment today$/) do |client_name|
-  client = Client.find_by(name: client_name)
-  route = Route.first
-  create(:order, client: client, route: route)
-  create(:shipment, client: client, route: route, date: Date.today)
-end
-
-Then(/^a shipments table should be present$/) do
-  expect(page).to have_selector(:xpath, "//table[@class='responsive-table']")
-end

@@ -22,11 +22,6 @@ When(/^I fill out product form with:$/) do |table|
   fill_in 'product_sku', with: table.hashes[0]['sku']
 end
 
-When(/^I am on the edit page for "(.*?)" product$/) do |name|
-  product = Product.find_by(name: name)
-  visit edit_product_path(product)
-end
-
 When(/^I change the product name to "(.*?)"$/) do |name|
   fill_in 'product_name', with: name
 end

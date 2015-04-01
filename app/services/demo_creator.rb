@@ -1,8 +1,12 @@
 # rubocop:disable Metrics/ClassLength
 # rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize
 class DemoCreator
+  attr_reader :kickoff
+
   def initialize(bakery)
     @bakery = bakery
+    @kickoff = @bakery.kickoff_time + 1.hour
   end
 
   def run
@@ -16,8 +20,10 @@ class DemoCreator
   end
 
   def run_one_week_shipments
-    (0..7).to_a.reverse.each do |days|
-      ShipmentService.process_bakery(@bakery, Date.today - days.days)
+    (0..7).to_a.reverse_each do |days|
+      date = Date.today - days.days
+      process_time = Time.new(date.year, date.month, date.day, kickoff.hour, kickoff.min, kickoff.sec)
+      ShipmentService.new(@bakery, process_time).run
     end
   end
 
@@ -293,3 +299,4 @@ class DemoCreator
 end
 # rubocop:enable Metrics/ClassLength
 # rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/AbcSize

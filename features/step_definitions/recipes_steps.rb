@@ -20,11 +20,6 @@ When(/^I fill out recipe form with:$/) do |table|
   fill_in 'recipe_note', with: table.hashes[0]['note']
 end
 
-Given(/^I am on the edit page for "(.*?)" recipe$/) do |name|
-  recipe = Recipe.find_by(name: name)
-  visit edit_recipe_path(recipe)
-end
-
 When(/^I change the recipe name to "(.*?)"$/) do |name|
   fill_in 'recipe_name', with: name
 end
@@ -38,33 +33,9 @@ When(/^I fill out recipe item with:$/) do |table|
   all('input[type=text]').last.set(table.hashes[0]['percentage'])
 end
 
-When(/^I delete "(.*?)" ingredient$/) do |name|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
-  form.find('a', text: 'X').click
-end
-
-When(/^I edit "(.*?)" baker's percentage$/) do |name|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../..")
-  form.find_field("Baker\'s %").set('10.5')
-end
-
-Then(/^the recipe item "(.*?)" should be present$/) do |name|
-  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to_not raise_error
-end
-
-Then(/^the recipe item "(.*?)" should not be present$/) do |name|
-  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to raise_error
-end
-
 Then(/^I should see confirmation the recipe "(.*?)" was deleted$/) do |recipe|
   within '.alert-box' do
     expect(page).to have_content("You have deleted #{recipe}")
-  end
-end
-
-Then(/^the recipe "(.*?)" should be present$/) do |recipe|
-  within '.responsive-table' do
-    expect(page).to have_content(recipe)
   end
 end
 
