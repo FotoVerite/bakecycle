@@ -4,7 +4,7 @@ namespace :bakecycle do
     task biencuit_import: :environment do
       require 'legacy_importer'
       Rails.logger.info 'Starting import'
-      biencuit = Bakery.find_by!(name: 'Biencuit')
+      biencuit = Bakery.find_by!(name: 'Bien Cuit')
       importer = LegacyImporter.new(bakery: biencuit)
       _valid_clients, invalid_clients = importer.import_clients
       puts "#{invalid_clients.count} errored client imports"
@@ -15,7 +15,7 @@ namespace :bakecycle do
     desc 'Email the legacy biencuit bakecycle data'
     task biencuit_email: :environment do
       require 'legacy_importer'
-      biencuit = Bakery.find_by!(name: 'Biencuit')
+      biencuit = Bakery.find_by!(name: 'Bien Cuit')
       importer = LegacyImporter.new(bakery: biencuit)
       _valid_clients, invalid_clients = importer.import_clients
       puts "#{invalid_clients.count} errored client imports"

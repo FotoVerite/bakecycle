@@ -5,11 +5,22 @@ namespace :db do
   task devdata: :environment do
     raise "don't run this here!" if Rails.env.production?
 
+    # Things now need to be deleted in order
+    Shipment.destroy_all
+    Order.destroy_all
+    Route.destroy_all
+    Client.destroy_all
+    Product.destroy_all
+    Recipe.destroy_all
+    Ingredient.destroy_all
+    User.destroy_all
+    Bakery.destroy_all
+
     Rails.application.eager_load! # load all classes
-    ActiveRecord::Base.descendants.map(&:destroy_all) # DESTROY ALL CLASSES
+    ActiveRecord::Base.descendants.reverse.map(&:destroy_all) # DESTROY ALL CLASSES
     puts 'Dev Data Destroyed'
 
-    biencuit = FactoryGirl.create(:bakery, :with_logo, name: 'Biencuit')
+    biencuit = FactoryGirl.create(:bakery, :with_logo, name: 'Bien Cuit')
     DemoCreator.new(biencuit).run
 
     grumpy = FactoryGirl.create(:bakery, name: 'Grumpy')
