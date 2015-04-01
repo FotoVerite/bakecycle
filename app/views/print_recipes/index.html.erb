@@ -50,7 +50,7 @@
         </div>
         <div class="small-12 medium-2 columns end">
         <%= label :over_bake_percentage, "percentage", class: "hide-for-large-up"%>
-          <input ng-disabled="true" type="text" value='<%= "#{product.over_bake_percentage}%" %>' />
+          <input ng-disabled="true" type="text" value='<%= number_to_percentage(product.over_bake_percentage, strip_insignificant_zeros: true) %>' />
         </div>
         <hr class="show-for-small-only">
       </div>
