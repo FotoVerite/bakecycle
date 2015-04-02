@@ -9,24 +9,6 @@ describe ShipmentService do
   end
   let(:shipment_service) { ShipmentService.new(bakery, after_kickoff_time) }
 
-  describe 'kickoff?' do
-    it 'returns false if before kickoff time' do
-      current_time = bakery.kickoff_time - 1.hour
-      shipment_service = ShipmentService.new(bakery, current_time)
-      expect(shipment_service.kickoff?).to eq(false)
-    end
-
-    it 'returns false if last_kickoff is within 24 hours' do
-      bakery.last_kickoff = after_kickoff_time - 4.hours
-      expect(shipment_service.kickoff?).to eq(false)
-    end
-
-    it 'returns true if last_kickoff is outside of 24 hours' do
-      bakery.last_kickoff = after_kickoff_time - 25.hours
-      expect(shipment_service.kickoff?).to eq(true)
-    end
-  end
-
   context 'creates shipments' do
     it 'creates shipments for orders and dates where the production date is today' do
       order = create(:order, start_date: today, total_lead_days: 2)
