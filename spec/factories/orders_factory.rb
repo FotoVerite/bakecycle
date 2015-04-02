@@ -11,15 +11,19 @@ FactoryGirl.define do
     transient do
       order_item_count 1
       total_lead_days 2
+      daily_item_count nil
+      product { create(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
     end
 
     after(:build) do |order, evaluator|
       order.order_items << FactoryGirl.build_list(
         :order_item,
         evaluator.order_item_count,
+        product: evaluator.product,
         order: order,
         bakery: evaluator.bakery,
-        total_lead_days: evaluator.total_lead_days
+        total_lead_days: evaluator.total_lead_days,
+        daily_item_count: evaluator.daily_item_count
       )
     end
 

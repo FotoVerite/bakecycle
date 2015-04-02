@@ -39,6 +39,13 @@ class Shipment < ActiveRecord::Base
       .order('date DESC')
   end
 
+  def self.shipments_for_week(client_id, end_date)
+    week = Week.new(end_date)
+    search_by_client(client_id)
+      .search_by_date_from(week.start_date)
+      .search_by_date_to(week.end_date)
+  end
+
   def self.search_by_date(date)
     return all if date.blank?
     where(date: date)
@@ -64,6 +71,10 @@ class Shipment < ActiveRecord::Base
     where('date <= ?', date_to)
   end
 
+  def self.weekly_subtotal(client_id, date)
+    shipments_for_week(client_id, date).map(&:subtotal).sum
+  end
+
   def self.recent(client_id)
     where(client_id: client_id).order('date DESC').limit(10)
   end
@@ -73,9 +84,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def subtotal
-    shipment_items.reduce(0) do |sum, item|
-      sum + item.price
-    end
+    shipment_items.map(&:price).sum
   end
 
   def price
