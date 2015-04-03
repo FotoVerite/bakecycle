@@ -13,13 +13,8 @@ class ShipmentService
   end
 
   def run
-    return unless kickoff?
     bakery.update!(last_kickoff: run_time)
     process_bakery
-  end
-
-  def kickoff?
-    after_kickoff_time? && kickoff_expired?
   end
 
   def process_bakery
@@ -69,18 +64,5 @@ class ShipmentService
     return 0 unless order.client_daily_delivery_fee?
     return 0 unless order.daily_subtotal(ship_date) < order.client_delivery_minimum
     order.client_delivery_fee
-  end
-
-  private
-
-  def after_kickoff_time?
-    kickoff = bakery.kickoff_time
-    kickoff_today = Time.new(run_time.year, run_time.month, run_time.day, kickoff.hour, kickoff.min, kickoff.sec)
-    kickoff_today < run_time
-  end
-
-  def kickoff_expired?
-    return true unless bakery.last_kickoff
-    (bakery.last_kickoff + 24.hours) < run_time
   end
 end
