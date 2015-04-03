@@ -3,12 +3,12 @@ class PrintRecipesController < ApplicationController
 
   def index
     @date = date_query
-    @products = RecipeRun.new(@date, item_finder.shipment_items).collection
+    @production_runs = item_finder.production_runs.for_date(@date)
   end
 
   private
 
   def date_query
-    Chronic.parse(params[:date] || params[:id]) || Date.today
+    Chronic.parse(params[:date] || Date.today)
   end
 end

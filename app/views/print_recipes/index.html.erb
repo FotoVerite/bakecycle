@@ -13,47 +13,16 @@
   </div>
 <% end %>
 
-<% if @products.any? %>
-  <fieldset>
-    <legend>Products</legend>
-    <div class="row collapse show-for-large-up">
-      <div class="small-12 columns">
-        <div class="row collapse">
-          <div class="small-12 medium-6 columns">
-            <%= label :name, "Name"%>
-          </div>
-          <div class="small-12 medium-2 columns">
-            <%= label :count, "Original Qty"%>
-          </div>
-          <div class="small-12 medium-2 columns">
-            <%= label :over_bake, "Adjusted Qty"%>
-          </div>
-          <div class="small-12 medium-2 columns end">
-            <%= label :over_bake_percentage, "percentage"%>
-          </div>
-        </div>
-      </div>
-    </div>
-    <% @products.each do |product| %>
-      <div class="row collapse">
-        <div class="small-12 medium-6 columns">
-          <%= label :name, "Name", class: "hide-for-large-up"%>
-          <input ng-disabled="true" type="text" value="<%= product.product.name %>" />
-        </div>
-        <div class="small-12 medium-2 columns">
-          <%= label :count, "Original Qty", class: "hide-for-large-up"%>
-          <input ng-disabled="true" type="text" value="<%= product.count %>" />
-        </div>
-        <div class="small-12 medium-2 columns">
-          <%= label :over_bake, "Adjusted Qty", class: "hide-for-large-up"%>
-          <input type="text" value="<%= product.over_bake %>" />
-        </div>
-        <div class="small-12 medium-2 columns end">
-        <%= label :over_bake_percentage, "percentage", class: "hide-for-large-up"%>
-          <input ng-disabled="true" type="text" value='<%= number_to_percentage(product.over_bake_percentage, strip_insignificant_zeros: true) %>' />
-        </div>
-        <hr class="show-for-small-only">
-      </div>
+ <table class="responsive-table">
+  <thead>
+    <th>Id </th>
+    <th>Date</th>
+    <th>Actions</th>
+  </thead>
+
+  <tbody>
+    <% @production_runs.each do |production_run| %>
+      <%= render partial: 'production_run', locals: { production_run: production_run } %>
     <% end %>
-  </fieldset>
-<% end %>
+  </tbody>
+ </table>

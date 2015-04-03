@@ -1,5 +1,5 @@
 namespace :db do
-  task :dev_data, [:devdata]
+  task dev_data: :devdata
 
   desc 'Reset database with development data'
   task devdata: :environment do
@@ -14,6 +14,7 @@ namespace :db do
     Recipe.destroy_all
     Ingredient.destroy_all
     User.destroy_all
+    ProductionRun.destroy_all
     Bakery.destroy_all
 
     Rails.application.eager_load! # load all classes

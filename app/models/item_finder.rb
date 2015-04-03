@@ -29,6 +29,10 @@ class ItemFinder
     Route.accessible_by(ability)
   end
 
+  def production_runs
+    ProductionRun.accessible_by(ability)
+  end
+
   def shipments
     Shipment.accessible_by(ability)
   end

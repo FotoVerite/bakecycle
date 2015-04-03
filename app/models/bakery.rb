@@ -10,6 +10,7 @@ class Bakery < ActiveRecord::Base
   has_many :production_runs
 
   has_many :shipment_items, through: :shipments
+  has_many :run_items, through: :production_runs
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
   has_attached_file :logo, styles: { invoice: ['1800x200>', :png], thumb: ['300x200>', :png] }

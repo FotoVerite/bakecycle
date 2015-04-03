@@ -1,0 +1,29 @@
+<div ng-controller="NestedItemCtrl">
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Total Quantity</th>
+        <th>Order Quantity</th>
+        <th>Over Bake %</th>
+        <th>Over Bake Quantity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= f.simple_fields_for :run_items do |builder| %>
+          <%= render "run_item_fields", f: builder %>
+      <% end %>
+
+      <tr ng-repeat="nestedItem in nestedItems">
+        <%= f.simple_fields_for :run_items, @production_run.run_items.build do |builder| %>
+           <%= render "new_run_item_fields", f: builder %>
+        <% end %>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <%= link_to 'Add Product', '', :'ng-click' => "add()", class: "button" %>
+</div>
