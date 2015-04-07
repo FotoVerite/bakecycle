@@ -164,6 +164,20 @@ describe Shipment do
     end
   end
 
+  describe '.shipments_for_week' do
+    let(:monday) { Date.new(2015, 3, 30) }
+    let(:sunday) { Date.new(2015, 4, 5) }
+
+    it 'returns the last week of shipments for a client' do
+      client = create(:client)
+      shipments = [
+        create(:shipment, client: client, bakery: client.bakery, date: monday),
+        create(:shipment, client: client, bakery: client.bakery, date: sunday)
+      ]
+      expect(Shipment.shipments_for_week(client.id, sunday)).to contain_exactly(*shipments)
+    end
+  end
+
   describe '#client=' do
     it 'sets client data on shipment' do
       client = build_stubbed(:client, billing_term: :net_30)

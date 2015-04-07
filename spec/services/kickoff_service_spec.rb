@@ -7,7 +7,14 @@ describe KickoffService do
     kickoff = bakery.kickoff_time + 1.hour
     Time.new(today.year, today.month, today.day, kickoff.hour, kickoff.min, kickoff.sec)
   end
+  let(:shipment_service) { double(ShipmentService, run: true) }
+  let(:production_service) { double(ProductionRunService, create_production_run: true) }
   let(:kickoff_service) { KickoffService.new(bakery, after_kickoff_time) }
+
+  before do
+    allow(ShipmentService).to receive(:new).and_return(shipment_service)
+    allow(ProductionRunService).to receive(:new).and_return(production_service)
+  end
 
   describe '.run' do
     it 'creates a new instance of itself for each bakery' do
@@ -19,10 +26,9 @@ describe KickoffService do
 
   describe '#run' do
     it 'calls creates and calls run for ShipmentService and ProductionRunService' do
-      allow_any_instance_of(Bakery).to receive(:shipments).and_return(:true)
-      expect(ShipmentService).to receive(:new).and_call_original
-      expect(ProductionRunService).to receive(:new).and_call_original
-      KickoffService.new(bakery).run
+      expect(ShipmentService).to receive(:new)
+      expect(ProductionRunService).to receive(:new)
+      kickoff_service.run
     end
   end
 

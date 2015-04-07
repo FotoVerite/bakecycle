@@ -29,40 +29,8 @@ class ShipmentService
     (1..max_lead_time).each do |lead|
       ship_date = run_time + lead.days
       Order.active(client, ship_date).each do |order|
-        ship_order(order, ship_date)
+        ShipmentCreator.new(order, ship_date).create!
       end
     end
-  end
-
-  def ship_order(order, ship_date)
-    shipment_items = shipment_items(order.order_items, ship_date)
-    return unless shipment_items.any?
-    Shipment.where(
-      bakery: order.bakery,
-      client_id: order.client.id,
-      route_id: order.route.id,
-      date: ship_date,
-      auto_generated: true
-    ).first_or_create! do |shipment|
-      shipment.shipment_items = shipment_items
-      shipment.delivery_fee = delivery_fee(order, ship_date)
-    end
-  end
-
-  def shipment_items(order_items, ship_date)
-    order_items.map do |item|
-      next unless item.quantity(ship_date) > 0
-      ShipmentItem.new(
-        product_id: item.product.id,
-        product_quantity: item.quantity(ship_date),
-        product_price: item.product_price
-      )
-    end.compact
-  end
-
-  def delivery_fee(order, ship_date)
-    return 0 unless order.client_daily_delivery_fee?
-    return 0 unless order.daily_subtotal(ship_date) < order.client_delivery_minimum
-    order.client_delivery_fee
   end
 end
