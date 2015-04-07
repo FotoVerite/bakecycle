@@ -26,9 +26,11 @@ describe KickoffService do
 
   describe '#run' do
     it 'calls creates and calls run for ShipmentService and ProductionRunService' do
-      expect(ShipmentService).to receive(:new)
-      expect(ProductionRunService).to receive(:new)
-      kickoff_service.run
+      allow_any_instance_of(Bakery).to receive(:shipments).and_return(true)
+      allow_any_instance_of(KickoffService).to receive(:kickoff?).and_return(true)
+      expect(ShipmentService).to receive(:new).and_call_original
+      expect(ProductionRunService).to receive(:new).and_call_original
+      KickoffService.new(bakery).run
     end
   end
 

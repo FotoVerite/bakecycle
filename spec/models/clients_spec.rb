@@ -43,23 +43,6 @@ describe Client do
     expect(client).to ensure_length_of(:name).is_at_most(150)
     expect(client).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     expect(client).to ensure_length_of(:dba).is_at_most(150)
-    expect(client).to validate_presence_of(:business_phone)
-    expect(client).to validate_presence_of(:delivery_address_street_1)
-    expect(client).to validate_presence_of(:delivery_address_city)
-    expect(client).to validate_presence_of(:delivery_address_state)
-    expect(client).to validate_presence_of(:delivery_address_zipcode)
-    expect(client).to validate_presence_of(:billing_address_street_1)
-    expect(client).to validate_presence_of(:billing_address_city)
-    expect(client).to validate_presence_of(:billing_address_state)
-    expect(client).to validate_presence_of(:billing_address_zipcode)
-    expect(client).to validate_presence_of(:accounts_payable_contact_name)
-    expect(client).to ensure_length_of(:accounts_payable_contact_name).is_at_most(150)
-    expect(client).to validate_presence_of(:accounts_payable_contact_phone)
-    expect(client).to validate_presence_of(:accounts_payable_contact_email)
-    expect(client).to validate_presence_of(:primary_contact_name)
-    expect(client).to ensure_length_of(:primary_contact_name).is_at_most(150)
-    expect(client).to validate_presence_of(:primary_contact_phone)
-    expect(client).to validate_presence_of(:primary_contact_email)
     expect(client).to validate_presence_of(:delivery_fee_option)
     expect(client).to validate_presence_of(:delivery_minimum)
     expect(client).to validate_numericality_of(:delivery_minimum)
@@ -72,11 +55,6 @@ describe Client do
     client_name = 'Grumpy Cafe'
     create(:client, name: client_name, bakery: biencuit)
     expect(create(:client, name: client_name)).to be_valid
-  end
-
-  it 'requires accounts_payable_contact_email to have an @ symbol' do
-    expect(build(:client, accounts_payable_contact_email: 'not an email')).to_not be_valid
-    expect(build(:client, accounts_payable_contact_email: 'user@example.com')).to be_valid
   end
 
   it 'requires primary_contact_email to have an @ symbol' do
