@@ -3,13 +3,13 @@ Rails.application.routes.draw do
   root 'landing_pages#index'
   get :dashboard, to: 'dashboard#index'
 
-  resources :ingredients
-  resources :recipes
-  resources :products
-  resources :routes
+  resources :ingredients, except: [:show]
+  resources :recipes, except: [:show]
+  resources :products, except: [:show]
+  resources :routes, except: [:show]
   resources :clients
-  resources :orders
-  resources :users
+  resources :orders, except: [:show]
+  resources :users, except: [:show]
 
   resources :shipments, except: [:show] do
     get 'invoice', on: :member
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     get 'invoices', on: :collection
   end
 
-  resources :bakeries do
+  resources :bakeries, except: [:show] do
     get 'mybakery', on: :collection, as: 'my'
   end
 
