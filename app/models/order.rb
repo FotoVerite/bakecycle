@@ -19,7 +19,14 @@ class Order < ActiveRecord::Base
   validates :bakery, presence: true
   validate  :standing_order_date_can_not_overlap
 
-  delegate :weekly_delivery_fee?, :daily_delivery_fee?, :delivery_fee, :delivery_minimum, to: :client, prefix: true
+  delegate(
+    :weekly_delivery_fee?,
+    :daily_delivery_fee?,
+    :delivery_fee,
+    :delivery_minimum,
+    :name,
+    to: :client, prefix: true
+  )
 
   def self.active(client, date)
     temp_orders = temporary(date).where(client: client).to_a

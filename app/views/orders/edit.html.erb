@@ -1,11 +1,11 @@
 <% provide(:title, "Editing Order: #{order.id}") %>
-<h1>Editing Order: <%= order.id %> - <%= order.client.name %></h1>
+<h1>Editing Order: <%= order.id %> - <%= order.client_name %></h1>
 <%= link_to 'Back', orders_path %>
 <div ng-controller="OrderCtrl" ng-init="order=<%= @order.to_json %>">
   <%= render "form"%>
 
   <% unless @shipments.empty? %>
-    <h3>Upcoming shipments for <%= order.client.name %> on <%= order.route_name %> route</h3>
+    <h3>Upcoming shipments for <%= order.client_name %> on <%= order.route_name %> route</h3>
     <table class="responsive-table">
       <thead>
         <tr>

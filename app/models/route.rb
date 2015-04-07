@@ -16,8 +16,4 @@ class Route < ActiveRecord::Base
   def formatted_time
     departure_time.strftime('%I:%M %p')
   end
-
-  def active?
-    active ? 'Yes' : 'No'
-  end
 end

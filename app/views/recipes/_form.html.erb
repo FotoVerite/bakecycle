@@ -19,13 +19,13 @@
         <%= f.input :mix_size, as: :string %>
       </div>
       <div class="small-6 columns">
-        <%= f.input :mix_size_unit, collection: Recipe.mix_size_units.keys.to_a, prompt: "Select One", as: :select %>
+        <%= f.input :mix_size_unit, collection: Recipe.mix_size_units_select, prompt: "Select One", as: :select %>
       </div>
     </div>
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.input :recipe_type, collection: Recipe.recipe_types.keys.to_a, prompt: "Select One", as: :select %>
+        <%= f.input :recipe_type, collection: Recipe.recipe_types_select, prompt: "Select One", as: :select %>
       </div>
     </div>
 

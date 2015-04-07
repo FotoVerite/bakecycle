@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
 
   def create
     if @order.save
-      flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client.name}."
+      flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
     else
       render 'new'
@@ -28,7 +28,7 @@ class OrdersController < ApplicationController
 
   def update
     if @order.update(order_params)
-      flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client.name}."
+      flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
     else
       @shipments = Shipment.upcoming(@order)
@@ -38,7 +38,7 @@ class OrdersController < ApplicationController
 
   def destroy
     @order.destroy!
-    flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client.name}."
+    flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client_name}."
     redirect_to orders_path
   end
 
