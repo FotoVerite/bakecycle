@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :recipe do
-    recipe_type { Recipe.recipe_types.keys.sample }
+    recipe_type { Recipe.recipe_types.except(:inclusion).keys.sample }
     sequence(:name) { |n| "#{n}#{Faker::Lorem.word}" }
     mix_size 12
     mix_size_unit { Recipe.mix_size_units.keys.sample }
@@ -17,6 +17,7 @@ FactoryGirl.define do
 
     factory :recipe_inclusion do
       recipe_type :inclusion
+      lead_days 0
     end
 
     factory :recipe_ingredient do
@@ -24,6 +25,7 @@ FactoryGirl.define do
     end
 
     trait :with_ingredients do
+      lead_days 0
       transient do
         ingredient_count 3
       end

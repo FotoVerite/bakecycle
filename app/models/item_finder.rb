@@ -44,15 +44,4 @@ class ItemFinder
   def users
     User.accessible_by(ability)
   end
-
-  def inclusionables
-    items = [ingredients, recipes].reduce([]) do |collection, objects|
-      collection + objects.all.map do |o|
-        [o.name, "#{o.id}-#{o.class}"]
-      end
-    end
-    items.sort do |a, b|
-      a[0] <=> b[0]
-    end
-  end
 end

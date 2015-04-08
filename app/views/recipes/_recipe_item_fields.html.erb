@@ -1,6 +1,9 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
-    <div class="small-12 medium-4 columns">
+    <div class="small-12 medium-4 columns" ng-if="isInclusion()">
+      <%= f.input :inclusionable_id_type, collection: recipe.available_ingredients, label: "Ingredient", include_blank: "Select One", as: :select%>
+    </div>
+    <div class="small-12 medium-4 columns" ng-if="!isInclusion()">
       <%= f.input :inclusionable_id_type, collection: recipe.available_inclusions, label: "Ingredient", include_blank: "Select One", as: :select%>
     </div>
     <div class="small-12 medium-2 columns">

@@ -7,8 +7,46 @@ class RecipeDecorator < Draper::Decorator
   end
 
   def available_inclusions
-    h.item_finder.inclusionables.delete_if do |item|
-      item[1] == "#{object.id}-#{object.class.name}"
+    delete_itself_from_collection inclusionables(ingredients, recipes)
+  end
+
+  def available_ingredients
+    delete_itself_from_collection inclusionables(ingredients)
+  end
+
+  def serialized_json
+    RecipeSerializer.new(object).to_json
+  end
+
+  private
+
+  def ingredients
+    h.item_finder.ingredients
+  end
+
+  def recipes
+    h.item_finder.recipes
+  end
+
+  def delete_itself_from_collection(collection)
+    collection.delete_if do |(_name, item)|
+      item == "#{object.id}-#{object.class.name}"
+    end
+  end
+
+  def inclusionables(*objects)
+    sort_by_name make_ids_for_select(objects)
+  end
+
+  def make_ids_for_select(collections)
+    collections.flatten.map do |o|
+      [o.name, "#{o.id}-#{o.class}"]
+    end
+  end
+
+  def sort_by_name(items)
+    items.sort do |(a_name, _), (b_name, _)|
+      a_name <=> b_name
     end
   end
 end
