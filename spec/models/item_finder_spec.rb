@@ -63,16 +63,4 @@ describe ItemFinder do
     other_user = create(:user, bakery: user.bakery)
     expect(item_finder.users).to contain_exactly(user, other_user)
   end
-
-  it 'finds my inclusionable items alphabetically' do
-    apple = create(:ingredient, name: 'apple', bakery: user.bakery)
-    artichoke_dip = create(:recipe, name: 'artichoke dip', bakery: user.bakery)
-    bananna = create(:ingredient, name: 'bananna', bakery: user.bakery)
-    item_list = [
-      [apple.name, "#{apple.id}-#{apple.class}"],
-      [artichoke_dip.name, "#{artichoke_dip.id}-#{artichoke_dip.class}"],
-      [bananna.name, "#{bananna.id}-#{bananna.class}"]
-    ]
-    expect(item_finder.inclusionables).to eq(item_list)
-  end
 end

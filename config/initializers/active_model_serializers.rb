@@ -1,0 +1,2 @@
+
+ActiveModel::Serializer.root = false

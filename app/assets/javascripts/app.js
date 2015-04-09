@@ -29,8 +29,17 @@ app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
   };
 }]);
 
+app.controller('RecipeCtrl', [ '$scope', function ($scope) {
+  $scope.recipe = {};
+
+  $scope.isInclusion = function () {
+    return "inclusion" === $scope.recipe.recipe_type;
+  };
+}]);
+
 app.controller('OrderCtrl', [ '$scope', function ($scope) {
   $scope.order = {}; // filled by ng-init
+
   $scope.isTemporary = function () {
     return "temporary" === $scope.order.order_type;
   };

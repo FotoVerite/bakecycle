@@ -20,6 +20,8 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.1)
+    active_model_serializers (0.9.3)
+      activemodel (>= 3.2)
     activejob (4.2.1)
       activesupport (= 4.2.1)
       globalid (>= 0.3.0)
@@ -129,7 +131,7 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
-    draper (1.4.0)
+    draper (2.1.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
       activesupport (>= 3.0)
@@ -220,14 +222,14 @@ GEM
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
     mime-types (2.4.3)
-    mini_portile (0.6.1)
+    mini_portile (0.6.2)
     minitest (5.5.1)
     multi_json (1.11.0)
     multi_test (0.1.1)
     multi_xml (0.5.5)
     mysql2 (0.3.18)
     netrc (0.10.3)
-    nokogiri (1.6.4.1)
+    nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     orm_adapter (0.5.0)
     paperclip (4.2.1)
@@ -396,6 +398,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers
   airbrake
   aws-sdk (< 2.0)
   better_errors
@@ -410,7 +413,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   devise
-  draper (~> 1.3)
+  draper
   factory_girl_rails
   faker
   font-awesome-rails

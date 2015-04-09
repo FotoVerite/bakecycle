@@ -1,6 +1,15 @@
+<div ng-controller="RecipeCtrl" ng-init="recipe=<%= recipe.serialized_json %>">
+
 <%= simple_form_for recipe do |f| %>
 
   <%= f.error_notification %>
+  <% if f.object.errors.any? %>
+      <div id="error_explanation">
+        <ul>
+          <li> <%= f.object.errors[:recipe_items].uniq.first %></li>
+        </ul>
+      </div>
+    <% end %>
   <fieldset>
     <legend>Recipe Information</legend>
     <div class="row">
@@ -25,12 +34,12 @@
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.input :recipe_type, collection: Recipe.recipe_types_select, prompt: "Select One", as: :select %>
+        <%= f.input :recipe_type, collection: Recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipe_type" } %>
       </div>
     </div>
 
     <div class="row">
-      <div class="small-12 columns">
+      <div class="small-12 columns" ng-hide="isInclusion()">
         <%= f.input :lead_days, as: :string %>
       </div>
     </div>
@@ -62,3 +71,4 @@
     </div>
   </div>
 <% end %>
+</div>

@@ -20,6 +20,9 @@ class Recipe < ActiveRecord::Base
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true
   validates :bakery, presence: true
+  validate :inclusionable_a_recipe?, if: :inclusion?
+
+  before_save :make_lead_days_zero_if_inclusion
 
   def reject_recipe_items(attributes)
     attributes['inclusionable_id_type'].blank?
@@ -43,5 +46,21 @@ class Recipe < ActiveRecord::Base
 
   def total_lead_days
     lead_days + recipe_items.max_lead_days
+  end
+
+  def make_lead_days_zero_if_inclusion
+    self.lead_days = 0 if inclusion?
+  end
+
+  def inclusion?
+    recipe_type == 'inclusion'
+  end
+
+  def inclusionable_a_recipe?
+    recipe_items.each do |recipe_item|
+      if recipe_item.inclusionable_type == 'Recipe'
+        errors.add(:recipe_items, 'Inclusion recipes can only include ingredients')
+      end
+    end
   end
 end
