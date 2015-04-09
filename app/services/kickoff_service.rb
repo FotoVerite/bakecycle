@@ -1,21 +1,21 @@
 class KickoffService
   attr_reader :bakery, :run_time
 
-  def initialize(bakery, run_time = Time.now)
-    @bakery = bakery
-    @run_time = run_time
-  end
-
   def self.run(run_time = Time.now)
     Bakery.find_each do |bakery|
       new(bakery, run_time).run
     end
   end
 
+  def initialize(bakery, run_time = Time.now)
+    @bakery = bakery
+    @run_time = run_time
+  end
+
   def run
     return unless kickoff?
     ShipmentService.new(bakery, run_time).run
-    ProductionRunService.new(bakery).create_production_run
+    ProductionRunService.new(bakery, run_time).create_production_run
   end
 
   def kickoff?

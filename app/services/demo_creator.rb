@@ -23,7 +23,7 @@ class DemoCreator
     (0..7).to_a.reverse_each do |days|
       date = Date.today - days.days
       process_time = Time.new(date.year, date.month, date.day, kickoff.hour, kickoff.min, kickoff.sec)
-      ShipmentService.new(@bakery, process_time).run
+      KickoffService.new(@bakery, process_time).run
     end
   end
 

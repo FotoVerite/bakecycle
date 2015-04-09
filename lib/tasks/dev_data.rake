@@ -22,10 +22,7 @@ namespace :db do
     puts 'Dev Data Destroyed'
 
     biencuit = FactoryGirl.create(:bakery, :with_logo, name: 'Bien Cuit')
-    DemoCreator.new(biencuit).run
-
     grumpy = FactoryGirl.create(:bakery, name: 'Grumpy')
-    DemoCreator.new(grumpy).run
 
     FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: nil)
     FactoryGirl.create(:user, :as_admin, email: 'kate@biencuit.com', bakery: biencuit)
@@ -75,7 +72,9 @@ namespace :db do
     FactoryGirl.create_list(:order, 12, bakery: biencuit, total_lead_days: 5, route: route1)
     FactoryGirl.create_list(:order, 12, total_lead_days: 5)
 
-    ShipmentService.run
+    DemoCreator.new(biencuit).run
+    DemoCreator.new(grumpy).run
+    KickoffService.run
 
     puts 'Dev Data Loaded'
   end
