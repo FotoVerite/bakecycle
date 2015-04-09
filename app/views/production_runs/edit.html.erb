@@ -2,4 +2,4 @@
 <h1>Editing Production Run: <%= @production_run.id %> - <%= l @production_run.date %></h1>
 <%= link_to 'Back', @production_runs_path, format: :long %>
 
-<%= render "form" %>
+<%= render partial: "production_runs/form" %>

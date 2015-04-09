@@ -3,7 +3,7 @@ class RunItem < ActiveRecord::Base
   belongs_to :production_run
 
   has_many :shipment_items, through: :production_run
-  validates :product, presence: true
+  validates :product, presence: true, uniqueness: { scope: :production_run_id, message: '- remove duplicate products' }
   validates :overbake_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :order_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
@@ -17,6 +17,6 @@ class RunItem < ActiveRecord::Base
   end
 
   def update_total_quantity
-    self.total_quantity = overbake_quantity + order_quantity
+    self.total_quantity = overbake_quantity + order_quantity if overbake_quantity
   end
 end

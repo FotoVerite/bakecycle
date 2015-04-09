@@ -7,13 +7,20 @@
     And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
 
   @javascript
-  Scenario: I should be able to find and edit and add run items to a production run
+  Scenario: Find and edit and add run items to a production run from production runs
+    Given there is a run item for a "biencuit" production run
+    And I am on the Production Runs page
+    Then I should see the date for my production run
+    When I click on that production run row
+    Then "Editing Production Run" should be present
+
+  @javascript
+  Scenario: Find and edit and add run items to a production run from print recipes
     Given there is a run item for a "biencuit" production run
     And I am on the Print Recipes page
-    When I click on that production run row
-    And "Editing Production Run" should be present
+    Then "Editing Production Run" should be present
     When I click on "Add Product"
-    And change the overbake quantity on the existing run item
+    And I change the overbake quantity on the existing run item
     And I fill out run item form with:
       | product         | overbake_quantity|
       | donut tart      | 15               |

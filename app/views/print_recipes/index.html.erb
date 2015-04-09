@@ -13,16 +13,6 @@
   </div>
 <% end %>
 
- <table class="responsive-table">
-  <thead>
-    <th>Id </th>
-    <th>Date</th>
-    <th>Actions</th>
-  </thead>
-
-  <tbody>
-    <% @production_runs.each do |production_run| %>
-      <%= render partial: 'production_run', locals: { production_run: production_run } %>
-    <% end %>
-  </tbody>
- </table>
+<% if @production_run %>
+  <%= render template: 'production_runs/edit', params: { id: @production_run.id }, controller: 'production_runs' %>
+<% end %>

@@ -10,8 +10,8 @@ app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
 
   $scope.remove = function ($event) {
     var parentElementName, target;
-    var hiddenField = $event.target.previousElementSibling;
-    hiddenField.value = true;
+    var removeField = $event.target.previousElementSibling;
+    removeField.value = true;
 
     parentElementName = "fields";
     target = $event.target;

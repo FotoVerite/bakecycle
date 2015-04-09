@@ -3,7 +3,7 @@ class PrintRecipesController < ApplicationController
 
   def index
     @date = date_query
-    @production_runs = item_finder.production_runs.for_date(@date)
+    @production_run = item_finder.production_runs.for_date(@date).last
   end
 
   private

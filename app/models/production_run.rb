@@ -10,6 +10,6 @@ class ProductionRun < ActiveRecord::Base
   )
 
   def self.for_date(date)
-    all.collect { |run| run if run.date.beginning_of_day == date.beginning_of_day }.compact
+    where('date >= ? AND date < ?', date.beginning_of_day, date.end_of_day)
   end
 end

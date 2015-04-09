@@ -15,8 +15,7 @@ describe RunItemQuantifier do
     end
 
     it 'sets the order quantity based on shipment_items of they exist' do
-      allow_any_instance_of(RunItemQuantifier).to receive(:shipment_items).and_return([])
-      expect(ShipmentItem).to_not receive(:quantities_sum)
+      allow(ShipmentItem).to receive(:for_product).and_return(ShipmentItem.none)
       expect(quantifier.order_quantity).to eq(0)
     end
   end

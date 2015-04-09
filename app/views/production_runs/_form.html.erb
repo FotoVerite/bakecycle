@@ -1,7 +1,14 @@
-<%= simple_form_for @production_run do |f| %>
+<%= simple_form_for @production_run, controller: 'production_runs' do |f| %>
   <%= f.error_notification %>
 
-  <%= render partial: "run_items", locals: {f: f} %>
+  <% if @production_run.errors.full_messages_for(:"run_items.product").any? %>
+    <div class="alert-box alert">
+      <%= @production_run.errors.full_messages_for(:"run_items.product").join
+ %>
+    </div>
+  <% end %>
+
+  <%= render partial: "production_runs/run_items", locals: {f: f} %>
 
   <div class="row">
     <div class="small-12 columns">

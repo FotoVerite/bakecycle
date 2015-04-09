@@ -34,7 +34,7 @@ When(/^I fill out run item form with:$/) do |table|
   all('.new_run_item_overbake_quantity').last.set(table.hashes[0]['overbake_quantity'])
 end
 
-When(/^change the overbake quantity on the existing run item$/) do
+When(/^I change the overbake quantity on the existing run item$/) do
   fill_in 'production_run_run_items_attributes_0_overbake_quantity', with: 33
 end
 
@@ -53,4 +53,12 @@ end
 When(/^I click on that production run row$/) do
   production_run_id = ProductionRun.last.id
   find("#production_run_#{production_run_id}").click
+end
+
+Given(/^I am on the Production Runs page$/) do
+  visit production_runs_path
+end
+
+Then(/^I should see the date for my production run$/) do
+  expect(page).to have_content(Date.today)
 end

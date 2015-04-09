@@ -1,5 +1,5 @@
 <div ng-controller="NestedItemCtrl">
-  <table class="responsive-table">
+  <table class="responsive-table recent-shipment">
     <thead>
       <tr>
         <th>Product</th>
@@ -7,18 +7,18 @@
         <th>Order Quantity</th>
         <th>Over Bake %</th>
         <th>Over Bake Quantity</th>
-        <th>Actions</th>
+        <th>Delete</th>
       </tr>
     </thead>
 
     <tbody>
       <%= f.simple_fields_for :run_items do |builder| %>
-          <%= render "run_item_fields", f: builder %>
+          <%= render "production_runs/run_item_fields", f: builder %>
       <% end %>
 
       <tr ng-repeat="nestedItem in nestedItems">
         <%= f.simple_fields_for :run_items, @production_run.run_items.build do |builder| %>
-           <%= render "new_run_item_fields", f: builder %>
+           <%= render "production_runs/new_run_item_fields", f: builder %>
         <% end %>
       </tr>
 

@@ -13,7 +13,6 @@ class RunItemQuantifier
   end
 
   def order_quantity
-    run_item.order_quantity = 0 unless shipment_items.any?
     run_item.order_quantity ||= shipment_items.quantities_sum
   end
 

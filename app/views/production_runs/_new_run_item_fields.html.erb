@@ -1,5 +1,5 @@
 <td>
-  <%= f.input :product_id, collection: @products, input_html: { class: 'new_run_item_product_id', id: "production_run_run_items_attributes_{{getRandomId($index)}}_product_id", name: "production_run[run_items_attributes][{{getRandomId($index)}}][product_id]" } %>
+  <%= f.input :product_id, collection: item_finder.products, input_html: { class: 'new_run_item_product_id', id: "production_run_run_items_attributes_{{getRandomId($index)}}_product_id", name: "production_run[run_items_attributes][{{getRandomId($index)}}][product_id]" } %>
 </td>
 <td>-</td>
 <td>-</td>

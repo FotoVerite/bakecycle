@@ -1,0 +1,28 @@
+<% provide(:title, "Production Runs") %>
+
+<h1>Production Runs</h1>
+
+<%= simple_form_for :search, method: :get do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :date, input_html: { value: @date, class: "js-datepicker", name: :date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
+    </div>
+  </div>
+<% end %>
+
+ <table class="responsive-table">
+  <thead>
+    <th>Id </th>
+    <th>Date</th>
+    <th>Actions</th>
+  </thead>
+
+  <tbody>
+    <% @production_runs.each do |production_run| %>
+      <%= render partial: 'production_run', locals: { production_run: production_run } %>
+    <% end %>
+  </tbody>
+ </table>
