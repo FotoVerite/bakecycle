@@ -1,0 +1,24 @@
+<%= simple_form_for @production_run, controller: 'production_runs' do |f| %>
+  <%= f.error_notification %>
+
+  <% if @production_run.errors.full_messages_for(:"run_items.product").any? %>
+    <div class="alert-box alert">
+      <%= @production_run.errors.full_messages_for(:"run_items.product").join
+ %>
+    </div>
+  <% end %>
+
+  <%= render partial: "production_runs/run_items", locals: {f: f} %>
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless f.object.new_record? %>
+        <%= link_to 'Delete', production_run_path(f.object),
+          class: "button alert",
+          method: :delete,
+          data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

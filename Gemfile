@@ -56,7 +56,6 @@ group :test, :development do
   gem 'guard-rails'
   gem 'immigrant'
   gem 'pry'
-  gem 'pry-byebug'
   gem 'rack-livereload'
   gem 'rspec-rails'
   gem 'rubocop', require: false

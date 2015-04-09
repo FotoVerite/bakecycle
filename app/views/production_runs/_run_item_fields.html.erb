@@ -1,0 +1,22 @@
+<tr class="fields" id="run_item_<%= f.object.id %>" ng-show="true">
+  <% if f.object.id %>
+    <td><%= f.object.product.name %></td>
+    <%= f.hidden_field :product_id, label: false, value: "#{f.object.product.id}" %>
+  <% else %>
+    <td>
+      <%= f.input :product_id, collection: item_finder.products, :error_html => { :id => "run_items_product_error"} %>
+    </td>
+  <% end %>
+
+  <td><strong><%= f.object.total_quantity %></strong></td>
+  <td><%= f.object.order_quantity %></td>
+  <td><%= f.object.over_bake %> %</td>
+  <td><%= f.input :overbake_quantity, label: false %></td>
+  <% unless f.object.id && f.object.shipment_items.for_product(f.object.product).any? %>
+    <td>
+      <%= f.hidden_field :_destroy, value: false %>
+      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
+    </td>
+  <% end %>
+</tr>
+

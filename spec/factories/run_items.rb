@@ -6,5 +6,6 @@ FactoryGirl.define do
 
     production_run { create(:production_run, bakery: bakery) }
     product { create(:product, bakery: bakery) }
+    overbake_quantity 10
   end
 end

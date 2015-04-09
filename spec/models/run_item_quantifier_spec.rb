@@ -9,25 +9,23 @@ describe RunItemQuantifier do
   let(:quantifier) { RunItemQuantifier.new(run_item) }
 
   describe '#order_quantity' do
-    it 'sets the order quantity based on shipment_items' do
+    it 'sets the order quantity based on shipment_items of they exist' do
+      expect(ShipmentItem).to receive(:quantities_sum).and_call_original
       expect(quantifier.order_quantity).to eq(shipment_item.product_quantity)
+    end
+
+    it 'sets the order quantity based on shipment_items of they exist' do
+      allow(ShipmentItem).to receive(:for_product).and_return(ShipmentItem.none)
+      expect(quantifier.order_quantity).to eq(0)
     end
   end
 
   describe '#overbake_quantity' do
     it 'sets the overbake quantity based on product order quantity and product overbake' do
       allow_any_instance_of(RunItemQuantifier).to receive(:order_quantity).and_return(10)
-      allow(ShipmentItem).to receive(:quantities_sum).and_return(10)
+      expect_any_instance_of(Product).to receive(:over_bake).twice.and_call_original
       overbake = product.over_bake * 10 / 100
       expect(quantifier.overbake_quantity).to eq(overbake.ceil)
-    end
-  end
-
-  describe '#total_quantity' do
-    it 'sets the order quantity based on order quantity and overbake quantity' do
-      allow_any_instance_of(RunItemQuantifier).to receive(:order_quantity).and_return(10)
-      allow_any_instance_of(Product).to receive(:over_bake).and_return(50)
-      expect(quantifier.total_quantity).to eq(15)
     end
   end
 end

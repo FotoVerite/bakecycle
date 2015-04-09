@@ -30,4 +30,8 @@ Rails.application.routes.draw do
   end
 
   resources :print_recipes, only: [:index]
+
+  resources :production_runs do
+    resources :run_items
+  end
 end

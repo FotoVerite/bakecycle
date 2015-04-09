@@ -31,6 +31,9 @@ class Ability
     # Orders
     can :manage, Order, bakery_id: user.bakery.id if user.bakery
 
+    # ProductionRun
+    can :manage, ProductionRun, bakery_id: user.bakery.id if user.bakery
+
     # Bakeries
     can [:read, :update, :mybakery], Bakery, id: user.bakery.id if user.bakery
     can :manage, Bakery if user.admin?

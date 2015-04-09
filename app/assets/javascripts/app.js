@@ -9,10 +9,9 @@ app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
   };
 
   $scope.remove = function ($event) {
-    var hiddenElement, parentElementName, target;
-
-    hiddenElement = $event.target.previousElementSibling;
-    hiddenElement.value = true;
+    var parentElementName, target;
+    var removeField = $event.target.previousElementSibling;
+    removeField.value = true;
 
     parentElementName = "fields";
     target = $event.target;
@@ -21,7 +20,7 @@ app.controller("NestedItemCtrl", [ '$scope', function ($scope) {
       target = target.parentNode;
     }
 
-    target.hidden = true;
+    $(target).hide();
   };
 
   $scope.getRandomId = function ($index) {
