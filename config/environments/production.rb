@@ -19,6 +19,9 @@ Rails.application.configure do
   # Version of your assets, change this if you want to expire all your assets.
   config.assets.version = '1.0'
 
+  # Set static assets cache expiration to a year
+  config.static_cache_control = 'public, max-age=31536000'
+
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 

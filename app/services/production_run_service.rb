@@ -1,5 +1,5 @@
 class ProductionRunService
-  attr_reader :bakery, :production_run
+  attr_reader :bakery, :production_run, :date
 
   def self.run(date = Time.now)
     Bakery.find_each do |bakery|
@@ -10,6 +10,7 @@ class ProductionRunService
   def initialize(bakery, date = Time.now)
     @bakery = bakery
     @production_run = ProductionRun.create(bakery: bakery, date: date)
+    @date = date
   end
 
   def create_production_run
@@ -34,6 +35,6 @@ class ProductionRunService
   end
 
   def eligible_shipment_items
-    bakery.shipment_items.where(production_start: Date.today, production_run: nil)
+    bakery.shipment_items.where(production_start: date, production_run: nil)
   end
 end
