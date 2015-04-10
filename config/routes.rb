@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   resources :print_recipes, only: [:index]
 
   resources :production_runs do
+    get 'print', on: :member
     resources :run_items
   end
 end
