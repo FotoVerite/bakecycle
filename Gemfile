@@ -26,6 +26,7 @@ gem 'prawn-table'
 gem 'rails', '4.2.1'
 gem 'sass-rails', '~> 4.0.3'
 gem 'simple_form'
+gem 'skylight'
 gem 'uglifier', '>= 1.3.0'
 gem 'unicorn', require: false
 gem 'will_paginate', '~> 3.0.6'
