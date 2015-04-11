@@ -26,8 +26,13 @@ module Bakecycle
 
     config.serve_static_files = true
 
+    # for bower stuff
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+
+    # for foundation
     config.assets.precompile += %w( vendor/modernizr.js )
+
+    # fonts
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/
 
     # enable instrumentation in staging

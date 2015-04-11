@@ -1,10 +1,12 @@
 /*global jasmine*/
 var excludes = [
     "map_events.html", 
-    "map_fit_bounds.htl",
     "map_lazy_init.html", 
+    "map-lazy-load.html", 
     "marker_with_dynamic_position.html",
-    "marker_with_ng_repeat_dynamic.html"
+    "marker_with_dynamic_address.html",
+    "marker_with_info_window.html",
+    "places-auto-complete.html"
   ];
 
 function using(values, func){

@@ -5,7 +5,12 @@
 <%= link_to 'Edit', edit_client_path(@client) %> |
 <%= link_to 'Back', clients_path %>
 
-<div class="map-container" ng-controller="mapCtrl" ng-init="center = [<%= client.latitude %>, <%= client.longitude %>]">
+<div
+  class="map-container"
+  ng-controller="mapCtrl"
+  ng-init="center=<%= [client.latitude,client.longitude].to_json %>"
+  map-lazy-load="http://maps.google.com/maps/api/js"
+>
   <map
     center="{{center}}"
     visible = "true"
@@ -13,7 +18,8 @@
     zoom-control = "true"
     scrollwheel = "false"
     max-zoom="15"
-    min-zoom="15">
+    min-zoom="15"
+  >
     <marker position = "{{center}}" on-click="openMap(center)"></marker>
   </map>
 </div>

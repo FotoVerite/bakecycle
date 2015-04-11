@@ -17,6 +17,10 @@
 //= require angular/angular
 //= require ngmap
 //= require foundation
-//= require_tree .
 
-$(function () { $(document).foundation(); });
+// Angular components
+//= require ./angular/app.js
+//= require_tree ./angular/
+
+// JQuery components
+//= require_tree ./plugins/
