@@ -13,7 +13,7 @@ class Bakery < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
   has_attached_file :logo, styles: { invoice: ['1800x200>', :png], thumb: ['300x200>', :png] }
-  validates_attachment :logo, content_type: { content_type: /\Aimage\/(jpeg|png|tiff|bmp)$/ }
+  validates_attachment :logo, content_type: { content_type: %r{\Aimage/(jpeg|png|tiff|bmp)$} }
 
   def logo_local_file(style = logo.default_style)
     return if logo.path(style).nil?

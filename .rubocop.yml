@@ -1,3 +1,4 @@
+inherit_from: .rubocop_todo.yml
 require: rubocop-rspec
 
 AllCops:
@@ -14,22 +15,6 @@ AllCops:
     - 'config/initializers/simple_form_foundation.rb'
     - 'app/models/ability.rb'
 
-Style/SignalException:
-  Enabled: false
-Style/SingleSpaceBeforeFirstArg:
-  Enabled: false
-Style/StringLiterals:
-  Enabled: false
-Style/Documentation:
-  Enabled: false
-Style/NumericLiterals:
-  Enabled: false
-Style/IndentHash:
-  Enabled: false
-Style/MultilineOperationIndentation:
-  EnforcedStyle: indented
-Style/StringLiterals:
-  EnforcedStyle: single_quotes
 Metrics/LineLength:
   Max: 120
 Metrics/MethodLength:
@@ -40,4 +25,22 @@ Metrics/ClassLength:
   Max: 116
 RSpec/DescribedClass:
   Enabled: false
-
+Style/BlockDelimiters:
+  # it would be great to use EnforcedStyle: semantic here but it complains way too much
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/IndentHash:
+  Enabled: false
+Style/NumericLiterals:
+  Enabled: false
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+Style/SignalException:
+  Enabled: false
+Style/SingleSpaceBeforeFirstArg:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: single_quotes

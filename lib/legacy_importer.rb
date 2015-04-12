@@ -1,6 +1,8 @@
 require 'mysql2'
 require 'uri'
-require 'csv'
+
+require 'legacy_importer/legacy_client_importer'
+require 'legacy_importer/legacy_ingredient_importer'
 
 class LegacyImporter
   attr_reader :connection, :bakery
@@ -12,7 +14,7 @@ class LegacyImporter
 
   def connect(connection_url)
     info = URI.parse(connection_url)
-    database = info.path.gsub(/^\//, '')
+    database = info.path.gsub(%r{^/}, '')
     Mysql2::Client.new(
       host: info.host,
       username: info.user,
@@ -23,131 +25,10 @@ class LegacyImporter
   end
 
   def clients
-    connection.query('SELECT * FROM bc_clients', symbolize_keys: true, stream: true)
+    LegacyClientImporter.new(bakery: bakery, connection: connection)
   end
 
-  USER_FIELDS_MAP = %w(
-    client_active             active
-    client_business_name      name
-    client_dba                dba
-
-    client_billing_address1   billing_address_street_1
-    client_billing_address2   billing_address_street_2
-    client_billing_city       billing_address_city
-    client_billing_state      billing_address_state
-    client_billing_zip        billing_address_zipcode
-
-    client_delivery_address1  delivery_address_street_1
-    client_delivery_address2  delivery_address_street_2
-    client_delivery_city      delivery_address_city
-    client_delivery_state     delivery_address_state
-    client_delivery_zip       delivery_address_zipcode
-
-    client_ap_email           accounts_payable_contact_email
-    client_ap_name            accounts_payable_contact_name
-    client_ap_phone           accounts_payable_contact_phone
-
-    client_delivery_name1     primary_contact_name
-    client_delivery_email1    primary_contact_email
-    client_delivery_phone1    primary_contact_phone
-
-    client_delivery_name2     secondary_contact_name
-    client_delivery_email2    secondary_contact_email
-    client_delivery_phone2    secondary_contact_phone
-
-    client_deliveryfee        delivery_fee
-    client_deliverymin        delivery_minimum
-    client_deliveryterms      billing_term
-    client_fax                business_fax
-    client_phone              business_phone
-  ).map(&:to_sym).each_slice(2)
-
-  # client_ap_emailcc
-  # client_createinvoices
-  # client_deliverorpickup
-  # client_deliveryend
-  # client_deliverynotes
-  # client_deliverystart
-  # client_discountpct
-  # client_doc_creditcardapp
-  # client_doc_resaleform
-  # client_doc_wholesaleagreement
-  # client_printinvoices
-  # client_printpackslips
-  # client_sendstatements
-
-  BILLING_TERMS_MAP = {
-    'Net 30' => :net_30,
-    'Credit Card' => :credit_card,
-    'COD' => :cod,
-    'Net 15' => :net_15,
-    '' => :net_30
-  }
-
-  def import_clients
-    clients.reject { |client| skip_client?(client) }.map { |client| import_client(client) }.partition(&:valid?)
-  end
-
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def import_client(legacy_client)
-    client_attr = translate_fields(legacy_client)
-    client_attr[:billing_term] = BILLING_TERMS_MAP[client_attr[:billing_term]]
-    client_attr[:active] = legacy_client[:client_active] == 'Y'
-    client_attr[:name] ||= legacy_client[:client_dba]
-    client_attr[:delivery_fee_option] = "#{legacy_client[:client_deliveryfeespan]}_delivery_fee".to_sym
-    client_attr[:accounts_payable_contact_name] ||= legacy_client[:primary_contact_name]
-
-    client_id = { bakery: bakery, legacy_id: legacy_client[:client_id].to_s }
-    client = Client.where(client_id).first_or_create
-    client.update(client_attr)
-    client
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
-
-  def invalid_client_report(invalid_clients)
-    invalid_client_info = []
-    invalid_clients.each do |client|
-      invalid_keys = client.errors.messages.keys
-      invalid_attributes = invalid_keys.collect { |key| "#{key}: #{client[key]}" }.join(', ')
-      unless client.name.include?('Samples')
-        invalid_client_info << "#{client.name}, #{client.dba}, #{invalid_attributes}\n"
-      end
-    end
-    invalid_client_info.sort
-  end
-
-  def invalid_client_csv_email(invalid_clients)
-    csv_string = CSV.generate(headers: true) do |csv|
-      csv << ['Name', 'DBA', 'Invalid Attributes']
-      invalid_clients.sort_by(&:name).each do |invalid_client|
-        csv << report_row(invalid_client) unless  invalid_client.name.include?('Samples')
-      end
-    end
-
-    LegacyImporterMailer.invalid_clients_csv(csv_string).deliver_now
-  end
-
-  private
-
-  def report_row(invalid_client)
-    invalid_keys = invalid_client.errors.messages.keys
-    invalid_attributes = invalid_keys.collect { |key| "#{key}: #{invalid_client[key]}" }
-    [invalid_client.name, invalid_client.dba, invalid_attributes].flatten
-  end
-
-  def skip_client?(client)
-    if client[:client_business_name].blank? && client[:client_dba].blank?
-      Rails.logger.warn "Skipping Legacy ID #{client[:client_id]} due to blank name and dba"
-      return true
-    elsif client[:client_business_name].include?('Samples') || client[:client_active] != 'Y'
-      return true
-    end
-    false
-  end
-
-  def translate_fields(legacy_client)
-    USER_FIELDS_MAP.each_with_object({}) do |(legacy_field, field), client_attr|
-      client_attr[field] = legacy_client[legacy_field] unless legacy_client[legacy_field] == ''
-    end
+  def ingredients
+    LegacyIngredientImporter.new(bakery: bakery, connection: connection)
   end
 end

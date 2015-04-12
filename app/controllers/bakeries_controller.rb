@@ -61,6 +61,6 @@ class BakeriesController < ApplicationController
       :address_state,
       :address_zipcode,
       :kickoff_time
-      )
+    )
   end
 end
