@@ -16,7 +16,7 @@ FactoryGirl.define do
     end
 
     after(:build) do |recipe_item, evaluator|
-      recipe_item.inclusionable ||=  build(:recipe, bakery: evaluator.bakery, lead_days: evaluator.recipe_lead_days)
+      recipe_item.inclusionable ||= build(:recipe, bakery: evaluator.bakery, lead_days: evaluator.recipe_lead_days)
     end
   end
 end

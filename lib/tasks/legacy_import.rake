@@ -6,9 +6,10 @@ namespace :bakecycle do
       Rails.logger.warn 'Starting import'
       biencuit = Bakery.find_by!(name: 'Bien Cuit')
       importer = LegacyImporter.new(bakery: biencuit)
-      _valid_clients, invalid_clients = importer.import_clients
+      valid_clients, invalid_clients = importer.clients.import!
+      puts "#{valid_clients.count} client imported"
       puts "#{invalid_clients.count} errored client imports"
-      importer.invalid_client_report(invalid_clients)
+      puts LegacyClientImporter::Report.new(invalid_clients).csv
       Rails.logger.warn 'Finished import'
     end
 
@@ -17,9 +18,9 @@ namespace :bakecycle do
       require 'legacy_importer'
       biencuit = Bakery.find_by!(name: 'Bien Cuit')
       importer = LegacyImporter.new(bakery: biencuit)
-      _valid_clients, invalid_clients = importer.import_clients
+      _valid_clients, invalid_clients = importer.clients.import!
       puts "#{invalid_clients.count} errored client imports"
-      importer.invalid_client_csv_email(invalid_clients)
+      LegacyClientImporter::Report.new(invalid_clients).send_email
     end
   end
 end
