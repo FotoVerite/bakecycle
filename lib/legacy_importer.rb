@@ -147,7 +147,7 @@ class LegacyImporter
 
   def skip_client?(client)
     if client[:client_business_name].blank? && client[:client_dba].blank?
-      Rails.logger.info "Skipping Legacy ID #{client[:client_id]} due to blank name and dba"
+      Rails.logger.warn "Skipping Legacy ID #{client[:client_id]} due to blank name and dba"
       return true
     elsif client[:client_business_name].include?('Samples')
       return true

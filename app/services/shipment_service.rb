@@ -1,10 +1,14 @@
 class ShipmentService
   attr_reader :bakery, :run_time
 
-  def self.run(run_time = Time.now)
-    Bakery.find_each do |bakery|
-      new(bakery, run_time).run
+  class << self
+    include Skylight::Helpers
+    def run(run_time = Time.now)
+      Bakery.find_each do |bakery|
+        new(bakery, run_time).run
+      end
     end
+    instrument_method :run, title: 'Shipment Service'
   end
 
   def initialize(bakery, run_time)
