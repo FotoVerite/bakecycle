@@ -95,17 +95,7 @@ class LegacyImporter
     client_attr[:active] = legacy_client[:client_active] == 'Y'
     client_attr[:name] ||= legacy_client[:client_dba]
     client_attr[:delivery_fee_option] = "#{legacy_client[:client_deliveryfeespan]}_delivery_fee".to_sym
-
-    client_attr[:business_phone] ||= 'unknown'
-
-    client_attr[:primary_contact_name] ||= 'unknown'
-    client_attr[:primary_contact_phone] ||= 'unknown'
-    client_attr[:primary_contact_email] ||= 'unknown@example.com'
-
     client_attr[:accounts_payable_contact_name] ||= legacy_client[:primary_contact_name]
-    client_attr[:accounts_payable_contact_phone] ||= legacy_client[:primary_contact_phone] || 'unknown'
-
-    client_attr[:accounts_payable_contact_email] ||= legacy_client[:primary_contact_email] || 'unknown@example.com'
 
     client_id = { bakery: bakery, legacy_id: legacy_client[:client_id].to_s }
     client = Client.where(client_id).first_or_create
@@ -149,7 +139,7 @@ class LegacyImporter
     if client[:client_business_name].blank? && client[:client_dba].blank?
       Rails.logger.warn "Skipping Legacy ID #{client[:client_id]} due to blank name and dba"
       return true
-    elsif client[:client_business_name].include?('Samples')
+    elsif client[:client_business_name].include?('Samples') || client[:client_active] != 'Y'
       return true
     end
     false

@@ -57,7 +57,7 @@ describe LegacyImporter do
 
   describe '#import_clients' do
     it 'returns successful imports and unsuccessful imports' do
-      invalid_client = legacy_client.dup.merge(client_delivery_address1: nil)
+      invalid_client = legacy_client.dup.merge(client_phone: nil)
       expect(connection).to receive(:query).and_return([legacy_client, invalid_client])
       valid_clients, error_clients = importer.import_clients
 
@@ -88,7 +88,7 @@ describe LegacyImporter do
   describe '#invalid_client_report' do
     it 'returns invalid clients' do
       invalid_client = importer.import_client(legacy_client.merge(client_delivery_address1: nil))
-      invalid_client_row = ["#{invalid_client.name}, #{invalid_client.dba}, delivery_address_street_1: \n"]
+      invalid_client_row = ["#{invalid_client.name}, #{invalid_client.dba}, \n"]
       expect(importer.invalid_client_report([invalid_client])).to eq(invalid_client_row)
     end
   end
