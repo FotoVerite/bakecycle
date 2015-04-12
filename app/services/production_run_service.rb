@@ -1,10 +1,14 @@
 class ProductionRunService
   attr_reader :bakery, :production_run, :date
 
-  def self.run(date = Time.now)
-    Bakery.find_each do |bakery|
-      new(bakery, date).create_production_run
+  class << self
+    include Skylight::Helpers
+    def run(date = Time.now)
+      Bakery.find_each do |bakery|
+        new(bakery, date).create_production_run
+      end
     end
+    instrument_method :run, title: 'Production Run Service'
   end
 
   def initialize(bakery, date = Time.now)
