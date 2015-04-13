@@ -1,34 +1,44 @@
-require 'mysql2'
-require 'uri'
+require 'legacy_importer/models'
+require 'legacy_importer/importer'
+require 'legacy_importer/reporter'
+require 'legacy_importer/client_importer'
+require 'legacy_importer/ingredient_importer'
+require 'legacy_importer/recipe_importer'
 
-require 'legacy_importer/legacy_client_importer'
-require 'legacy_importer/legacy_ingredient_importer'
-
-class LegacyImporter
-  attr_reader :connection, :bakery
-
-  def initialize(bakery:, connection_url: ENV['LEGACY_BAKECYCLE_DATABASE_URL'], connection: nil)
-    @bakery = bakery
-    @connection = connection || connect(connection_url)
+module LegacyImporter
+  def self.bakery
+    @_bakery ||= Bakery.find_by!(name: 'Bien Cuit')
   end
 
-  def connect(connection_url)
-    info = URI.parse(connection_url)
-    database = info.path.gsub(%r{^/}, '')
-    Mysql2::Client.new(
-      host: info.host,
-      username: info.user,
-      password: info.password,
-      database: database,
-      reconnect: true
-    )
+  def self.report(imported_objects)
+    Reporter.new(imported_objects)
   end
 
-  def clients
-    LegacyClientImporter.new(bakery: bakery, connection: connection)
+  def self.import_clients
+    Importer.new(
+      bakery: bakery,
+      collection: Clients.all,
+      importer: ClientImporter
+    ).import!
   end
 
-  def ingredients
-    LegacyIngredientImporter.new(bakery: bakery, connection: connection)
+  def self.import_ingredients
+    Importer.new(
+      bakery: bakery,
+      collection: Ingredients.all,
+      importer: IngredientImporter
+    ).import!
+  end
+
+  def self.import_recipes
+    Importer.new(
+      bakery: bakery,
+      collection: Recipes.all,
+      importer: RecipeImporter
+    ).import!
+  end
+
+  def self.import_all
+    import_clients + import_ingredients + import_recipes
   end
 end

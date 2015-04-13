@@ -1,10 +1,9 @@
 require 'rails_helper'
 require 'legacy_importer'
 
-describe LegacyClientImporter do
+describe LegacyImporter::ClientImporter do
   let(:bakery) { create(:bakery) }
-  let(:connection) { instance_double(Mysql2::Client, query: [legacy_client]) }
-  let(:importer) { LegacyClientImporter.new(bakery: bakery, connection: connection) }
+  let(:importer) { LegacyImporter::ClientImporter.new(bakery, legacy_client) }
 
   let(:legacy_client) do
     HashWithIndifferentAccess.new(
@@ -56,15 +55,6 @@ describe LegacyClientImporter do
   end
 
   describe '#import!' do
-    it 'returns successful imports and unsuccessful imports' do
-      invalid_client = legacy_client.dup.merge(client_phone: nil)
-      expect(connection).to receive(:query).and_return([legacy_client, invalid_client])
-      valid_clients, error_clients = importer.import!
-
-      expect(error_clients.count).to eq(1)
-      expect(valid_clients.count).to eq(1)
-    end
-
     it 'creates a Client out of a LegacyClient' do
       (client, _), _ = importer.import!
       expect(client).to be_an_instance_of(Client)
@@ -73,32 +63,30 @@ describe LegacyClientImporter do
       expect(client).to be_persisted
     end
 
+    it 'returns unsuccessful import' do
+      legacy_client[:client_phone] = nil
+      ingredient = importer.import!
+      expect(ingredient).to_not be_valid
+      expect(ingredient).to_not be_persisted
+    end
+
     it 'updates existing clients' do
-      (client, _), _ = importer.import!
+      client = importer.import!
       legacy_client[:client_business_name] = 'New Name'
-      (updated_client, _), _ = importer.import!
+      updated_client = importer.import!
 
       expect(updated_client.name).to eq('New Name')
       expect(client).to eq(updated_client)
       client.reload
       expect(client.name).to eq('New Name')
     end
-  end
 
-  describe '#invalid_client_report' do
-    it 'returns invalid clients' do
-      legacy_client[:client_phone] = nil
-      _, (invalid_client, _) = importer.import!
-      invalid_client_row = "\"#{invalid_client.name}\",#{invalid_client.dba},business_phone:nil\n"
-      expect(LegacyClientImporter::Report.new([invalid_client]).csv).to include(invalid_client_row)
-    end
-
-    it 'delivers invalid client csv mailer' do
-      legacy_client[:client_phone] = nil
-      _, (invalid_client, _) = importer.import!
-      LegacyClientImporter::Report.new([invalid_client]).send_email
-      expect(ActionMailer::Base.deliveries.last.subject).to eq('Invalid clients csv')
-      expect(ActionMailer::Base.deliveries.last.attachments.first.content_type). to eq('text/csv; charset=UTF-8')
+    it 'skips clients who have no name' do
+      legacy_client[:client_business_name] = nil
+      legacy_client[:client_dba] = nil
+      skipped_client = importer.import!
+      expect(skipped_client).to be_valid
+      expect(skipped_client).to_not be_persisted
     end
   end
 end
