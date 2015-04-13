@@ -3,24 +3,28 @@ namespace :bakecycle do
     desc 'Import the legacy biencuit bakecycle data'
     task biencuit_import: :environment do
       require 'legacy_importer'
-      Rails.logger.warn 'Starting import'
-      biencuit = Bakery.find_by!(name: 'Bien Cuit')
-      importer = LegacyImporter.new(bakery: biencuit)
-      valid_clients, invalid_clients = importer.clients.import!
-      puts "#{valid_clients.count} client imported"
-      puts "#{invalid_clients.count} errored client imports"
-      puts LegacyClientImporter::Report.new(invalid_clients).csv
-      Rails.logger.warn 'Finished import'
+      puts 'Starting import'
+      imported_objects = LegacyImporter.import_all
+      reporter = LegacyImporter.report(imported_objects)
+      puts "#{reporter.imported_count} objects imported"
+      puts "#{reporter.skipped_count} skipped objects"
+      puts "#{reporter.invalid_count} errored objects"
+      puts reporter.csv
+      puts 'Finished import'
     end
 
     desc 'Email the legacy biencuit bakecycle data'
     task biencuit_email: :environment do
       require 'legacy_importer'
-      biencuit = Bakery.find_by!(name: 'Bien Cuit')
-      importer = LegacyImporter.new(bakery: biencuit)
-      _valid_clients, invalid_clients = importer.clients.import!
-      puts "#{invalid_clients.count} errored client imports"
-      LegacyClientImporter::Report.new(invalid_clients).send_email
+      puts 'Starting import'
+      imported_objects = LegacyImporter.import_all
+      reporter = LegacyImporter.report(imported_objects)
+      puts "#{reporter.imported_count} objects imported"
+      puts "#{reporter.skipped_count} skipped objects"
+      puts "#{reporter.invalid_count} errored objects"
+      puts reporter.csv
+      reporter.send_email
+      puts 'Finished import and email'
     end
   end
 end

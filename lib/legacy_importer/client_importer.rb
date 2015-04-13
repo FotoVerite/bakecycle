@@ -1,53 +1,12 @@
-require 'mysql2'
-require 'uri'
-require 'csv'
+module LegacyImporter
+  class ClientImporter
+    attr_reader :data, :bakery
 
-class LegacyClientImporter
-  attr_reader :connection, :bakery
-
-  def initialize(bakery:, connection:)
-    @bakery = bakery
-    @connection = connection
-  end
-
-  def import!
-    clients.map { |client|
-      Importer.new(client, bakery).import!
-    }.compact.partition(&:valid?)
-  end
-
-  def clients
-    connection.query('SELECT * FROM bc_clients', symbolize_keys: true, stream: true)
-  end
-
-  class Report
-    attr_reader :objects
-
-    def initialize(objects)
-      @objects = objects
+    def initialize(bakery, legacy_clients)
+      @bakery = bakery
+      @data = legacy_clients
     end
 
-    def invalid_objects
-      objects.sort_by(&:name).map do |client|
-        invalid_keys = client.errors.messages.keys
-        invalid_attributes = invalid_keys.map { |key| "#{key}:#{client[key].inspect}" }.join(' ')
-        [client.name, client.dba, invalid_attributes]
-      end
-    end
-
-    def csv
-      CSV.generate(headers: true) do |csv|
-        csv << ['Name', 'DBA', 'Invalid Attributes']
-        invalid_objects.each { |row| csv << row }
-      end
-    end
-
-    def send_email
-      LegacyImporterMailer.invalid_clients_csv(csv).deliver_now
-    end
-  end
-
-  class Importer
     FIELDS_MAP = %w(
       client_active             active
       client_business_name      name
@@ -106,15 +65,8 @@ class LegacyClientImporter
       '' => :net_30
     }
 
-    attr_reader :data, :bakery
-
-    def initialize(legacy_client, bakery)
-      @data = legacy_client
-      @bakery = bakery
-    end
-
     def import!
-      return if skip?
+      return SkippedClient.new(attributes) if skip?
       Client.where(
         bakery: bakery,
         legacy_id: data[:client_id].to_s
@@ -123,8 +75,13 @@ class LegacyClientImporter
         .tap { |c| c.update(attributes) }
     end
 
+    class SkippedClient < SkippedObject
+    end
+
+    private
+
     def skip?
-      no_name? || not_active?
+      no_name? || not_active? || sample?
     end
 
     def no_name?
@@ -132,7 +89,12 @@ class LegacyClientImporter
     end
 
     def not_active?
-      data[:client_business_name].include?('Samples') || data[:client_active] != 'Y'
+      data[:client_active] != 'Y'
+    end
+
+    def sample?
+      data[:client_business_name].include?('Samples') ||
+        data[:client_dba].include?('Samples')
     end
 
     def attributes

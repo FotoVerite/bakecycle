@@ -1,10 +1,9 @@
 require 'rails_helper'
 require 'legacy_importer'
 
-describe LegacyIngredientImporter do
+describe LegacyImporter::IngredientImporter do
   let(:bakery) { create(:bakery) }
-  let(:connection) { instance_double(Mysql2::Client, query: [legacy_ingredient]) }
-  let(:importer) { LegacyIngredientImporter.new(bakery: bakery, connection: connection) }
+  let(:importer) { LegacyImporter::IngredientImporter.new(bakery, legacy_ingredient) }
 
   let(:legacy_ingredient) do
     HashWithIndifferentAccess.new(
@@ -20,27 +19,24 @@ describe LegacyIngredientImporter do
   end
 
   describe '#import!' do
-    it 'returns successful imports and unsuccessful imports' do
-      invalid_ingredient = legacy_ingredient.dup.merge(ingredient_name: nil)
-      expect(connection).to receive(:query).and_return([legacy_ingredient, invalid_ingredient])
-      valid_ingredients, error_ingredients = importer.import!
-
-      expect(error_ingredients.count).to eq(1)
-      expect(valid_ingredients.count).to eq(1)
-    end
-
-    it 'creates a Client out of a LegacyClient' do
-      (ingredient, _), _ = importer.import!
+    it 'creates a Ingredient out of a legacy_ingredient' do
+      ingredient = importer.import!
       expect(ingredient).to be_an_instance_of(Ingredient)
-      # expect(ingredient.active).to eq(true)
       expect(ingredient).to be_valid
       expect(ingredient).to be_persisted
     end
 
+    it 'returns unsuccessful import' do
+      legacy_ingredient[:ingredient_name] = nil
+      ingredient = importer.import!
+      expect(ingredient).to_not be_valid
+      expect(ingredient).to_not be_persisted
+    end
+
     it 'updates existing clients' do
-      (ingredient, _), _ = importer.import!
+      ingredient = importer.import!
       legacy_ingredient[:ingredient_name] = 'New Name'
-      (updated_ingredient, _), _ = importer.import!
+      updated_ingredient = importer.import!
 
       expect(updated_ingredient.name).to eq('New Name')
       expect(ingredient).to eq(updated_ingredient)

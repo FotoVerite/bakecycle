@@ -12,7 +12,7 @@ FactoryGirl.define do
     end
 
     factory :recipe_preferment do
-      recipe_type :pre_ferment
+      recipe_type :preferment
     end
 
     factory :recipe_inclusion do
