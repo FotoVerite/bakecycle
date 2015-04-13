@@ -4,7 +4,13 @@ class ProductionRunsController < ApplicationController
 
   def index
     @date = date
-    @production_runs = production_runs
+  end
+
+  def print
+    production_run_data = ProductionRunData.new(@production_run)
+    pdf = ProductionRunPdf.new(production_run_data)
+    pdf_name = 'ProductionRunRecipe.pdf'
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def edit; end
