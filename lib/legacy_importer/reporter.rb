@@ -35,15 +35,14 @@ module LegacyImporter
 
     def invalid_objects
       @objects.select { |o| !o.valid? }
-        .sort_by(&:name)
+        .sort_by { |o| o.try(:name) || '' }
         .sort_by { |o| o.class.to_s }
     end
 
     def invalid_report
-      invalid_objects.map do |client|
-        invalid_keys = client.errors.messages.keys
-        invalid_attributes = invalid_keys.map { |key| "#{key}:#{client[key]}" }.join('|')
-        [client.class, client.name, client.legacy_id, invalid_attributes]
+      invalid_objects.map do |object|
+        errors = object.errors.full_messages.join('|')
+        [object.class, object.try(:name), object.try(:legacy_id), errors]
       end
     end
   end

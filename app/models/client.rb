@@ -9,7 +9,6 @@ class Client < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :dba, length: { maximum: 150 }
-  validates :business_phone, presence: true
 
   validates :primary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
@@ -48,10 +47,10 @@ class Client < ActiveRecord::Base
   end
 
   def self.billing_terms_select
-    billing_terms.keys.to_a.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
+    billing_terms.keys.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
   end
 
   def self.delivery_fee_options_select
-    delivery_fee_options.keys.to_a.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
+    delivery_fee_options.keys.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
   end
 end

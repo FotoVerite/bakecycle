@@ -5,7 +5,7 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence(1) }
     weight { Faker::Number.decimal(0, 3) }
     unit { Product.units.keys.sample }
-    over_bake { Faker::Number.decimal(2, 1) }
+    over_bake { Faker::Number.decimal(1, 1) }
     base_price { Faker::Number.decimal(2) }
     bakery
 
@@ -35,7 +35,7 @@ FactoryGirl.define do
       'Apple Butter Scone',
       'Pear Danish',
       'Apple Cinnamon Muffin',
-      'Apple Pumpkin Muffin'
+      'Pumpkin Muffin'
     ]
 
     "#{products.sample} #{n}"

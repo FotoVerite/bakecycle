@@ -26,7 +26,7 @@
     </div>
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :product_type, collection: Product.product_types_select, prompt: "Select One", as: :select %>
+        <%= f.input :product_type, collection: product.product_types_select, prompt: "Select One", as: :select %>
       </div>
       <div class="small-12 medium-6 columns">
         <%= f.input :base_price, as: :string %>
@@ -34,7 +34,7 @@
     </div>
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :unit, collection: Product.units_select, prompt: 'Select One', as: :select %>
+        <%= f.input :unit, collection: product.units_select, prompt: 'Select One', as: :select %>
       </div>
       <div class="small-12 medium-6 columns">
         <%= f.input :weight, as: :string%>
@@ -56,10 +56,10 @@
     </div>
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :inclusion_id, collection: product.inclusions, label_method: :name, value_method: :id,include_blank: 'Select One', as: :select %>
+        <%= f.input :motherdough_id, collection: product.motherdoughs, label_method: :name, value_method: :id, include_blank: 'Select One', as: :select %>
       </div>
       <div class="small-12 medium-6 columns">
-        <%= f.input :motherdough_id, collection: product.motherdoughs, label_method: :name, value_method: :id, include_blank: 'Select One', as: :select %>
+        <%= f.input :inclusion_id, collection: product.inclusions, label_method: :name, value_method: :id,include_blank: 'Select One', as: :select %>
       </div>
     </div>
   </fieldset>

@@ -9,7 +9,9 @@ module LegacyImporter
     end
 
     def import!
-      @imported = collection.map { |object| importer.new(bakery, object).import! }
+      Skylight.instrument title: importer.to_s do
+        @imported = collection.map { |object| importer.new(bakery, object).import! }
+      end
     end
   end
 end

@@ -64,10 +64,10 @@ describe LegacyImporter::ClientImporter do
     end
 
     it 'returns unsuccessful import' do
-      legacy_client[:client_phone] = nil
-      ingredient = importer.import!
-      expect(ingredient).to_not be_valid
-      expect(ingredient).to_not be_persisted
+      legacy_client[:client_deliverymin] = 'a'
+      client = importer.import!
+      expect(client).to_not be_valid
+      expect(client).to_not be_persisted
     end
 
     it 'updates existing clients' do

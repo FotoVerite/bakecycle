@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :recipe do
+    name { generate(:recipe_name) }
     recipe_type { Recipe.recipe_types.except(:inclusion).keys.sample }
-    sequence(:name) { |n| "#{n}#{Faker::Lorem.word}" }
     mix_size 12
     mix_size_unit { Recipe.mix_size_units.keys.sample }
     lead_days 2
@@ -44,5 +44,26 @@ FactoryGirl.define do
         recipe.recipe_items = [build(:recipe_item_recipe, recipe_lead_days: evaluator.recipe_lead_days)]
       end
     end
+  end
+
+  sequence :recipe_name do |n|
+    recipes = [
+      'Baguette',
+      'Baguette Poolish',
+      'Black sesame petit pain',
+      'Brioche',
+      'Brioche Cocoa Nib',
+      'Brioche Orange Blossom',
+      'Brioche Traditional',
+      'Broa',
+      'Broa Biga',
+      'Campagne',
+      'Challah',
+      'Challah Milk Poolish',
+      'Chive Lobster Roll',
+      'Chive Pain au Lait',
+      'Ciabatta'
+    ]
+    "#{recipes.sample} ##{n}"
   end
 end

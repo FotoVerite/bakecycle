@@ -43,6 +43,7 @@ module LegacyImporter
       client_phone              business_phone
     ).map(&:to_sym).each_slice(2)
 
+    # Fields we have yet to import
     # client_ap_emailcc
     # client_createinvoices
     # client_deliverorpickup
@@ -104,7 +105,7 @@ module LegacyImporter
         active: active?,
         name: client_attr[:name] || data[:client_dba],
         delivery_fee_option: delivery_fee,
-        accounts_payable_contact_name: client_attr[:accounts_payable_contact_name] ||= data[:primary_contact_name]
+        accounts_payable_contact_name: client_attr[:accounts_payable_contact_name] || data[:primary_contact_name]
       )
     end
 
