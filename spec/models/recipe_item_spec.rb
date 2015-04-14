@@ -16,20 +16,9 @@ describe RecipeItem do
     expect(recipe_item_recipe).to validate_presence_of(:bakers_percentage)
   end
 
-  describe 'bakers_percentage' do
-    it 'is a number with 2 decimals' do
-      expect(build(:recipe_item_recipe, bakers_percentage: 12.011)).to be_valid
-    end
-    it 'is not a number' do
-      expect(build(:recipe_item_recipe, bakers_percentage: 'not a number')).to_not be_valid
-    end
-
-    it 'has more than 3 decimals' do
-      expect(build(:recipe_item_recipe, bakers_percentage: 0.1234)).to_not be_valid
-    end
-
-    it 'has less than 3 decimals' do
-      expect(build(:recipe_item_recipe, bakers_percentage: 0.1)).to be_valid
-    end
+  it 'prevents infinite loops' do
+    recipe = create(:recipe)
+    item = RecipeItem.new(recipe_id: recipe.id, inclusionable: recipe, bakers_percentage: 1)
+    expect(item).to_not be_valid
   end
 end

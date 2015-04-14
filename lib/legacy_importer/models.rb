@@ -20,25 +20,37 @@ module LegacyImporter
     end
 
     def self.query(sql)
-      connection.query(sql, symbolize_keys: true, stream: true, cache_rows: false).to_a
+      connection.query(sql, symbolize_keys: true, stream: true, cache_rows: false)
     end
   end
 
-  module Clients
+  class Clients
     def self.all
       DB.query('SELECT * FROM bc_clients')
     end
   end
 
-  module Ingredients
+  class Ingredients
     def self.all
       DB.query('SELECT * FROM bc_ingredients')
     end
   end
 
-  module Recipes
+  class Recipes
     def self.all
       DB.query('SELECT * FROM bc_recipes')
+    end
+  end
+
+  class RecipeItems
+    def self.all
+      DB.query('SELECT * FROM bc_recipeamts')
+    end
+  end
+
+  class Products
+    def self.all
+      DB.query('SELECT * FROM bc_products')
     end
   end
 

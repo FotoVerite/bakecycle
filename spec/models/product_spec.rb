@@ -18,67 +18,25 @@ describe Product do
 
   it 'has association' do
     expect(product).to belong_to(:bakery)
+    expect(product).to belong_to(:motherdough)
+    expect(product).to belong_to(:inclusion)
   end
 
-  describe 'validations' do
-    it 'has a name' do
-      expect(product).to validate_presence_of(:name)
-      expect(product).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
-    end
+  it 'has validations' do
+    expect(product).to validate_presence_of(:name)
+    expect(product).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    expect(product).to validate_presence_of(:product_type)
+    expect(product).to validate_presence_of(:base_price)
+    expect(product).to validate_presence_of(:weight)
+    expect(product).to validate_presence_of(:unit)
+    expect(product).to validate_presence_of(:over_bake)
+  end
 
-    it 'can have same name if are apart of different bakeries' do
-      biencuit = create(:bakery)
-      product_name = 'Carrot Cake'
-      create(:product, name: product_name, bakery: biencuit)
-      expect(create(:product, name: product_name)).to be_valid
-    end
-
-    it 'has a product type' do
-      expect(product).to validate_presence_of(:product_type)
-    end
-
-    it 'has a base price' do
-      expect(product).to validate_presence_of(:base_price)
-      expect(product).to validate_numericality_of(:base_price)
-      expect(build(:product, base_price: 12.011)).to_not be_valid
-      expect(build(:product, base_price: 12.01)).to be_valid
-    end
-
-    it 'has a description' do
-      expect(product).to ensure_length_of(:description).is_at_most(500)
-    end
-
-    it 'has a weight that is a number' do
-      expect(product).to validate_numericality_of(:weight)
-      expect(build(:product, weight: 12.011)).to be_valid
-      expect(build(:product, name: 'this is our test', weight: 'not a number')).to_not be_valid
-      expect(build(:product, weight: 0.1234)).to_not be_valid
-      expect(build(:product, weight: 0.12)).to be_valid
-      expect(build(:product, weight: 0.1)).to be_valid
-      expect(build(:product, weight: 1)).to be_valid
-    end
-
-    it 'has a unit' do
-      expect(build(:product, unit: nil)).to be_valid
-      expect(build(:product, unit: 0)).to be_valid
-    end
-
-    it 'has an over_bake that is a number' do
-      expect(product).to validate_numericality_of(:over_bake)
-      expect(build(:product, over_bake: 12.011)).to be_valid
-      expect(build(:product, name: 'this is our test', over_bake: 'not a number')).to_not be_valid
-      expect(build(:product, over_bake: 0.1234)).to_not be_valid
-      expect(build(:product, over_bake: 0.12)).to be_valid
-      expect(build(:product, over_bake: 0.1)).to be_valid
-      expect(build(:product, over_bake: 1)).to be_valid
-    end
-
-    it 'has a motherdough' do
-      expect(build(:product)).to belong_to(:motherdough)
-    end
-
-    it 'has a inclusion' do
-      expect(build(:product)).to belong_to(:inclusion)
+  describe 'name' do
+    it 'strips the spaces around names' do
+      bread = build(:product, name: ' bread ')
+      bread.valid?
+      expect(bread.name).to eq('bread')
     end
   end
 
@@ -92,6 +50,24 @@ describe Product do
 
     it 'returns 1 if no recipes' do
       expect(product.total_lead_days).to eq(1)
+    end
+  end
+
+  describe '#price' do
+    let(:product) { create(:product, base_price: 10) }
+
+    it 'gives the base price if no variants' do
+      expect(product.price(1)).to eq(10)
+    end
+
+    it 'returns the matching variant price based upon quantity' do
+      create(:price_varient, product: product, price: 9, quantity: 2)
+      create(:price_varient, product: product, price: 8, quantity: 3)
+      create(:price_varient, product: product, price: 7, quantity: 4)
+      expect(product.price(1)).to eq(10)
+      expect(product.price(2)).to eq(9)
+      expect(product.price(3)).to eq(8)
+      expect(product.price(4)).to eq(7)
     end
   end
 end

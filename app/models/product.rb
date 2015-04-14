@@ -7,7 +7,7 @@ class Product < ActiveRecord::Base
 
   has_many :price_varients, dependent: :destroy
 
-  accepts_nested_attributes_for :price_varients, allow_destroy: true, reject_if: :reject_price_varients
+  accepts_nested_attributes_for :price_varients, allow_destroy: true, reject_if: :reject_price_varients?
 
   enum product_type: [
     :bread,
@@ -23,24 +23,22 @@ class Product < ActiveRecord::Base
 
   enum unit: [:oz, :lb, :g, :kg]
 
+  validates :bakery, presence: true
   validates :name, presence: true, uniqueness: { scope: :bakery }
   validates :product_type, presence: true
-  validates :description, length: { maximum: 500 }
-  validates :weight, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
-  validates :over_bake, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true
-  validates :base_price, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true, presence: true
-  validates :bakery, presence: true
+  validates :weight, numericality: true, presence: true
+  validates :unit, presence: true
+  validates :over_bake, numericality: true, presence: true
+  validates :base_price, numericality: true, presence: true
 
-  def reject_price_varients(attributes)
+  before_validation :strip_name
+
+  def strip_name
+    self.name = name.strip if name
+  end
+
+  def reject_price_varients?(attributes)
     attributes['quantity'].blank? && (attributes['price'] == '0.0' || attributes['price'].blank?)
-  end
-
-  def self.units_select
-    units.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
-  end
-
-  def self.product_types_select
-    product_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
   end
 
   def save(*args)
@@ -51,17 +49,11 @@ class Product < ActiveRecord::Base
   end
 
   def price(quantity)
-    return base_price if find_varients.empty?
-    return base_price if quantity_varient(quantity).empty?
-    quantity_varient(quantity).last.price
-  end
-
-  def find_varients
-    price_varients
+    quantity_varient(quantity).try(:price) || base_price
   end
 
   def quantity_varient(quantity)
-    find_varients.where('quantity <= ?', quantity).order(:quantity)
+    price_varients.where('quantity <= ?', quantity).order('quantity desc').first
   end
 
   def total_lead_days

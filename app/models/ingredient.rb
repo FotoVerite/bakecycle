@@ -17,10 +17,10 @@ class Ingredient < ActiveRecord::Base
   validates :bakery, presence: true
 
   def self.units_select
-    units.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+    units.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
   end
 
   def self.ingredient_types_select
-    ingredient_types.keys.to_a.map { |keys| [keys.humanize(capitalize: false), keys] }
+    ingredient_types.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
   end
 end

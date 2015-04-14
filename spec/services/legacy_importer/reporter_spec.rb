@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'legacy_importer'
 
 describe LegacyImporter::Reporter do
-  let(:invalid_client) { build(:client, name: 'hi', legacy_id: 4, business_phone: nil) }
+  let(:invalid_client) { build(:client, name: nil, legacy_id: 4) }
   let(:client) { build_stubbed(:client) }
   let(:skipped_client) { LegacyImporter::ClientImporter::SkippedClient.new(attributes_for(:client)) }
   let(:reporter) { LegacyImporter::Reporter.new([client, invalid_client, skipped_client]) }
@@ -10,9 +10,8 @@ describe LegacyImporter::Reporter do
   describe '#invalid_client_report' do
     it 'returns invalid clients' do
       csv = reporter.csv
-      expect(csv).to include(invalid_client.name)
       expect(csv).to include(invalid_client.legacy_id)
-      expect(csv).to include('business_phone:')
+      expect(csv).to include("Name can't be blank")
     end
 
     it 'delivers invalid client csv mailer' do

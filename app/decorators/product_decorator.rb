@@ -5,6 +5,14 @@ class ProductDecorator < Draper::Decorator
     product_type.humanize(capitalize: false).titleize
   end
 
+  def product_types_select
+    object.class.product_types.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
+
+  def units_select
+    object.class.units.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
+  end
+
   def truncated_description
     return description.truncate(30) if description
     nil

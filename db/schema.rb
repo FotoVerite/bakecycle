@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413014728) do
+ActiveRecord::Schema.define(version: 20150414033227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,21 +140,23 @@ ActiveRecord::Schema.define(version: 20150413014728) do
   add_index "production_runs", ["bakery_id"], name: "index_production_runs_on_bakery_id", using: :btree
 
   create_table "products", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "product_type"
-    t.decimal  "weight"
-    t.integer  "unit"
+    t.string   "name",                         null: false
+    t.integer  "product_type",                 null: false
+    t.decimal  "weight",                       null: false
+    t.integer  "unit",                         null: false
     t.text     "description"
     t.decimal  "over_bake",      default: 0.0, null: false
     t.integer  "motherdough_id"
     t.integer  "inclusion_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "base_price"
+    t.decimal  "base_price",                   null: false
     t.integer  "bakery_id",                    null: false
     t.string   "sku"
+    t.string   "legacy_id"
   end
 
+  add_index "products", ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "products", ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "recipe_items", force: :cascade do |t|

@@ -30,7 +30,7 @@ class DemoCreator
   def dark_rye_flour
     @_dark_rye_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Dark Rye Flour',
+      name: 'Dark Rye Flour Mix',
       price: 22.00,
       measure: 40,
       unit: :lb,
@@ -41,7 +41,7 @@ class DemoCreator
   def white_flour
     @_white_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'White Flour',
+      name: 'White Flour Blend',
       price: 1.10,
       measure: 1,
       unit: :kg,
@@ -52,7 +52,7 @@ class DemoCreator
   def whole_wheat_flour
     @_whole_wheat_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Whole Wheat Flour',
+      name: 'Whole Wheat Flour Mix',
       price: 1.30,
       measure: 1,
       unit: :kg,
@@ -63,7 +63,7 @@ class DemoCreator
   def yeast
     @_yeast ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Yeast',
+      name: 'Yeast #2',
       price: 75.00,
       measure: 20,
       unit: :lb,
@@ -74,7 +74,7 @@ class DemoCreator
   def water
     @_water ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Water',
+      name: 'Purified Water',
       price: 0.00,
       measure: 0,
       unit: :g,
@@ -85,7 +85,7 @@ class DemoCreator
   def nicoise_olives
     @_nicoise_olives ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Nicoise Olives',
+      name: 'Black Olives',
       price: 40.00,
       measure: 1,
       unit: :lb,
@@ -96,7 +96,7 @@ class DemoCreator
   def chives
     @_chives ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Chives',
+      name: 'Chopped Chives',
       price: 15.00,
       measure: 1,
       unit: :lb,
@@ -108,7 +108,7 @@ class DemoCreator
     @_nicoise_olive_inclusion ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
-      name: 'Nicoise Olives',
+      name: 'Black Olives',
       lead_days: 1,
       recipe_items: [RecipeItem.create!(
         bakers_percentage: 15,
@@ -121,7 +121,7 @@ class DemoCreator
     @_dark_rype ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
-      name: 'Dark Rye',
+      name: 'Dark Rye Blend',
       lead_days: 2,
       recipe_items: [RecipeItem.create!(
         bakers_percentage: 1,
@@ -134,7 +134,7 @@ class DemoCreator
     Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
-      name: 'Chive Pain au Lait',
+      name: 'Chives Pain au Lait',
       lead_days: 1,
       recipe_items: [RecipeItem.create!(
         bakers_percentage: 2,
@@ -147,7 +147,7 @@ class DemoCreator
     Recipe.create!(
       bakery: @bakery,
       recipe_type: :dough,
-      name: 'Multi-Grain',
+      name: 'Multi Grain',
       mix_size: 12,
       mix_size_unit: :kg,
       lead_days: 2,
@@ -164,7 +164,7 @@ class DemoCreator
     Recipe.create!(
       bakery: @bakery,
       recipe_type: :dough,
-      name: 'Baguette',
+      name: 'Light Baguette',
       mix_size: 50,
       mix_size_unit: :kg,
       lead_days: 2,
@@ -180,7 +180,7 @@ class DemoCreator
     Recipe.create!(
       bakery: @bakery,
       recipe_type: :dough,
-      name: 'Pain au Lait',
+      name: 'Sweet Pain au Lait',
       mix_size: 70,
       mix_size_unit: :kg,
       lead_days: 3,
@@ -196,7 +196,7 @@ class DemoCreator
     return @_multi_grain_loaf if @_multi_grain_loaf
     @_multi_grain_loaf = Product.create!(
       bakery: @bakery,
-      name: 'Multi-Grain Loaf',
+      name: 'Large Multi-Grain Loaf',
       product_type: :bread,
       description: 'A delicious loaf',
       weight: 1200,
@@ -212,7 +212,7 @@ class DemoCreator
   def nicoise_baguette
     @_nicoise_baguette ||= Product.create!(
       bakery: @bakery,
-      name: 'Nicoise Baguette',
+      name: 'Black Olive Baguette',
       product_type: :bread,
       description: 'The finest baguette',
       weight: 50,
@@ -227,7 +227,7 @@ class DemoCreator
   def chive_pain_au_lait
     @_chive_pain_au_lait ||= Product.create!(
       bakery: @bakery,
-      name: 'Chive Pain Au Lait',
+      name: 'Chives Pain Au Lait',
       product_type: :bread,
       weight: 40,
       unit: :g,
@@ -284,16 +284,28 @@ class DemoCreator
       end_date: nil,
       client: client,
       route: default_route,
-      order_items: [OrderItem.new(
-        product: nicoise_baguette,
-        monday: 5,
-        tuesday: 5,
-        wednesday: 4,
-        thursday: 5,
-        friday: 5,
-        saturday: 10,
-        sunday: 0
-      )]
+      order_items: [
+        OrderItem.new(
+          product: nicoise_baguette,
+          monday: 5,
+          tuesday: 5,
+          wednesday: 4,
+          thursday: 5,
+          friday: 5,
+          saturday: 10,
+          sunday: 0
+        ),
+        OrderItem.new(
+          product: chive_pain_au_lait,
+          monday: 9,
+          tuesday: 7,
+          wednesday: 10,
+          thursday: 12,
+          friday: 11,
+          saturday: 0,
+          sunday: 0
+        )
+      ]
     )
   end
 end
