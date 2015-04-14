@@ -20,5 +20,11 @@ describe RecipeItem do
     recipe = create(:recipe)
     item = RecipeItem.new(recipe_id: recipe.id, inclusionable: recipe, bakers_percentage: 1)
     expect(item).to_not be_valid
+
+    item = RecipeItem.new(bakers_percentage: 1)
+    expect(item).to_not be_valid
+
+    item = RecipeItem.new(recipe_id: recipe.id, bakers_percentage: 1)
+    expect(item).to_not be_valid
   end
 end

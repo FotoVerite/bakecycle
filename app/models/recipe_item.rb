@@ -14,7 +14,7 @@ class RecipeItem < ActiveRecord::Base
   end
 
   def infinite_loop?
-    is_inclusionable_recipe = inclusionable_type.to_sym == :Recipe
+    is_inclusionable_recipe = inclusionable_type && inclusionable_type.to_sym == :Recipe
     inclusionable_id && inclusionable_id == recipe_id && is_inclusionable_recipe
   end
 
