@@ -32,16 +32,18 @@ class ProductionRunPdf < PdfReport
   end
 
   def body
-    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 50) do
+    @production_run.recipes.each do |motherdough|
       start_new_page
-      recipes
+      render_recipe(motherdough)
     end
   end
 
-  def recipes
-    @production_run.motherdoughs.each do |motherdough|
-      text motherdough.name, size: 20
-      start_new_page unless motherdough == @production_run.motherdoughs.last
+  def render_recipe(recipe_data)
+    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 50) do
+      text recipe_data.recipe.name, size: 20
+      text recipe_data.recipe.recipe_type, size: 20
+      text recipe_data.products.count, size: 20
+      text recipe_data.inclusions.count, size: 20
     end
   end
 
