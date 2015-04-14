@@ -33,17 +33,7 @@ class ProductionRunPdf < PdfReport
 
   def body
     @production_run.recipes.each do |motherdough|
-      start_new_page
-      render_recipe(motherdough)
-    end
-  end
-
-  def render_recipe(recipe_data)
-    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 50) do
-      text recipe_data.recipe.name, size: 20
-      text recipe_data.recipe.recipe_type, size: 20
-      text recipe_data.products.count, size: 20
-      text recipe_data.inclusions.count, size: 20
+      RecipeDataPdf.new(self, motherdough).render_recipe
     end
   end
 
