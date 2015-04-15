@@ -21,6 +21,11 @@ FactoryGirl.define do
       motherdough { create(:recipe_motherdough, bakery: bakery, lead_days: total_lead_days) }
     end
 
+    trait :with_recipe_items do
+      inclusion { create(:recipe, :with_ingredients, bakery: bakery) }
+      motherdough { create(:recipe, :with_nested_recipe, bakery: bakery) }
+    end
+
     trait :with_sku do
       sku { Faker::Code.ean }
     end

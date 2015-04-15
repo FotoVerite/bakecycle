@@ -59,4 +59,8 @@ class Product < ActiveRecord::Base
   def total_lead_days
     [1, inclusion.try(:total_lead_days), motherdough.try(:total_lead_days)].compact.max
   end
+
+  def weight_with_unit
+    Unitwise(weight, unit)
+  end
 end
