@@ -1,9 +1,11 @@
 class ProductionRunData
-  attr_reader :bakery
+  attr_reader :bakery, :recipes
   def initialize(production_run)
     @production_run = production_run
     @run_items = production_run.run_items
     @bakery = production_run.bakery
+    @recipes = RecipeCollection.new
+    processes_run_items
   end
 
   def id
@@ -19,15 +21,22 @@ class ProductionRunData
   end
 
   def products
-    @run_items.map do |items|
-      { name: items.product.name, quantity: items.total_quantity }
+    @run_items.map do |item|
+      { name: item.product.name, quantity: item.total_quantity }
     end
   end
 
-  def motherdoughs
-    @run_items.map do |item|
-      item.product.motherdough if item.product.motherdough.present?
+  def processes_run_items
+    @run_items.each do |item|
+      add_to_recipe_run_data(item.product, item.total_quantity)
     end
+  end
+
+  def add_to_recipe_run_data(product, quantity)
+    motherdough =  product.motherdough
+    return unless motherdough
+    recipe_data = recipes.find_or_create(motherdough)
+    recipe_data.run_data(product, quantity)
   end
 
   private
