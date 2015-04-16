@@ -36,7 +36,7 @@ class ProductionRunData
     motherdough =  product.motherdough
     return unless motherdough
     recipe_data = recipes.find_or_create(motherdough)
-    recipe_data.run_data(product, quantity)
+    recipe_data.add_product(product, quantity)
   end
 
   private

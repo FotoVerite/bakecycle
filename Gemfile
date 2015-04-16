@@ -29,6 +29,7 @@ gem 'simple_form'
 gem 'skylight'
 gem 'uglifier', '>= 1.3.0'
 gem 'unicorn', require: false
+gem 'unitwise'
 gem 'will_paginate', '~> 3.0.6'
 
 # deployment
