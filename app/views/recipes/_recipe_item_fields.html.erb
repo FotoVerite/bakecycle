@@ -1,25 +1,28 @@
 <div class="fields" ng-show="true">
   <div class="row collapse">
     <div class="small-12 medium-4 columns" ng-if="isInclusion()">
-      <%= f.input :inclusionable_id_type, collection: recipe.available_ingredients, label: "Ingredient", include_blank: "Select One", as: :select%>
+      <%= f.label :inclusionable_id_type, "Ingredient", class: "hide-for-medium-up" %>
+      <%= f.input :inclusionable_id_type, collection: recipe.available_ingredients, label: false, include_blank: "Select One", as: :select%>
     </div>
     <div class="small-12 medium-4 columns" ng-if="!isInclusion()">
-      <%= f.input :inclusionable_id_type, collection: recipe.available_inclusions, label: "Ingredient", include_blank: "Select One", as: :select%>
+      <%= f.label :inclusionable_id_type, "Ingredient", class: "hide-for-medium-up" %>
+      <%= f.input :inclusionable_id_type, collection: recipe.available_inclusions, label: false, include_blank: "Select One", as: :select%>
     </div>
     <div class="small-12 medium-2 columns">
-      <%= f.input :bakers_percentage, label: "Baker's %", as: :string %>
+      <%= f.label :bakers_percentage, "Baker's %", class: "hide-for-medium-up" %>
+      <%= f.input :bakers_percentage, label: false, as: :string %>
     </div>
     <div class="small-12 medium-2 columns">
-      <%= f.label :inclusionable_type, "Type" %>
+      <%= f.label :inclusionable_type, "Type", class: "hide-for-medium-up" %>
       <input ng-disabled="true" type="text" value="<%= f.object.display_type %>" />
     </div>
     <div class="small-12 medium-2 columns">
-      <%= f.label :total_lead_days, "Lead time" %>
+      <%= f.label :total_lead_days, "Lead time", class: "hide-for-medium-up" %>
       <input ng-disabled="true" type="text" value="<%= f.object.total_lead_display %>" />
     </div>
     <div class="small-12 medium-2 columns end">
       <%= f.input :_destroy, as: :hidden, wrapper: false %>
-      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "remove-button button alert postfix" %>
+      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: "button alert postfix" %>
     </div>
   </div>
 </div>
