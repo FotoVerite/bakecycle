@@ -32,7 +32,7 @@
           <p class="contact-info">
             <span>Sales:</span><br>
             (800) 312-1234<br>
-            <a class="underlined-link" href="sales@bakecycle.com">sales@bakecycle.com</a>
+            <%= mail_to "sales@bakecycle.com", "sales@bakecycle.com", html_options = { class:"underlined-link" } %>
           </p>
         </div>
 
@@ -40,7 +40,7 @@
           <p class="contact-info">
             <span>Support:</span><br>
             (800) 312-1234<br>
-            <a class="underlined-link" href="support@bakecycle.com">support@bakecycle.com</a>
+            <%= mail_to "support@bakecycle.com", "support@bakecycle.com", html_options = { class:"underlined-link" } %>
           </p>
         </div>
 
