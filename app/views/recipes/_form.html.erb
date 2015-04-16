@@ -47,6 +47,20 @@
 
   <fieldset>
     <legend>Ingredients</legend>
+    <div class="row collapse">
+      <div class="small-12 medium-4 columns">
+        <%= f.label :inclusionable_id_type, "Ingredient", class: "show-for-medium-up" %>
+      </div>
+      <div class="small-12 medium-2 columns">
+        <%= f.label :bakers_percentage, "Baker's %", class: "show-for-medium-up" %>
+      </div>
+      <div class="small-12 medium-2 columns">
+        <%= f.label :inclusionable_type, "Type", class: "show-for-medium-up" %>
+      </div>
+      <div class="small-12 medium-2 columns end">
+        <%= f.label :total_lead_days, "Lead time", class: "show-for-medium-up" %>
+      </div>
+    </div>
     <div ng-controller="NestedItemCtrl">
       <%= f.simple_fields_for :recipe_items do |builder| %>
         <%= render "recipe_item_fields", f: builder %>
