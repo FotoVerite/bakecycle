@@ -1,6 +1,6 @@
 namespace :immigrant do
   desc 'Checks for missing foreign key relationships in the database'
-  task check_keys: :environment do
+  task my_check_keys: :environment do
     Rails.application.eager_load!
 
     config_file = '.immigrant.yml'
