@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     get 'print', on: :member
   end
 
-  resources :print_recipes, only: [:index]
+  get 'print-recipes', to: 'production_runs#print_recipes'
 
   resources :production_runs do
     get 'print', on: :member

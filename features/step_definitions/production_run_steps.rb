@@ -1,6 +1,6 @@
-Given(/^there are "(.*?)" production_runs$/) do |bakery|
+Given(/^there is a "(.*?)" production run$/) do |bakery|
   bakery = Bakery.find_by(name: bakery)
-  create_list(:production_run, 2, bakery: bakery)
+  create(:production_run, bakery: bakery, date: Date.today)
 end
 
 Given(/^there is a production run for another bakery$/) do
@@ -35,7 +35,7 @@ When(/^I fill out run item form with:$/) do |table|
 end
 
 When(/^I change the overbake quantity on the existing run item$/) do
-  fill_in 'production_run_run_items_attributes_0_overbake_quantity', with: 33
+  fill_in('Overbake quantity', with: 33)
 end
 
 When(/^I click an a run item delete button on the donut$/) do

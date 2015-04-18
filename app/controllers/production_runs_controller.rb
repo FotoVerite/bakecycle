@@ -1,9 +1,9 @@
 class ProductionRunsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
+  decorates_assigned :production_runs, :production_run
 
   def index
-    @date = date
   end
 
   def print
@@ -14,6 +14,15 @@ class ProductionRunsController < ApplicationController
   end
 
   def edit; end
+
+  def print_recipes
+    active_nav(:print_recipes)
+    @date = date_query
+    @production_run = item_finder
+      .production_runs
+      .for_date(@date)
+      .first
+  end
 
   def update
     if @production_run.update(production_run_params)
@@ -33,17 +42,7 @@ class ProductionRunsController < ApplicationController
     )
   end
 
-  def date
-    date_query.strftime('%Y-%m-%d') if date_query
-  end
-
   def date_query
-    Chronic.parse(params[:date])
-  end
-
-  def production_runs
-    date = date_query
-    return item_finder.production_runs.for_date(date) if date
-    item_finder.production_runs
+    Chronic.parse(params[:date]) || Time.zone.today
   end
 end

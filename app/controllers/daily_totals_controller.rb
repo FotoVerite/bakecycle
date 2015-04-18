@@ -14,6 +14,6 @@ class DailyTotalsController < ApplicationController
   private
 
   def date_query
-    Chronic.parse(params[:date] || params[:id]) || Date.today
+    Chronic.parse(params[:date] || params[:id]) || Time.zone.today
   end
 end

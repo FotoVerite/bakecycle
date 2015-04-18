@@ -1,9 +1,0 @@
-<tr class="js-clickableRow" id="production_run_<%= production_run.id %>" href='<%= "#{edit_production_run_path(production_run)}" %>'>
-  <td><%= production_run.id %></td>
-  <td><%= production_run.date %></td>
-  <td data-title="Action">
-      <%= link_to edit_production_run_path(production_run) do %>
-        <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Production Run"><i class="fi-page-edit"></i></span>
-      <% end %>
-  </td>
-</tr>

@@ -8,6 +8,7 @@ class ProductsController < ApplicationController
   end
 
   def new
+    @product.unit = :kg
   end
 
   def create

@@ -8,7 +8,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = Order.new(order_type: 'standing', start_date: Date.today)
+    @order = Order.new(order_type: 'standing', start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
     @order.order_items.build
   end

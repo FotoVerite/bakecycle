@@ -12,6 +12,10 @@ class RunItem < ActiveRecord::Base
 
   delegate :over_bake, to: :product
 
+  def from_shipment?
+    order_quantity > 0
+  end
+
   def initialize_quantities
     RunItemQuantifier.new(self).set
   end
