@@ -19,7 +19,8 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  config.active_support.deprecation = :raise
+  # I want this to be raise
+  config.active_support.deprecation = :log
 
   config.action_controller.action_on_unpermitted_parameters = :raise
 
