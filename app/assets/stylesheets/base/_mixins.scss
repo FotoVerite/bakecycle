@@ -1,13 +1,13 @@
 @mixin transform-origin($horizontal:0, $vertical:0) {
-  -ms-transform-origin: ($horizontal $vertical);
+      -ms-transform-origin: ($horizontal $vertical);
   -webkit-transform-origin: ($horizontal $vertical);
-  transform-origin: ($horizontal $vertical);
+          transform-origin: ($horizontal $vertical);
 }
 
 @mixin transform-skew($x-angle:0, $y-angle:0){
-  -ms-transform: skew($x-angle, $y-angle);
+      -ms-transform: skew($x-angle, $y-angle);
   -webkit-transform: skew($x-angle, $y-angle);
-  transform: skew($x-angle, $y-angle);
+          transform: skew($x-angle, $y-angle);
 }
 
 @mixin underline-link($color){
