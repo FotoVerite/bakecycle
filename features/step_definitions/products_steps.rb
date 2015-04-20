@@ -12,14 +12,17 @@ Then(/^I should see a list of products including "(.*?)" and "(.*?)"$/) do |prod
 end
 
 When(/^I fill out product form with:$/) do |table|
-  fill_in 'product_name', with: table.hashes[0]['name']
-  select table.hashes[0]['product_type'], from: 'product_product_type'
-  fill_in 'product_weight', with: table.hashes[0]['weight']
-  select table.hashes[0]['unit'], from: 'product_unit'
-  fill_in 'product_description', with: table.hashes[0]['description']
-  fill_in 'product_over_bake', with: table.hashes[0]['over_bake']
-  fill_in 'product_base_price', with: table.hashes[0]['base_price']
-  fill_in 'product_sku', with: table.hashes[0]['sku']
+  row = table.hashes.first
+  jquery_fill(
+    product_name: row['name'],
+    product_sku: row['sku'],
+    product_base_price: row['base_price'],
+    product_weight: row['weight'],
+    product_over_bake: row['over_bake'],
+    product_description: row['description'],
+    product_product_type: row['product_type'],
+    product_unit: row['unit']
+  )
 end
 
 When(/^I change the product name to "(.*?)"$/) do |name|
