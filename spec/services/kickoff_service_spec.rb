@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe KickoffService do
-  let(:today) { Date.today }
+  let(:today) { Time.zone.today }
   let(:bakery) { create(:bakery) }
   let(:after_kickoff_time) do
     kickoff = bakery.kickoff_time + 1.hour
-    Time.new(today.year, today.month, today.day, kickoff.hour, kickoff.min, kickoff.sec)
+    Time.zone.local(today.year, today.month, today.day, kickoff.hour, kickoff.min, kickoff.sec)
   end
   let(:shipment_service) { double(ShipmentService, run: true) }
   let(:production_service) { double(ProductionRunService, create_production_run: true) }

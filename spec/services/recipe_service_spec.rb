@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe RecipeService do
-  let(:today) { Date.today }
-  let(:tomorrow) { Date.tomorrow }
+  let(:today) { Time.zone.today }
+  let(:tomorrow) { Time.zone.tomorrow }
   let(:bakery) { create(:bakery) }
   let(:recipe_service) { RecipeService.new(today, bakery) }
 

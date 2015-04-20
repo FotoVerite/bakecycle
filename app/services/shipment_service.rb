@@ -3,7 +3,7 @@ class ShipmentService
 
   class << self
     include Skylight::Helpers
-    def run(run_time = Time.now)
+    def run(run_time = Time.zone.now)
       Bakery.find_each do |bakery|
         new(bakery, run_time).run
       end

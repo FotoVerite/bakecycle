@@ -43,11 +43,11 @@ class PdfReport < Prawn::Document
   end
 
   def current_date
-    Date.today.strftime('%A %B %e, %Y')
+    Time.zone.today.strftime('%A %B %e, %Y')
   end
 
   def current_time
-    Time.now.strftime('%l:%M%P')
+    Time.zone.now.strftime('%l:%M%P')
   end
 
   def timestamp

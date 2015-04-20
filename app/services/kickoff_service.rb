@@ -3,7 +3,7 @@ class KickoffService
 
   class << self
     include Skylight::Helpers
-    def run(run_time = Time.now)
+    def run(run_time = Time.zone.now)
       Bakery.find_each do |bakery|
         new(bakery, run_time).run
       end
@@ -11,7 +11,7 @@ class KickoffService
     instrument_method :run, title: 'Kickoff Service'
   end
 
-  def initialize(bakery, run_time = Time.now)
+  def initialize(bakery, run_time = Time.zone.now)
     @bakery = bakery
     @run_time = run_time
   end
@@ -30,7 +30,7 @@ class KickoffService
 
   def after_kickoff_time?
     kickoff = bakery.kickoff_time
-    kickoff_today = Time.new(run_time.year, run_time.month, run_time.day, kickoff.hour, kickoff.min, kickoff.sec)
+    kickoff_today = Time.zone.local(run_time.year, run_time.month, run_time.day, kickoff.hour, kickoff.min, kickoff.sec)
     kickoff_today < run_time
   end
 
