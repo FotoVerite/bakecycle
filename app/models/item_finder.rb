@@ -31,6 +31,7 @@ class ItemFinder
 
   def production_runs
     ProductionRun.accessible_by(ability)
+      .includes(run_items: [:product])
   end
 
   def shipments
@@ -38,7 +39,9 @@ class ItemFinder
   end
 
   def shipment_items
-    ShipmentItem.joins(:shipment).where(shipments: ability.attributes_for(:read, Shipment))
+    ShipmentItem
+      .joins(:shipment)
+      .where(shipments: ability.attributes_for(:read, Shipment))
   end
 
   def orders

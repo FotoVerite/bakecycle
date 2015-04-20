@@ -12,7 +12,7 @@
   <td><%= f.object.order_quantity %></td>
   <td><%= f.object.over_bake %> %</td>
   <td><%= f.input :overbake_quantity, label: false %></td>
-  <% unless f.object.id && f.object.shipment_items.for_product(f.object.product).any? %>
+  <% unless f.object.from_shipment? %>
     <td>
       <%= f.hidden_field :_destroy, value: false %>
       <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>

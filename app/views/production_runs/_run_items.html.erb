@@ -25,5 +25,5 @@
     </tbody>
   </table>
 
-  <%= link_to 'Add Product', '', :'ng-click' => "add()", class: "button" %>
+  <%= link_to('Add Product', '', :'ng-click' => "add()", class: "button") if f.object.persisted? %>
 </div>

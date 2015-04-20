@@ -37,7 +37,7 @@
         <%= f.input :weight, as: :string%>
       </div>
       <div class="small-12 medium-6 columns">
-        <%= f.input :unit, collection: product.units_select, prompt: 'Select One', as: :select %>
+        <%= f.input :unit, collection: product.units_select, as: :select, include_blank: false %>
       </div>
     </div>
     <div class="row">

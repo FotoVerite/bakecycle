@@ -3,8 +3,8 @@
 
   Background:
     Given I am logged in as a user with a bakery called "biencuit"
-    And there are "biencuit" production_runs
     And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    And there is a "biencuit" production run
 
   @javascript
   Scenario: Find and edit and add run items to a production run from production runs
@@ -18,7 +18,6 @@
   Scenario: Find and edit and add run items to a production run from print recipes
     Given there is a run item for a "biencuit" production run
     And I am on the Print Recipes page
-    Then "Editing Production Run" should be present
     When I click on "Add Product"
     And I change the overbake quantity on the existing run item
     And I fill out run item form with:

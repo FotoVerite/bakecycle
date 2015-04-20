@@ -40,9 +40,9 @@ describe Client do
 
   it 'has validations' do
     expect(client).to validate_presence_of(:name)
-    expect(client).to ensure_length_of(:name).is_at_most(150)
+    expect(client).to validate_length_of(:name).is_at_most(150)
     expect(client).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
-    expect(client).to ensure_length_of(:dba).is_at_most(150)
+    expect(client).to validate_length_of(:dba).is_at_most(150)
     expect(client).to validate_presence_of(:delivery_fee_option)
     expect(client).to validate_presence_of(:delivery_minimum)
     expect(client).to validate_numericality_of(:delivery_minimum)

@@ -16,7 +16,7 @@ describe User do
 
   describe 'validations' do
     describe 'name' do
-      it { expect(user).to ensure_length_of(:name).is_at_most(150) }
+      it { expect(user).to validate_length_of(:name).is_at_most(150) }
     end
 
     describe 'email' do

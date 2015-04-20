@@ -22,9 +22,9 @@ describe Recipe do
       recipe = build(:recipe)
       expect(recipe).to validate_presence_of(:recipe_type)
       expect(recipe).to validate_presence_of(:name)
-      expect(recipe).to ensure_length_of(:name).is_at_most(150)
+      expect(recipe).to validate_length_of(:name).is_at_most(150)
       expect(recipe).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
-      expect(recipe).to ensure_length_of(:note).is_at_most(500)
+      expect(recipe).to validate_length_of(:note).is_at_most(500)
       expect(recipe).to validate_numericality_of(:lead_days)
     end
 

@@ -19,7 +19,7 @@ describe Ingredient do
   describe 'validations' do
     describe 'name' do
       it { expect(ingredient).to validate_presence_of(:name) }
-      it { expect(ingredient).to ensure_length_of(:name).is_at_most(150) }
+      it { expect(ingredient).to validate_length_of(:name).is_at_most(150) }
       it { expect(ingredient).to validate_uniqueness_of(:name).scoped_to(:bakery_id) }
 
       it 'can have same name if are apart of different bakeries' do
@@ -79,7 +79,7 @@ describe Ingredient do
     end
 
     describe 'description' do
-      it { expect(ingredient).to ensure_length_of(:description).is_at_most(500) }
+      it { expect(ingredient).to validate_length_of(:description).is_at_most(500) }
     end
 
     describe 'unit' do
