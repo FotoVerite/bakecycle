@@ -6,6 +6,7 @@ require 'legacy_importer/ingredient_importer'
 require 'legacy_importer/recipe_importer'
 require 'legacy_importer/recipe_item_importer'
 require 'legacy_importer/product_importer'
+require 'legacy_importer/price_varient_importer'
 
 module LegacyImporter
   def self.bakery
@@ -56,7 +57,15 @@ module LegacyImporter
     ).import!
   end
 
+  def self.import_price_varients
+    Importer.new(
+      bakery: bakery,
+      collection: PriceVarients.all,
+      importer: PriceVarientImporter
+    ).import!
+  end
+
   def self.import_all
-    import_clients + import_ingredients + import_recipes + import_recipe_items + import_products
+    import_clients + import_ingredients + import_recipes + import_recipe_items + import_products + import_price_varients
   end
 end
