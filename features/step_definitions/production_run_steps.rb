@@ -1,6 +1,6 @@
 Given(/^there is a "(.*?)" production run$/) do |bakery|
   bakery = Bakery.find_by(name: bakery)
-  create(:production_run, bakery: bakery, date: Date.today)
+  create(:production_run, bakery: bakery, date: Time.zone.today)
 end
 
 Given(/^there is a production run for another bakery$/) do
@@ -60,5 +60,5 @@ Given(/^I am on the Production Runs page$/) do
 end
 
 Then(/^I should see the date for my production run$/) do
-  expect(page).to have_content(Date.today)
+  expect(page).to have_content(Time.zone.today)
 end

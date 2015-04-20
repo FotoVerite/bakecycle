@@ -21,8 +21,8 @@ class DemoCreator
 
   def run_one_week_shipments
     (0..7).to_a.reverse_each do |days|
-      date = Date.today - days.days
-      process_time = Time.new(date.year, date.month, date.day, kickoff.hour, kickoff.min, kickoff.sec)
+      date = Time.zone.today - days.days
+      process_time = Time.zone.local(date.year, date.month, date.day, kickoff.hour, kickoff.min, kickoff.sec)
       KickoffService.new(@bakery, process_time).run
     end
   end
@@ -280,7 +280,7 @@ class DemoCreator
     Order.create!(
       bakery: @bakery,
       order_type: 'standing',
-      start_date: Date.today - 1.week,
+      start_date: Time.zone.today - 1.week,
       end_date: nil,
       client: client,
       route: default_route,

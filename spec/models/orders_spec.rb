@@ -2,10 +2,10 @@ require 'rails_helper'
 
 describe Order do
   let(:order) { build(:order) }
-  let(:today) { Date.today }
-  let(:yesterday) { Date.today - 1.day }
-  let(:tomorrow) { Date.today + 1.day }
-  let(:next_week) { Date.today + 1.week }
+  let(:today) { Time.zone.today }
+  let(:yesterday) { today - 1.day }
+  let(:tomorrow) { today + 1.day }
+  let(:next_week) { today + 1.week }
 
   it 'has model attributes' do
     expect(order).to respond_to(:client)

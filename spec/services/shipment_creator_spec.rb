@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ShipmentCreator do
-  let(:today) { Date.today }
+  let(:today) { Time.zone.today }
   let(:bakery) { create(:bakery) }
 
   describe '#create!' do

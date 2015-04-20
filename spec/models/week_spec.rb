@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Week do
-  let(:today) { Date.today }
+  let(:today) { Time.zone.today }
 
   context 'creates week model' do
     it 'creates a model containing a start_date and end_date' do

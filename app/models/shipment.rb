@@ -79,7 +79,7 @@ class Shipment < ActiveRecord::Base
     where(client_id: client_id).order('date DESC').limit(10)
   end
 
-  def self.upcoming(order, date = Date.today)
+  def self.upcoming(order, date = Time.zone.today)
     where(client_id: order.client.id, route_id: order.route.id).where('date >= ?', date).order('date ASC')
   end
 

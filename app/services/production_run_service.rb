@@ -3,7 +3,7 @@ class ProductionRunService
 
   class << self
     include Skylight::Helpers
-    def run(date = Time.now)
+    def run(date = Time.zone.now)
       Bakery.find_each do |bakery|
         new(bakery, date).create_production_run
       end
@@ -11,7 +11,7 @@ class ProductionRunService
     instrument_method :run, title: 'Production Run Service'
   end
 
-  def initialize(bakery, date = Time.now)
+  def initialize(bakery, date = Time.zone.now)
     @bakery = bakery
     @production_run = ProductionRun.create(bakery: bakery, date: date)
     @date = date

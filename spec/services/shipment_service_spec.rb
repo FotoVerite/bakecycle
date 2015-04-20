@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe ShipmentService do
-  let(:today) { Date.today }
+  let(:today) { Time.zone.today }
   let(:bakery) { create(:bakery) }
   let(:after_kickoff_time) do
     kickoff = bakery.kickoff_time + 1.hour
-    Time.new(today.year, today.month, today.day, kickoff.hour, kickoff.min, kickoff.sec)
+    Time.zone.local(today.year, today.month, today.day, kickoff.hour, kickoff.min, kickoff.sec)
   end
   let(:shipment_service) { ShipmentService.new(bakery, after_kickoff_time) }
 
@@ -35,7 +35,7 @@ describe ShipmentService do
     end
 
     it 'updates last_kickoff time to bakery when last_kickoff is over 24 hours' do
-      bakery = create(:bakery, last_kickoff: Date.today - 24.hours, kickoff_time: Chronic.parse('2 pm'))
+      bakery = create(:bakery, last_kickoff: today - 24.hours, kickoff_time: Chronic.parse('2 pm'))
       current_time = Chronic.parse('3 pm')
       create(:order, start_date: today, total_lead_days: 1, bakery: bakery)
       ShipmentService.run(current_time)

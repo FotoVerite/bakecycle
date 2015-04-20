@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :shipment do
-    date  { Date.today + Faker::Number.number(1).to_i.days }
+    date  { Time.zone.today + Faker::Number.number(1).to_i.days }
     bakery
     route { create(:route, bakery: bakery) }
     client { create(:client, bakery: bakery) }

@@ -82,30 +82,32 @@ end
 
 Given(/^there are "(.*?)" shipments for the past two weeks$/) do |bakery|
   bakery = Bakery.find_by(name: bakery)
-  create(:shipment, bakery: bakery, date: (Date.today))
-  create(:shipment, bakery: bakery, date: (Date.today - 2))
-  create(:shipment, bakery: bakery, date: (Date.today - 5))
-  create(:shipment, bakery: bakery, date: (Date.today - 7))
-  create(:shipment, bakery: bakery, date: (Date.today - 10))
-  create(:shipment, bakery: bakery, date: (Date.today - 11))
-  create(:shipment, bakery: bakery, date: (Date.today - 15))
+  today = Time.zone.today
+  create(:shipment, bakery: bakery, date: today)
+  create(:shipment, bakery: bakery, date: today - 2.days)
+  create(:shipment, bakery: bakery, date: today - 5.days)
+  create(:shipment, bakery: bakery, date: today - 7.days)
+  create(:shipment, bakery: bakery, date: today - 10.days)
+  create(:shipment, bakery: bakery, date: today - 11.days)
+  create(:shipment, bakery: bakery, date: today - 15.days)
 end
 
 When(/^I filter shipments by to and from dates for the past week$/) do
-  fill_in 'search_date_from', with: (Date.today - 7).to_s
-  fill_in 'search_date_to', with: (Date.today).to_s
+  fill_in 'search_date_from', with: (Time.zone.today - 7.days).to_s
+  fill_in 'search_date_to', with: (Time.zone.today).to_s
   click_button 'Search'
 end
 
 Then(/^I should see a list of shipments for only the past week$/) do
   within '.responsive-table' do
-    expect(page).to have_content(Date.today.strftime('%Y-%m-%d'))
-    expect(page).to have_content((Date.today - 2).strftime('%Y-%m-%d'))
-    expect(page).to have_content((Date.today - 5).strftime('%Y-%m-%d'))
-    expect(page).to have_content((Date.today - 7).strftime('%Y-%m-%d'))
-    expect(page).to_not have_content((Date.today - 10).strftime('%Y-%m-%d'))
-    expect(page).to_not have_content((Date.today - 11).strftime('%Y-%m-%d'))
-    expect(page).to_not have_content((Date.today - 15).strftime('%Y-%m-%d'))
+    today = Time.zone.today
+    expect(page).to have_content(today.strftime('%Y-%m-%d'))
+    expect(page).to have_content((today - 2.days).strftime('%Y-%m-%d'))
+    expect(page).to have_content((today - 5.days).strftime('%Y-%m-%d'))
+    expect(page).to have_content((today - 7.days).strftime('%Y-%m-%d'))
+    expect(page).to_not have_content((today - 10.days).strftime('%Y-%m-%d'))
+    expect(page).to_not have_content((today - 11.days).strftime('%Y-%m-%d'))
+    expect(page).to_not have_content((today - 15.days).strftime('%Y-%m-%d'))
   end
 end
 

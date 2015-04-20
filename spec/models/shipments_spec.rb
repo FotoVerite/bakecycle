@@ -2,6 +2,9 @@ require 'rails_helper'
 
 describe Shipment do
   let(:shipment) { build(:shipment) }
+  let(:today) { Time.zone.today }
+  let(:yesterday) { today - 1.day }
+  let(:tomorrow) { today + 1.day }
 
   it 'has model attributes' do
     expect(shipment).to respond_to(:date)
@@ -99,47 +102,47 @@ describe Shipment do
     end
 
     it 'allows searching by a date' do
-      shipment_1 = create(:shipment, date: Date.today)
-      create(:shipment, date: Date.tomorrow)
-      search = { date: Date.today }
+      shipment_1 = create(:shipment, date: today)
+      create(:shipment, date: tomorrow)
+      search = { date: today }
       expect(Shipment.search(search)).to contain_exactly(shipment_1)
     end
 
     it 'returns shipments after and including a date_from' do
-      shipment_1 = create(:shipment, date: Date.today)
-      shipment_2 = create(:shipment, date: Date.tomorrow)
-      create(:shipment, date: Date.yesterday)
+      shipment_1 = create(:shipment, date: today)
+      shipment_2 = create(:shipment, date: tomorrow)
+      create(:shipment, date: yesterday)
 
-      search = { date_from: Date.today }
-      expect(Shipment.search_by_date_from(Date.today)).to contain_exactly(shipment_1, shipment_2)
+      search = { date_from: today }
+      expect(Shipment.search_by_date_from(today)).to contain_exactly(shipment_1, shipment_2)
       expect(Shipment.search(search)).to contain_exactly(shipment_1, shipment_2)
     end
 
     it 'returns shipments before and include a date_to' do
-      shipment_1 = create(:shipment, date: Date.today)
-      shipment_2 = create(:shipment, date: Date.yesterday)
+      shipment_1 = create(:shipment, date: today)
+      shipment_2 = create(:shipment, date: yesterday)
 
-      search = { date_to: Date.today }
+      search = { date_to: today }
       expect(Shipment.search(search)).to contain_exactly(shipment_1, shipment_2)
     end
 
     it 'allows to search for date ranges' do
-      shipment_1 = create(:shipment, date: Date.today)
-      create(:shipment, date: Date.yesterday)
-      create(:shipment, date: Date.tomorrow)
+      shipment_1 = create(:shipment, date: today)
+      create(:shipment, date: yesterday)
+      create(:shipment, date: tomorrow)
 
-      search = { date_to: Date.today, date_from: Date.today }
+      search = { date_to: today, date_from: today }
       expect(Shipment.search(search)).to contain_exactly(shipment_1)
     end
 
     it 'allows to search for both client and dates' do
       client = create(:client)
-      shipment_1 = create(:shipment, client: client, date: Date.yesterday)
-      create(:shipment, date: Date.today)
-      create(:shipment, date: Date.tomorrow)
-      create(:shipment, client: client, date: Date.tomorrow)
+      shipment_1 = create(:shipment, client: client, date: yesterday)
+      create(:shipment, date: today)
+      create(:shipment, date: tomorrow)
+      create(:shipment, client: client, date: tomorrow)
 
-      search = { client_id: client.id, date_from: Date.yesterday, date_to: Date.today }
+      search = { client_id: client.id, date_from: yesterday, date_to: today }
       expect(Shipment.search(search)).to contain_exactly(shipment_1)
     end
   end
@@ -148,7 +151,7 @@ describe Shipment do
     it 'returns the latest 10 shipments for a client' do
       client = create(:client, name: 'Mando')
       create(:shipment)
-      create(:shipment, client: client, date: Date.today - 1)
+      create(:shipment, client: client, date: today - 1)
       client_shipments = create_list(:shipment, 10, client: client)
 
       expect(Shipment.recent(client)).to contain_exactly(*client_shipments)
@@ -158,8 +161,8 @@ describe Shipment do
   describe '.upcoming' do
     it 'returns shipments for an order' do
       order = create(:order)
-      shipment = create(:shipment, client: order.client, route: order.route, date: Date.today)
-      create(:shipment, client: order.client, route: order.route, date: Date.today - 1.day)
+      shipment = create(:shipment, client: order.client, route: order.route, date: today)
+      create(:shipment, client: order.client, route: order.route, date: today - 1.day)
       expect(Shipment.upcoming(order)).to contain_exactly(shipment)
     end
   end
