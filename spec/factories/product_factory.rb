@@ -23,7 +23,7 @@ FactoryGirl.define do
 
     trait :with_recipe_items do
       inclusion { create(:recipe, :with_ingredients, bakery: bakery) }
-      motherdough { create(:recipe, :with_nested_recipe, bakery: bakery) }
+      motherdough { create(:recipe, :with_nested_recipes, bakery: bakery) }
     end
 
     trait :with_sku do
