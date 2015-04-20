@@ -3,6 +3,6 @@ class ProductionRunDecorator < Draper::Decorator
   decorates_association :run_items
 
   def available_products
-    h.item_finder.products - object.run_items.map(&:product)
+    h.item_finder.products.order(:name) - object.run_items.map(&:product)
   end
 end

@@ -71,7 +71,7 @@ describe Recipe do
     end
 
     it 'works with stacked recipes' do
-      dough = build(:recipe_preferment, :with_nested_recipe, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
+      dough = build(:recipe_preferment, :with_nested_recipes, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
       expect(recipe.total_lead_days).to eq(8)
