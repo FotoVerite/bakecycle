@@ -32,14 +32,22 @@ class ProductionRunData
     end
   end
 
+  private
+
   def add_to_recipe_run_data(product, quantity)
     motherdough =  product.motherdough
     return unless motherdough
     recipe_data = recipes.find_or_create(motherdough)
     recipe_data.add_product(product, quantity)
+    add_nested_recipes(recipe_data)
   end
 
-  private
+  def add_nested_recipes(recipe_data)
+    recipe_data.deeply_nested_recipe_info.each do |nested_info|
+      nested_data = recipes.find_or_create(nested_info[:inclusionable])
+      nested_data.add_parent_recipe(nested_info[:parent_recipe], nested_info[:weight])
+    end
+  end
 
   def max_product_lead_day
     product_lead_days.max.days
