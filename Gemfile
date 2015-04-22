@@ -31,11 +31,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'unicorn', require: false
 gem 'unitwise'
 gem 'will_paginate', '~> 3.0.6'
-
-# deployment
-gem 'httparty', require: false
-gem 'netrc', require: false
-gem 'rendezvous', require: false
+gem 'wizarddev-heroku'
 
 # legacy import
 gem 'mysql2', require: false
