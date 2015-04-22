@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/MethodLength
 require 'uri'
 require 'mysql2'
 
@@ -51,6 +52,29 @@ module LegacyImporter
   class Products
     def self.all
       DB.query('SELECT * FROM bc_products')
+    end
+  end
+
+  class PriceVarients
+    def self.all
+      DB.query('
+        SELECT
+        max(productprice_id) as productprice_id,
+        productprice_productid,
+        productprice_quantity,
+        (
+          SELECT  productprice_price
+          FROM bc_productprices as t2
+          WHERE
+          t2.productprice_productid = t1.productprice_productid
+          AND t2.productprice_quantity = t1.productprice_quantity
+          ORDER BY productprice_validfrom desc
+          LIMIT 1
+          )
+      as latest_price
+      FROM bc_productprices t1
+      GROUP BY productprice_productid, productprice_quantity
+      ')
     end
   end
 

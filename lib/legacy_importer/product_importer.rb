@@ -15,9 +15,8 @@ module LegacyImporter
       product_extra         over_bake
       product_type          product_type
     ).map(&:to_sym).each_slice(2)
-    # product_cost
-    # product_active
-    # t.decimal  "base_price"
+    # product_recipeid      motherdough_id
+    # product_inclusionid   inclusion_id
 
     PRODUCT_TYPE_MAP = {
       'Bread' => :bread,
@@ -55,7 +54,9 @@ module LegacyImporter
       attrs.merge(
         product_type: PRODUCT_TYPE_MAP[attrs[:product_type]] || attrs[:product_type],
         unit: :g,
-        base_price: 0
+        base_price: 0,
+        motherdough: Recipe.find_by(legacy_id: data[:product_recipeid]),
+        inclusion: Recipe.find_by(legacy_id: data[:product_inclusionid])
       )
     end
 
