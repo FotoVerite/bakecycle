@@ -8,13 +8,15 @@ describe ProductRecipeCalc do
   let(:dough_percentage) { product.motherdough.recipe_items.map(&:bakers_percentage).sum }
   let(:product_weight) { product.weight_with_unit.to_kg * quantity }
   let(:percent_weight) { product_weight / (dough_percentage + inclusion_percentage) }
+  let(:dough_weight) { dough_percentage * percent_weight }
 
   describe '.product_info' do
     it 'returns an object containing product, quantity and product weight' do
       product_info = {
         product: product,
         quantity: quantity,
-        weight: product_weight
+        weight: product_weight,
+        dough_weight: dough_weight
       }
       expect(calculator.product_info).to eq(product_info)
     end
@@ -30,6 +32,7 @@ describe ProductRecipeCalc do
       inclusion_weight = inclusion_percentage * percent_weight
 
       inclusion_info = {
+        product: product,
         recipe: product.inclusion,
         weight: inclusion_weight
       }

@@ -1,5 +1,6 @@
 class PdfReport < Prawn::Document
   HEADER_ROW_COLOR = 'b9b9b9'
+  INDENTED_ROW_COLOR = 'd3d3d3'
 
   def initialize
     super(default_margin)

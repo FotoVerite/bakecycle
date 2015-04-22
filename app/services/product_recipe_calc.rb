@@ -8,12 +8,12 @@ class ProductRecipeCalc
   end
 
   def product_info
-    { product: product, quantity: quantity, weight: product_weight }
+    { product: product, quantity: quantity, weight: product_weight, dough_weight: dough_weight }
   end
 
   def inclusion_info
     return nil unless inclusion
-    { recipe: inclusion, weight: inclusions_weight }
+    { product: product, recipe: inclusion, weight: inclusions_weight }
   end
 
   def dough_weight
