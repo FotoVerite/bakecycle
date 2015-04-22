@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class RecipeDataPdf
   attr_reader :recipe_run_data, :display_precision
 
@@ -30,8 +31,9 @@ class RecipeDataPdf
   end
 
   def right_section
-    products_table
+    products_table if recipe_run_data.products.any?
     inclusions_table if recipe_run_data.inclusions.any?
+    deeply_nested_recipes_table if recipe_run_data.parent_recipes.any?
   end
 
   def left_section
@@ -124,7 +126,29 @@ class RecipeDataPdf
     end
   end
 
+  def deeply_nested_recipes_data
+    header = ['Used In Recipe', 'Weight', '% Used']
+    rows = recipe_run_data.parent_recipes.map do |recipe_info|
+      [
+        recipe_info[:parent_recipe].name,
+        display_weight(recipe_info[:weight]),
+        (recipe_info[:weight] / recipe_run_data.weight * 100).to_f.round(2)
+      ]
+    end
+    rows.unshift(header)
+  end
+
+  def deeply_nested_recipes_table
+    move_down 30 if recipe_run_data.products.any?
+    table(deeply_nested_recipes_data, column_widths: [130, 95, 56]) do
+      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+      column(0).style(align: :left)
+      column(1).style(align: :center)
+    end
+  end
+
   def display_weight(weight)
     weight.round(display_precision).to_s
   end
 end
+# rubocop:enable Metrics/ClassLength
