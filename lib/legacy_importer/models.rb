@@ -78,6 +78,12 @@ module LegacyImporter
     end
   end
 
+  class Routes
+    def self.all
+      DB.query('SELECT * FROM bc_routes')
+    end
+  end
+
   class SkippedObject < OpenStruct
     def persisted?
       false

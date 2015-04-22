@@ -13,7 +13,6 @@ module LegacyImporter
       recipe_daystomake   lead_days
       recipe_type         recipe_type
       recipe_mix_size     mix_size
-
     ).map(&:to_sym).each_slice(2)
     # recipe_extra
     # recipe_active

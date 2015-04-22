@@ -7,6 +7,7 @@ require 'legacy_importer/recipe_importer'
 require 'legacy_importer/recipe_item_importer'
 require 'legacy_importer/product_importer'
 require 'legacy_importer/price_varient_importer'
+require 'legacy_importer/route_importer'
 
 module LegacyImporter
   def self.bakery
@@ -65,7 +66,23 @@ module LegacyImporter
     ).import!
   end
 
+  def self.import_routes
+    Importer.new(
+      bakery: bakery,
+      collection: Routes.all,
+      importer: RouteImporter
+    ).import!
+  end
+
   def self.import_all
-    import_clients + import_ingredients + import_recipes + import_recipe_items + import_products + import_price_varients
+    [
+      import_clients,
+      import_ingredients,
+      import_recipes,
+      import_recipe_items,
+      import_products,
+      import_price_varients,
+      import_routes
+    ].sum
   end
 end
