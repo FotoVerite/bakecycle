@@ -1,12 +1,8 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :access_search_form, only: [:index, :invoices]
+  before_action :load_search_form, only: [:index, :invoices]
   load_and_authorize_resource
   decorates_assigned :shipments, :shipment
-
-  def access_search_form
-    @search_form = ShipmentSearchForm.new(search_params)
-  end
 
   def index
     @shipments = @shipments.search(@search_form).paginate(page: params[:page])
@@ -63,6 +59,10 @@ class ShipmentsController < ApplicationController
   end
 
   private
+
+  def load_search_form
+    @search_form = ShipmentSearchForm.new(search_params)
+  end
 
   def search_params
     search = params.permit(:utf8, :page, search: [:client_id, :date_from, :date_to])

@@ -14,12 +14,11 @@ module LegacyImporter
     ).map(&:to_sym).each_slice(2)
 
     def import!
-      Route.where(
+      ObjectFinder.new(
+        Route,
         bakery: bakery,
         legacy_id: data[:route_id].to_s
-      )
-        .first_or_initialize
-        .tap { |route| route.update(attributes) }
+      ).update(attributes)
     end
 
     private
@@ -31,8 +30,7 @@ module LegacyImporter
     end
 
     def route_active_status?
-      return true if data[:route_active] == 'Y'
-      false
+      data[:route_active] == 'Y'
     end
 
     def attr_map

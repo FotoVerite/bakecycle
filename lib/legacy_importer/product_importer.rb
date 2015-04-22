@@ -7,6 +7,7 @@ module LegacyImporter
       @data = legacy_product
       @motherdough = Recipe.find_by(legacy_id: data[:product_recipeid])
       @inclusion = Recipe.find_by(legacy_id: data[:product_inclusionid])
+      @field_mapper = FieldMapper.new(FIELDS_MAP)
     end
 
     FIELDS_MAP = %w(
@@ -16,7 +17,7 @@ module LegacyImporter
       product_weight_g      weight
       product_extra         over_bake
       product_type          product_type
-    ).map(&:to_sym).each_slice(2)
+    )
 
     PRODUCT_TYPE_MAP = {
       'Bread' => :bread,
@@ -32,12 +33,13 @@ module LegacyImporter
 
     def import!
       return SkippedProduct.new(data) if skip?
-      Product.where(
+      ObjectFinder.new(
+        Product,
         bakery: bakery,
         legacy_id: data[:product_id].to_s
       )
-        .first_or_initialize
-        .tap { |product| product.update(attributes) }
+        .new? { |product| product.base_price = 0 }
+        .update(attributes)
     end
 
     class SkippedProduct < SkippedObject
@@ -49,21 +51,14 @@ module LegacyImporter
       data[:product_active] != 'Y'
     end
 
-    def attr_map
-      FIELDS_MAP.each_with_object({}) do |(legacy_field, field), data_hash|
-        data_hash[field] = data[legacy_field] unless data[legacy_field] == ''
-      end
-    end
-
     def attributes
-      attrs = attr_map
+      attrs = @field_mapper.translate(data)
       attrs.merge(
         motherdough: motherdough,
         inclusion: inclusion,
         weight: adjusted_weight(attrs),
         product_type: PRODUCT_TYPE_MAP[attrs[:product_type]] || attrs[:product_type],
-        unit: :g,
-        base_price: 0
+        unit: :g
       )
     end
 

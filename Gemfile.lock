@@ -219,6 +219,7 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    memoist (0.12.0)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
@@ -440,6 +441,7 @@ DEPENDENCIES
   jquery-rails
   jquery-timepicker-rails
   jquery-ui-sass-rails
+  memoist
   mysql2
   paperclip (~> 4.2)
   pg

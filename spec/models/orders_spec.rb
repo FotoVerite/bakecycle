@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Order do
   let(:order) { build(:order) }
+  let(:bakery) { order.bakery }
   let(:today) { Time.zone.today }
   let(:yesterday) { today - 1.day }
   let(:tomorrow) { today + 1.day }
@@ -39,7 +40,13 @@ describe Order do
     describe '#standing_order_date_can_not_overlap' do
       it 'is invalid if two orders overlap' do
         order = create(:order, start_date: today)
-        overlaping_order = build(:order, route: order.route, client: order.client, start_date: today)
+        overlaping_order = build(
+          :order,
+          bakery: order.bakery,
+          route: order.route,
+          client: order.client,
+          start_date: today
+        )
         expect(overlaping_order).to_not be_valid
         expect(overlaping_order.errors[:start_date].count).to be > 0
       end
@@ -73,7 +80,7 @@ describe Order do
     it 'returns true if there is an existing overlapping order for the same client and route' do
       client = create(:client)
       route = create(:route)
-      create(:order, start_date: today, end_date: tomorrow, route: route, client: client)
+      order = create(:order, start_date: today, end_date: tomorrow, route: route, client: client)
 
       combinations = [
         { start_date: yesterday, end_date: yesterday, result: false },
@@ -94,7 +101,13 @@ describe Order do
 
       combinations.each do |combo|
         start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
-        order = build(:order, route: route, client: client, start_date: start_date, end_date: end_date)
+        order = build(
+          :order,
+          bakery: order.bakery,
+          route: route, client: client,
+          start_date: start_date,
+          end_date: end_date
+        )
         msg = "expected start_date of #{start_date}, & end_date of #{end_date || 'nil'} to have overlapping? #{result}"
         expect(order.overlapping?).to eq(result), msg
       end
@@ -103,7 +116,7 @@ describe Order do
     it 'returns true if there is an existing overlapping order for the same client and route with no end date' do
       client = create(:client)
       route = create(:route)
-      create(:order, start_date: today, end_date: nil, route: route, client: client)
+      order = create(:order, start_date: today, end_date: nil, route: route, client: client)
 
       combinations = [
         { start_date: yesterday, end_date: yesterday, result: false },
@@ -119,7 +132,14 @@ describe Order do
 
       combinations.each do |combo|
         start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
-        order = build(:order, route: route, client: client, start_date: start_date, end_date: end_date)
+        order = build(
+          :order,
+          bakery: order.bakery,
+          route: route,
+          client: client,
+          start_date: start_date,
+          end_date: end_date
+        )
         msg = "expected start_date of #{start_date}, & end_date of #{end_date || 'nil'} to have overlapping? #{result}"
         expect(order.overlapping?).to eq(result), msg
       end
@@ -130,6 +150,13 @@ describe Order do
       create(:temporary_order, route: order.route, client: order.client, start_date: today)
       create(:order, route: order.route, start_date: today)
       create(:order, client: order.client, start_date: today)
+      expect(order).to_not be_overlapping
+    end
+
+    it 'lets temporary orders get away with not having an end date' do
+      order = create(:temporary_order, start_date: today)
+      not_overlapping = create(:temporary_order, start_date: tomorrow, client: order.client, route: order.route)
+      expect(not_overlapping).to_not be_overlapping
       expect(order).to_not be_overlapping
     end
 

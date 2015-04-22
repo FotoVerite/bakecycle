@@ -9,12 +9,11 @@ module LegacyImporter
 
     def import!
       return SkippedRecipeItem.new(data) if skip?
-      RecipeItem.where(
+      ObjectFinder.new(
+        RecipeItem,
         recipe_id: recipe.try(:id),
         inclusionable: ingredient || included_recipe
-      )
-        .first_or_initialize
-        .tap { |item| item.update(bakers_percentage: data[:recipeamt_bakerspct]) }
+      ).update(bakers_percentage: data[:recipeamt_bakerspct])
     end
 
     class SkippedRecipeItem < SkippedObject

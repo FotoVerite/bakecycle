@@ -35,7 +35,7 @@ describe LegacyImporter::RecipeImporter do
       expect(recipe).to_not be_persisted
     end
 
-    it 'updates existing clients' do
+    it 'updates existing recipes' do
       recipe = importer.import!
       legacy_recipe[:recipe_name] = 'New Name'
       updated_recipe = importer.import!
