@@ -63,4 +63,8 @@ class Recipe < ActiveRecord::Base
       end
     end
   end
+
+  def total_bakers_percentage
+    recipe_items.map(&:bakers_percentage).sum || 0
+  end
 end

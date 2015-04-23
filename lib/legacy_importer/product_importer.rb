@@ -1,10 +1,12 @@
 module LegacyImporter
   class ProductImporter
-    attr_reader :data, :bakery
+    attr_reader :data, :bakery, :motherdough, :inclusion
 
     def initialize(bakery, legacy_product)
       @bakery = bakery
       @data = legacy_product
+      @motherdough = Recipe.find_by(legacy_id: data[:product_recipeid])
+      @inclusion = Recipe.find_by(legacy_id: data[:product_inclusionid])
     end
 
     FIELDS_MAP = %w(
@@ -15,8 +17,6 @@ module LegacyImporter
       product_extra         over_bake
       product_type          product_type
     ).map(&:to_sym).each_slice(2)
-    # product_recipeid      motherdough_id
-    # product_inclusionid   inclusion_id
 
     PRODUCT_TYPE_MAP = {
       'Bread' => :bread,
@@ -37,7 +37,7 @@ module LegacyImporter
         legacy_id: data[:product_id].to_s
       )
         .first_or_initialize
-        .tap { |recipe| recipe.update(attributes) }
+        .tap { |product| product.update(attributes) }
     end
 
     class SkippedProduct < SkippedObject
@@ -49,21 +49,30 @@ module LegacyImporter
       data[:product_active] != 'Y'
     end
 
-    def attributes
-      attrs = attr_map
-      attrs.merge(
-        product_type: PRODUCT_TYPE_MAP[attrs[:product_type]] || attrs[:product_type],
-        unit: :g,
-        base_price: 0,
-        motherdough: Recipe.find_by(legacy_id: data[:product_recipeid]),
-        inclusion: Recipe.find_by(legacy_id: data[:product_inclusionid])
-      )
-    end
-
     def attr_map
       FIELDS_MAP.each_with_object({}) do |(legacy_field, field), data_hash|
         data_hash[field] = data[legacy_field] unless data[legacy_field] == ''
       end
+    end
+
+    def attributes
+      attrs = attr_map
+      attrs.merge(
+        motherdough: motherdough,
+        inclusion: inclusion,
+        weight: adjusted_weight(attrs),
+        product_type: PRODUCT_TYPE_MAP[attrs[:product_type]] || attrs[:product_type],
+        unit: :g,
+        base_price: 0
+      )
+    end
+
+    def adjusted_weight(attrs)
+      return attrs[:weight] unless inclusion && motherdough
+      inclusion_percent = inclusion.total_bakers_percentage
+      motherdough_percent = motherdough.total_bakers_percentage
+      return attrs[:weight] if motherdough_percent == 0
+      (attrs[:weight] / motherdough_percent * (motherdough_percent + inclusion_percent)).round(3)
     end
   end
 end
