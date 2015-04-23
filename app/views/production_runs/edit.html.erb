@@ -1,5 +1,4 @@
 <% provide(:title, "Edit Production Run: #{@production_run.id}") %>
 <h1>Editing Production Run: #<%= @production_run.id %> - <%= @production_run.date.strftime("%A %b. %e, %Y") %></h1>
-<%= link_to 'Back', production_runs_path %>
 
 <%= render partial: "production_runs/form" %>
