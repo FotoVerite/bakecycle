@@ -1,7 +1,7 @@
 Feature: Recipes
 
   @javascript
-  Scenario: As a user, I should be able to view recipes index
+  Scenario: As a user, I should be able to manage recipes
     Given I am logged in as a user with a bakery called "biencuit"
     And There are "biencuit" bakery recipes named "baguette" and "donut"
     And There are "biencuit" bakery ingredients named "celery" and "almond"

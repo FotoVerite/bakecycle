@@ -3,24 +3,23 @@ Given(/^there is a "(.*?)" production run$/) do |bakery|
   create(:production_run, bakery: bakery, date: Time.zone.today)
 end
 
-Then(/^I should see production runs for "(.*?)"$/) do |bakery|
-  bakery = Bakery.find_by(name: bakery)
-  production_run = bakery.production_runs.first
-  expect(page).to have_content("#{production_run.id}: #{production_run.date}")
-end
-
 Given(/^there is a run item for a "(.*?)" production run$/) do |bakery|
   bakery = Bakery.find_by(name: bakery)
   create(:run_item, production_run: bakery.production_runs.last, product: bakery.products.first)
 end
 
 When(/^I fill out run item form with:$/) do |table|
-  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
-  all('.new_run_item_overbake_quantity').last.set(table.hashes[0]['overbake_quantity'])
+  pr = table.hashes[0]
+  jquery_fill(
+    '.new_run_item_overbake_quantity:last' => pr['overbake_quantity'],
+    'select:last' => pr['product']
+  )
 end
 
 When(/^I change the overbake quantity on the existing run item$/) do
-  fill_in('Overbake quantity', with: 33)
+  jquery_fill(
+    '#production_run_run_items_attributes_0_overbake_quantity' => 33
+  )
 end
 
 When(/^I click an a run item delete button on the donut$/) do

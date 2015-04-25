@@ -37,7 +37,8 @@ When(/^I go to the home page$/) do
 end
 
 Given(/^I am logged in as a user$/) do
-  user = create(:user)
+  bakery = Bakery.first || create(:bakery)
+  user = create(:user, bakery: bakery)
   login_as(user, scope: :user)
 end
 

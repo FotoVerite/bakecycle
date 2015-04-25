@@ -12,12 +12,15 @@ Then(/^I should see a list of recipes including "(.*?)" and "(.*?)"$/) do |recip
 end
 
 When(/^I fill out recipe form with:$/) do |table|
-  fill_in 'recipe_name', with: table.hashes[0]['name']
-  fill_in 'recipe_mix_size', with: table.hashes[0]['mix_size']
-  select table.hashes[0]['mix_size_unit'], from: 'recipe_mix_size_unit'
-  fill_in 'recipe_lead_days', with: table.hashes[0]['lead_days']
   select table.hashes[0]['recipe_type'], from: 'recipe_recipe_type'
-  fill_in 'recipe_note', with: table.hashes[0]['note']
+  recipe = table.hashes[0]
+  jquery_fill(
+    '#recipe_name' => recipe['name'],
+    '#recipe_mix_size' => recipe['mix_size'],
+    '#recipe_lead_days' => recipe['lead_days'],
+    '#recipe_note' => recipe['note'],
+    '#recipe_mix_size_unit' => recipe['mix_size_unit']
+  )
 end
 
 When(/^I change the recipe name to "(.*?)"$/) do |name|
@@ -29,8 +32,11 @@ Then(/^I should see that the recipe name is "(.*?)"$/) do |name|
 end
 
 When(/^I fill out recipe item with:$/) do |table|
-  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['inclusionable_id_type']}']").click
-  all('input[type=text]').last.set(table.hashes[0]['percentage'])
+  item = table.hashes[0]
+  jquery_fill(
+    'input[id$="bakers_percentage"]:last' => item['percentage'],
+    'select[id$="inclusionable_id_type"]' => item['inclusionable_id_type']
+  )
 end
 
 Then(/^I should see confirmation the recipe "(.*?)" was deleted$/) do |recipe|

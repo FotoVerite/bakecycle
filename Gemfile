@@ -64,7 +64,9 @@ group :test, :development do
 end
 
 group :test do
+  gem 'capybara-screenshot'
   gem 'database_cleaner'
+  gem 'launchy'
   gem 'webmock', require: false
 end
 
