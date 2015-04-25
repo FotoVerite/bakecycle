@@ -45,10 +45,10 @@ class ProductRecipeCalc
 
   def inclusion_percentage
     return 0 unless inclusion
-    inclusion.recipe_items.map(&:bakers_percentage).sum
+    inclusion.total_bakers_percentage
   end
 
   def dough_percentage
-    recipe.recipe_items.map(&:bakers_percentage).sum
+    recipe.total_bakers_percentage
   end
 end
