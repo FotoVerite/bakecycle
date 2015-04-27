@@ -14,14 +14,14 @@ end
 When(/^I fill out product form with:$/) do |table|
   row = table.hashes.first
   jquery_fill(
-    product_name: row['name'],
-    product_sku: row['sku'],
-    product_base_price: row['base_price'],
-    product_weight: row['weight'],
-    product_over_bake: row['over_bake'],
-    product_description: row['description'],
-    product_product_type: row['product_type'],
-    product_unit: row['unit']
+    '#product_name' => row['name'],
+    '#product_sku' => row['sku'],
+    '#product_base_price' => row['base_price'],
+    '#product_weight' => row['weight'],
+    '#product_over_bake' => row['over_bake'],
+    '#product_description' => row['description'],
+    '#product_product_type' => row['product_type'],
+    '#product_unit' => row['unit']
   )
 end
 
@@ -34,8 +34,11 @@ Then(/^I should see that the product name is "(.*?)"$/) do |name|
 end
 
 When(/^I fill out the price varient form with:$/) do |table|
-  all('.price_input').last.set(table.hashes[0]['price'])
-  all('.quantity_input').last.set(table.hashes[0]['quantity'])
+  pricev = table.hashes[0]
+  jquery_fill(
+    '.price_input:last' => pricev['price'],
+    '.quantity_input:last' => pricev['quantity']
+  )
 end
 
 Then(/^I click on the last price's remove button$/) do

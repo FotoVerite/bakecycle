@@ -9,11 +9,14 @@ Given(/^There are "(.*?)" shipments with clients named "(.*?)" and "(.*?)"$/) do
 end
 
 When(/^I fill out Shipment form with:$/) do |table|
-  fill_in 'shipment_date', with: table.hashes[0]['date']
-  select table.hashes[0]['route'], from: 'shipment_route_id'
-  select table.hashes[0]['client'], from: 'shipment_client_id'
-  fill_in 'shipment_delivery_fee', with: table.hashes[0]['delivery_fee']
-  fill_in 'shipment_note', with: table.hashes[0]['note']
+  shipment = table.hashes[0]
+  jquery_fill(
+    '#shipment_route_id' => shipment['route'],
+    '#shipment_client_id' => shipment['client'],
+    '#shipment_date' => shipment['date'],
+    '#shipment_delivery_fee' => shipment['delivery_fee'],
+    '#shipment_note' => shipment['note']
+  )
 end
 
 When(/^I am on the shipment edit page for the client "(.*?)"$/) do |name|
@@ -35,9 +38,12 @@ When(/^I change the shipment date to "(.*?)"$/) do |date|
 end
 
 When(/^I fill out Shipment Item form with:$/) do |table|
-  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
-  all('.product_quantity_input').last.set(table.hashes[0]['quantity'])
-  all('.product_price_input').last.set(table.hashes[0]['product_price'])
+  shipment = table.hashes[0]
+  jquery_fill(
+    '.fields .product_quantity_input:last' => shipment['quantity'],
+    '.fields .product_price_input:last' => shipment['product_price'],
+    '.fields select:last' => shipment['product']
+  )
 end
 
 When(/^I am on the edit page for "(.*?)" shipment$/) do |name|
@@ -55,7 +61,7 @@ Then(/^the shipment item "(.*?)" should be present$/) do |name|
 end
 
 Then(/^the shipment item "(.*?)" should not be present$/) do |name|
-  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to raise_error
+  expect(page).to have_no_selector(:xpath, "//select/option[@selected='selected' and text()='#{name}']")
 end
 
 When(/^I delete "(.*?)" shipment item$/) do |name|

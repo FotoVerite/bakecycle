@@ -17,7 +17,7 @@
   <tbody>
     <% orders.each do |order| %>
       <tr class="js-clickableRow" href='<%= "#{edit_order_path(order)}" %>'>
-        <th scope="row"><%= link_to order.start_date, edit_order_path(order) %></th>
+        <th scope="row"><%= link_to order.start_date, edit_order_path(order), class: "order-#{order.id}" %></th>
         <td data-title="Client"><%= order.client_name %></td>
         <td data-title="Type"><%= order.type %></td>
         <td data-title="Route"><%= order.route_name %></td>

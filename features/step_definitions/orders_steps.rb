@@ -16,19 +16,25 @@ end
 
 When(/^I fill out Order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
-  fill_in 'order_start_date', with: table.hashes[0]['start_date']
-  fill_in 'order_end_date', with: table.hashes[0]['end_date']
-  fill_in 'order_note', with: table.hashes[0]['note']
   select table.hashes[0]['route'], from: 'order_route_id'
   select table.hashes[0]['client'], from: 'order_client_id'
+  order = table.hashes[0]
+  jquery_fill(
+    '#order_start_date' => order['start_date'],
+    '#order_end_date' => order['end_date'],
+    '#order_note' => order['note']
+  )
 end
 
 When(/^I fill out temporary order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
-  fill_in 'order_start_date', with: table.hashes[0]['start_date']
-  fill_in 'order_note', with: table.hashes[0]['note']
   select table.hashes[0]['route'], from: 'order_route_id'
   select table.hashes[0]['client'], from: 'order_client_id'
+  order = table.hashes[0]
+  jquery_fill(
+    '#order_start_date' => order['start_date'],
+    '#order_note' => order['note']
+  )
 end
 
 When(/^I am on the edit page for "(.*?)" order$/) do |name|
@@ -39,21 +45,24 @@ end
 
 When(/^I fill out the order item form with:$/) do |table|
   form = table.hashes[0]
-  within('.fields:last-of-type') do
-    select(form['product'])
-    find('.monday_input').set(form['monday'])
-    find('.tuesday_input').set(form['tuesday'])
-    find('.wednesday_input').set(form['wednesday'])
-    find('.thursday_input').set(form['thursday'])
-    find('.friday_input').set(form['friday'])
-    find('.saturday_input').set(form['saturday'])
-    find('.sunday_input').set(form['sunday'])
-  end
+  jquery_fill(
+    '.fields:last .monday_input' => form['monday'],
+    '.fields:last .tuesday_input' => form['tuesday'],
+    '.fields:last .wednesday_input' => form['wednesday'],
+    '.fields:last .thursday_input' => form['thursday'],
+    '.fields:last .friday_input' => form['friday'],
+    '.fields:last .saturday_input' => form['saturday'],
+    '.fields:last .sunday_input' => form['sunday'],
+    '.fields:last .select' => form['product']
+  )
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|
-  all(:xpath, '//select').last.find(:xpath, "option[text()='#{table.hashes[0]['product']}']").click
-  all('.friday_input').last.set(table.hashes[0]['friday'])
+  form = table.hashes[0]
+  jquery_fill(
+    '.fields:last .select' => form['product'],
+    '.fields:last .friday_input' => form['friday']
+  )
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
@@ -67,11 +76,11 @@ When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, 
 end
 
 Then(/^the order item "(.*?)" should be present$/) do |name|
-  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to_not raise_error
+  expect(page).to have_xpath("//select/option[@selected='selected' and text()='#{name}']")
 end
 
 Then(/^the order item "(.*?)" should not be present$/) do |name|
-  expect { find(:xpath, "//select/option[@selected='selected' and text()='#{name}']") }.to raise_error
+  expect(page).to have_no_selector(:xpath, "//select/option[@selected='selected' and text()='#{name}']")
 end
 
 Then(/^The order "(.*?)" should not be present$/) do |order|
@@ -90,8 +99,10 @@ Then(/^I should see order information about "(.*?)"$/) do |name|
   expect(page).to have_content(/Editing Order: \d+ \- #{name}/)
 end
 
-When(/^I click on the first order$/) do
+When(/^I click the order "(.*?)"$/) do |order_client|
+  client = Client.find_by(name: order_client)
+  order = Order.find_by(client: client)
   within('.responsive-table') do
-    first('a, .fi-page-edit').click
+    find("a.order-#{order.id}").click
   end
 end
