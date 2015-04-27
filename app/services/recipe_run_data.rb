@@ -1,9 +1,11 @@
 class RecipeRunData
+  delegate  :total_lead_days, :mix_size_with_unit, to: :recipe
   attr_reader :recipe, :products, :inclusions, :weight,
-              :recipe_items, :parent_recipes
+              :recipe_items, :parent_recipes, :date
 
-  def initialize(recipe)
+  def initialize(recipe, date)
     @recipe = recipe
+    @date = date
     @products = []
     @parent_recipes = []
     @inclusions = []
@@ -49,5 +51,9 @@ class RecipeRunData
 
   def mix_bowl_count
     (weight / recipe.mix_size).to_f.ceil
+  end
+
+  def finished_date
+    date + recipe.total_lead_days.days
   end
 end

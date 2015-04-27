@@ -20,16 +20,16 @@ class RecipeDataPdf
   def page_layout
     define_grid(columns: 12, rows: 12, gutter: 10)
 
-    grid([0, 0], [1, 5]).bounding_box do
+    grid([0, 0], [1, 11]).bounding_box do
       header
     end
-    grid([0, 6], [1, 11]).bounding_box do
-      header_table
+    grid([1, 0], [2, 11]).bounding_box do
+      recipe_table
     end
-    grid([1, 0], [11, 5]).bounding_box do
+    grid([2, 0], [11, 5]).bounding_box do
       left_section
     end
-    grid([1, 6], [11, 11]).bounding_box do
+    grid([2, 6], [11, 11]).bounding_box do
       right_section
     end
   end
@@ -45,23 +45,26 @@ class RecipeDataPdf
   end
 
   def header
-    text "#{recipe_run_data.recipe.name}", size: 20
+    text "#{recipe_run_data.recipe.name}", size: 25
     text "Type: #{recipe_run_data.recipe.recipe_type.capitalize}", size: 15
   end
 
-  def header_table
-    table(header_data, column_widths: [93, 93, 93]) do
+  def recipe_table
+    table(recipe_data, column_widths: 95.3) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
-      column(0..2).style(align: :center)
+      column(0..5).style(align: :center)
     end
   end
 
-  def header_data
-    header = ['Total Weight', 'Bowl Size', 'Bowl Count']
+  def recipe_data
+    header = ['Weight', 'Bowl Size', 'Bowl Count', 'Lead Days', 'Start Date', 'Ship Date']
     data = [
       display_weight(recipe_run_data.weight),
-      "#{recipe_run_data.recipe.mix_size} #{recipe_run_data.recipe.mix_size_unit}",
-      recipe_run_data.mix_bowl_count
+      display_weight(recipe_run_data.mix_size_with_unit),
+      recipe_run_data.mix_bowl_count,
+      recipe_run_data.total_lead_days,
+      display_date(recipe_run_data.date),
+      display_date(recipe_run_data.finished_date)
     ]
     [header, data]
   end
@@ -88,7 +91,6 @@ class RecipeDataPdf
         display_weight(product[:product].weight_with_unit),
         display_weight(product[:weight])
       ]
-
       rows << product_parts_table(product)
     end
     rows
@@ -188,6 +190,10 @@ class RecipeDataPdf
 
   def display_weight(weight)
     weight.round(display_precision).to_s
+  end
+
+  def display_date(date)
+    date.strftime('%m/%d/%Y')
   end
 end
 # rubocop:enable Metrics/ClassLength

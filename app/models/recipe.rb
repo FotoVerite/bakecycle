@@ -67,4 +67,9 @@ class Recipe < ActiveRecord::Base
   def total_bakers_percentage
     recipe_items.map(&:bakers_percentage).sum || 0
   end
+
+  def mix_size_with_unit
+    return Unitwise(0, :kg) unless mix_size
+    Unitwise(mix_size, mix_size_unit)
+  end
 end
