@@ -1,0 +1,134 @@
+.pricing {
+  .pricing-tables {
+    margin-bottom: 10px;
+    @media #{$medium-up} { margin-bottom: 43px;}
+  }
+
+  .pricing-footer {
+    font-weight: 300;
+    text-align: center;
+
+    .openbeta-message {
+      font-size: 10px;
+      letter-spacing: .54px;
+      line-height: 16px;
+    }
+
+    .rwd-line {
+      @media #{$large-up} { display: block; }
+    }
+
+    .underlined-link {
+      @include underline-link($charcoal);
+    }
+
+    .phone-cta {
+      font-size: 18px;
+      letter-spacing: 1px;
+      line-height: 24px;
+    }
+  }
+}
+
+.pricing-table {
+  @media only screen and (max-width: 64em) { margin-bottom: 30px; }
+
+  .cta {
+    bottom: 22px;
+    position: relative;
+    text-align: center;
+  }
+
+  .header {
+    @include pricing-table-title;
+    background: #1da7b3;
+    color: $white;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .custom-price {
+    @include pricing-table-price;
+    background: #bec3c8;
+    border: 0;
+    color: $white;
+
+    .month,
+    .price-deal {
+      font-weight: 400;
+    }
+
+    .number,
+    .symbol {
+      font-weight: 600;
+    }
+
+    .month {
+      font-size: 12px;
+      letter-spacing: 1px;
+      line-height: 17px;
+    }
+
+    .number {
+      font-size: 40px;
+      letter-spacing: 1px;
+      line-height: 50px;
+    }
+
+    .symbol {
+      font-size: 20px;
+      vertical-align: 70%;
+    }
+
+    .quoted-description {
+      color: rgba(0, 0, 0, .70);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 22px;
+    }
+
+    .price-deal {
+      color: $white;
+      line-height: 20px;
+
+      p:first-child {
+        margin-bottom: 10px;
+      }
+    }
+
+    .customers,
+    .standing-orders {
+      span {
+        font-weight: 700;
+      }
+    }
+
+    .customers {
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .standing-orders {
+      font-size: 12px;
+    }
+
+    .custom-hr {
+      background: $white;
+    }
+  }
+
+  .feature {
+    @include pricing-table-bullet;
+    background: #f0f1f2;
+    color: $bc-charcoal;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+
+    span {
+      font-weight: 700;
+    }
+  }
+}

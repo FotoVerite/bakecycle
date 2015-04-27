@@ -31,6 +31,15 @@
   }
 }
 
+.cta-btn-round {
+  @extend .cta-btn;
+  border-radius: 40px;
+  font-weight: 400;
+  font-size: 12px;
+  color: #FFFFFF;
+  text-transform: none;
+}
+
 .white-outline-btn {
   @extend .default-btn;
   background-color: inherit;
