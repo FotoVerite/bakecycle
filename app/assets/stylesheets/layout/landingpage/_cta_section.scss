@@ -26,15 +26,8 @@
       @media #{$medium-up} { display: block }
     }
 
-    .mailing-list {
-      font-weight: 700;
-      border-bottom: solid 1px $bc-charcoal;
-      display: inline;
-
-      &:hover,
-      &:focus  {
-        color: $bc-green;
-      }
+    .underlined-link {
+      @include underline-link($bc-charcoal);
     }
   }
 }
