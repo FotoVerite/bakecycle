@@ -52,16 +52,12 @@ When(/^I am on the edit page for "(.*?)" shipment$/) do |name|
   visit edit_shipment_path(shipment)
 end
 
-When(/^I replace "(.*?)" product name with "(.*?)"$/) do |_, name|
-  all(:xpath, '//select').last.find(:xpath, "option[text()='#{name}']").click
+Then(/^the product "(.*?)" should be selected$/) do |product_name|
+  expect(page).to have_selector(:xpath, "//select/option[@selected='selected' and text()='#{product_name }']")
 end
 
-Then(/^the shipment item "(.*?)" should be present$/) do |name|
-  find(:xpath, "//select/option[@selected='selected' and text()='#{name}']")
-end
-
-Then(/^the shipment item "(.*?)" should not be present$/) do |name|
-  expect(page).to have_no_selector(:xpath, "//select/option[@selected='selected' and text()='#{name}']")
+Then(/^the product "(.*?)" should not be selected$/) do |product_name|
+  expect(page).to have_no_selector(:xpath, "//select/option[@selected='selected' and text()='#{product_name}']")
 end
 
 When(/^I delete "(.*?)" shipment item$/) do |name|

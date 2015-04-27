@@ -36,22 +36,21 @@ Feature: Shipments management
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
       | client    | date       | route | delivery_fee | note          |
-      | francesco | 2015-01-12 | Canal | 10.0         | leave at door |
+      | mandos | 2015-01-12 | Canal | 10.0         | leave at door |
     And I click on "Create"
-    Then "You have created a shipment for francesco." should be present
+    Then "You have created a shipment for mandos." should be present
     And "Payment Due Date" should be present
     And "Total Price: $10.00" should be present
 
-  @javascript
-  Scenario: I should be able to edit a shipment
-    When I am on the shipment edit page for the client "mandos"
-    And I change the shipment's client name to "francesco"
+    When I change the shipment's client name to "francesco"
     And I click on "Update"
     Then I should see that the shipment's client name is "francesco"
-    When I click on "Back"
-    Then I should be on the "Shipments" index page
-    And "francesco" should be present
-    And I should not see shipments for the client "mandos"
+
+    And I click on "Delete"
+    And I confirm popup
+    Then I should see confirmation the shipment for "francesco" was deleted
+    And the shipment for "francesco" should not be present
+
 
   @javascript
   Scenario: When I edit the shipment with invalid data I should an error
@@ -64,15 +63,7 @@ Feature: Shipments management
     Then "You have updated the shipment" should be present
 
   @javascript
-  Scenario: I should be able to delete a shipment
-    When I am on the shipment edit page for the client "mandos"
-    And I click on "Delete"
-    And I confirm popup
-    Then I should see confirmation the shipment for "mandos" was deleted
-    And the shipment for "mandos" should not be present
-
-  @javascript
-  Scenario: I should be able to add shipment items to a shipment
+  Scenario: I should be able to manage shipment items
     Given I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
@@ -85,33 +76,23 @@ Feature: Shipments management
     And I click on "Add Product" and don't enter any information
     When I click on "Create"
     Then "You have created a shipment" should be present
-    And "baguette cookie" should be present
+    And the product "baguette cookie" should be selected
 
-  @javascript
-  Scenario: I should be able to edit a shipment item
-    When I am on the edit page for "andysdecaf" shipment
-    And I click on "Add Product"
+    When I fill out Shipment Item form with:
+      | product         | product_price | quantity |
+      | donut tart      | 5.00         | 10       |
+    And I click on "Update"
+    Then "You have updated the shipment" should be present
+    And the product "baguette cookie" should not be selected
+    And the product "donut tart" should be selected
+
+    When I click on "Add Product"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |
     When I click on "Update"
     Then "You have updated the shipment" should be present
-    When I replace "baguette cookie" product name with "donut tart"
+    When I delete "donut tart" shipment item
     And I click on "Update"
     Then "You have updated the shipment" should be present
-    And the shipment item "baguette cookie" should not be present
-    And the shipment item "donut tart" should be present
-
-  @javascript
-  Scenario: I should be able to edit a shipment item
-    When I am on the edit page for "andysdecaf" shipment
-    And I click on "Add Product"
-    And I fill out Shipment Item form with:
-      | product         | product_price | quantity |
-      | baguette cookie | 10.00         | 50       |
-    When I click on "Update"
-    Then "You have updated the shipment" should be present
-    When I delete "baguette cookie" shipment item
-    And I click on "Update"
-    Then "You have updated the shipment" should be present
-    And the shipment item "baguette cookie" should not be present
+    And the product "donut tart" should not be selected

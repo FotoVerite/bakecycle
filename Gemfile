@@ -59,12 +59,12 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
-  gem 'selenium-webdriver'
   gem 'shoulda-matchers', require: false
 end
 
 group :test do
   gem 'capybara-screenshot'
+  gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'webmock', require: false
