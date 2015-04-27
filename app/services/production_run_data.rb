@@ -1,5 +1,5 @@
 class ProductionRunData
-  attr_reader :bakery, :recipes
+  attr_reader :bakery, :recipes, :production_run
   def initialize(production_run)
     @production_run = production_run
     @run_items = production_run.run_items
@@ -37,14 +37,14 @@ class ProductionRunData
   def add_to_recipe_run_data(product, quantity)
     motherdough =  product.motherdough
     return unless motherdough
-    recipe_data = recipes.find_or_create(motherdough)
+    recipe_data = recipes.find_or_create(motherdough, production_run.date)
     recipe_data.add_product(product, quantity)
     add_nested_recipes(recipe_data)
   end
 
   def add_nested_recipes(recipe_data)
     recipe_data.deeply_nested_recipe_info.each do |nested_info|
-      nested_data = recipes.find_or_create(nested_info[:inclusionable])
+      nested_data = recipes.find_or_create(nested_info[:inclusionable], production_run.date)
       nested_data.add_parent_recipe(nested_info[:parent_recipe], nested_info[:weight])
     end
   end

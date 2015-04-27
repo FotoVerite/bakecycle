@@ -5,7 +5,7 @@ describe RecipeRunData do
     let(:motherdough) { create(:recipe) }
     let(:inclusion) { create(:recipe) }
     let(:product) { create(:product, motherdough: motherdough, weight: 1, unit: :g) }
-    let(:run_data) { RecipeRunData.new(motherdough) }
+    let(:run_data) { RecipeRunData.new(motherdough, date: Time.zone.today) }
 
     it 'keeps a list of products and their info' do
       allow_any_instance_of(ProductRecipeCalc).to receive(:dough_percentage).and_return(0)
