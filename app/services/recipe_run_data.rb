@@ -46,4 +46,8 @@ class RecipeRunData
   def nested_recipes
     recipe_items.select { |item| item[:inclusionable_type] == 'Recipe' }
   end
+
+  def mix_bowl_count
+    (weight / recipe.mix_size).to_f.ceil
+  end
 end

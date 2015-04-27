@@ -19,8 +19,12 @@ class RecipeDataPdf
 
   def page_layout
     define_grid(columns: 12, rows: 12, gutter: 10)
-    grid([0, 0], [1, 8]).bounding_box do
+
+    grid([0, 0], [1, 5]).bounding_box do
       header
+    end
+    grid([0, 6], [1, 11]).bounding_box do
+      header_table
     end
     grid([1, 0], [11, 5]).bounding_box do
       left_section
@@ -42,15 +46,31 @@ class RecipeDataPdf
 
   def header
     text "#{recipe_run_data.recipe.name}", size: 20
-    text "#{recipe_run_data.recipe.recipe_type}", size: 20
-    text display_weight(recipe_run_data.weight), size: 10
+    text "Type: #{recipe_run_data.recipe.recipe_type.capitalize}", size: 15
+  end
+
+  def header_table
+    table(header_data, column_widths: [93, 93, 93]) do
+      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+      column(0..2).style(align: :center)
+    end
+  end
+
+  def header_data
+    header = ['Total Weight', 'Bowl Size', 'Bowl Count']
+    data = [
+      display_weight(recipe_run_data.weight),
+      "#{recipe_run_data.recipe.mix_size} #{recipe_run_data.recipe.mix_size_unit}",
+      recipe_run_data.mix_bowl_count
+    ]
+    [header, data]
   end
 
   def products_table
     table(product_data, column_widths: [130, 38, 56, 56]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      column(1).style(align: :center)
+      column(1..3).style(align: :center)
     end
   end
 
@@ -137,7 +157,7 @@ class RecipeDataPdf
   end
 
   def nested_recipes_table
-    move_down 30
+    move_down 20
     table(nested_recipes_data, column_widths: [169, 56, 56]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
@@ -158,7 +178,7 @@ class RecipeDataPdf
   end
 
   def deeply_nested_recipes_table
-    move_down 30 if recipe_run_data.products.any?
+    move_down 20 if recipe_run_data.products.any?
     table(deeply_nested_recipes_data, column_widths: [130, 95, 56]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
