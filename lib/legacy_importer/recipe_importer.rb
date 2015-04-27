@@ -23,12 +23,11 @@ module LegacyImporter
     }
 
     def import!
-      Recipe.where(
+      ObjectFinder.new(
+        Recipe,
         bakery: bakery,
         legacy_id: data[:recipe_id].to_s
-      )
-        .first_or_initialize
-        .tap { |recipe| recipe.update(attributes) }
+      ).update(attributes)
     end
 
     private

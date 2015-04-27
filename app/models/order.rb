@@ -50,20 +50,27 @@ class Order < ActiveRecord::Base
   end
 
   def end_date_is_not_before_start_date
-    return unless end_date
-    errors.add(:end_date, 'The end date cannot be before the start date') if end_date < start_date
+    return unless end_date && start_date
+    return unless end_date < start_date
+    errors.add(:end_date, 'The end date cannot be before the start date')
   end
 
   def standing_order_date_can_not_overlap
-    errors.add(:start_date, 'This order overlaps with at least one other') if overlapping?
+    ids = overlapping_orders.map(&:id).join(',')
+    errors.add(:start_date, "This order overlaps with ids (#{ids})") if overlapping?
   end
 
   def overlapping?
-    overlapping = Order.where(client: client, route: route, order_type: order_type)
+    overlapping_orders.count > 0
+  end
+
+  def overlapping_orders
+    overlapping = Order
+      .where(bakery: bakery, client: client, route: route, order_type: order_type)
       .where.not(id: id)
       .where('end_date >= ? OR end_date is null', start_date)
     overlapping = overlapping.where('start_date <= ?', end_date) if end_date
-    overlapping.count > 0
+    overlapping
   end
 
   def set_end_date_to_start

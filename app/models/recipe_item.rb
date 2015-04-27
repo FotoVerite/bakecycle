@@ -10,7 +10,7 @@ class RecipeItem < ActiveRecord::Base
   scope :recipes, -> { where(inclusionable_type: 'Recipe') }
 
   def no_infinite_loops
-    errors.add(:inclusionable_id_type, 'A recipe cannot include itself') if infinite_loop?
+    errors.add(:inclusionable_id_type, "#{inclusionable.try(:name)} recipe cannot include itself") if infinite_loop?
   end
 
   def infinite_loop?

@@ -6,7 +6,7 @@ describe LegacyImporter::IngredientImporter do
   let(:importer) { LegacyImporter::IngredientImporter.new(bakery, legacy_ingredient) }
 
   let(:legacy_ingredient) do
-    HashWithIndifferentAccess.new(
+    {
       ingredient_id: 2,
       ingredient_name: 'Yeast, Instant Red Label SAF 20/1#',
       ingredient_cost: BigDecimal.new('0.5'),
@@ -15,7 +15,7 @@ describe LegacyImporter::IngredientImporter do
       ingredient_description: '',
       ingredient_type: 'ingredient',
       ingredient_active: 'Y'
-    )
+    }
   end
 
   describe '#import!' do

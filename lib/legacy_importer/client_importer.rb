@@ -5,6 +5,7 @@ module LegacyImporter
     def initialize(bakery, legacy_clients)
       @bakery = bakery
       @data = legacy_clients
+      @field_mapper = FieldMapper.new(FIELDS_MAP)
     end
 
     FIELDS_MAP = %w(
@@ -41,7 +42,7 @@ module LegacyImporter
       client_deliveryterms      billing_term
       client_fax                business_fax
       client_phone              business_phone
-    ).map(&:to_sym).each_slice(2)
+    )
 
     # Fields we have yet to import
     # client_ap_emailcc
@@ -68,12 +69,11 @@ module LegacyImporter
 
     def import!
       return SkippedClient.new(attributes) if skip?
-      Client.where(
+      ObjectFinder.new(
+        Client,
         bakery: bakery,
         legacy_id: data[:client_id].to_s
-      )
-        .first_or_initialize
-        .tap { |c| c.update(attributes) }
+      ).update(attributes)
     end
 
     class SkippedClient < SkippedObject
@@ -82,7 +82,7 @@ module LegacyImporter
     private
 
     def skip?
-      no_name? || not_active? || sample?
+      no_name? || not_active? || sample? || catering?
     end
 
     def no_name?
@@ -98,8 +98,13 @@ module LegacyImporter
         data[:client_dba].include?('Samples')
     end
 
+    def catering?
+      data[:client_business_name].include?('Catering') ||
+        data[:client_dba].include?('Catering')
+    end
+
     def attributes
-      client_attr = map_attrs
+      client_attr = @field_mapper.translate(data)
       client_attr.merge(
         billing_term: BILLING_TERMS_MAP[client_attr[:billing_term]],
         active: active?,
@@ -107,12 +112,6 @@ module LegacyImporter
         delivery_fee_option: delivery_fee,
         accounts_payable_contact_name: client_attr[:accounts_payable_contact_name] || data[:primary_contact_name]
       )
-    end
-
-    def map_attrs
-      FIELDS_MAP.each_with_object({}) do |(legacy_field, field), client_hash|
-        client_hash[field] = data[legacy_field] unless data[legacy_field] == ''
-      end
     end
 
     def active?

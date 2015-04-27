@@ -4,7 +4,8 @@ class OrdersController < ApplicationController
   decorates_assigned :orders, :order
 
   def index
-    @orders = @orders.includes(:client, :route)
+    # client_dba, route_time ASC, order_startdate
+    @orders = @orders.includes(:client, :route).order('start_date desc').paginate(page: params[:page])
   end
 
   def new
