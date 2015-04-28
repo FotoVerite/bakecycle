@@ -101,4 +101,36 @@ describe OrderItem do
       expect(order_item.total_quantity_price).to eq(1.7)
     end
   end
+
+  context 'start dates' do
+    let(:lead_time) { order_item.product.total_lead_days }
+
+    before do
+      order_item.update(wednesday: 0)
+    end
+
+    describe '#can_start_on_date?(date)' do
+      it 'returns true if production can start on the date given based on lead time and day of week' do
+        sunday = Time.zone.now.sunday
+        expect(order_item.can_start_on_date?(sunday)).to eq(true)
+      end
+
+      it 'returns false if production cannot start on the date given based on lead time and day of week' do
+        monday = Time.zone.now.monday
+        expect(order_item.can_start_on_date?(monday)).to eq(false)
+      end
+    end
+
+    describe '.can_start_on_date(date)' do
+      it 'returns only order_items that can start on a given date' do
+        sunday = Time.zone.now.sunday
+        order_items = OrderItem.can_start_on_date(sunday)
+        expect(order_items.include?(order_item)).to eq(true)
+
+        monday = Time.zone.now.monday
+        order_items = OrderItem.can_start_on_date(monday)
+        expect(order_items.include?(order_item)).to eq(false)
+      end
+    end
+  end
 end

@@ -4,7 +4,7 @@ body, html {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: $bc-charcoal !important;
+  color: $bc-charcoal;
 }
 
 p, div {
@@ -59,4 +59,8 @@ input[type="text"] {
 
 .alert-box {
   margin-top: 20px;
+}
+
+.projection {
+  font-size: 1.5rem;
 }

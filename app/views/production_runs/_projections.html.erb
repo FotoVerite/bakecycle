@@ -1,0 +1,24 @@
+<p class='projection'>Projection based on active orders</p>
+
+<table class="responsive-table production-run-projection">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Total Quantity</th>
+      <th>Order Quantity</th>
+      <th>Over Bake %</th>
+      <th>Over Bake Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_run_projection.products_info.each do |projection| %>
+      <tr>
+        <td><%= projection.product.name %></td>
+        <td><%= projection.total_quantity %></td>
+        <td><%= projection.order_quantity %></td>
+        <td><%= projection.product.over_bake %></td>
+        <td><%= projection.overbake_quantity %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

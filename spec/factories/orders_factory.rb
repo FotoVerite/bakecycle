@@ -27,6 +27,15 @@ FactoryGirl.define do
       )
     end
 
+    trait :active do
+      start_date  { Time.zone.today - 4.days }
+    end
+
+    trait :inactive do
+      start_date  { Time.zone.today - 2.weeks }
+      end_date  { Time.zone.today - 1.week }
+    end
+
     factory :temporary_order do
       order_type 'temporary'
       end_date nil
