@@ -189,14 +189,21 @@ describe Order do
   end
 
   describe '.active' do
-    it 'returns all active orders for a client and date' do
+    it 'returns all active orders for a date' do
       order = create(:order, start_date: yesterday)
       client = order.client
       temp_order = create(:temporary_order, start_date: today, client: client, route: order.route)
       different_route = create(:order, start_date: yesterday, client: client)
 
-      expect(Order.active(client, yesterday)).to contain_exactly(order, different_route)
-      expect(Order.active(client, today)).to contain_exactly(temp_order, different_route)
+      expect(Order.active(yesterday)).to contain_exactly(order, different_route)
+      expect(Order.active(today)).to contain_exactly(temp_order, different_route)
+    end
+
+    it 'allows scoping to clients' do
+      create(:order, start_date: yesterday)
+      order = create(:order, start_date: yesterday)
+      client = order.client
+      expect(client.orders.active(today)).to contain_exactly(order)
     end
   end
 end

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     get 'print', on: :member
   end
 
+  get 'active-orders', to: 'orders#active_orders'
   get 'print-recipes', to: 'production_runs#print_recipes'
 
   resources :production_runs do

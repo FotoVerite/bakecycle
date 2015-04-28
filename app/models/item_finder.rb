@@ -48,6 +48,10 @@ class ItemFinder
     Order.accessible_by(ability)
   end
 
+  def active_orders(date)
+    orders.active(date)
+  end
+
   def users
     User.accessible_by(ability)
   end

@@ -4,8 +4,13 @@ class OrdersController < ApplicationController
   decorates_assigned :orders, :order
 
   def index
-    # client_dba, route_time ASC, order_startdate
-    @orders = @orders.includes(:client, :route).order('start_date desc').paginate(page: params[:page])
+    @orders = @orders.sort_for_history.paginate(page: params[:page])
+  end
+
+  def active_orders
+    active_nav(:active_orders)
+    @date = date_query
+    @orders = item_finder.active_orders(@date).sort_for_active.paginate(page: params[:page])
   end
 
   def new
@@ -44,6 +49,10 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def date_query
+    Chronic.parse(params[:date]) || Time.zone.today
+  end
 
   def order_params
     params.require(:order).permit(

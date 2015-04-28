@@ -30,10 +30,16 @@ Feature: Navigation
     And I click on "Clients"
     Then "Add New Client" should be present
 
-  Scenario: As a user, I should be able to visit Orders index from the dashboard
+  Scenario: As a user, I should be able to visit Order History index from the dashboard
     Given I am logged in as a user
     When I go to the home page
-    And I click on "Orders"
+    And I click on "Order History"
+    Then "Add New Order" should be present
+
+  Scenario: As a user, I should be able to visit Active Orders index from the dashboard
+    Given I am logged in as a user
+    When I go to the home page
+    And I click on "Active Orders"
     Then "Add New Order" should be present
 
   Scenario: As a user, I should be able to visit Shipments index from the dashboard

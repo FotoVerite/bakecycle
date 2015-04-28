@@ -28,16 +28,27 @@ class Order < ActiveRecord::Base
     to: :client, prefix: true
   )
 
-  def self.active(client, date)
-    temp_orders = temporary(date).where(client: client).to_a
-    standing_orders = standing(date).where(client: client).to_a
-
-    return standing_orders if temp_orders.empty?
-
-    standing_orders.map do |order|
-      temp_orders.find { |o| o.route_id == order.route_id } || order
-    end
+  # rubocop:disable Metrics/MethodLength
+  def self.active(date)
+    where('
+      start_date <= :date and (end_date is null OR end_date >= :date)
+      AND orders.id NOT IN (
+        select ID
+        FROM orders standing_orders
+        WHERE order_type = :standing
+        AND start_date <= :date and (end_date is null OR end_date >= :date)
+        AND (
+          SELECT count(id)
+          FROM orders temp_orders
+          WHERE order_type = :temporary
+          AND standing_orders.route_id = temp_orders.route_id
+          AND standing_orders.client_id = temp_orders.client_id
+          AND start_date <= :date and (end_date is null OR end_date >= :date)
+        ) > 0
+      )
+    ', date: date, standing: 'standing', temporary: 'temporary')
   end
+  # rubocop:enable Metrics/MethodLength
 
   def self.temporary(date)
     where(order_type: 'temporary', start_date: date)
@@ -47,6 +58,19 @@ class Order < ActiveRecord::Base
     where(order_type: 'standing')
       .where('start_date <= ? ', date)
       .where('end_date is null or end_date >= ? ', date)
+  end
+
+  def self.sort_for_active
+    includes(:client, :route)
+      .joins(:client, :route)
+      .order('clients.name asc')
+      .order('routes.departure_time asc')
+      .order(start_date: :desc)
+  end
+
+  def self.sort_for_history
+    includes(:client, :route)
+      .order(start_date: :desc)
   end
 
   def end_date_is_not_before_start_date
