@@ -23,7 +23,7 @@ module LegacyImporter
     end
 
     def self.query(sql)
-      benchmark "MYSQL Query: #{sql}" do
+      benchmark "MYSQL Query: #{sql}", level: :debug do
         connection.query(sql, symbolize_keys: true, stream: true, cache_rows: false)
       end
     end
