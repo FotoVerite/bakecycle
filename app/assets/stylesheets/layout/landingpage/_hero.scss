@@ -1,51 +1,54 @@
 .hero {
-  position: relative;
-  background-image: image-url("marketing/home/hero_1.jpg");
+  background-image: image-url('marketing/home/hero_1.jpg');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-color: #464646;
-  padding: 170px 0 0 0;
+  margin: 0 0 60px;
   min-height: 900px;
-  margin: 0 0 60px 0;
   overflow: hidden;
+  padding: 170px 0 0;
+  position: relative;
 
   .logo {
-    max-width: 400px;
-    width: 100%;
     margin: 0 0 0 -3px;
-    padding: 0 0 0 0;
+    max-width: 400px;
+    padding: 0;
+    width: 100%;
   }
 
   .headline {
-    font-weight: 300;
+    color: $white;
     font-size: 24px;
-    color: #FFFFFF;
+    font-weight: 300;
     line-height: 40px;
-    text-shadow: 0px 1px 4px rgba(0,0,0,0.50);
-    margin: 0 0 16px 0;
+    margin: 0 0 16px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .50);
   }
 
   .arrow {
-    position: absolute;
     bottom: 0;
-    width: 100%;
-  }
-  .arrow:before, .arrow:after {
-    content:'';
     position: absolute;
-    bottom: 100%;
-    width: 50%;
-    box-sizing: border-box;
-  }
-  .arrow:before {
-    right: 50%;
-    border-bottom: 40px solid $bc-off-white;
-    border-right: 40px solid transparent;
-  }
-  .arrow:after {
-    left: 50%;
-    border-bottom: 40px solid $bc-off-white;
-    border-left: 40px solid transparent;
+    width: 100%;
+
+    &:before,
+    &:after {
+      bottom: 100%;
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      width: 50%;
+    }
+
+    &:before {
+      border-bottom: 40px solid $bc-off-white;
+      border-right: 40px solid transparent;
+      right: 50%;
+    }
+
+    &:after {
+      border-bottom: 40px solid $bc-off-white;
+      border-left: 40px solid transparent;
+      left: 50%;
+    }
   }
 }

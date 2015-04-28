@@ -1,18 +1,18 @@
 .marketing-footer {
   background-color: $tuatara;
-  color: white;
+  color: $white;
   padding: 21px 0 83px 0;
 
   .underlined-link {
-    @include underline-link(white);
+    @include underline-link($white);
   }
 
   .left-section {
     margin: 0 0 20px 0;
     text-align: center;
     @media #{$large-up} {
-      text-align: left;
       padding: 0;
+      text-align: left;
     }
 
     .logo {
@@ -21,15 +21,15 @@
       width: 200px;
       @media #{$medium-only} { width: 300px; }
       @media #{$large-up} {
-        width: 240px;
         margin: 16px 0 15px -2px;
+        width: 240px;
       }
     }
 
     .message {
-      font-weight: 300;
+      color: $white;
       font-size: 10px;
-      color: #FFFFFF;
+      font-weight: 300;
 
       .strong {
         font-weight: 700;
@@ -54,9 +54,9 @@
 
       ul {
         list-style: none;
+        margin: 0;
         text-align: left;
         padding: 0;
-        margin: 0;
 
         li {
           display: inline-block;
@@ -69,13 +69,13 @@
         }
 
         a {
-          text-decoration: none;
+          color: $white;
           font-size: 12px;
-          letter-spacing: 1px;
-          text-shadow: 0px 0px 2px rgba(0,0,0,0.80);
           font-weight: 600;
+          letter-spacing: 1px;
+          text-decoration: none;
+          text-shadow: 0 0 2px rgba(0, 0, 0, .80);
           text-transform: uppercase;
-          color: white;
         }
       }
     }
