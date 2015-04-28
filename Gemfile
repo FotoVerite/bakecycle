@@ -67,6 +67,7 @@ group :test do
   gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'launchy'
+  gem 'selenium-webdriver'
   gem 'webmock', require: false
 end
 

@@ -13,12 +13,7 @@ When(/^I pry$/) do
 end
 
 When(/^I confirm popup$/) do
-  if page.driver.class == Capybara::Webkit::Driver
-    sleep 0.5 # prevent test from failing by waiting for popup
-    page.driver.browser.accept_js_confirms
-  else
-    page.driver.browser.switch_to.alert.accept
-  end
+  confirm_alert
 end
 
 When(/^I click on "(.*?)"$/) do |linkable_text|
