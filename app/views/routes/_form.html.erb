@@ -11,7 +11,7 @@
       </div>
 
       <div class="large-2 medium-3 small-6 columns select-time-wrapper">
-        <%= f.input :departure_time, as: :string, placeholder: "Select Time", input_html: { class: "js-timepicker" } %>
+        <%= f.input :departure_time, as: :string, placeholder: "Select Time", input_html: { value: "#{@route.formatted_time}", class: "js-timepicker" } %>
       </div>
     </div>
 

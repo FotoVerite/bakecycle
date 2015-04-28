@@ -14,6 +14,7 @@ class Route < ActiveRecord::Base
   end
 
   def formatted_time
+    return unless departure_time
     departure_time.strftime('%I:%M %p')
   end
 end
