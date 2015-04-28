@@ -2,13 +2,13 @@
   padding: 100px 0 100px 0;
 
   .headline {
-    font-weight: 400;
     font-size: 30px;
+    font-weight: 400;
     line-height: 40px;
 
     .rwd-line {
       display: block;
-      @media #{$medium-up} { display: inline }
+      @media #{$medium-up} { display: inline; }
     }
   }
 
@@ -17,13 +17,13 @@
   }
 
   .message {
-    font-weight: 300;
     font-size: 18px;
+    font-weight: 300;
     line-height: 32px;
 
     .rwd-line {
       display: inline;
-      @media #{$medium-up} { display: block }
+      @media #{$medium-up} { display: block; }
     }
 
     .underlined-link {
