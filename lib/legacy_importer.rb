@@ -122,4 +122,13 @@ module LegacyImporter
       ].sum
     end
   end
+
+  def self.make_shipments_and_production_runs
+    ActiveRecord::Base.connection.cache do
+      (bakery.orders.minimum(:start_date)..Time.zone.yesterday).each do |day|
+        ShipmentService.new(bakery, day).run
+        ProductionRunService.new(bakery, day).run
+      end
+    end
+  end
 end

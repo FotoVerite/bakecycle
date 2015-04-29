@@ -58,7 +58,7 @@ describe Recipe do
     end
   end
 
-  describe 'total_lead_days' do
+  describe '#total_lead_days' do
     let(:recipe) { create(:recipe) }
     let(:bakery) { recipe.bakery }
 

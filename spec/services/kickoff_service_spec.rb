@@ -8,20 +8,12 @@ describe KickoffService do
     Time.zone.local(today.year, today.month, today.day, kickoff.hour, kickoff.min, kickoff.sec)
   end
   let(:shipment_service) { double(ShipmentService, run: true) }
-  let(:production_service) { double(ProductionRunService, create_production_run: true) }
+  let(:production_service) { double(ProductionRunService, run: true) }
   let(:kickoff_service) { KickoffService.new(bakery, after_kickoff_time) }
 
   before do
     allow(ShipmentService).to receive(:new).and_return(shipment_service)
     allow(ProductionRunService).to receive(:new).and_return(production_service)
-  end
-
-  describe '.run' do
-    it 'creates a new instance of itself for each bakery' do
-      bakery
-      expect(KickoffService).to receive(:new).at_least(:once).and_call_original
-      KickoffService.run
-    end
   end
 
   describe '#run' do
@@ -31,6 +23,21 @@ describe KickoffService do
       expect(ShipmentService).to receive(:new).and_call_original
       expect(ProductionRunService).to receive(:new).and_call_original
       KickoffService.new(bakery).run
+    end
+
+    it 'assigns last_kickoff time to bakery when you run shipment service' do
+      current_time = Chronic.parse('3 pm')
+      KickoffService.new(bakery, current_time).run
+      bakery.reload
+      expect(bakery.last_kickoff).to eq(current_time)
+    end
+
+    it 'updates last_kickoff time to bakery when last_kickoff is over 24 hours' do
+      bakery = create(:bakery, last_kickoff: today - 24.hours, kickoff_time: Chronic.parse('2 pm'))
+      current_time = Chronic.parse('3 pm')
+      KickoffService.new(bakery, current_time).run
+      bakery.reload
+      expect(bakery.last_kickoff).to eq(current_time)
     end
   end
 

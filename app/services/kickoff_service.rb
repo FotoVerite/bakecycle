@@ -1,16 +1,6 @@
 class KickoffService
   attr_reader :bakery, :run_time
 
-  class << self
-    include Skylight::Helpers
-    def run(run_time = Time.zone.now)
-      Bakery.find_each do |bakery|
-        new(bakery, run_time).run
-      end
-    end
-    instrument_method :run, title: 'Kickoff Service'
-  end
-
   def initialize(bakery, run_time = Time.zone.now)
     @bakery = bakery
     @run_time = run_time
@@ -19,7 +9,8 @@ class KickoffService
   def run
     return unless kickoff?
     ShipmentService.new(bakery, run_time).run
-    ProductionRunService.new(bakery, run_time).create_production_run
+    ProductionRunService.new(bakery, run_time).run
+    bakery.update!(last_kickoff: run_time)
   end
 
   def kickoff?
