@@ -84,5 +84,22 @@ describe RecipeRunData do
         expect(run_data.nested_recipes.first[:inclusionable]).to be_a(Recipe)
       end
     end
+
+    describe '#mix_bowl_count' do
+      it 'returns nil if no bowl info' do
+        motherdough.update(mix_size: 0)
+        expect(run_data.mix_bowl_count).to be_nil
+        motherdough.update(mix_size: nil)
+        expect(run_data.mix_bowl_count).to be_nil
+      end
+
+      it 'returns the number of bowls needed' do
+        motherdough.update(mix_size: 100, mix_size_unit: :g)
+        run_data.weight = Unitwise(1, :kg)
+        expect(run_data.mix_bowl_count).to eq(10)
+        run_data.weight = Unitwise(101, :g)
+        expect(run_data.mix_bowl_count).to eq(2)
+      end
+    end
   end
 end

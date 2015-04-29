@@ -50,7 +50,8 @@ class RecipeRunData
   end
 
   def mix_bowl_count
-    (weight / recipe.mix_size).to_f.ceil
+    return unless recipe.mix_size_with_unit > Unitwise(0, :kg)
+    (weight / recipe.mix_size_with_unit).to_f.ceil
   end
 
   def finished_date
