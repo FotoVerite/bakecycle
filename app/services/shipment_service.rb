@@ -32,7 +32,7 @@ class ShipmentService
     return if max_lead_time.nil?
     (1..max_lead_time).each do |lead|
       ship_date = run_time + lead.days
-      Order.active(client, ship_date).each do |order|
+      client.orders.active(ship_date).each do |order|
         ShipmentCreator.new(order, ship_date).create!
       end
     end

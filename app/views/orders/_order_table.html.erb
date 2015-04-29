@@ -1,0 +1,19 @@
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Start Date</th>
+      <th scope="col">End Date</th>
+      <th scope="col">Client</th>
+      <th scope="col">Type</th>
+      <th scope="col">Route</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render orders %>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <%= will_paginate @orders %>
+</div>

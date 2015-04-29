@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422210346) do
+ActiveRecord::Schema.define(version: 20150428231910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,8 @@ ActiveRecord::Schema.define(version: 20150422210346) do
     t.integer  "legacy_id"
   end
 
+  add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
+  add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
 
   create_table "price_varients", force: :cascade do |t|
