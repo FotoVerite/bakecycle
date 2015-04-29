@@ -27,7 +27,6 @@ gem 'prawn-table'
 gem 'rails', '4.2.1'
 gem 'sass-rails'
 gem 'simple_form'
-gem 'skylight'
 gem 'uglifier', '>= 1.3.0'
 gem 'unicorn', require: false
 gem 'unitwise'
@@ -77,5 +76,7 @@ group :test, :development, :staging do
 end
 
 group :production, :staging do
+  # gem 'skylight'
   gem 'rails_12factor'
+  gem 'newrelic_rpm'
 end

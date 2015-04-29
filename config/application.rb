@@ -36,7 +36,7 @@ module Bakecycle
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/
 
     # enable instrumentation in staging
-    config.skylight.environments += ['staging']
+    # config.skylight.environments += ['staging']
 
     config.generators do |g|
       g.factory_girl true
