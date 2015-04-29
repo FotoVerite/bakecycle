@@ -1,6 +1,6 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_search_form, only: [:index, :invoices]
+  before_action :load_search_form, only: [:index, :invoices, :invoices_csv]
   load_and_authorize_resource
   decorates_assigned :shipments, :shipment
 
@@ -24,8 +24,14 @@ class ShipmentsController < ApplicationController
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
+  def invoices_csv
+    @shipments = filtered_shipment_search
+    csv_string = InvoicesCsv.new(@shipments)
+    send_data csv_string.generate, filename: 'invoices.csv', type: 'text/csv', disposition: 'attachment'
+  end
+
   def invoices
-    @shipments = @shipments.search(@search_form).includes(:shipment_items, :bakery)
+    @shipments = filtered_shipment_search
     pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
     pdf_name = 'invoices.pdf'
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
@@ -64,8 +70,12 @@ class ShipmentsController < ApplicationController
     @search_form = ShipmentSearchForm.new(search_params)
   end
 
+  def filtered_shipment_search
+    @shipments.search(@search_form).includes(:shipment_items, :bakery)
+  end
+
   def search_params
-    search = params.permit(:utf8, :page, search: [:client_id, :date_from, :date_to])
+    search = params.permit(:utf8, :page, :format, search: [:client_id, :date_from, :date_to])
     search[:search]
   end
 

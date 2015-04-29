@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     get 'invoice', on: :member
     get 'packing_slip', on: :member
     get 'invoices', on: :collection
+    get 'invoices_csv', on: :collection
   end
 
   resources :bakeries, except: [:show] do
