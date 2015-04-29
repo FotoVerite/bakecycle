@@ -16,6 +16,14 @@ describe KickoffService do
     allow(ProductionRunService).to receive(:new).and_return(production_service)
   end
 
+  describe '.run' do
+    it 'creates a new instance of itself for each bakery' do
+      bakery
+      expect(KickoffService).to receive(:new).at_least(:once).and_call_original
+      KickoffService.run
+    end
+  end
+
   describe '#run' do
     it 'calls creates and calls run for ShipmentService and ProductionRunService' do
       allow_any_instance_of(Bakery).to receive(:shipments).and_return(true)

@@ -1,6 +1,12 @@
 class KickoffService
   attr_reader :bakery, :run_time
 
+  def self.run(run_time = Time.zone.now)
+    Bakery.find_each do |bakery|
+      new(bakery, run_time).run
+    end
+  end
+
   def initialize(bakery, run_time = Time.zone.now)
     @bakery = bakery
     @run_time = run_time
