@@ -66,6 +66,13 @@ describe ShipmentCreator do
   end
 
   describe 'daily delivery fees' do
+    it 'does not charge fee if there is no order' do
+      client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)
+      order = create(:order, order_item_count: 1, bakery: bakery, daily_item_count: 0, client: client)
+      shipment = ShipmentCreator.new(order, today).create!
+      expect(shipment).to be_nil
+    end
+
     it 'sets delivery fee to 0 if client has no delivery fees' do
       client = create(:client, delivery_fee_option: 0, bakery: bakery)
       order = create(:order, start_date: today, client: client, bakery: bakery)

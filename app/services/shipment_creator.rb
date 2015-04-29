@@ -55,6 +55,7 @@ class ShipmentCreator
 
   def charge_daily_fee?
     return false unless order.client_daily_delivery_fee?
+    return false if shipment_items.empty?
     shipment_items_subtotal < order.client_delivery_minimum
   end
 
