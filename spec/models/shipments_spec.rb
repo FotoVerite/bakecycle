@@ -6,7 +6,7 @@ describe Shipment do
   let(:yesterday) { today - 1.day }
   let(:tomorrow) { today + 1.day }
 
-  it 'has model attributes' do
+  it 'has a shape' do
     expect(shipment).to respond_to(:date)
     expect(shipment).to respond_to(:payment_due_date)
     expect(shipment).to respond_to(:shipment_items)
@@ -27,9 +27,6 @@ describe Shipment do
     expect(shipment).to respond_to(:client_primary_contact_name)
     expect(shipment).to respond_to(:client_primary_contact_phone)
     expect(shipment).to respond_to(:note)
-  end
-
-  it 'has association' do
     expect(shipment).to belong_to(:bakery)
   end
 
@@ -41,16 +38,8 @@ describe Shipment do
     expect(shipment).to validate_presence_of(:delivery_fee)
     expect(shipment).to validate_presence_of(:client_id)
     expect(shipment).to validate_presence_of(:client_name)
-    expect(shipment).to validate_presence_of(:client_id)
-    expect(shipment).to validate_presence_of(:client_name)
     expect(shipment).to validate_presence_of(:client_billing_term)
-    expect(shipment).to validate_presence_of(:client_delivery_address_street_1)
-    expect(shipment).to validate_presence_of(:client_delivery_address_city)
-    expect(shipment).to validate_presence_of(:client_billing_address_street_1)
-    expect(shipment).to validate_presence_of(:client_billing_address_city)
     expect(shipment).to validate_presence_of(:client_billing_term_days)
-    expect(shipment).to validate_presence_of(:client_primary_contact_name)
-    expect(shipment).to validate_presence_of(:client_primary_contact_phone)
     expect(shipment).to validate_numericality_of(:delivery_fee)
   end
 

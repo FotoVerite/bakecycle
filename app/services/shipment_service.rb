@@ -1,14 +1,9 @@
 class ShipmentService
   attr_reader :bakery, :run_time
 
-  class << self
-    include Skylight::Helpers
-    def run(run_time = Time.zone.now)
-      Bakery.find_each do |bakery|
-        new(bakery, run_time).run
-      end
-    end
-    instrument_method :run, title: 'Shipment Service'
+  def self.lookup_lead_time(product)
+    @product_time_cache ||= {}
+    @product_time_cache[product.id] ||= product.total_lead_days
   end
 
   def initialize(bakery, run_time)
@@ -17,24 +12,23 @@ class ShipmentService
   end
 
   def run
-    bakery.update!(last_kickoff: run_time)
     process_bakery
   end
 
-  def process_bakery
-    Client.where(bakery: bakery).find_each do |client|
-      process_client(client)
-    end
-  end
+  private
 
-  def process_client(client)
-    max_lead_time = client.orders.map(&:total_lead_days).max
-    return if max_lead_time.nil?
-    (1..max_lead_time).each do |lead|
+  def process_bakery
+    lead_time =  max_lead_time(bakery.products)
+    return if lead_time.nil?
+    (1..lead_time).each do |lead|
       ship_date = run_time + lead.days
-      client.orders.active(ship_date).each do |order|
+      bakery.orders.includes(:client, :route, order_items: [:product]).active(ship_date).find_each do |order|
         ShipmentCreator.new(order, ship_date).create!
       end
     end
+  end
+
+  def max_lead_time(products)
+    products.map { |product| ShipmentService.lookup_lead_time(product) }.max
   end
 end

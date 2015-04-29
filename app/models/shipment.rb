@@ -13,13 +13,7 @@ class Shipment < ActiveRecord::Base
   validates :client_id,
             :client_name,
             :client_billing_term,
-            :client_delivery_address_street_1,
-            :client_delivery_address_city,
-            :client_billing_address_street_1,
-            :client_billing_address_city,
-            :client_billing_term_days,
-            :client_primary_contact_name,
-            :client_primary_contact_phone, presence: true
+            :client_billing_term_days, presence: true
 
   validates :route_id, :route_name, presence: true
   validates :payment_due_date, presence: true

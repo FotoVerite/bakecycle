@@ -6,14 +6,6 @@ describe ProductionRunService do
   let(:production_run_service) { ProductionRunService.new(bakery) }
   let(:production_run) { production_run_service.production_run }
 
-  describe '.run' do
-    it 'creates a new instance of itself for each bakery' do
-      bakery
-      expect(ProductionRunService).to receive(:new).at_least(:once).and_call_original
-      ProductionRunService.run
-    end
-  end
-
   describe '#associate_shipment_item' do
     it 'associates shpiment items to the production run' do
       create_list(:shipment_item, 3, production_run: production_run, production_start: today)
