@@ -25,10 +25,10 @@
 
     <div class="row">
       <div class="small-6 columns">
-        <%= f.input :mix_size, as: :string %>
+        <%= f.input :mix_size, as: :string, label: "Mixing Bowl Size" %>
       </div>
       <div class="small-6 columns">
-        <%= f.input :mix_size_unit, collection: Recipe.mix_size_units_select, prompt: "Select One", as: :select %>
+        <%= f.input :mix_size_unit, collection: Recipe.mix_size_units_select, prompt: "Select One", as: :select, label: "Mixing Bowl Size Unit" %>
       </div>
     </div>
 
