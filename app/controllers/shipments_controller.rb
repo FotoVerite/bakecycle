@@ -1,6 +1,6 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_search_form, only: [:index, :invoices, :invoices_csv]
+  before_action :load_search_form, only: [:index, :invoices, :invoices_csv, :invoices_iif]
   load_and_authorize_resource
   decorates_assigned :shipments, :shipment
 
@@ -26,7 +26,7 @@ class ShipmentsController < ApplicationController
 
   def invoices_csv
     @shipments = filtered_shipment_search
-    csv_string = InvoicesCsv.new(@shipments)
+    csv_string = InvoicesCsv.new(@shipments.decorate)
     send_data csv_string.generate, filename: 'invoices.csv', type: 'text/csv', disposition: 'attachment'
   end
 
@@ -35,6 +35,17 @@ class ShipmentsController < ApplicationController
     pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
     pdf_name = 'invoices.pdf'
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+  end
+
+  def invoice_iif
+    iif_string = InvoiceIif.new(@shipment.decorate)
+    send_data iif_string.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
+  end
+
+  def invoices_iif
+    @shipments = filtered_shipment_search
+    iif_string = InvoicesIif.new(@shipments.decorate)
+    send_data iif_string.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
   end
 
   def create

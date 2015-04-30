@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428231910) do
+ActiveRecord::Schema.define(version: 20150430194226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(version: 20150428231910) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
-    t.time     "kickoff_time",      null: false
+    t.time     "kickoff_time",       null: false
     t.datetime "last_kickoff"
+    t.string   "quickbooks_account", null: false
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree
@@ -219,13 +220,14 @@ ActiveRecord::Schema.define(version: 20150428231910) do
     t.integer  "shipment_id"
     t.integer  "product_id"
     t.string   "product_name"
-    t.integer  "product_quantity",  default: 0,   null: false
-    t.decimal  "product_price",     default: 0.0, null: false
+    t.integer  "product_quantity",     default: 0,   null: false
+    t.decimal  "product_price",        default: 0.0, null: false
     t.string   "product_sku"
-    t.date     "production_start",                null: false
+    t.date     "production_start",                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "production_run_id"
+    t.string   "product_product_type",               null: false
   end
 
   add_index "shipment_items", ["production_run_id"], name: "index_shipment_items_on_production_run_id", using: :btree

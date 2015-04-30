@@ -151,8 +151,6 @@ GEM
       i18n (~> 0.5)
     fastercsv (1.5.5)
     ffi (1.9.8)
-    font-awesome-rails (4.3.0.0)
-      railties (>= 3.2, < 5.0)
     formatador (0.2.5)
     foundation-icons-sass-rails (3.0.0)
       railties (>= 3.1.1)
@@ -313,6 +311,7 @@ GEM
     request_store (1.1.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    riif (0.6.0)
     rspec-core (3.2.3)
       rspec-support (~> 3.2.0)
     rspec-expectations (3.2.1)
@@ -438,7 +437,6 @@ DEPENDENCIES
   draper
   factory_girl_rails
   faker
-  font-awesome-rails
   foundation-icons-sass-rails
   foundation-rails
   geocoder
@@ -463,6 +461,7 @@ DEPENDENCIES
   rack-livereload
   rails (= 4.2.1)
   rails_12factor
+  riif
   rspec-rails
   rubocop
   rubocop-rspec

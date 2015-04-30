@@ -43,6 +43,10 @@ class ShipmentDecorator < Draper::Decorator
     object.client_billing_address_zipcode
   end
 
+  def client_state_zipcode
+    "#{object.client_delivery_address_state} #{client_delivery_zipcode}"
+  end
+
   def client_delivery_city_state_zip
     "#{object.client_delivery_address_city}, #{object.client_delivery_address_state} #{client_delivery_zipcode}"
   end
@@ -68,4 +72,5 @@ class ShipmentDecorator < Draper::Decorator
   delegate :city_state_zip, to: :bakery, prefix: true
   delegate :phone_number, to: :bakery, prefix: true
   delegate :email, to: :bakery, prefix: true
+  delegate :quickbooks_account, to: :bakery, prefix: true
 end

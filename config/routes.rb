@@ -13,9 +13,11 @@ Rails.application.routes.draw do
 
   resources :shipments, except: [:show] do
     get 'invoice', on: :member
+    get 'invoice_iif', on: :member
     get 'packing_slip', on: :member
     get 'invoices', on: :collection
     get 'invoices_csv', on: :collection
+    get 'invoices_iif', on: :collection
   end
 
   resources :bakeries, except: [:show] do

@@ -11,7 +11,6 @@ gem 'chronic'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'devise'
 gem 'draper'
-gem 'font-awesome-rails'
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails'
 gem 'geocoder'
@@ -32,6 +31,7 @@ gem 'unicorn', require: false
 gem 'unitwise'
 gem 'will_paginate', '~> 3.0.6'
 gem 'wizarddev-heroku'
+gem 'riif'
 
 # legacy import
 gem 'mysql2', require: false
