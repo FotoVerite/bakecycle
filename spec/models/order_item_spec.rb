@@ -53,18 +53,6 @@ describe OrderItem do
     end
   end
 
-  describe '#total_lead_days' do
-    it 'returns max lead time for the order_item' do
-      motherdough = create(:recipe_motherdough, lead_days: 5)
-      inclusion = create(:recipe_inclusion, lead_days: 3)
-      product = create(:product, inclusion: inclusion, motherdough: motherdough)
-      order = create(:order)
-      order_item = create(:order_item, order: order, product: product)
-
-      expect(order_item.total_lead_days).to eq(5)
-    end
-  end
-
   describe '#quantity' do
     it 'returns the quantity ordered on a date' do
       order_item = OrderItem.new(monday: 4)

@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 describe Order do
-  let(:order) { build(:order) }
-  let(:bakery) { order.bakery }
+  let(:bakery) { build(:bakery) }
+  let(:order) { build(:order, bakery: bakery) }
   let(:today) { Time.zone.today }
   let(:yesterday) { today - 1.day }
   let(:tomorrow) { today + 1.day }
   let(:next_week) { today + 1.week }
 
-  it 'has model attributes' do
+  it 'has a shape' do
     expect(order).to respond_to(:client)
     expect(order).to respond_to(:route)
     expect(order).to respond_to(:start_date)
@@ -19,6 +19,12 @@ describe Order do
     expect(order).to belong_to(:bakery)
     expect(order).to belong_to(:client)
     expect(order).to belong_to(:route)
+
+    expect(order).to belong_to(:bakery)
+    expect(order).to belong_to(:client)
+    expect(order).to belong_to(:route)
+    expect(order).to have_many(:order_items)
+    expect(order).to have_many(:products)
   end
 
   it 'has validations' do
@@ -63,24 +69,23 @@ describe Order do
 
   describe '#total_lead_days' do
     it 'returns lead time for order items' do
-      motherdough = create(:recipe_motherdough, lead_days: 5)
-      inclusion = create(:recipe_inclusion, lead_days: 3)
-      product_1 = create(:product, inclusion: inclusion)
-      product_2 = create(:product, motherdough: motherdough)
+      motherdough = create(:recipe_motherdough, bakery: bakery, lead_days: 5)
+      inclusion = create(:recipe_inclusion, bakery: bakery, lead_days: 3)
+      product_1 = create(:product, bakery: bakery, inclusion: inclusion)
+      product_2 = create(:product, bakery: bakery, motherdough: motherdough)
 
-      order = create(:order)
       order.order_items << build(:order_item, order: nil, product: product_1)
       order.order_items << build(:order_item, order: nil, product: product_2)
-
+      order.save
       expect(order.total_lead_days).to eq(5)
     end
   end
 
   describe '#overlapping?' do
     it 'returns true if there is an existing overlapping order for the same client and route' do
-      client = create(:client)
-      route = create(:route)
-      order = create(:order, start_date: today, end_date: tomorrow, route: route, client: client)
+      client = create(:client, bakery: bakery)
+      route = create(:route, bakery: bakery)
+      order = create(:order, bakery: bakery, start_date: today, end_date: tomorrow, route: route, client: client)
 
       combinations = [
         { start_date: yesterday, end_date: yesterday, result: false },

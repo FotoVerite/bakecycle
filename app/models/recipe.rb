@@ -1,11 +1,11 @@
 class Recipe < ActiveRecord::Base
   extend AlphabeticalOrder
 
-  has_many :recipe_items, dependent: :destroy
-  has_many :recipe_parts, as: :inclusionable, class_name: 'RecipeItem'
-  has_many :product
-
   belongs_to :bakery
+  has_many :parent_recipe_items, class_name: 'RecipeItem', as: :inclusionable
+  has_many :parent_recipes, through: :parent_recipe_items, source: :recipe
+  has_many :recipe_items, dependent: :destroy
+  has_many :child_recipes, through: :recipe_items, source: :inclusionable, source_type: 'Recipe'
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
@@ -14,7 +14,7 @@ class Recipe < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :lead_days, presence: true
-  validates :mix_size, format: { with: /\A\d+(?:\.\d{0,3})?\z/ }, numericality: true, allow_nil: true
+  validates :mix_size, numericality: true, allow_nil: true
   validates :mix_size_unit, presence: true, unless: 'mix_size.blank?'
   validates :recipe_type, presence: true
   validates :note, length: { maximum: 500 }
@@ -24,28 +24,19 @@ class Recipe < ActiveRecord::Base
 
   before_save :make_lead_days_zero_if_inclusion
 
+  scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
+  scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
+
+  def products
+    Product.where('motherdough_id = :id OR inclusion_id = :id', id: id)
+  end
+
   def reject_recipe_items(attributes)
     attributes['inclusionable_id_type'].blank?
   end
 
-  def self.recipe_types_select
-    recipe_types.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
-  end
-
-  def self.mix_size_units_select
-    mix_size_units.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
-  end
-
-  def self.motherdoughs
-    where(recipe_type: Recipe.recipe_types[:dough])
-  end
-
-  def self.inclusions
-    where(recipe_type: Recipe.recipe_types[:inclusion])
-  end
-
   def total_lead_days
-    lead_days + recipe_items.max_lead_days
+    lead_days + (child_recipes.map(&:total_lead_days).max || 0)
   end
 
   def make_lead_days_zero_if_inclusion

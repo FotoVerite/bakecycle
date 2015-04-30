@@ -6,8 +6,11 @@ class Order < ActiveRecord::Base
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
 
-  accepts_nested_attributes_for :order_items, allow_destroy: true,
-                                              reject_if: proc { |attributes| attributes['product_id'].blank? }
+  accepts_nested_attributes_for(
+    :order_items,
+    allow_destroy: true,
+    reject_if: proc { |attributes| attributes['product_id'].blank? }
+  )
 
   before_validation :set_end_date_to_start, if: :temporary?
 
@@ -111,7 +114,7 @@ class Order < ActiveRecord::Base
   end
 
   def total_lead_days
-    order_items.map(&:total_lead_days).max || 0
+    products.map(&:total_lead_days).max || 0
   end
 
   def daily_subtotal(date)

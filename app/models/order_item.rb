@@ -27,11 +27,6 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
-  def total_lead_days
-    return 0 unless product.total_lead_days
-    product.total_lead_days
-  end
-
   def product_price
     product.price(total_quantity) if product
   end

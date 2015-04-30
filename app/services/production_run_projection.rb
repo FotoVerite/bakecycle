@@ -1,24 +1,22 @@
-class ProductionRunProjectionService
-  attr_reader :bakery, :start_date, :products_info
+class ProductionRunProjection
+  attr_reader :bakery, :start_date
 
   def initialize(bakery, start_date)
     @bakery = bakery
     @start_date = start_date
-    order_items
-    group_by_product_and_count
   end
 
   def order_items
     @_order_items ||= active_order_items.can_start_on_date(start_date)
   end
 
-  private
-
-  def group_by_product_and_count
-    @products_info = groups.collect do |group|
+  def products_info
+    @_products_info ||= groups.collect do |group|
       create_product_info(group)
     end
   end
+
+  private
 
   def create_product_info(group)
     product, order_items = group
@@ -36,7 +34,7 @@ class ProductionRunProjectionService
   end
 
   def active_order_items
-    OrderItem.where(order: orders)
+    OrderItem.where(order: orders).includes(product: [:inclusion, :motherdough])
   end
 
   def groups
