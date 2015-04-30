@@ -46,3 +46,23 @@ end
 Then(/^I should see the date for my production run$/) do
   expect(page).to have_content(Time.zone.today)
 end
+
+Given(/^"(.*?)" has clients and active orders$/) do |bakery|
+  bakery = Bakery.find_by(name: bakery)
+  client = create(:client, bakery: bakery)
+  create(:order, :active, bakery: bakery, client: client, order_item_count: 1)
+end
+
+When(/^I search for tomorrow's recipe runs$/) do
+  formatted_date = (Time.zone.now + 1.day).strftime('%m-%d-%Y')
+  fill_in 'search_date', with: formatted_date
+  click_on 'Search'
+end
+
+Then(/^I should see a warning that I am seeing a projection$/) do
+  expect(page).to have_content('Projection')
+end
+
+Then(/^I should rows of projected product quantities$/) do
+  expect(page.all('.production-run-projection tr').count).to eq(2)
+end

@@ -17,6 +17,10 @@ class OrderItem < ActiveRecord::Base
   validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
+  def self.can_start_on_date(date)
+    all.select { |order_item| order_item.can_start_on_date?(date) }
+  end
+
   def set_quantity_zero_if_blank
     DAYS_OF_WEEK.each do |day|
       send(:"#{day}=", 0) unless send(day)
@@ -49,5 +53,14 @@ class OrderItem < ActiveRecord::Base
 
   def daily_subtotal(date)
     quantity(date) * product.price(total_quantity)
+  end
+
+  def can_start_on_date?(start_date)
+    delivery_days = DAYS_OF_WEEK.select { |day| self[day] > 0 }
+    delivery_days.include?(order_ready_day(start_date))
+  end
+
+  def order_ready_day(start_date)
+    (start_date + product.total_lead_days.days).strftime('%A').downcase.to_sym
   end
 end

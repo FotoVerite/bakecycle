@@ -18,10 +18,8 @@ class ProductionRunsController < ApplicationController
   def print_recipes
     active_nav(:print_recipes)
     @date = date_query
-    @production_run = item_finder
-      .production_runs
-      .for_date(@date)
-      .first
+    @production_run = production_run_by_date
+    @production_run_projection = ProductionRunProjectionService.new(current_bakery, @date) unless @production_run
   end
 
   def update
@@ -44,5 +42,13 @@ class ProductionRunsController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date]) || Time.zone.today
+  end
+
+  def production_run_by_date
+    @date = date_query
+    @production_run = item_finder
+      .production_runs
+      .for_date(@date)
+      .first
   end
 end

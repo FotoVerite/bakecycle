@@ -32,3 +32,8 @@
     When I click on "Update"
     Then "donut tart" should not be present
     And "baguette cookie" should be present
+    Given "biencuit" has clients and active orders
+    And I am on the Print Recipes page
+    When I search for tomorrow's recipe runs
+    Then I should see a warning that I am seeing a projection
+    Then I should rows of projected product quantities
