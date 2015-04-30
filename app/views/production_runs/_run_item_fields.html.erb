@@ -1,10 +1,10 @@
 <tr class="fields" id="run_item_<%= f.object.id %>" ng-show="true">
-  <% if f.object.id %>
+  <% if f.object.persisted? %>
     <td><%= f.object.product.name %></td>
     <%= f.hidden_field :product_id, label: false, value: "#{f.object.product.id}" %>
   <% else %>
     <td>
-      <%= f.input :product_id, collection: item_finder.products, :error_html => { :id => "run_items_product_error"} %>
+      <%= f.input :product_id, collection: production_run.available_products, :error_html => { :id => "run_items_product_error"} %>
     </td>
   <% end %>
 
