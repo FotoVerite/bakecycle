@@ -4,6 +4,7 @@ class ProductionRunsController < ApplicationController
   decorates_assigned :production_runs, :production_run
 
   def index
+    @production_runs = @production_runs.order(date: :desc).paginate(page: params[:page])
   end
 
   def print
