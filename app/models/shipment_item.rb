@@ -6,6 +6,7 @@ class ShipmentItem < ActiveRecord::Base
   validates :product_name, presence: true
   validates :product_quantity, presence: true, numericality: true
   validates :product_price, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
+  validates :product_product_type, presence: true
 
   before_validation :set_product_data
   before_save :set_production_start
@@ -36,7 +37,7 @@ class ShipmentItem < ActiveRecord::Base
 
   def product=(product)
     fields = [
-      :id, :name, :sku
+      :id, :name, :sku, :product_type
     ]
 
     fields.each do |field|

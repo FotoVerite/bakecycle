@@ -60,6 +60,15 @@
     </div>
   </fieldset>
 
+  <fieldset>
+    <legend>Bakery Setting</legend>
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.input :quickbooks_account, as: :string %>
+      </div>
+    </div>
+  </fieldset>
+
   <% unless f.object.persisted? %>
     <fieldset>
       <div class="row">

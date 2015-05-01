@@ -7,7 +7,7 @@ class BakeriesController < ApplicationController
   end
 
   def new
-    @bakery = Bakery.new(kickoff_time: Chronic.parse('2 pm'))
+    @bakery = Bakery.new(kickoff_time: Chronic.parse('2 pm'), quickbooks_account: 'Sales:Sales - Wholesale')
   end
 
   def create
@@ -60,7 +60,8 @@ class BakeriesController < ApplicationController
       :address_city,
       :address_state,
       :address_zipcode,
-      :kickoff_time
+      :kickoff_time,
+      :quickbooks_account
     )
   end
 end
