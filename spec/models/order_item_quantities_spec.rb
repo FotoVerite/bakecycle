@@ -12,7 +12,7 @@ describe OrderItemQuantities do
 
   describe '#validate_single_product' do
     it 'sets the product if all order items belong to the same product' do
-      expect(order_item_quantities.product).to eq(order.products.first)
+      expect(order_item_quantities.product).to eq(product)
     end
 
     it 'raises an argument error if the order items do not belong to the same product' do

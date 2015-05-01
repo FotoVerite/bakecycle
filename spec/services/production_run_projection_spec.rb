@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ProductionRunProjectionService do
+describe ProductionRunProjection do
   let(:bakery) { create(:bakery) }
   let(:client) { create(:client, bakery: bakery) }
   let!(:active_order) { create(:order, :active, bakery: bakery, client: client, order_item_count: 3) }
@@ -14,7 +14,7 @@ describe ProductionRunProjectionService do
     it 'sets products_info with product names and quantities for order items' do
       monday = Time.zone.today.monday
       wednesday_quantity = active_order.order_items.map(&:wednesday).sum
-      projector = ProductionRunProjectionService.new(bakery, monday)
+      projector = ProductionRunProjection.new(bakery, monday)
       order_product = active_order.order_items.first.product
 
       expect(wednesday_quantity).to_not eq(0)
@@ -23,7 +23,7 @@ describe ProductionRunProjectionService do
 
     it 'does not include a product that should not start on the given date' do
       sunday = Time.zone.today.sunday
-      projector = ProductionRunProjectionService.new(bakery, sunday)
+      projector = ProductionRunProjection.new(bakery, sunday)
       expect(projector.products_info).to eq([])
     end
   end
@@ -31,7 +31,7 @@ describe ProductionRunProjectionService do
   describe '#collect_order_items' do
     it 'returns only order_items of active orders' do
       monday = Time.zone.today.monday
-      projector = ProductionRunProjectionService.new(bakery, monday)
+      projector = ProductionRunProjection.new(bakery, monday)
       expect(projector.order_items).to eq(active_order.order_items)
     end
   end

@@ -7,6 +7,7 @@ class OrderItemQuantities
   end
 
   def order_quantity
+    # what is this magic!?
     @_order_quantity ||= @order_items.map(&ready_on_weekday).sum
   end
 

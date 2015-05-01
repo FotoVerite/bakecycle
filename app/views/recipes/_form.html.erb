@@ -28,13 +28,13 @@
         <%= f.input :mix_size, as: :string, label: "Mixing Bowl Size" %>
       </div>
       <div class="small-6 columns">
-        <%= f.input :mix_size_unit, collection: Recipe.mix_size_units_select, prompt: "Select One", as: :select, label: "Mixing Bowl Size Unit" %>
+        <%= f.input :mix_size_unit, collection: recipe.mix_size_units_select, prompt: "Select One", as: :select, label: "Mixing Bowl Size Unit" %>
       </div>
     </div>
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.input :recipe_type, collection: Recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipe_type" } %>
+        <%= f.input :recipe_type, collection: recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipe_type" } %>
       </div>
     </div>
 
