@@ -34,11 +34,4 @@ describe OrderItemQuantities do
       expect(order_item_quantities.total_quantity).to eq(expected_total)
     end
   end
-
-  describe '#ready_on_weekday' do
-    it 'calculates the day of the week the product would be ready if started on the given date' do
-      ready_weekday = (start_date + product.total_lead_days.days).strftime('%A').downcase.to_sym
-      expect(order_item_quantities.send(:ready_on_weekday)).to eq(ready_weekday)
-    end
-  end
 end

@@ -51,11 +51,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def can_start_on_date?(start_date)
-    delivery_days = DAYS_OF_WEEK.select { |day| self[day] > 0 }
-    delivery_days.include?(order_ready_day(start_date))
-  end
-
-  def order_ready_day(start_date)
-    (start_date + product.total_lead_days.days).strftime('%A').downcase.to_sym
+    ready_date =  start_date + product.total_lead_days.days
+    quantity(ready_date) > 0
   end
 end
