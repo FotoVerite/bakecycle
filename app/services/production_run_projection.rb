@@ -7,7 +7,7 @@ class ProductionRunProjection
   end
 
   def order_items
-    @_order_items ||= active_order_items.can_start_on_date(start_date)
+    @_order_items ||= active_order_items.quantity_on?(start_date)
   end
 
   def products_info
@@ -34,7 +34,7 @@ class ProductionRunProjection
   end
 
   def active_order_items
-    OrderItem.where(order: orders).includes(product: [:inclusion, :motherdough])
+    OrderItem.where(order_id: orders.map(&:id)).includes(product: [:inclusion, :motherdough])
   end
 
   def groups

@@ -1,13 +1,15 @@
 class Shipment < ActiveRecord::Base
-  belongs_to :bakery
+  include Denormalization
 
+  belongs_to :bakery
   has_many :shipment_items, dependent: :destroy
 
-  accepts_nested_attributes_for :shipment_items, allow_destroy: true,
-                                                 reject_if: proc { |attributes| attributes['product_id'].blank? }
+  accepts_nested_attributes_for(
+    :shipment_items,
+    allow_destroy: true,
+    reject_if: proc { |attributes| attributes['product_id'].blank? }
+  )
 
-  before_validation :set_client_data
-  before_validation :set_route_data
   before_validation :set_payment_due_date
 
   validates :client_id,
@@ -19,10 +21,22 @@ class Shipment < ActiveRecord::Base
   validates :payment_due_date, presence: true
   validates :date, presence: true
   validates :bakery, presence: true
-  validates :delivery_fee, presence: true, format: { with: /\A\d+(?:\.\d{0,2})?\z/ }, numericality: true
+  validates :delivery_fee, presence: true, numericality: true
 
   # will_paginate
   self.per_page = 20
+
+  # create route= and route_id= methods
+  denormalize :route, [:id, :name]
+
+  # create client= and client_id= methods
+  denormalize :client, [
+    :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
+    :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
+    :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2,
+    :billing_address_city, :billing_address_state, :billing_address_zipcode,
+    :primary_contact_name, :primary_contact_phone
+  ]
 
   def self.search(fields)
     search_by_client(fields[:client_id])
@@ -74,7 +88,9 @@ class Shipment < ActiveRecord::Base
   end
 
   def self.upcoming(order, date = Time.zone.today)
-    where(client_id: order.client.id, route_id: order.route.id).where('date >= ?', date).order('date ASC')
+    where(client_id: order.client.id, route_id: order.route.id)
+      .where('date >= ?', date)
+      .order('date ASC')
   end
 
   def subtotal
@@ -98,37 +114,7 @@ class Shipment < ActiveRecord::Base
     self.payment_due_date = date + client_billing_term_days.days
   end
 
-  def set_client_data
-    self.client = Client.find(client_id) if client_id
-  end
-
   def production_start
     shipment_items.earliest_production_date
-  end
-
-  def client=(client)
-    fields = [
-      :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
-      :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
-      :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2, :billing_address_city,
-      :billing_address_state, :billing_address_zipcode, :primary_contact_name, :primary_contact_phone]
-
-    fields.each do |field|
-      assign_method = "client_#{field}=".to_sym
-      send(assign_method, client.send(field))
-    end
-  end
-
-  def set_route_data
-    self.route = Route.find(route_id) if route_id
-  end
-
-  def route=(route)
-    fields = [:id, :name]
-
-    fields.each do |field|
-      assign_method = "route_#{field}=".to_sym
-      send(assign_method, route.send(field))
-    end
   end
 end

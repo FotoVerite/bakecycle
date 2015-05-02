@@ -170,58 +170,74 @@ describe Shipment do
     end
   end
 
-  describe '#client=' do
-    it 'sets client data on shipment' do
-      client = build_stubbed(:client, billing_term: :net_30)
-      shipment = Shipment.new
-      shipment.client = client
+  context 'denormalizing' do
+    describe '#client=' do
+      it 'sets client data on shipment' do
+        client = build_stubbed(:client, billing_term: :net_30)
+        shipment = Shipment.new
+        shipment.client = client
 
-      fields = [
-        :id,
-        :name,
-        :dba,
-        :billing_term,
-        :billing_term_days,
-        :delivery_address_street_1,
-        :delivery_address_street_2,
-        :delivery_address_city,
-        :delivery_address_state,
-        :delivery_address_zipcode,
-        :billing_address_street_1,
-        :billing_address_street_2,
-        :billing_address_city,
-        :billing_address_state,
-        :billing_address_zipcode,
-        :primary_contact_name,
-        :primary_contact_phone
-      ]
+        fields = [
+          :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
+          :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
+          :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2,
+          :billing_address_city, :billing_address_state, :billing_address_zipcode,
+          :primary_contact_name, :primary_contact_phone
+        ]
 
-      fields.each do |field|
-        expect(shipment.send("client_#{field}".to_sym)).to eq(client.send(field))
+        fields.each do |field|
+          expect(shipment.send("client_#{field}".to_sym)).to eq(client.send(field))
+        end
       end
-    end
-  end
-
-  describe '#route=' do
-    it 'sets route data on shipment' do
-      client = build_stubbed(:client)
-      route = build_stubbed(:route)
-      shipment = Shipment.new
-
-      shipment.client = client
-      shipment.route = route
-
-      fields = [:id, :name]
-
-      fields.each do |field|
-        expect(shipment.send("route_#{field}".to_sym)).to eq(route.send(field))
+      it 'sets client data when assigned by id' do
+        client = create(:client)
+        shipment = Shipment.new(client_id: client.id)
+        expect(shipment.client_name).to eq(client.name)
       end
     end
 
-    it 'sets route_name from the name of the related route if that product exists' do
-      route = create(:route, name: 'Route1')
-      shipment = create(:shipment, route: route)
-      expect(shipment.route_name).to eq('Route1')
+    describe '#route=' do
+      it 'sets route data on shipment' do
+        client = build_stubbed(:client)
+        route = build_stubbed(:route)
+        shipment = Shipment.new
+
+        shipment.client = client
+        shipment.route = route
+
+        fields = [:id, :name]
+
+        fields.each do |field|
+          expect(shipment.send("route_#{field}".to_sym)).to eq(route.send(field))
+        end
+      end
+
+      it 'clears route data when nil' do
+        shipment = Shipment.new(route_name: 'Bobys route')
+        shipment.route = nil
+        expect(shipment.route_name).to be_nil
+      end
+
+      it 'sets route_name from the name of the related route' do
+        route = create(:route, name: 'Route1')
+        shipment = build(:shipment, route: nil)
+        shipment.route_id = route.id
+        expect(shipment.route_name).to eq('Route1')
+      end
+    end
+
+    describe '#route_id=' do
+      it 'does nothing the route did\'t change' do
+        shipment = build_stubbed(:shipment)
+        route_id = shipment.route_id
+        expect(Route).to_not receive(:find_by)
+        shipment.route_id = route_id
+      end
+      it 'sets route data on shipment' do
+        route = create(:route)
+        shipment = Shipment.new(route_id: route.id)
+        expect(shipment.route_name).to eq(route.name)
+      end
     end
   end
 end

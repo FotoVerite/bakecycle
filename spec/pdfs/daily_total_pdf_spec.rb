@@ -6,7 +6,7 @@ describe DailyTotalPdf do
 
   it 'renders shipments on a date' do
     route = create(:route, bakery: bakery)
-    create_list(:shipment, 2, date: today, shipment_item_count: 2, route_id: route.id, bakery: bakery)
+    create_list(:shipment, 2, date: today, shipment_item_count: 2, route: route, bakery: bakery)
     create_list(:shipment, 2, date: today, shipment_item_count: 2)
 
     pdf = DailyTotalPdf.new(today, bakery)

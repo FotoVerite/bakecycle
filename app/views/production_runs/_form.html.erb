@@ -7,7 +7,7 @@
 
   <% if @production_run.errors.any? %>
     <div class="alert-box alert">
-      <%= @production_run.errors.full_messages_for(:"run_items.product").join %>
+      <%= @production_run.errors.full_messages.join %>
     </div>
   <% end %>
 

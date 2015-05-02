@@ -1,22 +1,17 @@
 FactoryGirl.define do
-  factory :recipe_item_ingredient, class: RecipeItem do
-    bakers_percentage { Faker::Number.between(1, 100) }
+  factory :recipe_item, aliases: [:recipe_item_ingredient] do
     transient do
-      bakery { build(:bakery) }
+      bakery { |t| t.association(:bakery) }
     end
 
-    inclusionable { build(:ingredient, bakery: bakery) }
-  end
-
-  factory :recipe_item_recipe, class: RecipeItem do
     bakers_percentage { Faker::Number.between(1, 100) }
-    transient do
-      bakery { build(:bakery) }
-      recipe_lead_days 2
-    end
+    inclusionable { |t| t.association(:ingredient, bakery: bakery) }
 
-    after(:build) do |recipe_item, evaluator|
-      recipe_item.inclusionable ||= build(:recipe, bakery: evaluator.bakery, lead_days: evaluator.recipe_lead_days)
+    factory :recipe_item_recipe do
+      transient do
+        recipe_lead_days 2
+      end
+      inclusionable { |t| t.association(:recipe, bakery: bakery, lead_days: recipe_lead_days) }
     end
   end
 end

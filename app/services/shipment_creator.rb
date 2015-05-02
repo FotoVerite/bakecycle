@@ -21,6 +21,8 @@ class ShipmentCreator
 
   def create_shipment
     Shipment.create!(shipment_attributes) do |shipment|
+      shipment.client = order.client
+      shipment.route = order.route
       shipment.shipment_items = shipment_items
       shipment.delivery_fee = delivery_fee
     end
@@ -40,7 +42,7 @@ class ShipmentCreator
     @_shipment_items ||= order.order_items.map do |item|
       next unless item.quantity(ship_date) > 0
       ShipmentItem.new(
-        product_id: item.product.id,
+        product: item.product,
         product_quantity: item.quantity(ship_date),
         product_price: item.product_price
       )
@@ -68,7 +70,7 @@ class ShipmentCreator
   end
 
   def weekly_subtotal
-    Shipment.weekly_subtotal(order.client.id, ship_date)
+    Shipment.weekly_subtotal(order.client_id, ship_date)
   end
 
   def shipment_items_subtotal

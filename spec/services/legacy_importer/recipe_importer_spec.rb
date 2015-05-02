@@ -7,7 +7,6 @@ describe LegacyImporter::RecipeImporter do
 
   let(:legacy_recipe) do
     HashWithIndifferentAccess.new(
-      recipe_id: 4,
       recipe_id: 10000,
       recipe_name: 'Baguette',
       recipe_instructions: '',

@@ -1,5 +1,4 @@
 class OrderItem < ActiveRecord::Base
-  belongs_to :order
   belongs_to :product
 
   before_validation :set_quantity_zero_if_blank
@@ -17,8 +16,8 @@ class OrderItem < ActiveRecord::Base
   validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
-  def self.can_start_on_date(date)
-    all.select { |order_item| order_item.can_start_on_date?(date) }
+  def self.quantity_on?(date)
+    all.select { |order_item| order_item.quantity_on?(date) }
   end
 
   def set_quantity_zero_if_blank
@@ -50,7 +49,7 @@ class OrderItem < ActiveRecord::Base
     quantity(date) * product.price(total_quantity)
   end
 
-  def can_start_on_date?(start_date)
+  def quantity_on?(start_date)
     ready_date =  start_date + product.total_lead_days.days
     quantity(ready_date) > 0
   end

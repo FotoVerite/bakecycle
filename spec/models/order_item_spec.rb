@@ -3,9 +3,8 @@ require 'rails_helper'
 describe OrderItem do
   let(:order_item) { build(:order_item) }
 
-  it 'has model attributes' do
+  it 'has a shape' do
     expect(order_item).to respond_to(:product)
-    expect(order_item).to respond_to(:order)
     expect(order_item).to respond_to(:monday)
     expect(order_item).to respond_to(:tuesday)
     expect(order_item).to respond_to(:wednesday)
@@ -13,6 +12,7 @@ describe OrderItem do
     expect(order_item).to respond_to(:friday)
     expect(order_item).to respond_to(:saturday)
     expect(order_item).to respond_to(:sunday)
+    expect(order_item).to belong_to(:product)
   end
 
   it 'has days of week default to 0' do
@@ -20,11 +20,6 @@ describe OrderItem do
     expect(order_item.monday).to eq(nil)
     order_item.save
     expect(order_item.monday).to eq(0)
-  end
-
-  it 'has association' do
-    expect(order_item).to belong_to(:order)
-    expect(order_item).to belong_to(:product)
   end
 
   it 'has validations' do
@@ -97,26 +92,26 @@ describe OrderItem do
       order_item.update(wednesday: 0)
     end
 
-    describe '#can_start_on_date?(date)' do
+    describe '#quantity_on?(date)' do
       it 'returns true if production can start on the date given based on lead time and day of week' do
         sunday = Time.zone.now.sunday
-        expect(order_item.can_start_on_date?(sunday)).to eq(true)
+        expect(order_item.quantity_on?(sunday)).to eq(true)
       end
 
       it 'returns false if production cannot start on the date given based on lead time and day of week' do
         monday = Time.zone.now.monday
-        expect(order_item.can_start_on_date?(monday)).to eq(false)
+        expect(order_item.quantity_on?(monday)).to eq(false)
       end
     end
 
-    describe '.can_start_on_date(date)' do
-      it 'returns only order_items that can start on a given date' do
+    describe '.quantity_on?(date)' do
+      it 'returns only order_items that have a quantity for a given date' do
         sunday = Time.zone.now.sunday
-        order_items = OrderItem.can_start_on_date(sunday)
+        order_items = OrderItem.quantity_on?(sunday)
         expect(order_items.include?(order_item)).to eq(true)
 
         monday = Time.zone.now.monday
-        order_items = OrderItem.can_start_on_date(monday)
+        order_items = OrderItem.quantity_on?(monday)
         expect(order_items.include?(order_item)).to eq(false)
       end
     end
