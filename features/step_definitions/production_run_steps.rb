@@ -5,7 +5,7 @@ end
 
 Given(/^there is a run item for a "(.*?)" production run$/) do |bakery|
   bakery = Bakery.find_by(name: bakery)
-  create(:run_item, production_run: bakery.production_runs.last, product: bakery.products.first)
+  create(:run_item, production_run_id: bakery.production_runs.last.id, product: bakery.products.first)
 end
 
 When(/^I fill out run item form with:$/) do |table|

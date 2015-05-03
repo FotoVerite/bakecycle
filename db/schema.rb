@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150430194226) do
+ActiveRecord::Schema.define(version: 20150503175423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,10 +139,11 @@ ActiveRecord::Schema.define(version: 20150430194226) do
   create_table "production_runs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "date",       null: false
+    t.date     "date",       null: false
     t.integer  "bakery_id",  null: false
   end
 
+  add_index "production_runs", ["bakery_id", "date"], name: "index_production_runs_on_bakery_id_and_date", using: :btree
   add_index "production_runs", ["bakery_id"], name: "index_production_runs_on_bakery_id", using: :btree
 
   create_table "products", force: :cascade do |t|
@@ -206,7 +207,7 @@ ActiveRecord::Schema.define(version: 20150430194226) do
 
   create_table "run_items", force: :cascade do |t|
     t.integer  "production_run_id", null: false
-    t.integer  "product_id"
+    t.integer  "product_id",        null: false
     t.integer  "total_quantity"
     t.integer  "order_quantity"
     t.integer  "overbake_quantity"
@@ -220,14 +221,15 @@ ActiveRecord::Schema.define(version: 20150430194226) do
     t.integer  "shipment_id"
     t.integer  "product_id"
     t.string   "product_name"
-    t.integer  "product_quantity",     default: 0,   null: false
-    t.decimal  "product_price",        default: 0.0, null: false
+    t.integer  "product_quantity",        default: 0,   null: false
+    t.decimal  "product_price",           default: 0.0, null: false
     t.string   "product_sku"
-    t.date     "production_start",                   null: false
+    t.date     "production_start",                      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "production_run_id"
-    t.string   "product_product_type",               null: false
+    t.string   "product_product_type",                  null: false
+    t.integer  "product_total_lead_days",               null: false
   end
 
   add_index "shipment_items", ["production_run_id"], name: "index_shipment_items_on_production_run_id", using: :btree

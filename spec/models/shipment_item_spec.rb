@@ -41,7 +41,9 @@ describe ShipmentItem do
       fields = [
         :id,
         :name,
-        :sku
+        :sku,
+        :product_type,
+        :total_lead_days
       ]
 
       fields.each do |field|

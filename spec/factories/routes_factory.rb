@@ -12,7 +12,8 @@ FactoryGirl.define do
       'Downtown',
       'East Side',
       'West Side',
-      'Midtown'
+      'Midtown',
+      'Early AM'
     ]
 
     "#{routes.sample} #{n}"

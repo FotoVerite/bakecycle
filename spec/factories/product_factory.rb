@@ -14,16 +14,16 @@ FactoryGirl.define do
     end
 
     trait :with_inclusion do
-      inclusion { create(:recipe_inclusion, bakery: bakery, lead_days: total_lead_days) }
+      inclusion { |t| t.association(:recipe_inclusion, bakery: bakery, lead_days: total_lead_days) }
     end
 
     trait :with_motherdough do
-      motherdough { create(:recipe_motherdough, bakery: bakery, lead_days: total_lead_days) }
+      motherdough { |t| t.association(:recipe_motherdough, bakery: bakery, lead_days: total_lead_days) }
     end
 
     trait :with_recipe_items do
-      inclusion { create(:recipe, :with_ingredients, bakery: bakery) }
-      motherdough { create(:recipe, :with_nested_recipes, bakery: bakery) }
+      inclusion { |t| t.association(:recipe, :with_ingredients, bakery: bakery) }
+      motherdough { |t| t.association(:recipe, :with_nested_recipes, bakery: bakery) }
     end
 
     trait :with_sku do

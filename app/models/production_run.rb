@@ -10,6 +10,6 @@ class ProductionRun < ActiveRecord::Base
   )
 
   def self.for_date(date)
-    where('date >= ? AND date < ?', date.beginning_of_day, date.end_of_day)
+    where(date: date)
   end
 end

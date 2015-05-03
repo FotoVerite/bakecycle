@@ -2,21 +2,25 @@ FactoryGirl.define do
   factory :shipment do
     date  { Time.zone.today + Faker::Number.number(1).to_i.days }
     bakery
-    route { create(:route, bakery: bakery) }
-    client { create(:client, bakery: bakery) }
+    route { |t| t.association(:route, bakery: bakery) }
+    client { |t| t.association(:client, bakery: bakery) }
     note { Faker::Lorem.sentence(1) }
 
     transient do
       shipment_item_count 1
+      total_lead_days 2
+      product { |t| t.association(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
     end
 
-    after(:build) do |shipment, evaluator|
-      shipment.shipment_items << FactoryGirl.build_list(
-        :shipment_item,
-        evaluator.shipment_item_count,
-        shipment: shipment,
-        bakery: evaluator.bakery
-      )
+    shipment_items do |t|
+      shipment_item_count.times.map do
+        t.association(
+          :shipment_item,
+          shipment: t.instance_variable_get(:@instance),
+          product: product,
+          bakery: bakery
+        )
+      end
     end
 
     trait :with_delivery_fee do

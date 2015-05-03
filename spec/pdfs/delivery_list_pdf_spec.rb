@@ -6,7 +6,7 @@ describe DeliveryListPdf do
 
   it 'renders shipments clients on a date' do
     route = create(:route, bakery: bakery)
-    create_list(:shipment, 2, date: today, shipment_item_count: 2, route_id: route.id, bakery: bakery)
+    create_list(:shipment, 2, date: today, shipment_item_count: 2, route: route, bakery: bakery)
     create_list(:shipment, 2, date: today, shipment_item_count: 2)
 
     pdf = DeliveryListPdf.new(today, bakery)

@@ -5,7 +5,7 @@
 <%= simple_form_for :search, method: :get do |f| %>
   <div class="row collapse">
     <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date, class: "js-datepicker", name: :date}, required: false %>
+      <%= f.input :date, input_html: { value: @date, class: "js-datepicker", name: :date }, required: false %>
     </div>
     <div class="small-12 medium-3 columns end">
       <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
@@ -17,6 +17,7 @@
   <thead>
     <th>Id </th>
     <th>Date</th>
+    <th>Product Count</th>
     <th>Actions</th>
   </thead>
 

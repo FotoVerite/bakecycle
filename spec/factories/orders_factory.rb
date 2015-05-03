@@ -5,26 +5,25 @@ FactoryGirl.define do
     end_date  nil
     bakery
 
-    client { create(:client, bakery: bakery) }
-    route { create(:route, bakery: bakery) }
+    client { |t| t.association(:client, bakery: bakery) }
+    route { |t| t.association(:route, bakery: bakery) }
 
     transient do
       order_item_count 1
       total_lead_days 2
       daily_item_count nil
-      product { create(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
+      product { |t| t.association(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
     end
 
-    after(:build) do |order, evaluator|
-      order.order_items << FactoryGirl.build_list(
-        :order_item,
-        evaluator.order_item_count,
-        product: evaluator.product,
-        order: order,
-        bakery: evaluator.bakery,
-        total_lead_days: evaluator.total_lead_days,
-        daily_item_count: evaluator.daily_item_count
-      )
+    order_items do |t|
+      order_item_count.times.map do
+        t.association(
+          :order_item,
+          product: product,
+          bakery: bakery,
+          daily_item_count: daily_item_count
+        )
+      end
     end
 
     trait :active do

@@ -74,8 +74,8 @@ describe Order do
       product_1 = create(:product, bakery: bakery, inclusion: inclusion)
       product_2 = create(:product, bakery: bakery, motherdough: motherdough)
 
-      order.order_items << build(:order_item, order: nil, product: product_1)
-      order.order_items << build(:order_item, order: nil, product: product_2)
+      order.order_items << build(:order_item, product: product_1)
+      order.order_items << build(:order_item, product: product_2)
       order.save
       expect(order.total_lead_days).to eq(5)
     end

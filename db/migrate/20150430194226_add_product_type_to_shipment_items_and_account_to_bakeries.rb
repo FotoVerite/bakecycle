@@ -2,8 +2,9 @@ class AddProductTypeToShipmentItemsAndAccountToBakeries < ActiveRecord::Migratio
   def change
     add_column :shipment_items, :product_product_type, :string
 
+    # Save to trigger an update to product info
     ShipmentItem.find_each do |shipment_item|
-      shipment_item.product_product_type = Product.find_by(id: shipment_item.product_id).product_type
+      shipment_item.product = Product.find_by!(id: shipment_item.product_id)
       shipment_item.save!
     end
 
