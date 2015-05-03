@@ -9,7 +9,7 @@ class Recipe < ActiveRecord::Base
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
-  enum recipe_type: [:dough, :preferment, :inclusion, :ingredient]
+  enum recipe_type: [:dough, :preferment, :inclusion]
   enum mix_size_unit: [:oz, :lb, :g, :kg]
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
