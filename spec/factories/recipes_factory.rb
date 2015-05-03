@@ -20,10 +20,6 @@ FactoryGirl.define do
       lead_days 0
     end
 
-    factory :recipe_ingredient do
-      recipe_type :ingredient
-    end
-
     trait :with_ingredients do
       lead_days 0
       transient do

@@ -6,7 +6,7 @@ describe LegacyImporter::RecipeImporter do
   let(:importer) { LegacyImporter::RecipeImporter.new(bakery, legacy_recipe) }
 
   let(:legacy_recipe) do
-    HashWithIndifferentAccess.new(
+    {
       recipe_id: 10000,
       recipe_name: 'Baguette',
       recipe_instructions: '',
@@ -16,7 +16,7 @@ describe LegacyImporter::RecipeImporter do
       recipe_active: 'Y',
       recipe_print: 'Y',
       recipe_mix_size: 80
-    )
+    }
   end
 
   describe '#import!' do

@@ -10,10 +10,9 @@ module LegacyImporter
     FIELDS_MAP = %w(
       recipe_name         name
       recipe_instructions note
-      recipe_daystomake   lead_days
       recipe_type         recipe_type
       recipe_mix_size     mix_size
-    ).map(&:to_sym).each_slice(2)
+    )
     # recipe_extra
     # recipe_active
     # recipe_print
@@ -33,16 +32,19 @@ module LegacyImporter
     private
 
     def attributes
-      attrs = attr_map
+      attrs = FieldMapper.new(FIELDS_MAP).translate(data)
       attrs.merge(
         mix_size_unit: :kg,
-        recipe_type: RECIPE_TYPE_MAP[attrs[:recipe_type]] || attrs[:recipe_type]
+        recipe_type: RECIPE_TYPE_MAP[attrs[:recipe_type]] || attrs[:recipe_type],
+        lead_days: calculate_lead_days
       )
     end
 
-    def attr_map
-      FIELDS_MAP.each_with_object({}) do |(legacy_field, field), data_hash|
-        data_hash[field] = data[legacy_field] unless data[legacy_field] == ''
+    def calculate_lead_days
+      if data[:recipe_type] == 'inclusion'
+        1
+      else
+        data[:recipe_daystomake] - 1
       end
     end
   end
