@@ -24,6 +24,8 @@ class Client < ActiveRecord::Base
   geocoded_by :full_delivery_address
   after_validation :geocode, if: :needs_geocode?
 
+  scope :active, -> { where(active: true) }
+
   def delivery_fee?
     !no_delivery_fee?
   end

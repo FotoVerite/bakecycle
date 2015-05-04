@@ -14,6 +14,8 @@
   </tbody>
 </table>
 
-<div class="pagination">
-  <%= will_paginate @orders %>
-</div>
+<% if will_paginate @orders %>
+  <div class="pagination">
+    <%= will_paginate @orders %>
+  </div>
+<% end %>

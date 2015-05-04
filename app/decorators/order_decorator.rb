@@ -21,4 +21,8 @@ class OrderDecorator < Draper::Decorator
   def available_clients
     h.item_finder.clients.order(:name)
   end
+
+  def shipments
+    Shipment.upcoming(object)
+  end
 end

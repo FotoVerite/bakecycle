@@ -24,11 +24,8 @@ class Order < ActiveRecord::Base
   validate  :standing_order_date_can_not_overlap
 
   delegate(
-    :weekly_delivery_fee?,
-    :daily_delivery_fee?,
-    :delivery_fee,
-    :delivery_minimum,
-    :name,
+    :weekly_delivery_fee?, :daily_delivery_fee?, :delivery_fee,
+    :delivery_minimum, :name,
     to: :client, prefix: true
   )
 
@@ -121,5 +118,26 @@ class Order < ActiveRecord::Base
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
     end
+  end
+
+  def self.search(fields)
+    search_by_client(fields[:client_id])
+      .search_by_route(fields[:route_id])
+      .search_by_date(fields[:date])
+  end
+
+  def self.search_by_client(client_id)
+    return all if client_id.blank?
+    where(client_id: client_id)
+  end
+
+  def self.search_by_route(route_id)
+    return all if route_id.blank?
+    where(route_id: route_id)
+  end
+
+  def self.search_by_date(date)
+    return all if date.blank?
+    where('start_date <= ?', date).where('end_date >= ? OR end_date is NULL', date)
   end
 end
