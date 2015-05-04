@@ -7,7 +7,9 @@ class ProductCounter
   end
 
   def shipments
-    @_shipments ||= Shipment.where(bakery: bakery).search_by_date(date)
+    @_shipments ||= Shipment.where(bakery: bakery)
+      .search_by_date(date)
+      .order(:route_departure_time, :route_name, :client_name)
   end
 
   def products
