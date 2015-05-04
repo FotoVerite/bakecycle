@@ -10,13 +10,6 @@ Feature: Shipments management
     And There are "biencuit" bakery clients named "amyavocado" and "francesco"
     And There are "biencuit" shipments with clients named "andysdecaf" and "mandos"
 
-  Scenario: I should be able to view shipments
-    Given There are "30" shipments for "mandos"
-    And I am on the "shipments" page
-    Then I should see shipments for "mandos"
-    When I click on "Next"
-    Then I should see shipments for "mandos"
-
   Scenario: I should be able to filter on the shipment index page
     Given I am on the "shipments" page
     And I filter shipments by the client "mandos"
@@ -31,7 +24,7 @@ Feature: Shipments management
     Then I should see a list of shipments for only the past week
 
   @javascript
-  Scenario: I should be able to add a shipment
+  Scenario: I should be able to manage a shipment
     Given I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
@@ -46,21 +39,17 @@ Feature: Shipments management
     And I click on "Update"
     Then I should see that the shipment's client name is "francesco"
 
-    And I click on "Delete"
-    And I confirm popup
-    Then I should see confirmation the shipment for "francesco" was deleted
-    And the shipment for "francesco" should not be present
-
-
-  @javascript
-  Scenario: When I edit the shipment with invalid data I should an error
-    When I am on the shipment edit page for the client "mandos"
-    And I change the shipment date to ""
+    When I change the shipment date to ""
     And I click on "Update"
     Then "can't be blank" should be present
     When I change the shipment date to "2015-01-01"
     And I click on "Update"
     Then "You have updated the shipment" should be present
+
+    And I click on "Delete"
+    And I confirm popup
+    Then I should see confirmation the shipment for "francesco" was deleted
+    And the shipment for "francesco" should not be present
 
   @javascript
   Scenario: I should be able to manage shipment items

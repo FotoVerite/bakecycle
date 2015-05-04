@@ -19,12 +19,6 @@ When(/^I fill out Shipment form with:$/) do |table|
   )
 end
 
-When(/^I am on the shipment edit page for the client "(.*?)"$/) do |name|
-  client = Client.find_by(name: name)
-  shipment = Shipment.find_by(client_id: client)
-  visit edit_shipment_path(shipment)
-end
-
 When(/^I change the shipment's client name to "(.*?)"$/) do |name|
   select name, from: 'shipment_client_id'
 end
@@ -44,12 +38,6 @@ When(/^I fill out Shipment Item form with:$/) do |table|
     '.fields .product_price_input:last' => shipment['product_price'],
     '.fields select:last' => shipment['product']
   )
-end
-
-When(/^I am on the edit page for "(.*?)" shipment$/) do |name|
-  client = Client.find_by(name: name)
-  shipment = Shipment.find_by(client_id: client)
-  visit edit_shipment_path(shipment)
 end
 
 Then(/^the product "(.*?)" should be selected$/) do |product_name|
@@ -115,17 +103,6 @@ end
 
 Then(/^I should see the search term "(.*?)" preserved in the client search box$/) do |client|
   find(:xpath, "//select/option[@selected='selected' and text()='#{client}']")
-end
-
-Given(/^There are "(.*?)" shipments for "(.*?)"$/) do |number, name|
-  client = Client.find_by(name: name)
-  create_list(:shipment, number.to_i, client: client, bakery: client.bakery)
-end
-
-Then(/^I should see shipments for "(.*?)"$/) do |name|
-  within '.responsive-table' do
-    expect(page).to have_content(name)
-  end
 end
 
 Then(/^I should see confirmation the shipment for "(.*?)" was deleted$/) do |shipment|
