@@ -1,20 +1,20 @@
 require 'rails_helper'
 
-describe RecipeService do
+describe ProductCounter do
   let(:today) { Time.zone.today }
   let(:tomorrow) { Time.zone.tomorrow }
   let(:bakery) { create(:bakery) }
-  let(:recipe_service) { RecipeService.new(today, bakery) }
+  let(:product_counter) { ProductCounter.new(today, bakery) }
 
   describe '#date' do
     it 'returns date' do
-      expect(recipe_service.date).to eq(today)
+      expect(product_counter.date).to eq(today)
     end
   end
 
   describe '#bakery' do
     it 'returns bakery' do
-      expect(recipe_service.bakery).to eq(bakery)
+      expect(product_counter.bakery).to eq(bakery)
     end
   end
 
@@ -22,16 +22,7 @@ describe RecipeService do
     it 'returns collection of shipments for the date' do
       shipment = create(:shipment, bakery: bakery, date: today)
       create(:shipment, bakery: bakery, date: tomorrow)
-      expect(recipe_service.shipments).to contain_exactly(shipment)
-    end
-  end
-
-  describe '#shipment_items' do
-    it 'returns collection of shipment_items that belongs to shipments searched by date' do
-      shipments = create_list(:shipment, 2, shipment_item_count: 1, date: today, bakery: bakery)
-      items = shipments.map(&:shipment_items).flatten
-      create(:shipment)
-      expect(recipe_service.shipment_items).to match_array(items)
+      expect(product_counter.shipments).to contain_exactly(shipment)
     end
   end
 
@@ -40,7 +31,7 @@ describe RecipeService do
       create_list(:shipment, 2, date: today, bakery: bakery)
       create(:shipment, date: tomorrow)
       products = Product.all.to_a - [Product.last]
-      expect(recipe_service.products).to match_array(products)
+      expect(product_counter.products).to match_array(products)
     end
   end
 
@@ -51,7 +42,7 @@ describe RecipeService do
       cookie = create(:product, product_type: :cookie, bakery: bakery)
       create(:shipment_item, shipment: shipment, product: bread, bakery: bakery)
       create(:shipment_item, shipment: shipment, product: cookie, bakery: bakery)
-      expect(recipe_service.product_types).to match_array(Product.all.pluck(:product_type).sort)
+      expect(product_counter.product_types).to match_array(Product.all.pluck(:product_type).sort)
     end
   end
 
@@ -60,7 +51,7 @@ describe RecipeService do
       create_list(:shipment, 2, date: today, bakery: bakery)
       route = create(:route, bakery: bakery)
       routes = Route.order('departure_time ASC').to_a - [route]
-      expect(recipe_service.routes).to match_array(routes)
+      expect(product_counter.routes).to match_array(routes)
     end
   end
 
@@ -73,8 +64,8 @@ describe RecipeService do
       create(:shipment, date: today, shipment_item_count: 0, bakery: bakery, client: client1, route: route)
       create(:shipment, date: today, shipment_item_count: 0, bakery: bakery, client: client2, route: route)
       create(:shipment, date: today, shipment_item_count: 0, bakery: bakery, client: client3)
-      expect(recipe_service.route_shipment_clients(route)).to match_array([client1, client2])
-      expect(recipe_service.route_shipment_clients(route)).to_not include(client3)
+      expect(product_counter.route_shipment_clients(route)).to match_array([client1, client2])
+      expect(product_counter.route_shipment_clients(route)).to_not include(client3)
     end
   end
 
@@ -104,12 +95,12 @@ describe RecipeService do
         }
       }
 
-      expect(recipe_service.product_counts).to eq(counts)
+      expect(product_counter.product_counts).to eq(counts)
     end
 
     it 'caches the output' do
       create_list(:shipment, 2, date: today)
-      expect(recipe_service.product_counts).to be(recipe_service.product_counts)
+      expect(product_counter.product_counts).to be(product_counter.product_counts)
     end
   end
 end

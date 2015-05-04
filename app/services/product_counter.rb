@@ -1,4 +1,4 @@
-class RecipeService
+class ProductCounter
   attr_reader :date, :bakery
 
   def initialize(date, bakery)
@@ -8,10 +8,6 @@ class RecipeService
 
   def shipments
     @_shipments ||= Shipment.where(bakery: bakery).search_by_date(date)
-  end
-
-  def shipment_items
-    @_shipment_items ||= ShipmentItem.where(shipment_id: shipments.pluck(:id))
   end
 
   def products
@@ -27,7 +23,7 @@ class RecipeService
   end
 
   def route_shipment_clients(route)
-    clients_id = route.shipments.pluck(:client_id).uniq
+    clients_id = Shipment.where(route_id: route.id).pluck(:client_id).uniq
     Client.where(bakery: bakery, id: clients_id).decorate
   end
 
@@ -47,6 +43,10 @@ class RecipeService
   end
 
   private
+
+  def shipment_items
+    @_shipment_items ||= ShipmentItem.where(shipment_id: shipments.pluck(:id))
+  end
 
   def shipment_route_index
     @_shipment_route_index ||= shipments.pluck(:id, :route_id).to_h

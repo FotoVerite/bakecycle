@@ -2,7 +2,7 @@ class DailyTotalsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @recipes = RecipeService.new(date_query, current_bakery)
+    @recipes = ProductCounter.new(date_query, current_bakery)
   end
 
   def print

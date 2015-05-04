@@ -23,9 +23,6 @@ class Shipment < ActiveRecord::Base
   validates :bakery, presence: true
   validates :delivery_fee, presence: true, numericality: true
 
-  # will_paginate
-  self.per_page = 20
-
   # create route= and route_id= methods
   denormalize :route, [:id, :name]
 

@@ -5,10 +5,7 @@ describe DeliveryListPdf do
   let(:today) { Time.zone.today }
 
   it 'renders shipments clients on a date' do
-    route = create(:route, bakery: bakery)
-    create_list(:shipment, 2, date: today, shipment_item_count: 2, route: route, bakery: bakery)
-    create_list(:shipment, 2, date: today, shipment_item_count: 2)
-
+    create_list(:shipment, 2, date: today, shipment_item_count: 2, bakery: bakery)
     pdf = DeliveryListPdf.new(today, bakery)
     expect(pdf.render).to_not be_nil
   end
