@@ -6,15 +6,18 @@
         <li class="<%= active_nav?(:ingredients) %>"><%= link_to("Ingredients", ingredients_path)%></li>
         <li class="<%= active_nav?(:recipes) %>"><%= link_to("Recipes", recipes_path) %></li>
         <li class="<%= active_nav?(:products) %>"><%= link_to("Products", products_path) %></li>
-        <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
+
+        <li class="<%= active_nav?(:print_recipes) %>"><%= link_to("Print Recipes", print_recipes_path) %></li>
+        <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
+        <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
+
         <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
         <li class="<%= active_nav?(:active_orders) %>"><%= link_to("Active Orders", active_orders_path)%></li>
         <li class="<%= active_nav?(:orders) %>"><%= link_to("Order History", orders_path) %></li>
         <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
-        <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
+
+        <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
         <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
-        <li class="<%= active_nav?(:print_recipes) %>"><%= link_to("Print Recipes", print_recipes_path) %></li>
-        <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
       <% end %>
 
       <% if can? :manage, User %>
@@ -28,7 +31,6 @@
       <% if current_bakery %>
         <li class="<%= active_nav?(:bakeries) %>"><%= link_to('My Bakery', my_bakeries_path) %></li>
       <% end %>
-
     </ul>
   </div>
 </div>
