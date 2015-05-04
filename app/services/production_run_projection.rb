@@ -7,35 +7,19 @@ class ProductionRunProjection
   end
 
   def order_items
-    @_order_items ||= active_order_items.quantity_on?(start_date)
+    @_order_items ||= bakery
+      .order_items
+      .production_start_on?(start_date)
+      .select { |order_item| order_item.production_start_on?(start_date) }
   end
 
   def products_info
-    @_products_info ||= groups.collect do |group|
-      create_product_info(group)
-    end
+    @_products_info ||= groups.collect do |(_product, grouped_order_items)|
+      OrderItemQuantities.new(grouped_order_items, start_date)
+    end.compact
   end
 
   private
-
-  def create_product_info(group)
-    product, order_items = group
-    order_quantities = OrderItemQuantities.new(order_items, start_date)
-    OpenStruct.new(
-      product: product,
-      order_quantity: order_quantities.order_quantity,
-      overbake_quantity: order_quantities.overbake_quantity,
-      total_quantity: order_quantities.total_quantity
-    )
-  end
-
-  def orders
-    bakery.orders.active(start_date)
-  end
-
-  def active_order_items
-    OrderItem.where(order_id: orders.map(&:id)).includes(product: [:inclusion, :motherdough])
-  end
 
   def groups
     order_items.group_by(&:product)

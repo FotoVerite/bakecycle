@@ -10,9 +10,16 @@ FactoryGirl.define do
 
     transient do
       order_item_count 1
-      total_lead_days 2
+      product_total_lead_days 2
       daily_item_count nil
-      product { |t| t.association(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
+      product { |t|
+        t.association(
+          :product,
+          :with_motherdough,
+          bakery: bakery,
+          force_total_lead_days: product_total_lead_days
+        )
+      }
     end
 
     order_items do |t|
@@ -21,6 +28,7 @@ FactoryGirl.define do
           :order_item,
           product: product,
           bakery: bakery,
+          order: t.instance_variable_get(:@instance),
           daily_item_count: daily_item_count
         )
       end

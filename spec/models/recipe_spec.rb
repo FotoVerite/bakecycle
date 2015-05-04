@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Recipe do
   let(:bakery) { build_stubbed(:bakery) }
   let(:recipe) { build_stubbed(:recipe, bakery: bakery) }
+  let(:product) { build_stubbed(:product, motherdough: recipe) }
 
   it 'has model attributes' do
     expect(recipe).to respond_to(:name)
@@ -33,7 +34,7 @@ describe Recipe do
 
   describe 'unique tests' do
     it 'has validations that need the db' do
-      recipe = build(:recipe)
+      recipe = build(:recipe, name: 'parent recipe')
       expect(recipe).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     end
   end
@@ -42,10 +43,13 @@ describe Recipe do
     let(:recipe) { create(:recipe) }
     let(:bakery) { recipe.bakery }
 
-    it 'checks the lead time of all included recipes, and adds the longest to its own total_lead_days' do
-      dough = build(:recipe_preferment, bakery: bakery, lead_days: 4)
+    it 'calculated from own lead_days plus max of included recipe lead days, is called in an after save' do
+      product
+      dough = build(:recipe_preferment, name: 'child recipe', bakery: bakery, lead_days: 4)
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
+      recipe.save
+      recipe.reload
 
       expect(recipe.total_lead_days).to eq(6)
     end
@@ -54,6 +58,10 @@ describe Recipe do
       dough = build(:recipe_preferment, :with_nested_recipes, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
+      expect(recipe.calculate_total_lead_days).to eq(8)
+
+      recipe.save
+      recipe.reload
       expect(recipe.total_lead_days).to eq(8)
     end
   end

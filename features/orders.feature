@@ -68,11 +68,10 @@ Feature: Orders
     When I am on the edit page for "andysdecaf" order
     And I click on "X"
     And I click on "Update"
-    Then "You must choose a product before saving" should be present
     When I click on "Add Product"
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
     And I click on "Update"
-    Then "X" should be present "2" times
+    Then "remove_order_item" button should be present "2" times
 
