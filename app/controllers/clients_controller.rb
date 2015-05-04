@@ -4,6 +4,7 @@ class ClientsController < ApplicationController
   decorates_assigned :clients, :client
 
   def index
+    @clients = @clients.order(:name)
   end
 
   def new
