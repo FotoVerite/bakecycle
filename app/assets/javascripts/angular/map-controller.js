@@ -4,13 +4,13 @@
 
   app.controller('mapCtrl', ['$window', '$scope', function ($window, $scope) {
     $scope.$on('mapInitialized', function (event, map) {
-      angular.element($window).bind('resize', function () {
-        var resetCenter = debounce(function () {
-          var myLatLng = new google.maps.LatLng($scope.center[0], $scope.center[1]);
-          return map.setCenter(myLatLng);
-        }, 250);
-        resetCenter();
-      });
+      var resetCenter = function () {
+        var myLatLng = new google.maps.LatLng($scope.center[0], $scope.center[1]);
+        map.setCenter(myLatLng);
+      };
+      resetCenter();
+      var onMapResize = debounce(resetCenter, 250)
+      angular.element($window).bind('resize', onMapResize);
     });
 
     $scope.openMap = function (object, center) {
@@ -19,7 +19,7 @@
 
     function debounce(func, wait, immediate) {
       var timeout;
-      return function() {
+      return function debounced() {
         var context = this, args = arguments;
         var later = function() {
           timeout = null;
