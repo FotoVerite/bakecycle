@@ -13,8 +13,7 @@ describe Route do
 
   it 'has validations' do
     expect(route).to validate_presence_of(:name)
-    expect(route).to validate_length_of(:name).is_at_most(150)
     expect(route).to validate_presence_of(:departure_time)
-    expect(route).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    expect(build(:route)).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
   end
 end

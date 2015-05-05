@@ -24,7 +24,7 @@ class Shipment < ActiveRecord::Base
   validates :delivery_fee, presence: true, numericality: true
 
   # create route= and route_id= methods
-  denormalize :route, [:id, :name]
+  denormalize :route, [:id, :name, :departure_time]
 
   # create client= and client_id= methods
   denormalize :client, [
