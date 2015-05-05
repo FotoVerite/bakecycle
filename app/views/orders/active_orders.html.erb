@@ -1,17 +1,7 @@
-<% provide(:title, "Active Orders - #{@date.strftime('%A %b. %e, %Y')}") %>
-<h1>Active Orders &mdash; <%= @date.strftime("%A %b. %e, %Y") %>
+<% provide(:title, "Active Orders - #{@search_form.date.strftime('%A %b. %e, %Y')}") %>
+<h1>Active Orders &mdash; <%= @search_form.date.strftime("%A %b. %e, %Y") %>
 
 <p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
 
-<%= simple_form_for :search, method: :get do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
-    </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
-    </div>
-  </div>
-<% end %>
-
+<%= render partial: 'search_form', object: @search_form, locals: { orders_destination: active_orders_path }  %>
 <%= render partial: 'order_table' %>

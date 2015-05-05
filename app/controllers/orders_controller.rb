@@ -1,20 +1,28 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
+  before_action :load_search_form, only: [:index, :active_orders]
   load_and_authorize_resource
   decorates_assigned :orders, :order
 
   def index
-    @orders = @orders.sort_for_history.paginate(page: params[:page])
+    @orders = @orders
+      .search(@search_form)
+      .sort_for_history
+      .paginate(page: params[:page])
   end
 
   def active_orders
     active_nav(:active_orders)
-    @date = date_query
-    @orders = item_finder.active_orders(@date).sort_for_active.paginate(page: params[:page])
+    @search_form.date ||= Time.zone.today
+    @orders = @orders
+      .active(@search_form.date)
+      .search(@search_form)
+      .sort_for_active
+      .paginate(page: params[:page])
   end
 
   def new
-    @order = Order.new(order_type: 'standing', start_date: Time.zone.today)
+    @order.assign_attributes(order_type: 'standing', start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
     @order.order_items.build
   end
@@ -29,7 +37,6 @@ class OrdersController < ApplicationController
   end
 
   def edit
-    @shipments = Shipment.upcoming(@order)
   end
 
   def update
@@ -37,7 +44,6 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
     else
-      @shipments = Shipment.upcoming(@order)
       render 'edit'
     end
   end
@@ -50,8 +56,8 @@ class OrdersController < ApplicationController
 
   private
 
-  def date_query
-    Chronic.parse(params[:date]) || Time.zone.today
+  def load_search_form
+    @search_form = OrderSearchForm.new(params[:search])
   end
 
   def order_params
