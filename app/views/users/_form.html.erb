@@ -14,16 +14,14 @@
       </div>
     </div>
 
-    <% unless f.object.persisted? %>
-      <div class="row">
-        <div class="large-6 small-12 columns">
-          <%= f.input :password, as: :password %>
-        </div>
-        <div class="large-6 small-12 columns">
-          <%= f.input :password_confirmation, as: :password %>
-        </div>
+    <div class="row">
+      <div class="large-6 small-12 columns">
+        <%= f.input :password, as: :password %>
       </div>
-    <% end %>
+      <div class="large-6 small-12 columns">
+        <%= f.input :password_confirmation, as: :password %>
+      </div>
+    </div>
 
     <div class="row">
       <div class="large-6 small-12 columns">
