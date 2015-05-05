@@ -4,8 +4,8 @@ module ApplicationHelper
     'medium-6 medium-offset-3 small-10 small-offset-1 columns light-grey-bg-pattern'
   end
 
-  def active_nav?(section)
-    'active' if section == @_active_nav
+  def active_nav?(*sections)
+    'active' if sections.include? @_active_nav
   end
 
   def full_title(page_title = nil)
