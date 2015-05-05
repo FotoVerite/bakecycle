@@ -1,8 +1,14 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
+  decorates_assigned :users, :user
 
   def index
+    @users = @users
+      .includes(:bakery)
+      .joins(:bakery)
+      .order('bakeries.name asc')
+      .order(:name)
   end
 
   def new
@@ -38,6 +44,11 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :bakery_id)
+    user = params.require(:user).permit(:name, :email, :password, :password_confirmation, :bakery_id)
+    if user[:password].blank? && user[:password_confirmation].blank?
+      user.delete(:password)
+      user.delete(:password_confirmation)
+    end
+    user
   end
 end
