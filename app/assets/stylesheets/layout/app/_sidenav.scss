@@ -1,12 +1,25 @@
 .side-column {
+
   .columns {
-    padding: 0px;
+    padding: 0;
   }
 
-  .side-nav {
-    background: #fff;
-    border-right: 1px solid $bc-border-grey;
-    padding-bottom: 0px;
+  .header {
+    text-transform: uppercase;
+
+    &:hover,
+    &:focus {
+      color: $bc-green;
+      cursor: pointer;
+    }
+  }
+
+  .side-navigation {
+    background: $white;
+    border: 1px solid $bc-lightgrey;
+    display: block;
+    height: auto;
+    width: 100%;
 
     @media all and (max-width:1025px) {
       display: none;
@@ -15,42 +28,76 @@
     @media all and (min-width:1026px) {
       display: block !important;
     }
+  }
 
-    .active {
+  .main,
+  .sub {
+    list-style: none;
+    margin: 0;
+  }
+
+  .main {
+    color: $bc-darkgrey;
+    font-size: 14px;
+    letter-spacing: 1px;
+    line-height: 25px;
+    padding: 15px 30px 75px;
+
+    > li {
+      padding: 0 0 25px 50px;
+    }
+
+    @media all and (min-width: 1026px) and (max-width: 1291px) {
+      padding: 15px 10px 75px;
+
+      > li {
+        padding: 0 0 25px 30px;
+      }
+    }
+  }
+
+  .sub {
+    display: none;
+    font-size: 12px;
+    padding: 25px 0 0;
+  }
+
+  .icon {
+    display: inline-block;
+    height: 25px;
+    margin: 0 20px 0 -50px;
+    width: 25px;
+
+    @media all and (min-width: 1026px) and (max-width: 1291px) {
+      margin: 0 0 0 -30px;
+    }
+  }
+
+  a {
+    color: $bc-mediumgrey;
+    font-weight: 300;
+    line-height: 37px;
+    text-transform: none;
+
+    &:hover,
+    &:focus {
       color: $bc-green;
     }
 
-    li {
-      list-style: none;
-
-      &.active {
-
-        > a {
-
-          &:first-child:not(.button){
-            color: $bc-green;
-            font-weight: 600;
-          }
-        }
-      }
-
-      a {
-        &:hover,
-        &:not(.button):hover,
-        &:not(.button):focus {
-          color: $bc-green;
-        }
-
-        &:not(.button) {
-          color: $bc-tuatara;
-        }
-      }
+    .header {
+      font-weight: 600;
     }
+  }
 
-    > li {
-      padding: 10px;
-      border-bottom: 1px solid #ebeaeb;
-      vertical-align: middle;
+  .active,
+  .active > a {
+    color: $bc-green;
+    font-weight: 600;
+  }
+
+  .active {
+    .sub {
+      display: block;
     }
   }
 }
