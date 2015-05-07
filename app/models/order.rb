@@ -18,7 +18,6 @@ class Order < ActiveRecord::Base
   validates :client, :client_id, presence: true
   validates :start_date, presence: true
   validate  :end_date_is_not_before_start_date
-  validates :order_items, presence: { message: 'You must choose a product before saving' }
   validates :order_type, presence: true, inclusion: %w(standing temporary)
   validates :bakery, presence: true
   validate  :standing_order_date_can_not_overlap
@@ -31,23 +30,25 @@ class Order < ActiveRecord::Base
 
   # rubocop:disable Metrics/MethodLength
   def self.active(date)
-    where('
-      start_date <= :date and (end_date is null OR end_date >= :date)
-      AND orders.id NOT IN (
-        select ID
-        FROM orders standing_orders
-        WHERE order_type = :standing
-        AND start_date <= :date and (end_date is null OR end_date >= :date)
-        AND (
-          SELECT count(id)
-          FROM orders temp_orders
-          WHERE order_type = :temporary
-          AND standing_orders.route_id = temp_orders.route_id
-          AND standing_orders.client_id = temp_orders.client_id
-          AND start_date <= :date and (end_date is null OR end_date >= :date)
-        ) > 0
+    sql = <<-SQL
+      orders.id in (
+        SELECT id from (
+          SELECT
+            id,
+            first_value(id) OVER (PARTITION BY client_id, route_id ORDER BY order_type DESC) active_order_id
+          FROM
+            orders
+          WHERE
+            start_date <= :date and (end_date is null OR end_date >= :date)
+          ORDER BY
+            client_id,
+            route_id,
+            order_type
+        ) active_orders
+        WHERE id = active_order_id
       )
-    ', date: date, standing: 'standing', temporary: 'temporary')
+    SQL
+    where(sql, date: date, standing: 'standing', temporary: 'temporary')
   end
   # rubocop:enable Metrics/MethodLength
 
@@ -111,7 +112,7 @@ class Order < ActiveRecord::Base
   end
 
   def total_lead_days
-    products.map(&:total_lead_days).max || 0
+    products.maximum(:total_lead_days) || 0
   end
 
   def daily_subtotal(date)

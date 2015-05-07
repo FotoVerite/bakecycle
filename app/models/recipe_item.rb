@@ -7,6 +7,8 @@ class RecipeItem < ActiveRecord::Base
   validates :bakers_percentage, format: { with: /\A\d+(?:\.\d{0,4})?\z/ }, numericality: { greater_than: 0 }
   validate :no_infinite_loops
 
+  after_save :touch_recipe
+
   delegate :total_lead_days, to: :inclusionable, allow_nil: true
 
   def no_infinite_loops
@@ -24,5 +26,9 @@ class RecipeItem < ActiveRecord::Base
 
   def inclusionable_id_type
     "#{inclusionable_id}-#{inclusionable_type}" if inclusionable
+  end
+
+  def touch_recipe
+    recipe.try(:touch)
   end
 end

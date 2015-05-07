@@ -4,7 +4,7 @@ module Denormalization
   class_methods do
     def denormalize(object_name, fields)
       define_id_method(object_name)
-      define_obj_metho(object_name, fields)
+      define_obj_method(object_name, fields)
     end
 
     def define_id_method(object_name)
@@ -18,7 +18,7 @@ module Denormalization
       end
     end
 
-    def define_obj_metho(object_name, fields)
+    def define_obj_method(object_name, fields)
       define_method "#{object_name}=" do |object|
         object ||= OpenStruct.new
         fields.each do |field|

@@ -73,6 +73,10 @@ Then(/^"(.*?)" should be present "(.*?)" times$/) do |keyword, count|
   page.find(:xpath, '//body').text.split(regexp).length.should == count + 1
 end
 
+Then(/^"(.*?)" button should be present "(.*?)" times$/) do |button_class, count|
+  have_css(".#{button_class}", count: count.to_i)
+end
+
 Then(/^I should see "(.*?)" information about "(.*?)"$/) do |object, name|
   expect(page).to have_content("#{object}: #{name}")
 end

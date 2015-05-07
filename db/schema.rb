@@ -108,7 +108,10 @@ ActiveRecord::Schema.define(version: 20150507163500) do
     t.integer  "sunday"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "total_lead_days", null: false
   end
+
+  add_index "order_items", ["total_lead_days"], name: "index_order_items_on_total_lead_days", using: :btree
 
   create_table "orders", force: :cascade do |t|
     t.integer  "client_id"
@@ -148,20 +151,21 @@ ActiveRecord::Schema.define(version: 20150507163500) do
   add_index "production_runs", ["bakery_id"], name: "index_production_runs_on_bakery_id", using: :btree
 
   create_table "products", force: :cascade do |t|
-    t.string   "name",                         null: false
-    t.integer  "product_type",                 null: false
-    t.decimal  "weight",                       null: false
-    t.integer  "unit",                         null: false
+    t.string   "name",                          null: false
+    t.integer  "product_type",                  null: false
+    t.decimal  "weight",                        null: false
+    t.integer  "unit",                          null: false
     t.text     "description"
-    t.decimal  "over_bake",      default: 0.0, null: false
+    t.decimal  "over_bake",       default: 0.0, null: false
     t.integer  "motherdough_id"
     t.integer  "inclusion_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "base_price",                   null: false
-    t.integer  "bakery_id",                    null: false
+    t.decimal  "base_price",                    null: false
+    t.integer  "bakery_id",                     null: false
     t.string   "sku"
     t.string   "legacy_id"
+    t.integer  "total_lead_days",               null: false
   end
 
   add_index "products", ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true, using: :btree
@@ -182,11 +186,12 @@ ActiveRecord::Schema.define(version: 20150507163500) do
     t.decimal  "mix_size"
     t.integer  "mix_size_unit"
     t.integer  "recipe_type"
-    t.integer  "lead_days",     default: 0, null: false
+    t.integer  "lead_days",       default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "bakery_id",                 null: false
+    t.integer  "bakery_id",                   null: false
     t.string   "legacy_id"
+    t.integer  "total_lead_days",             null: false
   end
 
   add_index "recipes", ["legacy_id", "bakery_id"], name: "index_recipes_on_legacy_id_and_bakery_id", unique: true, using: :btree

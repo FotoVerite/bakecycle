@@ -49,6 +49,7 @@ describe Product do
     end
 
     it 'returns 1 if no recipes' do
+      product.save
       expect(product.total_lead_days).to eq(1)
     end
   end
@@ -68,6 +69,16 @@ describe Product do
       expect(product.price(2)).to eq(9)
       expect(product.price(3)).to eq(8)
       expect(product.price(4)).to eq(7)
+    end
+  end
+
+  describe 'after touch' do
+    it 'updates its total lead days based on the motherdough' do
+      dough = FactoryGirl.create(:recipe_motherdough)
+      product = FactoryGirl.create(:product, motherdough: dough)
+      dough.update(lead_days: 9)
+      product.reload
+      expect(product.total_lead_days).to eq(9)
     end
   end
 end

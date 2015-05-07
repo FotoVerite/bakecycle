@@ -86,33 +86,58 @@ describe OrderItem do
   end
 
   context 'start dates' do
-    let(:lead_time) { order_item.product.total_lead_days }
+    let(:today) { Time.zone.today }
+    let(:last_week) { today - 7.days }
+    let(:two_days_ago) { today - 2.days }
+    let!(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
+    let(:order_item) { order.order_items.first }
+    let(:lead_time) { order_item.total_lead_days }
 
-    before do
-      order_item.update(wednesday: 0)
-    end
-
-    describe '#quantity_on?(date)' do
+    describe '#production_start_on?(date)' do
       it 'returns true if production can start on the date given based on lead time and day of week' do
         sunday = Time.zone.now.sunday
-        expect(order_item.quantity_on?(sunday)).to eq(true)
+        expect(order_item.production_start_on?(sunday)).to eq(true)
       end
 
       it 'returns false if production cannot start on the date given based on lead time and day of week' do
+        order_item.update(wednesday: 0)
         monday = Time.zone.now.monday
-        expect(order_item.quantity_on?(monday)).to eq(false)
+        expect(order_item.production_start_on?(monday)).to eq(false)
       end
     end
 
-    describe '.quantity_on?(date)' do
+    describe '.production_start_on?(date)' do
       it 'returns only order_items that have a quantity for a given date' do
-        sunday = Time.zone.now.sunday
-        order_items = OrderItem.quantity_on?(sunday)
-        expect(order_items.include?(order_item)).to eq(true)
+        expect(OrderItem.production_start_on?(today)).to contain_exactly(order_item)
+        expect(OrderItem.production_start_on?(two_days_ago)).to contain_exactly(order_item)
+        expect(OrderItem.production_start_on?(last_week)).to_not contain_exactly(order_item)
+      end
 
-        monday = Time.zone.now.monday
-        order_items = OrderItem.quantity_on?(monday)
-        expect(order_items.include?(order_item)).to eq(false)
+      it 'only returns items from active orders' do
+        temp_order = create(
+          :temporary_order,
+          bakery: order.bakery,
+          client: order.client,
+          route: order.route,
+          start_date: today + 1.day,
+          order_item_count: 1,
+          product_total_lead_days: 2
+        )
+        temp_order_item = temp_order.order_items.first
+        expect(OrderItem.production_start_on?(two_days_ago)).to contain_exactly(order_item)
+        expect(OrderItem.production_start_on?(today - 1.day)).to contain_exactly(temp_order_item)
+      end
+    end
+
+    context 'after_touch' do
+      describe 'update_total_lead_days' do
+        it 'updates its total_lead_days when the product is updated' do
+          order_item = create(:order_item, total_lead_days: 3)
+          product = order_item.product
+          product.update(total_lead_days: 8)
+          order_item.reload
+          expect(order_item.total_lead_days).to eq(8)
+        end
       end
     end
   end

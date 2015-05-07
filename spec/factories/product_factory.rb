@@ -10,15 +10,15 @@ FactoryGirl.define do
     bakery
 
     transient do
-      total_lead_days 2
+      force_total_lead_days 2
     end
 
     trait :with_inclusion do
-      inclusion { |t| t.association(:recipe_inclusion, bakery: bakery, lead_days: total_lead_days) }
+      inclusion { |t| t.association(:recipe_inclusion, bakery: bakery, lead_days: force_total_lead_days) }
     end
 
     trait :with_motherdough do
-      motherdough { |t| t.association(:recipe_motherdough, bakery: bakery, lead_days: total_lead_days) }
+      motherdough { |t| t.association(:recipe_motherdough, bakery: bakery, lead_days: force_total_lead_days) }
     end
 
     trait :with_recipe_items do

@@ -33,8 +33,32 @@ class Product < ActiveRecord::Base
 
   before_validation :strip_name
 
+  before_save :set_total_lead_days, if: :update_total_lead_days?
+
+  after_save :touch_order_items
+
+  after_touch :update_total_lead_days
+
   def strip_name
     self.name = name.strip if name
+  end
+
+  def update_total_lead_days
+    update_columns(total_lead_days: set_total_lead_days)
+    touch_order_items
+  end
+
+  def set_total_lead_days
+    lead_days = [1, inclusion.try(:total_lead_days), motherdough.try(:total_lead_days)].compact.max
+    self.total_lead_days = lead_days
+  end
+
+  def update_total_lead_days?
+    new_record? || motherdough_id_changed? || inclusion_id_changed?
+  end
+
+  def touch_order_items
+    OrderItem.where(product_id: id).find_each(&:touch)
   end
 
   def reject_price_varients?(attributes)
@@ -54,10 +78,6 @@ class Product < ActiveRecord::Base
 
   def quantity_varient(quantity)
     price_varients.where('quantity <= ?', quantity).order('quantity desc').first
-  end
-
-  def total_lead_days
-    [1, inclusion.try(:total_lead_days), motherdough.try(:total_lead_days)].compact.max
   end
 
   def weight_with_unit

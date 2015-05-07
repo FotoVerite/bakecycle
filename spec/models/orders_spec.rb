@@ -31,7 +31,6 @@ describe Order do
     expect(order).to validate_presence_of(:client)
     expect(order).to validate_presence_of(:route)
     expect(order).to validate_presence_of(:start_date)
-    expect(order).to validate_presence_of(:order_items).with_message(/You must choose a product before saving/)
     expect(order).to validate_presence_of(:order_type)
   end
 
@@ -86,7 +85,6 @@ describe Order do
       client = create(:client, bakery: bakery)
       route = create(:route, bakery: bakery)
       order = create(:order, bakery: bakery, start_date: today, end_date: tomorrow, route: route, client: client)
-
       combinations = [
         { start_date: yesterday, end_date: yesterday, result: false },
         { start_date: yesterday, end_date: today, result: true },
@@ -106,7 +104,7 @@ describe Order do
 
       combinations.each do |combo|
         start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
-        order = build(
+        order = build_stubbed(
           :order,
           bakery: order.bakery,
           route: route, client: client,
@@ -137,7 +135,7 @@ describe Order do
 
       combinations.each do |combo|
         start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
-        order = build(
+        order = build_stubbed(
           :order,
           bakery: order.bakery,
           route: route,
@@ -199,7 +197,6 @@ describe Order do
       client = order.client
       temp_order = create(:temporary_order, start_date: today, client: client, route: order.route)
       different_route = create(:order, start_date: yesterday, client: client)
-
       expect(Order.active(yesterday)).to contain_exactly(order, different_route)
       expect(Order.active(today)).to contain_exactly(temp_order, different_route)
     end

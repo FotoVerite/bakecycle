@@ -23,6 +23,11 @@ class Recipe < ActiveRecord::Base
   validate :inclusionable_a_recipe?, if: :inclusion?
 
   before_save :make_lead_days_zero_if_inclusion
+  before_save :set_total_lead_days
+  after_save :touch_parent_recipes
+  after_save :touch_products
+
+  after_touch :update_total_lead_days
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
@@ -31,12 +36,30 @@ class Recipe < ActiveRecord::Base
     Product.where('motherdough_id = :id OR inclusion_id = :id', id: id)
   end
 
+  def update_total_lead_days
+    update_columns(total_lead_days: calculate_total_lead_days)
+    touch_parent_recipes
+    touch_products
+  end
+
+  def set_total_lead_days
+    self.total_lead_days = calculate_total_lead_days
+  end
+
+  def touch_parent_recipes
+    parent_recipes.each(&:touch)
+  end
+
+  def touch_products
+    products.each(&:touch)
+  end
+
   def reject_recipe_items(attributes)
     attributes['inclusionable_id_type'].blank?
   end
 
-  def total_lead_days
-    lead_days + (child_recipes.map(&:total_lead_days).max || 0)
+  def calculate_total_lead_days
+    lead_days + (child_recipes.maximum(:total_lead_days) || 0)
   end
 
   def make_lead_days_zero_if_inclusion
