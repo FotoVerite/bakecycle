@@ -12,12 +12,12 @@ module LegacyImporter
 
     FIELDS_MAP = %w(
       product_name          name
-      product_shortname     sku
       product_description   description
       product_weight_g      weight
       product_extra         over_bake
       product_type          product_type
     )
+    # product_shortname     sku
 
     PRODUCT_TYPE_MAP = {
       'Bread' => :bread,
@@ -58,7 +58,8 @@ module LegacyImporter
         inclusion: inclusion,
         weight: adjusted_weight(attrs),
         product_type: PRODUCT_TYPE_MAP[attrs[:product_type]] || attrs[:product_type],
-        unit: :g
+        unit: :g,
+        sku: nil
       )
     end
 
