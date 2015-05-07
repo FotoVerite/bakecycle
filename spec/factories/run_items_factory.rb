@@ -6,5 +6,6 @@ FactoryGirl.define do
     product { |t| t.association(:product, bakery: bakery) }
     overbake_quantity 0
     order_quantity 0
+    production_run { |t| t.association(:production_run, bakery: bakery) }
   end
 end

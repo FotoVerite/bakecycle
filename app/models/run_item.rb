@@ -1,5 +1,6 @@
 class RunItem < ActiveRecord::Base
   belongs_to :product
+  belongs_to :production_run
 
   validates :product, presence: true, uniqueness: { scope: :production_run_id, message: '- remove duplicate products' }
   validates :overbake_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
