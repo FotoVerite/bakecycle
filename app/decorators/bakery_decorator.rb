@@ -8,4 +8,14 @@ class BakeryDecorator < Draper::Decorator
   def logo_errors?
     object.errors[:logo].any? || object.errors[:logo_content_type].any?
   end
+
+  def display_kickoff_time
+    return unless kickoff_time
+    kickoff_time.strftime('%I:%M%p')
+  end
+
+  def display_last_kickoff
+    return unless last_kickoff
+    last_kickoff.to_s(:long)
+  end
 end

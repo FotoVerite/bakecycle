@@ -51,11 +51,11 @@
     <legend>Run Time</legend>
     <div class="row">
       <div class="small-12 medium-6 columns select-time-wrapper">
-        <%= f.input :kickoff_time, as: :string, placeholder: "Select Start Time", input_html: { value: "#{@bakery.display_kickoff_time}", class: "js-timepicker" } %>
+        <%= f.input :kickoff_time, as: :string, placeholder: "Select Start Time", input_html: { value: "#{bakery.display_kickoff_time}", class: "js-timepicker" } %>
       </div>
       <div class="small-12 medium-6 columns">
         <%= f.label :last_kickoff %>
-        <input ng-disabled="true" type="text" value="<%= @bakery.display_last_kickoff %>" />
+        <input ng-disabled="true" type="text" value="<%= bakery.display_last_kickoff %>" />
       </div>
     </div>
   </fieldset>
