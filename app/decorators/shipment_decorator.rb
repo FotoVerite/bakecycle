@@ -56,7 +56,6 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def client_billing_name
-    return object.client_dba if object.client_dba.present?
     object.client_name
   end
 

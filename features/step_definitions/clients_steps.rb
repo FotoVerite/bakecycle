@@ -19,10 +19,9 @@ Then(/^I should not see clients "(.*?)" and "(.*?)"$/) do |client1, client2|
 end
 
 When(/^I fill out Client form with valid data$/) do
-  fill_in 'client_name', with: 'Test'
-  fill_in 'client_dba', with: 'text'
-  fill_in 'client_business_phone', with: 'text'
-  fill_in 'client_business_fax', with: 'text'
+  fill_in 'client_name', with: 'Wizards Coffee'
+  fill_in 'client_official_company_name', with: 'Wizard Development'
+  fill_in 'client_business_phone', with: '212-867-5309'
   fill_in 'client_delivery_address_street_1', with: 'text'
   fill_in 'client_delivery_address_street_2', with: 'text'
   fill_in 'client_delivery_address_city', with: 'text'

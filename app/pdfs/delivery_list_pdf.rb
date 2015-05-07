@@ -56,7 +56,7 @@ class DeliveryListPdf < PdfReport
   def client_information_row
     header = ['Client Name', 'Contact', 'Phone', 'Address', 'D-time']
     rows = @recipes.route_shipment_clients(@route).map do |client|
-      [client.delivery_name,
+      [client.name,
        client.primary_contact_name,
        client.primary_contact_phone,
        client.street_zipcode,

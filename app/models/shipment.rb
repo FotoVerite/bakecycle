@@ -12,23 +12,24 @@ class Shipment < ActiveRecord::Base
 
   before_validation :set_payment_due_date
 
+  validates :date, presence: true
+  validates :bakery, presence: true
+  validates :payment_due_date, presence: true
+  validates :delivery_fee, presence: true, numericality: true
   validates :client_id,
             :client_name,
             :client_billing_term,
             :client_billing_term_days, presence: true
-
-  validates :route_id, :route_name, presence: true
-  validates :payment_due_date, presence: true
-  validates :date, presence: true
-  validates :bakery, presence: true
-  validates :delivery_fee, presence: true, numericality: true
+  validates :route_id,
+            :route_name,
+            :route_departure_time, presence: true
 
   # create route= and route_id= methods
   denormalize :route, [:id, :name, :departure_time]
 
   # create client= and client_id= methods
   denormalize :client, [
-    :id, :name, :dba, :billing_term, :billing_term_days, :delivery_address_street_1,
+    :id, :name, :official_company_name, :billing_term, :billing_term_days, :delivery_address_street_1,
     :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
     :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2,
     :billing_address_city, :billing_address_state, :billing_address_zipcode,

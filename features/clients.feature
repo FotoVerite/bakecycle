@@ -18,7 +18,7 @@ Feature: Clients
     When I click on "Add New Client"
     And I fill out Client form with valid data
     And I click on "Create"
-    Then "You have created Test" should be present
+    Then "You have created Wizards Coffee" should be present
 
   @javascript
   Scenario: As a user, I should be able to delete a client

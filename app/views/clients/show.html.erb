@@ -26,34 +26,36 @@
 
 <fieldset>
   <legend>Business Information</legend>
-    <div class="row">
-    <div class="small-12 large-6 columns">
+  <div class="row">
+    <div class="small-12 medium-4 columns">
       <p>Name: <%= client.name %></p>
     </div>
-
-    <div class="small-12 large-6 columns">
-      <p>DBA: <%= client.dba %></p>
+    <div class="small-12 medium-4 columns">
+      <p>Official Company Name: <%= client.official_company_name %></p>
+    </div>
+    <div class="small-12 medium-4 columns">
+      <p>EIN: <%= client.ein %></p>
     </div>
   </div>
 
   <div class="row">
-    <div class="small-12 large-6 columns">
-      <p>Business Phone:<%= client.business_phone %></p>
+    <div class="small-12 medium-4 columns">
+      <p>Business Phone: <%= client.business_phone %></p>
     </div>
-
-    <div class="small-12 large-6 columns">
+    <div class="small-12 medium-4 columns">
       <p>Business Fax: <%= client.business_fax %></p>
     </div>
-  </div>
-  <div class="row">
-    <div class="small-12 large-6 columns">
+    <div class="small-12 medium-4 columns">
       <p>Billing Terms: <%= client.billing %></p>
     </div>
-    <div class="small-12 large-6 columns">
+  </div>
+  <div class="row">
+    <div class="small-12 medium-4 columns">
       <p>Active: <%= client.active_status %></p>
     </div>
   </div>
 </fieldset>
+
 <fieldset>
   <legend>Delivery Fee Information</legend>
   <div class="row">
@@ -70,29 +72,25 @@
 
 </fieldset>
 
-<fieldset>
-  <legend>Delivery Address</legend>
-  <div class="row">
-    <div class="small-12 columns">
+<div class="row">
+  <div class="small-12 medium-4 columns">
+    <fieldset>
+      <legend>Delivery Address</legend>
       <p><%= client.delivery_address_street_1 %></p>
       <p><%= client.delivery_address_street_2 %></p>
       <p><%= client.delivery_address_city %>, <%= client.delivery_address_state %> <%= client.delivery_address_zipcode %></p>
-    </div>
+    </fieldset>
   </div>
-</fieldset>
+  <div class="small-12 medium-4 columns end">
+    <fieldset>
+      <legend>Billing Address</legend>
 
-<fieldset>
-  <legend>Billing Address</legend>
-  <div class="row">
-    <div class="small-12 columns">
       <p><%= client.billing_address_street_1 %></p>
       <p><%= client.billing_address_street_2 %></p>
       <p><%= client.billing_address_city %>, <%= client.billing_address_state %> <%= client.billing_address_zipcode %></p>
-    </div>
+    </fieldset>
   </div>
-</fieldset>
-
-
+</div>
 <div class="row">
   <div class="small-12 large-4 columns">
     <fieldset>

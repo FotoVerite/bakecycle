@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150504201509) do
+ActiveRecord::Schema.define(version: 20150507163500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20150504201509) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name"
-    t.string   "dba"
+    t.string   "official_company_name"
     t.string   "business_phone"
     t.string   "business_fax"
     t.boolean  "active",                                       null: false
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20150504201509) do
     t.integer  "delivery_fee_option",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ein"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
@@ -235,16 +236,16 @@ ActiveRecord::Schema.define(version: 20150504201509) do
   add_index "shipment_items", ["production_run_id"], name: "index_shipment_items_on_production_run_id", using: :btree
 
   create_table "shipments", force: :cascade do |t|
-    t.integer  "client_id"
-    t.integer  "route_id"
-    t.date     "date"
-    t.date     "payment_due_date"
+    t.integer  "client_id",                                        null: false
+    t.integer  "route_id",                                         null: false
+    t.date     "date",                                             null: false
+    t.date     "payment_due_date",                                 null: false
     t.integer  "bakery_id",                                        null: false
     t.decimal  "delivery_fee",                     default: 0.0,   null: false
     t.boolean  "auto_generated",                   default: false, null: false
-    t.string   "client_name"
-    t.string   "client_dba"
-    t.string   "client_billing_term"
+    t.string   "client_name",                                      null: false
+    t.string   "client_official_company_name"
+    t.string   "client_billing_term",                              null: false
     t.string   "client_delivery_address_street_1"
     t.string   "client_delivery_address_street_2"
     t.string   "client_delivery_address_city"
@@ -255,8 +256,8 @@ ActiveRecord::Schema.define(version: 20150504201509) do
     t.string   "client_billing_address_city"
     t.string   "client_billing_address_state"
     t.string   "client_billing_address_zipcode"
-    t.integer  "client_billing_term_days"
-    t.string   "route_name"
+    t.integer  "client_billing_term_days",                         null: false
+    t.string   "route_name",                                       null: false
     t.string   "note"
     t.string   "client_primary_contact_name"
     t.string   "client_primary_contact_phone"
