@@ -18,14 +18,16 @@ class ShipmentService
   private
 
   def process_bakery
-    lead_time =  max_lead_time(bakery.products)
-    return if lead_time.nil?
-    (1..lead_time).each do |lead|
-      ship_date = run_time + lead.days
-      bakery.orders.includes(:client, :route, order_items: [:product]).active(ship_date).find_each do |order|
+    orders_ready_for_production.each do |order|
+      (1..order.total_lead_days).each do |lead|
+        ship_date = run_time + lead.days
         ShipmentCreator.new(order, ship_date).create!
       end
     end
+  end
+
+  def orders_ready_for_production
+    bakery.order_items.production_start_on?(run_time).map(&:order).uniq
   end
 
   def max_lead_time(products)

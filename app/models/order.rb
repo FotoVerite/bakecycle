@@ -139,6 +139,7 @@ class Order < ActiveRecord::Base
 
   def self.search_by_date(date)
     return all if date.blank?
-    where('start_date <= ?', date).where('end_date >= ? OR end_date is NULL', date)
+    where('start_date <= ?', date)
+      .where('end_date >= ? OR end_date is NULL', date)
   end
 end
