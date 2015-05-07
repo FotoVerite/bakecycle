@@ -45,8 +45,8 @@ namespace :db do
     FactoryGirl.create(:order, client: johns_bakery, bakery: biencuit, route: route1)
     FactoryGirl.create(:order, client: angels_deli, bakery: biencuit, route: route2)
     FactoryGirl.create(:order, client: tonys_brunch, bakery: biencuit, route: route3)
-    FactoryGirl.create_list(:order, 12, bakery: biencuit, total_lead_days: 5, route: route1)
-    FactoryGirl.create_list(:order, 12, total_lead_days: 5)
+    FactoryGirl.create_list(:order, 12, bakery: biencuit, product_total_lead_days: 5, route: route1)
+    FactoryGirl.create_list(:order, 12, product_total_lead_days: 5)
 
     DemoCreator.new(biencuit).run
     DemoCreator.new(grumpy).run

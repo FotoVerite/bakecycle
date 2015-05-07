@@ -18,4 +18,12 @@ describe RunItem do
       expect(run_item.total_quantity).to eq(30)
     end
   end
+
+  describe 'uniqueness' do
+    it 'enforces uniqueness' do
+      expect(create(:run_item)).to validate_uniqueness_of(:product)
+        .scoped_to(:production_run_id)
+        .with_message('- remove duplicate products')
+    end
+  end
 end
