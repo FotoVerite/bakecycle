@@ -25,5 +25,12 @@ namespace :bakecycle do
       reporter.send_email
       puts 'Finished import and email'
     end
+
+    desc 'create shipments and production runs for legacy biencuit data'
+    task biencuit_backfill: :environment do
+      require 'legacy_importer'
+      puts 'Starting backfill'
+      LegacyImporter.back_fill_data
+    end
   end
 end
