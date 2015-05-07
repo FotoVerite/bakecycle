@@ -30,14 +30,4 @@ class Bakery < ActiveRecord::Base
     logo.copy_to_local_file(style, tempfile.path)
     tempfile
   end
-
-  def display_kickoff_time
-    return unless kickoff_time
-    kickoff_time.strftime('%I:%M%p')
-  end
-
-  def display_last_kickoff
-    return unless last_kickoff
-    last_kickoff.strftime('%I:%M%p')
-  end
 end
