@@ -10,8 +10,8 @@ module LegacyImporter
 
     FIELDS_MAP = %w(
       client_active             active
-      client_business_name      name
-      client_dba                dba
+      client_business_name      official_company_name
+      client_dba                name
 
       client_billing_address1   billing_address_street_1
       client_billing_address2   billing_address_street_2
@@ -108,7 +108,7 @@ module LegacyImporter
       client_attr.merge(
         billing_term: BILLING_TERMS_MAP[client_attr[:billing_term]],
         active: active?,
-        name: client_attr[:name] || data[:client_dba],
+        name: client_attr[:name] || client_attr[:official_company_name],
         delivery_fee_option: delivery_fee,
         accounts_payable_contact_name: client_attr[:accounts_payable_contact_name] || data[:primary_contact_name]
       )

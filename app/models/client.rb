@@ -8,7 +8,6 @@ class Client < ActiveRecord::Base
   enum delivery_fee_option: [:no_delivery_fee, :daily_delivery_fee, :weekly_delivery_fee]
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
-  validates :dba, length: { maximum: 150 }
 
   validates :primary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true

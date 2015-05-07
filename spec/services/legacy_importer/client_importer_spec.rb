@@ -72,7 +72,7 @@ describe LegacyImporter::ClientImporter do
 
     it 'updates existing clients' do
       client = importer.import!
-      legacy_client[:client_business_name] = 'New Name'
+      legacy_client[:client_dba] = 'New Name'
       updated_client = importer.import!
 
       expect(updated_client.name).to eq('New Name')
@@ -81,7 +81,7 @@ describe LegacyImporter::ClientImporter do
       expect(client.name).to eq('New Name')
     end
 
-    it 'skips clients who have no name' do
+    it 'skips clients who have no dba' do
       legacy_client[:client_business_name] = nil
       legacy_client[:client_dba] = nil
       skipped_client = importer.import!

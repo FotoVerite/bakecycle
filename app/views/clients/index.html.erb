@@ -8,7 +8,6 @@
   <thead>
     <tr>
       <th scope="col">Name</th>
-      <th scope="col">DBA</th>
       <th scope="col">Active</th>
       <th scope="col">Actions</th>
     </tr>
@@ -17,7 +16,6 @@
     <% clients.each do |client| %>
       <tr class="js-clickableRow" href='<%= "#{client_path(client)}" %>'>
         <th scope="row"><%= link_to client.name, client_path(client) %></th>
-        <td data-title="DBA"><%= client.dba_display %></td>
         <td data-title="Active"><%= client.active_status %></td>
         <td data-title="Actions">
 
