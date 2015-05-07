@@ -13,7 +13,7 @@ module LegacyImporter
         RecipeItem,
         recipe_id: recipe.try(:id),
         inclusionable: ingredient || included_recipe
-      ).update(bakers_percentage: data[:recipeamt_bakerspct])
+      ).update_if_changed(bakers_percentage: data[:recipeamt_bakerspct])
     end
 
     class SkippedRecipeItem < SkippedObject

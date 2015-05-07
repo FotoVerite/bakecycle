@@ -215,5 +215,14 @@ module LegacyImporter
     def update(attributes)
       tap { |object| object.update(attributes) }
     end
+
+    def update_if_changed(attributes)
+      save_if_changed { |object| object.assign_attributes(attributes) }
+    end
+
+    def save_if_changed
+      yield @object if block_given?
+      @object.tap { |object| object.save if object.changed? }
+    end
   end
 end
