@@ -5,7 +5,7 @@ module ApplicationHelper
   end
 
   def active_nav?(*sections)
-    'active' if sections.include? @_active_nav
+    'active show-nav' if sections.include? @_active_nav
   end
 
   def full_title(page_title = nil)

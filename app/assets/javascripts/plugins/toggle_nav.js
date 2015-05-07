@@ -1,6 +1,5 @@
 $(function () {
-  $('li.js-subnav-toggle').click(function() {
-    $('li.js-subnav-toggle').removeClass('active');
-    $(this).addClass('active');
+  $('.js-subnav-toggle').on('click', '>span',function() {
+    $(this).parent().toggleClass('show-nav');
   });
 });
