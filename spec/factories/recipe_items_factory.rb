@@ -4,6 +4,8 @@ FactoryGirl.define do
       bakery { |t| t.association(:bakery) }
     end
 
+    recipe { |t| t.association(:recipe, bakery: bakery) }
+
     bakers_percentage { Faker::Number.between(1, 100) }
     inclusionable { |t| t.association(:ingredient, bakery: bakery) }
 

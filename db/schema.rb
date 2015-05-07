@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(version: 20150508153433) do
   add_index "products", ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "recipe_items", force: :cascade do |t|
-    t.integer  "recipe_id"
+    t.integer  "recipe_id",                        null: false
     t.integer  "inclusionable_id"
     t.string   "inclusionable_type"
     t.decimal  "bakers_percentage",  default: 0.0, null: false
