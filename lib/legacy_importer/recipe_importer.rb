@@ -26,7 +26,7 @@ module LegacyImporter
         Recipe,
         bakery: bakery,
         legacy_id: data[:recipe_id].to_s
-      ).update(attributes)
+      ).update_if_changed(attributes)
     end
 
     private

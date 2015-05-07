@@ -18,7 +18,7 @@ module LegacyImporter
         Route,
         bakery: bakery,
         legacy_id: data[:route_id].to_s
-      ).update(attributes)
+      ).update_if_changed(attributes)
     end
 
     private

@@ -13,7 +13,10 @@ module LegacyImporter
         legacy_id: data[:productprice_productid].to_s
       )
       return SkippedPriceVarient.new(data) unless product
-      product.tap { |p| p.update(base_price: data[:latest_price]) }
+      product.tap do |p|
+        p.base_price = data[:latest_price]
+        p.save if p.changed?
+      end
     end
 
     class SkippedPriceVarient < SkippedObject

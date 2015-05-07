@@ -39,7 +39,7 @@ module LegacyImporter
         legacy_id: data[:product_id].to_s
       )
         .new? { |product| product.base_price = 0 }
-        .update(attributes)
+        .update_if_changed(attributes)
     end
 
     class SkippedProduct < SkippedObject

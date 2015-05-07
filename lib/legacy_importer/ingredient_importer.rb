@@ -18,12 +18,11 @@ module LegacyImporter
     # ingredient_active         active
 
     def import!
-      Ingredient.where(
+      ObjectFinder.new(
+        Ingredient,
         bakery: bakery,
         legacy_id: data[:ingredient_id].to_s
-      )
-        .first_or_initialize
-        .tap { |ingredient| ingredient.update(attributes) }
+      ).update_if_changed(attributes)
     end
 
     private
