@@ -38,9 +38,18 @@ Feature: Clients
     Then "amymushroom" should be present
     And the client "andysdecaf" should not be present
 
-  Scenario: As a user, I should be able to view a clients recent purchases in the client's index page and be able to click to see more shipments for that client
+  Scenario: As a user, I should be able to view a clients recent purchases in the client's page and be able to click to see more shipments for that client
     Given That there's shipments for "mandos" and "andysdecaf"
     When I am on the view page for "mandos"
     Then I should see recent shipments information
     When I click on "View More Shipments"
     Then I should be on the shipment's index page with "mandos" shipments and none from "andysdecaf"
+
+  Scenario: As a user, I should be able to view a clients upcoming orders in the client's page and be able to click to see more orders for that client
+    Given That there's orders for "mandos" and "andysdecaf"
+    When I am on the view page for "mandos"
+    Then I should see upcoming orders information
+    When I click on "View More Orders"
+    Then I should be on the orders index page with "mandos" shipments and none from "andysdecaf"
+
+
