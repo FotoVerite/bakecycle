@@ -25,6 +25,9 @@ class ClientsController < ApplicationController
 
   def show
     @shipments = item_finder.shipments.recent(@client).includes(:shipment_items)
+    @orders =  item_finder.orders
+      .where(client: @client)
+      .upcoming(Time.zone.now).decorate
   end
 
   def update

@@ -98,3 +98,25 @@ Then(/^I should see confirmation that the client "(.*?)" was deleted$/) do |clie
     expect(page).to have_content("You have deleted #{client}")
   end
 end
+
+Given(/^That there's orders for "(.*?)" and "(.*?)"$/) do |name1, name2|
+  client1 = Client.find_by(name: name1)
+  client2 = Client.find_by(name: name2)
+  bakery = client1.bakery
+  route = create(:route, bakery: bakery)
+  create(:order, client: client1, bakery: bakery, route: route)
+  create(:order, client: client1, bakery: bakery, route: route, order_type: 'temporary')
+  create(:order, client: client2, bakery: bakery, route: route)
+  create(:order, client: client2, bakery: bakery, route: route, order_type: 'temporary')
+end
+
+Then(/^I should see upcoming orders information$/) do
+  expect(page).to have_css('.upcoming-orders')
+end
+
+Then(/^I should be on the orders index page with "(.*?)" shipments and none from "(.*?)"$/) do |name1, name2|
+  within '.responsive-table' do
+    expect(page).to have_content(name1)
+    expect(page).to_not have_content(name2)
+  end
+end
