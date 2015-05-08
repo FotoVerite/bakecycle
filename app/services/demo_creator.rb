@@ -27,6 +27,14 @@ class DemoCreator
     end
   end
 
+  def create_doughs
+    nicoise_olive_inclusion
+    chive_pain_au_lait_inclusion
+    multi_grain_dough
+    baguette_dough
+    pain_au_lait_dough
+  end
+
   def dark_rye_flour
     @_dark_rye_flour ||= Ingredient.create!(
       bakery: @bakery,
@@ -105,96 +113,98 @@ class DemoCreator
   end
 
   def nicoise_olive_inclusion
-    @_nicoise_olive_inclusion ||= Recipe.create!(
+    return @_nicoise_olive_inclusion if @_nicoise_olive_inclusion
+    @_nicoise_olive_inclusion = Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
       name: 'Black Olives',
-      lead_days: 1,
-      recipe_items: [RecipeItem.create!(
-        bakers_percentage: 15,
-        inclusionable: nicoise_olives
-      )]
+      lead_days: 1
     )
+
+    RecipeItem.create!(recipe: @_nicoise_olive_inclusion, bakers_percentage: 15, inclusionable: nicoise_olives)
+    @_nicoise_olive_inclusion
   end
 
   def dark_rye
-    @_dark_rype ||= Recipe.create!(
+    return @_dark_rye if @_dark_rye
+    @_dark_rye ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
       name: 'Dark Rye Blend',
-      lead_days: 2,
-      recipe_items: [RecipeItem.create!(
-        bakers_percentage: 1,
-        inclusionable: dark_rye_flour
-      )]
+      lead_days: 2
     )
+
+    RecipeItem.create!(recipe: @_dark_rye, bakers_percentage: 1, inclusionable: dark_rye_flour)
+    @_dark_rye
   end
 
   def chive_pain_au_lait_inclusion
-    Recipe.create!(
+    return @_chive_pain_au_lait_inclusion if @_chive_pain_au_lait_inclusion
+    @_chive_pain_au_lait_inclusion ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
       name: 'Chives Pain au Lait',
-      lead_days: 1,
-      recipe_items: [RecipeItem.create!(
-        bakers_percentage: 2,
-        inclusionable: chives
-      )]
+      lead_days: 1
     )
+
+    RecipeItem.create!(recipe: @_chive_pain_au_lait_inclusion, bakers_percentage: 2, inclusionable: chives)
+    @_chive_pain_au_lait_inclusion
   end
 
   def multi_grain_dough
-    Recipe.create!(
+    return @_multi_grain_dough if @_multi_grain_dough
+    @_multi_grain_dough ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :dough,
-      name: 'Multi Grain',
+      name: 'Multi Grain 2',
       mix_size: 12,
       mix_size_unit: :kg,
-      lead_days: 2,
-      recipe_items: [
-        RecipeItem.create!(bakers_percentage: 80, inclusionable: white_flour),
-        RecipeItem.create!(bakers_percentage: 20, inclusionable: whole_wheat_flour),
-        RecipeItem.create!(bakers_percentage: 0.4, inclusionable: yeast),
-        RecipeItem.create!(bakers_percentage: 85, inclusionable: water)
-      ]
+      lead_days: 2
     )
+
+    RecipeItem.create(recipe: @_multi_grain_dough, bakers_percentage: 80, inclusionable: white_flour)
+    RecipeItem.create(recipe: @_multi_grain_dough, bakers_percentage: 20, inclusionable: whole_wheat_flour)
+    RecipeItem.create(recipe: @_multi_grain_dough, bakers_percentage: 0.4, inclusionable: yeast)
+    RecipeItem.create(recipe: @_multi_grain_dough, bakers_percentage: 85, inclusionable: water)
+    @_multi_grain_dough
   end
 
   def baguette_dough
-    Recipe.create!(
+    return @_baguette_dough if @_baguette_dough
+    @_baguette_dough ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :dough,
       name: 'Light Baguette',
       mix_size: 50,
       mix_size_unit: :kg,
-      lead_days: 2,
-      recipe_items: [
-        RecipeItem.create!(bakers_percentage: 100, inclusionable: white_flour),
-        RecipeItem.create!(bakers_percentage: 0.4, inclusionable: yeast),
-        RecipeItem.create!(bakers_percentage: 40, inclusionable: water)
-      ]
+      lead_days: 2
     )
+
+    RecipeItem.create!(recipe: @_baguette_dough, bakers_percentage: 100, inclusionable: white_flour)
+    RecipeItem.create!(recipe: @_baguette_dough, bakers_percentage: 0.4, inclusionable: yeast)
+    RecipeItem.create!(recipe: @_baguette_dough, bakers_percentage: 40, inclusionable: water)
+    @_baguette_dough
   end
 
   def pain_au_lait_dough
-    Recipe.create!(
+    return @_pain_au_lait_dough if @_pain_au_lait_dough
+    @_pain_au_lait_dough ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :dough,
       name: 'Sweet Pain au Lait',
       mix_size: 70,
       mix_size_unit: :kg,
-      lead_days: 3,
-      recipe_items: [
-        RecipeItem.create!(bakers_percentage: 100, inclusionable: white_flour),
-        RecipeItem.create!(bakers_percentage: 2.2, inclusionable: yeast),
-        RecipeItem.create!(bakers_percentage: 30, inclusionable: water)
-      ]
+      lead_days: 3
     )
+
+    RecipeItem.create!(recipe: @_pain_au_lait_dough, bakers_percentage: 100, inclusionable: white_flour)
+    RecipeItem.create!(recipe: @_pain_au_lait_dough, bakers_percentage: 2.2, inclusionable: yeast)
+    RecipeItem.create!(recipe: @_pain_au_lait_dough, bakers_percentage: 30, inclusionable: water)
+    @_pain_au_lait_dough
   end
 
   def multi_grain_loaf
-    return @_multi_grain_loaf if @_multi_grain_loaf
-    @_multi_grain_loaf = Product.create!(
+    @_multi_grain_loaf ||= Product.create(
       bakery: @bakery,
       name: 'Large Multi-Grain Loaf',
       product_type: :bread,
@@ -206,6 +216,7 @@ class DemoCreator
       motherdough: multi_grain_dough,
       inclusion: dark_rye
     )
+
     PriceVariant.create!(product: @_multi_grain_loaf, price: 5.50, quantity: 10)
   end
 
@@ -216,8 +227,7 @@ class DemoCreator
       product_type: :bread,
       description: 'The finest baguette',
       weight: 50,
-      unit: :g,
-      over_bake: 0,
+      unit: :g,      over_bake: 0,
       base_price: 1.50,
       motherdough: baguette_dough,
       inclusion: nicoise_olive_inclusion
@@ -225,7 +235,8 @@ class DemoCreator
   end
 
   def chive_pain_au_lait
-    @_chive_pain_au_lait ||= Product.create!(
+    return @_chive_pain_au_lait if @_chive_pain_au_lait
+    @_chive_pain_au_lait = Product.create!(
       bakery: @bakery,
       name: 'Chives Pain Au Lait',
       product_type: :bread,
