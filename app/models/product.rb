@@ -5,9 +5,9 @@ class Product < ActiveRecord::Base
   belongs_to :motherdough, class_name: 'Recipe'
   belongs_to :bakery
 
-  has_many :price_varients, dependent: :destroy
+  has_many :price_variants, dependent: :destroy
 
-  accepts_nested_attributes_for :price_varients, allow_destroy: true, reject_if: :reject_price_varients?
+  accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
 
   enum product_type: [
     :bread,
@@ -61,7 +61,7 @@ class Product < ActiveRecord::Base
     OrderItem.where(product_id: id).find_each(&:touch)
   end
 
-  def reject_price_varients?(attributes)
+  def reject_price_variants?(attributes)
     attributes['quantity'].blank? && (attributes['price'] == '0.0' || attributes['price'].blank?)
   end
 
@@ -73,11 +73,13 @@ class Product < ActiveRecord::Base
   end
 
   def price(quantity)
-    quantity_varient(quantity).try(:price) || base_price
+    price_by_quantity(quantity) || base_price
   end
 
-  def quantity_varient(quantity)
-    price_varients.where('quantity <= ?', quantity).order('quantity desc').first
+  # price variants are probably always going to be very small set, getting all of them allows the query to be cached
+  def price_by_quantity(quantity)
+    matching = price_variants.order('quantity desc').detect { |variant| variant.quantity <= quantity }
+    matching.price if matching
   end
 
   def weight_with_unit

@@ -68,12 +68,12 @@
   <legend>Prices</legend>
 
     <div ng-controller="NestedItemCtrl">
-      <%= f.simple_fields_for :price_varients do |builder| %>
-        <%= render "price_varient_fields", f: builder %>
+      <%= f.simple_fields_for :price_variants do |builder| %>
+        <%= render "price_variant_fields", f: builder %>
       <% end %>
       <div ng-repeat="nestedItem in nestedItems">
-        <%= f.simple_fields_for :price_varients, @product.price_varients.build do |builder| %>
-          <%= render "new_price_varient_fields", f: builder %>
+        <%= f.simple_fields_for :price_variants, @product.price_variants.build do |builder| %>
+          <%= render "new_price_variant_fields", f: builder %>
         <% end %>
       </div>
       <%= link_to 'Add New Price', '', 'ng-click' => "add()", class: "button" %>

@@ -8,7 +8,7 @@ require 'legacy_importer/ingredient_importer'
 require 'legacy_importer/recipe_importer'
 require 'legacy_importer/recipe_item_importer'
 require 'legacy_importer/product_importer'
-require 'legacy_importer/price_varient_importer'
+require 'legacy_importer/price_variant_importer'
 require 'legacy_importer/route_importer'
 require 'legacy_importer/order_importer'
 require 'legacy_importer/order_items_importer'
@@ -77,15 +77,15 @@ module LegacyImporter
       .tap { |c| puts "Imported #{c.count} Products" }
   end
 
-  def self.import_price_varients
-    puts 'Importing PriceVarients'
+  def self.import_price_variants
+    puts 'Importing PriceVariants'
     Importer.new(
       bakery: bakery,
-      collection: PriceVarients.all,
-      importer: PriceVarientImporter
+      collection: PriceVariants.all,
+      importer: PriceVariantImporter
     )
       .import!
-      .tap { |c| puts "Imported #{c.count} PriceVarients" }
+      .tap { |c| puts "Imported #{c.count} PriceVariants" }
   end
 
   def self.import_routes
@@ -118,7 +118,7 @@ module LegacyImporter
         import_recipes,
         import_recipe_items,
         import_products,
-        import_price_varients,
+        import_price_variants,
         import_routes,
         import_orders
       ].sum

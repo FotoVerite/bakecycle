@@ -206,7 +206,7 @@ class DemoCreator
       motherdough: multi_grain_dough,
       inclusion: dark_rye
     )
-    PriceVarient.create!(product: @_multi_grain_loaf, price: 5.50, quantity: 10)
+    PriceVariant.create!(product: @_multi_grain_loaf, price: 5.50, quantity: 10)
   end
 
   def nicoise_baguette

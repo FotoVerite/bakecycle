@@ -1,4 +1,4 @@
-class PriceVarient < ActiveRecord::Base
+class PriceVariant < ActiveRecord::Base
   belongs_to :product
 
   validates :price, presence: true, numericality: true
