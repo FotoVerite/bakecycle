@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507193133) do
+ActiveRecord::Schema.define(version: 20150508153433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20150507193133) do
     t.integer  "total_lead_days", null: false
   end
 
+  add_index "order_items", ["order_id"], name: "index_order_items_on_order_id", using: :btree
   add_index "order_items", ["total_lead_days"], name: "index_order_items_on_total_lead_days", using: :btree
 
   create_table "orders", force: :cascade do |t|
@@ -130,15 +131,15 @@ ActiveRecord::Schema.define(version: 20150507193133) do
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
 
-  create_table "price_varients", force: :cascade do |t|
-    t.integer  "product_id"
+  create_table "price_variants", force: :cascade do |t|
+    t.integer  "product_id",               null: false
     t.decimal  "price",      default: 0.0, null: false
     t.integer  "quantity",                 null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "price_varients", ["product_id", "quantity"], name: "unique_price_varient_quantity", unique: true, using: :btree
+  add_index "price_variants", ["product_id", "quantity"], name: "unique_price_varient_quantity", unique: true, using: :btree
 
   create_table "production_runs", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -179,6 +180,8 @@ ActiveRecord::Schema.define(version: 20150507193133) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "recipe_items", ["recipe_id", "inclusionable_type", "inclusionable_id"], name: "index_recipe_items_on_recipe_id_and_inclusionable", using: :btree
 
   create_table "recipes", force: :cascade do |t|
     t.string   "name"
@@ -239,6 +242,7 @@ ActiveRecord::Schema.define(version: 20150507193133) do
   end
 
   add_index "shipment_items", ["production_run_id"], name: "index_shipment_items_on_production_run_id", using: :btree
+  add_index "shipment_items", ["shipment_id"], name: "index_shipment_items_on_shipment_id", using: :btree
 
   create_table "shipments", force: :cascade do |t|
     t.integer  "client_id",                                        null: false
@@ -271,6 +275,9 @@ ActiveRecord::Schema.define(version: 20150507193133) do
     t.time     "route_departure_time",                             null: false
   end
 
+  add_index "shipments", ["bakery_id"], name: "index_shipments_on_bakery_id", using: :btree
+  add_index "shipments", ["client_id", "route_id", "date"], name: "index_shipments_on_client_id_and_route_id_and_date", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "name",                   default: "",    null: false
@@ -289,6 +296,7 @@ ActiveRecord::Schema.define(version: 20150507193133) do
     t.boolean  "admin",                  default: false
   end
 
+  add_index "users", ["bakery_id"], name: "index_users_on_bakery_id", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
@@ -299,7 +307,7 @@ ActiveRecord::Schema.define(version: 20150507193133) do
   add_foreign_key "orders", "bakeries", name: "orders_bakery_id_fk"
   add_foreign_key "orders", "clients", name: "orders_client_id_fk"
   add_foreign_key "orders", "routes", name: "orders_route_id_fk"
-  add_foreign_key "price_varients", "products", name: "price_varients_product_id_fk", on_delete: :cascade
+  add_foreign_key "price_variants", "products", name: "price_varients_product_id_fk", on_delete: :cascade
   add_foreign_key "production_runs", "bakeries", name: "production_runs_bakery_id_fk"
   add_foreign_key "products", "bakeries", name: "products_bakery_id_fk"
   add_foreign_key "products", "recipes", column: "inclusion_id", name: "products_inclusion_id_fk"

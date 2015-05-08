@@ -59,9 +59,9 @@ describe OrderItem do
   context '#total_quantity_price' do
     it 'calculates total quantity price for an order item' do
       apple = create(:product, name: 'Apple', base_price: 0.5)
-      create(:price_varient, product: apple, quantity: 11, price: 0.4)
-      create(:price_varient, product: apple, quantity: 13, price: 0.2)
-      create(:price_varient, product: apple, quantity: 15, price: 0.1)
+      create(:price_variant, product: apple, quantity: 11, price: 0.4)
+      create(:price_variant, product: apple, quantity: 13, price: 0.2)
+      create(:price_variant, product: apple, quantity: 15, price: 0.1)
 
       order_item = create(
         :order_item,

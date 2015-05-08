@@ -62,9 +62,9 @@ describe Product do
     end
 
     it 'returns the matching variant price based upon quantity' do
-      create(:price_varient, product: product, price: 9, quantity: 2)
-      create(:price_varient, product: product, price: 8, quantity: 3)
-      create(:price_varient, product: product, price: 7, quantity: 4)
+      create(:price_variant, product: product, price: 9, quantity: 2)
+      create(:price_variant, product: product, price: 8, quantity: 3)
+      create(:price_variant, product: product, price: 7, quantity: 4)
       expect(product.price(1)).to eq(10)
       expect(product.price(2)).to eq(9)
       expect(product.price(3)).to eq(8)

@@ -1,10 +1,10 @@
 module LegacyImporter
-  class PriceVarientImporter
+  class PriceVariantImporter
     attr_reader :data, :bakery
 
-    def initialize(bakery, legacy_price_varient)
+    def initialize(bakery, legacy_price_variant)
       @bakery = bakery
-      @data = legacy_price_varient
+      @data = legacy_price_variant
     end
 
     def import!
@@ -12,14 +12,14 @@ module LegacyImporter
         bakery: bakery,
         legacy_id: data[:productprice_productid].to_s
       )
-      return SkippedPriceVarient.new(data) unless product
+      return SkippedPriceVariant.new(data) unless product
       product.tap do |p|
         p.base_price = data[:latest_price]
         p.save if p.changed?
       end
     end
 
-    class SkippedPriceVarient < SkippedObject
+    class SkippedPriceVariant < SkippedObject
     end
   end
 end

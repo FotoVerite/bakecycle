@@ -15,12 +15,12 @@ Feature: Products
       | name           | product_type | description | weight | unit | over_bake | base_price | sku             |
       | almond cookies | cookie       | delicious   | 10     | g    | 10        | 1.10       | abc-123-xyz-890 |
     And I click on "Add New Price"
-    And I fill out the price varient form with:
+    And I fill out the price variant form with:
       | price | quantity |
       | 10.23 |          |
     And I click on "Create"
     Then "Quantity can't be blank" should be present
-    And I fill out the price varient form with:
+    And I fill out the price variant form with:
       | price | quantity |
       | 10.23 | 100      |
 
@@ -33,7 +33,7 @@ Feature: Products
     Then I should see that the product name is "sugar cookie"
 
     And I click on "Add New Price"
-    And I fill out the price varient form with:
+    And I fill out the price variant form with:
       | price | quantity |
       | 10.23  | 83      |
     And I click on "Update"

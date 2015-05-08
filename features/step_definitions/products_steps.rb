@@ -33,7 +33,7 @@ Then(/^I should see that the product name is "(.*?)"$/) do |name|
   expect(page).to have_content(name)
 end
 
-When(/^I fill out the price varient form with:$/) do |table|
+When(/^I fill out the price variant form with:$/) do |table|
   pricev = table.hashes[0]
   jquery_fill(
     '.price_input:last' => pricev['price'],

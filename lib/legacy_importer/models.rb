@@ -63,7 +63,7 @@ module LegacyImporter
     end
   end
 
-  class PriceVarients
+  class PriceVariants
     def self.all
       DB.query('
         SELECT
