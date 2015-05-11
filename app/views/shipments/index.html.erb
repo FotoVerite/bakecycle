@@ -30,7 +30,7 @@
   </thead>
   <tbody>
     <% @shipments.each do |shipment| %>
-      <tr class="js-clickableRow" href='<%= "#{edit_shipment_path(shipment)}" %>'>
+      <tr class="js-clickableRow" href="<%= edit_shipment_path(shipment) %>">
         <th scope="row"><%= shipment.invoice_number %></th>
         <td data-title="Date"><%= shipment.date %></td>
         <td data-title="Client Name"><%= shipment.client_name %></td>

@@ -1,4 +1,4 @@
-<tr class="js-clickableRow" href='<%= "#{edit_order_path(order)}" %>'>
+<tr class="js-clickableRow" href="<%= edit_order_path(order) %>">
   <th scope="row"><%= link_to order.start_date, edit_order_path(order), class: "order-#{order.id}" %></th>
   <td data-title="End-Date"><%= order.end_date %></td>
   <td data-title="Client"><%= order.client_name %></td>

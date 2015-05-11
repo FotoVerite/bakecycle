@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <% routes.each do |route| %>
-      <tr class="js-clickableRow" href='<%= "#{edit_route_path(route)}" %>'>
+      <tr class="js-clickableRow" href="<%= edit_route_path(route) %>">
         <th scope="row"><%= link_to route.name, edit_route_path(route) %></th>
         <td data-title="Departure Time"><%= route.formatted_time %></td>
         <td data-title="Active"><%= route.active_status %></td>

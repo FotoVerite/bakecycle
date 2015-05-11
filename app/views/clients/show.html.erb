@@ -166,7 +166,7 @@
 
       <tbody>
         <% @orders.each do |order| %>
-          <tr>
+          <tr class="js-clickableRow" href="<%= edit_order_path(order) %>">
             <td data-title="Number"><%= order.id %></td>
             <th scope="row"><%= order.route_name %></th>
             <th scope="row"><%= order.start_date %></th>
@@ -203,7 +203,7 @@
 
       <tbody>
         <% @shipments.each do |shipment| %>
-          <tr>
+          <tr class="js-clickableRow" href="<%= edit_shipment_path(shipment) %>">
             <th scope="row"><%= shipment.date %></th>
             <td data-title="Number"><%= shipment.id %></td>
             <td data-title="Route"><%= shipment.route_name %></td>

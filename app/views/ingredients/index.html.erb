@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <% @ingredients.each do |ingredient| %>
-      <tr class="js-clickableRow" href='<%= "#{edit_ingredient_path(ingredient)}" %>'>
+      <tr class="js-clickableRow" href="<%= edit_ingredient_path(ingredient) %>">
         <th scope="row"><%= link_to ingredient.name, edit_ingredient_path(ingredient) %></th>
         <td data-title="Action">
           <%= link_to edit_ingredient_path(ingredient) do %>

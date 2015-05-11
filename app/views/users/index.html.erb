@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <% users.each do |user| %>
-      <tr class="js-clickableRow" href='<%= "#{edit_user_path(user)}" %>'>
+      <tr class="js-clickableRow" href="<%= edit_user_path(user) %>">
         <th scope="row"><%= link_to user.name, edit_user_path(user) %></th>
         <td data-title="Email"><%= user.email %></td>
         <td data-title="Bakery"><%= user.bakery_name %></td>
