@@ -35,9 +35,6 @@ module Bakecycle
     # fonts
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/
 
-    # enable instrumentation in staging
-    # config.skylight.environments += ['staging']
-
     config.generators do |g|
       g.factory_girl true
       g.test_framework :rspec

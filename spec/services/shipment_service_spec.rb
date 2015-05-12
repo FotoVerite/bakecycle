@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe ShipmentService do
   let(:today) { Time.zone.today }
+  let(:tomorrow) { today + 1.day }
   let(:bakery) { create(:bakery) }
   let(:shipment_service) { ShipmentService.new(bakery, today) }
 
@@ -14,7 +15,7 @@ describe ShipmentService do
     end
 
     it "doesn't create multiple shipments for the same client, route, and date" do
-      create(:order, bakery: bakery, start_date: today, product_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: tomorrow, product_total_lead_days: 1)
       shipment_service.run
       expect(Shipment.count).to eq(1)
       shipment_service.run

@@ -76,7 +76,6 @@ group :test, :development, :staging do
 end
 
 group :production, :staging do
-  # gem 'skylight'
   gem 'rails_12factor'
   gem 'newrelic_rpm'
 end

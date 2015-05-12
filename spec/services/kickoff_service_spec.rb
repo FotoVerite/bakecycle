@@ -52,8 +52,8 @@ describe KickoffService do
   describe '#kickoff?' do
     it 'returns false if before kickoff time' do
       current_time = bakery.kickoff_time - 1.hour
-      shipment_service = KickoffService.new(bakery, current_time)
-      expect(shipment_service.kickoff?).to eq(false)
+      kickoff_service = KickoffService.new(bakery, current_time)
+      expect(kickoff_service.kickoff?).to eq(false)
     end
 
     it 'returns false if last_kickoff is within 24 hours' do
@@ -64,6 +64,17 @@ describe KickoffService do
     it 'returns true if last_kickoff is outside of 24 hours' do
       bakery.last_kickoff = after_kickoff_time - 25.hours
       expect(kickoff_service.kickoff?).to eq(true)
+    end
+
+    it 'dont run more than once a day' do
+      expect(KickoffService.new(bakery, after_kickoff_time).kickoff?).to eq(true)
+      bakery.last_kickoff = after_kickoff_time
+      two_hours_later = after_kickoff_time + 2.hours
+      expect(KickoffService.new(bakery, two_hours_later).kickoff?).to eq(false)
+      tomorrow_am = after_kickoff_time.end_of_day + 1.minute
+      expect(KickoffService.new(bakery, tomorrow_am).kickoff?).to eq(false)
+      tomorrow = after_kickoff_time + 1.day - 1.hour
+      expect(KickoffService.new(bakery, tomorrow).kickoff?).to eq(true)
     end
   end
 end
