@@ -9,17 +9,17 @@ class Product < ActiveRecord::Base
 
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
 
-  enum product_type: [
-    :bread,
-    :vienoisserie,
-    :cookie,
-    :tart_and_desert,
-    :quiche,
-    :sandwich_and_tartine,
-    :pot_pie,
-    :dry_goods,
-    :other
-  ]
+  enum product_type: {
+     bread: 10,
+     cookie: 11,
+     pot_pie: 12,
+     quiche: 13,
+     sandwich_and_tartine: 14,
+     tart_and_desert: 15,
+     vienoisserie: 16,
+     dry_goods: 17,
+     other: 18
+  }
 
   enum unit: [:oz, :lb, :g, :kg]
 

@@ -11,6 +11,14 @@ class RunItem < ActiveRecord::Base
 
   delegate :over_bake, to: :product
 
+  def self.order_by_product_name
+    all.includes(:product).order('products.name asc')
+  end
+
+  def self.order_by_product_type_and_name
+    all.includes(:product).order('products.product_type asc, products.name asc')
+  end
+
   def from_shipment?
     order_quantity > 0 if order_quantity
   end
