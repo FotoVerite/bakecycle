@@ -28,11 +28,11 @@ class KickoffService
   def after_kickoff_time?
     kickoff = bakery.kickoff_time
     kickoff_today = Time.zone.local(run_time.year, run_time.month, run_time.day, kickoff.hour, kickoff.min, kickoff.sec)
-    kickoff_today < run_time
+    kickoff_today <= run_time
   end
 
   def kickoff_expired?
     return true unless bakery.last_kickoff
-    (bakery.last_kickoff + 24.hours) < run_time
+    bakery.last_kickoff.tomorrow.beginning_of_day <= run_time
   end
 end
