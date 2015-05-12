@@ -5,9 +5,13 @@
 <%= simple_form_for @production_run do |f| %>
   <%= f.error_notification %>
 
-  <% if @production_run.errors.any? %>
-    <div class="alert-box alert">
-      <%= @production_run.errors.full_messages.join %>
+  <% if f.object.errors.any? %>
+    <div id="error_explanation">
+      <ul>
+        <% f.object.errors.each do |attribute, msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
 

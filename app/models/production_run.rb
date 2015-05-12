@@ -12,4 +12,11 @@ class ProductionRun < ActiveRecord::Base
   def self.for_date(date)
     where(date: date)
   end
+
+  def save(*args)
+    super
+  rescue ActiveRecord::RecordNotUnique
+    errors[:base] << 'Cannot add same product more than once'
+    false
+  end
 end

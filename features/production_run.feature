@@ -37,3 +37,24 @@
     When I search for tomorrow's recipe runs
     Then I should see a warning that I am seeing a projection
     Then I should rows of projected product quantities
+
+  @javascript
+  Scenario: Not allowed to add same product more than once
+    Given there is a run item for a "biencuit" production run
+    And I am on the Print Recipes page
+    When I click on "Add Product"
+    And I fill out run item form with:
+      | product         | overbake_quantity|
+      | donut tart      | 15               |
+    And I click on "Add Product"
+    And I fill out run item form with:
+      | product         | overbake_quantity|
+      | donut tart      | 15               |
+    And I click on "Update"
+    Then "Cannot add same product more than once" should be present
+    When I click on "Add Product"
+    And I fill out run item form with:
+      | product         | overbake_quantity|
+      | donut tart      | 15               |
+    And I click on "Update"
+    Then "Successfully updated" should be present
