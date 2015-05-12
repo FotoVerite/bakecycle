@@ -2,7 +2,10 @@ class RunItem < ActiveRecord::Base
   belongs_to :product
   belongs_to :production_run
 
-  validates :product, presence: true, uniqueness: { scope: :production_run_id, message: '- remove duplicate products' }
+  validates :product, presence: true, uniqueness: {
+    scope: :production_run_id,
+    message: 'Cannot add same product more than once'
+  }
   validates :overbake_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :order_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
 

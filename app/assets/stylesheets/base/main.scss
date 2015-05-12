@@ -64,3 +64,9 @@ input[type="text"] {
 .projection {
   font-size: 1.5rem;
 }
+
+#error_explanation {
+  ul {
+    list-style-type: none;
+  }
+}
