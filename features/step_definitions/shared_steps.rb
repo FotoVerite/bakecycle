@@ -36,6 +36,10 @@ When(/^I go to the home page$/) do
   visit root_path
 end
 
+When(/^I go to the dashboard$/) do
+  visit dashboard_path
+end
+
 Given(/^I am logged in as a user$/) do
   bakery = Bakery.first || create(:bakery)
   user = create(:user, bakery: bakery)

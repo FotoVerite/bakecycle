@@ -1,5 +1,13 @@
 class LandingPagesController < ApplicationController
   def index
-    redirect_to dashboard_path if user_signed_in?
+    expires_in 2.minutes, public: true
+  end
+
+  def sign_in
+    if user_signed_in?
+      redirect_to after_sign_in_path_for(current_user)
+    else
+      redirect_to new_user_session_path
+    end
   end
 end
