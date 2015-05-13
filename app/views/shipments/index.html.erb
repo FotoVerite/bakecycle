@@ -1,24 +1,24 @@
 <% provide(:title, "Shipments") %>
 
-<div class="row">
-  <div class="small-12 medium-6 columns">
-    <h1>Shipments</h1>
-    <p><%= link_to 'Add New Shipment', new_shipment_path, class: "button" %></p>
-  </div>
-  <% if @shipments.any? %>
-    <div class="small-12 medium-6 columns">
-      <div class="view-pdf-button small-only-text-center medium-text-right">
-        <%= link_to "<i class='fi-page-multiple'></i> Export PDF".html_safe,
-          invoices_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
-        <%= link_to "<i class='fi-page-export-csv'></i> Export CSV".html_safe,
-          invoices_csv_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
-        <%= link_to "<i class='fi-page-export-csv'></i> Export QuickBooks".html_safe,
-          invoices_iif_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
-      </div>
-    </div>
-  <% end %>
-</div>
+<h1>Shipments</h1>
+<p><%= link_to 'Add New Shipment', new_shipment_path, class: "button" %></p>
+
 <%= render partial: 'search_form', object: @search_form %>
+
+<% if @shipments.any? %>
+  <ul class="stack-for-small secondary button-group">
+    <li><%= link_to "<i class='fi-page-multiple'></i> Export PDF".html_safe,
+      invoices_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
+    </li>
+    <li><%= link_to "<i class='fi-page-export-csv'></i> Export CSV".html_safe,
+      invoices_csv_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
+    </li>
+    <li><%= link_to "<i class='fi-page-export-csv'></i> Export QuickBooks".html_safe,
+        invoices_iif_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
+    </li>
+  </ul>
+<% end %>
+
 <table class="responsive-table">
   <thead>
     <tr>

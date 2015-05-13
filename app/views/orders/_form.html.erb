@@ -39,11 +39,9 @@
       <div class="small-12 medium-6 columns">
         <%= f.input :start_date, as: :string, label: "Effective Date", input_html: { class: "js-datepicker", "ng-model" => "order.start_date" } %>
       </div>
-      <% unless f.object.temporary? %>
-        <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
-          <%= f.input :end_date, as: :string, label: "End Date", input_html: { class: "js-datepicker"} %>
-        </div>
-      <% end %>
+      <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
+        <%= f.input :end_date, as: :string, label: "End Date", input_html: { class: "js-datepicker"} %>
+      </div>
     </div>
 
 

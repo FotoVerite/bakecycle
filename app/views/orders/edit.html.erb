@@ -1,7 +1,10 @@
 <% provide(:title, "Editing Order: #{order.id}") %>
 <h1>Editing Order: <%= order.id %> - <%= order.client_name %></h1>
-<%= link_to "Create New Order From This Order", copy_order_path(params[:id]) %>
-<%= link_to 'Back', orders_path %>
+
+<ul class="stack-for-small secondary button-group">
+  <li><%= link_to 'Back', orders_path, class: "button small" %></li>
+  <li><%= link_to "Create New Order From This Order", copy_order_path(order), class: "button small" %></li>
+</ul>
 <div ng-controller="OrderCtrl" ng-init="order=<%= @order.to_json %>">
   <%= render "form"%>
   <%= render partial: 'upcoming_shipments' if order.shipments.any? %>
