@@ -3,7 +3,7 @@
 <h1>Editing Bakery: <%= @bakery.name %></h1>
 
 <% if can? :manage, Bakery %>
-  <%= link_to "Back", bakeries_path %>
+  <%= link_to "Back", bakeries_path, class: "button small" %>
 <% end %>
 
 <%= render 'form' %>

@@ -5,17 +5,13 @@
     <h1>Editing Shipment: <%= @shipment.id %></h1>
     <h3>Client Name: <%= @shipment.client_name %></h3>
   </div>
-  <div class="small-12 medium-6 columns">
-    <div class="view-pdf-button small-only-text-center medium-text-right">
-      <%= link_to "<i class='fi-page-export-pdf'></i> Pdf".html_safe, invoice_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button"%>
-      <%= link_to "<i class='fi-page-export-csv'></i> IIF".html_safe,invoice_iif_shipment_path(shipment), target: "_blank", class: "button"%>
-      <%= link_to "<i class='fi-page'></i> Packing Slip ".html_safe, packing_slip_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button"%>
-    </div>
-  </div>
 </div>
-<div class="row back-button">
-  <div class="small-12 column">
-    <%= link_to 'Back', shipments_path%>
-  </div>
-</div>
+
+<ul class="stack-for-small button-group">
+    <li><%= link_to 'Back', shipments_path, class: "button small"%></li>
+    <li><%= link_to "<i class='fi-page-export-pdf'></i> Pdf".html_safe, invoice_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button small"%></li>
+    <li><%= link_to "<i class='fi-page-export-csv'></i> IIF".html_safe,invoice_iif_shipment_path(shipment), target: "_blank", class: "button small"%></li>
+    <li><%= link_to "<i class='fi-page'></i> Packing Slip ".html_safe, packing_slip_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button small"%></li>
+</ul>
+
 <%= render "form"%>
