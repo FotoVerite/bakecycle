@@ -26,7 +26,10 @@ class RecipeDataPdf
     grid([1, 0], [2, 11]).bounding_box do
       recipe_table
     end
-    grid([2, 0], [11, 11]).bounding_box do
+    grid([2, 0], [11, 5]).bounding_box do
+      left_section
+    end
+    grid([2, 6], [11, 11]).bounding_box do
       right_section
     end
   end
@@ -67,15 +70,15 @@ class RecipeDataPdf
   end
 
   def products_table
-    table(product_data, column_widths: [200, 100, 38, 65, 65]) do
+    table(product_data, column_widths: [110, 38, 65, 65]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      column(1..4).style(align: :center)
+      column(1..3).style(align: :center)
     end
   end
 
   def product_data
-    header = ['Product/Recipe Name', 'Type', 'Qty', 'Item Wt', 'Total Wt']
+    header = ['Name', 'Qty', 'Item Wt', 'Total Wt']
     product_rows.unshift(header)
   end
 
@@ -84,7 +87,6 @@ class RecipeDataPdf
     recipe_run_data.products.each do |product|
       rows << [
         product[:product].name,
-        product[:product].product_type,
         product[:quantity],
         display_weight(product[:product].weight_with_unit),
         display_weight(product[:weight])
@@ -98,46 +100,32 @@ class RecipeDataPdf
     make_cell(content: '', background_color: PdfReport::HEADER_ROW_COLOR)
   end
 
-  def empty_cell
-    make_cell(content: '', background_color: PdfReport::INDENTED_ROW_COLOR)
-  end
-
   def motherdough_row(product)
     name = make_cell(content: recipe_run_data.recipe.name, background_color: PdfReport::INDENTED_ROW_COLOR)
-    type = make_cell(
-      content: recipe_run_data.recipe.recipe_type,
-      background_color: PdfReport::INDENTED_ROW_COLOR,
-      align: :center
-    )
     weight = make_cell(
       content: display_weight(product[:dough_weight]),
       background_color: PdfReport::INDENTED_ROW_COLOR,
       align: :center
     )
 
-    [indent_cell, name, type, empty_cell, weight]
+    [indent_cell, name, weight]
   end
 
   def inclusion_row(product)
     inclusion = recipe_run_data.inclusions.detect { |i| i[:product] == product[:product] }
     return unless inclusion
     name = make_cell(content: inclusion[:recipe].name, background_color: PdfReport::INDENTED_ROW_COLOR)
-    type = make_cell(
-      content: inclusion[:recipe].recipe_type,
-      background_color: PdfReport::INDENTED_ROW_COLOR,
-      align: :center
-    )
     weight = make_cell(
       content: display_weight(inclusion[:weight]),
       background_color: PdfReport::INDENTED_ROW_COLOR,
       align: :center
     )
-    [indent_cell, name, type, empty_cell, weight]
+    [indent_cell, name, weight]
   end
 
   def product_parts_table(product)
     table_data = [motherdough_row(product), inclusion_row(product)].compact
-    [colspan: 5, content: make_table(table_data, column_widths: [10, 190, 100, 103, 65])]
+    [colspan: 5, content: make_table(table_data, column_widths: [10, 203, 65])]
   end
 
   def ingredients_data
