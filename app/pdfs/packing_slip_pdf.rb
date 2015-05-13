@@ -56,10 +56,10 @@ class PackingSlipPdf < PdfReport
   end
 
   def shipment_items
-    table(shipment_items_row, column_widths: [400, 172 / 3.0, 172 / 3.0, 172 / 3.0])do
+    table(shipment_items_row, column_widths: [300, 100, 57.3, 57.3, 57.3])do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      row(1..-1).column(1..2).style(font_style: :bold)
+      row(1..-1).column(2..3).style(font_style: :bold)
       column(1..-1).style(align: :center)
     end
   end
@@ -89,15 +89,16 @@ class PackingSlipPdf < PdfReport
   end
 
   def shipment_items_row
-    header = ['Item Name', 'Ordered', 'Shipped', 'Pack Check']
-    rows = @shipment.shipment_items.map do |item|
-      [item.product_name_and_sku, item.product_quantity, item.product_quantity, nil]
+    header = ['Item Name', 'Product Type', 'Ordered', 'Shipped', 'Pack Check']
+    rows = @shipment.shipment_items.object.order_by_product_type_and_name.map do |item|
+      item = item.decorate
+      [item.product_name_and_sku, item.product_product_type, item.product_quantity, item.product_quantity, nil]
     end
     rows.unshift(header)
   end
 
   def pieces_shipped
-    table(pieces_shipped_row, position: :right, column_widths: [400, 172 / 3.0, 172 / 3.0, 172 / 3.0]) do
+    table(pieces_shipped_row, position: :right, column_widths: [400, 57.3, 57.3, 57.3]) do
       cells.borders = []
       column(0).style(align: :right, font_style: :bold)
       column(1).borders = [:top, :right, :bottom, :left]
