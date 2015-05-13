@@ -38,7 +38,7 @@ class DailyTotalPdf < PdfReport
   def information
     @recipes.product_types.each do |type|
       move_down 20
-      text Product.product_types.invert[type].titleize, size: 20
+      text invert_product_type(type).titleize, size: 20
       table(information_data(type), column_widths: column_width_sizes, header: true, row_colors: %w(FFFFFF E3E3E3)) do
         row(0).style(background_color: HEADER_ROW_COLOR, size: 10)
         row(0..-1).column(1..-1).style(align: :center)
@@ -73,13 +73,32 @@ class DailyTotalPdf < PdfReport
   end
 
   def product_items(type)
-    product_counts = @recipes.product_counts
-    @recipes.products.where(product_type: type).map do |product|
-      total_count = product_counts[product.id][:total]
-      route_counts = @recipes.routes.map do |route|
-        product_counts[product.id][route.id] || 0
-      end
-      [product.name, total_count] + route_counts
+    recipe_products(type).map do |product|
+      [product.name, total_count(product)] + route_counts(product)
     end
+  end
+
+  private
+
+  def recipe_products(type)
+    @recipes.products.where(product_type: type)
+  end
+
+  def route_counts(product)
+    @recipes.routes.map do |route|
+      product_counts[product.id][route.id] || 0
+    end
+  end
+
+  def total_count(product)
+    product_counts[product.id][:total]
+  end
+
+  def product_counts
+    @recipes.product_counts
+  end
+
+  def invert_product_type(type)
+    Product.product_types.invert[type]
   end
 end

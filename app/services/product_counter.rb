@@ -13,7 +13,7 @@ class ProductCounter
   end
 
   def products
-    @_products ||= Product.where(bakery: bakery, id: shipment_items.pluck(:product_id))
+    @_products ||= Product.where(bakery: bakery, id: shipment_items.pluck(:product_id)).order(:name)
   end
 
   def product_types
