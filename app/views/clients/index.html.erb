@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <% clients.each do |client| %>
-      <tr class="js-clickableRow" href='<%= "#{client_path(client)}" %>'>
+      <tr class="js-clickableRow" href="<%= client_path(client) %>">
         <th scope="row"><%= link_to client.name, client_path(client) %></th>
         <td data-title="Active"><%= client.active_status %></td>
         <td data-title="Actions">

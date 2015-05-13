@@ -15,7 +15,7 @@
   </thead>
   <tbody>
     <% products.each do |product| %>
-      <tr class="js-clickableRow" href='<%= "#{edit_product_path(product)}" %>'>
+      <tr class="js-clickableRow" href="<%= edit_product_path(product) %>">
         <th scope="row"><%= link_to product.name, edit_product_path(product) %></th>
         <td data-title="Product Type"><%= product.type %></td>
         <td data-title="Description"><%= product.truncated_description %></td>
