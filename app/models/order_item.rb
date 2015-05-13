@@ -1,4 +1,6 @@
 class OrderItem < ActiveRecord::Base
+  extend OrderByProduct
+
   belongs_to :product
   belongs_to :order
 

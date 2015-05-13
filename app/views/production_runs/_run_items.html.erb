@@ -3,6 +3,8 @@
     <thead>
       <tr>
         <th>Product</th>
+        <th>Type</th>
+        <th>Lead Days</th>
         <th>Total Quantity</th>
         <th>Order Quantity</th>
         <th>Over Bake %</th>
@@ -12,7 +14,7 @@
     </thead>
 
     <tbody>
-      <%= f.simple_fields_for :run_items, @production_run.run_items.includes(:product) do |builder| %>
+      <%= f.simple_fields_for :run_items, @production_run.run_items.order_by_product_type_and_name do |builder| %>
           <%= render 'run_item_fields', f: builder %>
       <% end %>
 

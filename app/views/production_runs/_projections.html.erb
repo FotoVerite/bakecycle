@@ -4,6 +4,8 @@
   <thead>
     <tr>
       <th>Product</th>
+      <th>Type</th>
+      <th>Lead Days</th>
       <th>Total Quantity</th>
       <th>Order Quantity</th>
       <th>Over Bake %</th>
@@ -14,6 +16,8 @@
     <% @production_run_projection.products_info.each do |projection| %>
       <tr>
         <td><%= projection.product.name %></td>
+        <td><%= projection.product.product_type %></td>
+        <td><%= projection.product.total_lead_days %></td>
         <td><%= projection.total_quantity %></td>
         <td><%= projection.order_quantity %></td>
         <td><%= projection.product.over_bake %></td>

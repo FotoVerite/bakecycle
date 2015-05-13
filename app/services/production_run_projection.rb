@@ -10,6 +10,7 @@ class ProductionRunProjection
     @_order_items ||= bakery
       .order_items
       .production_start_on?(start_date)
+      .order_by_product_type_and_name
       .select { |order_item| order_item.production_start_on?(start_date) }
   end
 
