@@ -14,7 +14,7 @@ Feature: Orders
     Then I should see order information about "andysdecaf"
 
   @javascript
-  Scenario: As a user I need to be able to add an standing order
+  Scenario: As a user I need to be able to add an standing order and duplicate this order
     When I go to the "orders" page
     And I click on "Add New Order"
     And I fill out Order form with:
@@ -26,6 +26,15 @@ Feature: Orders
     And I click on "Add Product" and don't enter any information
     And I click on "Create"
     Then "You have created a standing order for mandos." should be present
+    When I click on "Create New Order From This Order"
+    And I click on "Create"
+    Then "This order overlaps with ids" should be present
+    When I edit the order form with:
+      | order_type | start_date |
+      | temporary  | 2014-11-11 |
+    And I click on "Create"
+    Then "You have created a temporary order for mandos." should be present
+    When I go to the "orders" page
 
   @javascript
   Scenario: As a user I need to be able to add a temporary order
@@ -74,4 +83,3 @@ Feature: Orders
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
     And I click on "Update"
     Then "remove_order_item" button should be present "2" times
-

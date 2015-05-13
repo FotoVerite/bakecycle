@@ -37,6 +37,14 @@ When(/^I fill out temporary order form with:$/) do |table|
   )
 end
 
+When(/^I edit the order form with:$/) do |table|
+  choose "order_order_type_#{table.hashes[0]['order_type']}"
+  order = table.hashes[0]
+  jquery_fill(
+    '#order_start_date' => order['start_date']
+  )
+end
+
 When(/^I am on the edit page for "(.*?)" order$/) do |name|
   client = Client.find_by(name: name)
   order = Order.find_by(client: client)

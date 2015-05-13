@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   resources :products, except: [:show]
   resources :routes, except: [:show]
   resources :clients
-  resources :orders, except: [:show]
+  resources :orders, except: [:show] do
+    get 'copy', on: :member
+  end
   resources :users, except: [:show]
 
   resources :shipments, except: [:show] do

@@ -21,6 +21,11 @@ class OrdersController < ApplicationController
       .paginate(page: params[:page])
   end
 
+  def copy
+    @order = OrderDuplicate.new(@order).order_dup
+    render 'new'
+  end
+
   def new
     @order.assign_attributes(order_type: 'standing', start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
