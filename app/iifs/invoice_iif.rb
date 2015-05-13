@@ -24,18 +24,29 @@ class InvoiceIif
       row do
         trnsid shipment.id
         trnstype 'INVOICE'
-        date shipment.date
+        date shipment.date_for_iif
         accnt 'Accounts Receivable'
         name shipment.client_name
-        amount shipment.price
+        method_missing(:class)
+        amount shipment.price_for_iif
         docnum shipment.invoice_number
+        memo 'Wholesale'
+        clear 'Y'
+        toprint 'N'
         addr1 shipment.client_name
         addr2 shipment.client_delivery_address_street_1
         addr3 shipment.client_delivery_address_street_2
         addr4 shipment.client_state_zipcode
-        duedate shipment.payment_due_date
-        terms shipment.client_billing_term
-        shipdate shipment.date
+        addr5
+        duedate shipment.due_date_for_iif
+        terms shipment.terms
+        paid 'N'
+        paymeth
+        shipdate shipment.date_for_iif
+        rep
+        ponum
+        invtitle
+        invmemo
       end
 
       shipment.shipment_items.each do |item|
@@ -43,13 +54,17 @@ class InvoiceIif
           row do
             splid item.id
             trnstype 'INVOICE'
-            date shipment.date
+            date shipment.date_for_iif
             accnt shipment.bakery_quickbooks_account
-            amount item.price
+            name
+            amount item.price_for_iif
+            docnum
             memo item.product_name
-            qnty item.product_quantity
-            price item.product_price
+            method_missing(:class, 'Wholesale')
+            qnty item.product_quantity_for_iif
+            price item.product_price_for_iif
             invitem item.product_product_type
+            paymeth
             taxable 'N'
           end
         end
