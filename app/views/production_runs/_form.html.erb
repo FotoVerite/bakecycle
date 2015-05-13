@@ -23,6 +23,9 @@
           class: "button alert",
           method: :delete,
           data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Reset', reset_production_run_path(f.object),
+          class: "button alert",
+          data: { confirm: "You will lose all custom overbake products and quantities on this run.\n\nContinue resetting?" } %>
       <% end %>
     </div>
   </div>

@@ -66,3 +66,12 @@ end
 Then(/^I should rows of projected product quantities$/) do
   expect(page.all('.production-run-projection tr').count).to eq(2)
 end
+
+When(/^I cancel in the confirm box$/) do
+  binding.pry
+  page.execute_script 'window.confirm = function () { return false }'
+end
+
+When(/^I accept in the confirm box$/) do
+  page.execute_script 'window.confirm = function () { return true }'
+end

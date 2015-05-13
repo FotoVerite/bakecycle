@@ -58,3 +58,15 @@
       | donut tart      | 15               |
     And I click on "Update"
     Then "Successfully updated" should be present
+
+  @javascript
+  Scenario: Resetting production runs
+    Given there is a run item for a "biencuit" production run
+    And I am on the Print Recipes page
+    When I click on "Reset"
+    And I accept in the confirm box
+    Then "Reset Complete" should be present
+    When I pry
+    When I click on "Reset"
+    And I cancel in the confirm box
+    Then "Reset Complete" should not be present

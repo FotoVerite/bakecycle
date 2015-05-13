@@ -40,6 +40,8 @@ Rails.application.routes.draw do
 
   resources :production_runs do
     get 'print', on: :member
+    get 'reset', on: :member
+
     resources :run_items
   end
 end

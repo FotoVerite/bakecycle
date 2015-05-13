@@ -7,7 +7,7 @@ class ProductionRunService
   end
 
   def run
-    find_or_create
+    find_or_create_production_run
     associate_shipment_items
     create_or_update_run_items
   end
@@ -15,7 +15,7 @@ class ProductionRunService
   private
 
   def associate_shipment_items
-    shipment_items.update_all(production_run_id: production_run.id)
+    shipment_items.where(production_run_id: nil).update_all(production_run_id: production_run.id)
   end
 
   def shipment_items
@@ -46,7 +46,7 @@ class ProductionRunService
     shipment_items.select { |item| item.product_id == product.id }
   end
 
-  def find_or_create
+  def find_or_create_production_run
     @production_run = ProductionRun.where(bakery: bakery, date: date).first_or_create
   end
 end
