@@ -1,4 +1,6 @@
 class RunItem < ActiveRecord::Base
+  extend OrderByProduct
+
   belongs_to :product
   belongs_to :production_run
 
@@ -13,14 +15,6 @@ class RunItem < ActiveRecord::Base
   before_validation :update_total_quantity
 
   delegate :over_bake, to: :product
-
-  def self.order_by_product_name
-    all.includes(:product).order('products.name asc')
-  end
-
-  def self.order_by_product_type_and_name
-    all.includes(:product).order('products.product_type asc, products.name asc')
-  end
 
   def from_shipment?
     order_quantity > 0 if order_quantity

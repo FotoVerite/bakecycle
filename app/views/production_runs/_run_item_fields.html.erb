@@ -2,10 +2,14 @@
   <% if f.object.persisted? %>
     <td><%= f.object.product.name %></td>
     <%= f.hidden_field :product_id, label: false, value: "#{f.object.product.id}" %>
+    <td><%= f.object.product.product_type %></td>
+    <td><%= f.object.product.total_lead_days %></td>
   <% else %>
     <td>
       <%= f.input :product_id, collection: production_run.available_products, :error_html => { :id => "run_items_product_error"} %>
     </td>
+    <td>-</td>
+    <td>-</td>
   <% end %>
 
   <td><strong><%= f.object.total_quantity %></strong></td>
