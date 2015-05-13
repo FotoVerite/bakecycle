@@ -23,6 +23,18 @@ class ShipmentDecorator < Draper::Decorator
     h.number_to_currency(object.price)
   end
 
+  def price_for_iif
+    object.price
+  end
+
+  def date_for_iif
+    object.date.strftime('%-m/%d/%y')
+  end
+
+  def due_date_for_iif
+    object.payment_due_date.strftime('%-m/%d/%y')
+  end
+
   def delivery_fee
     h.number_to_currency(object.delivery_fee)
   end
