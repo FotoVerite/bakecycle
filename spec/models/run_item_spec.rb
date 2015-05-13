@@ -1,6 +1,28 @@
 require 'rails_helper'
 
 describe RunItem do
+  describe '.order_by_product_name' do
+    it 'sorts by product name' do
+      create_list(:run_item, 5)
+      ordered_product_names = RunItem.all.sort_by { |run_item| run_item.product.name }
+      expect(RunItem.order_by_product_name).to eq(ordered_product_names)
+    end
+  end
+
+  describe '.order_by_product_type_and_name' do
+    it 'sorts by product name' do
+      create_list(:run_item, 2, product_product_type: 'vienoisserie')
+      create_list(:run_item, 2, product_product_type: 'bread')
+      create_list(:run_item, 2, product_product_type: 'pot_pie')
+
+      ordered_by_product_type_and_names = RunItem.all.sort_by do |run_item|
+        [run_item.product.product_type, run_item.product.name]
+      end
+
+      expect(RunItem.order_by_product_type_and_name).to eq(ordered_by_product_type_and_names)
+    end
+  end
+
   describe '#initialize_quantities' do
     it 'calls RunItemQuantifier' do
       expect_any_instance_of(RunItemQuantifier).to receive(:set)

@@ -20,14 +20,23 @@ class ProductionRunData
     (@production_run.date + max_product_lead_day).strftime('%A %b. %e, %Y')
   end
 
+  def run_items_by_product_name
+    @_run_items_by_product_name ||= @run_items.order_by_product_type_and_name
+  end
+
   def products
-    @run_items.map do |item|
-      { name: item.product.name, quantity: item.total_quantity }
+    run_items_by_product_name.map do |item|
+      product = item.product
+      {
+        name: product.name,
+        type: product.product_type,
+        quantity: item.total_quantity
+      }
     end
   end
 
   def processes_run_items
-    @run_items.each do |item|
+    run_items_by_product_name.each do |item|
       add_to_recipe_run_data(item.product, item.total_quantity)
     end
   end

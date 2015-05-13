@@ -1,6 +1,6 @@
 class ProductionRunPdf < PdfReport
   def initialize(production_run_data)
-    @production_run = production_run_data
+    @production_run_data = production_run_data
     @bakery = production_run_data.bakery.decorate
     super()
   end
@@ -27,29 +27,30 @@ class ProductionRunPdf < PdfReport
 
   def production_run_info
     font_size 12
-    text "Production Run ##{@production_run.id}"
-    text "#{@production_run.start_date} - #{@production_run.end_date}"
+    text "Production Run ##{@production_run_data.id}"
+    text "#{@production_run_data.start_date} - #{@production_run_data.end_date}"
   end
 
   def body
-    @production_run.recipes.each do |motherdough|
+    @production_run_data.recipes.each do |motherdough|
       RecipeDataPdf.new(self, motherdough).render_recipe
     end
   end
 
   def products
     move_down 40
-    table(product_information_row, column_widths: [380, 190]) do
+    table(product_information_row, column_widths: [300, 135, 135]) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      column(1).style(align: :center)
+      column(1..2).style(align: :center)
     end
   end
 
   def product_information_row
-    header = %w(Product Qty)
-    rows = @production_run.products.map do |product|
+    header = %w(Product Type Qty)
+    rows = @production_run_data.products.map do |product|
       [product[:name],
+       product[:type],
        product[:quantity]
       ]
     end
