@@ -26,7 +26,7 @@ class ProductionRunPdf < PdfReport
   end
 
   def production_run_info
-    font_size 12
+    font_size 10
     text "Production Run ##{@production_run_data.id}"
     text "#{@production_run_data.start_date} - #{@production_run_data.end_date}"
   end
