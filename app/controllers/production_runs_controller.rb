@@ -32,9 +32,8 @@ class ProductionRunsController < ApplicationController
   end
 
   def reset
-    if ProductionRunService.new(@production_run.bakery, @production_run.date).run
-      redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'
-    end
+    ProductionRunService.new(@production_run.bakery, @production_run.date).run
+    redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'
   end
 
   private

@@ -61,12 +61,10 @@
 
   @javascript
   Scenario: Resetting production runs
-    Given there is a run item for a "biencuit" production run
+    Given there is a run item and shipment item for a "biencuit" production run
     And I am on the Print Recipes page
+    And I change the shipment item product quantity to "99"
     When I click on "Reset"
-    And I accept in the confirm box
+    When I accept in the confirm box
     Then "Reset Complete" should be present
-    When I pry
-    When I click on "Reset"
-    And I cancel in the confirm box
-    Then "Reset Complete" should not be present
+    And the product quantity should be the same as the shipment item

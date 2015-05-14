@@ -15,13 +15,11 @@ class ProductionRunService
   private
 
   def associate_shipment_items
-    shipment_items.where(production_run_id: nil).update_all(production_run_id: production_run.id)
+    shipment_items.update_all(production_run_id: production_run.id)
   end
 
   def shipment_items
-    @_shipment_items ||= bakery
-      .shipment_items
-      .where(production_start: date)
+    @_shipment_items ||= bakery.shipment_items.where(production_start: date)
       .where('production_run_id IS NULL OR production_run_id = ?', production_run.id)
   end
 
@@ -31,8 +29,7 @@ class ProductionRunService
   end
 
   def make_run_item(product)
-    RunItem
-      .where(product: product, production_run_id: production_run.id)
+    RunItem.where(product: product, production_run_id: production_run.id)
       .first_or_initialize
       .tap { |run_item| update_run_item(run_item, product) }
   end
