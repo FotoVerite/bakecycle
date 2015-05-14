@@ -16,6 +16,10 @@ class ShipmentItem < ActiveRecord::Base
 
   before_save :set_production_start
 
+  def self.order_by_product_type_and_name
+    order('product_product_type asc, product_name asc')
+  end
+
   def self.earliest_production_date
     all.minimum(:production_start)
   end

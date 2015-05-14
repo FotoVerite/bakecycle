@@ -81,24 +81,25 @@ class InvoicePdf < PdfReport
 
   def shipment_items
     move_down 20
-    table(shipment_items_row, column_widths: [272, 100, 100, 100])do
+    table(shipment_items_row, column_widths: [250, 80.5, 80.5, 80.5, 80.5])do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      column(1..3).style(align: :center)
+      column(1..4).style(align: :center)
     end
   end
 
   def shipment_items_row
-    header = ['Item Name', 'Quantity', 'Price Each', 'Total']
-    rows = @shipment.shipment_items.map do |item|
-      [item.product_name, item.product_quantity, item.product_price, item.price]
+    header = ['Item Name', 'Product Type', 'Quantity', 'Price Each', 'Total']
+    rows = @shipment.shipment_items.object.order_by_product_type_and_name.map do |item|
+      item = item.decorate
+      [item.product_name, item.product_product_type, item.product_quantity, item.product_price, item.price]
     end
     rows.unshift(header)
   end
 
   def totals
     move_down 5
-    table(totals_row, position: :right, column_widths: [100, 100]) do
+    table(totals_row, position: :right, column_widths: [80.5, 80.5]) do
       cells.borders = []
       column(0).style(align: :right)
       column(1).borders = [:top, :right, :bottom, :left]
