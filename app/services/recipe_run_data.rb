@@ -20,12 +20,12 @@ class RecipeRunData
     self.weight += calculator.dough_weight
   end
 
-  def add_parent_recipe(parent, weight)
+  def add_parent_recipe(parent_recipe, weight)
     self.weight += weight
-    parent_recipes.push(
-      parent_recipe: parent,
-      weight: weight
-    )
+    detected_parent_recipe = detect_parent_recipe(parent_recipe)
+    parent_recipe_item = detected_parent_recipe || new_parent_recipe_item(parent_recipe)
+    parent_recipes << parent_recipe_item unless detected_parent_recipe
+    parent_recipe_item[:weight] += weight
   end
 
   def deeply_nested_recipe_info
@@ -56,5 +56,15 @@ class RecipeRunData
 
   def finished_date
     date + recipe.total_lead_days.days
+  end
+
+  private
+
+  def new_parent_recipe_item(parent_recipe)
+    { parent_recipe: parent_recipe, weight: Unitwise(0, :kg) }
+  end
+
+  def detect_parent_recipe(parent_recipe)
+    parent_recipes.detect { |data| data[:parent_recipe] == parent_recipe }
   end
 end
