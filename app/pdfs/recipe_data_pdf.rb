@@ -171,9 +171,9 @@ class RecipeDataPdf
 
   def deeply_nested_recipes_data
     header = ['Used In Recipe', 'Weight', '% Used']
-    rows = recipe_run_data.parent_recipes.map do |recipe_info|
+    rows = sorted_parent_recipes.map do |recipe_info|
       [
-        recipe_info[:parent_recipe].name,
+        recipe_info[:parent_recipe].name.titleize,
         display_weight(recipe_info[:weight]),
         (recipe_info[:weight] / recipe_run_data.weight * 100).to_f.round(2)
       ]
@@ -196,6 +196,12 @@ class RecipeDataPdf
 
   def display_date(date)
     date.strftime('%m/%d/%Y')
+  end
+
+  private
+
+  def sorted_parent_recipes
+    @recipe_run_data.parent_recipes.sort_by { |h| h[:parent_recipe][:name].downcase }
   end
 end
 # rubocop:enable Metrics/ClassLength
