@@ -66,3 +66,40 @@ end
 Then(/^I should rows of projected product quantities$/) do
   expect(page.all('.production-run-projection tr').count).to eq(2)
 end
+
+Given(/^there is a run item and shipment item for a "(.*?)" production run$/) do |bakery|
+  bakery = Bakery.find_by(name: bakery)
+  production_run = bakery.production_runs.last
+  product = create(:product, bakery: bakery, total_lead_days: 1)
+  shipment = create(:shipment, bakery: bakery, date: Time.zone.tomorrow, shipment_item_count: 0)
+
+  create(:shipment_item,
+         shipment: shipment,
+         production_run: production_run,
+         bakery: bakery,
+         product: product,
+         product_quantity: 10
+        )
+  create(:run_item,
+         production_run: production_run,
+         bakery: bakery,
+         product: product,
+         order_quantity: 10
+        )
+end
+
+Then(/^the product quantity should be the same as the shipment item$/) do
+  run_item = RunItem.last
+  shipment_item = ShipmentItem.find_by(product_id: run_item.product.id)
+  expect(run_item.order_quantity).to eq(shipment_item.product_quantity)
+end
+
+When(/^I accept in the confirm box$/) do
+  confirm_alert
+end
+
+Given(/^I change the shipment item product quantity to "(.*?)"$/) do |quantity|
+  run_item = RunItem.last
+  shipment_item = ShipmentItem.find_by(product_id: run_item.product.id)
+  shipment_item.update(product_quantity: quantity.to_i)
+end

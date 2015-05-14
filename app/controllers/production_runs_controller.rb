@@ -7,14 +7,15 @@ class ProductionRunsController < ApplicationController
     @production_runs = @production_runs.order(date: :desc).paginate(page: params[:page])
   end
 
-  def print
-    production_run_data = ProductionRunData.new(@production_run)
-    pdf = ProductionRunPdf.new(production_run_data)
-    pdf_name = 'ProductionRunRecipe.pdf'
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
-  end
-
   def edit; end
+
+  def update
+    if @production_run.update(production_run_params)
+      redirect_to edit_production_run_path(@production_run), notice: 'Successfully updated'
+    else
+      render :edit, notice: 'Remove duplicate products if applicable'
+    end
+  end
 
   def print_recipes
     active_nav(:print_recipes)
@@ -23,12 +24,16 @@ class ProductionRunsController < ApplicationController
     @production_run_projection = ProductionRunProjection.new(current_bakery, @date) unless @production_run
   end
 
-  def update
-    if @production_run.update(production_run_params)
-      redirect_to edit_production_run_path(@production_run), notice: 'Successfully updated'
-    else
-      render :edit, notice: 'Remove duplicate products if applicable'
-    end
+  def print
+    production_run_data = ProductionRunData.new(@production_run)
+    pdf = ProductionRunPdf.new(production_run_data)
+    pdf_name = 'ProductionRunRecipe.pdf'
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+  end
+
+  def reset
+    ProductionRunService.new(@production_run.bakery, @production_run.date).run
+    redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'
   end
 
   private

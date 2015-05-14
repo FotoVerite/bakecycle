@@ -7,7 +7,7 @@ class ProductionRunService
   end
 
   def run
-    find_or_create
+    find_or_create_production_run
     associate_shipment_items
     create_or_update_run_items
   end
@@ -19,9 +19,7 @@ class ProductionRunService
   end
 
   def shipment_items
-    @_shipment_items ||= bakery
-      .shipment_items
-      .where(production_start: date)
+    @_shipment_items ||= bakery.shipment_items.where(production_start: date)
       .where('production_run_id IS NULL OR production_run_id = ?', production_run.id)
   end
 
@@ -31,8 +29,7 @@ class ProductionRunService
   end
 
   def make_run_item(product)
-    RunItem
-      .where(product: product, production_run_id: production_run.id)
+    RunItem.where(product: product, production_run_id: production_run.id)
       .first_or_initialize
       .tap { |run_item| update_run_item(run_item, product) }
   end
@@ -46,7 +43,7 @@ class ProductionRunService
     shipment_items.select { |item| item.product_id == product.id }
   end
 
-  def find_or_create
+  def find_or_create_production_run
     @production_run = ProductionRun.where(bakery: bakery, date: date).first_or_create
   end
 end
