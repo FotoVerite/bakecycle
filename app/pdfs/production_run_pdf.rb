@@ -39,7 +39,7 @@ class ProductionRunPdf < PdfReport
 
   def products
     move_down 40
-    table(product_information_row, column_widths: [300, 135, 135]) do
+    table(product_information_row, column_widths: [300, 120, 120, 30]) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
@@ -47,11 +47,12 @@ class ProductionRunPdf < PdfReport
   end
 
   def product_information_row
-    header = %w(Product Type Qty)
+    header = ['Product', 'Type', 'Qty', nil]
     rows = @production_run_data.products.map do |product|
       [product[:name],
        product[:type],
-       product[:quantity]
+       product[:quantity],
+       nil
       ]
     end
     rows.unshift(header)
