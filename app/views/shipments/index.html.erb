@@ -7,7 +7,7 @@
 
 <% if @shipments.any? %>
   <ul class="stack-for-small secondary button-group">
-    <li><%= link_to "<i class='fi-page-export-pdf'></i> Export PDF".html_safe,
+    <li><%= link_to "<i class='fi-page-export-pdf'></i> Export Invoices".html_safe,
       invoices_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
     </li>
     <li><%= link_to "<i class='fi-page-export-csv'></i> Export CSV".html_safe,

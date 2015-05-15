@@ -56,7 +56,7 @@ class PackingSlipPdf < PdfReport
   end
 
   def shipment_items
-    table(shipment_items_row, column_widths: [300, 100, 57.3, 57.3, 57.3])do
+    table(shipment_items_rows, column_widths: [300, 100, 57.3, 57.3, 57.3])do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
       row(1..-1).column(2..3).style(font_style: :bold)
@@ -88,9 +88,10 @@ class PackingSlipPdf < PdfReport
     ]
   end
 
-  def shipment_items_row
+  def shipment_items_rows
     header = ['Item Name', 'Product Type', 'Ordered', 'Shipped', 'Pack Check']
-    rows = @shipment.shipment_items.object.order_by_product_type_and_name.map do |item|
+    sorted_order_items = @shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
+    rows = sorted_order_items.map do |item|
       item = item.decorate
       [item.product_name_and_sku, item.product_product_type, item.product_quantity, item.product_quantity, nil]
     end
