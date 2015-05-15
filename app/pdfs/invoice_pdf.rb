@@ -90,7 +90,8 @@ class InvoicePdf < PdfReport
 
   def shipment_items_row
     header = ['Item Name', 'Product Type', 'Quantity', 'Price Each', 'Total']
-    rows = @shipment.shipment_items.object.order_by_product_type_and_name.map do |item|
+    sorted_order_items = @shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
+    rows = sorted_order_items.map do |item|
       item = item.decorate
       [item.product_name, item.product_product_type, item.product_quantity, item.product_price, item.price]
     end
