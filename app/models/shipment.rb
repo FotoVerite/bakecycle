@@ -82,7 +82,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def self.recent(client_id)
-    where(client_id: client_id).order('date DESC').limit(10)
+    where(client_id: client_id).order(date: :desc).limit(10)
   end
 
   def self.upcoming(order, date = Time.zone.today)

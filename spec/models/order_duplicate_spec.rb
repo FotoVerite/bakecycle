@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe OrderDuplicate do
-  let(:order) { create(:order, order_item_count: 2) }
+  let(:order) { build_stubbed(:order, order_item_count: 2) }
 
   it 'creates a duplicate of order' do
     order_copy = OrderDuplicate.new(order)

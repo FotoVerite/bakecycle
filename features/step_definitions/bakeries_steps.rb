@@ -1,7 +1,11 @@
-Given(/^There are bakeries named "(.*?)","(.*?)" and "(.*?)"$/) do |name1, name2, name3|
-  create(:bakery, :with_logo, name: name1)
-  create(:bakery, :with_logo, name: name2)
-  create(:bakery, :with_logo, name: name3)
+Given(/^there are bakeries named "(.*?)","(.*?)" and "(.*?)"$/) do |name1, name2, name3|
+  create(:bakery, name: name1)
+  create(:bakery, name: name2)
+  create(:bakery, name: name3)
+end
+
+Given(/^there is a bakery named "(.*?)"$/) do |name|
+  create(:bakery, name: name)
 end
 
 Then(/^I should see a list of bakeries including "(.*?)", "(.*?)" and "(.*?)"$/) do |name1, name2, name3|

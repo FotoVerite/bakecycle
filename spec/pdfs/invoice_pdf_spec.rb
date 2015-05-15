@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe InvoicePdf do
   it 'renders invoice on a shipment' do
-    bakery = create(:bakery)
-    shipment = create(:shipment, bakery: bakery)
+    bakery = build_stubbed(:bakery)
+    shipment = build_stubbed(:shipment, bakery: bakery)
     pdf = InvoicePdf.new(shipment.decorate, bakery)
     expect(pdf.render).to_not be_nil
   end

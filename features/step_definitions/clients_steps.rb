@@ -71,9 +71,8 @@ end
 Given(/^That there's shipments for "(.*?)" and "(.*?)"$/) do |name1, name2|
   client1 = Client.find_by(name: name1)
   client2 = Client.find_by(name: name2)
-
-  create_list(:shipment, 11, client: client1, bakery: client1.bakery)
-  create_list(:shipment, 11, client: client2, bakery: client2.bakery)
+  create(:shipment, client: client1, bakery: client1.bakery)
+  create(:shipment, client: client2, bakery: client2.bakery)
 end
 
 Then(/^I should see recent shipments information$/) do

@@ -2,10 +2,10 @@ Feature: Bakery
 
   Background:
     Given I am logged in as an admin
-    And There are bakeries named "Biencuit","Grumpy" and "Wonder"
 
   Scenario: As an Admin, I can view all bakeries
-    Given I am on the "bakeries" page
+    Given there are bakeries named "Biencuit","Grumpy" and "Wonder"
+    And I am on the "bakeries" page
     Then I should see a list of bakeries including "Biencuit", "Grumpy" and "Wonder"
     When I click on "Wonder"
     Then I should see "Bakery" information about "Wonder"
@@ -16,10 +16,11 @@ Feature: Bakery
     And I fill out Bakery form with valid data
     And I upload my Bakery logo
     And I click on "Create"
-    Then "You have created Au Bon Pain" should be present
+    Then "You have created" should be present
 
   Scenario: As an Admin, I can edit a Bakery
-    Given I am on the edit page for "Grumpy" bakery
+    Given there is a bakery named "Grumpy"
+    And I am on the edit page for "Grumpy" bakery
     When I change the bakery name to "Cheeky's"
     And I click on "Update"
     Then I should see that the bakery name is "Cheeky's"
@@ -30,7 +31,8 @@ Feature: Bakery
 
   @javascript
   Scenario: As an Admin, I can delete a Bakery
-    Given I am on the edit page for "Wonder" bakery
+    Given there is a bakery named "Wonder"
+    And I am on the edit page for "Wonder" bakery
     When I click on "Delete"
     And I confirm popup
     Then I should see confirmation the bakery was deleted
@@ -45,5 +47,6 @@ Feature: Bakery
   @javascript
   Scenario: As a User, I cannot see another bakery
     Given I am logged in as a user with a bakery called "Wizard"
+    And there is a bakery named "Grumpy"
     And I go to the "Grumpy" edit bakery page
     Then "You are not authorized to access this page." should be present
