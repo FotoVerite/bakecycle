@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Shipment do
+  let(:bakery) { create(:bakery) }
   let(:shipment) { build(:shipment) }
   let(:today) { Time.zone.today }
   let(:yesterday) { today - 1.day }
@@ -137,12 +138,18 @@ describe Shipment do
   end
 
   describe '.recent' do
-    it 'returns the latest 10 shipments for a client' do
-      client = create(:client, name: 'Mando')
-      create(:shipment)
-      create(:shipment, client: client, date: today - 1)
-      client_shipments = create_list(:shipment, 10, client: client)
-
+    it 'returns the latest shipments for a client' do
+      client = create(:client, bakery: bakery, name: 'Mando')
+      route = create(:route, bakery: bakery)
+      create(:shipment, bakery: bakery, route: route, shipment_item_count: 0, client: client, date: today - 1)
+      client_shipments = create_list(
+        :shipment,
+        10,
+        bakery: bakery,
+        route: route,
+        shipment_item_count: 0,
+        client: client
+      )
       expect(Shipment.recent(client)).to contain_exactly(*client_shipments)
     end
   end

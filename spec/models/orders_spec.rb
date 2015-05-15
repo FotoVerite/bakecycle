@@ -181,11 +181,11 @@ describe Order do
 
   describe '.standing' do
     it 'returns all standing orders active on a day' do
-      order = create(:order, start_date: today, end_date: today)
-      order2 = create(:order, start_date: yesterday, end_date: today + 1.day)
-      order3 = create(:order, start_date: yesterday, end_date: nil)
-      create(:order, start_date: yesterday, end_date: yesterday)
-      create(:temporary_order, start_date: today)
+      order = create(:order, start_date: today, end_date: today, order_item_count: 0)
+      order2 = create(:order, start_date: yesterday, end_date: today + 1.day, order_item_count: 0)
+      order3 = create(:order, start_date: yesterday, end_date: nil, order_item_count: 0)
+      create(:order, start_date: yesterday, end_date: yesterday, order_item_count: 0)
+      create(:temporary_order, start_date: today, order_item_count: 0)
 
       expect(Order.standing(today)).to contain_exactly(order, order2, order3)
     end
@@ -193,10 +193,10 @@ describe Order do
 
   describe '.active' do
     it 'returns all active orders for a date' do
-      order = create(:order, start_date: yesterday)
+      order = create(:order, start_date: yesterday, order_item_count: 0)
       client = order.client
-      temp_order = create(:temporary_order, start_date: today, client: client, route: order.route)
-      different_route = create(:order, start_date: yesterday, client: client)
+      temp_order = create(:temporary_order, start_date: today, client: client, route: order.route, order_item_count: 0)
+      different_route = create(:order, start_date: yesterday, client: client, order_item_count: 0)
       expect(Order.active(yesterday)).to contain_exactly(order, different_route)
       expect(Order.active(today)).to contain_exactly(temp_order, different_route)
     end
@@ -230,7 +230,8 @@ describe Order do
           client: client,
           start_date: start_date,
           end_date: end_date,
-          order_type: order_type
+          order_type: order_type,
+          order_item_count: 0
         )
       end
 

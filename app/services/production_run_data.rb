@@ -59,7 +59,7 @@ class ProductionRunData
   end
 
   def max_product_lead_day
-    product_lead_days.max.days
+    (product_lead_days.max || 0).days
   end
 
   def product_lead_days
