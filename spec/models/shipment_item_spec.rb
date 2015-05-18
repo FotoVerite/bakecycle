@@ -19,8 +19,6 @@ describe ShipmentItem do
   it 'has validations' do
     expect(shipment_item).to validate_presence_of(:product_id)
     expect(shipment_item).to validate_presence_of(:product_name)
-    expect(shipment_item).to validate_presence_of(:product_quantity)
-    expect(shipment_item).to validate_presence_of(:product_price)
     expect(shipment_item).to validate_numericality_of(:product_quantity)
     expect(shipment_item).to validate_numericality_of(:product_price)
   end
