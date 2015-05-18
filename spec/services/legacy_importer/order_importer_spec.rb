@@ -23,7 +23,7 @@ describe LegacyImporter::OrderImporter do
       order_type: 'standing',
       order_startdate: Time.zone.today,
       order_enddate: Time.zone.tomorrow,
-      order_note: 'Go long and throw it down the stairs',
+      order_notes: 'Go long and throw it down the stairs',
       order_deleted: 'N'
     }
   end
@@ -54,7 +54,7 @@ describe LegacyImporter::OrderImporter do
 
     it 'updates existing orders' do
       order = importer.import!
-      legacy_order[:order_note] = 'Something'
+      legacy_order[:order_notes] = 'Something'
       updated_order = importer.import!
 
       expect(updated_order.note).to eq('Something')

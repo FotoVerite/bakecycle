@@ -10,7 +10,7 @@ module LegacyImporter
     end
 
     FIELDS_MAP = %w(
-      order_note      note
+      order_notes     note
       order_type      order_type
     )
 
