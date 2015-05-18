@@ -38,14 +38,14 @@ class ShipmentsController < ApplicationController
   end
 
   def invoice_iif
-    iif_string = InvoiceIif.new(@shipment.decorate)
-    send_data iif_string.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
+    quickbooks_iif = InvoiceIif.new(@shipment.decorate)
+    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
   end
 
   def invoices_iif
     @shipments = filtered_shipment_search
-    iif_string = InvoicesIif.new(@shipments.decorate)
-    send_data iif_string.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
+    quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery)
+    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: quickbooks_iif.filename
   end
 
   def create
