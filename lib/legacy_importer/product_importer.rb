@@ -48,7 +48,7 @@ module LegacyImporter
     private
 
     def skip?
-      data[:product_active] != 'Y'
+      data[:product_name].blank?
     end
 
     def attributes
