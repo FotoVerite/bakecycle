@@ -189,7 +189,7 @@ GEM
     highline (1.6.21)
     hitimes (1.2.2)
     http_parser.rb (0.6.0)
-    httparty (0.13.3)
+    httparty (0.13.4)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
@@ -406,7 +406,7 @@ GEM
       crack (>= 0.3.2)
     websocket (1.2.2)
     will_paginate (3.0.7)
-    wizarddev-heroku (0.0.1)
+    wizarddev-heroku (0.0.2)
       httparty
       netrc
       rendezvous
