@@ -7,9 +7,11 @@ class ProductionRunService
   end
 
   def run
-    find_or_create_production_run
-    associate_shipment_items
-    create_or_update_run_items
+    ActiveRecord::Base.transaction do
+      find_or_create_production_run
+      associate_shipment_items
+      create_or_update_run_items
+    end
   end
 
   private

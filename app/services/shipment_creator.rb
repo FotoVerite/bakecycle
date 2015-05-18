@@ -10,10 +10,16 @@ class ShipmentCreator
     existing_shipment = Shipment.where(shipment_attributes).first
     return existing_shipment if existing_shipment
     return if shipment_items_is_empty_and_has_no_fee?
-    create_shipment
+    create_shipment_transaction
   end
 
   private
+
+  def create_shipment_transaction
+    ActiveRecord::Base.transaction do
+      create_shipment
+    end
+  end
 
   def shipment_items_is_empty_and_has_no_fee?
     shipment_items.empty? && delivery_fee == 0
