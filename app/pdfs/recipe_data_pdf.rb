@@ -46,7 +46,6 @@ class RecipeDataPdf
 
   def header
     text "#{recipe_run_data.recipe.name}", size: 25
-    text "Type: #{recipe_run_data.recipe.recipe_type.capitalize}", size: 15
   end
 
   def recipe_table
