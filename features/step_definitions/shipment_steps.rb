@@ -4,7 +4,7 @@ Given(/^There are "(.*?)" shipments with clients named "(.*?)" and "(.*?)"$/) do
   client1 = create(:client, name: name1, bakery: bakery)
   client2 = create(:client, name: name2, bakery: bakery)
 
-  create(:shipment, client: client1, bakery: bakery)
+  create(:shipment, client: client1, bakery: bakery, date: Time.zone.now)
   create(:shipment, client: client2, bakery: bakery)
 end
 
@@ -114,5 +114,11 @@ end
 Then(/^the shipment for "(.*?)" should not be present$/) do |shipment|
   within '.responsive-table' do
     expect(page).to_not have_content(shipment)
+  end
+end
+
+Then(/^I should see a table of shipping information$/) do
+  within '.responsive-table' do
+    expect(page).to have_content('Client')
   end
 end

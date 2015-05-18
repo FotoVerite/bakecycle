@@ -2,8 +2,8 @@ class PdfReport < Prawn::Document
   HEADER_ROW_COLOR = 'b9b9b9'
   INDENTED_ROW_COLOR = 'd3d3d3'
 
-  def initialize
-    super(default_margin)
+  def initialize(options = {})
+    super(default_options.merge(options))
     font_size 10
     setup_grid
     @stamps = {}
@@ -24,7 +24,7 @@ class PdfReport < Prawn::Document
     define_grid(columns: 12, rows: 12, gutter: 8)
   end
 
-  def default_margin
+  def default_options
     { margin: [20, 20, 20, 20] }
   end
 

@@ -85,3 +85,10 @@ Feature: Shipments management
     And I click on "Update"
     Then "You have updated the shipment" should be present
     And the product "donut tart" should not be selected
+
+  @javascript
+  Scenario: I should be able to manage shipment items
+    Given I am on the "packing_slips" page
+    Then I should see a table of shipping information
+    When I click on "Print Packing Slips"
+    Then I should be on the "Packing Slips" index page

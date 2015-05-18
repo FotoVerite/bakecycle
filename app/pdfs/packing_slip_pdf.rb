@@ -1,28 +1,28 @@
-class PackingSlipPdf < PdfReport
-  def initialize(shipment, bakery)
-    @shipment = shipment
-    @bakery = bakery.decorate
-    super()
+class PackingSlipPdf
+  def initialize(shipment, bakery, pdf)
+    @shipment = shipment.decorate
+    @bakery = bakery
+    @pdf = pdf
+    @shipment_items = shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
+  end
+
+  def method_missing(method, *args, &block)
+    @pdf.send(method, *args, &block)
   end
 
   def setup
-    packing_slip
-    footer
-  end
-
-  def packing_slip
-    header_stamp
+    packing_slip_header_stamp
     addresses
     packing_slip_info
-    shipment_items
+    shipment_items_table
     pieces_shipped
   end
 
-  def header_stamp
-    stamp_or_create('header') { header }
+  def packing_slip_header_stamp
+    stamp_or_create('packing slip header') { packing_slip_header }
   end
 
-  def header
+  def packing_slip_header
     bounding_box([0, cursor], width: 260, height: 60) do
       bakery_logo_display(@bakery)
     end
@@ -55,9 +55,9 @@ class PackingSlipPdf < PdfReport
     text @shipment.send("client_#{type}_city_state_zip"), style: :bold
   end
 
-  def shipment_items
+  def shipment_items_table
     table(shipment_items_rows, column_widths: [300, 100, 57.3, 57.3, 57.3])do
-      row(0).style(background_color: HEADER_ROW_COLOR)
+      row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       row(1..-1).column(2..3).style(font_style: :bold)
       column(1..-1).style(align: :center)
@@ -90,8 +90,7 @@ class PackingSlipPdf < PdfReport
 
   def shipment_items_rows
     header = ['Item Name', 'Product Type', 'Ordered', 'Shipped', 'Pack Check']
-    sorted_order_items = @shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
-    rows = sorted_order_items.map do |item|
+    rows = @shipment_items.map do |item|
       item = item.decorate
       [item.product_name_and_sku, item.product_product_type, item.product_quantity, item.product_quantity, nil]
     end
