@@ -13,7 +13,7 @@ class ProductionRunsController < ApplicationController
     if @production_run.update(production_run_params)
       redirect_to edit_production_run_path(@production_run), notice: 'Successfully updated'
     else
-      render :edit, notice: 'Remove duplicate products if applicable'
+      render :edit
     end
   end
 

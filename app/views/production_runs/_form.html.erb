@@ -7,7 +7,7 @@
     <div id="error_explanation">
       <ul>
         <% f.object.errors.each do |attribute, msg| %>
-          <li><%= msg %></li>
+          <li class='alert-box alert'><%= msg %></li>
         <% end %>
       </ul>
     </div>

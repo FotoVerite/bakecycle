@@ -14,6 +14,7 @@ class ShipmentItem < ActiveRecord::Base
     :id, :name, :sku, :product_type, :total_lead_days
   ]
 
+  before_validation :set_product_quantity_and_price
   before_save :set_production_start
 
   def self.order_by_product_type_and_name
@@ -31,5 +32,10 @@ class ShipmentItem < ActiveRecord::Base
   def set_production_start
     return unless shipment && shipment.date
     self.production_start = shipment.date - product_total_lead_days
+  end
+
+  def set_product_quantity_and_price
+    self.product_quantity ||= 0
+    self.product_price ||= 0
   end
 end
