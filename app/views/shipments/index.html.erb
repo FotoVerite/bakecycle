@@ -11,10 +11,10 @@
       invoices_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
     </li>
     <li><%= link_to "<i class='fi-page-export-csv'></i> Export CSV".html_safe,
-      invoices_csv_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
+      invoices_csv_shipments_path(search: params[:search]), class: "button" %>
     </li>
     <li><%= link_to "<i class='fi-page-export'></i> Export QuickBooks".html_safe,
-        invoices_iif_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
+        invoices_iif_shipments_path(search: params[:search]), class: "button" %>
     </li>
   </ul>
 <% end %>

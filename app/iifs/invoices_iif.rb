@@ -11,7 +11,7 @@ class InvoicesIif < InvoiceIif
   end
 
   def filename
-    "#{bakery.name}-quickbooks_#{date_from}_#{date_to}.iif"
+    "#{bakery.parameterized_name}-quickbooks_#{date_from}_#{date_to}.iif"
   end
 
   private

@@ -44,7 +44,7 @@ class ShipmentsController < ApplicationController
 
   def invoices_iif
     @shipments = filtered_shipment_search
-    quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery)
+    quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery.decorate)
     send_data quickbooks_iif.generate, content_type: 'text/plain', filename: quickbooks_iif.filename
   end
 
