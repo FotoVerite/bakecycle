@@ -14,6 +14,7 @@ class PackingSlipPdf
     packing_slip_header_stamp
     addresses
     packing_slip_info
+    # notes
     shipment_items_table
     pieces_shipped
   end
@@ -43,6 +44,10 @@ class PackingSlipPdf
       text 'Billed To:', size: 9
       client_address(:billing)
     end
+  end
+
+  def notes
+    text "Notes: #{@shipment.notes}"
   end
 
   def client_address(type)
@@ -84,7 +89,6 @@ class PackingSlipPdf
       ['Date:', @shipment.date],
       ['Invoice #:', @shipment.invoice_number],
       ['Route:', @shipment.route_name],
-      ['Notes:', @shipment.note]
     ]
   end
 
