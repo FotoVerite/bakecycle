@@ -176,7 +176,7 @@
             <th scope="row"><%= order.type %></th>
             <td data-title="Action">
               <%= link_to edit_order_path(order) do %>
-                <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Order"><i class="fi-page-edit"></i></span>
+                <span class="table-action-icon table-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
               <% end %>
             </td>
           </tr>
@@ -212,7 +212,7 @@
             <td data-title="Total"><%= number_to_currency(shipment.price, precision: 2) %></td>
             <td data-title="Action">
               <%= link_to edit_shipment_path(shipment) do %>
-                <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Shipment"><i class="fi-page-edit"></i></span>
+                <span class="table-action-icon table-tooltip" aria-label="Edit Shipment"><i class="fi-page-edit"></i></span>
               <% end %>
             </td>
           </tr>

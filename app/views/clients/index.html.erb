@@ -20,15 +20,15 @@
         <td data-title="Actions">
 
           <%= link_to edit_client_path(client) do %>
-            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Edit Client"><i class="fi-page-edit"></i></span>
+            <span class="table-action-icon table-tooltip" aria-label="Edit Client"><i class="fi-page-edit"></i></span>
           <% end %>
 
           <%= link_to client_path(client) do %>
-            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="View Client"><i class="fi-eye"></i></span>
+            <span class="table-action-icon table-tooltip" aria-label="View Client"><i class="fi-eye"></i></span>
           <% end %>
 
           <%= link_to new_order_path do %>
-            <span class="table-action-icon" data-tooltip aria-haspopup="true" data-options="show_on:medium" title="Add Order For This Client"><i class="fi-page-add"></i></span>
+            <span class="table-action-icon table-tooltip" aria-label="Add Order For This Client"><i class="fi-page-add"></i></span>
           <% end %>
         </td>
       </tr>

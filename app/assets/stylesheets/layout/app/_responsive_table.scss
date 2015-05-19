@@ -11,6 +11,37 @@ $bp-xlarge: 75em;
   }
 }
 
+.table-tooltip {
+  display: inline;
+  position: relative;
+
+  &:hover {
+
+    &:before {
+      border: solid;
+      border-color: #333 transparent;
+      border-width: 0 6px 6px 6px;
+      top: 20px;
+      content: "";
+      left: 4%;
+      position: absolute;
+      z-index: 99;
+    }
+
+    &:after {
+      background: #333;
+      top: 26px;
+      color: #fff;
+      content: attr(aria-label);
+      right: -40%;
+      padding: 12px;
+      position: absolute;
+      z-index: 98;
+      width: 140px;
+    }
+  }
+}
+
 .table-action-icon {
   margin-left: 10px;
   i {

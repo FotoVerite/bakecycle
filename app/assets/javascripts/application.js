@@ -16,7 +16,8 @@
 //= require jquery.timepicker.js
 //= require angular/angular
 //= require ngmap
-//= require foundation
+//= require foundation/foundation
+//= require foundation/foundation.alert
 
 // Angular components
 //= require ./angular/app.js
