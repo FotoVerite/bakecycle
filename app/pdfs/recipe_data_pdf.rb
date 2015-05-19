@@ -83,14 +83,14 @@ class RecipeDataPdf
 
   def product_rows
     rows = []
-    recipe_run_data.products.each do |product|
+    sorted_recipe_run_date_products.each do |product|
       rows << [
         product[:product].name,
         product[:quantity],
         display_weight(product[:product].weight_with_unit),
         display_weight(product[:weight])
       ]
-      rows << product_parts_table(product)
+      rows << product_parts_table(product) if product[:product].inclusion
     end
     rows
   end
@@ -201,6 +201,14 @@ class RecipeDataPdf
 
   def sorted_parent_recipes
     @recipe_run_data.parent_recipes.sort_by { |h| h[:parent_recipe][:name].downcase }
+  end
+
+  def sorted_recipe_run_date_products
+    recipe_run_data.products.sort_by { |product| [product_without_inclusion(product), product[:product].name.downcase] }
+  end
+
+  def product_without_inclusion(product)
+    product[:product].inclusion ? 1 : 0
   end
 end
 # rubocop:enable Metrics/ClassLength
