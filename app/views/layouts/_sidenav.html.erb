@@ -3,7 +3,7 @@
     <div class="side-navigation js-sidenav-toggle">
       <ul class="main">
 
-        <li class="js-subnav-toggle <%= active_nav?(:dashboard) %>">
+        <li class="js-subnav-toggle show-nav <%= active_nav?(:dashboard) %>">
           <%= link_to dashboard_path do %>
               <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
               <span class="header">Dashboard</span>
@@ -11,7 +11,7 @@
         </li>
 
         <% if current_bakery %>
-          <li class="js-subnav-toggle <%= active_nav?(:ingredients, :recipes, :products) %>">
+          <li class="js-subnav-toggle show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
             <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
             <span class="header">Products</span>
 
@@ -22,7 +22,7 @@
             </ul>
           </li>
 
-          <li class="js-subnav-toggle <%= active_nav?(:print_recipes, :production_runs, :daily_totals) %>">
+          <li class="js-subnav-toggle show-nav <%= active_nav?(:print_recipes, :production_runs, :daily_totals) %>">
             <span class="icon"><%= image_tag 'icons/icon-production.svg'%></span>
             <span class="header">Production</span>
 
@@ -33,7 +33,7 @@
             </ul>
           </li>
 
-          <li class="js-subnav-toggle <%= active_nav?(:clients, :active_orders, :orders, :shipments) %>">
+          <li class="js-subnav-toggle show-nav <%= active_nav?(:clients, :active_orders, :orders, :shipments) %>">
             <span class="icon"><%= image_tag 'icons/icon-client.svg'%></span>
             <span class="header">Clients</span>
 
@@ -44,7 +44,7 @@
               <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
             </ul>
           </li>
-          <li class="js-subnav-toggle <%= active_nav?(:routes, :delivery_lists) %>">
+          <li class="js-subnav-toggle show-nav <%= active_nav?(:routes, :delivery_lists) %>">
             <span class="icon"><%= image_tag 'icons/icon-shipping.svg'%></span>
             <span class="header">Shipping</span>
 
@@ -55,7 +55,7 @@
           </li>
         <% end %>
 
-        <li class="js-subnav-toggle <%= active_nav?(:users, :bakeries) %>">
+        <li class="js-subnav-toggle show-nav <%= active_nav?(:users, :bakeries) %>">
           <span class="icon"><%= image_tag 'icons/icon-account.svg'%></span>
           <span class="header">Admin</span>
 
