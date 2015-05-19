@@ -5,7 +5,8 @@
     </div>
     <div class="small-12 medium-3 columns end">
       <div class="invoices-checkbox">
-        <%=  f.input_field :include_invoices, as: :boolean, required: false, inline_label: true %>
+        <%=  f.input_field :include_invoices, as: :boolean, required: false, inline_label: true, checked: true %>
+        <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
       </div>
     </div>
   </div>
