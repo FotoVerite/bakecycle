@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512205946) do
+ActiveRecord::Schema.define(version: 20150519212601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 20150512205946) do
     t.integer  "route_id"
     t.date     "start_date"
     t.date     "end_date"
-    t.string   "note"
+    t.text     "note"
     t.string   "order_type", null: false
     t.integer  "bakery_id",  null: false
     t.datetime "created_at"
@@ -267,7 +267,7 @@ ActiveRecord::Schema.define(version: 20150512205946) do
     t.string   "client_billing_address_zipcode"
     t.integer  "client_billing_term_days",                         null: false
     t.string   "route_name",                                       null: false
-    t.string   "note"
+    t.text     "note"
     t.string   "client_primary_contact_name"
     t.string   "client_primary_contact_phone"
     t.datetime "created_at"
