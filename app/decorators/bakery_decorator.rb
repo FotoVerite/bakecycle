@@ -18,4 +18,8 @@ class BakeryDecorator < Draper::Decorator
     return unless last_kickoff
     last_kickoff.to_s(:long)
   end
+
+  def parameterized_name
+    object.name.parameterize
+  end
 end
