@@ -13,13 +13,13 @@ class ShipmentsController < ApplicationController
   end
 
   def invoice
-    pdf = InvoicePdf.new(@shipment.decorate, current_bakery)
+    pdf = InvoicesPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def packing_slip
-    pdf = PackingSlipPdf.new(@shipment.decorate, current_bakery)
+    pdf = PackingSlipsPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end

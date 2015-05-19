@@ -1,20 +1,15 @@
-class InvoicesPdf < InvoicePdf
+class InvoicesPdf < PdfReport
   def initialize(shipments, bakery)
     @shipments = shipments
     @bakery = bakery.decorate
-    super(nil, @bakery)
+    super(skip_page_creation: true)
   end
 
   def setup
-    shipment_invoices
-    timestamp
-  end
-
-  def shipment_invoices
     @shipments.each do |shipment|
-      @shipment = shipment
-      invoice
-      start_new_page unless shipment == @shipments.last
+      start_new_page
+      InvoicePdf.new(shipment, @bakery, self).setup
     end
+    timestamp
   end
 end

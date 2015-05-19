@@ -1,17 +1,16 @@
-class InvoicePdf < PdfReport
-  def initialize(shipment, bakery)
-    @shipment = shipment
-    @bakery = bakery.decorate
-    super()
+class InvoicePdf
+  def initialize(shipment, bakery, pdf)
+    @shipment = shipment.decorate
+    @bakery = bakery
+    @pdf = pdf
+  end
+
+  def method_missing(method, *args, &block)
+    @pdf.send(method, *args, &block)
   end
 
   def setup
-    invoice
-    footer
-  end
-
-  def invoice
-    header_stamp
+    invoice_header_stamp
     addresses
     note
     information
@@ -19,11 +18,11 @@ class InvoicePdf < PdfReport
     totals
   end
 
-  def header_stamp
-    stamp_or_create('header') { header }
+  def invoice_header_stamp
+    stamp_or_create('invoice header') { invoice_header }
   end
 
-  def header
+  def invoice_header
     bounding_box([0, cursor], width: 260, height: 60) do
       bakery_logo_display(@bakery)
     end
@@ -66,7 +65,7 @@ class InvoicePdf < PdfReport
   def information
     table(information_rows, column_widths: [114.4, 114.4, 114.4, 114.4, 114.4])  do
       column(0..4).style(align: :center)
-      row(0).style(background_color: HEADER_ROW_COLOR)
+      row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       row(1).style(overflow: :shrink_to_fit, min_font_size: 10)
     end
   end
@@ -82,7 +81,7 @@ class InvoicePdf < PdfReport
   def shipment_items
     move_down 20
     table(shipment_items_row, column_widths: [250, 80.5, 80.5, 80.5, 80.5])do
-      row(0).style(background_color: HEADER_ROW_COLOR)
+      row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..4).style(align: :center)
     end

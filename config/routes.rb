@@ -35,6 +35,10 @@ Rails.application.routes.draw do
     get 'print', on: :member
   end
 
+  resources :packing_slips, only: [:index] do
+    get 'print', on: :collection
+  end
+
   get 'active-orders', to: 'orders#active_orders'
   get 'print-recipes', to: 'production_runs#print_recipes'
 

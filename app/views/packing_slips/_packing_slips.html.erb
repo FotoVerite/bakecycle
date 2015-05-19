@@ -1,0 +1,30 @@
+<%= simple_form_for :print, url:  print_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.submit 'Print Packing Slips', class: "button postfix search-button", action: 'print', name: nil %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <div class="invoices-checkbox">
+        <%=  f.input_field :include_invoices, as: :boolean, required: false, inline_label: true %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Client</th>
+      <th scope="col">Route</th>
+      <th scope="col">Departure Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% shipments.each do |shipment| %>
+      <tr>
+        <th scope="row"><%= shipment.client_name %></th>
+        <td data-title="Route Name"><%= shipment.route_name %></td>
+        <td data-title="Departure Time"><%= shipment.route_departure_time.strftime("%I:%M%p") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

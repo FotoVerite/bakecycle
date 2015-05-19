@@ -91,6 +91,10 @@ class Shipment < ActiveRecord::Base
       .order('date ASC')
   end
 
+  def self.order_by_route_and_client
+    order('route_departure_time asc, route_name asc, client_name asc')
+  end
+
   def subtotal
     shipment_items.map(&:price).sum
   end
@@ -100,7 +104,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def total_quantity
-    shipment_items.pluck(:product_quantity).reduce(:+) || 0
+    shipment_items.map(&:product_quantity).sum
   end
 
   def invoice_number
