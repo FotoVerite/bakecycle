@@ -1,5 +1,5 @@
 <div ng-controller="NestedItemCtrl">
-  <%= f.simple_fields_for :shipment_items, @shipment.shipment_items.order_by_product_type_and_name do |builder| %>
+  <%= f.simple_fields_for :shipment_items, shipment.sorted_shipment_items do |builder| %>
     <%= render "shipment_item_fields", f: builder %>
   <% end %>
 

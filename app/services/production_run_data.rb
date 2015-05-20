@@ -26,10 +26,10 @@ class ProductionRunData
 
   def products
     run_items_by_product_name.map do |item|
-      product = item.product
+      product = item.product.decorate
       {
         name: product.name,
-        type: product.product_type,
+        type: product.type,
         quantity: item.total_quantity
       }
     end

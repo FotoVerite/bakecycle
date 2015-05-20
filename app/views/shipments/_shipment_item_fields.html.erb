@@ -5,8 +5,8 @@
       <%= f.input :product_id, collection: shipment.available_products, label: false, include_blank: "--None--", as: :select %>
     </div>
     <div class="small-12 large-2 columns">
-      <%= f.label :production_start, "Type", class: "hide-for-large-up" %>
-      <input ng-disabled="true" type="text" value="<%= f.object.product_product_type %>" />
+      <%= f.label :product_product_type, "Type", class: "hide-for-large-up" %>
+      <input ng-disabled="true" type="text" value="<%= f.object.product_type %>" />
     </div>
     <div class="small-12 large-1 columns">
       <%= f.label :product_quantity, "Quantity", class: "hide-for-large-up" %>
