@@ -5,6 +5,14 @@ class ShipmentItemDecorator < Draper::Decorator
     h.number_to_currency(object.product_price)
   end
 
+  def float_product_price
+    object.product_price.to_f
+  end
+
+  def product_type
+    object.product_product_type.humanize(capitalize: false).titleize
+  end
+
   def price
     h.number_to_currency(object.price)
   end

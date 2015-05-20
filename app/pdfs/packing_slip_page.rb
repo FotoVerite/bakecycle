@@ -1,4 +1,4 @@
-class PackingSlipPdf
+class PackingSlipPage
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
     @bakery = bakery
@@ -97,7 +97,7 @@ class PackingSlipPdf
     header = ['Item Name', 'Product Type', 'Ordered', 'Shipped', 'Pack Check']
     rows = @shipment_items.map do |item|
       item = item.decorate
-      [item.product_name_and_sku, item.product_product_type, item.product_quantity, item.product_quantity, nil]
+      [item.product_name_and_sku, item.product_type, item.product_quantity, item.product_quantity, nil]
     end
     rows.unshift(header)
   end

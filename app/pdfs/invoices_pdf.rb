@@ -8,7 +8,7 @@ class InvoicesPdf < PdfReport
   def setup
     @shipments.each do |shipment|
       start_new_page
-      InvoicePdf.new(shipment, @bakery, self).setup
+      InvoicePage.new(shipment, @bakery, self).setup
     end
     timestamp
   end

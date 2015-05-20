@@ -3,6 +3,10 @@ class ShipmentDecorator < Draper::Decorator
   decorates_association :shipment_items
   decorates_association :bakery
 
+  def sorted_shipment_items
+    object.shipment_items.order_by_product_type_and_name.decorate
+  end
+
   def available_clients
     h.item_finder.clients.order(:name)
   end
