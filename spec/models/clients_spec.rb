@@ -6,6 +6,7 @@ describe Client do
 
   it 'has model attributes' do
     expect(client).to respond_to(:name)
+    expect(client).to respond_to(:notes)
     expect(client).to respond_to(:official_company_name)
     expect(client).to respond_to(:business_phone)
     expect(client).to respond_to(:business_fax)

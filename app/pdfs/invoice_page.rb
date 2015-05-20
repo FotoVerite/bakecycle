@@ -12,7 +12,7 @@ class InvoicePage
   def setup
     invoice_header_stamp
     addresses
-    note unless @shipment.note.try(:blank?)
+    note
     information
     shipment_items
     totals
@@ -43,11 +43,6 @@ class InvoicePage
       text 'Billed To:', size: 9
       client_address(:billing)
     end
-  end
-
-  def note
-    text "Note: #{@shipment.note}"
-    move_down 15
   end
 
   def client_address(type)
@@ -107,5 +102,17 @@ class InvoicePage
 
   def totals_row
     [['Subtotal:', @shipment.subtotal], ['Delivery Fee:', @shipment.delivery_fee], ['Total:', @shipment.price]]
+  end
+
+  private
+
+  def note
+    notes_data if @shipment.note.present?
+  end
+
+  def notes_data
+    text 'Notes', style: :bold
+    text @shipment.note
+    move_down 15
   end
 end

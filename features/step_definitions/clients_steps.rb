@@ -46,6 +46,7 @@ When(/^I fill out Client form with valid data$/) do
   select 'Daily Delivery Fee', from: 'client_delivery_fee_option'
   fill_in 'client_delivery_minimum', with: '310.00'
   fill_in 'client_delivery_fee', with: '20.85'
+  fill_in 'client_notes', with: 'Call before knocking'
 end
 
 Then(/^the client "(.*?)" should not be present$/) do |client_name|

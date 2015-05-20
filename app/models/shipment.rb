@@ -33,7 +33,7 @@ class Shipment < ActiveRecord::Base
     :delivery_address_street_2, :delivery_address_city, :delivery_address_state,
     :delivery_address_zipcode, :billing_address_street_1, :billing_address_street_2,
     :billing_address_city, :billing_address_state, :billing_address_zipcode,
-    :primary_contact_name, :primary_contact_phone
+    :primary_contact_name, :primary_contact_phone, :notes
   ]
 
   def self.search(fields)
