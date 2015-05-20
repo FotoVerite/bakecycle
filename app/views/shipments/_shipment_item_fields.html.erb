@@ -15,7 +15,7 @@
 
     <div class="small-12 large-1 columns">
       <%= f.label :product_price, "Price", class: "hide-for-large-up" %>
-      <%= f.input :product_price, as: :string, label: false, input_html: { class: "product_price_input" } %>
+      <%= f.input :product_price, as: :string, label: false, input_html: { class: "product_price_input", value: f.object.float_product_price } %>
      </div>
 
     <div class="small-12 large-2 columns">
