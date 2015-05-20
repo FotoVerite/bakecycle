@@ -25,7 +25,7 @@ class PdfReport < Prawn::Document
   end
 
   def default_options
-    { margin: [20, 20, 20, 20] }
+    { margin: [40, 20, 20, 20] }
   end
 
   def number_of_pages
@@ -54,7 +54,7 @@ class PdfReport < Prawn::Document
   def timestamp
     repeat :all do
       bounding_box([288, bounds.bottom + 10], width: (bounds.width / 2.0)) do
-        text printed_today, size: 8, align: :right
+        text printed_today, size: 8, align: :right, margin: 10
       end
     end
   end

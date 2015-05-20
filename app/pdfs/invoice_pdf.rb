@@ -12,7 +12,7 @@ class InvoicePdf
   def setup
     invoice_header_stamp
     addresses
-    note
+    note unless @shipment.note.try(:blank?)
     information
     shipment_items
     totals
@@ -35,21 +35,19 @@ class InvoicePdf
   end
 
   def addresses
-    grid([1.5, 0], [1.9, 3]).bounding_box do
+    grid([1.1, 0], [1.3, 3]).bounding_box do
       text 'Shipped To:', size: 9
       client_address(:delivery)
     end
-    grid([1.5, 4], [1.9, 7]).bounding_box do
+    grid([1.1, 4], [1.3, 7]).bounding_box do
       text 'Billed To:', size: 9
       client_address(:billing)
     end
   end
 
   def note
-    grid([1.5, 8], [1.9, 11]).bounding_box do
-      text 'Notes:', size: 9
-      text @shipment.note, size: 10
-    end
+    text "Note: #{@shipment.note}"
+    move_down 15
   end
 
   def client_address(type)
