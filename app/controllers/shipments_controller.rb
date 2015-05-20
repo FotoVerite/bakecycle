@@ -15,18 +15,21 @@ class ShipmentsController < ApplicationController
   def invoice
     pdf = InvoicesPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
+    expires_now
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def packing_slip
     pdf = PackingSlipsPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
+    expires_now
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def invoices_csv
     @shipments = filtered_shipment_search
     csv_string = InvoicesCsv.new(@shipments.decorate)
+    expires_now
     send_data csv_string.generate, filename: 'invoices.csv', type: 'text/csv', disposition: 'attachment'
   end
 
@@ -34,17 +37,20 @@ class ShipmentsController < ApplicationController
     @shipments = filtered_shipment_search
     pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
     pdf_name = 'invoices.pdf'
+    expires_now
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
   def invoice_iif
     quickbooks_iif = InvoiceIif.new(@shipment.decorate)
+    expires_now
     send_data quickbooks_iif.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
   end
 
   def invoices_iif
     @shipments = filtered_shipment_search
     quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery.decorate)
+    expires_now
     send_data quickbooks_iif.generate, content_type: 'text/plain', filename: quickbooks_iif.filename
   end
 

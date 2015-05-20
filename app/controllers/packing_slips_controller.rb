@@ -8,7 +8,8 @@ class PackingSlipsController < ApplicationController
 
   def print
     pdf = PackingSlipsPdf.new(shipments_for(slip_date), current_bakery, print_invoices?)
-    pdf_name = "packing_slips_#{slip_date}.pdf"
+    pdf_name = "packing_slips_#{slip_date.strftime('%Y-%m-%d')}.pdf"
+    expires_now
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 

@@ -2,7 +2,6 @@
   <div class="large-2 medium-12 small-12 columns">
     <div class="side-navigation js-sidenav-toggle">
       <ul class="main">
-
         <li class="js-subnav-toggle show-nav <%= active_nav?(:dashboard) %>">
           <%= link_to dashboard_path do %>
               <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
@@ -56,7 +55,7 @@
           </li>
         <% end %>
 
-        <li class="js-subnav-toggle show-nav <%= active_nav?(:users, :bakeries) %>">
+        <li class="js-subnav-toggle show-nav <%= active_nav?(:users, :bakeries, :my_bakery) %>">
           <span class="icon"><%= image_tag 'icons/icon-account.svg'%></span>
           <span class="header">Admin</span>
 
@@ -70,7 +69,7 @@
             <% end %>
 
             <% if current_bakery %>
-              <li class="<%= active_nav?(:bakeries) %>"><%= link_to('My Bakery', my_bakeries_path) %></li>
+              <li class="<%= active_nav?(:my_bakery) %>"><%= link_to('My Bakery', my_bakeries_path) %></li>
             <% end %>
 
             <% if current_user %>

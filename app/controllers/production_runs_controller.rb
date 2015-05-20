@@ -28,6 +28,7 @@ class ProductionRunsController < ApplicationController
     production_run_data = ProductionRunData.new(@production_run)
     pdf = ProductionRunPdf.new(production_run_data)
     pdf_name = 'ProductionRunRecipe.pdf'
+    expires_now
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
