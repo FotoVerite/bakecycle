@@ -1,4 +1,4 @@
-class InvoicePdf
+class InvoicePage
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
     @bakery = bakery

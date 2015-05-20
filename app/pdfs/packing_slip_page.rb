@@ -1,4 +1,4 @@
-class PackingSlipPdf
+class PackingSlipPage
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
     @bakery = bakery

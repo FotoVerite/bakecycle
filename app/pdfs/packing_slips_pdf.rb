@@ -16,12 +16,12 @@ class PackingSlipsPdf < PdfReport
 
   def render_packing_slip(shipment)
     start_new_page
-    PackingSlipPdf.new(shipment, @bakery, self).setup
+    PackingSlipPage.new(shipment, @bakery, self).setup
   end
 
   def render_invoice(shipment)
     return unless @invoices
     start_new_page
-    InvoicePdf.new(shipment, @bakery, self).setup
+    InvoicePage.new(shipment, @bakery, self).setup
   end
 end
