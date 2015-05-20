@@ -7,7 +7,10 @@ class BakeriesController < ApplicationController
   end
 
   def new
-    @bakery = Bakery.new(kickoff_time: Chronic.parse('2 pm'), quickbooks_account: 'Sales:Sales - Wholesale')
+    @bakery = Bakery.new(
+      kickoff_time: Chronic.parse('2 pm'),
+      quickbooks_account: 'Sales:Sales - Wholesale'
+    )
   end
 
   def create
@@ -24,6 +27,7 @@ class BakeriesController < ApplicationController
   end
 
   def mybakery
+    active_nav(:my_bakery)
     @bakery = current_bakery
     render 'edit'
   end
