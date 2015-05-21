@@ -41,7 +41,7 @@ module LegacyImporter
     end
 
     def calculate_lead_days
-      if data[:recipe_type] == 'inclusion'
+      if data[:recipe_type] == 'preferment'
         1
       else
         data[:recipe_daystomake] - 1
