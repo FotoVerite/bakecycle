@@ -12,9 +12,4 @@ class ClientDecorator < Draper::Decorator
   def delivery_fee_display
     delivery_fee_option.humanize(capitalize: false).titleize if delivery_fee_option
   end
-
-  def delivery_address
-    "#{delivery_address_street_1} #{delivery_address_street_2}" \
-    "#{delivery_address_city} #{delivery_address_state} #{delivery_address_zipcode}"
-  end
 end

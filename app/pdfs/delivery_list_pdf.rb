@@ -66,7 +66,7 @@ class DeliveryListPdf < PdfReport
         client.name,
         client.primary_contact_name,
         client.primary_contact_phone,
-        client.delivery_address,
+        client.full_delivery_address,
         nil
       ]
       rows << client_notes_row(client) if client.notes.present?
