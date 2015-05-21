@@ -32,6 +32,16 @@ class ProductionRunsController < ApplicationController
     send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
   end
 
+  def print_projection
+    projection = ProductionRunProjection.new(current_bakery, date_query)
+    projection_run_data = ProjectionRunData.new(projection)
+
+    pdf = ProductionRunPdf.new(projection_run_data)
+    pdf_name = 'ProjectionRunRecipe.pdf'
+    expires_now
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+  end
+
   def reset
     ProductionRunService.new(@production_run.bakery, @production_run.date).run
     redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'

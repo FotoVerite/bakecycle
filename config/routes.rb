@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
   resources :production_runs do
     get 'print', on: :member
+    get 'print_projection', on: :collection
     put 'reset', on: :member
 
     resources :run_items

@@ -2,7 +2,7 @@ class ProductionRunData
   attr_reader :bakery, :recipes, :production_run
   def initialize(production_run)
     @production_run = production_run
-    @run_items = production_run.run_items
+    @items = production_run.run_items
     @bakery = production_run.bakery
     @recipes = RecipeCollection.new
     processes_run_items
@@ -12,16 +12,16 @@ class ProductionRunData
     @production_run.id
   end
 
+  def run_date
+    production_run.date
+  end
+
   def start_date
-    @production_run.date.strftime('%A %b. %e, %Y')
+    run_date.strftime('%A %b. %e, %Y')
   end
 
   def end_date
-    (@production_run.date + max_product_lead_day).strftime('%A %b. %e, %Y')
-  end
-
-  def run_items_by_product_name
-    @_run_items_by_product_name ||= @run_items.order_by_product_type_and_name
+    (run_date + max_product_lead_day).strftime('%A %b. %e, %Y')
   end
 
   def products
@@ -46,14 +46,14 @@ class ProductionRunData
   def add_to_recipe_run_data(product, quantity)
     motherdough =  product.motherdough
     return unless motherdough
-    recipe_data = recipes.find_or_create(motherdough, production_run.date)
+    recipe_data = recipes.find_or_create(motherdough, run_date)
     recipe_data.add_product(product, quantity)
     add_nested_recipes(recipe_data)
   end
 
   def add_nested_recipes(recipe_data)
     recipe_data.deeply_nested_recipe_info.each do |nested_info|
-      nested_data = recipes.find_or_create(nested_info[:inclusionable], production_run.date)
+      nested_data = recipes.find_or_create(nested_info[:inclusionable], run_date)
       nested_data.add_parent_recipe(nested_info[:parent_recipe], nested_info[:weight])
     end
   end
@@ -63,6 +63,10 @@ class ProductionRunData
   end
 
   def product_lead_days
-    @run_items.map { |items| items.product.total_lead_days }
+    @items.map { |items| items.product.total_lead_days }
+  end
+
+  def run_items_by_product_name
+    @_run_items_by_product_name ||= @items.order_by_product_type_and_name
   end
 end

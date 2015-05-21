@@ -1,7 +1,7 @@
 class ProductionRunPdf < PdfReport
-  def initialize(production_run_data)
-    @production_run_data = production_run_data
-    @bakery = production_run_data.bakery.decorate
+  def initialize(run_data)
+    @run_data = run_data
+    @bakery = run_data.bakery.decorate
     super()
   end
 
@@ -10,10 +10,25 @@ class ProductionRunPdf < PdfReport
     production_run_info
     products
     body
+    timestamp
+    run_stamp
   end
 
   def header_stamp
     stamp_or_create('header') { header }
+  end
+
+  def run_stamp
+    repeat :all do
+      bounding_box([0, bounds.bottom + 10], width: (bounds.width / 2.0)) do
+        text run_label, size: 10, style: :bold, margin: 10
+      end
+    end
+  end
+
+  def run_label
+    return "Production Run ##{@run_data.id}" if @run_data.id
+    'Production Run PROJECTION'
   end
 
   def header
@@ -27,18 +42,18 @@ class ProductionRunPdf < PdfReport
 
   def production_run_info
     font_size 10
-    text "Production Run ##{@production_run_data.id}"
-    text "#{@production_run_data.start_date} - #{@production_run_data.end_date}"
+    text run_label
+    text "#{@run_data.start_date} - #{@run_data.end_date}"
   end
 
   def body
-    @production_run_data.recipes.each do |motherdough|
+    @run_data.recipes.each do |motherdough|
       RecipeDataPdf.new(self, motherdough).render_recipe
     end
   end
 
   def products
-    move_down 40
+    move_down 15
     table(product_information_row, column_widths: [300, 120, 120, 30]) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
@@ -48,7 +63,7 @@ class ProductionRunPdf < PdfReport
 
   def product_information_row
     header = ['Product', 'Type', 'Qty', nil]
-    rows = @production_run_data.products.map do |product|
+    rows = @run_data.products.map do |product|
       [product[:name],
        product[:type],
        product[:quantity],
