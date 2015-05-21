@@ -27,6 +27,7 @@ describe Shipment do
     expect(shipment).to respond_to(:client_billing_term_days)
     expect(shipment).to respond_to(:client_primary_contact_name)
     expect(shipment).to respond_to(:client_primary_contact_phone)
+    expect(shipment).to respond_to(:client_notes)
     expect(shipment).to respond_to(:note)
     expect(shipment).to belong_to(:bakery)
   end

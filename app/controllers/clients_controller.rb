@@ -57,6 +57,6 @@ class ClientsController < ApplicationController
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
       :secondary_contact_phone, :secondary_contact_email, :billing_term, :delivery_fee_option,
-      :delivery_fee, :delivery_minimum)
+      :delivery_fee, :delivery_minimum, :notes)
   end
 end

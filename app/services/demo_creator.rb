@@ -283,7 +283,8 @@ class DemoCreator
       primary_contact_email: 'francis@wizarddevelopment.com',
 
       billing_term: :net_30,
-      delivery_fee_option: :no_delivery_fee
+      delivery_fee_option: :no_delivery_fee,
+      notes:  'Call before knocking'
     )
   end
 

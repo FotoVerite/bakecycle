@@ -30,7 +30,7 @@ class DeliveryListPdf < PdfReport
   end
 
   def body
-    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 50) do
+    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 100) do
       routes
     end
   end
@@ -45,7 +45,7 @@ class DeliveryListPdf < PdfReport
   end
 
   def clients
-    table(client_information_row, column_widths: [160, 100, 80, 180, 52]) do
+    table(client_data, column_widths: [160, 100, 80, 180, 52]) do
       column(0..-1).style(size: 9)
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
@@ -53,17 +53,29 @@ class DeliveryListPdf < PdfReport
     end
   end
 
-  def client_information_row
+  def client_data
     header = ['Client Name', 'Contact', 'Phone', 'Address', 'D-time']
-    rows = @recipes.route_shipment_clients(@route).map do |client|
-      [client.name,
-       client.primary_contact_name,
-       client.primary_contact_phone,
-       client.street_zipcode,
-       nil
+    client_rows.unshift(header)
+  end
+
+  def client_rows
+    rows = []
+
+    @recipes.route_shipment_clients(@route).each do |client|
+      rows << [
+        client.name,
+        client.primary_contact_name,
+        client.primary_contact_phone,
+        client.delivery_address,
+        nil
       ]
+      rows << client_notes_row(client) if client.notes.present?
     end
-    rows.unshift(header)
+    rows
+  end
+
+  def client_notes_row(client)
+    [content: client.notes, colspan: 5, background_color: 'FFFFCC']
   end
 
   def delivery_date

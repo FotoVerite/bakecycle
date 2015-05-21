@@ -14,7 +14,7 @@ class PackingSlipPage
     packing_slip_header_stamp
     addresses
     packing_slip_info
-    note unless @shipment.note.blank?
+    notes
     shipment_items_table
     pieces_shipped
   end
@@ -54,11 +54,6 @@ class PackingSlipPage
       text @shipment.send("client_#{type}_address_street_2"), style: :bold
     end
     text @shipment.send("client_#{type}_city_state_zip"), style: :bold
-  end
-
-  def note
-    text "Note: #{@shipment.note}"
-    move_down 15
   end
 
   def shipment_items_table
@@ -117,5 +112,22 @@ class PackingSlipPage
       ['# BOXES shipped:', nil, nil],
       ['# BAGS shipped:', nil, nil]
     ]
+  end
+
+  private
+
+  def shipment_or_client_notes_present?
+    @shipment.client_notes.present? || @shipment.note.present?
+  end
+
+  def notes
+    notes_data if shipment_or_client_notes_present?
+  end
+
+  def notes_data
+    text 'Notes', style: :bold
+    text @shipment.client_notes if @shipment.client_notes.present?
+    text @shipment.note if @shipment.note.present?
+    move_down 15
   end
 end
