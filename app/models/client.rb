@@ -30,7 +30,13 @@ class Client < ActiveRecord::Base
   end
 
   def full_delivery_address
-    "#{delivery_address_street_1} #{delivery_address_street_2} #{delivery_address_city} #{delivery_address_state}"
+    [
+      delivery_address_street_1,
+      delivery_address_street_2,
+      delivery_address_city,
+      delivery_address_state,
+      delivery_address_zipcode
+    ].compact.join(' ')
   end
 
   def needs_geocode?
@@ -38,6 +44,7 @@ class Client < ActiveRecord::Base
     changed ||= delivery_address_street_2_changed?
     changed ||= delivery_address_city_changed?
     changed ||= delivery_address_state_changed?
+    changed ||= delivery_address_zipcode_changed?
 
     changed || latitude.nil? || longitude.nil?
   end
