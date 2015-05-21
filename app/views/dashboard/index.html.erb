@@ -136,5 +136,8 @@
         </div>
       <% end %>
     <% end %>
+    <% if can? :manage, :resque %>
+      <%= resque_info_table %>
+    <% end %>
   </div>
 </div>

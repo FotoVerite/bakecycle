@@ -51,4 +51,13 @@ Rails.application.routes.draw do
 
     resources :run_items
   end
+
+  # If user is not an admin it 404s for resque
+  resque_web_constraint = lambda do |request|
+    current_user = request.env['warden'].user
+    current_user.present? && current_user.admin?
+  end
+  constraints resque_web_constraint do
+    mount Resque::Server, at: '/resque'
+  end
 end

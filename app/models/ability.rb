@@ -37,5 +37,7 @@ class Ability
     # Bakeries
     can [:read, :update, :mybakery], Bakery, id: user.bakery.id if user.bakery
     can :manage, Bakery if user.admin?
+
+    can :manage, :resque if user.admin?
   end
 end
