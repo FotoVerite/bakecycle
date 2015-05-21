@@ -41,7 +41,7 @@ describe LegacyImporter::ClientImporter do
       client_deliverystart: Time.zone.local('2000-01-01 03:00:00 -0500'),
       client_deliveryend: Time.zone.local('2000-01-01 04:00:00 -0500'),
       client_deliveryterms: 'Net 30',
-      client_deliverynotes: '',
+      client_deliverynotes: 'Pick up only',
       client_createinvoices: 'Y',
       client_emailinvoices: 'N',
       client_printinvoices: 1,

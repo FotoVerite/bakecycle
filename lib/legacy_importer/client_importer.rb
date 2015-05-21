@@ -40,6 +40,7 @@ module LegacyImporter
       client_deliveryfee        delivery_fee
       client_deliverymin        delivery_minimum
       client_deliveryterms      billing_term
+      client_deliverynotes      notes
       client_fax                business_fax
       client_phone              business_phone
     )
@@ -49,7 +50,6 @@ module LegacyImporter
     # client_createinvoices
     # client_deliverorpickup
     # client_deliveryend
-    # client_deliverynotes
     # client_deliverystart
     # client_discountpct
     # client_doc_creditcardapp
