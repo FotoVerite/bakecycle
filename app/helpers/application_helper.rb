@@ -13,4 +13,8 @@ module ApplicationHelper
     return base_title if page_title.empty?
     "#{page_title} - #{base_title}".html_safe
   end
+
+  def resque_info_table
+    render partial: 'resque_info_table', locals: { info: Resque.info }
+  end
 end

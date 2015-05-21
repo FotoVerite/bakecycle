@@ -1,0 +1,33 @@
+<div class="large-4 medium-6 small-12 columns end">
+  <div class="stats border">
+    Job Queues
+    <table>
+      <tbody>
+        <tr>
+          <td>Workers</td>
+          <td><%= info[:workers] %></td>
+        </tr>
+        <tr>
+          <td>Working</td>
+          <td><%= info[:working] %></td>
+        </tr>
+        <tr>
+          <td>Failed</td>
+          <td><%= info[:failed] %></td>
+        </tr>
+        <tr>
+          <td>Pending</td>
+          <td><%= info[:pending] %></td>
+        </tr>
+        <tr>
+          <td>Processed</td>
+          <td><%= info[:processed] %></td>
+        </tr>
+        <tr>
+          <td>Servers</td>
+          <td><%= info[:servers].join(',') %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

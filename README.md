@@ -2,6 +2,11 @@
 
 We like bakers and their bread. Lets make life easier for them.
 
+## Development Server
+
+`foreman start` will start a unicorn server and a resque worker
+
+
 ## Errors
 
 Can be found and logged at our errors site. http://errors.wizarddevelopment.com/
@@ -22,4 +27,14 @@ List packages in the `Bowerfile` and then run  `rake bower:install` to install t
 ## Direnv
 
 Is great, use it.
+
+## Databases
+We use postgresql and redis
+
+## Queue System
+
+### To run a single worker
+`env TERM_CHILD=1 QUEUE=* bundle exec rake resque:work`
+
+### To access the front-end interface you must log in as an admin and visit `http://localhost:3000/resque`
 
