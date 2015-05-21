@@ -62,6 +62,11 @@
         <%= f.input :inclusion_id, collection: product.inclusions, label_method: :name, value_method: :id,include_blank: 'Select One', as: :select %>
       </div>
     </div>
+    <div class="row">
+      <div class="small-12 columns">
+      <%=  f.input_field :batch_recipe, as: :boolean, inline_label: 'Include Product on batch reports?', input_html: { id: 'batch_recipe' } %>
+      </div>
+    </div>
   </fieldset>
 
   <fieldset>
