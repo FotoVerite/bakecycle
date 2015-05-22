@@ -1,5 +1,20 @@
 namespace :bakecycle do
   namespace :legacy_import do
+    desc 'reload all of biencuits data'
+    task biencuit_reload: :environment do
+      Rake::Task['bakecycle:legacy_import:biencuit_delete'].invoke
+      Rake::Task['bakecycle:legacy_import:biencuit'].invoke
+      Rake::Task['bakecycle:legacy_import:biencuit_backfill'].invoke
+    end
+
+    desc 'delete of of biencuits data'
+    task biencuit_delete: :environment do
+      require 'legacy_importer'
+      puts 'Deleting existing data'
+      LegacyImporter.delete_all
+      puts 'Done'
+    end
+
     desc 'Import the legacy biencuit bakecycle data'
     task biencuit: :environment do
       require 'legacy_importer'

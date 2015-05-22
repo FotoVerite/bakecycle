@@ -143,4 +143,19 @@ module LegacyImporter
       ProductionRunService.new(bakery, date).run
     end
   end
+
+  def self.delete_all
+    [
+      ProductionRun,
+      Shipment,
+      Order,
+      Client,
+      Route,
+      Product,
+      Recipe,
+      Ingredient
+    ].each do |klass|
+      klass.where(bakery: bakery).delete_all
+    end
+  end
 end
