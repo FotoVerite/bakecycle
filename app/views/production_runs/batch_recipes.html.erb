@@ -1,0 +1,19 @@
+<% provide(:title, 'Batch Recipes') %>
+
+<h1>Batch Recipes &mdash; <%= @start_date.strftime("%A %b. %e, %Y") %> - <%= @end_date.strftime("%A %b. %e, %Y") %></h1>
+
+<%= simple_form_for :search, method: :get do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :start_date, input_html: { value: @start_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :start_date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns">
+      <%= f.input :end_date, input_html: { value: @end_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :end_date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'projections' %>

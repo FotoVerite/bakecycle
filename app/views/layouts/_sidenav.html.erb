@@ -21,12 +21,13 @@
             </ul>
           </li>
 
-          <li class="js-subnav-toggle show-nav <%= active_nav?(:print_recipes, :production_runs, :daily_totals) %>">
+          <li class="js-subnav-toggle show-nav <%= active_nav?(:print_recipes, :batch_recipes, :production_runs, :daily_totals) %>">
             <span class="icon"><%= image_tag 'icons/icon-production.svg'%></span>
             <span class="header">Production</span>
 
             <ul class="sub">
               <li class="<%= active_nav?(:print_recipes) %>"><%= link_to("Print Recipes", print_recipes_path) %></li>
+               <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to("Print Batch Recipes", batch_recipes_path) %></li>
               <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
               <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
             </ul>

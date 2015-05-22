@@ -24,12 +24,18 @@ class ProductionRunsController < ApplicationController
     @production_run_projection = ProductionRunProjection.new(current_bakery, @date) unless @production_run
   end
 
+  def batch_recipes
+    active_nav(:batch_recipes)
+    @start_date = start_date
+    @end_date = end_date
+    @production_run_projection = ProductionRunProjection.new(current_bakery, @start_date, @end_date)
+  end
+
   def print
     production_run_data = ProductionRunData.new(@production_run)
     pdf = ProductionRunPdf.new(production_run_data)
-    pdf_name = 'ProductionRunRecipe.pdf'
     expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    send_data pdf.render, filename: 'ProductionRunRecipe.pdf', type: 'application/pdf', disposition: 'inline'
   end
 
   def print_projection
@@ -37,9 +43,17 @@ class ProductionRunsController < ApplicationController
     projection_run_data = ProjectionRunData.new(projection)
 
     pdf = ProductionRunPdf.new(projection_run_data)
-    pdf_name = 'ProjectionRunRecipe.pdf'
     expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    send_data pdf.render, filename: 'ProjectionRunRecipe.pdf', type: 'application/pdf', disposition: 'inline'
+  end
+
+  def print_batch
+    projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
+    projection_run_data = ProjectionRunData.new(projection)
+
+    pdf = BatchRunPdf.new(projection_run_data)
+    expires_now
+    send_data pdf.render, filename: 'BatchRecipes.pdf', type: 'application/pdf', disposition: 'inline'
   end
 
   def reset
@@ -59,6 +73,14 @@ class ProductionRunsController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date]) || Time.zone.today
+  end
+
+  def start_date
+    Chronic.parse(params[:start_date]) || Time.zone.today
+  end
+
+  def end_date
+    Chronic.parse(params[:end_date]) || Time.zone.today + 6.days
   end
 
   def production_run_for_date(date)
