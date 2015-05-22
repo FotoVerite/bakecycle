@@ -133,13 +133,13 @@ module LegacyImporter
   end
 
   def self.make_shipments
-    (bakery.orders.minimum(:start_date)..Time.zone.today).each do |date|
+    (bakery.orders.minimum(:start_date)..Time.zone.yesterday).each do |date|
       ShipmentService.new(bakery, date).run
     end
   end
 
   def self.make_production_runs
-    (bakery.orders.minimum(:start_date)..Time.zone.today).each do |date|
+    (bakery.orders.minimum(:start_date)..Time.zone.yesterday).each do |date|
       ProductionRunService.new(bakery, date).run
     end
   end
