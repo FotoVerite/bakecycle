@@ -82,7 +82,7 @@ module LegacyImporter
     private
 
     def skip?
-      no_name? || not_active? || sample? || catering?
+      no_name?
     end
 
     def no_name?
