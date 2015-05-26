@@ -24,15 +24,9 @@ class PackingSlipPage
   end
 
   def packing_slip_header
-    bounding_box([0, cursor], width: 260, height: 60) do
-      bakery_logo_display(@bakery)
-    end
-    grid([0, 5.5], [0, 8]).bounding_box do
-      bakery_info(@bakery)
-    end
-    grid([0, 9], [0, 11]).bounding_box do
-      text 'Packing Slip', size: 20
-    end
+    bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
+    grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
+    grid([0, 9], [0, 11]).bounding_box { text 'Packing Slip', size: 20 }
   end
 
   def addresses
