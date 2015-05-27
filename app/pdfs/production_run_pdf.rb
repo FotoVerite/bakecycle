@@ -20,8 +20,8 @@ class ProductionRunPdf < PdfReport
 
   def run_stamp
     repeat :all do
-      bounding_box([0, bounds.bottom + 10], width: (bounds.width / 2.0)) do
-        text run_label, size: 10, style: :bold, margin: 10
+      bounding_box([0, 0], width: (bounds.width / 2.0), height: 10) do
+        text run_label, size: 8, style: :bold, align: :left
       end
     end
   end
@@ -32,12 +32,8 @@ class ProductionRunPdf < PdfReport
   end
 
   def header
-    bounding_box([0, cursor], width: 260, height: 60) do
-      bakery_logo_display(@bakery)
-    end
-    grid([0, 5.5], [0, 8]).bounding_box do
-      bakery_info(@bakery)
-    end
+    bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
+    grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
   end
 
   def production_run_info
@@ -53,21 +49,28 @@ class ProductionRunPdf < PdfReport
   end
 
   def products
-    move_down 15
-    table(product_information_row, column_widths: [300, 120, 120, 30]) do
-      row(0).style(background_color: HEADER_ROW_COLOR)
-      column(0).style(align: :left)
-      column(1..2).style(align: :center)
+    @run_data.products.each do |product_type|
+      products_table(product_type)
     end
   end
 
-  def product_information_row
-    header = ['Product', 'Type', 'Qty', nil]
-    rows = @run_data.products.map do |product|
-      [product[:name],
-       product[:type],
-       product[:quantity],
-       nil
+  def products_table(product_type)
+    move_down 15
+    text "#{product_type.first.titleize}"
+    table(product_information_row(product_type[1..-1]), column_widths: [422, 120, 30], header: true) do
+      row(0).style(background_color: HEADER_ROW_COLOR)
+      column(0).style(align: :left)
+      column(1..-1).style(align: :center)
+    end
+  end
+
+  def product_information_row(product_type)
+    header = ['Product', 'Qty', nil]
+    rows = product_type.first.map do |run_item|
+      [
+        run_item.product.name,
+        run_item.total_quantity,
+        nil
       ]
     end
     rows.unshift(header)

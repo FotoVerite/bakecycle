@@ -1,9 +1,10 @@
 class PdfReport < Prawn::Document
-  HEADER_ROW_COLOR = 'b9b9b9'
+  HEADER_ROW_COLOR = 'e6e6e6'
   INDENTED_ROW_COLOR = 'd3d3d3'
 
   def initialize(options = {})
     super(default_options.merge(options))
+    fill_color '404040'
     font_size 10
     setup_grid
     @stamps = {}
@@ -40,7 +41,7 @@ class PdfReport < Prawn::Document
   end
 
   def printed_today
-    "Printed at #{current_date} at#{current_time}"
+    "Printed at #{current_date} at #{current_time}"
   end
 
   def current_date
@@ -53,8 +54,8 @@ class PdfReport < Prawn::Document
 
   def timestamp
     repeat :all do
-      bounding_box([288, bounds.bottom + 10], width: (bounds.width / 2.0)) do
-        text printed_today, size: 8, align: :right, margin: 10
+      bounding_box([288, 0], width: bounds.width / 2.0, height: 10) do
+        text printed_today, size: 8, align: :right
       end
     end
   end

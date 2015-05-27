@@ -13,13 +13,8 @@ class ProjectionRunData < ProductionRunData
   end
 
   def products
-    projection_run.products_info.map do |item|
-      product = item.product.decorate
-      {
-        name: product.name,
-        type: product.type,
-        quantity: item.total_quantity
-      }
+    projection_run.products_info.group_by do |item|
+      item.product.product_type
     end
   end
 

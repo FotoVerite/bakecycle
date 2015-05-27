@@ -19,19 +19,19 @@ class RecipeDataPdf
 
   def page_layout
     define_grid(columns: 12, rows: 12, gutter: 10)
+    header_section
+    main_section
+  end
 
-    grid([0, 0], [1, 11]).bounding_box do
-      header
-    end
-    grid([1, 0], [2, 11]).bounding_box do
-      recipe_table
-    end
-    grid([2, 0], [11, 5]).bounding_box do
-      left_section
-    end
-    grid([2, 6], [11, 11]).bounding_box do
-      right_section
-    end
+  def header_section
+    grid([0, 0], [0, 7]).bounding_box { header_title }
+    grid([0, 8], [1, 11]).bounding_box { header_info }
+  end
+
+  def main_section
+    grid([1.2, 0], [2.2, 4]).bounding_box { bowl_count }
+    grid([2.5, 0], [11, 5]).bounding_box { left_section }
+    grid([2.5, 6], [11, 11]).bounding_box { right_section }
   end
 
   def right_section
@@ -44,87 +44,71 @@ class RecipeDataPdf
     nested_recipes_table if recipe_run_data.nested_recipes.any?
   end
 
-  def header
-    text "#{recipe_run_data.recipe.name}", size: 25
+  def header_title
+    text_box recipe_run_data.recipe.name, size: 50, min_font_size: 15, overflow: :shrink_to_fit, width: 380
   end
 
-  def recipe_table
-    table(recipe_data, column_widths: 95.3) do
-      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
-      column(0..5).style(align: :center)
+  def header_info
+    header_info_table
+  end
+
+  def header_info_table
+    table(header_info_data, column_widths: [60, 105], position: :right) do
+      column(0).style(borders: [:top, :left, :bottom], align: :right, padding: [4, 4, 2, 2])
+      column(1).style(borders: [:top, :right, :bottom], align: :left, padding: [4, 2, 2, 4])
     end
   end
 
-  def recipe_data
-    header = ['Weight', 'Bowl Size', 'Bowl Count', 'Lead Days', 'Start Date', 'Ship Date']
-    data = [
-      display_weight(recipe_run_data.weight),
-      display_weight(recipe_run_data.mix_size_with_unit),
-      recipe_run_data.mix_bowl_count,
-      recipe_run_data.total_lead_days,
-      display_date(recipe_run_data.date),
-      display_date(recipe_run_data.finished_date)
+  def header_info_data
+    lead_days = ['Lead Days', recipe_run_data.total_lead_days]
+    mix = ['Mix', display_date(recipe_run_data.date)]
+    bake = ['Bake', display_date(recipe_run_data.finished_date)]
+    [lead_days, mix, bake]
+  end
+
+  def bowl_count
+    table(bowl_data, cell_style: { font_style: :bold }) do
+      row(0).style(align: :center).valign = :center
+      column(0).style(borders: [:top, :left, :bottom], align: :right)
+      column(1).style(borders: [:top, :bottom], align: :center)
+      column(2).style(borders: [:top, :right, :bottom], align: :left)
+    end
+  end
+
+  def bowl_data
+    [
+      [
+        { content: "#{recipe_run_data.mix_bowl_count}", rowspan: 2, size: 35 },
+        { content: 'X', rowspan: 2, size: 10 },
+        { content: "#{display_weight(recipe_run_data.mix_size_with_unit)}", rowspan: 2, size: 15 }
+      ]
     ]
-    [header, data]
   end
 
   def products_table
-    table(product_data, column_widths: [110, 38, 65, 65]) do
+    table(product_data, column_widths: [65, 110, 38, 65]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
-      column(0).style(align: :left)
-      column(1..3).style(align: :center)
+      column(0).style(align: :center)
+      column(2..-1).style(align: :center)
+      column(1).style(align: :left)
+      row(1..-1).column(2).style(background_color: PdfReport::HEADER_ROW_COLOR)
     end
   end
 
   def product_data
-    header = ['Name', 'Qty', 'Item Wt', 'Total Wt']
+    header = ['Item Wt', 'Product Name', 'Qty', 'Total Wt']
     product_rows.unshift(header)
   end
 
   def product_rows
-    rows = []
-    sorted_recipe_run_date_products.each do |product|
-      rows << [
+    sorted_recipe_run_date_products.map do |product|
+      [
+        display_weight(product[:product].weight_with_unit),
         product[:product].name,
         product[:quantity],
-        display_weight(product[:product].weight_with_unit),
         display_weight(product[:weight])
       ]
-      rows << product_parts_table(product) if product[:product].inclusion
     end
-    rows
-  end
-
-  def indent_cell
-    make_cell(content: '', background_color: PdfReport::HEADER_ROW_COLOR)
-  end
-
-  def motherdough_row(product)
-    name = make_cell(content: recipe_run_data.recipe.name, background_color: PdfReport::INDENTED_ROW_COLOR)
-    weight = make_cell(
-      content: display_weight(product[:dough_weight]),
-      background_color: PdfReport::INDENTED_ROW_COLOR,
-      align: :center
-    )
-
-    [indent_cell, name, weight]
-  end
-
-  def inclusion_row(product)
-    inclusion = recipe_run_data.inclusions.detect { |i| i[:product] == product[:product] }
-    return unless inclusion
-    name = make_cell(content: inclusion[:recipe].name, background_color: PdfReport::INDENTED_ROW_COLOR)
-    weight = make_cell(
-      content: display_weight(inclusion[:weight]),
-      background_color: PdfReport::INDENTED_ROW_COLOR,
-      align: :center
-    )
-    [indent_cell, name, weight]
-  end
-
-  def product_parts_table(product)
-    table_data = [motherdough_row(product), inclusion_row(product)].compact
-    [colspan: 5, content: make_table(table_data, column_widths: [10, 203, 65])]
   end
 
   def ingredients_data
@@ -194,7 +178,7 @@ class RecipeDataPdf
   end
 
   def display_date(date)
-    date.strftime('%m/%d/%Y')
+    date.strftime('%a, %b %d, %Y')
   end
 
   private

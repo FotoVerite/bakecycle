@@ -25,13 +25,8 @@ class ProductionRunData
   end
 
   def products
-    run_items_by_product_name.map do |item|
-      product = item.product.decorate
-      {
-        name: product.name,
-        type: product.type,
-        quantity: item.total_quantity
-      }
+    run_items_by_product_name.group_by do |item|
+      item.product.product_type
     end
   end
 
