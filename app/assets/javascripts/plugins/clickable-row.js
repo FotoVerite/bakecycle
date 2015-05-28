@@ -7,5 +7,5 @@ $(function () {
     }
     window.document.location = $(this).attr("href");
   };
-  $(document).on("click", ".js-clickableRow", rowClickHandler);
+  $(document).on("click", ".js-clickable-row", rowClickHandler);
 });

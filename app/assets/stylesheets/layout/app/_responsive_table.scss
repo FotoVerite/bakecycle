@@ -5,13 +5,59 @@ $bp-medium: 48em;
 $bp-large: 62em;
 $bp-xlarge: 75em;
 
-.js-clickableRow {
+.js-clickable-row {
   &:hover {
-    cursor: pointer
+    cursor: pointer;
   }
 }
 
-.table-tooltip {
+.product-info-tooltip {
+  outline: none;
+  position: relative;
+
+  strong {
+    line-height: 30px;
+  }
+
+  &:hover {
+    cursor: help;
+    text-decoration: none;
+
+    span {
+      display: inline;
+      position: absolute;
+    }
+  }
+
+  span {
+    background: $bc-charcoal;
+    color: $white;
+    display: none;
+    line-height: 16px;
+    margin-left: 20px;
+    margin-top: -30px;
+    padding: 15px 12px;
+    width: 250px;
+    z-index: 10;
+
+    &:after {
+      border: solid transparent;
+      border-color: rgba(51, 51, 51, 0);
+      border-right-color: $bc-charcoal;
+      border-width: 12px;
+      content: '';
+      height: 0;
+      margin-top: -12px;
+      pointer-events: none;
+      position: absolute;
+      right: 100%;
+      top: 42%;
+      width: 0;
+    }
+  }
+}
+
+.icon-link-tooltip {
   display: inline;
   position: relative;
 
@@ -19,48 +65,49 @@ $bp-xlarge: 75em;
 
     &:before {
       border: solid;
-      border-color: #333 transparent;
-      border-width: 0 6px 6px 6px;
-      top: 20px;
-      content: "";
+      border-color: $bc-charcoal transparent;
+      border-width: 0 6px 6px;
+      content: '';
       left: 4%;
       position: absolute;
+      top: 20px;
       z-index: 99;
     }
 
     &:after {
-      background: #333;
-      top: 26px;
-      color: #fff;
+      background: $bc-charcoal;
+      color: $white;
       content: attr(aria-label);
-      right: -40%;
       padding: 12px;
       position: absolute;
-      z-index: 98;
+      right: -40%;
+      top: 26px;
       width: 140px;
+      z-index: 98;
     }
   }
 }
 
 .table-action-icon {
   margin-left: 10px;
+
   i {
     font-size: 1.5em;
   }
 }
-// Styles
-* {
- @include box-sizing(border-box);
 
- &:before,
- &:after {
-   @include box-sizing(border-box);
- }
+* {
+  @include box-sizing(border-box);
+
+  &:before,
+  &:after {
+    @include box-sizing(border-box);
+  }
 }
 
 .responsive-table {
-  width: 100%;
   margin-bottom: 1.5em;
+  width: 100%;
 
   @media (min-width: $bp-medium) {
     font-size: .9em;
@@ -71,30 +118,30 @@ $bp-xlarge: 75em;
   }
 
   thead {
-    // Accessibly hide <thead> on narrow viewports
-    position: absolute;
-    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-    clip: rect(1px, 1px, 1px, 1px);
-    padding: 0;
     border: 0;
+    // Accessibly hide <thead> on narrow viewports
+    clip: rect(1px 1px 1px 1px); // IE6, IE7 //
+    clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
-    width: 1px;
     overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
 
     @media (min-width: $bp-medium) {
       // Unhide <thead> on wide viewports
-      position: relative;
       clip: auto;
       height: auto;
-      width: auto;
       overflow: auto;
+      position: relative;
+      width: auto;
     }
 
     th {
       background-color: $bc-green;
       border: 1px solid $bc-green;
+      color: $white;
       text-align: center;
-      color: white;
 
       &:first-of-type {
         text-align: left;
@@ -151,13 +198,13 @@ $bp-xlarge: 75em;
     }
 
     tr {
-      margin-bottom: 1em;
       border: 2px solid $bc-green;
+      margin-bottom: 1em;
 
       @media (min-width: $bp-medium) {
         // Undo display: block
-        display: table-row;
         border-width: 1px;
+        display: table-row;
       }
 
       &:last-of-type {
@@ -166,30 +213,31 @@ $bp-xlarge: 75em;
 
       &:nth-of-type(even) {
         @media (min-width: $bp-medium) {
-          background-color: rgba(94,93,82,.1);
+          background-color: rgba(94, 93, 82, .1);
         }
       }
     }
 
     th[scope="row"] {
       background-color: $bc-green;
-      color: white;
+      color: $white;
 
       @media (min-width: $bp-medium) {
         background-color: transparent;
-        color: black;
+        color: $black;
         text-align: left;
       }
+
       a {
-        color: white;
+        color: $white;
         text-decoration: underline;
 
         @media (min-width: $bp-small) {
-          color: white;
+          color: $white;
           text-decoration: none;
         }
         @media (min-width: $bp-medium) {
-          color: black;
+          color: $black;
         }
       }
     }
@@ -203,10 +251,10 @@ $bp-xlarge: 75em;
     }
 
     td[data-title]:before {
+      color: rgba(94, 93, 82, .75);
       content: attr(data-title);
       float: left;
       font-size: .8em;
-      color: rgba(94,93,82,.75);
 
       @media (min-width: $bp-small) {
         font-size: .9em;

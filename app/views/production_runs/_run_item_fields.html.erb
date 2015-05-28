@@ -1,21 +1,25 @@
 <tr class="fields" id="run_item_<%= f.object.id %>" ng-show="true">
   <% if f.object.persisted? %>
-    <td><%= f.object.product.name %></td>
+    <td data-title="Name">
+      <a class="product-info-tooltip">
+        <%= f.object.product.name %>
+        <span>
+          <strong>Product Type:</strong> <%= f.object.product.product_type %><br />
+          <strong>Total Lead Days:</strong> <%= f.object.product.total_lead_days %>
+        </span>
+      </a>
+    </td>
     <%= f.hidden_field :product_id, label: false, value: "#{f.object.product.id}" %>
-    <td><%= f.object.product.product_type %></td>
-    <td><%= f.object.product.total_lead_days %></td>
   <% else %>
-    <td>
+    <td data-title="Product">
       <%= f.input :product_id, collection: production_run.available_products, :error_html => { :id => "run_items_product_error"} %>
     </td>
-    <td>-</td>
-    <td>-</td>
   <% end %>
 
-  <td><strong><%= f.object.total_quantity %></strong></td>
-  <td><%= f.object.order_quantity %></td>
-  <td><%= f.object.over_bake %> %</td>
-  <td><%= f.input :overbake_quantity, label: false %></td>
+  <td data-title="Total Qty"><strong><%= f.object.total_quantity %></strong></td>
+  <td data-title="Order Qty"><%= f.object.order_quantity %></td>
+  <td data-title="Over Bake %"><%= f.object.over_bake %> %</td>
+  <td data-title="Over Bake Qty"><%= f.input :overbake_quantity, label: false %></td>
   <% unless f.object.from_shipment? %>
     <td>
       <%= f.hidden_field :_destroy, value: false %>

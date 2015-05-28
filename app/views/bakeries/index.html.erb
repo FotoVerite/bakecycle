@@ -15,11 +15,11 @@
   </thead>
   <tbody>
     <% @bakeries.each do |bakery| %>
-      <tr class="js-clickableRow" href="<%= edit_bakery_path(bakery) %>">
+      <tr class="js-clickable-row" href="<%= edit_bakery_path(bakery) %>">
         <th scope="row"><%= link_to bakery.name, edit_bakery_path(bakery) %></th>
         <td data-title="Action">
           <%= link_to edit_bakery_path(bakery) do %>
-            <span class="table-action-icon table-tooltip" aria-label="Edit Bakery"><i class="fi-page-edit"></i></span>
+            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Bakery"><i class="fi-page-edit"></i></span>
           <% end %>
         </td>
       </tr>
