@@ -43,7 +43,7 @@ class ProductionRunPdf < PdfReport
   end
 
   def body
-    @run_data.recipes.each do |motherdough|
+    sorted_recipes_by_products.each do |motherdough|
       RecipeDataPdf.new(self, motherdough).render_recipe
     end
   end
@@ -74,5 +74,15 @@ class ProductionRunPdf < PdfReport
       ]
     end
     rows.unshift(header)
+  end
+
+  private
+
+  def sorted_recipes_by_products
+    @run_data.recipes.sort_by { |recipe| [recipes_without_products(recipe), recipe.recipe.name] }
+  end
+
+  def recipes_without_products(recipe)
+    recipe.products.any? ? 0 : 1
   end
 end
