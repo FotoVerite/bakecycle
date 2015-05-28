@@ -10,13 +10,13 @@
   </thead>
   <tbody>
     <% order.shipments.each do |shipment| %>
-      <tr class="js-clickableRow" href="<%= edit_shipment_path(shipment) %>">
+      <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
         <th scope="row"><%= shipment.invoice_number %></th>
         <td data-title="Date"><%= shipment.date %></td>
         <td data-title="Client Name"><%= shipment.client_name %></td>
         <td data-title="Action">
           <%= link_to edit_shipment_path(shipment) do %>
-            <span class="table-action-icon table-tooltip" aria-label="Edit Shipment"><i class="fi-page-edit"></i></span>
+            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Shipment"><i class="fi-page-edit"></i></span>
           <% end %>
         </td>
       </tr>
