@@ -14,7 +14,7 @@ class RunItem < ActiveRecord::Base
   before_validation :zero_fields_if_blank
   before_validation :update_total_quantity
 
-  delegate :over_bake, to: :product
+  delegate :name, :over_bake, :total_lead_days, to: :product, prefix: true
 
   def from_shipment?
     order_quantity > 0 if order_quantity
@@ -31,5 +31,9 @@ class RunItem < ActiveRecord::Base
 
   def update_total_quantity
     self.total_quantity = overbake_quantity + order_quantity
+  end
+
+  def product_type
+    product.product_type.humanize(capitalize: false).titleize
   end
 end

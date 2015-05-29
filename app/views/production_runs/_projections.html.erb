@@ -6,8 +6,6 @@
   <thead>
     <tr>
       <th>Product</th>
-      <th>Type</th>
-      <th>Lead Days</th>
       <th>Total Quantity</th>
       <th>Order Quantity</th>
       <th>Over Bake %</th>
@@ -17,13 +15,19 @@
   <tbody>
     <% @production_run_projection.products_info.each do |projection| %>
       <tr>
-        <td><%= projection.product.name %></td>
-        <td><%= projection.product.product_type %></td>
-        <td><%= projection.product.total_lead_days %></td>
-        <td><%= projection.total_quantity %></td>
-        <td><%= projection.order_quantity %></td>
-        <td><%= projection.product.over_bake %></td>
-        <td><%= projection.overbake_quantity %></td>
+        <th scope="row">
+          <a class="product-info-tooltip">
+            <%= projection.product_name %>
+            <span>
+              <strong>Product Type:</strong> <%= projection.product_type %><br />
+              <strong>Total Lead Days:</strong> <%= projection.product_total_lead_days %>
+            </span>
+          </a>
+        </th>
+        <td data-title="Total Qty"><%= projection.total_quantity %></td>
+        <td data-title="Order Qty"><%= projection.order_quantity %></td>
+        <td data-title="Over Bake %"><%= projection.product_over_bake %></td>
+        <td data-title="Over Bake Qty"><%= projection.overbake_quantity %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,14 +1,14 @@
 <tr class="fields" id="run_item_<%= f.object.id %>" ng-show="true">
   <% if f.object.persisted? %>
-    <td data-title="Name">
+    <th scope="row">
       <a class="product-info-tooltip">
-        <%= f.object.product.name %>
+        <%= f.object.product_name %>
         <span>
-          <strong>Product Type:</strong> <%= f.object.product.product_type %><br />
-          <strong>Total Lead Days:</strong> <%= f.object.product.total_lead_days %>
+          <strong>Product Type:</strong> <%= f.object.product_type %><br />
+          <strong>Total Lead Days:</strong> <%= f.object.product_total_lead_days %>
         </span>
       </a>
-    </td>
+    </th>
     <%= f.hidden_field :product_id, label: false, value: "#{f.object.product.id}" %>
   <% else %>
     <td data-title="Product">
@@ -18,7 +18,7 @@
 
   <td data-title="Total Qty"><strong><%= f.object.total_quantity %></strong></td>
   <td data-title="Order Qty"><%= f.object.order_quantity %></td>
-  <td data-title="Over Bake %"><%= f.object.over_bake %> %</td>
+  <td data-title="Over Bake %"><%= f.object.product_over_bake %> %</td>
   <td data-title="Over Bake Qty"><%= f.input :overbake_quantity, label: false %></td>
   <% unless f.object.from_shipment? %>
     <td>

@@ -20,13 +20,22 @@ $bp-xlarge: 75em;
   }
 
   &:hover {
-    cursor: help;
+    cursor: default;
     text-decoration: none;
 
-    span {
-      display: inline;
-      position: absolute;
+    @media (min-width: $bp-medium) {
+      cursor: help;
     }
+
+    span {
+      display: none;
+
+      @media (min-width: $bp-medium) {
+        display: inline;
+        position: absolute;
+      }
+    }
+
   }
 
   span {
@@ -58,32 +67,38 @@ $bp-xlarge: 75em;
 }
 
 .icon-link-tooltip {
-  display: inline;
-  position: relative;
-
   &:hover {
 
+    @media (min-width: $bp-medium) {
+      display: inline;
+      position: relative;
+    }
+
     &:before {
-      border: solid;
-      border-color: $bc-charcoal transparent;
-      border-width: 0 6px 6px;
-      content: '';
-      left: 4%;
-      position: absolute;
-      top: 20px;
-      z-index: 99;
+      @media (min-width: $bp-medium) {
+        border: solid;
+        border-color: $bc-charcoal transparent;
+        border-width: 0 6px 6px;
+        content: '';
+        left: 4%;
+        position: absolute;
+        top: 20px;
+        z-index: 99;
+      }
     }
 
     &:after {
-      background: $bc-charcoal;
-      color: $white;
-      content: attr(aria-label);
-      padding: 12px;
-      position: absolute;
-      right: -40%;
-      top: 26px;
-      width: 140px;
-      z-index: 98;
+      @media (min-width: $bp-medium) {
+        background: $bc-charcoal;
+        color: $white;
+        content: attr(aria-label);
+        padding: 12px;
+        position: absolute;
+        right: -40%;
+        top: 26px;
+        width: 140px;
+        z-index: 98;
+      }
     }
   }
 }
