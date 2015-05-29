@@ -31,7 +31,7 @@ class PdfReport < Prawn::Document
 
   def number_of_pages
     options = {
-      at: [bounds.left, bounds.bottom + 10],
+      at: [0, 0],
       width: bounds.width / 2.0,
       align: :left,
       start_count_at: 1,

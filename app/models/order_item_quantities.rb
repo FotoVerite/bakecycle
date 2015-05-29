@@ -1,5 +1,6 @@
 class OrderItemQuantities
   attr_reader :product, :ready_date
+  delegate :name, :total_lead_days, :over_bake, to: :product, prefix: true
   def initialize(order_items, start_date)
     @order_items = order_items
     @start_date = start_date
@@ -18,6 +19,10 @@ class OrderItemQuantities
 
   def total_quantity
     @_total_quantity ||= order_quantity + overbake_quantity
+  end
+
+  def product_type
+    product.product_type.humanize(capitalize: false).titleize
   end
 
   private
