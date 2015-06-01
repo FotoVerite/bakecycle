@@ -103,3 +103,7 @@ Given(/^I change the shipment item product quantity to "(.*?)"$/) do |quantity|
   shipment_item = ShipmentItem.find_by(product_id: run_item.product.id)
   shipment_item.update(product_quantity: quantity.to_i)
 end
+
+Given(/^I am on the Batch Recipes page$/) do
+  visit batch_recipes_path
+end

@@ -12,12 +12,14 @@ FactoryGirl.define do
       order_item_count 1
       product_total_lead_days 2
       daily_item_count nil
+      product_batch_recipe true
       product { |t|
         t.association(
           :product,
           :with_motherdough,
           bakery: bakery,
-          force_total_lead_days: product_total_lead_days
+          force_total_lead_days: product_total_lead_days,
+          batch_recipe: product_batch_recipe
         )
       }
     end

@@ -1,16 +1,19 @@
 class OrderItemQuantities
-  attr_reader :product, :ready_date
+  attr_reader :product, :ready_date, :end_date
   delegate :name, :total_lead_days, :over_bake, to: :product, prefix: true
-  def initialize(order_items, start_date)
-    @order_items = order_items
+
+  def initialize(order_items, start_date, end_date = nil)
+    @order_items = order_items.uniq
     @start_date = start_date
     @product = @order_items.first.product
     @ready_date = start_date + product.total_lead_days.days
+    @end_date = end_date
     validate_single_product
   end
 
   def order_quantity
-    @_order_quantity ||= @order_items.map { |order_item| order_item.quantity(ready_date) }.sum
+    @_order_quantity ||= batch_quantities if end_date
+    @_order_quantity ||= order_quantity_for_day(ready_date)
   end
 
   def overbake_quantity
@@ -26,6 +29,14 @@ class OrderItemQuantities
   end
 
   private
+
+  def batch_quantities
+    (@start_date..end_date).reduce(0) { |sum, date| sum + order_quantity_for_day(date + @product.total_lead_days.days) }
+  end
+
+  def order_quantity_for_day(date)
+    @order_items.map { |order_item| order_item.quantity(date) }.sum
+  end
 
   def validate_single_product
     return if @order_items.to_a.uniq(&:product_id).count == 1

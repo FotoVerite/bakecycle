@@ -42,3 +42,5 @@ Style/StringLiterals:
   Enabled: false
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+Style/SingleLineBlockParams:
+  Enabled: false
