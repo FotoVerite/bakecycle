@@ -56,8 +56,7 @@ class ProductionRunPdf < PdfReport
 
   def products_table(product_type)
     move_down 15
-    text "#{product_type.first.titleize}"
-    table(product_information_row(product_type[1..-1]), column_widths: [422, 120, 30], header: true) do
+    table(product_information_row(product_type), column_widths: [422, 120, 30], header: true) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..-1).style(align: :center)
@@ -65,8 +64,8 @@ class ProductionRunPdf < PdfReport
   end
 
   def product_information_row(product_type)
-    header = ['Product', 'Qty', nil]
-    rows = product_type.first.map do |run_item|
+    header = ["#{product_type.first.titleize}", 'Qty', nil]
+    rows = product_type[1].map do |run_item|
       [
         run_item.product.name,
         run_item.total_quantity,
