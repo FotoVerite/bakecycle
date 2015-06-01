@@ -21,14 +21,12 @@ class ProductionRunsController < ApplicationController
     active_nav(:print_recipes)
     @date = date_query
     @production_run = production_run_for_date(@date)
-    @production_run_projection = ProductionRunProjection.new(current_bakery, @date) unless @production_run
+    @projection = ProductionRunProjection.new(current_bakery, @date) unless @production_run
   end
 
   def batch_recipes
     active_nav(:batch_recipes)
-    @start_date = start_date
-    @end_date = end_date
-    @production_run_projection = ProductionRunProjection.new(current_bakery, @start_date, @end_date)
+    @projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
   end
 
   def print

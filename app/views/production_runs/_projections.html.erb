@@ -5,7 +5,7 @@
 <% else %>
   <p class="projection">Batch based on active orders</p>
   <%= link_to "<i class='fi-page-export-pdf'></i> Print Recipes for Projected Run".html_safe,
-    print_batch_production_runs_path(start_date: @start_date.strftime("%Y-%m-%d"), end_date: @end_date.strftime("%Y-%m-%d"),
+    print_batch_production_runs_path(start_date: @projection.start_date.strftime("%Y-%m-%d"), end_date: @projection.batch_end_date.strftime("%Y-%m-%d"),
     format: :pdf), target: "_blank", class: "button small"%>
 <% end %>
 
@@ -20,7 +20,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @production_run_projection.products_info.each do |projection| %>
+    <% @projection.products_info.each do |projection| %>
       <tr>
         <th scope="row">
           <a class="product-info-tooltip">

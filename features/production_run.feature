@@ -69,7 +69,7 @@
     Then "Reset Complete" should be present
     And the product quantity should be the same as the shipment item
 
-@javascript
+  @javascript
   Scenario: Projections
     Given I am on the Batch Recipes page
     Then "Batch based on active orders" should be present

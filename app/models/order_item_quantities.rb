@@ -31,7 +31,7 @@ class OrderItemQuantities
   private
 
   def batch_quantities
-    (@start_date..end_date).inject(0) { |a, e| a + order_quantity_for_day(e + @product.total_lead_days.days) }
+    (@start_date..end_date).reduce(0) { |sum, date| sum + order_quantity_for_day(date + @product.total_lead_days.days) }
   end
 
   def order_quantity_for_day(date)

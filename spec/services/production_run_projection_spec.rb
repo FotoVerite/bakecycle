@@ -7,6 +7,7 @@ describe ProductionRunProjection do
   let(:thursday) { monday + 3.days }
   let(:friday) { monday + 4.days }
   let(:saturday) { monday + 5.days }
+  let(:two_weeks) { saturday + 1.week }
 
   let(:bakery) { create(:bakery) }
   let(:client) { create(:client, bakery: bakery) }
@@ -23,6 +24,8 @@ describe ProductionRunProjection do
     create(:order, :inactive, bakery: bakery, client: client, order_item_count: 3, product_total_lead_days: 2)
   }
 
+  let(:wednesday_quantity) { active_order.order_items.map(&:wednesday).sum }
+
   before do
     OrderItem.update_all(tuesday: 0)
     active_order.reload
@@ -30,7 +33,6 @@ describe ProductionRunProjection do
 
   describe '#new' do
     it 'sets products_info with product names and quantities for order items' do
-      wednesday_quantity = active_order.order_items.map(&:wednesday).sum
       order_product = active_order.products.first
 
       projector = ProductionRunProjection.new(bakery, monday)
@@ -61,6 +63,12 @@ describe ProductionRunProjection do
       weekly_quantity = active_order.order_items.map(&:total_quantity).sum
 
       expect(projector.products_info.first.order_quantity).to eq(weekly_quantity)
+
+      projector = ProductionRunProjection.new(bakery, sunday, two_weeks)
+      expect(projector.products_info.first.order_quantity).to eq(weekly_quantity * 2)
+
+      projector = ProductionRunProjection.new(bakery, sunday, monday)
+      expect(projector.products_info.first.order_quantity).to eq(wednesday_quantity)
     end
   end
 end
