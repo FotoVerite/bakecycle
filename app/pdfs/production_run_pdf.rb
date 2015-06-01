@@ -79,7 +79,9 @@ class ProductionRunPdf < PdfReport
   private
 
   def sorted_recipes_by_products
-    @run_data.recipes.sort_by { |recipe| [recipes_without_products(recipe), recipe.recipe.name] }
+    @run_data.recipes.sort_by do |recipe|
+      [recipes_without_products(recipe), recipe.recipe.name.downcase]
+    end
   end
 
   def recipes_without_products(recipe)
