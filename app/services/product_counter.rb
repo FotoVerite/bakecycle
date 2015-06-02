@@ -8,7 +8,7 @@ class ProductCounter
 
   def shipments
     @_shipments ||= Shipment.where(bakery: bakery)
-      .search_by_date(date)
+      .where(date: date)
       .order(:route_departure_time, :route_name, :client_name)
   end
 
@@ -36,8 +36,8 @@ class ProductCounter
       product_id = item.product_id
       count[product_id] = Hash.new(0) unless count[product_id]
       count[product_id][route_id] += item.product_quantity
-      count[product_id][:total] += item.product_quantity
     end
+    assign_overbake_count_and_product_total(@_product_counts)
   end
 
   def date_formatted
@@ -45,6 +45,20 @@ class ProductCounter
   end
 
   private
+
+  def assign_overbake_count_and_product_total(product_counts)
+    product_counts.each do |product_id, product_count|
+      product_count[:overbake_count] = overbake_by_product[product_id] || 0
+      product_count[:total] = product_count.values.sum
+    end
+    product_counts
+  end
+
+  def overbake_by_product
+    @_run_items ||= RunItem.where(production_run_id: shipment_items.pluck(:production_run_id))
+      .group(:product_id)
+      .sum(:overbake_quantity)
+  end
 
   def shipment_items
     @_shipment_items ||= ShipmentItem.where(shipment_id: shipments.pluck(:id))

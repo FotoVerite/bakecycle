@@ -75,26 +75,28 @@ describe ProductCounter do
       pm = create(:route, bakery: bakery)
       shipment = create(:shipment, date: today, shipment_item_count: 0, route: am, bakery: bakery)
       shipment_2 = create(:shipment, date: today, shipment_item_count: 0, route: pm, bakery: bakery)
-      bread = create(:product, product_type: :bread, bakery: bakery)
-      cookie = create(:product, product_type: :cookie, bakery: bakery)
-      create(:shipment_item, shipment: shipment, product: bread, product_quantity: 1, bakery: bakery)
-      create(:shipment_item, shipment: shipment, product: cookie, product_quantity: 2, bakery: bakery)
-      create(:shipment_item, shipment: shipment_2, product: bread, product_quantity: 1, bakery: bakery)
-      create(:shipment_item, shipment: shipment_2, product: cookie, product_quantity: 3, bakery: bakery)
+      bread = create(:product, product_type: :bread, bakery: bakery, over_bake: 10)
+      cookie = create(:product, product_type: :cookie, bakery: bakery, over_bake: 10)
+      create(:shipment_item, shipment: shipment, product: bread, product_quantity: 10, bakery: bakery)
+      create(:shipment_item, shipment: shipment, product: cookie, product_quantity: 10, bakery: bakery)
+      create(:shipment_item, shipment: shipment_2, product: bread, product_quantity: 10, bakery: bakery)
+      create(:shipment_item, shipment: shipment_2, product: cookie, product_quantity: 10, bakery: bakery)
+      ProductionRunService.new(bakery, today - 1.days).run
 
       counts = {
         bread.id => {
-          am.id => 1,
-          pm.id => 1,
-          total: 2
+          am.id => 10,
+          pm.id => 10,
+          overbake_count: 2,
+          total: 22
         },
         cookie.id => {
-          am.id => 2,
-          pm.id => 3,
-          total: 5
+          am.id => 10,
+          pm.id => 10,
+          overbake_count: 2,
+          total: 22
         }
       }
-
       expect(product_counter.product_counts).to eq(counts)
     end
 

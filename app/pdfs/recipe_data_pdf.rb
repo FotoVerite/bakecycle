@@ -29,9 +29,9 @@ class RecipeDataPdf
   end
 
   def main_section
-    grid([1.2, 0], [2.2, 4]).bounding_box { bowl_count }
-    grid([2.5, 0], [11, 5]).bounding_box { left_section }
-    grid([2.5, 6], [11, 11]).bounding_box { right_section }
+    grid([1, 0], [1, 11]).bounding_box { bowl_count }
+    grid([2, 0], [11, 5]).bounding_box { left_section }
+    grid([2, 6], [11, 11]).bounding_box { right_section }
   end
 
   def right_section
@@ -67,7 +67,7 @@ class RecipeDataPdf
   end
 
   def bowl_count
-    table(bowl_data, cell_style: { font_style: :bold }) do
+    table(bowl_data, position: :center, cell_style: { font_style: :bold }) do
       row(0).style(align: :center).valign = :center
       column(0).style(borders: [:top, :left, :bottom], align: :right)
       column(1).style(borders: [:top, :bottom], align: :center)
@@ -86,7 +86,7 @@ class RecipeDataPdf
   end
 
   def products_table
-    table(product_data, column_widths: [65, 110, 38, 65]) do
+    table(product_data, column_widths: [52, 137, 32, 52]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :center)
       column(2..-1).style(align: :center)

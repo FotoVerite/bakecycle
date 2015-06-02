@@ -65,16 +65,16 @@ class DailyTotalPdf < PdfReport
   end
 
   def information_header
-    data = [%w(Item Total)]
+    data = [%w(Item Total Overbake)]
     @recipes.routes.each do |route|
-      data[0] << route.name
+      data[0] << route.name.titleize
     end
     data
   end
 
   def product_items(type)
     recipe_products(type).map do |product|
-      [product.name, total_count(product)] + route_counts(product)
+      [product.name, total_count(product), overbake_count(product)] + route_counts(product)
     end
   end
 
@@ -92,6 +92,10 @@ class DailyTotalPdf < PdfReport
 
   def total_count(product)
     product_counts[product.id][:total]
+  end
+
+  def overbake_count(product)
+    product_counts[product.id][:overbake_count]
   end
 
   def product_counts
