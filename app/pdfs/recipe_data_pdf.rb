@@ -42,6 +42,7 @@ class RecipeDataPdf
   def left_section
     ingredients_table
     nested_recipes_table if recipe_run_data.nested_recipes.any?
+    totals
   end
 
   def header_title
@@ -112,32 +113,32 @@ class RecipeDataPdf
   end
 
   def ingredients_data
-    header = ['Ingredient', 'Baker %', 'Weight']
+    header = ['Ingredient', 'Baker %', 'Wt / Bowl']
     rows = recipe_run_data.ingredients.map do |ingredient_info|
       [
         ingredient_info[:inclusionable].name,
         ingredient_info[:bakers_percentage],
-        display_weight(ingredient_info[:weight])
+        display_weight(bowl_ingredient_weight(ingredient_info))
       ]
     end
     rows.unshift(header)
   end
 
   def ingredients_table
-    table(ingredients_data, column_widths: [169, 56, 56]) do
-      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+    table(ingredients_data, column_widths: [169, 51, 61]) do
+      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR, overflow: :shrink_to_fit)
       column(0).style(align: :left)
-      column(1).style(align: :center)
+      column(1..2).style(align: :center)
     end
   end
 
   def nested_recipes_data
-    header = ['Nested Recipe', 'Baker %', 'Weight']
+    header = ['Nested Recipe', 'Baker %', 'Wt / Bowl']
     rows = recipe_run_data.nested_recipes.map do |ingredient_info|
       [
         ingredient_info[:inclusionable].name,
         ingredient_info[:bakers_percentage],
-        display_weight(ingredient_info[:weight])
+        display_weight(bowl_ingredient_weight(ingredient_info))
       ]
     end
     rows.unshift(header)
@@ -145,15 +146,15 @@ class RecipeDataPdf
 
   def nested_recipes_table
     move_down 20
-    table(nested_recipes_data, column_widths: [169, 56, 56]) do
+    table(nested_recipes_data, column_widths: [169, 51, 61]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      column(1).style(align: :center)
+      column(1..2).style(align: :center)
     end
   end
 
   def deeply_nested_recipes_data
-    header = ['Used In Recipe', 'Weight', '% Used']
+    header = ['Used In Recipe', 'Wt / bowl', '% Used']
     rows = sorted_parent_recipes.map do |recipe_info|
       [
         recipe_info[:parent_recipe].name.titleize,
@@ -169,7 +170,7 @@ class RecipeDataPdf
     table(deeply_nested_recipes_data, column_widths: [130, 95, 56]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
-      column(1).style(align: :center)
+      column(1..2).style(align: :center)
     end
   end
 
@@ -181,10 +182,37 @@ class RecipeDataPdf
     date.strftime('%a, %b %d, %Y')
   end
 
+  def totals
+    move_down 10
+    table(totals_info, position: :right, column_widths: [215, 61]) do
+      cells.borders = []
+      column(0).style(font_style: :bold, align: :right)
+      column(1).style(align: :center)
+      column(1).borders = [:top, :right, :bottom, :left]
+    end
+  end
+
+  def totals_info
+    [
+      ['Bowl Weight', display_weight(total_bowl_weight)],
+      ["Bowl Weight x #{recipe_run_data.mix_bowl_count}", display_weight(recipe_run_data.weight)]
+    ]
+  end
+
   private
 
+  def bowl_ingredient_weight(ingredient_info)
+    return Unitwise(0, :kg) if ingredient_info[:weight] == Unitwise(0, :kg)
+    ingredient_info[:weight] / recipe_run_data.mix_bowl_count
+  end
+
+  def total_bowl_weight
+    return Unitwise(0, :kg) if recipe_run_data.weight == Unitwise(0, :kg)
+    recipe_run_data.weight / recipe_run_data.mix_bowl_count
+  end
+
   def sorted_parent_recipes
-    @recipe_run_data.parent_recipes.sort_by { |h| h[:parent_recipe][:name].downcase }
+    recipe_run_data.parent_recipes.sort_by { |h| h[:parent_recipe][:name].downcase }
   end
 
   def sorted_recipe_run_date_products
