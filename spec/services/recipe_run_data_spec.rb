@@ -88,9 +88,9 @@ describe RecipeRunData do
     describe '#mix_bowl_count' do
       it 'returns nil if no bowl info' do
         motherdough.update(mix_size: 0)
-        expect(run_data.mix_bowl_count).to be_nil
+        expect(run_data.mix_bowl_count).to eq(1)
         motherdough.update(mix_size: nil)
-        expect(run_data.mix_bowl_count).to be_nil
+        expect(run_data.mix_bowl_count).to eq(1)
       end
 
       it 'returns the number of bowls needed' do
