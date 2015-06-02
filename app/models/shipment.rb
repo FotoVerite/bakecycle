@@ -108,7 +108,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def invoice_number
-    "#{date.strftime('%Y%m%d')}-#{id}-#{client_id}-#{route_id}"
+    "#{id}-#{client_id}"
   end
 
   def set_payment_due_date
