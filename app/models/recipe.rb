@@ -20,9 +20,9 @@ class Recipe < ActiveRecord::Base
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true
   validates :bakery, presence: true
-  validate :inclusionable_a_recipe?, if: :inclusion?
+  validate :inclusionable_a_recipe?, unless: :motherdough?
 
-  before_save :make_lead_days_zero_if_inclusion
+  before_save :set_recipe_lead_days
   before_save :set_total_lead_days
   after_save :touch_parent_recipes
   after_save :touch_products
@@ -62,18 +62,15 @@ class Recipe < ActiveRecord::Base
     lead_days + (child_recipes.maximum(:total_lead_days) || 0)
   end
 
-  def make_lead_days_zero_if_inclusion
-    self.lead_days = 0 if inclusion?
-  end
-
-  def inclusion?
-    recipe_type == 'inclusion'
+  def set_recipe_lead_days
+    return self.lead_days = 0 if inclusion?
+    self.lead_days = 1 if preferment?
   end
 
   def inclusionable_a_recipe?
     recipe_items.each do |recipe_item|
       if recipe_item.inclusionable_type == 'Recipe'
-        errors.add(:recipe_items, 'Inclusion recipes can only include ingredients')
+        errors.add(:recipe, "with #{recipe_type} recipe type can only include specified ingredients")
       end
     end
   end
@@ -85,5 +82,19 @@ class Recipe < ActiveRecord::Base
   def mix_size_with_unit
     return Unitwise(0, :kg) unless mix_size
     Unitwise(mix_size, mix_size_unit)
+  end
+
+  private
+
+  def motherdough?
+    recipe_type == 'dough'
+  end
+
+  def preferment?
+    recipe_type == 'preferment'
+  end
+
+  def inclusion?
+    recipe_type == 'inclusion'
   end
 end

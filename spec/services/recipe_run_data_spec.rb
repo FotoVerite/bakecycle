@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe RecipeRunData do
   describe '#add_product' do
-    let(:motherdough) { create(:recipe) }
-    let(:inclusion) { create(:recipe) }
+    let(:motherdough) { create(:recipe_motherdough) }
+    let(:inclusion) { create(:recipe_inclusion) }
     let(:product) { create(:product, motherdough: motherdough, weight: 1, unit: :g) }
     let(:run_data) { RecipeRunData.new(motherdough, date: Time.zone.today) }
 
@@ -72,7 +72,7 @@ describe RecipeRunData do
     end
 
     describe '#ingredients and #nested_recipes' do
-      let(:motherdough) { create(:recipe, :with_nested_recipes, :with_ingredients) }
+      let(:motherdough) { create(:recipe_motherdough, :with_nested_recipes, :with_ingredients) }
 
       it 'returns the ingredients from recipe items' do
         expect(run_data.ingredients.count).to eq(3)

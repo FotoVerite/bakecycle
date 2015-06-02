@@ -40,12 +40,12 @@ describe Recipe do
   end
 
   describe '#total_lead_days' do
-    let(:recipe) { create(:recipe) }
+    let(:recipe) { create(:recipe_motherdough) }
     let(:bakery) { recipe.bakery }
 
     it 'calculated from own lead_days plus max of included recipe lead days, is called in an after save' do
       product
-      dough = build(:recipe_preferment, name: 'child recipe', bakery: bakery, lead_days: 4)
+      dough = build(:recipe_motherdough, name: 'child recipe', bakery: bakery, lead_days: 4)
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
       recipe.save
@@ -55,7 +55,7 @@ describe Recipe do
     end
 
     it 'works with stacked recipes' do
-      dough = build(:recipe_preferment, :with_nested_recipes, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
+      dough = build(:recipe_motherdough, :with_nested_recipes, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
       expect(recipe.calculate_total_lead_days).to eq(8)
@@ -84,6 +84,13 @@ describe Recipe do
     it 'makes recipe lead days zero if its type is inclusion' do
       recipe = create(:recipe, lead_days: 10, recipe_type: :inclusion)
       expect(recipe.lead_days).to eq(0)
+    end
+  end
+
+  context 'make lead day one if preferment' do
+    it 'makes recipe lead days one if its type is preferment' do
+      recipe = create(:recipe, lead_days: 10, recipe_type: :preferment)
+      expect(recipe.lead_days).to eq(1)
     end
   end
 
