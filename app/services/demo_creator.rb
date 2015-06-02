@@ -38,77 +38,49 @@ class DemoCreator
   def dark_rye_flour
     @_dark_rye_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Dark Rye Flour Mix',
-      price: 22.00,
-      measure: 40,
-      unit: :lb,
-      ingredient_type: :flour
+      name: 'Dark Rye Flour Mix'
     )
   end
 
   def white_flour
     @_white_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'White Flour Blend',
-      price: 1.10,
-      measure: 1,
-      unit: :kg,
-      ingredient_type: :flour
+      name: 'White Flour Blend'
     )
   end
 
   def whole_wheat_flour
     @_whole_wheat_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Whole Wheat Flour Mix',
-      price: 1.30,
-      measure: 1,
-      unit: :kg,
-      ingredient_type: :flour
+      name: 'Whole Wheat Flour Mix'
     )
   end
 
   def yeast
     @_yeast ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Yeast #2',
-      price: 75.00,
-      measure: 20,
-      unit: :lb,
-      ingredient_type: :ingredient
+      name: 'Yeast #2'
     )
   end
 
   def water
     @_water ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Purified Water',
-      price: 0.00,
-      measure: 0,
-      unit: :g,
-      ingredient_type: :ingredient
+      name: 'Purified Water'
     )
   end
 
   def nicoise_olives
     @_nicoise_olives ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Black Olives',
-      price: 40.00,
-      measure: 1,
-      unit: :lb,
-      ingredient_type: :ingredient
+      name: 'Black Olives'
     )
   end
 
   def chives
     @_chives ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Chopped Chives',
-      price: 15.00,
-      measure: 1,
-      unit: :lb,
-      ingredient_type: :ingredient
+      name: 'Chopped Chives'
     )
   end
 
@@ -117,8 +89,7 @@ class DemoCreator
     @_nicoise_olive_inclusion = Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
-      name: 'Black Olives',
-      lead_days: 1
+      name: 'Black Olives'
     )
 
     RecipeItem.create!(recipe: @_nicoise_olive_inclusion, bakers_percentage: 15, inclusionable: nicoise_olives)
@@ -130,8 +101,7 @@ class DemoCreator
     @_dark_rye ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
-      name: 'Dark Rye Blend',
-      lead_days: 2
+      name: 'Dark Rye Blend'
     )
 
     RecipeItem.create!(recipe: @_dark_rye, bakers_percentage: 1, inclusionable: dark_rye_flour)
@@ -143,8 +113,7 @@ class DemoCreator
     @_chive_pain_au_lait_inclusion ||= Recipe.create!(
       bakery: @bakery,
       recipe_type: :inclusion,
-      name: 'Chives Pain au Lait',
-      lead_days: 1
+      name: 'Chives Pain au Lait'
     )
 
     RecipeItem.create!(recipe: @_chive_pain_au_lait_inclusion, bakers_percentage: 2, inclusionable: chives)
@@ -227,7 +196,8 @@ class DemoCreator
       product_type: :bread,
       description: 'The finest baguette',
       weight: 50,
-      unit: :g,      over_bake: 0,
+      unit: :g,
+      over_bake: 0,
       base_price: 1.50,
       motherdough: baguette_dough,
       inclusion: nicoise_olive_inclusion
