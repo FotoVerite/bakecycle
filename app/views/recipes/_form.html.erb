@@ -4,12 +4,15 @@
 
   <%= f.error_notification %>
   <% if f.object.errors.any? %>
-      <div id="error_explanation">
-        <ul>
-          <li> <%= f.object.errors[:recipe_items].uniq.first %></li>
-        </ul>
-      </div>
-    <% end %>
+    <div id="error_explanation">
+      <ul>
+        <% f.object.errors.full_messages.each do |msg| %>
+          <li> * <%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <fieldset>
     <legend>Recipe Information</legend>
     <div class="row">
@@ -39,7 +42,7 @@
     </div>
 
     <div class="row">
-      <div class="small-12 columns" ng-hide="isInclusion()">
+      <div class="small-12 columns" ng-show="isDough()">
         <%= f.input :lead_days, as: :string %>
       </div>
     </div>

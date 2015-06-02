@@ -13,7 +13,7 @@ FactoryGirl.define do
       transient do
         recipe_lead_days 2
       end
-      inclusionable { |t| t.association(:recipe, bakery: bakery, lead_days: recipe_lead_days) }
+      inclusionable { |t| t.association(:recipe, bakery: bakery, lead_days: recipe_lead_days, recipe_type: :dough) }
     end
   end
 end

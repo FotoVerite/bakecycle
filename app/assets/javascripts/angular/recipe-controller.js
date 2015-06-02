@@ -4,8 +4,8 @@
 
   app.controller('RecipeCtrl', [ '$scope', function ($scope) {
     $scope.recipe = {};
-    $scope.isInclusion = function () {
-      return "inclusion" === $scope.recipe.recipe_type;
+    $scope.isDough = function () {
+      return "dough" === $scope.recipe.recipe_type;
     };
   }]);
 })();

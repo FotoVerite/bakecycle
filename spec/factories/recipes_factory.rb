@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :recipe do
     name { generate(:recipe_name) }
-    recipe_type { Recipe.recipe_types.except(:inclusion).keys.sample }
+    recipe_type { Recipe.recipe_types.keys.sample }
     mix_size 12
     mix_size_unit { Recipe.mix_size_units.keys.sample }
     lead_days 2
@@ -9,10 +9,12 @@ FactoryGirl.define do
 
     factory :recipe_motherdough do
       recipe_type :dough
+      lead_days 2
     end
 
     factory :recipe_preferment do
       recipe_type :preferment
+      lead_days 1
     end
 
     factory :recipe_inclusion do
