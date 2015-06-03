@@ -13,10 +13,6 @@ end
 
 When(/^I fill out Ingredient form with:$/) do |table|
   fill_in 'ingredient_name', with: table.hashes[0]['name']
-  fill_in 'ingredient_price', with: table.hashes[0]['price']
-  fill_in 'ingredient_measure', with: table.hashes[0]['measure']
-  select table.hashes[0]['unit'], from: 'ingredient_unit'
-  select table.hashes[0]['ingredient_type'], from: 'ingredient_ingredient_type'
   fill_in 'ingredient_description', with: table.hashes[0]['description']
 end
 
