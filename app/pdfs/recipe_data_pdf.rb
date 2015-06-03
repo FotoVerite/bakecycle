@@ -36,7 +36,7 @@ class RecipeDataPdf
 
   def right_section
     products_table if recipe_run_data.products.any?
-    deeply_nested_recipes_table if recipe_run_data.parent_recipes.any?
+    parent_recipes_table if recipe_run_data.parent_recipes.any?
   end
 
   def left_section
@@ -153,21 +153,20 @@ class RecipeDataPdf
     end
   end
 
-  def deeply_nested_recipes_data
-    header = ['Used In Recipe', 'Wt / bowl', '% Used']
+  def parent_recipes_data
+    header = ['Used In Recipe', 'Weight']
     rows = sorted_parent_recipes.map do |recipe_info|
       [
         recipe_info[:parent_recipe].name.titleize,
-        display_weight(recipe_info[:weight]),
-        (recipe_info[:weight] / recipe_run_data.weight * 100).to_f.round(2)
+        display_weight(recipe_info[:weight])
       ]
     end
     rows.unshift(header)
   end
 
-  def deeply_nested_recipes_table
+  def parent_recipes_table
     move_down 20 if recipe_run_data.products.any?
-    table(deeply_nested_recipes_data, column_widths: [130, 95, 56]) do
+    table(parent_recipes_data, column_widths: [186, 95]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..2).style(align: :center)

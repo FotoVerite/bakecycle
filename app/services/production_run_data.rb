@@ -43,13 +43,14 @@ class ProductionRunData
     return unless motherdough
     recipe_data = recipes.find_or_create(motherdough, run_date)
     recipe_data.add_product(product, quantity)
-    add_nested_recipes(recipe_data)
+    update_nested_recipes(recipe_data)
   end
 
-  def add_nested_recipes(recipe_data)
-    recipe_data.deeply_nested_recipe_info.each do |nested_info|
+  def update_nested_recipes(recipe_data)
+    recipe_data.nested_recipes.each do |nested_info|
       nested_data = recipes.find_or_create(nested_info[:inclusionable], run_date)
-      nested_data.add_parent_recipe(nested_info[:parent_recipe], nested_info[:weight])
+      nested_data.update_parent_recipe(nested_info[:parent_recipe], nested_info[:weight])
+      update_nested_recipes(nested_data)
     end
   end
 
