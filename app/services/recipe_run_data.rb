@@ -1,13 +1,13 @@
 class RecipeRunData
   delegate  :total_lead_days, :mix_size_with_unit, to: :recipe
   attr_reader :recipe, :products, :inclusions, :weight,
-              :recipe_items, :parent_recipes, :date
+              :recipe_items, :date
 
   def initialize(recipe, date)
     @recipe = recipe
     @date = date
     @products = []
-    @parent_recipes = []
+    @parent_recipe_map = {}
     @inclusions = []
     @recipe_items = []
     self.weight = Unitwise(0, :kg)
@@ -20,24 +20,17 @@ class RecipeRunData
     self.weight += calculator.dough_weight
   end
 
-  def add_parent_recipe(parent_recipe, weight)
-    self.weight += weight
-    detected_parent_recipe = detect_parent_recipe(parent_recipe)
-    parent_recipe_item = detected_parent_recipe || new_parent_recipe_item(parent_recipe)
-    parent_recipes << parent_recipe_item unless detected_parent_recipe
-    parent_recipe_item[:weight] += weight
-  end
+  def update_parent_recipe(parent_recipe, weight)
+    @parent_recipe_map[parent_recipe] ||= { parent_recipe: parent_recipe, weight: Unitwise(0, :kg) }
+    parent_recipe_info = @parent_recipe_map[parent_recipe]
 
-  def deeply_nested_recipe_info
-    RecipeCalc.new(recipe, @weight).deeply_nested_recipe_info
+    self.weight -= parent_recipe_info[:weight]
+    self.weight += weight
+    parent_recipe_info[:weight] = weight
   end
 
   def weight=(weight)
     @weight = weight
-    calculate_recipe_item_weight
-  end
-
-  def calculate_recipe_item_weight
     @recipe_items = RecipeCalc.new(recipe, @weight).ingredients_info
   end
 
@@ -58,13 +51,7 @@ class RecipeRunData
     date + recipe.total_lead_days.days
   end
 
-  private
-
-  def new_parent_recipe_item(parent_recipe)
-    { parent_recipe: parent_recipe, weight: Unitwise(0, :kg) }
-  end
-
-  def detect_parent_recipe(parent_recipe)
-    parent_recipes.detect { |data| data[:parent_recipe] == parent_recipe }
+  def parent_recipes
+    @parent_recipe_map.values
   end
 end

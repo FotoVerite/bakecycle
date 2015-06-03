@@ -37,27 +37,4 @@ describe RecipeCalc do
       expect(recipe_calc.ingredients_info).to eq(recipe_item_info)
     end
   end
-
-  describe '#deeply_nested_recipe_info' do
-    it 'returns info for nested recipes' do
-      recipe = create(:recipe)
-      bakery = recipe.bakery
-      dough = build(:recipe_preferment, :with_nested_recipes, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
-      recipe_item = build(:recipe_item_recipe,
-                          bakery: bakery, inclusionable: dough, recipe_lead_days: 2, bakers_percentage: 100)
-      weight = Unitwise(15, :kg)
-
-      dough_info = {
-          parent_recipe: recipe,
-          inclusionable: dough,
-          weight: Unitwise(15, :kg),
-          bakers_percentage: 100,
-          inclusionable_type: 'Recipe'
-        }
-
-      recipe.recipe_items = [recipe_item]
-      recipe_calc = RecipeCalc.new(recipe, weight)
-      expect(recipe_calc.deeply_nested_recipe_info).to include(dough_info)
-    end
-  end
 end

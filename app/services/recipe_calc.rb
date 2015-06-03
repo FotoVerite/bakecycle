@@ -18,20 +18,7 @@ class RecipeCalc
     end
   end
 
-  def deeply_nested_recipe_info
-    recipes_info + recipes_info.map { |info|
-      RecipeCalc.new(
-        info[:inclusionable],
-        info[:weight]
-      ).deeply_nested_recipe_info
-    }.flatten
-  end
-
   private
-
-  def recipes_info
-    ingredients_info.select { |item| item[:inclusionable_type] == 'Recipe' }
-  end
 
   def weight_for(item)
     weight / total_percentage * item.bakers_percentage

@@ -103,22 +103,28 @@ describe RecipeRunData do
     end
   end
 
-  describe '#add_parent_recipe' do
+  describe '#update_parent_recipe' do
     let(:bakery) { create(:bakery) }
     let(:recipe) { create(:recipe, bakery: bakery) }
     let(:parent_recipe) { create(:recipe, bakery: bakery) }
+    let(:parent_recipe_2) { create(:recipe, bakery: bakery) }
     let(:date) { Time.zone.now }
     let(:run_data) { RecipeRunData.new(recipe, date) }
 
     it 'it keeps a sum of the weight by recipe' do
-      run_data.add_parent_recipe(parent_recipe, Unitwise(10, :kg))
-      run_data.add_parent_recipe(parent_recipe, Unitwise(10, :kg))
+      run_data.update_parent_recipe(parent_recipe, Unitwise(10, :kg))
+      run_data.update_parent_recipe(parent_recipe, Unitwise(5, :kg))
 
       recipe_info = {
         parent_recipe: parent_recipe,
-        weight: Unitwise(20, :kg)
+        weight: Unitwise(5, :kg)
       }
       expect(run_data.parent_recipes).to include(recipe_info)
+      expect(run_data.weight).to eq(Unitwise(5, :kg))
+
+      run_data.update_parent_recipe(parent_recipe_2, Unitwise(8, :kg))
+      expect(run_data.parent_recipes).to include(recipe_info)
+      expect(run_data.weight).to eq(Unitwise(13, :kg))
     end
   end
 end
