@@ -35,3 +35,16 @@ Feature: Recipes
     And I confirm popup
     Then I should see confirmation the recipe "danish" was deleted
     And the recipe "danish" should not be present
+
+    Given I am on the "recipes" page
+    When I click on "Add New Recipe"
+    And I fill out recipe form with:
+      | name  | mix_size | mix_size_unit| lead_days | recipe_type | note                |
+      | pears |  1.10    | kg           | 2         | dough       | I am made with love |
+    When I click on "Add New Ingredient"
+    And I fill out recipe item with:
+       | inclusionable_id_type | percentage |
+       | almond                | 22.5       |
+    When I click on "Add New Ingredient"
+    And I click on "Create"
+    Then "You have created pear" should be present
