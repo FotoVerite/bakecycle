@@ -25,9 +25,10 @@ class InvoicesIif < InvoiceIif
   end
 
   def invoices(shipments)
+    counter = LineCounter.new
     Riif::IIF.new do |riif|
       shipments.each do |shipment|
-        shipment_data(riif, shipment)
+        shipment_data(riif, shipment, counter)
       end
     end
   end
