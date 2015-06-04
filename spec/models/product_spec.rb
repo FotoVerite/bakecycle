@@ -76,6 +76,8 @@ describe Product do
     it 'updates its total lead days based on the motherdough' do
       dough = FactoryGirl.create(:recipe_motherdough)
       product = FactoryGirl.create(:product, motherdough: dough)
+
+      expect(Resque).to receive(:enqueue).at_least(:once).and_call_original
       dough.update(lead_days: 9)
       product.reload
       expect(product.total_lead_days).to eq(9)

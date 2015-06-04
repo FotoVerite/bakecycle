@@ -33,8 +33,20 @@ class Product < ActiveRecord::Base
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
-  after_save :touch_order_items
+  after_save :queue_touch_order_items
   after_touch :update_total_lead_days
+
+  def self.queue
+    :products
+  end
+
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
+
+  def async(method, *args)
+    Resque.enqueue(Product, id, method, *args)
+  end
 
   def strip_name
     self.name = name.strip if name
@@ -42,7 +54,7 @@ class Product < ActiveRecord::Base
 
   def update_total_lead_days
     update_columns(total_lead_days: set_total_lead_days)
-    touch_order_items
+    async(:touch_order_items)
   end
 
   def set_total_lead_days
@@ -52,6 +64,10 @@ class Product < ActiveRecord::Base
 
   def update_total_lead_days?
     new_record? || motherdough_id_changed? || inclusion_id_changed?
+  end
+
+  def queue_touch_order_items
+    async(:touch_order_items)
   end
 
   def touch_order_items

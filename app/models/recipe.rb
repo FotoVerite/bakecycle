@@ -24,11 +24,23 @@ class Recipe < ActiveRecord::Base
 
   before_save :set_recipe_lead_days
   before_save :set_total_lead_days
-  after_save :touch_parent_objects
+  after_save :queue_touch_parent_objects
   after_touch :update_total_lead_days
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
+
+  def self.queue
+    :recipes
+  end
+
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
+
+  def async(method, *args)
+    Resque.enqueue(Recipe, id, method, *args)
+  end
 
   def products
     Product.where('motherdough_id = :id OR inclusion_id = :id', id: id)
@@ -36,11 +48,15 @@ class Recipe < ActiveRecord::Base
 
   def update_total_lead_days
     update_columns(total_lead_days: calculate_total_lead_days)
-    touch_parent_objects
+    async(:touch_parent_objects)
   end
 
   def set_total_lead_days
     self.total_lead_days = calculate_total_lead_days
+  end
+
+  def queue_touch_parent_objects
+    async(:touch_parent_objects)
   end
 
   def touch_parent_objects
