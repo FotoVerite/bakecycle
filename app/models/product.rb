@@ -32,11 +32,8 @@ class Product < ActiveRecord::Base
   validates :base_price, numericality: true, presence: true
 
   before_validation :strip_name
-
   before_save :set_total_lead_days, if: :update_total_lead_days?
-
   after_save :touch_order_items
-
   after_touch :update_total_lead_days
 
   def strip_name
