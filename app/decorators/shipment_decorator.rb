@@ -31,6 +31,10 @@ class ShipmentDecorator < Draper::Decorator
     object.price
   end
 
+  def delivery_fee_for_iif
+    object.delivery_fee
+  end
+
   def date_for_iif
     object.date.strftime('%-m/%d/%y')
   end

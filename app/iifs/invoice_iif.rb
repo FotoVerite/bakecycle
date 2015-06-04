@@ -12,17 +12,18 @@ class InvoiceIif
   private
 
   def invoice(shipment)
+    counter = LineCounter.new
     Riif::IIF.new do |riif|
-      shipment_data(riif, shipment)
+      shipment_data(riif, shipment, counter)
     end
   end
 
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
-  def shipment_data(riif, shipment)
+  def shipment_data(riif, shipment, row_counter)
     riif.trns do
       row do
-        trnsid shipment.id
+        trnsid row_counter.next
         trnstype 'INVOICE'
         date shipment.date_for_iif
         accnt 'Accounts Receivable'
@@ -52,7 +53,7 @@ class InvoiceIif
       shipment.shipment_items.each do |item|
         spl do
           row do
-            splid item.id
+            splid row_counter.next
             trnstype 'INVOICE'
             date shipment.date_for_iif
             accnt shipment.bakery_quickbooks_account
@@ -69,8 +70,38 @@ class InvoiceIif
           end
         end
       end
+
+      if shipment.delivery_fee_for_iif > 0
+        spl do
+          row do
+            splid row_counter.next
+            trnstype 'INVOICE'
+            date shipment.date_for_iif
+            accnt shipment.bakery_quickbooks_account
+            name
+            amount "-#{shipment.delivery_fee_for_iif}"
+            docnum
+            memo 'Delivery Fee'
+            method_missing(:class, 'Wholesale')
+            qnty '-1'
+            price shipment.delivery_fee_for_iif
+            invitem 'Delivery Fee'
+            paymeth
+            taxable 'N'
+          end
+        end
+      end
     end
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+  class LineCounter
+    def initialize
+      @count = 0
+    end
+
+    def next
+      @count += 1
+    end
+  end
 end
