@@ -1,5 +1,6 @@
 class Recipe < ActiveRecord::Base
   extend AlphabeticalOrder
+  include ResqueJobs
 
   belongs_to :bakery
   has_many :parent_recipe_items, class_name: 'RecipeItem', as: :inclusionable
@@ -29,18 +30,6 @@ class Recipe < ActiveRecord::Base
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
-
-  def self.queue
-    :recipes
-  end
-
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  def async(method, *args)
-    Resque.enqueue(Recipe, id, method, *args)
-  end
 
   def products
     Product.where('motherdough_id = :id OR inclusion_id = :id', id: id)

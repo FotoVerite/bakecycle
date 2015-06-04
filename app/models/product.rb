@@ -1,5 +1,6 @@
 class Product < ActiveRecord::Base
   extend AlphabeticalOrder
+  include ResqueJobs
 
   belongs_to :inclusion, class_name: 'Recipe'
   belongs_to :motherdough, class_name: 'Recipe'
@@ -35,18 +36,6 @@ class Product < ActiveRecord::Base
   before_save :set_total_lead_days, if: :update_total_lead_days?
   after_save :queue_touch_order_items
   after_touch :update_total_lead_days
-
-  def self.queue
-    :products
-  end
-
-  def self.perform(id, method, *args)
-    find(id).send(method, *args)
-  end
-
-  def async(method, *args)
-    Resque.enqueue(Product, id, method, *args)
-  end
 
   def strip_name
     self.name = name.strip if name
