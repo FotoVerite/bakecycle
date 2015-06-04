@@ -29,20 +29,22 @@ class RecipeDataPdf
   end
 
   def main_section
-    grid([1, 0], [1, 11]).bounding_box { bowl_count }
-    grid([2, 0], [11, 5]).bounding_box { left_section }
-    grid([2, 6], [11, 11]).bounding_box { right_section }
+    grid([1, 0], [11, 5]).bounding_box { left_section }
+    grid([1, 6], [11, 11]).bounding_box { right_section }
   end
 
   def right_section
     products_table if recipe_run_data.products.any?
     parent_recipes_table if recipe_run_data.parent_recipes.any?
+    product_tables if products_with_inclusion.any?
   end
 
   def left_section
     ingredients_table
     nested_recipes_table if recipe_run_data.nested_recipes.any?
     totals
+    move_down 20
+    bowl_count
   end
 
   def header_title
@@ -69,7 +71,7 @@ class RecipeDataPdf
 
   def bowl_count
     table(bowl_data, position: :center, cell_style: { font_style: :bold }) do
-      row(0).style(align: :center).valign = :center
+      row(0).style(align: :right).valign = :center
       column(0).style(borders: [:top, :left, :bottom], align: :right)
       column(1).style(borders: [:top, :bottom], align: :center)
       column(2).style(borders: [:top, :right, :bottom], align: :left)
@@ -87,7 +89,7 @@ class RecipeDataPdf
   end
 
   def products_table
-    table(product_data, column_widths: [52, 137, 32, 52]) do
+    table(product_data, column_widths: [52, 145, 32, 52]) do
       row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :center)
       column(2..-1).style(align: :center)
@@ -104,12 +106,32 @@ class RecipeDataPdf
   def product_rows
     sorted_recipe_run_date_products.map do |product|
       [
-        display_weight(product[:product].weight_with_unit),
+        display_weight(product[:product].weight_with_unit.to_kg),
         product[:product].name,
         product[:quantity],
         display_weight(product[:weight])
       ]
     end
+  end
+
+  def product_tables
+    products_with_inclusion.each do |product|
+      move_down 20
+      table(product_with_inclusion_data(product), column_widths: [186, 95]) do
+        row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+        column(0).style(align: :left)
+        column(1).style(align: :center)
+      end
+    end
+  end
+
+  def product_with_inclusion_data(product)
+    inclusion = inclusion_for_product(product)
+
+    header = [product[:product].name, display_weight(product[:weight])]
+    dough_row = ['Dough', display_weight(product[:dough_weight])]
+    inclusion_row = [inclusion[:recipe].name, display_weight(inclusion[:weight])]
+    [header, dough_row, inclusion_row]
   end
 
   def ingredients_data
@@ -220,6 +242,14 @@ class RecipeDataPdf
 
   def product_without_inclusion(product)
     product[:product].inclusion ? 1 : 0
+  end
+
+  def products_with_inclusion
+    sorted_recipe_run_date_products.select { |product| product[:product].inclusion }
+  end
+
+  def inclusion_for_product(product)
+    recipe_run_data.inclusions.detect { |i| i[:product] == product[:product] }
   end
 end
 # rubocop:enable Metrics/ClassLength
