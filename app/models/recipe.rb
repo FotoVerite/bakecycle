@@ -24,9 +24,7 @@ class Recipe < ActiveRecord::Base
 
   before_save :set_recipe_lead_days
   before_save :set_total_lead_days
-  after_save :touch_parent_recipes
-  after_save :touch_products
-
+  after_save :touch_parent_objects
   after_touch :update_total_lead_days
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
@@ -38,19 +36,15 @@ class Recipe < ActiveRecord::Base
 
   def update_total_lead_days
     update_columns(total_lead_days: calculate_total_lead_days)
-    touch_parent_recipes
-    touch_products
+    touch_parent_objects
   end
 
   def set_total_lead_days
     self.total_lead_days = calculate_total_lead_days
   end
 
-  def touch_parent_recipes
+  def touch_parent_objects
     parent_recipes.each(&:touch)
-  end
-
-  def touch_products
     products.each(&:touch)
   end
 
