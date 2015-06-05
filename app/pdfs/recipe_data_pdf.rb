@@ -24,13 +24,12 @@ class RecipeDataPdf
   end
 
   def header_section
-    grid([0, 0], [0, 7]).bounding_box { header_title }
-    grid([0, 8], [1, 11]).bounding_box { header_info }
+    grid([0, 0], [0, 11]).bounding_box { header_title }
   end
 
   def main_section
-    grid([1, 0], [11, 5]).bounding_box { left_section }
-    grid([1, 6], [11, 11]).bounding_box { right_section }
+    grid([0.75, 0], [11, 5]).bounding_box { left_section }
+    grid([0.75, 6], [11, 11]).bounding_box { right_section }
   end
 
   def right_section
@@ -40,15 +39,16 @@ class RecipeDataPdf
   end
 
   def left_section
+    grid([0, 0], [0, 2]).bounding_box { bowl_count }
+    grid([0, 2], [0.5, 5]).bounding_box { header_info }
+
     ingredients_table
     nested_recipes_table if recipe_run_data.nested_recipes.any?
     totals
-    move_down 20
-    bowl_count
   end
 
   def header_title
-    text_box recipe_run_data.recipe.name, size: 50, min_font_size: 15, overflow: :shrink_to_fit, width: 380
+    text_box recipe_run_data.recipe.name, size: 45, min_font_size: 15, overflow: :shrink_to_fit, width: 380
   end
 
   def header_info
@@ -70,7 +70,7 @@ class RecipeDataPdf
   end
 
   def bowl_count
-    table(bowl_data, position: :center, cell_style: { font_style: :bold }) do
+    table(bowl_data, cell_style: { font_style: :bold }) do
       row(0).style(align: :right).valign = :center
       column(0).style(borders: [:top, :left, :bottom], align: :right)
       column(1).style(borders: [:top, :bottom], align: :center)
@@ -116,7 +116,7 @@ class RecipeDataPdf
 
   def product_tables
     products_with_inclusion.each do |product|
-      move_down 20
+      move_down 10
       table(product_with_inclusion_data(product), column_widths: [186, 95]) do
         row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
         column(0).style(align: :left)
