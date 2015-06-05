@@ -43,7 +43,7 @@ class Product < ActiveRecord::Base
 
   def update_total_lead_days
     update_columns(total_lead_days: set_total_lead_days)
-    async(:touch_order_items)
+    touch_order_items
   end
 
   def set_total_lead_days
