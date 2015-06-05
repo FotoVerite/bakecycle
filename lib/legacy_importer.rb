@@ -126,6 +126,8 @@ module LegacyImporter
   def self.back_fill_data
     ActiveRecord::Base.connection.cache do
       make_shipments
+    end
+    ActiveRecord::Base.connection.cache do
       make_production_runs
     end
   end
