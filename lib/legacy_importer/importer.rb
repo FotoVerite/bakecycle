@@ -10,8 +10,10 @@ module LegacyImporter
     end
 
     def import!
-      benchmark "Imported #{bakery.name} with Importer #{importer}" do
-        @imported = collection.map { |object| importer.new(bakery, object).import! }
+      ActiveRecord::Base.connection.cache do
+        benchmark "Imported #{bakery.name} with Importer #{importer}" do
+          @imported = collection.map { |object| importer.new(bakery, object).import! }
+        end
       end
     end
 
