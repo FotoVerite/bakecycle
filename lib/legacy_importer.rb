@@ -111,18 +111,16 @@ module LegacyImporter
   end
 
   def self.import_all
-    ActiveRecord::Base.connection.cache do
-      [
-        import_clients,
-        import_ingredients,
-        import_recipes,
-        import_recipe_items,
-        import_products,
-        import_price_variants,
-        import_routes,
-        import_orders
-      ].sum
-    end
+    [
+      import_clients,
+      import_ingredients,
+      import_recipes,
+      import_recipe_items,
+      import_products,
+      import_price_variants,
+      import_routes,
+      import_orders
+    ].sum
   end
 
   def self.back_fill_data

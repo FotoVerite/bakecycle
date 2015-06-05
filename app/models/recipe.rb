@@ -37,7 +37,7 @@ class Recipe < ActiveRecord::Base
 
   def update_total_lead_days
     update_columns(total_lead_days: calculate_total_lead_days)
-    async(:touch_parent_objects)
+    touch_parent_objects
   end
 
   def set_total_lead_days

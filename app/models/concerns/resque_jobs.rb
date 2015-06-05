@@ -8,6 +8,9 @@ module ResqueJobs
 
     def perform(id, method, *args)
       find(id).public_send(method, *args)
+    rescue Resque::TermException
+      Rails.logger.warn "Resque job termination re-queuing #{self} #{id} #{method} #{args.join(',')}"
+      Resque.enqueue(self, id, method, *args)
     end
   end
 

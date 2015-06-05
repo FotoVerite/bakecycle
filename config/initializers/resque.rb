@@ -1,2 +1,2 @@
-Resque.inline = ENV.key?('INLINE_JOBS')
+Resque.inline = ENV['INLINE_JOBS'] == 'true'
 Resque.redis = ENV['REDISCLOUD_URL'] if ENV['REDISCLOUD_URL']
