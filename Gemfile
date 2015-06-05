@@ -24,6 +24,8 @@ gem 'pg'
 gem 'prawn'
 gem 'prawn-table'
 gem 'rails', '4.2.1'
+gem 'resque', require: 'resque/server'
+gem 'riif'
 gem 'sass-rails'
 gem 'simple_form'
 gem 'uglifier', '>= 1.3.0'
@@ -31,7 +33,6 @@ gem 'unicorn', require: false
 gem 'unitwise'
 gem 'will_paginate', '~> 3.0.6'
 gem 'wizarddev-heroku'
-gem 'riif'
 
 # legacy import
 gem 'mysql2', require: false
@@ -42,6 +43,7 @@ group :development do
   gem 'quiet_assets'
   gem 'spring'
   gem 'web-console', '~> 2.0'
+  gem 'foreman', require: false
 end
 
 group :test, :development do

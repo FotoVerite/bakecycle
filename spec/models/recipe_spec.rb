@@ -64,6 +64,16 @@ describe Recipe do
       recipe.reload
       expect(recipe.total_lead_days).to eq(8)
     end
+
+    it 'is updated when dough is updated' do
+      dough = build(:recipe_motherdough, name: 'child recipe', bakery: bakery, lead_days: 4)
+      recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
+      recipe.recipe_items = [recipe_item]
+      expect(Resque).to receive(:enqueue).at_least(:once).and_call_original
+      dough.update(lead_days: 5)
+      recipe.reload
+      expect(recipe.total_lead_days).to eq(7)
+    end
   end
 
   describe '#mix_size_unit' do
