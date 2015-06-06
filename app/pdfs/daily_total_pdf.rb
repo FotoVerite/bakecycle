@@ -1,6 +1,6 @@
-class DailyTotalPdf < PdfReport
-  def initialize(date, bakery)
-    @recipes = ProductCounter.new(date, bakery)
+class DailyTotalPdf < BasePdfReport
+  def initialize(bakery, date)
+    @recipes = ProductCounter.new(bakery, date)
     super()
   end
 

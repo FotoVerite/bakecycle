@@ -90,11 +90,11 @@ class RecipeDataPdf
 
   def products_table
     table(product_data, column_widths: [52, 145, 32, 52]) do
-      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :center)
       column(2..-1).style(align: :center)
       column(1).style(align: :left)
-      row(1..-1).column(2).style(background_color: PdfReport::HEADER_ROW_COLOR)
+      row(1..-1).column(2).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
     end
   end
 
@@ -118,7 +118,7 @@ class RecipeDataPdf
     products_with_inclusion.each do |product|
       move_down 10
       table(product_with_inclusion_data(product), column_widths: [186, 95]) do
-        row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+        row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
         column(0).style(align: :left)
         column(1).style(align: :center)
       end
@@ -148,7 +148,7 @@ class RecipeDataPdf
 
   def ingredients_table
     table(ingredients_data, column_widths: [169, 51, 61]) do
-      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR, overflow: :shrink_to_fit)
+      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR, overflow: :shrink_to_fit)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
     end
@@ -169,7 +169,7 @@ class RecipeDataPdf
   def nested_recipes_table
     move_down 20
     table(nested_recipes_data, column_widths: [169, 51, 61]) do
-      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
     end
@@ -189,7 +189,7 @@ class RecipeDataPdf
   def parent_recipes_table
     move_down 20 if recipe_run_data.products.any?
     table(parent_recipes_data, column_widths: [186, 95]) do
-      row(0).style(background_color: PdfReport::HEADER_ROW_COLOR)
+      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
     end

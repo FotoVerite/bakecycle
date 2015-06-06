@@ -2,14 +2,12 @@ class DailyTotalsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @recipes = ProductCounter.new(date_query, current_bakery)
+    @recipes = ProductCounter.new(current_bakery, date_query)
   end
 
   def print
-    pdf = DailyTotalPdf.new(date_query, current_bakery)
-    pdf_name = 'dailytotal.pdf'
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    generator = DailyTotalGenerator.new(current_bakery, date_query)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   private

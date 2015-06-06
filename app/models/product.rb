@@ -34,7 +34,7 @@ class Product < ActiveRecord::Base
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
-  after_save :queue_touch_order_items
+  after_commit :queue_touch_order_items, on: [:create, :update]
   after_touch :update_total_lead_days
 
   def strip_name

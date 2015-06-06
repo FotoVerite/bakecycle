@@ -38,7 +38,7 @@ We use postgresql and redis
 ## Queue System
 
 ### To run a single worker
-`env TERM_CHILD=1 QUEUE=* bundle exec rake resque:work`
+`foreman start worker`
 
-### To access the front-end interface you must log in as an admin and visit `http://localhost:3000/resque`
+### To access the front-end interface visit `http://localhost:3000/resque` as an admin
 

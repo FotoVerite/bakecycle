@@ -68,7 +68,9 @@ group :test do
   gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'launchy'
+  gem 'rspec-activejob'
   gem 'selenium-webdriver'
+  gem 'test_after_commit'
   gem 'webmock', require: false
 end
 

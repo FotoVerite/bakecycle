@@ -1,4 +1,4 @@
-class InvoicesPdf < PdfReport
+class InvoicesPdf < BasePdfReport
   def initialize(shipments, bakery)
     @shipments = shipments
     @bakery = bakery.decorate

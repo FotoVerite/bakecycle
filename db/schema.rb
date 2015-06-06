@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150602225443) do
+ActiveRecord::Schema.define(version: 20150607010626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "bakeries", force: :cascade do |t|
     t.string   "name"
@@ -80,6 +81,19 @@ ActiveRecord::Schema.define(version: 20150602225443) do
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
   add_index "clients", ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
+
+  create_table "file_exports", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.integer  "bakery_id",         null: false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.string   "file_fingerprint"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "file_exports", ["bakery_id"], name: "index_file_exports_on_bakery_id", using: :btree
 
   create_table "ingredients", force: :cascade do |t|
     t.string   "name"
@@ -300,6 +314,7 @@ ActiveRecord::Schema.define(version: 20150602225443) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "clients", "bakeries", name: "clients_bakery_id_fk"
+  add_foreign_key "file_exports", "bakeries", on_delete: :cascade
   add_foreign_key "ingredients", "bakeries", name: "ingredients_bakery_id_fk"
   add_foreign_key "order_items", "orders", name: "order_items_order_id_fk", on_delete: :cascade
   add_foreign_key "order_items", "products", name: "order_items_product_id_fk"

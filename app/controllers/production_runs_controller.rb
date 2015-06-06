@@ -7,7 +7,8 @@ class ProductionRunsController < ApplicationController
     @production_runs = @production_runs.order(date: :desc).paginate(page: params[:page])
   end
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @production_run.update(production_run_params)
@@ -30,28 +31,18 @@ class ProductionRunsController < ApplicationController
   end
 
   def print
-    production_run_data = ProductionRunData.new(@production_run)
-    pdf = ProductionRunPdf.new(production_run_data)
-    expires_now
-    send_data pdf.render, filename: 'ProductionRunRecipe.pdf', type: 'application/pdf', disposition: 'inline'
+    generator = ProductionRunGenerator.new(@production_run)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def print_projection
-    projection = ProductionRunProjection.new(current_bakery, date_query)
-    projection_run_data = ProjectionRunData.new(projection)
-
-    pdf = ProductionRunPdf.new(projection_run_data)
-    expires_now
-    send_data pdf.render, filename: 'ProjectionRunRecipe.pdf', type: 'application/pdf', disposition: 'inline'
+    generator = ProjectionGenerator.new(current_bakery, date_query)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def print_batch
-    projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
-    projection_run_data = ProjectionRunData.new(projection)
-
-    pdf = BatchRunPdf.new(projection_run_data)
-    expires_now
-    send_data pdf.render, filename: 'BatchRecipes.pdf', type: 'application/pdf', disposition: 'inline'
+    generator = BatchGenerator.new(current_bakery, start_date, end_date)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def reset

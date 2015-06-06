@@ -2,7 +2,6 @@ require: rubocop-rspec
 
 AllCops:
   RunRailsCops: true
-#  DisplayCopNames: true
   Exclude:
     - 'lib/tasks/cucumber.rake'
     - 'Guardfile'
@@ -15,32 +14,52 @@ AllCops:
 
 Metrics/LineLength:
   Max: 120
+
 Metrics/MethodLength:
   Max: 15
+
 Metrics/AbcSize:
   Max: 18
+
 Metrics/ClassLength:
   Max: 124
+
 RSpec/DescribedClass:
   Enabled: false
+
+# it would be great to use EnforcedStyle: semantic here but it complains way too much
 Style/BlockDelimiters:
-  # it would be great to use EnforcedStyle: semantic here but it complains way too much
   Enabled: false
+
 Style/Documentation:
   Enabled: false
+
 Style/IndentHash:
   Enabled: false
+
 Style/NumericLiterals:
   Enabled: false
+
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
+
 Style/SignalException:
   Enabled: false
+
 Style/SingleSpaceBeforeFirstArg:
   Enabled: false
+
 Style/StringLiterals:
   Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+
 Style/SingleLineBlockParams:
   Enabled: false
+
+Style/AlignParameters:
+  Enabled: false
+
+Style/FirstParameterIndentation:
+  Enabled: flase

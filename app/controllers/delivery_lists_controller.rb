@@ -2,7 +2,7 @@ class DeliveryListsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @recipes = ProductCounter.new(date_query, current_bakery)
+    @recipes = ProductCounter.new(current_bakery, date_query)
   end
 
   def print

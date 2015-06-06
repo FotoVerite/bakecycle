@@ -7,10 +7,8 @@ class PackingSlipsController < ApplicationController
   end
 
   def print
-    pdf = PackingSlipsPdf.new(shipments_for(slip_date), current_bakery, print_invoices?)
-    pdf_name = "packing_slips_#{slip_date.strftime('%Y-%m-%d')}.pdf"
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    generator = PackingSlipsGenerator.new(current_bakery, slip_date, print_invoices?)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   private

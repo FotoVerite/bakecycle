@@ -1,4 +1,4 @@
-class PackingSlipsPdf < PdfReport
+class PackingSlipsPdf < BasePdfReport
   def initialize(shipments, bakery, invoices = false)
     @shipments = shipments
     @bakery = bakery.decorate
