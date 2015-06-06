@@ -1,18 +1,22 @@
-# BakeCycle the baker app
+# BakeCycle
 
-We like bakers and their bread. Lets make life easier for them.
+Centuries old tradition doesn't need to be changed, centuries old technology does.
 
-## Development Server
+# Management
+We use Pivotal Tracker for project management. [BakeCycle Tracker Board](https://www.pivotaltracker.com/n/projects/1187388)
 
-`foreman start` will start a unicorn server and a resque worker
-
-
-## Errors
+# Operations
 
 Can be found and logged at our errors site. http://errors.wizarddevelopment.com/
 
-## Logs
+## Logs and Metrics
 We use papertrail via heroku goto the dashboard
+
+# Development
+
+## Server
+
+`foreman start` will start a unicorn server and a resque worker
 
 ## deployment
 
