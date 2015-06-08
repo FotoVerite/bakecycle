@@ -13,7 +13,7 @@ describe ProductionRunData do
 
     it 'collects all the relevant recipes' do
       data = ProductionRunData.new(production_run)
-      expect(data.recipes.count).to eq(2)
+      expect(data.recipes_collection.count).to eq(2)
     end
   end
 end

@@ -54,4 +54,36 @@ class RecipeRunData
   def parent_recipes
     @parent_recipe_map.values
   end
+
+  def bowl_ingredient_weight(ingredient_info)
+    return Unitwise(0, :kg) if ingredient_info[:weight] == Unitwise(0, :kg)
+    ingredient_info[:weight] / mix_bowl_count
+  end
+
+  def sorted_parent_recipes
+    parent_recipes.sort_by { |recipe| recipe[:parent_recipe][:name].downcase }
+  end
+
+  def total_bowl_weight
+    return Unitwise(0, :kg) if weight == Unitwise(0, :kg)
+    weight / mix_bowl_count
+  end
+
+  def sorted_recipe_run_date_products
+    products.sort_by { |product| [product_without_inclusion(product), product[:product].name.downcase] }
+  end
+
+  def inclusion_for_product(product)
+    inclusions.detect { |i| i[:product] == product[:product] }
+  end
+
+  def products_with_inclusion
+    sorted_recipe_run_date_products.select { |product| product[:product].inclusion }
+  end
+
+  private
+
+  def product_without_inclusion(product)
+    product[:product].inclusion ? 1 : 0
+  end
 end

@@ -65,7 +65,8 @@ class BakeriesController < ApplicationController
       :address_state,
       :address_zipcode,
       :kickoff_time,
-      :quickbooks_account
+      :quickbooks_account,
+      :group_preferments
     )
   end
 end
