@@ -1,7 +1,7 @@
 class ProductCounter
   attr_reader :date, :bakery
 
-  def initialize(date, bakery)
+  def initialize(bakery, date)
     @bakery = bakery
     @date = date
   end

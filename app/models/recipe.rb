@@ -25,7 +25,7 @@ class Recipe < ActiveRecord::Base
 
   before_save :set_recipe_lead_days
   before_save :set_total_lead_days
-  after_save :queue_touch_parent_objects
+  after_commit :queue_touch_parent_objects, on: [:create, :update]
   after_touch :update_total_lead_days
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }

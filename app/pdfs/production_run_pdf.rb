@@ -1,4 +1,4 @@
-class ProductionRunPdf < PdfReport
+class ProductionRunPdf < BasePdfReport
   def initialize(run_data)
     @run_data = run_data
     @bakery = run_data.bakery.decorate

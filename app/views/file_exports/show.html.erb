@@ -1,0 +1,9 @@
+<div class="loading-report">
+  <h2 class="loading-message"><%= funny_loading_message %></h2>
+  <%= loading_indicator %>
+  <script type="text/javascript">
+  setTimeout(function(){
+    document.location.reload(true);
+  }, 2000);
+  </script>
+</div>

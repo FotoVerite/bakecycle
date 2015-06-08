@@ -19,6 +19,7 @@ namespace :bakecycle do
     task biencuit: :environment do
       require 'legacy_importer'
       puts 'Starting import'
+      Resque.inline = true
       imported_objects = LegacyImporter.import_all
       reporter = LegacyImporter.report(imported_objects)
       puts "#{reporter.imported_count} objects imported"
@@ -31,6 +32,7 @@ namespace :bakecycle do
     task biencuit_email: :environment do
       require 'legacy_importer'
       puts 'Starting import'
+      Resque.inline = true
       imported_objects = LegacyImporter.import_all
       reporter = LegacyImporter.report(imported_objects)
       puts "#{reporter.imported_count} objects imported"

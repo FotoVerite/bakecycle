@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get 'copy', on: :member
   end
   resources :users, except: [:show]
+  resources :file_exports, only: [:show]
 
   resources :shipments, except: [:show] do
     get 'invoice', on: :member
@@ -52,10 +53,10 @@ Rails.application.routes.draw do
     resources :run_items
   end
 
-  # If user is not an admin it 404s for resque
+  # If user is not an admin it 404s the resque request
   resque_web_constraint = lambda do |request|
     current_user = request.env['warden'].user
-    current_user.present? && current_user.admin?
+    current_user && Ability.new(current_user).can?(:manage, :resque)
   end
   constraints resque_web_constraint do
     mount Resque::Server, at: '/resque'

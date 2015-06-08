@@ -1,4 +1,4 @@
-class PdfReport < Prawn::Document
+class BasePdfReport < Prawn::Document
   HEADER_ROW_COLOR = 'e6e6e6'
   INDENTED_ROW_COLOR = 'd3d3d3'
 

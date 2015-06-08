@@ -1,6 +1,6 @@
-class DeliveryListPdf < PdfReport
+class DeliveryListPdf < BasePdfReport
   def initialize(date, bakery)
-    @recipes = ProductCounter.new(date, bakery)
+    @recipes = ProductCounter.new(bakery, date)
     @bakery = bakery.decorate
     @date = date
     super()
