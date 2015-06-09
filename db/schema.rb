@@ -32,9 +32,10 @@ ActiveRecord::Schema.define(version: 20150607010626) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
-    t.time     "kickoff_time",       null: false
+    t.time     "kickoff_time",                      null: false
     t.datetime "last_kickoff"
-    t.string   "quickbooks_account", null: false
+    t.string   "quickbooks_account",                null: false
+    t.boolean  "group_preferments",  default: true
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree

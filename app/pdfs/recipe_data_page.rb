@@ -1,5 +1,5 @@
 # rubocop:disable Metrics/ClassLength
-class RecipeDataPdf
+class RecipeDataPage
   attr_reader :recipe_run_data, :display_precision
 
   def initialize(pdf, recipe_run_data)
@@ -35,7 +35,7 @@ class RecipeDataPdf
   def right_section
     products_table if recipe_run_data.products.any?
     parent_recipes_table if recipe_run_data.parent_recipes.any?
-    product_tables if products_with_inclusion.any?
+    product_tables if recipe_run_data.products_with_inclusion.any?
   end
 
   def left_section
@@ -104,7 +104,7 @@ class RecipeDataPdf
   end
 
   def product_rows
-    sorted_recipe_run_date_products.map do |product|
+    recipe_run_data.sorted_recipe_run_date_products.map do |product|
       [
         display_weight(product[:product].weight_with_unit.to_kg),
         product[:product].name,
@@ -115,9 +115,9 @@ class RecipeDataPdf
   end
 
   def product_tables
-    products_with_inclusion.each do |product|
+    recipe_run_data.products_with_inclusion.each do |product|
       move_down 10
-      table(product_with_inclusion_data(product), column_widths: [186, 95]) do
+      table(product_with_inclusion_data(product), column_widths: [229, 52]) do
         row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
         column(0).style(align: :left)
         column(1).style(align: :center)
@@ -126,7 +126,7 @@ class RecipeDataPdf
   end
 
   def product_with_inclusion_data(product)
-    inclusion = inclusion_for_product(product)
+    inclusion = recipe_run_data.inclusion_for_product(product)
 
     header = [product[:product].name, display_weight(product[:weight])]
     dough_row = ['Dough', display_weight(product[:dough_weight])]
@@ -140,7 +140,7 @@ class RecipeDataPdf
       [
         ingredient_info[:inclusionable].name,
         ingredient_info[:bakers_percentage],
-        display_weight(bowl_ingredient_weight(ingredient_info))
+        display_weight(recipe_run_data.bowl_ingredient_weight(ingredient_info))
       ]
     end
     rows.unshift(header)
@@ -160,7 +160,7 @@ class RecipeDataPdf
       [
         ingredient_info[:inclusionable].name,
         ingredient_info[:bakers_percentage],
-        display_weight(bowl_ingredient_weight(ingredient_info))
+        display_weight(recipe_run_data.bowl_ingredient_weight(ingredient_info))
       ]
     end
     rows.unshift(header)
@@ -177,7 +177,7 @@ class RecipeDataPdf
 
   def parent_recipes_data
     header = ['Used In Recipe', 'Weight']
-    rows = sorted_parent_recipes.map do |recipe_info|
+    rows = recipe_run_data.sorted_parent_recipes.map do |recipe_info|
       [
         recipe_info[:parent_recipe].name.titleize,
         display_weight(recipe_info[:weight])
@@ -193,10 +193,6 @@ class RecipeDataPdf
       column(0).style(align: :left)
       column(1..2).style(align: :center)
     end
-  end
-
-  def display_weight(weight)
-    weight.round(display_precision).to_s
   end
 
   def display_date(date)
@@ -215,41 +211,15 @@ class RecipeDataPdf
 
   def totals_info
     [
-      ['Bowl Weight', display_weight(total_bowl_weight)],
+      ['Bowl Weight', display_weight(recipe_run_data.total_bowl_weight)],
       ["Bowl Weight x #{recipe_run_data.mix_bowl_count}", display_weight(recipe_run_data.weight)]
     ]
   end
+end
 
-  private
+private
 
-  def bowl_ingredient_weight(ingredient_info)
-    return Unitwise(0, :kg) if ingredient_info[:weight] == Unitwise(0, :kg)
-    ingredient_info[:weight] / recipe_run_data.mix_bowl_count
-  end
-
-  def total_bowl_weight
-    return Unitwise(0, :kg) if recipe_run_data.weight == Unitwise(0, :kg)
-    recipe_run_data.weight / recipe_run_data.mix_bowl_count
-  end
-
-  def sorted_parent_recipes
-    recipe_run_data.parent_recipes.sort_by { |h| h[:parent_recipe][:name].downcase }
-  end
-
-  def sorted_recipe_run_date_products
-    recipe_run_data.products.sort_by { |product| [product_without_inclusion(product), product[:product].name.downcase] }
-  end
-
-  def product_without_inclusion(product)
-    product[:product].inclusion ? 1 : 0
-  end
-
-  def products_with_inclusion
-    sorted_recipe_run_date_products.select { |product| product[:product].inclusion }
-  end
-
-  def inclusion_for_product(product)
-    recipe_run_data.inclusions.detect { |i| i[:product] == product[:product] }
-  end
+def display_weight(weight)
+  weight.round(display_precision).to_s
 end
 # rubocop:enable Metrics/ClassLength

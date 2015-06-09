@@ -43,9 +43,12 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def body
-    sorted_recipes_by_products.each do |motherdough|
-      RecipeDataPdf.new(self, motherdough).render_recipe
-    end
+    return recipe_data_with_single_preferment_page if @bakery.group_preferments
+    recipe_data_with_preferments
+  end
+
+  def display_weight(weight)
+    weight.round(@display_precision).to_s
   end
 
   def products
@@ -77,13 +80,20 @@ class ProductionRunPdf < BasePdfReport
 
   private
 
-  def sorted_recipes_by_products
-    @run_data.recipes.sort_by do |recipe|
-      [recipes_without_products(recipe), recipe.recipe.name.downcase]
+  def recipe_data_with_single_preferment_page
+    @run_data.recipes_without_preferments.each do |motherdough|
+      RecipeDataPage.new(self, motherdough).render_recipe
+    end
+    render_preferment_page
+  end
+
+  def recipe_data_with_preferments
+    @run_data.recipes.each do |motherdough|
+      RecipeDataPage.new(self, motherdough).render_recipe
     end
   end
 
-  def recipes_without_products(recipe)
-    recipe.products.any? ? 0 : 1
+  def render_preferment_page
+    PrefermentDataPage.new(self, @run_data.preferments).render_preferment if @run_data.preferments.any?
   end
 end

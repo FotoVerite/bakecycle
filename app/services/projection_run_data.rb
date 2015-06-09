@@ -1,11 +1,11 @@
 class ProjectionRunData < ProductionRunData
-  attr_reader :bakery, :recipes, :projection_run, :batch_end_date
+  attr_reader :bakery, :recipes_collection, :projection_run, :batch_end_date
 
   def initialize(projection_run)
     @projection_run = projection_run
     @items = projection_run.order_items
     @bakery = projection_run.bakery
-    @recipes = RecipeCollection.new
+    @recipes_collection = RecipeCollection.new
     @batch_end_date = projection_run.batch_end_date
     processes_run_items
   end
@@ -26,5 +26,6 @@ class ProjectionRunData < ProductionRunData
     end
   end
 
-  def id; end
+  def id
+  end
 end

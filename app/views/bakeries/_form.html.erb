@@ -66,6 +66,13 @@
       <div class="small-12 medium-6 columns">
         <%= f.input :quickbooks_account, as: :string %>
       </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.label :group_preferments, "Print all the preferments together at the end?"%>
+        <%= f.radio_button(:group_preferments, "true") %>
+        <%= f.label(:group_preferments_true, "Yes") %>
+        <%= f.radio_button(:group_preferments, "false") %>
+        <%= f.label(:group_preferments_false, "No") %>
+      </div>
     </div>
   </fieldset>
 

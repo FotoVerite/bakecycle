@@ -40,18 +40,6 @@ class BasePdfReport < Prawn::Document
     number_pages 'Page <page> of <total>', options
   end
 
-  def printed_today
-    "Printed at #{current_date} at #{current_time}"
-  end
-
-  def current_date
-    Time.zone.today.strftime('%A %B %e, %Y')
-  end
-
-  def current_time
-    Time.zone.now.strftime('%l:%M%P')
-  end
-
   def timestamp
     repeat :all do
       bounding_box([288, 0], width: bounds.width / 2.0, height: 10) do
@@ -79,5 +67,19 @@ class BasePdfReport < Prawn::Document
   def footer
     number_of_pages
     timestamp
+  end
+
+  private
+
+  def printed_today
+    "Printed on #{current_date} at #{current_time}"
+  end
+
+  def current_date
+    Time.zone.today.strftime('%A %B %e, %Y')
+  end
+
+  def current_time
+    Time.zone.now.strftime('%l:%M%P')
   end
 end
