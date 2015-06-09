@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 describe OrderItem do
+  let(:bakery) { create(:bakery) }
   let(:order_item) { build(:order_item) }
+  let(:tomorrow) { Time.zone.tomorrow }
+  let(:yesterday) { Time.zone.yesterday }
+  let(:today) { Time.zone.today }
+  let(:last_week) { today - 7.days }
+  let(:two_days_ago) { today - 2.days }
 
   it 'has a shape' do
     expect(order_item).to respond_to(:product)
@@ -86,10 +92,7 @@ describe OrderItem do
   end
 
   context 'start dates' do
-    let(:today) { Time.zone.today }
-    let(:last_week) { today - 7.days }
-    let(:two_days_ago) { today - 2.days }
-    let!(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
+    let(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
     let(:order_item) { order.order_items.first }
     let(:lead_time) { order_item.total_lead_days }
 
@@ -114,18 +117,42 @@ describe OrderItem do
       end
 
       it 'only returns items from active orders' do
+        order.update!(start_date: last_week)
         temp_order = create(
           :temporary_order,
           bakery: order.bakery,
           client: order.client,
           route: order.route,
-          start_date: today + 1.day,
+          start_date: tomorrow,
           order_item_count: 1,
           product_total_lead_days: 2
         )
         temp_order_item = temp_order.order_items.first
         expect(OrderItem.production_start_on?(two_days_ago)).to contain_exactly(order_item)
-        expect(OrderItem.production_start_on?(today - 1.day)).to contain_exactly(temp_order_item)
+        expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(temp_order_item)
+      end
+
+      it 'only returns items from active orders when there are expired orders' do
+        order.update!(start_date: last_week)
+        create(
+          :temporary_order,
+          bakery: order.bakery,
+          client: order.client,
+          route: order.route,
+          start_date: last_week,
+          end_date: last_week,
+          order_item_count: 1,
+          product_total_lead_days: 2
+        )
+        expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(order_item)
+      end
+
+      it 'returns orders with multiple lead times' do
+        order = create(:temporary_order, start_date: tomorrow, order_item_count: 0, bakery: bakery)
+        two_day_lead = create(:order_item, force_total_lead_days: 2, order: order, bakery: bakery)
+        one_day_lead = create(:order_item, force_total_lead_days: 1, order: order, bakery: bakery)
+        expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(two_day_lead)
+        expect(OrderItem.production_start_on?(today)).to contain_exactly(one_day_lead)
       end
     end
 

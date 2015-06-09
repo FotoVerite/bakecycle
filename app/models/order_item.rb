@@ -53,16 +53,16 @@ class OrderItem < ActiveRecord::Base
           INNER JOIN orders ON orders.id = order_items.order_id
           WHERE
             -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
-            DATE :production_start_date >= orders.start_date - INTERVAL '1 day' * (select max(total_lead_days) from order_items)
+            DATE :production_start_date >= (orders.start_date - (INTERVAL '1 day' * (select COALESCE(max(total_lead_days), 1) from order_items)))
             AND (
-              DATE :production_start_date <= orders.end_date - INTERVAL '1 day' * (select max(total_lead_days) from order_items)
+              DATE :production_start_date <= orders.end_date
               OR orders.end_date IS NULL
             )
 
             -- find all order items that have active orders on the production_start_date + lead time
-            AND DATE :production_start_date >= orders.start_date - INTERVAL '1 day' * order_items.total_lead_days
+            AND DATE :production_start_date >= (orders.start_date - (INTERVAL '1 day' * order_items.total_lead_days))
             AND (
-              DATE :production_start_date <= orders.end_date - INTERVAL '1 day' * order_items.total_lead_days
+              DATE :production_start_date <= (orders.end_date - (INTERVAL '1 day' * order_items.total_lead_days))
               OR orders.end_date IS NULL
             )
             ORDER BY
@@ -74,7 +74,7 @@ class OrderItem < ActiveRecord::Base
         WHERE active_items.order_id = active_items.active_order_id
       )
     SQL
-    where(sql, production_start_date: start_date, temporary: 'temporary')
+    where(sql, production_start_date: start_date)
   end
   # rubocop:enable Metrics/MethodLength, Metrics/LineLength
 
