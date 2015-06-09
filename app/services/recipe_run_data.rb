@@ -1,6 +1,6 @@
 class RecipeRunData
   delegate  :total_lead_days, :mix_size_with_unit, to: :recipe
-  attr_reader :recipe, :products, :inclusions, :weight,
+  attr_reader :recipe, :products, :inclusions, :inclusions_info, :weight,
               :recipe_items, :date
 
   def initialize(recipe, date)
@@ -9,6 +9,7 @@ class RecipeRunData
     @products = []
     @parent_recipe_map = {}
     @inclusions = []
+    @inclusions_info = []
     @recipe_items = []
     self.weight = Unitwise(0, :kg)
   end
@@ -77,6 +78,35 @@ class RecipeRunData
     inclusions.detect { |i| i[:product] == product[:product] }
   end
 
+  def add_recipe_inclusions_info
+    recipe_inclusion_groups.each do |inclusion, products|
+      total_inclusion_weight = total_weight(products, :inclusion_weight)
+      total_dough_weight = total_weight(products, :dough_weight)
+      inclusions_info << {
+        inclusion: inclusion,
+        total_inclusion_weight: total_inclusion_weight,
+        dough: recipe,
+        total_dough_weight: total_dough_weight,
+        total_product_weight: total_dough_weight + total_inclusion_weight,
+        ingredients: inclusion_ingredients(inclusion, total_inclusion_weight)
+      }
+    end
+  end
+
+  def inclusion_ingredients(inclusion, total_inclusion_weight)
+    inclusion.recipe_items.map do |recipe_item|
+      next unless recipe_item.inclusionable_type == 'Ingredient'
+      {
+        ingredient: recipe_item.inclusionable,
+        weight: weight_for(inclusion, recipe_item.bakers_percentage, total_inclusion_weight)
+      }
+    end.compact
+  end
+
+  def recipe_inclusion_groups
+    inclusions.group_by { |inclusion| inclusion[:recipe] }
+  end
+
   def products_with_inclusion
     sorted_recipe_run_date_products.select { |product| product[:product].inclusion }
   end
@@ -85,5 +115,13 @@ class RecipeRunData
 
   def product_without_inclusion(product)
     product[:product].inclusion ? 1 : 0
+  end
+
+  def total_weight(products, weight_type)
+    products.reduce(Unitwise(0, :kg)) { |sum, inclusion| sum + inclusion[weight_type] }
+  end
+
+  def weight_for(inclusion, bakers_percentage, total_inclusion_weight)
+    total_inclusion_weight / inclusion.total_bakers_percentage * bakers_percentage
   end
 end

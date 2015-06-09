@@ -7,6 +7,7 @@ class Recipe < ActiveRecord::Base
   has_many :parent_recipes, through: :parent_recipe_items, source: :recipe
   has_many :recipe_items, dependent: :destroy
   has_many :child_recipes, through: :recipe_items, source: :inclusionable, source_type: 'Recipe'
+  has_many :ingredients, through: :recipe_items, source: :inclusionable, source_type: 'Ingredient'
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 

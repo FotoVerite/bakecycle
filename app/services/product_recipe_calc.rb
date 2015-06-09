@@ -13,7 +13,13 @@ class ProductRecipeCalc
 
   def inclusion_info
     return nil unless inclusion
-    { product: product, recipe: inclusion, weight: inclusions_weight }
+    {
+      product: product,
+      recipe: inclusion,
+      inclusion_weight: inclusion_weight,
+      dough_weight: dough_weight,
+      product_weight: product_weight
+    }
   end
 
   def dough_weight
@@ -26,8 +32,8 @@ class ProductRecipeCalc
     (product.weight_with_unit * quantity).to_kg
   end
 
-  def inclusions_weight
-    inclusion_percentage * percent_weight
+  def inclusion_weight
+    (inclusion_percentage * percent_weight).round(24)
   end
 
   def percent_weight
