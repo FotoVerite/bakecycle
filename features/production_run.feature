@@ -12,7 +12,7 @@
     And I am on the Production Runs page
     Then I should see the date for my production run
     When I click on that production run row
-    Then "Editing Production Run" should be present
+    Then "Production Run:" should be present
 
   @javascript
   Scenario: Find and edit and add run items to a production run from print recipes
