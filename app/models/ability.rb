@@ -1,14 +1,11 @@
 class Ability
   include CanCan::Ability
+  attr_reader :user
 
   def initialize(user)
+    @user = user
     return unless user && user.persisted?
 
-    # Users
-    can [:read, :update], User, id: user.id
-    can :manage, User, bakery_id: user.bakery.id if user.bakery
-    cannot :destroy, User, id: user.id if user.bakery
-    can :manage, User if user.admin?
     can :manage, Client, bakery_id: user.bakery.id if user.bakery
     can :manage, Shipment, bakery_id: user.bakery.id if user.bakery
     can :manage, Ingredient, bakery_id: user.bakery.id if user.bakery

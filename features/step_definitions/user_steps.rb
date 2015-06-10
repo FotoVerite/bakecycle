@@ -1,3 +1,9 @@
+Given(/^I am logged in as an user with? (none|read|manage) access$/) do |access_type|
+  bakery = Bakery.first || create(:bakery)
+  @current_user = create(:user, bakery: bakery, user_permission: access_type)
+  login_as(@current_user, scope: :user)
+end
+
 Given(/^there is a user named "(.*?)"$/) do |name|
   bakery = Bakery.first || create(:bakery)
   create(:user, name: name, bakery: bakery)
@@ -14,6 +20,7 @@ When(/^I fill out User form with:$/) do |table|
   fill_in 'user_name', with: table.hashes[0]['name']
   fill_in 'user_password', with: table.hashes[0]['password']
   fill_in 'user_password_confirmation', with: table.hashes[0]['password_confirmation']
+  select table.hashes[0]['user_permission'], from: 'user_user_permission'
 end
 
 When(/^I edit the user "(.*?)"$/) do |name|
@@ -21,8 +28,21 @@ When(/^I edit the user "(.*?)"$/) do |name|
   visit edit_user_path(user.id)
 end
 
-When(/^I change the user name to "(.*?)"$/) do |name|
+When(/^I edit my name to "(.*?)"$/) do |name|
   fill_in 'user_name', with: name
+end
+
+When(/^I go to my user's edit page$/) do
+  visit edit_user_path(@current_user)
+end
+
+When(/^I change the user name to "(.*?)" and his user permission to "(.*?)"$/) do |name, access_level|
+  fill_in 'user_name', with: name
+  select access_level, from: 'user_user_permission'
+end
+
+When(/^I attempt to create a new user$/) do
+  visit new_user_path
 end
 
 Then(/^I should see that the user name is "(.*?)"$/) do |name|

@@ -49,6 +49,6 @@ class ItemFinder
   end
 
   def users
-    User.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, User)
   end
 end

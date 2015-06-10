@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150607010626) do
+ActiveRecord::Schema.define(version: 20150609155556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -293,13 +293,13 @@ ActiveRecord::Schema.define(version: 20150607010626) do
   add_index "shipments", ["client_id", "route_id", "date"], name: "index_shipments_on_client_id_and_route_id_and_date", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "",    null: false
-    t.string   "name",                   default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "email",                  default: "",     null: false
+    t.string   "name",                   default: "",     null: false
+    t.string   "encrypted_password",     default: "",     null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,      null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -308,6 +308,7 @@ ActiveRecord::Schema.define(version: 20150607010626) do
     t.datetime "updated_at"
     t.integer  "bakery_id"
     t.boolean  "admin",                  default: false
+    t.string   "user_permission",        default: "none", null: false
   end
 
   add_index "users", ["bakery_id"], name: "index_users_on_bakery_id", using: :btree

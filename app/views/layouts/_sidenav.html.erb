@@ -61,7 +61,7 @@
           <span class="header">Admin</span>
 
           <ul class="sub">
-            <% if can? :manage, User %>
+            <% if policy(User).index? %>
               <li class="<%= active_nav?(:users) %>"><%= link_to("Users", users_path) %></li>
             <% end %>
 

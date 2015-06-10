@@ -6,9 +6,11 @@ FactoryGirl.define do
     password_confirmation   'foobarbaz'
     admin false
     bakery
+    user_permission 'manage'
 
     trait :as_admin do
       admin true
+      user_permission 'manage'
     end
   end
 end

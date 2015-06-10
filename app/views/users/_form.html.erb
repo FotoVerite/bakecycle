@@ -32,6 +32,19 @@
     </div>
   </fieldset>
 
+  <fieldset>
+    <legend>Permissions</legend>
+    <% if policy(@user).manage_permission? %>
+      <div class="row">
+        <div class="large-6 small-12 columns">
+          <%= f.input :user_permission do %>
+            <%= f.collection_select(:user_permission, User::ACCESS_LEVELS, :to_s, lambda {|i| i.to_s.humanize}) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </fieldset>
+
   <div class="row">
     <div class="small-12 columns">
       <%= f.submit (@user.new_record? ? "Create" : "Update"), class: "button", name: nil %>
