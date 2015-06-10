@@ -33,9 +33,9 @@ class RecipeDataPage
   end
 
   def right_section
-    products_table if recipe_run_data.products.any?
-    parent_recipes_table if recipe_run_data.parent_recipes.any?
-    product_tables if recipe_run_data.products_with_inclusion.any?
+    products_table
+    parent_recipes_table
+    inclusion_tables
   end
 
   def left_section
@@ -43,7 +43,7 @@ class RecipeDataPage
     grid([0, 2], [0.5, 5]).bounding_box { header_info }
 
     ingredients_table
-    nested_recipes_table if recipe_run_data.nested_recipes.any?
+    nested_recipes_table
     totals
   end
 
@@ -89,6 +89,7 @@ class RecipeDataPage
   end
 
   def products_table
+    return if recipe_run_data.products.empty?
     table(product_data, column_widths: [52, 145, 32, 52]) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :center)
@@ -114,10 +115,12 @@ class RecipeDataPage
     end
   end
 
-  def product_tables
-    recipe_run_data.products_with_inclusion.each do |product|
+  def inclusion_tables
+    return if recipe_run_data.inclusions.empty?
+    recipe_run_data.add_recipe_inclusions_info
+    recipe_run_data.inclusions_info.each do |inclusion_info|
       move_down 10
-      table(product_with_inclusion_data(product), column_widths: [229, 52]) do
+      table(inclusion_data(inclusion_info), column_widths: [229, 52]) do
         row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
         column(0).style(align: :left)
         column(1).style(align: :center)
@@ -125,13 +128,27 @@ class RecipeDataPage
     end
   end
 
-  def product_with_inclusion_data(product)
-    inclusion = recipe_run_data.inclusion_for_product(product)
+  def inclusion_data(inclusion_info)
+    rows = [
+      [inclusion_info[:inclusion].name, display_weight(total_inclusion_weight(inclusion_info))],
+      [inclusion_info[:dough].name, display_weight(total_dough_weight(inclusion_info))]
+    ]
+    inclusion_ingredient_rows(inclusion_info).each { |ingredient_row| rows << ingredient_row }
+    rows << ['Total Product Weight', display_weight(inclusion_info[:total_product_weight])]
+  end
 
-    header = [product[:product].name, display_weight(product[:weight])]
-    dough_row = ['Dough', display_weight(product[:dough_weight])]
-    inclusion_row = [inclusion[:recipe].name, display_weight(inclusion[:weight])]
-    [header, dough_row, inclusion_row]
+  def inclusion_ingredient_rows(inclusion_info)
+    inclusion_info[:ingredients].map do |ingredient|
+      [ingredient[:ingredient].name, display_weight(ingredient[:weight])]
+    end
+  end
+
+  def total_inclusion_weight(inclusion_info)
+    inclusion_info[:total_inclusion_weight]
+  end
+
+  def total_dough_weight(inclusion_info)
+    inclusion_info[:total_dough_weight]
   end
 
   def ingredients_data
@@ -167,6 +184,7 @@ class RecipeDataPage
   end
 
   def nested_recipes_table
+    return if recipe_run_data.nested_recipes.empty?
     move_down 20
     table(nested_recipes_data, column_widths: [169, 51, 61]) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
@@ -187,6 +205,7 @@ class RecipeDataPage
   end
 
   def parent_recipes_table
+    return if recipe_run_data.parent_recipes.empty?
     move_down 20 if recipe_run_data.products.any?
     table(parent_recipes_data, column_widths: [186, 95]) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)

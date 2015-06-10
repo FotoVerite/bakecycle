@@ -24,7 +24,9 @@ describe RecipeRunData do
       inclusion_info = {
         product: product,
         recipe: inclusion,
-        weight: Unitwise(0, :g)
+        inclusion_weight: Unitwise(0, :kg),
+        dough_weight: Unitwise(0, :kg),
+        product_weight: Unitwise(0.001, :kg)
       }
       run_data.add_product(product, 1)
       expect(run_data.inclusions).to include(inclusion_info)
@@ -126,5 +128,37 @@ describe RecipeRunData do
       expect(run_data.parent_recipes).to include(recipe_info)
       expect(run_data.weight).to eq(Unitwise(13, :kg))
     end
+  end
+
+  describe '#add_recipe_inclusions_info' do
+    let(:motherdough) { create(:recipe_motherdough) }
+    let(:inclusion) { create(:recipe_inclusion, :with_ingredients) }
+    let(:product) { create(:product, motherdough: motherdough, weight: 10, unit: :g) }
+    let(:product2) { create(:product, motherdough: motherdough, weight: 10, unit: :g) }
+    let(:run_data) { RecipeRunData.new(motherdough, date: Time.zone.today) }
+    it 'adds inclusion info with weights and ingredients for each product inclusion' do
+      inclusions = [mock_recipe_run_inclusion(product, inclusion), mock_recipe_run_inclusion(product2, inclusion)]
+      allow_any_instance_of(RecipeRunData).to receive(:inclusions).and_return(inclusions)
+      run_data.add_recipe_inclusions_info
+      inclusion_info = run_data.inclusions_info.first
+      total_ingredients_weight = inclusion_info[:ingredients].map { |ingredient| ingredient[:weight] }.sum.round(3)
+
+      expect(inclusion_info[:inclusion]).to eq(inclusion)
+      expect(inclusion_info[:dough]).to eq(motherdough)
+      expect(inclusion_info[:total_inclusion_weight]).to eq(Unitwise(0.4, :kg))
+      expect(inclusion_info[:total_dough_weight]).to eq(Unitwise(1.6, :kg))
+      expect(inclusion_info[:total_product_weight]).to eq(Unitwise(2, :kg))
+      expect(total_ingredients_weight).to eq(inclusion_info[:total_inclusion_weight])
+    end
+  end
+
+  def mock_recipe_run_inclusion(product, inclusion)
+    {
+      product: product,
+      recipe: inclusion,
+      inclusion_weight: Unitwise(0.2, :kg),
+      dough_weight: Unitwise(0.8, :kg),
+      product_weight: Unitwise(1, :kg)
+    }
   end
 end
