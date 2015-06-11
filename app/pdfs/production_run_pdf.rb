@@ -59,7 +59,12 @@ class ProductionRunPdf < BasePdfReport
 
   def products_table(product_type)
     move_down 15
-    table(product_information_row(product_type), column_widths: [422, 120, 30], header: true) do
+    table(
+      product_information_row(product_type),
+      column_widths: [422, 120, 30],
+      header: true,
+      cell_style: BasePdfReport::TABLE_STYLE
+    ) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..-1).style(align: :center)
