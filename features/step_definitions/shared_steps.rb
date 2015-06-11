@@ -67,10 +67,6 @@ Given(/^I am on the "(.*?)" page$/) do |page|
   visit send(path_string.to_sym)
 end
 
-Then(/^"(.*?)" page header should be present$/) do |page_header|
-  expect(page).to have_selector('h1', text: page_header)
-end
-
 Then(/^"(.*?)" button should be present "(.*?)" times$/) do |button_class, count|
   have_css(".#{button_class}", count: count.to_i)
 end

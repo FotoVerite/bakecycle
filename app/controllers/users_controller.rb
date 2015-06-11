@@ -1,20 +1,23 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
+  before_action :set_user, only: [:edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped
   decorates_assigned :users, :user
 
   def index
-    @users = @users
-      .includes(:bakery)
-      .joins(:bakery)
-      .order('bakeries.name asc')
-      .order(:name)
+    authorize :user
+    @users = policy_scope(User).sort_by_bakery
   end
 
   def new
+    @user = policy_scope(User).build
+    authorize @user
   end
 
   def create
+    @user = policy_scope(User).build(user_params)
+    authorize @user
     if @user.save
       flash[:notice] = "You have created a new user for #{@user.name} with #{@user.email}"
       redirect_to edit_user_path(@user)
@@ -24,9 +27,11 @@ class UsersController < ApplicationController
   end
 
   def edit
+    authorize @user
   end
 
   def update
+    authorize @user
     if @user.update(user_params)
       flash[:notice] = "You have updated #{@user.name}."
       redirect_to edit_user_path(@user)
@@ -36,6 +41,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    authorize @user
     @user.destroy
     flash[:notice] = "You have deleted #{@user.name}"
     redirect_to users_path
@@ -43,12 +49,19 @@ class UsersController < ApplicationController
 
   private
 
+  def set_user
+    @user = policy_scope(User).find(params[:id])
+  end
+
   def user_params
-    user = params.require(:user).permit(:name, :email, :password, :password_confirmation, :bakery_id)
-    if user[:password].blank? && user[:password_confirmation].blank?
-      user.delete(:password)
-      user.delete(:password_confirmation)
-    end
+    user = params.require(:user).permit(policy(User).permitted_attributes)
+    delete_passwords_if_blank(user)
     user
+  end
+
+  def delete_passwords_if_blank(user)
+    return unless user[:password].blank? && user[:password_confirmation].blank?
+    user.delete(:password)
+    user.delete(:password_confirmation)
   end
 end

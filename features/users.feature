@@ -1,48 +1,59 @@
 Feature: Users
-  Background:
-    Given I am logged in as a user
 
-  Scenario: As a user, I can visit major sections
-    When I go to the "products" page
-    And "Products" page header should be present
-
-    When I go to the "recipes" page
-    And "Recipes" page header should be present
-
-    When I go to the "ingredients" page
-    And "Ingredients" page header should be present
-
-    When I logout
-    Then "Signed out successfully" should be present
-
-  Scenario: As a user, I can view all users
+  Scenario: A user with full access
+    Given I am logged in as an user with manage access
     And there is a user named "Andrew"
     When I go to the "users" page
     Then I should see a list of users including "Andrew"
     When I click on "Andrew"
     Then I should information about the user "Andrew"
 
-  Scenario: As a user, I can create manage other users
     When I go to the "users" page
     And I click on "Add New User"
     And I fill out User form with:
-      | email                |  password  |  password_confirmation  |  name    |
-      | new_user@example.com |  foobarbaz |  foobarbaz              | John Doe |
+      | email                | password  | password_confirmation | name     | user_permission |
+      | new_user@example.com | foobarbaz | foobarbaz             | John Doe | None            |
     And I click on "Create"
     Then "You have created a new user for John Doe with new_user@example.com" should be present
 
     When I edit the user "John Doe"
-    And I change the user name to "Andrew"
+    And I change the user name to "James" and his user permission to "Manage"
     And I click on "Update"
-    Then I should see that the user name is "Andrew"
+    Then I should see that the user name is "James"
 
-    When I go to the "users" page
-    Then "Andrew" should be present
-    And "John Doe" should not be present
-
-  Scenario: As a user, I can delete a user
-    Given there is a user named "Andrew"
     When I edit the user "Andrew"
     And I click on "Delete"
     Then I should see confirmation that the user "Andrew" was deleted
     And The user "Andrew" should not be present
+
+    When I go to my user's edit page
+    And I edit my name to "Harry"
+    And I click on "Update"
+    Then "You have updated Harry." should be present
+    Then I should see that the user name is "Harry"
+
+  Scenario: As a user with read only access
+    Given I am logged in as an user with read access
+    And there is a user named "Andrew"
+    When I go to the "users" page
+    Then I should see a list of users including "Andrew"
+    When I click on "Andrew"
+    Then "You are not authorized to access this page." should be present
+    When I attempt to create a new user
+    Then "You are not authorized to access this page." should be present
+
+    When I go to my user's edit page
+    And I edit my name to "Harry"
+    And I click on "Update"
+    Then "You have updated Harry." should be present
+    Then I should see that the user name is "Harry"
+
+  Scenario: As a user with none access
+    Given I am logged in as an user with none access
+    When I attempt to create a new user
+    Then "You are not authorized to access this page." should be present
+    When I go to my user's edit page
+    And I edit my name to "Harry"
+    And I click on "Update"
+    Then "You have updated Harry." should be present
+    Then I should see that the user name is "Harry"
