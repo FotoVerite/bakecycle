@@ -152,6 +152,22 @@ describe RecipeRunData do
     end
   end
 
+  describe '#mix_bowl_count' do
+    let(:run_data) { RecipeRunData.new(instance_double('recipe'), Time.zone.today) }
+    it 'returns a mix_bowl_size if mix_bowl_size was set by a writer' do
+      allow_any_instance_of(RecipeRunData).to receive(:weight=).and_return(nil)
+      run_data.mix_bowl_count = 3
+      expect(run_data.mix_bowl_count).to eq(3)
+    end
+
+    it 'calculates a mix_bowl_size if mix_bowl_size was not set by a writer' do
+      recipe = instance_double('Recipe', mix_size_with_unit: Unitwise(0, :kg))
+      allow_any_instance_of(RecipeRunData).to receive(:weight=).and_return(nil)
+      allow_any_instance_of(RecipeRunData).to receive(:recipe).and_return(recipe)
+      expect(run_data.mix_bowl_count).to eq(1)
+    end
+  end
+
   def mock_recipe_run_inclusion(product, inclusion)
     {
       product: product,
