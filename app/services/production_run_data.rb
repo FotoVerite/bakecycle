@@ -6,6 +6,7 @@ class ProductionRunData
     @bakery = production_run.bakery
     @recipes_collection = RecipeCollection.new
     processes_run_items
+    set_preferment_bowls
   end
 
   def id
@@ -55,6 +56,15 @@ class ProductionRunData
   end
 
   private
+
+  def set_preferment_bowls
+    preferments.each do |preferment|
+      next if preferment.parent_recipes.count > 1
+      parent_recipe = preferment.parent_recipes.first
+      parent_data = recipes_collection.detect { |recipe_data| recipe_data.recipe == parent_recipe[:parent_recipe] }
+      preferment.mix_bowl_count = parent_data.mix_bowl_count
+    end
+  end
 
   def recipes_without_products(recipe)
     recipe.products.any? ? 0 : 1

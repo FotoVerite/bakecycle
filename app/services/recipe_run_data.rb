@@ -43,7 +43,9 @@ class RecipeRunData
     recipe_items.select { |item| item[:inclusionable_type] == 'Recipe' }
   end
 
+  attr_writer :mix_bowl_count
   def mix_bowl_count
+    return @mix_bowl_count if @mix_bowl_count
     return 1 unless recipe.mix_size_with_unit > Unitwise(0, :kg)
     (weight / recipe.mix_size_with_unit).to_f.ceil
   end
