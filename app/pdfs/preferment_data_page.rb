@@ -44,10 +44,9 @@ class PrefermentDataPage
 
   def preferment_table(recipe)
     table(preferment_data(recipe), column_widths: [216, 65]) do
-      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR, font_style: :bold, size: 12)
-      row(0).column(0).style(overflow: :shrink_to_fit, min_font_size: 6, width: 216)
+      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR, font_style: :bold, size: 12, height: 25)
+      row(1..-1).style(height: 20, overflow: :shrink_to_fit, min_font_size: 5)
       column(1).style(align: :center)
-      row(1..-1).style(size: 8, padding: [2, 2, 2, 2])
       row(-2..-1).style(font_style: :bold)
     end
     move_down 10

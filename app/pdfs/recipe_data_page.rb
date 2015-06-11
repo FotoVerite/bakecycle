@@ -28,8 +28,8 @@ class RecipeDataPage
   end
 
   def main_section
-    grid([0.75, 0], [11, 5]).bounding_box { left_section }
-    grid([0.75, 6], [11, 11]).bounding_box { right_section }
+    grid([1, 0], [11, 5]).bounding_box { left_section }
+    grid([1, 6], [11, 11]).bounding_box { right_section }
   end
 
   def right_section
@@ -39,9 +39,8 @@ class RecipeDataPage
   end
 
   def left_section
-    grid([0, 0], [0, 2]).bounding_box { bowl_count }
-    grid([0, 2], [0.5, 5]).bounding_box { header_info }
-
+    grid([0, 0], [0.4, 2]).bounding_box { bowl_count }
+    grid([0, 2], [0.4, 5]).bounding_box { header_info }
     ingredients_table
     nested_recipes_table
     totals
@@ -56,9 +55,9 @@ class RecipeDataPage
   end
 
   def header_info_table
-    table(header_info_data, column_widths: [60, 105], position: :right) do
-      column(0).style(borders: [:top, :left, :bottom], align: :right, padding: [4, 4, 2, 2])
-      column(1).style(borders: [:top, :right, :bottom], align: :left, padding: [4, 2, 2, 4])
+    table(header_info_data, column_widths: [60, 105], position: :right, cell_style: BasePdfReport::TABLE_STYLE) do
+      column(0).style(borders: [:top, :left, :bottom], align: :right)
+      column(1).style(borders: [:top, :right, :bottom], align: :left)
     end
   end
 
@@ -70,7 +69,7 @@ class RecipeDataPage
   end
 
   def bowl_count
-    table(bowl_data, cell_style: { font_style: :bold }) do
+    table(bowl_data, cell_style: { height: 60, font_style: :bold }) do
       row(0).style(align: :right).valign = :center
       column(0).style(borders: [:top, :left, :bottom], align: :right)
       column(1).style(borders: [:top, :bottom], align: :center)
@@ -81,16 +80,16 @@ class RecipeDataPage
   def bowl_data
     [
       [
-        { content: "#{recipe_run_data.mix_bowl_count}", rowspan: 2, size: 35 },
-        { content: 'X', rowspan: 2, size: 10 },
-        { content: "#{display_weight(recipe_run_data.mix_size_with_unit)}", rowspan: 2, size: 15 }
+        { content: "#{recipe_run_data.mix_bowl_count}", size: 35 },
+        { content: 'X', size: 10 },
+        { content: "#{display_weight(recipe_run_data.mix_size_with_unit)}", size: 15 }
       ]
     ]
   end
 
   def products_table
     return if recipe_run_data.products.empty?
-    table(product_data, column_widths: [52, 145, 32, 52]) do
+    table(product_data, column_widths: [52, 145, 32, 52], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :center)
       column(2..-1).style(align: :center)
@@ -120,7 +119,7 @@ class RecipeDataPage
     recipe_run_data.add_recipe_inclusions_info
     recipe_run_data.inclusions_info.each do |inclusion_info|
       move_down 10
-      table(inclusion_data(inclusion_info), column_widths: [229, 52]) do
+      table(inclusion_data(inclusion_info), column_widths: [229, 52], cell_style: BasePdfReport::TABLE_STYLE) do
         row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
         column(0).style(align: :left)
         column(1).style(align: :center)
@@ -164,7 +163,7 @@ class RecipeDataPage
   end
 
   def ingredients_table
-    table(ingredients_data, column_widths: [169, 51, 61]) do
+    table(ingredients_data, column_widths: [169, 51, 61], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR, overflow: :shrink_to_fit)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
@@ -185,8 +184,8 @@ class RecipeDataPage
 
   def nested_recipes_table
     return if recipe_run_data.nested_recipes.empty?
-    move_down 20
-    table(nested_recipes_data, column_widths: [169, 51, 61]) do
+    move_down 15
+    table(nested_recipes_data, column_widths: [169, 51, 61], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
@@ -206,8 +205,8 @@ class RecipeDataPage
 
   def parent_recipes_table
     return if recipe_run_data.parent_recipes.empty?
-    move_down 20 if recipe_run_data.products.any?
-    table(parent_recipes_data, column_widths: [186, 95]) do
+    move_down 15 if recipe_run_data.products.any?
+    table(parent_recipes_data, column_widths: [186, 95], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..2).style(align: :center)
@@ -220,7 +219,7 @@ class RecipeDataPage
 
   def totals
     move_down 10
-    table(totals_info, position: :right, column_widths: [215, 61]) do
+    table(totals_info, position: :right, column_widths: [215, 61], cell_style: BasePdfReport::TABLE_STYLE) do
       cells.borders = []
       column(0).style(font_style: :bold, align: :right)
       column(1).style(align: :center)
