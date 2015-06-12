@@ -14,6 +14,12 @@ We use papertrail via heroku goto the dashboard
 
 # Development
 
+ - Clone repo
+ - `npm install`
+ - `bundle install`
+ - Setup your direnv file
+ - Decide what you want to do about workers (run your own or set the env file to run them inline)
+
 ## Server
 
 `foreman start` will start a unicorn server and a resque worker

@@ -22,7 +22,7 @@ class RecipeDecorator < Draper::Decorator
     delete_itself_from_collection inclusionables(ingredients)
   end
 
-  def serialized_json
+  def to_json
     RecipeSerializer.new(object).to_json
   end
 

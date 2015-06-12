@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require react_ujs
 //= require jquery_ujs
 //= require jquery.ui.datepicker
 //= require jquery.timepicker.js
@@ -24,4 +25,7 @@
 //= require_tree ./angular/
 
 // JQuery components
-//= require_tree ./plugins/
+//= require_tree ./jquery-components/
+
+// Browserify'd app components
+//= require app

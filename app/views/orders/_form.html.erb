@@ -28,16 +28,16 @@
       </div>
       <div class="small-12 medium-6 columns end">
           <%= f.label :order_type, "Order Type"%>
-          <%= f.radio_button(:order_type, "standing", "ng-model" => "order.order_type") %>
+          <%= f.radio_button(:order_type, "standing", "ng-model" => "order.orderType") %>
           <%= f.label(:order_type_standing, "Standing") %>
-          <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.order_type") %>
+          <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.orderType") %>
           <%= f.label(:order_type_temporary, "Temporary") %>
         </div>
     </div>
 
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :start_date, as: :string, label: "Effective Date", input_html: { class: "js-datepicker", "ng-model" => "order.start_date" } %>
+        <%= f.input :start_date, as: :string, label: "Effective Date", input_html: { class: "js-datepicker", "ng-model" => "order.startDate" } %>
       </div>
       <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
         <%= f.input :end_date, as: :string, label: "End Date", input_html: { class: "js-datepicker"} %>

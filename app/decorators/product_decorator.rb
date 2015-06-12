@@ -30,4 +30,8 @@ class ProductDecorator < Draper::Decorator
     return 'N/A' unless sku.present?
     sku
   end
+
+  def to_json
+    ProductSerializer.new(object).to_json
+  end
 end

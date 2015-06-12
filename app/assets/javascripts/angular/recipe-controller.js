@@ -1,11 +1,11 @@
-(function(){
-  "use strict";
+(function() {
+  'use strict';
   var app = window.BakeCycleAngular;
 
-  app.controller('RecipeCtrl', [ '$scope', function ($scope) {
+  app.controller('RecipeCtrl', [ '$scope', function($scope) {
     $scope.recipe = {};
-    $scope.isDough = function () {
-      return "dough" === $scope.recipe.recipe_type;
+    $scope.isDough = function() {
+      return 'dough' === $scope.recipe.recipeType;
     };
   }]);
 })();
