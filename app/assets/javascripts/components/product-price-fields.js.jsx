@@ -20,15 +20,15 @@ module.exports = React.createClass({
   },
 
   toggleDestroy: function() {
-    this.props.prices.toggleDestroy(this.props.index);
+    this.props.store.toggleDestroy(this.props.index);
   },
 
   updatePrice: function(event) {
-    this.props.prices.updatePrice(this.props.index, event.target.value);
+    this.props.store.updateField(this.props.index, 'price', event.target.value);
   },
 
   updateQuantity: function(event) {
-    this.props.prices.updateQuantity(this.props.index, event.target.value);
+    this.props.store.updateField(this.props.index, 'quantity', event.target.value);
   },
 
   render: function() {

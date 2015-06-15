@@ -1,10 +1,10 @@
 var React = require('react');
-var PriceField = require('./price-field');
-var PriceStore = require('./../stores/price-store');
+var ArrayStore = require('../stores/array-store');
+var PriceFields = require('./product-price-fields');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var prices = new PriceStore(this.props.priceVariants);
+    var prices = new ArrayStore(this.props.priceVariants);
     this.addBlankForm(prices);
     var updateState = () => {
       this.setState({prices: prices});
@@ -35,10 +35,10 @@ module.exports = React.createClass({
   render: function() {
     var prices = this.state.prices;
     var fields = prices.map((price, index) => {
-      return <PriceField
+      return <PriceFields
         {...price}
         index={index}
-        prices={prices} />;
+        store={prices} />;
     });
 
     return (<div>
