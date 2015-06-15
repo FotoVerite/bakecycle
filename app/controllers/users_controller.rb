@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   decorates_assigned :users, :user
 
   def index
-    authorize :user
+    authorize User
     @users = policy_scope(User).sort_by_bakery_and_name
   end
 

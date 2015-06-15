@@ -1,14 +1,17 @@
 <% provide(:title, "Recipes") %>
 
 <h1>Recipes</h1>
-
-<p><%= link_to 'Add New Recipe', new_recipe_path, class: "button" %></p>
+<% if policy(Product).new? %>
+  <p><%= link_to 'Add New Recipe', new_recipe_path, class: "button" %></p>
+<% end %>
 <table class="responsive-table">
   <thead>
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Type</th>
-      <th scope="col">Action</th>
+      <% if policy(Product).manage_permission? %>
+        <th scope="col">Action</th>
+      <% end %>
     </tr>
   </thead>
 
@@ -17,11 +20,13 @@
       <tr class="js-clickable-row" href="<%= edit_recipe_path(recipe) %>">
         <th scope="row"><%= link_to recipe.name, edit_recipe_path(recipe) %></th>
         <td data-title="Type"><%= recipe.type %></td>
-        <td data-title="Action">
-          <%= link_to edit_recipe_path(recipe) do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Recipe"><i class="fi-page-edit"></i></span>
-          <% end %>
-        </td>
+        <% if policy(recipe).manage_permission? %>
+          <td data-title="Action">
+            <%= link_to edit_recipe_path(recipe) do %>
+              <span class="table-action-icon icon-link-tooltip" aria-label="Edit Recipe"><i class="fi-page-edit"></i></span>
+            <% end %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

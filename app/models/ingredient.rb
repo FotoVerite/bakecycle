@@ -8,4 +8,8 @@ class Ingredient < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :description, length: { maximum: 500 }
   validates :bakery, presence: true
+
+  def self.policy_class
+    ProductPolicy
+  end
 end

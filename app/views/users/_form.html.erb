@@ -26,7 +26,14 @@
     <div class="row">
       <div class="large-6 small-12 columns">
         <% if policy(@current_user).admin? %>
-          <%= f.input :bakery_id, collection: Bakery.all, label_method: :name, value_method: :id, include_blank: 'None', as: :select  %>
+          <%= f.input(
+            :bakery_id,
+            collection: Bakery.all,
+            label_method: :name,
+            value_method: :id,
+            include_blank: 'None',
+            as: :select
+          ) %>
         <% end %>
       </div>
     </div>
@@ -37,9 +44,24 @@
     <% if policy(@user).manage_permission? %>
       <div class="row">
         <div class="large-6 small-12 columns">
-          <%= f.input :user_permission do %>
-            <%= f.collection_select(:user_permission, User::ACCESS_LEVELS, :to_s, lambda {|i| i.to_s.humanize}) %>
-          <% end %>
+          <%= f.input(
+            :user_permission,
+            collection: user.access_level,
+            as: :select,
+            include_blank: false
+          ) %>
+        </div>
+      </div>
+    <% end %>
+    <% if policy(@user).manage_permission? %>
+      <div class="row">
+        <div class="large-6 small-12 columns">
+          <%= f.input(
+            :product_permission,
+            collection: user.access_level,
+            as: :select,
+            include_blank: false
+          ) %>
         </div>
       </div>
     <% end %>

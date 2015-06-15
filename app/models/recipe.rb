@@ -32,6 +32,10 @@ class Recipe < ActiveRecord::Base
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
 
+  def self.policy_class
+    ProductPolicy
+  end
+
   def products
     Product.where('motherdough_id = :id OR inclusion_id = :id', id: id)
   end

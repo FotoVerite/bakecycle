@@ -2,41 +2,43 @@
 <div class="dashboard">
   <h1>Dashboard</h1>
   <div class="row">
-    <%= link_to ingredients_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Ingredients
-            <h3><%= item_finder.ingredients.count %></h3>
+    <% if policy(Product).index? %>
+      <%= link_to ingredients_path do %>
+        <div class="large-4 medium-6 small-12 columns">
+          <div class="stats border">
+            <div class="left">
+              Ingredients
+              <h3><%= item_finder.ingredients.count %></h3>
+            </div>
+            <i class="fi-info right"></i>
+            <div class="clearfix"></div>
           </div>
-          <i class="fi-info right"></i>
-          <div class="clearfix"></div>
         </div>
-      </div>
-    <% end %>
-    <%= link_to recipes_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Recipes
-            <h3><%= item_finder.recipes.count %></h3>
+      <% end %>
+      <%= link_to recipes_path do %>
+        <div class="large-4 medium-6 small-12 columns">
+          <div class="stats border">
+            <div class="left">
+              Recipes
+              <h3><%= item_finder.recipes.count %></h3>
+            </div>
+            <i class="fi-info right"></i>
+            <div class="clearfix"></div>
           </div>
-          <i class="fi-info right"></i>
-          <div class="clearfix"></div>
         </div>
-      </div>
-    <% end %>
-    <%= link_to products_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Products
-            <h3><%= item_finder.products.count %></h3>
+      <% end %>
+      <%= link_to products_path do %>
+        <div class="large-4 medium-6 small-12 columns">
+          <div class="stats border">
+            <div class="left">
+              Products
+              <h3><%= item_finder.products.count %></h3>
+            </div>
+            <i class="fi-price-tag right"></i>
+            <div class="clearfix"></div>
           </div>
-          <i class="fi-price-tag right"></i>
-          <div class="clearfix"></div>
         </div>
-      </div>
+      <% end %>
     <% end %>
     <%= link_to routes_path do %>
       <div class="large-4 medium-6 small-12 columns">

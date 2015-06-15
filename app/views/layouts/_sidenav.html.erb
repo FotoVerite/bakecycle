@@ -10,16 +10,23 @@
         </li>
 
         <% if current_bakery %>
-          <li class="js-subnav-toggle show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
-            <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
-            <span class="header">Products</span>
-
-            <ul class="sub">
-              <li class="<%= active_nav?(:ingredients) %>"><%= link_to("Ingredients", ingredients_path)%></li>
-              <li class="<%= active_nav?(:recipes) %>"><%= link_to("Recipes", recipes_path) %></li>
-              <li class="<%= active_nav?(:products) %>"><%= link_to("Products", products_path) %></li>
-            </ul>
-          </li>
+          <% if policy(Product).index? %>
+            <li class="js-subnav-toggle show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
+              <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
+              <span class="header">Products</span>
+              <ul class="sub">
+                <li class="<%= active_nav?(:ingredients) %>">
+                  <%= link_to("Ingredients", ingredients_path)%>
+                </li>
+                <li class="<%= active_nav?(:recipes) %>">
+                  <%= link_to("Recipes", recipes_path) %>
+                </li>
+                <li class="<%= active_nav?(:products) %>">
+                  <%= link_to("Products", products_path) %>
+                </li>
+              </ul>
+            </li>
+          <% end %>
 
           <li class="js-subnav-toggle show-nav <%= active_nav?(:print_recipes, :batch_recipes, :production_runs, :daily_totals) %>">
             <span class="icon"><%= image_tag 'icons/icon-production.svg'%></span>

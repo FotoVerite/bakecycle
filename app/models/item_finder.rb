@@ -14,15 +14,15 @@ class ItemFinder
   end
 
   def products
-    Product.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Product)
   end
 
   def ingredients
-    Ingredient.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Ingredient)
   end
 
   def recipes
-    Recipe.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Recipe)
   end
 
   def routes

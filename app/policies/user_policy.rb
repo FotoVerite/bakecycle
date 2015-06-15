@@ -39,6 +39,7 @@ class UserPolicy < ApplicationPolicy
     attributes = [:name, :email, :password, :password_confirmation]
     attributes << :bakery_id if user.admin?
     attributes << :user_permission if manage_permission?
+    attributes << :product_permission if manage_permission?
     attributes
   end
 

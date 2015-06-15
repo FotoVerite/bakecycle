@@ -31,12 +31,14 @@ describe ProductRecipeCalc do
     it 'returns an object containing recipe inclusion and weight' do
       inclusion_info = {
         dough_weight: dough_weight,
-        inclusion_weight: (product_weight - dough_weight).round(24),
+        inclusion_weight: (product_weight - dough_weight).round(10),
         product: product,
         product_weight: product_weight,
         recipe: product.inclusion
       }
-      expect(calculator.inclusion_info).to eq(inclusion_info)
+      info = calculator.inclusion_info
+      info[:inclusion_weight] = info[:inclusion_weight].round(10)
+      expect(info).to eq(inclusion_info)
     end
   end
 
