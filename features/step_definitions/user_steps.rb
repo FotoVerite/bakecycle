@@ -64,3 +64,7 @@ end
 Then(/^I should information about the user "(.*?)"$/) do |name|
   expect(page).to have_content("Editing User: #{name}")
 end
+
+Then(/^I should not see a bakeries column$/) do
+  find('.responsive-table').should have_no_content('Bakery')
+end

@@ -15,12 +15,15 @@ describe User do
     expect(user).to validate_uniqueness_of(:email)
   end
 
-  describe '.sort_by_bakery' do
-    it 'sorts users with no bakery first' do
+  describe '.sort_by_bakery_and_name' do
+    it 'sorts users with bakery first and sorts by name afterwards' do
       no_bakery = create(:user, bakery: nil)
-      a_bakery = create(:user, bakery: create(:bakery, name: 'a bakery'))
-      b_bakery = create(:user, bakery: create(:bakery, name: 'B bakery'))
-      expect(User.sort_by_bakery).to eq([a_bakery, b_bakery, no_bakery])
+      a_bakery = create(:bakery, name: 'a bakery')
+      john = create(:user, name: 'john', bakery: a_bakery)
+      david = create(:user, name: 'David', bakery: a_bakery)
+      bob = create(:user, name: 'bob', bakery: create(:bakery, name: 'B bakery'))
+      aria = create(:user, name: 'aria', bakery: create(:bakery, name: 'c bakery'))
+      expect(User.sort_by_bakery_and_name).to eq([david, john, bob, aria, no_bakery])
     end
   end
 end
