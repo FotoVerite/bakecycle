@@ -62,15 +62,27 @@
 
           <ul class="sub">
             <% if policy(User).index? %>
-              <li class="<%= active_nav?(:users) %>"><%= link_to("Users", users_path) %></li>
+              <li class="<%= active_nav?(:users) %>">
+                <%= link_to("Users", users_path) %>
+              </li>
+            <% end %>
+
+            <% if policy(current_user).myaccount? %>
+              <li class="<%= active_nav?(:my_account) %>">
+                <%= link_to('My Account', my_users_path) %>
+              </li>
             <% end %>
 
             <% if can? :manage, Bakery %>
-              <li class="<%= active_nav?(:bakeries) %>"><%= link_to('Bakeries', bakeries_path) %></li>
+              <li class="<%= active_nav?(:bakeries) %>">
+                <%= link_to('Bakeries', bakeries_path) %>
+              </li>
             <% end %>
 
             <% if current_bakery %>
-              <li class="<%= active_nav?(:my_bakery) %>"><%= link_to('My Bakery', my_bakeries_path) %></li>
+              <li class="<%= active_nav?(:my_bakery) %>">
+                <%= link_to('My Bakery', my_bakeries_path) %>
+              </li>
             <% end %>
 
             <% if can? :manage, :resque %>

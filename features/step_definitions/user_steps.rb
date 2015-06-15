@@ -1,7 +1,7 @@
 Given(/^I am logged in as an user with? (none|read|manage) access$/) do |access_type|
   bakery = Bakery.first || create(:bakery)
-  @current_user = create(:user, bakery: bakery, user_permission: access_type)
-  login_as(@current_user, scope: :user)
+  user = create(:user, bakery: bakery, user_permission: access_type)
+  login_as(user, scope: :user)
 end
 
 Given(/^there is a user named "(.*?)"$/) do |name|
@@ -33,7 +33,7 @@ When(/^I edit my name to "(.*?)"$/) do |name|
 end
 
 When(/^I go to my user's edit page$/) do
-  visit edit_user_path(@current_user)
+  visit my_users_path
 end
 
 When(/^I change the user name to "(.*?)" and his user permission to "(.*?)"$/) do |name, access_level|

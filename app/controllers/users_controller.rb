@@ -47,6 +47,13 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
+  def myaccount
+    @user = policy_scope(User).find(current_user)
+    active_nav(:my_user)
+    authorize @user
+    render 'edit'
+  end
+
   private
 
   def set_user
