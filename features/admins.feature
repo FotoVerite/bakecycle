@@ -10,3 +10,9 @@ Feature: Admin
       | hommiexx@example.com |  foobarbaz |  foobarbaz              | John Poe | homies wonderland |
     And I click on "Create"
     Then "You have created a new user for John Poe with hommiexx@example.com" should be present
+
+  Scenario: As a admin, I can view what bakery a user belongs to
+    Given I am logged in as an admin
+    And there is a user named "Andrew"
+    When I go to the "users" page
+    Then I should see a bakeries column

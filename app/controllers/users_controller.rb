@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 
   def index
     authorize :user
-    @users = policy_scope(User).sort_by_bakery
+    @users = policy_scope(User).sort_by_bakery_and_name
   end
 
   def new

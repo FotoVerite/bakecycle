@@ -1,9 +1,10 @@
 Feature: Users
 
-  Scenario: A user with full access
+  Scenario: As a user with full access
     Given I am logged in as an user with manage access
     And there is a user named "Andrew"
     When I go to the "users" page
+    Then I should not see a bakeries column
     Then I should see a list of users including "Andrew"
     When I click on "Andrew"
     Then I should information about the user "Andrew"
@@ -36,6 +37,7 @@ Feature: Users
     Given I am logged in as an user with read access
     And there is a user named "Andrew"
     When I go to the "users" page
+    Then I should not see a bakeries column
     Then I should see a list of users including "Andrew"
     When I click on "Andrew"
     Then "You are not authorized to access this page." should be present

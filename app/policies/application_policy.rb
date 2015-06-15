@@ -6,6 +6,8 @@ class ApplicationPolicy
     @record = record
   end
 
+  delegate :admin?, to: :user
+
   def index?
     false
   end
