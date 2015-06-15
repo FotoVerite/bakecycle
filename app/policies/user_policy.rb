@@ -27,6 +27,10 @@ class UserPolicy < ApplicationPolicy
     user.admin? || record_is_self? || manage_bakery_record?
   end
 
+  def myaccount?
+    record_is_self?
+  end
+
   def manage_permission?
     user.user_permission == 'manage'
   end

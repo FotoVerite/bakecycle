@@ -12,7 +12,10 @@ Rails.application.routes.draw do
   resources :orders, except: [:show] do
     get 'copy', on: :member
   end
-  resources :users, except: [:show]
+  resources :users, except: [:show] do
+    get 'myaccount', on: :collection, as: 'my'
+  end
+
   resources :file_exports, only: [:show]
 
   resources :shipments, except: [:show] do
