@@ -27,18 +27,15 @@
     </div>
 
     <div class="row">
-      <div class="small-6 columns">
+      <div class="small-4 columns">
+        <%= f.input :recipe_type, collection: recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipeType" } %>
+      </div>
+      <div class="small-4 columns">
         <%= f.input :mix_size, as: :string, label: "Mixing Bowl Size" %>
         <p class="help-text">* Pre-ferment mix bowls will match motherdough bowls when only included in one motherdough</p>
       </div>
-      <div class="small-6 columns">
+      <div class="small-4 columns">
         <%= f.input :mix_size_unit, collection: recipe.mix_size_units_select, prompt: "Select One", as: :select, label: "Mixing Bowl Size Unit" %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="small-12 columns">
-        <%= f.input :recipe_type, collection: recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipeType" } %>
       </div>
     </div>
 
