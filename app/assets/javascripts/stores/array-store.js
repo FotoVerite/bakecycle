@@ -1,34 +1,63 @@
+/** @preventMunge */
 var EventEmitter = require('events').EventEmitter;
+var _ = require('underscore');
 
 module.exports = class ArrayStore {
 
   constructor(initialCollection) {
-    this.collection = initialCollection || [];
+    this.collection = [];
+    this.index = {};
     this.emitter = new EventEmitter();
+    this._nextId = -1;
+
+    if (initialCollection) {
+      this.updateAll(initialCollection);
+    }
   }
 
-  updateAll(newItem) {
-    this.collection = newItem;
+  updateAll(newItems) {
+    this.collection = [];
+    this.index = {};
+    newItems.map((item) => {
+      this.add(item, true);
+    });
     this.emitChange();
   }
 
-  add() {
-    this.collection.push({});
+  add(object, dontEmitChange) {
+    object = object || {};
+    object._id = this.nextId();
+    this.collection.push(object);
+    this.index[object._id] = object;
+    if (!dontEmitChange) {
+      this.emitChange();
+    }
+  }
+
+  updateField(id, field, newValue) {
+    this.get(id)[field] = newValue;
     this.emitChange();
   }
 
-  updateField(index, field, newValue) {
-    this.collection[index][field] = newValue;
-    this.emitChange();
-  }
-
-  toggleDestroy(index) {
-    var items = this.collection;
-    var item = items[index];
+  toggleDestroy(id) {
+    var item = this.get(id);
     if (item.id) {
       item.destroy = !item.destroy;
     } else {
-      items.splice(index, 1);
+      this.remove(id);
+    }
+    this.emitChange();
+  }
+
+  remove(id) {
+    var obj = this.get(id);
+    if (!obj) {
+      return;
+    }
+    delete this.index[id];
+    var index = _.indexOf(this.collection, obj);
+    if (index !== -1) {
+      this.collection.splice(index, 1);
     }
     this.emitChange();
   }
@@ -37,8 +66,12 @@ module.exports = class ArrayStore {
     return this.collection.length;
   }
 
-  get(index) {
-    return this.collection[index];
+  get(id) {
+    return this.index[id];
+  }
+
+  getLast() {
+    return this.collection[this.collection.length - 1];
   }
 
   map() {
@@ -50,8 +83,16 @@ module.exports = class ArrayStore {
   }
 
   emitChange() {
-    process.nextTick(() => {
-      this.emitter.emit('change');
-    });
+    this.emitter.emit('change');
   }
+
+  nextId() {
+    this._nextId += 1;
+    return this._nextId;
+  }
+
+  sortBy(callBack) {
+    return _.sortBy(this.collection, callBack);
+  }
+
 };

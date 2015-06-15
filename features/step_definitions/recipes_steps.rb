@@ -12,19 +12,19 @@ Then(/^I should see a list of recipes including "(.*?)" and "(.*?)"$/) do |recip
 end
 
 When(/^I fill out recipe form with:$/) do |table|
-  select table.hashes[0]['recipe_type'], from: 'recipe_recipe_type'
   recipe = table.hashes[0]
   jquery_fill(
-    '#recipe_name' => recipe['name'],
-    '#recipe_mix_size' => recipe['mix_size'],
-    '#recipe_lead_days' => recipe['lead_days'],
-    '#recipe_note' => recipe['note'],
-    '#recipe_mix_size_unit' => recipe['mix_size_unit']
+    '[data-field="name"]' => recipe['name'],
+    '[data-field="mixSize"]' => recipe['mix_size'],
+    '[data-field="leadDays"]' => recipe['lead_days'],
+    '[data-field="note"]' => recipe['note'],
+    '[data-field="mixSizeUnit"]' => recipe['mix_size_unit'],
+    '[data-field="recipeType"]' => recipe['recipe_type']
   )
 end
 
 When(/^I change the recipe name to "(.*?)"$/) do |name|
-  fill_in 'recipe_name', with: name
+  jquery_fill('[data-field="name"]' => name)
 end
 
 Then(/^I should see that the recipe name is "(.*?)"$/) do |name|
@@ -34,8 +34,8 @@ end
 When(/^I fill out recipe item with:$/) do |table|
   item = table.hashes[0]
   jquery_fill(
-    'input[id$="bakers_percentage"]:last' => item['percentage'],
-    'select[id$="inclusionable_id_type"]' => item['inclusionable_id_type']
+    '.bakers_percentage_input:last' => item['percentage'],
+    '.inclusionable_id_type:last' => item['inclusionable_id_type']
   )
 end
 

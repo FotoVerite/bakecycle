@@ -41,3 +41,34 @@ fieldset legend {
   margin-top: -1.2em;
   font-weight: 300;
 }
+
+.draggable-placeholder {
+  background: $bc-verylightgrey;
+  height: 32px;
+  border: solid 1px $bc-mediumgrey;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.draggable-placeholder:before {
+  content: "Drop here";
+  color: $bc-mediumgrey;
+  padding: 5px;
+
+}
+
+.inline {
+  display: inline-block;
+}
+
+select.inline {
+  float: right;
+  width: 95%;
+}
+
+.drag-handle {
+  cursor: pointer;
+  float: left;
+  width: 5%;
+  line-height: 2.5em;
+}

@@ -40,9 +40,13 @@ class Recipe < ActiveRecord::Base
     Product.where('motherdough_id = :id OR inclusion_id = :id', id: id)
   end
 
+  def items
+    recipe_items.order('sort_id asc')
+  end
+
   def update_total_lead_days
     update_columns(total_lead_days: calculate_total_lead_days)
-    touch_parent_objects
+    queue_touch_parent_objects
   end
 
   def set_total_lead_days
