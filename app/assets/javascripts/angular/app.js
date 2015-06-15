@@ -1,4 +1,4 @@
-(function(){
-  "use strict";
+(function() {
+  'use strict';
   window.BakeCycleAngular = angular.module('bakecycle', ['ngMap']);
 })();

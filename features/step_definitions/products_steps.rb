@@ -42,7 +42,7 @@ When(/^I fill out the price variant form with:$/) do |table|
 end
 
 Then(/^I click on the last price's remove button$/) do
-  all('.remove-button').last.click
+  all('.test-remove-button').last.click
 end
 
 Then(/^I edit the remaining price to "(.*?)"$/) do |price|

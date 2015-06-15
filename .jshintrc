@@ -1,0 +1,33 @@
+{
+  "bitwise": true,
+  "browser": true,
+  "browserify": true,
+  "curly": true,
+  "eqeqeq": true,
+  "esnext": true,
+  "forin": true,
+  "freeze": true,
+  "funcscope": true,
+  "futurehostile": true,
+  "globals": {
+    "angular": false,
+    "google": false
+  },
+  "iterator": true,
+  "jquery": true,
+  "latedef": true,
+  "maxcomplexity": 10,
+  "maxdepth": 3,
+  "maxparams": 3,
+  "maxstatements": 25,
+  "noarg": true,
+  "nocomma": true,
+  "nonbsp": true,
+  "nonew": true,
+  "notypeof": true,
+  "shadow": false,
+  "strict": false, // we do this with browserify
+  "undef": true,
+  "unused": true,
+  "varstmt": false // one day!
+}

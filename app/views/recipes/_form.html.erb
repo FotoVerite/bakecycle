@@ -1,4 +1,4 @@
-<div ng-controller="RecipeCtrl" ng-init="recipe=<%= recipe.serialized_json %>">
+<div ng-controller="RecipeCtrl" ng-init="recipe=<%= recipe.to_json %>">
 
 <%= simple_form_for recipe do |f| %>
 
@@ -38,7 +38,7 @@
 
     <div class="row">
       <div class="small-12 columns">
-        <%= f.input :recipe_type, collection: recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipe_type" } %>
+        <%= f.input :recipe_type, collection: recipe.recipe_types_select, prompt: "Select One", as: :select, input_html: { "ng-model" => "recipe.recipeType" } %>
       </div>
     </div>
 

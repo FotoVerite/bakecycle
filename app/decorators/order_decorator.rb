@@ -25,4 +25,8 @@ class OrderDecorator < Draper::Decorator
   def shipments
     Shipment.upcoming(object)
   end
+
+  def to_json
+    OrderSerializer.new(object).to_json
+  end
 end

@@ -14,7 +14,6 @@ Feature: Products
     And I fill out product form with:
       | name           | product_type | description | weight | unit | over_bake | base_price | sku             |
       | almond cookies | cookie       | delicious   | 10     | g    | 10        | 1.10       | abc-123-xyz-890 |
-    And I click on "Add New Price"
     And I fill out the price variant form with:
       | price | quantity |
       | 10.23 |          |
@@ -24,7 +23,6 @@ Feature: Products
       | price | quantity |
       | 10.23 | 100      |
 
-    And I click on "Add New Price" and don't enter any information
     And I click on "Create"
     Then "You have created almond cookies" should be present
 
@@ -32,7 +30,6 @@ Feature: Products
     And I click on "Update"
     Then I should see that the product name is "sugar cookie"
 
-    And I click on "Add New Price"
     And I fill out the price variant form with:
       | price | quantity |
       | 10.23  | 83      |
