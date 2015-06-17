@@ -8,10 +8,10 @@ describe UserPolicy do
   context 'when you are an admin' do
     let(:current_user) { build_stubbed(:user, :as_admin, bakery: bakery) }
     it 'has access to users' do
-      expect(policy).to authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to authorize(:new)
       expect(policy).to authorize(:show)
       expect(policy).to authorize(:create)
-      expect(policy).to authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
@@ -20,20 +20,16 @@ describe UserPolicy do
     it 'has access to users in other bakeries' do
       record = build_stubbed(:user)
       policy = UserPolicy.new(current_user, record)
-      expect(policy).to authorize(:index)
       expect(policy).to authorize(:show)
       expect(policy).to authorize(:create)
-      expect(policy).to authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
     end
 
     it 'does allow access to yourself' do
-      expect(policy).to authorize(:index)
       expect(policy).to authorize(:show)
       expect(policy).to authorize(:create)
-      expect(policy).to authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
@@ -55,17 +51,17 @@ describe UserPolicy do
       expect(policy.permitted_attributes).to include(:bakery_id)
     end
     it 'allows you to set user_permission level' do
-      expect(policy.permitted_attributes).to include(:user_permission)
+      expect(policy.permitted_attributes).to include(:user_permission, :product_permission)
     end
   end
 
   context 'when access level of none' do
     let(:current_user) { build_stubbed(:user, bakery: bakery, user_permission: 'none') }
     it "doesn't allow access to users" do
-      expect(policy).to_not authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to_not authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to_not authorize(:new)
       expect(policy).to_not authorize(:show)
       expect(policy).to_not authorize(:create)
-      expect(policy).to_not authorize(:new)
       expect(policy).to_not authorize(:update)
       expect(policy).to_not authorize(:edit)
       expect(policy).to_not authorize(:destroy)
@@ -74,10 +70,8 @@ describe UserPolicy do
     it 'does allow access to yourself' do
       record = current_user
       policy = UserPolicy.new(current_user, record)
-      expect(policy).to_not authorize(:index)
       expect(policy).to authorize(:show)
       expect(policy).to_not authorize(:create)
-      expect(policy).to_not authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
@@ -102,10 +96,10 @@ describe UserPolicy do
   context 'when access level of read' do
     let(:current_user) { build_stubbed(:user, bakery: bakery, user_permission: 'read') }
     it 'has access to users' do
-      expect(policy).to authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to_not authorize(:new)
       expect(policy).to authorize(:show)
       expect(policy).to_not authorize(:create)
-      expect(policy).to_not authorize(:new)
       expect(policy).to_not authorize(:update)
       expect(policy).to_not authorize(:edit)
       expect(policy).to_not authorize(:destroy)
@@ -114,10 +108,8 @@ describe UserPolicy do
     it 'does allow access to yourself' do
       record = current_user
       policy = UserPolicy.new(current_user, record)
-      expect(policy).to authorize(:index)
       expect(policy).to authorize(:show)
       expect(policy).to_not authorize(:create)
-      expect(policy).to_not authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
@@ -143,10 +135,10 @@ describe UserPolicy do
   context 'when access level of manage' do
     let(:current_user) { build_stubbed(:user, bakery: bakery, user_permission: 'manage') }
     it 'has access to users' do
-      expect(policy).to authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to authorize(:index)
+      expect(UserPolicy.new(current_user, User)).to authorize(:new)
       expect(policy).to authorize(:show)
       expect(policy).to authorize(:create)
-      expect(policy).to authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
@@ -155,10 +147,8 @@ describe UserPolicy do
     it 'does allow access to yourself' do
       record = current_user
       policy = UserPolicy.new(current_user, record)
-      expect(policy).to authorize(:index)
       expect(policy).to authorize(:show)
       expect(policy).to authorize(:create)
-      expect(policy).to authorize(:new)
       expect(policy).to authorize(:update)
       expect(policy).to authorize(:edit)
       expect(policy).to authorize(:destroy)
@@ -176,7 +166,7 @@ describe UserPolicy do
       expect(policy.permitted_attributes).to_not include(:bakery_id)
     end
     it 'allows you to set user_permission level' do
-      expect(policy.permitted_attributes).to include(:user_permission)
+      expect(policy.permitted_attributes).to include(:user_permission, :product_permission)
     end
   end
 end

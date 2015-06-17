@@ -61,30 +61,6 @@ describe Ability do
     end
   end
 
-  describe 'managing ingredients' do
-    let(:ingredient) { create(:ingredient, bakery: user.bakery) }
-    let(:competitor_ingredient) { create(:ingredient, bakery: competitor.bakery) }
-
-    it 'allows users to access ingredients from same bakery' do
-      ingredient_2 = create(:ingredient, bakery: user.bakery)
-      expect(Ingredient.accessible_by(ability)).to contain_exactly(ingredient, ingredient_2)
-    end
-
-    it 'allows creation of ingredients only for their own bakery' do
-      expect(ability).to be_able_to(:create, Ingredient.new(bakery: user.bakery))
-      expect(ability).to_not be_able_to(:create, Ingredient.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Ingredient)).to eq(bakery_id: user.bakery.id)
-    end
-
-    context 'admins' do
-      let(:user) { create(:user, :as_admin) }
-      it 'allows admins to see only their bakery ingredients' do
-        ingredient_2 = create(:ingredient, bakery: user.bakery)
-        expect(Ingredient.accessible_by(ability)).to contain_exactly(ingredient, ingredient_2)
-      end
-    end
-  end
-
   describe 'managing orders' do
     let(:order) { create(:order, bakery: user.bakery) }
     let(:competitor_order) { create(:order, bakery: competitor.bakery) }
@@ -105,54 +81,6 @@ describe Ability do
       it 'allows admins to see only their bakery orders' do
         order_2 = create(:order, bakery: user.bakery)
         expect(Order.accessible_by(ability)).to contain_exactly(order, order_2)
-      end
-    end
-  end
-
-  describe 'managing products' do
-    let(:product) { create(:product, bakery: user.bakery) }
-    let(:competitor_product) { create(:product, bakery: competitor.bakery) }
-
-    it 'allows users to access products from same bakery' do
-      product_2 = create(:product, bakery: user.bakery)
-      expect(Product.accessible_by(ability)).to contain_exactly(product, product_2)
-    end
-
-    it 'allows creation of products only for their own bakery' do
-      expect(ability).to be_able_to(:create, Product.new(bakery: user.bakery))
-      expect(ability).to_not be_able_to(:create, Product.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Product)).to eq(bakery_id: user.bakery.id)
-    end
-
-    context 'admins' do
-      let(:user) { create(:user, :as_admin) }
-      it 'allows admins to see only their bakery products' do
-        product_2 = create(:product, bakery: user.bakery)
-        expect(Product.accessible_by(ability)).to contain_exactly(product, product_2)
-      end
-    end
-  end
-
-  describe 'managing recipes' do
-    let(:recipe) { create(:recipe, bakery: user.bakery) }
-    let(:competitor_recipe) { create(:recipe, bakery: competitor.bakery) }
-
-    it 'allows users to access recipes from same bakery' do
-      recipe_2 = create(:recipe, bakery: user.bakery)
-      expect(Recipe.accessible_by(ability)).to contain_exactly(recipe, recipe_2)
-    end
-
-    it 'allows creation of recipes only for their own bakery' do
-      expect(ability).to be_able_to(:create, Recipe.new(bakery: user.bakery))
-      expect(ability).to_not be_able_to(:create, Recipe.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Recipe)).to eq(bakery_id: user.bakery.id)
-    end
-
-    context 'admins' do
-      let(:user) { create(:user, :as_admin) }
-      it 'allows admins to see only their bakery recipes' do
-        recipe_2 = create(:recipe, bakery: user.bakery)
-        expect(Recipe.accessible_by(ability)).to contain_exactly(recipe, recipe_2)
       end
     end
   end

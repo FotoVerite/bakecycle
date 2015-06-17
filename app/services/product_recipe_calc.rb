@@ -33,7 +33,7 @@ class ProductRecipeCalc
   end
 
   def inclusion_weight
-    (inclusion_percentage * percent_weight).round(24)
+    (inclusion_percentage * percent_weight)
   end
 
   def percent_weight

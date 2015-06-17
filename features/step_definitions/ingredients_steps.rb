@@ -40,3 +40,17 @@ Then(/^I should see confirmation that the ingredient "(.*?)" was deleted$/) do |
     expect(page).to have_content("You have deleted #{client}")
   end
 end
+
+When(/^I attempt to visit the "(.*?)" page$/) do |page|
+  path_string = "#{page}_path"
+  visit send(path_string.to_sym)
+end
+
+When(/^I attempt to visit the page for "(.*?)" ingredient$/) do |name|
+  ingredient = Ingredient.find_by(name: name)
+  visit edit_ingredient_path(ingredient)
+end
+
+When(/^I attempt to visit a new ingredient page$/) do
+  visit new_ingredient_path
+end

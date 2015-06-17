@@ -8,10 +8,7 @@ class Ability
 
     can :manage, Client, bakery_id: user.bakery.id if user.bakery
     can :manage, Shipment, bakery_id: user.bakery.id if user.bakery
-    can :manage, Ingredient, bakery_id: user.bakery.id if user.bakery
-    can :manage, Recipe, bakery_id: user.bakery.id if user.bakery
     can :manage, Route, bakery_id: user.bakery.id if user.bakery
-    can :manage, Product, bakery_id: user.bakery.id if user.bakery
     can :manage, Order, bakery_id: user.bakery.id if user.bakery
     can :manage, ProductionRun, bakery_id: user.bakery.id if user.bakery
     can :manage, FileExport, bakery_id: user.bakery.id if user.bakery

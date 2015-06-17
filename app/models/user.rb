@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   validates :name, length: { maximum: 150 }
-  validates :user_permission, presence: true, inclusion: { in: ACCESS_LEVELS }
+  validates :user_permission, :product_permission, presence: true, inclusion: { in: ACCESS_LEVELS }
 
   def self.sort_by_bakery_and_name
     includes(:bakery)

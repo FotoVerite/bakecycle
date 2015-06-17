@@ -1,16 +1,23 @@
 class RecipesController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
+  before_action :set_recipe, only: [:edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped
   decorates_assigned :recipes, :recipe
 
   def index
-    @recipes = @recipes.order_by_name
+    authorize Recipe
+    @recipes = policy_scope(Recipe).order_by_name
   end
 
   def new
+    @recipe = policy_scope(Recipe).build
+    authorize @recipe
   end
 
   def create
+    @recipe = policy_scope(Recipe).build(recipe_params)
+    authorize @recipe
     if @recipe.save
       flash[:notice] = "You have created #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
@@ -20,9 +27,11 @@ class RecipesController < ApplicationController
   end
 
   def edit
+    authorize @recipe
   end
 
   def update
+    authorize @recipe
     if @recipe.update(recipe_params)
       flash[:notice] = "You have updated #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
@@ -32,12 +41,17 @@ class RecipesController < ApplicationController
   end
 
   def destroy
+    authorize @recipe
     @recipe.destroy!
     flash[:notice] = "You have deleted #{@recipe.name}"
     redirect_to recipes_path
   end
 
   private
+
+  def set_recipe
+    @recipe = policy_scope(Recipe).find(params[:id])
+  end
 
   def recipe_params
     params.require(:recipe).permit(
