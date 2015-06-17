@@ -14,33 +14,59 @@
 
   <fieldset>
     <legend>Information</legend>
-    <% unless f.object.persisted? %>
-      <div class="row">
-        <div class="small-12 columns">
-          <%= f.input :client_id, collection: order.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
-        </div>
-      </div>
-    <% end %>
-
     <div class="row">
-      <div class="small-12 medium-6 columns">
-         <%= f.input :route_id, collection: order.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
+      <div class="small-12 columns end">
+        <%= f.label :order_type, "Order Type"%>
+        <%= f.radio_button(:order_type, "standing", "ng-model" => "order.orderType") %>
+        <%= f.label(:order_type_standing, "Standing") %>
+        <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.orderType") %>
+        <%= f.label(:order_type_temporary, "Temporary") %>
+        <p class="help-text-order-type">
+          Standing orders repeat every week, temporary orders override standing orders for a specific date
+        </p>
       </div>
-      <div class="small-12 medium-6 columns end">
-          <%= f.label :order_type, "Order Type"%>
-          <%= f.radio_button(:order_type, "standing", "ng-model" => "order.orderType") %>
-          <%= f.label(:order_type_standing, "Standing") %>
-          <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.orderType") %>
-          <%= f.label(:order_type_temporary, "Temporary") %>
+    </div>
+    <div class="row">
+      <% unless f.object.persisted? %>
+        <div class="small-12 medium-6 columns">
+          <%= f.input(
+            :client_id,
+            collection: order.available_clients,
+            label_method: :name,
+            value_method: :id,
+            prompt: "Select One",
+            as: :select
+          )%>
         </div>
+      <% end %>
+      <div class="small-12 medium-6 columns">
+        <%= f.input(
+          :route_id,
+          collection: order.available_routes,
+          label_method: :name,
+          value_method: :id,
+          prompt: "Select One",
+          as: :select
+        ) %>
+      </div>
     </div>
 
     <div class="row">
       <div class="small-12 medium-6 columns">
-        <%= f.input :start_date, as: :string, label: "Effective Date", input_html: { class: "js-datepicker", "ng-model" => "order.startDate" } %>
+        <%= f.input(
+          :start_date,
+          as: :string,
+          label: "Start Date",
+          input_html: { class: "js-datepicker", "ng-model" => "order.startDate" }
+        ) %>
       </div>
       <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
-        <%= f.input :end_date, as: :string, label: "End Date", input_html: { class: "js-datepicker"} %>
+        <%= f.input(
+          :end_date,
+          as: :string,
+          label: "End Date",
+          input_html: { class: "js-datepicker"}
+        ) %>
       </div>
     </div>
 
