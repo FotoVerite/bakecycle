@@ -15,7 +15,7 @@ class ProductionRunGenerator
   end
 
   def filename
-    'ProductionRunRecipe.pdf'
+    "Production-Run-#{@production_run.id}-#{@production_run.date}.pdf"
   end
 
   def generate
