@@ -32,7 +32,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def manage_permission?
-    user.user_permission == 'manage'
+    user.admin? || user.user_permission == 'manage'
   end
 
   def permitted_attributes

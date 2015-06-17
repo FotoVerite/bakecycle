@@ -11,7 +11,8 @@ FactoryGirl.define do
 
     trait :as_admin do
       admin true
-      user_permission 'manage'
+      user_permission 'none'
+      product_permission 'none'
     end
   end
 end
