@@ -46,18 +46,14 @@ module.exports = React.createClass({
         <legend>Prices</legend>
         <div className="row collapse">
           <div className="small-12 medium-4 columns">
-            <div className="input string required">
-              <label className="string required">
-                <abbr title="required">*</abbr>Price
-              </label>
-            </div>
+            <label className="string required hide-for-small-down">
+              <abbr title="required">*</abbr>Price
+            </label>
           </div>
           <div className="small-12 medium-4 columns end">
-            <div className="input string required">
-              <label className="string required">
-                <abbr title="required">*</abbr>Quantity
-              </label>
-            </div>
+            <label className="string required hide-for-small-down">
+              <abbr title="required">*</abbr>Quantity
+            </label>
           </div>
         </div>
         {fields}
