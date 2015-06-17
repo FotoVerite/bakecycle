@@ -76,6 +76,10 @@ class RecipeRunData
     products.sort_by { |product| [product_without_inclusion(product), product[:product].name.downcase] }
   end
 
+  def products_total_weight
+    products.reduce(Unitwise(0, :kg)) { |sum, product| sum + product[:weight] }
+  end
+
   def inclusion_for_product(product)
     inclusions.detect { |i| i[:product] == product[:product] }
   end

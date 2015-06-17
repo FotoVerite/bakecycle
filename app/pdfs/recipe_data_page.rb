@@ -96,6 +96,7 @@ class RecipeDataPage
       column(1).style(align: :left)
       row(1..-1).column(2).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
     end
+    products_table_total_weight
   end
 
   def product_data
@@ -112,6 +113,16 @@ class RecipeDataPage
         display_weight(product[:weight])
       ]
     end
+  end
+
+  def products_table_total_weight
+    table(products_total_weight_data, position: :right, column_widths: 52, cell_style: BasePdfReport::TABLE_STYLE) do
+      column(0).style(align: :center)
+    end
+  end
+
+  def products_total_weight_data
+    [[display_weight(recipe_run_data.products_total_weight)]]
   end
 
   def inclusion_tables
