@@ -168,6 +168,19 @@ describe RecipeRunData do
     end
   end
 
+  describe '#products_total_weight' do
+    let(:motherdough) { create(:recipe_motherdough) }
+    let(:product) { create(:product, motherdough: motherdough, weight: 3, unit: :g) }
+    let(:run_data) { RecipeRunData.new(motherdough, date: Time.zone.today) }
+
+    it 'returns the total weights of all the products' do
+      product_with_kg_weight = create(:product, motherdough: motherdough, weight: 2, unit: :kg)
+      run_data.add_product(product, 1)
+      run_data.add_product(product_with_kg_weight, 1)
+      expect(run_data.products_total_weight).to eq(Unitwise(2.003, :kg))
+    end
+  end
+
   def mock_recipe_run_inclusion(product, inclusion)
     {
       product: product,
