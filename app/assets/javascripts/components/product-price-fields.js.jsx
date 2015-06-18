@@ -44,6 +44,9 @@ module.exports = React.createClass({
       <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
       <div className="row collapse">
         <div className="small-12 medium-4 columns">
+          <label className="string required hide-for-medium-up">
+            <abbr title="required">*</abbr>Price
+          </label>
           <input
             className={`price_input ${this.errorClassFor('price')}`}
             disabled={destroy}
@@ -56,6 +59,9 @@ module.exports = React.createClass({
           {this.errorFor('price')}
         </div>
         <div className="small-12 medium-4 columns">
+          <label className="string required hide-for-medium-up">
+            <abbr title="required">*</abbr>Quantity
+          </label>
           <input
             className={`quantity_input ${this.errorClassFor('quantity')}`}
             disabled={destroy}
