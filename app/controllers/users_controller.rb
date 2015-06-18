@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   def myaccount
     @user = policy_scope(User).find(current_user)
     active_nav(:my_user)
-    authorize @user
+    authorize @user, :edit?
     render 'edit'
   end
 

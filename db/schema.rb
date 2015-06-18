@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615210434) do
+ActiveRecord::Schema.define(version: 20150618155617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -310,6 +310,7 @@ ActiveRecord::Schema.define(version: 20150615210434) do
     t.boolean  "admin",                  default: false
     t.string   "user_permission",        default: "none", null: false
     t.string   "product_permission",     default: "none", null: false
+    t.string   "bakery_permission",      default: "none", null: false
   end
 
   add_index "users", ["bakery_id"], name: "index_users_on_bakery_id", using: :btree

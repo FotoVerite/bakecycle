@@ -65,6 +65,19 @@
         </div>
       </div>
     <% end %>
+
+    <% if policy(@user).manage_permission? %>
+      <div class="row">
+        <div class="large-6 small-12 columns">
+          <%= f.input(
+            :bakery_permission,
+            collection: user.access_level,
+            as: :select,
+            include_blank: false
+          ) %>
+        </div>
+      </div>
+    <% end %>
   </fieldset>
 
   <div class="row">

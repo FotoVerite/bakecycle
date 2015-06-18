@@ -12,11 +12,11 @@ class ApplicationPolicy
     false
   end
 
-  def show?
+  def create?
     false
   end
 
-  def create?
+  def show?
     false
   end
 
@@ -53,6 +53,8 @@ class ApplicationPolicy
       @user = user
       @scope = scope
     end
+
+    delegate :admin?, to: :user
 
     def resolve
       scope.none

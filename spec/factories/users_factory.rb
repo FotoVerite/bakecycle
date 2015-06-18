@@ -8,11 +8,13 @@ FactoryGirl.define do
     bakery
     user_permission 'manage'
     product_permission 'manage'
+    bakery_permission 'manage'
 
     trait :as_admin do
       admin true
       user_permission 'none'
       product_permission 'none'
+      bakery_permission 'none'
     end
   end
 end

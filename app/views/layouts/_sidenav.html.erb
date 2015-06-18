@@ -74,19 +74,19 @@
               </li>
             <% end %>
 
-            <% if policy(current_user).myaccount? %>
+            <% if policy(current_user).edit? %>
               <li class="<%= active_nav?(:my_account) %>">
                 <%= link_to('My Account', my_users_path) %>
               </li>
             <% end %>
 
-            <% if can? :manage, Bakery %>
+            <% if policy(Bakery).index? %>
               <li class="<%= active_nav?(:bakeries) %>">
                 <%= link_to('Bakeries', bakeries_path) %>
               </li>
             <% end %>
 
-            <% if current_bakery %>
+            <%if current_bakery && policy(current_bakery).edit? %>
               <li class="<%= active_nav?(:my_bakery) %>">
                 <%= link_to('My Bakery', my_bakeries_path) %>
               </li>

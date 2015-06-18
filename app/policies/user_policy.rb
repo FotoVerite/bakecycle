@@ -1,22 +1,22 @@
 class UserPolicy < ApplicationPolicy
   def index?
-    user.admin? || read_permission?
+    admin? || read_permission?
   end
 
   def show?
-    user.admin? || record_is_self? || (read_permission? && belongs_to_bakery?)
+    admin? || record_is_self? || (read_permission? && belongs_to_bakery?)
   end
 
   def create?
-    user.admin? || manage_bakery_record?
+    admin? || manage_bakery_record?
   end
 
   def new?
-    user.admin? || manage_permission?
+    admin? || manage_permission?
   end
 
   def update?
-    user.admin? || record_is_self? || manage_bakery_record?
+    admin? || record_is_self? || manage_bakery_record?
   end
 
   def edit?
@@ -24,22 +24,19 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? || record_is_self? || manage_bakery_record?
-  end
-
-  def myaccount?
-    record_is_self?
+    admin? || record_is_self? || manage_bakery_record?
   end
 
   def manage_permission?
-    user.admin? || user.user_permission == 'manage'
+    admin? || user.user_permission == 'manage'
   end
 
   def permitted_attributes
     attributes = [:name, :email, :password, :password_confirmation]
-    attributes << :bakery_id if user.admin?
+    attributes << :bakery_id if admin?
     attributes << :user_permission if manage_permission?
     attributes << :product_permission if manage_permission?
+    attributes << :bakery_permission if manage_permission?
     attributes
   end
 
@@ -59,7 +56,7 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope.all if user.admin?
+      return scope.all if admin?
       return scope.none unless user.bakery
       return scope.where(bakery_id: user.bakery_id) if read_permission?
       scope.where(id: user.id)

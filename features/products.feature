@@ -46,16 +46,16 @@ Feature: Products
     Then I should see confirmation that the product "sugar cookie" was deleted
     And The product "sugar cookie" should not be present
 
-    Scenario: As a user with read access to products
-      Given I am logged in as an user with product "read" access with a bakery called "biencuit"
-      And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
-      When I go to the "products" page
-      Then I should see a list of products including "baguette cookie" and "donut tart"
-      When I click on "baguette cookie"
-      Then "You are not authorized to access this page." should be present
+  Scenario: As a user with read access to products
+    Given I am logged in as an user with product "read" access with a bakery called "biencuit"
+    And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    When I go to the "products" page
+    Then I should see a list of products including "baguette cookie" and "donut tart"
+    When I click on "baguette cookie"
+    Then "You are not authorized to access this page." should be present
 
-    Scenario: As a user with none access to products
-      Given I am logged in as an user with product "none" access with a bakery called "biencuit"
-      And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
-      When I go to the "products" page
-      Then "You are not authorized to access this page." should be present
+  Scenario: As a user with none access to products
+    Given I am logged in as an user with product "none" access with a bakery called "biencuit"
+    And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    When I go to the "products" page
+    Then "You are not authorized to access this page." should be present

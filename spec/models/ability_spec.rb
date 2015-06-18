@@ -6,35 +6,6 @@ describe Ability do
   let(:ability) { Ability.new(user) }
   let(:competitor) { build(:user) }
 
-  describe 'managing bakeries' do
-    it 'allows users to edit their own bakery' do
-      expect(ability).to be_able_to(:edit, user.bakery)
-      expect(ability).to be_able_to(:read, user.bakery)
-      expect(ability).to_not be_able_to(:destroy, user.bakery)
-      expect(ability).to_not be_able_to(:create, Bakery)
-      expect(ability).to_not be_able_to(:read, build(:bakery))
-    end
-
-    context 'no bakery' do
-      let(:user) { create(:user, bakery: nil) }
-      it "doesn't allow them to do anything" do
-        expect(ability).to_not be_able_to(:create, user.bakery)
-        expect(ability).to_not be_able_to(:read, user.bakery)
-        expect(ability).to_not be_able_to(:update, user.bakery)
-        expect(ability).to_not be_able_to(:delete, user.bakery)
-        expect(ability).to_not be_able_to(:manage, user.bakery)
-      end
-    end
-
-    context 'admin' do
-      let(:user) { create(:user, :as_admin) }
-      it 'allows them to do anything' do
-        expect(ability).to be_able_to(:manage, user.bakery)
-        expect(ability).to be_able_to(:manage, build(:bakery))
-      end
-    end
-  end
-
   describe 'managing clients' do
     let(:client) { create(:client, bakery: user.bakery) }
     let(:competitor_client) { create(:client, bakery: competitor.bakery) }
