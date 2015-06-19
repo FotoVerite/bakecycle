@@ -11,7 +11,7 @@ class RecipesController < ApplicationController
   end
 
   def new
-    @recipe = policy_scope(Recipe).build
+    @recipe = policy_scope(Recipe).build(recipe_type: :dough)
     authorize @recipe
   end
 
@@ -56,7 +56,7 @@ class RecipesController < ApplicationController
   def recipe_params
     params.require(:recipe).permit(
       :name, :note, :mix_size, :mix_size_unit, :recipe_type, :lead_days,
-      recipe_items_attributes: [:id, :inclusionable_id_type, :bakers_percentage, :_destroy]
+      recipe_items_attributes: [:id, :inclusionable_id_type, :bakers_percentage, :sort_id, :_destroy]
     )
   end
 end

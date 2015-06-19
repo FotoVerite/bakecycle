@@ -20,19 +20,16 @@ module.exports = React.createClass({
   },
 
   toggleDestroy: function() {
-    this.props.store.toggleDestroy(this.props.index);
+    this.props.store.toggleDestroy(this.props._id);
   },
 
-  updatePrice: function(event) {
-    this.props.store.updateField(this.props.index, 'price', event.target.value);
-  },
-
-  updateQuantity: function(event) {
-    this.props.store.updateField(this.props.index, 'quantity', event.target.value);
+  updateField: function(event) {
+    var field = event.target.dataset.field;
+    this.props.store.updateField(this.props._id, field, event.target.value);
   },
 
   render: function() {
-    var {price, quantity, id, index, destroy} = this.props;
+    var { price, quantity, id, index, destroy } = this.props;
     var namePrefix = `product[price_variants_attributes][${index}]`;
     var backgroundStyle = destroy ? {backgroundColor: 'lightgrey'} : {};
 
@@ -48,10 +45,11 @@ module.exports = React.createClass({
             <abbr title="required">*</abbr>Price
           </label>
           <input
+            data-field="price"
             className={`price_input ${this.errorClassFor('price')}`}
             disabled={destroy}
             name={`${namePrefix}[price]`}
-            onChange={this.updatePrice}
+            onChange={this.updateField}
             placeholder="0.00"
             style={backgroundStyle}
             type="text"
@@ -63,10 +61,11 @@ module.exports = React.createClass({
             <abbr title="required">*</abbr>Quantity
           </label>
           <input
+            data-field="quantity"
             className={`quantity_input ${this.errorClassFor('quantity')}`}
             disabled={destroy}
             name={`${namePrefix}[quantity]`}
-            onChange={this.updateQuantity}
+            onChange={this.updateField}
             placeholder="0"
             style={backgroundStyle}
             type="text"

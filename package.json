@@ -5,16 +5,21 @@
   "license": "proprietary",
   "description": "Painless Bakery Operations",
   "homepage": "https://www.bakecycle.com",
+  "engines": {
+    "node": "0.12.x"
+  },
   "scripts": {
     "test": "npm run jscs && npm run jsxhint",
     "jscs": "find app/assets/javascripts -name '*.js*' | xargs jscs",
     "jsxhint": "find app/assets/javascripts -name '*.js*' | xargs jsxhint"
   },
   "dependencies": {
+    "backbone": "^1.2.1",
     "browserify": "^10.2.4",
     "browserify-incremental": "^3.0.1",
     "react": "^0.13.3",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "esprima-fb": "^15001.1.0-dev-harmony-fb",

@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 20150618155617) do
     t.decimal  "bakers_percentage",  default: 0.0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sort_id"
   end
 
   add_index "recipe_items", ["recipe_id", "inclusionable_type", "inclusionable_id"], name: "index_recipe_items_on_recipe_id_and_inclusionable", using: :btree

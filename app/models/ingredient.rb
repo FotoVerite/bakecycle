@@ -12,4 +12,8 @@ class Ingredient < ActiveRecord::Base
   def self.policy_class
     ProductPolicy
   end
+
+  def total_lead_days
+    0
+  end
 end
