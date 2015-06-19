@@ -33,11 +33,12 @@ describe Bakery do
 
   describe '#logo_local_file' do
     it 'gives the path of the logo' do
-      bakery = build(:bakery, :with_logo)
+      bakery = create(:bakery, :with_logo)
       expect(bakery.logo_local_file).to include('.png')
     end
 
     it 'returns nil with no logo' do
+      bakery = create(:bakery)
       expect(bakery.logo_local_file).to be_nil
     end
   end

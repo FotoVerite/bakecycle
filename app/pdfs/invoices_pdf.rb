@@ -7,8 +7,7 @@ class InvoicesPdf < BasePdfReport
 
   def setup
     @shipments.each do |shipment|
-      start_new_page
-      InvoicePage.new(shipment, @bakery, self).setup
+      InvoicePage.new(shipment, @bakery, self).render
     end
     timestamp
   end

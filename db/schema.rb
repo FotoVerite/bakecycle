@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150618155617) do
+ActiveRecord::Schema.define(version: 20150619162907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 20150618155617) do
     t.decimal  "bakers_percentage",  default: 0.0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "sort_id"
+    t.integer  "sort_id",            default: 0,   null: false
   end
 
   add_index "recipe_items", ["recipe_id", "inclusionable_type", "inclusionable_id"], name: "index_recipe_items_on_recipe_id_and_inclusionable", using: :btree

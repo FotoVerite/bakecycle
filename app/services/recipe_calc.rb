@@ -7,13 +7,14 @@ class RecipeCalc
   end
 
   def ingredients_info
-    recipe.recipe_items.map do |item|
+    recipe.recipe_items.sort_by(&:sort_id).map do |item|
       {
         parent_recipe: recipe,
         inclusionable: item.inclusionable,
         weight: weight_for(item),
         bakers_percentage: item.bakers_percentage,
-        inclusionable_type: item.inclusionable_type
+        inclusionable_type: item.inclusionable_type,
+        sort_id: item.sort_id
       }
     end
   end

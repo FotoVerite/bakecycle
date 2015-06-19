@@ -8,13 +8,15 @@ class RecipeDataPage
     @display_precision = 3
   end
 
-  def method_missing(method, *args, &block)
-    @pdf.send(method, *args, &block)
-  end
-
-  def render_recipe
+  def render
     start_new_page
     page_layout
+  end
+
+  private
+
+  def method_missing(method, *args, &block)
+    @pdf.send(method, *args, &block)
   end
 
   def page_layout
@@ -162,7 +164,6 @@ class RecipeDataPage
   end
 
   def ingredients_data
-    header = ['Ingredient', 'Baker %', 'Wt / Bowl']
     rows = recipe_run_data.ingredients.map do |ingredient_info|
       [
         ingredient_info[:inclusionable].name,
@@ -170,7 +171,7 @@ class RecipeDataPage
         display_weight(recipe_run_data.bowl_ingredient_weight(ingredient_info))
       ]
     end
-    rows.unshift(header)
+    rows.unshift(['Ingredient', 'Baker %', 'Wt / Bowl'])
   end
 
   def ingredients_table
@@ -244,11 +245,9 @@ class RecipeDataPage
       ["Bowl Weight x #{recipe_run_data.mix_bowl_count}", display_weight(recipe_run_data.weight)]
     ]
   end
-end
 
-private
-
-def display_weight(weight)
-  weight.round(display_precision).to_s
+  def display_weight(weight)
+    weight.round(display_precision).to_s
+  end
 end
 # rubocop:enable Metrics/ClassLength
