@@ -6,17 +6,20 @@ class PackingSlipPage
     @shipment_items = shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
   end
 
-  def method_missing(method, *args, &block)
-    @pdf.send(method, *args, &block)
-  end
-
-  def setup
+  def render
+    start_new_page
     packing_slip_header_stamp
     addresses
     packing_slip_info
     notes
     shipment_items_table
     pieces_shipped
+  end
+
+  private
+
+  def method_missing(method, *args, &block)
+    @pdf.send(method, *args, &block)
   end
 
   def packing_slip_header_stamp

@@ -1,8 +1,8 @@
 class PackingSlipsPdf < BasePdfReport
-  def initialize(shipments, bakery, invoices = false)
+  def initialize(shipments, bakery, print_invoices = false)
     @shipments = shipments
     @bakery = bakery.decorate
-    @invoices = invoices
+    @print_invoices = print_invoices
     super(skip_page_creation: true)
   end
 
@@ -15,13 +15,11 @@ class PackingSlipsPdf < BasePdfReport
   end
 
   def render_packing_slip(shipment)
-    start_new_page
-    PackingSlipPage.new(shipment, @bakery, self).setup
+    PackingSlipPage.new(shipment, @bakery, self).render
   end
 
   def render_invoice(shipment)
-    return unless @invoices
-    start_new_page
-    InvoicePage.new(shipment, @bakery, self).setup
+    return unless @print_invoices
+    InvoicePage.new(shipment, @bakery, self).render
   end
 end

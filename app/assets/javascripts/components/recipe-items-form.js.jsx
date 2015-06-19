@@ -20,13 +20,8 @@ module.exports = React.createClass({
     }
   },
 
-  sortedItems: function() {
-    return this.props.recipeItems.sortBy((item) => { return Number(item.sortId); });
-  },
-
   dragStart: function(e) {
     this.dragged = e.target;
-
     this.draggedOver = false;
     e.dataTransfer.effectAllowed = 'move';
     // Firefox requires calling dataTransfer.setData
@@ -68,7 +63,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var fields = this.sortedItems().map((item, index) => {
+    var fields = this.props.recipeItems.map((item, index) => {
       return (<RecipeItemFields
         {...item}
         key={item._id}

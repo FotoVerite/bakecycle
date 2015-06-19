@@ -5,17 +5,20 @@ class InvoicePage
     @pdf = pdf
   end
 
-  def method_missing(method, *args, &block)
-    @pdf.send(method, *args, &block)
-  end
-
-  def setup
+  def render
+    start_new_page
     invoice_header_stamp
     addresses
     note
     information
     shipment_items
     totals
+  end
+
+  private
+
+  def method_missing(method, *args, &block)
+    @pdf.send(method, *args, &block)
   end
 
   def invoice_header_stamp
@@ -97,8 +100,6 @@ class InvoicePage
   def totals_row
     [['Subtotal:', @shipment.subtotal], ['Delivery Fee:', @shipment.delivery_fee], ['Total:', @shipment.price]]
   end
-
-  private
 
   def note
     notes_data if @shipment.note.present?

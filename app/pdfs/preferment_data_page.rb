@@ -6,13 +6,15 @@ class PrefermentDataPage
     @display_precision = 3
   end
 
-  def method_missing(method, *args, &block)
-    @pdf.send(method, *args, &block)
-  end
-
-  def render_preferment
+  def render
     start_new_page
     page_layout
+  end
+
+  private
+
+  def method_missing(method, *args, &block)
+    @pdf.send(method, *args, &block)
   end
 
   def page_layout
@@ -67,8 +69,6 @@ class PrefermentDataPage
     rows += bowl_info
     rows.unshift(header)
   end
-
-  private
 
   def display_weight(weight)
     weight.round(@display_precision).to_s

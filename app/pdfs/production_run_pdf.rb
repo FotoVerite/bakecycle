@@ -5,11 +5,13 @@ class ProductionRunPdf < BasePdfReport
     super()
   end
 
+  private
+
   def setup
     header_stamp
     production_run_info
     products
-    body
+    recipes
     timestamp
     run_stamp
   end
@@ -42,9 +44,12 @@ class ProductionRunPdf < BasePdfReport
     text "#{@run_data.start_date} - #{@run_data.end_date}"
   end
 
-  def body
-    return recipe_data_with_single_preferment_page if @bakery.group_preferments
-    recipe_data_with_preferments
+  def recipes
+    if @bakery.group_preferments
+      recipe_data_with_single_preferment_page
+    else
+      recipe_data_with_preferments
+    end
   end
 
   def display_weight(weight)
@@ -83,22 +88,20 @@ class ProductionRunPdf < BasePdfReport
     rows.unshift(header)
   end
 
-  private
-
   def recipe_data_with_single_preferment_page
     @run_data.recipes_without_preferments.each do |motherdough|
-      RecipeDataPage.new(self, motherdough).render_recipe
+      RecipeDataPage.new(self, motherdough).render
     end
-    render_preferment_page
+    render_preferment_pages
   end
 
   def recipe_data_with_preferments
     @run_data.recipes.each do |motherdough|
-      RecipeDataPage.new(self, motherdough).render_recipe
+      RecipeDataPage.new(self, motherdough).render
     end
   end
 
-  def render_preferment_page
-    PrefermentDataPage.new(self, @run_data.preferments).render_preferment if @run_data.preferments.any?
+  def render_preferment_pages
+    PrefermentDataPage.new(self, @run_data.preferments).render if @run_data.preferments.any?
   end
 end
