@@ -1,16 +1,14 @@
 Feature: Bakery
 
-  Background:
+  @javascript
+  Scenario: As an Admin, I can manage bakeries
     Given I am logged in as an admin
-
-  Scenario: As an Admin, I can view all bakeries
     Given there are bakeries named "Biencuit","Grumpy" and "Wonder"
     And I am on the "bakeries" page
     Then I should see a list of bakeries including "Biencuit", "Grumpy" and "Wonder"
     When I click on "Wonder"
     Then I should see "Bakery" information about "Wonder"
 
-  Scenario: As an Admin, I can create a Bakery
     Given I am on the "bakeries" page
     When I click on "Add New Bakery"
     And I fill out Bakery form with valid data
@@ -18,8 +16,6 @@ Feature: Bakery
     And I click on "Create"
     Then "You have created" should be present
 
-  Scenario: As an Admin, I can edit a Bakery
-    Given there is a bakery named "Grumpy"
     And I am on the edit page for "Grumpy" bakery
     When I change the bakery name to "Cheeky's"
     And I click on "Update"
@@ -29,24 +25,29 @@ Feature: Bakery
     And "Cheeky's" should be present
     And "Grumpy" should not be present
 
-  @javascript
-  Scenario: As an Admin, I can delete a Bakery
-    Given there is a bakery named "Wonder"
     And I am on the edit page for "Wonder" bakery
     When I click on "Delete"
     And I confirm popup
     Then I should see confirmation the bakery was deleted
     And the bakery "Wonder" should not be present
 
-  Scenario: As a User, I can see my bakery
-    Given I am logged in as a user with a bakery called "Wizard"
-    And I am on the "bakeries" page
-    When I click on "Wizard"
-    Then I should see "Bakery" information about "Wizard"
+  Scenario: As a User, with manage access to my bakery
+    Given I am logged in as an user with bakery "manage" access with a bakery called "biencuit"
+    When I visit my bakery
+    Then "Update" button should be present
+    And "Delete" link should not be present
 
-  @javascript
-  Scenario: As a User, I cannot see another bakery
-    Given I am logged in as a user with a bakery called "Wizard"
-    And there is a bakery named "Grumpy"
-    And I go to the "Grumpy" edit bakery page
+    When I change the bakery name to "Cheeky's"
+    And I click on "Update"
+    Then I should see that the bakery name is "Cheeky's"
+
+  Scenario: As a User, with read access to my bakery
+    Given I am logged in as an user with bakery "read" access with a bakery called "biencuit"
+    When I visit my bakery
+    Then "Update" button should not be present
+    And "Delete" link should not be present
+
+  Scenario: As a User, with none access to my bakery
+    Given I am logged in as an user with bakery "none" access with a bakery called "biencuit"
+    And I am on the "bakeries" page
     Then "You are not authorized to access this page." should be present

@@ -2,7 +2,7 @@
 
 <h1>Editing Bakery: <%= @bakery.name %></h1>
 
-<% if can? :manage, Bakery %>
+<% if policy(Bakery).index? %>
   <%= link_to "Back", bakeries_path, class: "button small" %>
 <% end %>
 

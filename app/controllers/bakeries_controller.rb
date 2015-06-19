@@ -1,19 +1,26 @@
 class BakeriesController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
+  before_action :set_bakery, only: [:edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped
   decorates_assigned :bakeries, :bakery
 
   def index
+    authorize Bakery
+    @bakeries = policy_scope(Bakery)
   end
 
   def new
-    @bakery = Bakery.new(
+    @bakery = policy_scope(Bakery).build(
       kickoff_time: Chronic.parse('2 pm'),
       quickbooks_account: 'Sales:Sales - Wholesale'
     )
+    authorize @bakery
   end
 
   def create
+    @bakery = policy_scope(Bakery).build(bakery_params)
+    authorize @bakery
     if @bakery.save
       create_demo_data
       flash[:notice] = "You have created #{@bakery.name}."
@@ -24,15 +31,11 @@ class BakeriesController < ApplicationController
   end
 
   def edit
-  end
-
-  def mybakery
-    active_nav(:my_bakery)
-    @bakery = current_bakery
-    render 'edit'
+    authorize @bakery
   end
 
   def update
+    authorize @bakery
     if @bakery.update(bakery_params)
       flash[:notice] = "You have updated #{@bakery.name}."
       redirect_to edit_bakery_path(@bakery)
@@ -42,15 +45,27 @@ class BakeriesController < ApplicationController
   end
 
   def destroy
+    authorize @bakery
     @bakery.destroy!
     flash[:notice] = "You have deleted #{@bakery.name}"
     redirect_to bakeries_path
+  end
+
+  def mybakery
+    @bakery = policy_scope(Bakery).find(current_bakery)
+    active_nav(:my_bakery)
+    authorize @bakery, :edit?
+    render 'edit'
   end
 
   private
 
   def create_demo_data
     DemoCreator.new(@bakery).run if params[:set_demo_data]
+  end
+
+  def set_bakery
+    @bakery = policy_scope(Bakery).find(params[:id])
   end
 
   def bakery_params

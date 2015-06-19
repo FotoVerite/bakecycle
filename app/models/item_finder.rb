@@ -6,7 +6,7 @@ class ItemFinder
   end
 
   def bakeries
-    Bakery.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Bakery)
   end
 
   def clients

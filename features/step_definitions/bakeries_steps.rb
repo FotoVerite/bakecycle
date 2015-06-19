@@ -63,3 +63,25 @@ Given(/^I go to the "(.*?)" edit bakery page$/) do |name|
   bakery = Bakery.find_by(name: name)
   visit edit_bakery_path(bakery)
 end
+
+When(/^I visit my bakery$/) do
+  visit my_bakeries_path
+end
+
+Then(/^"(.*?)" link should not be present$/) do |name|
+  has_no_link?(name)
+end
+
+Then(/^"(.*?)" button should be present$/) do |name|
+  has_button?(name)
+end
+
+Then(/^"(.*?)" button should not be present$/) do |name|
+  has_no_button?(name)
+end
+
+Given(/^I am logged in as an user with bakery "(.*?)" access with a bakery called "(.*?)"$/) do |access, name|
+  bakery = create(:bakery, name: name)
+  user = create(:user, bakery: bakery, bakery_permission: access)
+  login_as(user, scope: :user)
+end
