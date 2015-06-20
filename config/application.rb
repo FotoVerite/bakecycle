@@ -40,8 +40,12 @@ module Bakecycle
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/
 
     config.generators do |g|
-      g.factory_girl true
-      g.test_framework :rspec
+      g.factory_girl    true
+      g.test_framework  :rspec
+      g.stylesheets     false
+      g.javascripts     false
+      g.helper          false
+      g.decorator       false
     end
 
     ActionMailer::Base.smtp_settings = {

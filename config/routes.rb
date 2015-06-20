@@ -56,6 +56,10 @@ Rails.application.routes.draw do
     resources :run_items
   end
 
+  namespace :api do
+    resources :file_exports, only: [:show]
+  end
+
   # If user is not an admin it 404s the resque request
   resque_web_constraint = lambda do |request|
     current_user = request.env['warden'].user

@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
   before_action :active_nav
+  before_action :default_side_nav
   before_action :resque_no_worker if Rails.env.development?
   helper_method :current_bakery
   helper_method :item_finder
@@ -11,6 +12,14 @@ class ApplicationController < ActionController::Base
 
   def active_nav(name = nil)
     @_active_nav = name || controller_name.to_sym
+  end
+
+  def default_side_nav
+    @_render_side_nav = user_signed_in?
+  end
+
+  def render_side_nav(render = true)
+    @_render_side_nav = render
   end
 
   def current_bakery

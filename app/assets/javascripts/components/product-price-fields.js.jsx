@@ -31,6 +31,7 @@ module.exports = React.createClass({
   render: function() {
     var { price, quantity, id, index, destroy } = this.props;
     var namePrefix = `product[price_variants_attributes][${index}]`;
+    var idPrefix = `product_price_variant_${index}`;
     var backgroundStyle = destroy ? {backgroundColor: 'lightgrey'} : {};
 
     var undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
@@ -41,10 +42,11 @@ module.exports = React.createClass({
       <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
       <div className="row collapse">
         <div className="small-12 medium-4 columns">
-          <label className="string required hide-for-medium-up">
+          <label htmlFor={`${idPrefix}_price`} className="string required hide-for-medium-up">
             <abbr title="required">*</abbr>Price
           </label>
           <input
+            id={`${idPrefix}_price`}
             data-field="price"
             className={`price_input ${this.errorClassFor('price')}`}
             disabled={destroy}
@@ -57,10 +59,11 @@ module.exports = React.createClass({
           {this.errorFor('price')}
         </div>
         <div className="small-12 medium-4 columns">
-          <label className="string required hide-for-medium-up">
+          <label htmlFor={`${idPrefix}_quantity`} className="string required hide-for-medium-up">
             <abbr title="required">*</abbr>Quantity
           </label>
           <input
+            id={`${idPrefix}_quantity`}
             data-field="quantity"
             className={`quantity_input ${this.errorClassFor('quantity')}`}
             disabled={destroy}
