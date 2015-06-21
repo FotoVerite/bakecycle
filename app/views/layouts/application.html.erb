@@ -14,7 +14,7 @@
       <div class="large-12 columns content-bg">
         <%= render 'layouts/topmenusection' %>
         <div class="row">
-          <% if user_signed_in? %>
+          <% if render_side_nav? %>
             <%= render 'layouts/sidenav' %>
           <% end %>
           <div class= "<%= class_for_main_content %>">
