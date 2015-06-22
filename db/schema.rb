@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150619162907) do
+ActiveRecord::Schema.define(version: 20150622182702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20150619162907) do
     t.datetime "last_kickoff"
     t.string   "quickbooks_account",                null: false
     t.boolean  "group_preferments",  default: true
+    t.integer  "plan_id",                           null: false
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree
@@ -142,6 +143,15 @@ ActiveRecord::Schema.define(version: 20150619162907) do
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
+
+  create_table "plans", force: :cascade do |t|
+    t.string   "name",         null: false
+    t.string   "display_name", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plans", ["name"], name: "index_plans_on_name", unique: true, using: :btree
 
   create_table "price_variants", force: :cascade do |t|
     t.integer  "product_id",               null: false
@@ -318,6 +328,7 @@ ActiveRecord::Schema.define(version: 20150619162907) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "bakeries", "plans"
   add_foreign_key "clients", "bakeries", name: "clients_bakery_id_fk"
   add_foreign_key "file_exports", "bakeries", on_delete: :cascade
   add_foreign_key "ingredients", "bakeries", name: "ingredients_bakery_id_fk"

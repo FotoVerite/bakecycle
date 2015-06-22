@@ -3,7 +3,7 @@ Feature: Bakery
   @javascript
   Scenario: As an Admin, I can manage bakeries
     Given I am logged in as an admin
-    Given there are bakeries named "Biencuit","Grumpy" and "Wonder"
+    And there are bakeries named "Biencuit","Grumpy" and "Wonder"
     And I am on the "bakeries" page
     Then I should see a list of bakeries including "Biencuit", "Grumpy" and "Wonder"
     When I click on "Wonder"

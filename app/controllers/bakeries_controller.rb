@@ -13,7 +13,8 @@ class BakeriesController < ApplicationController
   def new
     @bakery = policy_scope(Bakery).build(
       kickoff_time: Chronic.parse('2 pm'),
-      quickbooks_account: 'Sales:Sales - Wholesale'
+      quickbooks_account: 'Sales:Sales - Wholesale',
+      plan_id: Plan.find_or_create_by(name: 'beta_large', display_name: 'large_bakery').id
     )
     authorize @bakery
   end
@@ -81,7 +82,8 @@ class BakeriesController < ApplicationController
       :address_zipcode,
       :kickoff_time,
       :quickbooks_account,
-      :group_preferments
+      :group_preferments,
+      :plan_id
     )
   end
 end
