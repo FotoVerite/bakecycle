@@ -118,13 +118,20 @@ class RecipeDataPage
   end
 
   def products_table_total_weight
-    table(products_total_weight_data, position: :right, column_widths: 52, cell_style: BasePdfReport::TABLE_STYLE) do
-      column(0).style(align: :center)
+    table(
+      products_total_weight_data,
+      position: :right,
+      column_widths: [32, 52],
+      cell_style: BasePdfReport::TABLE_STYLE
+    ) do
+      column(0).style(font_style: :bold, align: :right)
+      column(0).borders = []
+      column(1).style(align: :center)
     end
   end
 
   def products_total_weight_data
-    [[display_weight(recipe_run_data.products_total_weight)]]
+    [['Total', display_weight(recipe_run_data.products_total_weight)]]
   end
 
   def inclusion_tables
@@ -232,10 +239,9 @@ class RecipeDataPage
   def totals
     move_down 10
     table(totals_info, position: :right, column_widths: [215, 61], cell_style: BasePdfReport::TABLE_STYLE) do
-      cells.borders = []
       column(0).style(font_style: :bold, align: :right)
+      column(0).borders = []
       column(1).style(align: :center)
-      column(1).borders = [:top, :right, :bottom, :left]
     end
   end
 
