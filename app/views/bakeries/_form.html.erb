@@ -112,6 +112,7 @@
 
   <div class="row">
     <div class="small-12 columns">
+      <%= f.input :plan_id, as: :hidden%>
       <% if policy(current_user).update? %>
         <%= f.submit (@bakery.new_record? ? "Create" : "Update"), class: "button", name: nil %>
       <% end %>

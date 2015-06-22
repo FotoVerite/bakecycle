@@ -16,13 +16,18 @@ namespace :db do
     Ingredient.destroy_all
     User.destroy_all
     Bakery.destroy_all
+    Plan.destroy_all
 
     Rails.application.eager_load! # load all classes
     ActiveRecord::Base.descendants.reverse.map(&:destroy_all) # DESTROY ALL CLASSES
     puts 'Dev Data Destroyed'
 
-    biencuit = FactoryGirl.create(:bakery, :with_logo, name: 'Bien Cuit')
-    grumpy = FactoryGirl.create(:bakery, name: 'Grumpy')
+    FactoryGirl.create(:plan, name: 'beta_small', display_name: 'Small Bakery')
+    FactoryGirl.create(:plan, name: 'beta_medium', display_name: 'Medium Bakery')
+    beta_large = FactoryGirl.create(:plan, name: 'beta_large', display_name: 'Large Bakery')
+
+    biencuit = FactoryGirl.create(:bakery, :with_logo, name: 'Bien Cuit', plan: beta_large)
+    grumpy = FactoryGirl.create(:bakery, name: 'Grumpy', plan: beta_large)
 
     FactoryGirl.create(:user, :as_admin, email: 'admin@example.com', bakery: nil)
     FactoryGirl.create(:user, :as_admin, email: 'admin@bakecycle.com', bakery: nil)

@@ -29,6 +29,7 @@ describe Bakery do
     expect(bakery).to validate_presence_of(:name)
     expect(bakery).to validate_length_of(:name).is_at_most(150)
     expect(bakery).to validate_uniqueness_of(:name)
+    expect(bakery).to validate_presence_of(:plan)
   end
 
   describe '#logo_local_file' do

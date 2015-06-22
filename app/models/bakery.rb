@@ -12,7 +12,10 @@ class Bakery < ActiveRecord::Base
   has_many :shipment_items, through: :shipments
   has_many :order_items, through: :orders
 
+  belongs_to :plan
+
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
+  validates :plan, presence: true
   has_attached_file :logo, styles: { invoice: ['1800x200>', :png], thumb: ['300x200>', :png] }
   validates_attachment :logo, content_type: { content_type: %r{\Aimage/(jpeg|png|tiff|bmp)$} }
 
