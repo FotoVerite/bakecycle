@@ -1,34 +1,36 @@
 <section class="marketing-footer">
-  <div class="row">
-    <div class="small-12 large-4 columns left-section">
+  <div class="row full-width">
+    <div class="small-12 medium-12 large-3 columns logo left-section">
       <%= link_to root_path do %>
-        <%= image_tag 'marketing/home/heading_logo@2x.png', alt: 'Wholesale Bakery Management', class: "logo" %>
+        <%= image_tag 'marketing/home/bakecycle-logo.svg', alt: 'Wholesale Bakery Management' %>
       <% end %>
-      <p class="message">
-        <span class="strong">BakeCycle</span>
-          is a collaboration of <a class="underlined-link" href="http://www.wizarddevelopment.com" target="_blank">Wizard Development</a> and <a class="underlined-link" href="http://www.biencuit.com" target="_blank">Bien Cuit</a>.
-        Copyright &copy; 2015 Wizard Development, LLC.
-      </p>
     </div>
 
-    <div class="small-12 large-8 columns right-section">
+    <div class="small-12 medium-12 large-offset-6 large-3 columns right-section">
       <div class="row">
-        <div class="small-12 column show-for-large-up">
-          <nav class="footer-nav">
+        <div class="small-12 column">
+          <nav class="header-nav">
             <ul>
-              <li><a>Home</a></li>
-              <li><a>About</a></li>
-              <li><a>Testimonials</a></li>
-              <li><a>Features</a></li>
-              <li><a>Pricing</a></li>
-              <li><a>Contact</a></li>
-              <li><a class="white-outline-btn" href="#">Request Demo</a></li>
+              <li><%= link_to("Open Beta", new_registration_path, class:"white-outline-btn")%></li>
             </ul>
           </nav>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="row full-width">
+    <div class="small-12 large-4 columns left-section">
+      <p class="message">
+        <span class="strong">BakeCycle</span>
+          is a collaboration of <a class="underlined-link" href="http://www.wizarddevelopment.com" target="_blank">Wizard Development</a> and <a class="underlined-link" href="http://www.biencuit.com" target="_blank">Bien Cuit</a>.<br>
+        Copyright &copy; 2015 Wizard Development, LLC.
+      </p>
+    </div>
+
+    <div class="small-12 large-5 columns middle-section">
       <div class="row">
-        <div class="small-12 medium-4 large-3 columns">
+        <div class="small-12 medium-4 columns">
           <p class="contact-info">
             <span>Sales:</span><br>
             <%= number_to_phone(6468872253, country_code: 1) %><br>
@@ -36,7 +38,7 @@
           </p>
         </div>
 
-        <div class="small-12 medium-4 large-3 columns">
+        <div class="small-12 medium-4 columns">
           <p class="contact-info">
             <span>Support:</span><br>
             <%= number_to_phone(6468872253, country_code: 1) %><br>
@@ -44,13 +46,27 @@
           </p>
         </div>
 
-        <div class="small-12 medium-4 large-3 columns end">
+        <div class="small-12 medium-4 columns end">
           <p class="contact-info">
-            BakeCycle:<br>
+            <span>BakeCycle:</span><br>
             64 Allen Street #5<br>
             New York, NY 10002
           </p>
         </div>
       </div>
+    </div>
+
+    <div class="small-12 large-3 columns right-section">
+      <div class="row">
+        <p class="footer-links">
+          <span>
+            <%= link_to "Privacy Policy", privacy_policy_path, class: "underlined-link" %>
+          </span>
+          <span>
+            <%= link_to "Terms of Service", terms_of_service_path, class: "underlined-link" %>
+          </span>
+        </p>
+      </div>
+    </div>
   </div>
 </section>

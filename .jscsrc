@@ -13,7 +13,6 @@
   "esnext": true,
   "esprima": "esprima-fb",
   "maximumLineLength": 120,
-  "requireCamelCaseOrUpperCaseIdentifiers": true,
   "requireCapitalizedConstructors": true,
   "requireCurlyBraces": true,
   "requireSpaceAfterBinaryOperators": true,

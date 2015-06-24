@@ -70,3 +70,17 @@ input[type="text"] {
     list-style-type: none;
   }
 }
+
+.underlined-link {
+  @include underline-link($bc-shakespeare);
+}
+
+.alert-box.alert {
+  background-color: $bc-alizarin-crimson;
+  border: 0;
+}
+
+.alert-box.success {
+  background-color: $bc-lima;
+  border: 0;
+}

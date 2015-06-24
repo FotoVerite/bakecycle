@@ -14,9 +14,9 @@ end
 When(/^I fill out recipe form with:$/) do |table|
   recipe = table.hashes[0]
   jquery_fill(
-    '[data-field="name"]' => recipe['name'],
+    '[name="recipe[name]"]' => recipe['name'],
     '[data-field="mixSize"]' => recipe['mix_size'],
-    '[data-field="leadDays"]' => recipe['lead_days'],
+    '[name="recipe[lead_days]"]' => recipe['lead_days'],
     '[data-field="note"]' => recipe['note'],
     '[data-field="mixSizeUnit"]' => recipe['mix_size_unit'],
     '[data-field="recipeType"]' => recipe['recipe_type']
@@ -24,7 +24,7 @@ When(/^I fill out recipe form with:$/) do |table|
 end
 
 When(/^I change the recipe name to "(.*?)"$/) do |name|
-  jquery_fill('[data-field="name"]' => name)
+  jquery_fill('[name="recipe[name]"]' => name)
 end
 
 Then(/^I should see that the recipe name is "(.*?)"$/) do |name|

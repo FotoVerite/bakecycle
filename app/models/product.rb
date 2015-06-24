@@ -31,6 +31,7 @@ class Product < ActiveRecord::Base
   validates :unit, presence: true
   validates :over_bake, numericality: true, presence: true
   validates :base_price, numericality: true, presence: true
+  validates :description, length: { maximum: 500 }
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?

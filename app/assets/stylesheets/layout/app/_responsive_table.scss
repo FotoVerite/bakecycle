@@ -153,8 +153,8 @@ $bp-xlarge: 75em;
     }
 
     th {
-      background-color: $bc-green;
-      border: 1px solid $bc-green;
+      background-color: $bc-shakespeare;
+      border: 1px solid $bc-shakespeare;
       color: $white;
       text-align: center;
 
@@ -213,7 +213,7 @@ $bp-xlarge: 75em;
     }
 
     tr {
-      border: 2px solid $bc-green;
+      border: 2px solid $bc-shakespeare;
       margin-bottom: 1em;
 
       @media (min-width: $bp-medium) {
@@ -234,7 +234,7 @@ $bp-xlarge: 75em;
     }
 
     th[scope="row"] {
-      background-color: $bc-green;
+      background-color: $bc-shakespeare;
       color: $white;
 
       @media (min-width: $bp-medium) {

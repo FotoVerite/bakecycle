@@ -1,6 +1,12 @@
+.landing-page-body {
+  background: $bc-white;
+}
+
 @import "components";
+@import "header";
 @import "hero";
 @import "about";
 @import "pricing";
 @import "cta_section";
+@import "terms_of_service";
 @import "footer";
