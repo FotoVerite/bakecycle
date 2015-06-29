@@ -5,13 +5,14 @@ class Ability
   def initialize(user)
     @user = user
     return unless user && user.persisted?
-
-    can :manage, Client, bakery_id: user.bakery.id if user.bakery
-    can :manage, Shipment, bakery_id: user.bakery.id if user.bakery
-    can :manage, Route, bakery_id: user.bakery.id if user.bakery
-    can :manage, Order, bakery_id: user.bakery.id if user.bakery
-    can :manage, ProductionRun, bakery_id: user.bakery.id if user.bakery
-    can :manage, FileExport, bakery_id: user.bakery.id if user.bakery
+    if user.bakery
+      can :manage, Client, bakery_id: user.bakery_id
+      can :manage, Shipment, bakery_id: user.bakery_id
+      can :manage, Route, bakery_id: user.bakery_id
+      can :manage, Order, bakery_id: user.bakery_id
+      can :manage, ProductionRun, bakery_id: user.bakery_id
+      can :manage, FileExport, bakery_id: user.bakery_id
+    end
     can :manage, :resque if user.admin?
   end
 end
