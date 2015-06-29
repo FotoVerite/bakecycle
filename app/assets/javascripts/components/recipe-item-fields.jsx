@@ -22,37 +22,39 @@ module.exports = React.createClass({
   },
 
   toggleDestroy: function() {
-    this.props.store.toggleDestroy(this.props._id);
+    var destroy = this.props.model.get('destroy');
+    this.props.model.set({ destroy: !destroy });
   },
 
   updateBakersPercentage: function(event) {
-    this.props.store.updateField(this.props._id, 'bakersPercentage', event.target.value);
+    this.props.model.set({ bakersPercentage: event.target.value });
   },
 
   updateInclusionableIdType: function(event) {
-    this.props.store.updateField(this.props._id, 'inclusionableIdType', event.target.value);
+    this.props.model.set({ inclusionableIdType: event.target.value });
   },
 
   updateSortId: function(event) {
-    this.props.store.updateField(this.props._id, 'sortId', event.target.value);
+    this.props.model.set({ sortId: event.target.value });
   },
 
   render: function() {
     var {
-      index,
-      id,
-      _id,
-      sortId,
-      bakersPercentage,
-      inclusionableIdType,
       availableInclusions,
-      inclusionableType,
-      totalLeadDays,
       dragEnd,
       dragStart,
-      destroy
+      model,
     } = this.props;
-    var namePrefix = `recipe[recipe_items_attributes][${index}]`;
+    var {
+      bakersPercentage,
+      id,
+      inclusionableIdType,
+      inclusionableType,
+      sortId,
+      destroy,
+      totalLeadDays,
+    } = model.toJSON();
+    var namePrefix = `recipe[recipe_items_attributes][${model.getNumericCID()}]`;
     var backgroundStyle = destroy ? { backgroundColor: 'lightgrey' } : {};
     var undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
     var removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
@@ -61,7 +63,7 @@ module.exports = React.createClass({
     });
 
     return (<div
-        data-id={_id}
+        data-id={model.cid}
         draggable="true"
         onDragEnd={dragEnd}
         onDragStart={dragStart}

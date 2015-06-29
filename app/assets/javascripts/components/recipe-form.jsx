@@ -2,32 +2,23 @@ var React = require('react');
 var RecipeItemsForm = require('./recipe-items-form');
 var RecipeItemStore = require('../stores/recipe-item-store');
 var RecipeStore = require('backbone').Model;
-var TextInput = require('./bakecycle-text-input');
-
+var BCTextInput = require('./bakecycle-text-input');
+var BCTextarea = require('./bakecycle-textarea');
+var BCSelect = require('./bakecycle-select');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var items = new RecipeItemStore(this.props.recipeItems);
-    this.addBlankForm(items);
-    items.onChange(() => { this.setState({items}); });
-
     var recipe = new RecipeStore(this.props);
-    recipe.on('change', () => { this.setState({recipe}); });
+    var items = new RecipeItemStore(this.props.recipeItems);
+    items.addBlankForm();
+    items.on('change sort remove', () => this.setState({items}));
+    recipe.on('change', () => this.setState({recipe}));
     return { items, recipe };
   },
 
-  addBlankForm: function(items) {
-    if (!items.length()) {
-      return items.add();
-    }
-    if (items.getLast().id) {
-      items.add();
-    }
-  },
-
   willReceiveProps: function(nextProps) {
-    this.state.items.updateAll(nextProps.recipeItems);
-    this.addBlankForm(this.state.items);
+    this.state.items.set(nextProps.recipeItems);
+    this.state.items.addBlankForm();
     this.state.recipe.set(nextProps);
   },
 
@@ -54,7 +45,7 @@ module.exports = React.createClass({
     return (
       <div className="row">
         <div className="small-4 columns end">
-        <TextInput
+        <BCTextInput
           model={recipe}
           field='leadDays'
           name='recipe[lead_days]'
@@ -82,93 +73,63 @@ module.exports = React.createClass({
 
   render: function() {
     var recipe = this.state.recipe;
-    var {
-      mixSize,
-      mixSizeUnit,
-      note,
-      recipeType
-    } = recipe.toJSON();
-
     return (<div>
       <fieldset>
         <legend>Recipe Information</legend>
         <div className="row">
           <div className="small-12 columns">
-            <TextInput
+            <BCTextInput
               model={recipe}
               field='name'
               name='recipe[name]'
               label='Name'
               required
-              error={this.props.errors.name} />
+              error={this.props.errors.name}
+            />
           </div>
         </div>
         <div className="row">
           <div className="small-12 columns">
-            <div className={`input text optional recipe_note ${this.errorClassFor('Note')}`}>
-              <label className="text optional" htmlFor="recipe_note">Note</label>
-              <textarea
-                id="recipe_note"
-                data-field="note"
-                className="text optional"
-                name="recipe[note]"
-                onChange={this.updateField}
-                value={note} >
-              </textarea>
-              {this.errorFor('note')}
-            </div>
+            <BCTextarea
+              model={recipe}
+              field='note'
+              name='recipe[note]'
+              label='Note'
+              error={this.props.errors.note}
+            />
           </div>
         </div>
         <div className="row">
           <div className="small-4 columns">
-            <div className={`input select required recipe_recipe_type ${this.errorClassFor('recipe_type')}`}>
-              <label className="select required" htmlFor="recipe_recipe_type">
-                Recipe type <abbr title="required">*</abbr>
-              </label>
-              <select
-                id="recipe_recipe_type"
-                data-field="recipeType"
-                value={recipeType}
-                onChange={this.updateField}
-                className="select required"
-                name="recipe[recipe_type]" >
-                {this.recipeTypeOptions()}
-              </select>
-              {this.errorFor('recipe_type')}
-            </div>
+            <BCSelect
+              model={recipe}
+              field="recipeType"
+              options={this.recipeTypeOptions()}
+              name="recipe[recipe_type]"
+              label="Recipe type"
+              required
+              error={this.props.errors.recipe_type} />
           </div>
           <div className="small-4 columns">
-            <div className={`input text optional recipe_mix_size ${this.errorClassFor('mix_size')}`}>
-              <label htmlFor="recipe_mix_size">Mix Size</label>
-              <input
-                id="recipe_mix_size"
-                data-field="mixSize"
-                className="input optional"
-                name='recipe[mix_size]'
-                onChange={this.updateField}
-                type="text"
-                value={mixSize} />
-              {this.errorFor('mix_size')}
-            </div>
+            <BCTextInput
+              model={recipe}
+              field='mixSize'
+              name='recipe[mix_size]'
+              label='Mix Size'
+              required
+              error={this.props.errors.mix_size} />
             <p className="help-text">
               * Pre-ferment mix bowls will match motherdough bowls when only included in one motherdough
             </p>
           </div>
           <div className="small-4 columns">
-            <div className={`input select required recipe_mix_size_unit ${this.errorClassFor('mix_size_unit')}`}>
-              <label className="select" htmlFor="recipe_mix_size_unit">Mix Units</label>
-              <select
-                id="recipe_mix_size_unit"
-                data-field="mixSizeUnit"
-                value={mixSizeUnit}
-                onChange={this.updateField}
-                className="select required"
-                name="recipe[mix_size_unit]"
-              >
-                {this.mixUnitsOptions()}
-              </select>
-              {this.errorFor('mix_size_unit')}
-            </div>
+            <BCSelect
+              model={recipe}
+              field="mixSizeUnit"
+              options={this.mixUnitsOptions()}
+              name="recipe[mix_size_unit]"
+              label="Mix Units"
+              error={this.props.errors.mix_size_unit} />
           </div>
         </div>
         {this.showLeadDays()}

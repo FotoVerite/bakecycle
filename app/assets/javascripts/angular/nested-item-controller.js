@@ -11,18 +11,9 @@
     };
 
     $scope.remove = function($event) {
-      var parentElementName, target;
       var removeField = $event.target.previousElementSibling;
       removeField.value = true;
-
-      parentElementName = 'fields';
-      target = $event.target;
-
-      while (target.className !== parentElementName) {
-        target = target.parentNode;
-      }
-
-      $(target).hide();
+      $($event.target).parents('.fields').hide();
     };
 
     $scope.getRandomId = function($index) {

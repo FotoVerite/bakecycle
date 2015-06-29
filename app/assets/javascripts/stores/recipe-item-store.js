@@ -1,46 +1,64 @@
-var ArrayStore = require('./array-store');
+var Backbone = require('backbone');
 var _ = require('underscore');
 
-module.exports = class RecipeStore extends ArrayStore {
-  constructor(initialCollection) {
-    super(initialCollection);
-  }
+var RecipeItem = Backbone.Model.extend({
+  defaults: function() {
+    var sortId = this.getNumericCID();
+    if (this.collection) {
+      sortId = this.collection.nextSortId();
+    }
+    return { sortId };
+  },
 
-  move(id, targetId, after) {
-    var movedItem = this.get(id);
-    var targetItem = this.get(targetId);
+  getNumericCID: function() {
+    return Number(this.cid.substring(1));
+  }
+});
+
+var RecipeItemStore = Backbone.Collection.extend({
+  initialize: function() {
+    this.on('change:destroy', this.onToggleDestroy);
+  },
+
+  onToggleDestroy: function(model) {
+    if (!model.id) {
+      this.remove(model);
+    }
+  },
+
+  model: RecipeItem,
+
+  move: function(cid, targetCid, after) {
+    var movedItem = this.get(cid);
+    var targetItem = this.get(targetCid);
     if (!movedItem || !targetItem) { return; }
-    var sorted = _.chain(this.collection)
-      .without(movedItem)
-      .sortBy((item) => { return Number(item.sortId); })
-      .value();
+    var sorted = this.without(movedItem);
     var newIndex = _.indexOf(sorted, targetItem);
     if (after) {
       newIndex = newIndex + 1;
     }
     sorted.splice(newIndex, 0, movedItem);
-    sorted.forEach((item, index) => { item.sortId = index; });
-    this.emitChange();
-  }
+    sorted.forEach((item, index) => item.set({sortId: index}, {silent: true}));
+    this.sort();
+  },
 
-  add(newItem, dontEmitChange) {
-    newItem = newItem || {};
-    if (newItem.sortId === undefined) {
-      newItem.sortId = this.nextSortId();
+  nextSortId: function() {
+    if (this.length === 0) { return 0; }
+    var lastItem = this.max(function(model) {return model.get('sortId');});
+    return Number(lastItem.get('sortId')) + 1;
+  },
+
+  comparator: 'sortId',
+
+  addBlankForm: function() {
+    if (this.length === 0) {
+      return this.add({});
     }
-    return super.add(newItem, dontEmitChange);
-  }
+    if (this.last().id) {
+      this.add({});
+    }
+  },
 
-  nextSortId() {
-    if (_.isEmpty(this.collection)) { return 0; }
-    return (_(this.collection)
-      .max(item => item.sortId)
-      .sortId + 1
-    );
-  }
+});
 
-  map() {
-    var sorted = this.sortBy(item => Number(item.sortId));
-    return sorted.map.apply(sorted, arguments);
-  }
-};
+module.exports = RecipeItemStore;
