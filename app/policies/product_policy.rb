@@ -1,6 +1,4 @@
 class ProductPolicy < ApplicationPolicy
-  attr_reader :user, :record
-
   def index?
     (admin? || read_permission?) && user.bakery
   end

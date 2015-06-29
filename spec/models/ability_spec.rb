@@ -127,28 +127,4 @@ describe Ability do
       end
     end
   end
-
-  describe 'managing file exports' do
-    let(:file_export) { create(:file_export, bakery: user.bakery) }
-    let(:competitor_file_export) { create(:file_export, bakery: competitor.bakery) }
-
-    it 'allows users to access production run from same bakery' do
-      file_export_2 = create(:file_export, bakery: user.bakery)
-      expect(FileExport.accessible_by(ability)).to contain_exactly(file_export, file_export_2)
-    end
-
-    it 'allows creation of shipment only for their own bakery' do
-      expect(ability).to be_able_to(:create, FileExport.new(bakery: user.bakery))
-      expect(ability).to_not be_able_to(:create, FileExport.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, FileExport)).to eq(bakery_id: user.bakery.id)
-    end
-
-    context 'admins' do
-      let(:user) { create(:user, :as_admin) }
-      it 'allows admins to see only their bakery shipments' do
-        file_export_2 = create(:file_export, bakery: user.bakery)
-        expect(FileExport.accessible_by(ability)).to contain_exactly(file_export, file_export_2)
-      end
-    end
-  end
 end

@@ -1,8 +1,6 @@
 class BakeriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_bakery, only: [:edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :verify_policy_scoped
   decorates_assigned :bakeries, :bakery
 
   def index

@@ -1,4 +1,6 @@
 class LandingPagesController < ApplicationController
+  before_action :skip_authorization, :skip_policy_scope
+
   def index
     expires_in 2.minutes, public: true
   end
