@@ -128,7 +128,7 @@
       <% end %>
     <% end %>
 
-    <% if can? :manage, Bakery %>
+    <% if policy(Bakery).index? %>
       <%= link_to bakeries_path do %>
         <div class="large-4 medium-6 small-12 columns end">
           <div class="stats border">
@@ -143,7 +143,7 @@
       <% end %>
     <% end %>
 
-    <% if can? :manage, :resque %>
+    <% if policy(:job).index? %>
       <%= resque_info_table %>
     <% end %>
   </div>
