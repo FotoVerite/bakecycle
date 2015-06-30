@@ -1,5 +1,6 @@
 class RoutesController < ApplicationController
   before_action :authenticate_user!
+  before_action :skip_authorization, :skip_policy_scope
   load_and_authorize_resource
   before_action :error_if_remaining_route, only: :destroy
   before_action :error_if_orders, only: :destroy

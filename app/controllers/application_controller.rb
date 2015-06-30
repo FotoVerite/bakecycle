@@ -4,11 +4,12 @@ class ApplicationController < ActionController::Base
   before_action :active_nav
   before_action :default_side_nav
   before_action :resque_no_worker if Rails.env.development?
+  after_action :verify_authorized, :verify_policy_scoped, unless: :devise_controller?
   helper_method :current_bakery
   helper_method :item_finder
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  rescue_from CanCan::AccessDenied, with: :user_not_authorized
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+  rescue_from CanCan::AccessDenied, with: :not_authorized
 
   def active_nav(name = nil)
     @_active_nav = name || controller_name.to_sym
@@ -50,7 +51,7 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
-  def user_not_authorized
+  def not_authorized
     flash[:alert] = 'You are not authorized to access this page.'
     redirect_to(request.referrer || redirect_path)
   end

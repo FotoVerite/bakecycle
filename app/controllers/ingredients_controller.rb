@@ -1,8 +1,6 @@
 class IngredientsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_ingredient, only: [:edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :verify_policy_scoped
 
   def index
     authorize Ingredient

@@ -1,5 +1,6 @@
 class DeliveryListsController < ApplicationController
   before_action :authenticate_user!
+  before_action :skip_authorization, :skip_policy_scope
 
   def index
     @recipes = ProductCounter.new(current_bakery, date_query)

@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_search_form, only: [:index, :active_orders]
+  before_action :skip_authorization, :skip_policy_scope
   load_and_authorize_resource
   decorates_assigned :orders, :order
 

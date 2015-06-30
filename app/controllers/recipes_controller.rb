@@ -1,8 +1,6 @@
 class RecipesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_recipe, only: [:edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :verify_policy_scoped
   decorates_assigned :recipes, :recipe
 
   def index

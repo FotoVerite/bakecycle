@@ -1,5 +1,6 @@
 class ProductionRunsController < ApplicationController
   before_action :authenticate_user!
+  before_action :skip_authorization, :skip_policy_scope
   load_and_authorize_resource
   decorates_assigned :production_runs, :production_run
 

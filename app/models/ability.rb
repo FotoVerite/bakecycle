@@ -11,7 +11,6 @@ class Ability
       can :manage, Route, bakery_id: user.bakery_id
       can :manage, Order, bakery_id: user.bakery_id
       can :manage, ProductionRun, bakery_id: user.bakery_id
-      can :manage, FileExport, bakery_id: user.bakery_id
     end
     can :manage, :resque if user.admin?
   end
