@@ -28,7 +28,7 @@ module Bakecycle
 
     # Browserify
     config.browserify_rails.source_map_environments = %w(development staging)
-    config.browserify_rails.commandline_options = '-t [reactify --es6 ] --extension=".js.jsx"'
+    config.browserify_rails.commandline_options = '-t [reactify --es6 ] --extension=".jsx"'
 
     # for bower stuff
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')

@@ -1,0 +1,68 @@
+<% provide(:title, "Registration") %>
+<section class="registration">
+  <div class="small-12 medium-10 medium-offset-1 large-8 large-offset-2 columns main-container">
+    <%= simple_form_for @registration do |f| %>
+      <div class="row">
+        <h1>Sign up for bakecycle</h1>
+        <p>
+          <label>Plan Type
+            <% if f.object.errors[:plan].any? %>
+              <span class="plan-type-error"><%= f.object.errors[:plan].first %></span>
+            <% end %>
+          </label>
+        </p>
+        <ul class="registration-button-group">
+          <% Plan.for_display.each do |plan| %>
+          <li>
+            <div class="registration-button">
+              <%= f.radio_button(:plan_id, plan.id) %>
+              <%= f.label(:plan_id, plan.display_name, value: plan.id) %>
+            </div>
+          </li>
+          <% end %>
+        </ul>
+
+        <p class="sign-up-message">Choose your plan. Don't worry! You won't be charged until the end of your trial.</p>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="basic-info-container">
+          <h2>Your Basic Information</h2>
+
+          <div class="row">
+            <div class="small-12 medium-5 columns">
+              <%= f.input :first_name, as: :string, label: "First", required: true %>
+            </div>
+            <div class="small-12 medium-7 columns">
+              <%= f.input :last_name, as: :string, label: "Last", required: true %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-12 columns">
+              <%= f.input :bakery_name, as: :string, label: "Bakery Name", required: true %>
+            </div>
+          </div>
+        </div>
+
+        <div class="your-account-container">
+          <h2>Your Account Credentials</h2>
+          <div class="row">
+            <div class="small-12 medium-5 columns">
+              <%= f.input :email, as: :email, label: "Email", required: true %>
+            </div>
+            <div class="small-12 medium-7 columns">
+              <%= f.input :password, as: :password, label: "Password", required: true %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <%= f.submit "Join BakeCycle", class: "join-cta-button", name: nil %>
+        <p class="join-message">When you click join BakeCycle, yourou are also agreeing to our <%= link_to "Terms of Service", terms_of_service_path, class:"underlined-link" %> and our <%= link_to "Privacy Policy", privacy_policy_path, class: "underlined-link" %>.</p>
+      </div>
+    <% end %>
+  </div>
+</section>

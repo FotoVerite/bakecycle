@@ -12,11 +12,11 @@
 
 @mixin underline-link($color){
   color: $color;
-  font-weight: 700;
+  font-weight: 600;
   border-bottom: solid 1px $color;
 
   &:hover,
   &:focus {
-    color: $bc-green;
+    color: darken($bc-shakespeare, 5%);
   }
 }

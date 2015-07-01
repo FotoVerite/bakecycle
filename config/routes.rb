@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   root 'landing_pages#index'
   devise_for :users
   get :sign_in, to: 'landing_pages#sign_in'
+  get 'privacy_policy', to: 'landing_pages#privacy_policy'
+  get 'terms_of_service', to: 'landing_pages#terms_of_service'
   get :dashboard, to: 'dashboard#index'
+
+  resources :registrations, only: [:new, :create]
 
   resources :ingredients, except: [:show]
   resources :recipes, except: [:show]

@@ -31,6 +31,7 @@
 
     .strong {
       font-weight: 700;
+      color: $bc-shakespeare;
     }
 
     .message {
@@ -39,10 +40,6 @@
 
       .rwd-line {
         @media #{$medium-up} { display: block; }
-      }
-
-      .underlined-link {
-        @include underline-link($bc-charcoal);
       }
     }
   }

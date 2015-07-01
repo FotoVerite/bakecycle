@@ -32,6 +32,7 @@
 
     &:before,
     &:after {
+      border-bottom: 40px solid $bc-white;
       bottom: 100%;
       box-sizing: border-box;
       content: '';
@@ -40,13 +41,11 @@
     }
 
     &:before {
-      border-bottom: 40px solid $bc-off-white;
       border-right: 40px solid transparent;
       right: 50%;
     }
 
     &:after {
-      border-bottom: 40px solid $bc-off-white;
       border-left: 40px solid transparent;
       left: 50%;
     }

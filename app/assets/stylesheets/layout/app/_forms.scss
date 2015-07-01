@@ -72,3 +72,69 @@ select.inline {
   width: 5%;
   line-height: 2.5em;
 }
+
+.bakecycle-form {
+  label {
+    color: $bc-silver-chalice;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: -3px;
+  }
+
+  input:not([type='submit']),
+  select,
+  textarea {
+    border: solid 2px $bc-lightgrey;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    position: relative;
+    z-index: 2;
+  }
+
+  [type=submit] {
+    border: 0;
+  }
+
+  input:not([type='submit']),
+  select {
+    min-height: 40px;
+  }
+
+  textarea {
+    min-height: 75px;
+  }
+
+  .error {
+
+    abbr,
+    label {
+      color: $bc-alizarin-crimson;
+    }
+
+    input:not([type='submit']),
+    select,
+    textarea {
+      border-color: $bc-alizarin-crimson;
+    }
+
+    small {
+      background-color: $bc-alizarin-crimson;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      color: $white;
+      display: block;
+      font-size: 10px;
+      line-height: 15px;
+      margin-top: -15px;
+      padding: 20px 0 5px 10px;
+      position: relative;
+      z-index: 1;
+    }
+  }
+}

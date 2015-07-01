@@ -7,7 +7,7 @@
   </div>
   <div class="row pricing-tables">
     <div class="small-12 medium-offset-2 medium-8 large-offset-0 large-4 columns">
-      <ul class="pricing-table">
+      <ul class="pricing-table small-plan">
         <li class="header">Small</li>
         <li class="custom-price">
           <div>
@@ -25,7 +25,7 @@
           </div>
         </li>
         <div class="cta">
-          <%= link_to('Join our Open Beta',"https://www.getdrip.com/forms/1849359/submissions/new", target: "_blank", class: "cta-btn-round") %>
+          <%= link_to('Sign Up', new_registration_path(plan: "beta_small"), class: "cta-btn") %>
         </div>
         <li class="feature">Up to <span>5</span> Users</li>
         <li class="feature">Automatic Invoicing</li>
@@ -34,7 +34,7 @@
       </ul>
     </div>
     <div class="small-12 medium-offset-2 medium-8 large-offset-0 large-4 columns">
-      <ul class="pricing-table">
+      <ul class="pricing-table medium-plan">
         <li class="header">Medium</li>
         <li class="custom-price">
           <div>
@@ -52,7 +52,7 @@
           </div>
         </li>
         <div class="cta">
-          <%= link_to('Join our Open Beta',"https://www.getdrip.com/forms/1849359/submissions/new", target: "_blank", class: "cta-btn-round") %>
+          <%= link_to('Sign Up', new_registration_path(plan: "beta_medium"), class: "cta-btn") %>
         </div>
         <li class="feature">Up to <span>7</span> Users</li>
         <li class="feature">Shipping Management</li>
@@ -62,7 +62,7 @@
       </ul>
     </div>
     <div class="small-12 medium-offset-2 medium-8 large-offset-0 large-4 columns end">
-      <ul class="pricing-table">
+      <ul class="pricing-table large-plan">
         <li class="header">Large</li>
         <li class="custom-price">
           <div>
@@ -80,7 +80,7 @@
           </div>
         </li>
         <div class="cta">
-          <%= link_to('Join our Open Beta',"https://www.getdrip.com/forms/1849359/submissions/new", target: "_blank", class: "cta-btn-round") %>
+          <%= link_to('Sign Up', new_registration_path(plan: "beta_large"), class: "cta-btn") %>
         </div>
         <li class="feature">Up to <span>25</span> Users</li>
         <li class="feature">Client Portal</li>

@@ -2,6 +2,8 @@ var React = require('react');
 var RecipeItemsForm = require('./recipe-items-form');
 var RecipeItemStore = require('../stores/recipe-item-store');
 var RecipeStore = require('backbone').Model;
+var TextInput = require('./bakecycle-text-input');
+
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -46,22 +48,19 @@ module.exports = React.createClass({
   },
 
   showLeadDays: function() {
-    var { recipeType, leadDays } = this.state.recipe.toJSON();
+    var recipe = this.state.recipe;
+    var { recipeType } = recipe.toJSON();
     if (recipeType !== 'dough') { return; }
     return (
       <div className="row">
         <div className="small-4 columns end">
-          <label className="string required" htmlFor="recipe_lead_days">
-            <abbr title="required">*</abbr> Lead Days
-          </label>
-          <input
-            data-field="leadDays"
-            className={`${this.errorClassFor('lead_days')}`}
-            name='recipe[lead_days]'
-            onChange={this.updateField}
-            type="text"
-            value={leadDays} />
-          {this.errorFor('lead_days')}
+        <TextInput
+          model={recipe}
+          field='leadDays'
+          name='recipe[lead_days]'
+          label='Lead Days'
+          required
+          error={this.props.errors.lead_days} />
         </div>
       </div>
     );
@@ -82,87 +81,93 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var recipe = this.state.recipe;
     var {
-      name,
       mixSize,
       mixSizeUnit,
       note,
       recipeType
-    } = this.state.recipe.toJSON();
+    } = recipe.toJSON();
 
     return (<div>
       <fieldset>
         <legend>Recipe Information</legend>
         <div className="row">
           <div className="small-12 columns">
-            <label className="string required" htmlFor="recipe_name"><abbr title="required">*</abbr> Name</label>
-            <input
-              data-field='name'
-              className={` ${this.errorClassFor('name')}`}
+            <TextInput
+              model={recipe}
+              field='name'
               name='recipe[name]'
-              onChange={this.updateField}
-              type="text"
-              value={name} />
-            {this.errorFor('name')}
+              label='Name'
+              required
+              error={this.props.errors.name} />
           </div>
         </div>
         <div className="row">
           <div className="small-12 columns">
-            <label htmlFor="recipe_note">Note</label>
-            <div className="input text optional recipe_note">
+            <div className={`input text optional recipe_note ${this.errorClassFor('Note')}`}>
+              <label className="text optional" htmlFor="recipe_note">Note</label>
               <textarea
-              data-field='note'
-              className="text optional"
-              name="recipe[note]"
-              onChange={this.updateField}
-              value={note} ></textarea>
-            {this.errorFor('note')}
+                id="recipe_note"
+                data-field="note"
+                className="text optional"
+                name="recipe[note]"
+                onChange={this.updateField}
+                value={note} >
+              </textarea>
+              {this.errorFor('note')}
             </div>
           </div>
         </div>
         <div className="row">
           <div className="small-4 columns">
-            <div className="input select required recipe_recipe_type">
-              <label className="recipe_recipe_type select required" htmlFor="recipe_recipe_type">
-                <abbr title="required">*</abbr> Recipe type
+            <div className={`input select required recipe_recipe_type ${this.errorClassFor('recipe_type')}`}>
+              <label className="select required" htmlFor="recipe_recipe_type">
+                Recipe type <abbr title="required">*</abbr>
               </label>
               <select
+                id="recipe_recipe_type"
                 data-field="recipeType"
                 value={recipeType}
                 onChange={this.updateField}
-                className={`${this.errorClassFor('recipeType')}`}
-                name="recipe[recipe_type]"
-              >
+                className="select required"
+                name="recipe[recipe_type]" >
                 {this.recipeTypeOptions()}
               </select>
+              {this.errorFor('recipe_type')}
             </div>
           </div>
           <div className="small-4 columns">
-            <label htmlFor="recipe_mix_size">Mix Size</label>
-            <input
-              data-field="mixSize"
-              className={`bakers_percentage_input ${this.errorClassFor('bakers_percentage')}`}
-              name='recipe[mix_size]'
-              onChange={this.updateField}
-              type="text"
-              value={mixSize} />
-            {this.errorFor('mixSize')}
+            <div className={`input text optional recipe_mix_size ${this.errorClassFor('mix_size')}`}>
+              <label htmlFor="recipe_mix_size">Mix Size</label>
+              <input
+                id="recipe_mix_size"
+                data-field="mixSize"
+                className="input optional"
+                name='recipe[mix_size]'
+                onChange={this.updateField}
+                type="text"
+                value={mixSize} />
+              {this.errorFor('mix_size')}
+            </div>
             <p className="help-text">
               * Pre-ferment mix bowls will match motherdough bowls when only included in one motherdough
             </p>
           </div>
           <div className="small-4 columns">
-            <div className="input select required recipe_recipe_type">
-              <label className="select" htmlFor="recipe_recipe_type">Mix Units</label>
+            <div className={`input select required recipe_mix_size_unit ${this.errorClassFor('mix_size_unit')}`}>
+              <label className="select" htmlFor="recipe_mix_size_unit">Mix Units</label>
               <select
+                id="recipe_mix_size_unit"
                 data-field="mixSizeUnit"
                 value={mixSizeUnit}
                 onChange={this.updateField}
-                className={`${this.errorClassFor('mixSizeUnit')}`}
+                className="select required"
                 name="recipe[mix_size_unit]"
               >
                 {this.mixUnitsOptions()}
               </select>
+              {this.errorFor('mix_size_unit')}
             </div>
           </div>
         </div>

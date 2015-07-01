@@ -1,42 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-251 343 108 108"
-	 enable-background="new -251 343 108 108" xml:space="preserve">
-<title>shadow + color + icons</title>
-<desc>Created with Sketch.</desc>
-<g id="BakeCycle---_x28_r.1.v.1_x29_" sketch:type="MSPage">
-	<g id="HOME---_x28_1280x700_x29_" transform="translate(-584.000000, -1016.000000)" sketch:type="MSArtboardGroup">
-		<g id="ABOUT" transform="translate(132.000000, 788.000000)" sketch:type="MSLayerGroup">
-			<g id="FEATURE-_x2B_-FEATURE-_x2B_-FEATURE" transform="translate(0.000000, 232.000000)">
-				<g id="_x32_" transform="translate(356.000000, 0.000000)">
-					<g id="shadow-_x2B_-color-_x2B_-icons" transform="translate(100.000000, 0.000000)">
-						<circle id="shadow" sketch:type="MSShapeGroup" fill="none" stroke="#F1F1F1" stroke-width="4" cx="-201" cy="393" r="50">
-						</circle>
-						
-							<linearGradient id="color_1_" gradientUnits="userSpaceOnUse" x1="-502.99" y1="786.59" x2="-502.99" y2="785.59" gradientTransform="matrix(100 0 0 -100 50098 79002)">
-							<stop  offset="0" style="stop-color:#60C6CF"/>
-							<stop  offset="1" style="stop-color:#1DA7B3"/>
-						</linearGradient>
-						
-							<circle id="color" sketch:type="MSShapeGroup" fill="url(#color_1_)" stroke="#FFFFFF" stroke-width="2" cx="-201" cy="393" r="50">
-						</circle>
-					</g>
-				</g>
-			</g>
-		</g>
-	</g>
-</g>
-<g>
-	<g>
-		<path fill="#FFFFFF" d="M-197.4,413.4h19.3v-16.1h-19.3V413.4z M-194.1,400.6h12.8v9.6h-12.8V400.6z"/>
-		<circle fill="#FFFFFF" cx="-207" cy="408.6" r="1.6"/>
-		<path fill="#FFFFFF" d="M-170.9,384.5L-170.9,384.5l-4.5-11.2h-40.7l-4.5,11.2h0l-0.8,2v1.2c0,3,1.2,5.5,3.2,6.8v25.3h45v-25.3
-			c2-1.4,3.2-3.8,3.2-6.8v-1.2L-170.9,384.5z M-218.2,387.7v-1.6h8v1.6c0,2.2-1.1,4.8-4,4.8C-217.2,392.5-218.2,390-218.2,387.7z
-			 M-185,382.9h-9.2v-6.4h7.6L-185,382.9z M-194.1,386.1h9.6v1.6c0,0,0,0,0,0.1c0,2.6-2.2,4.8-4.8,4.8c-2.7,0-4.8-2.2-4.8-4.8V386.1
-			z M-213.9,376.5h5.7l-1.6,6.4h-6.7L-213.9,376.5z M-210.2,416.6v-16h8v16H-210.2z M-176.5,416.6H-199v-19.3h-14.4v19.3h-1.6v-20.9
-			c0.3,0,0.5,0,0.8,0c2.5,0,4.5-1.1,5.8-3c1.5,1.8,3.7,3,6.2,3c2.6,0,5-1.3,6.4-3.2c1.5,2,3.8,3.2,6.4,3.2c2.5,0,4.8-1.2,6.2-3
-			c1.3,1.9,3.3,3,5.8,3c0.3,0,0.5,0,0.8,0V416.6z"/>
-	</g>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>shadow + color + icons</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="BakeCycle---(r.2.v.1)" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="HOME" sketch:type="MSArtboardGroup" transform="translate(-588.000000, -1020.000000)">
+            <g id="ABOUT" sketch:type="MSLayerGroup" transform="translate(98.000000, 788.000000)">
+                <g id="FEATURE-+-FEATURE-+-FEATURE">
+                    <g transform="translate(34.000000, 232.000000)">
+                        <g id="2" transform="translate(356.000000, 0.000000)">
+                            <g id="shadow-+-color-+-icons" transform="translate(100.000000, 0.000000)">
+                                <circle id="shadow" sketch:type="MSShapeGroup" cx="50" cy="50" r="50"></circle>
+                                <circle id="color" fill="#55AAD7" sketch:type="MSShapeGroup" cx="50" cy="50" r="50"></circle>
+                                <image id="icons" sketch:type="MSBitmapLayer" x="10" y="10" width="80" height="80" xlink:href="data:image/png;base64,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"></image>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
 </svg>

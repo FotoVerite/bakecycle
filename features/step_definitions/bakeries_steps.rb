@@ -59,11 +59,6 @@ When(/^I upload my Bakery logo$/) do
   attach_file(field, path)
 end
 
-Given(/^I go to the "(.*?)" edit bakery page$/) do |name|
-  bakery = Bakery.find_by(name: name)
-  visit edit_bakery_path(bakery)
-end
-
 When(/^I visit my bakery$/) do
   visit my_bakeries_path
 end

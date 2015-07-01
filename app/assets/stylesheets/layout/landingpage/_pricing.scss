@@ -18,10 +18,6 @@
       @media #{$large-up} { display: block; }
     }
 
-    .underlined-link {
-      @include underline-link($charcoal);
-    }
-
     .phone-cta {
       font-size: 18px;
       letter-spacing: 1px;
@@ -37,11 +33,12 @@
     bottom: 22px;
     position: relative;
     text-align: center;
+    margin-bottom: -15px;
   }
 
   .header {
     @include pricing-table-title;
-    background: #1da7b3;
+    background: $bc-shakespeare;
     color: $white;
     font-size: 14px;
     font-weight: 400;
@@ -51,7 +48,7 @@
 
   .custom-price {
     @include pricing-table-price;
-    background: #bec3c8;
+    background: $bc-silver;
     border: 0;
     color: $white;
 
@@ -121,7 +118,7 @@
 
   .feature {
     @include pricing-table-bullet;
-    background: #f0f1f2;
+    background: $bc-white;
     color: $bc-charcoal;
     font-size: 12px;
     font-weight: 400;

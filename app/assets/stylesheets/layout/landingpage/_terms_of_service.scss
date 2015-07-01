@@ -1,0 +1,48 @@
+.privacy-policy,
+.terms_of_service {
+  h1,
+  h2,
+  span {
+    color: $bc-scorpion;
+    font-weight: 600;
+  }
+
+  h2,
+  p {
+    font-size: 14px;
+    line-height: 25px;
+  }
+
+  h1 {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  h2 {
+    text-transform: uppercase;
+  }
+
+  hr {
+    background: $bc-silver-chalice;
+  }
+
+  p {
+    color: $bc-silver-chalice;
+    font-weight: 400;
+  }
+
+  ul {
+    margin-left: 40px;
+
+    li {
+      color: $bc-silver-chalice;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+
+  .effective-date {
+    margin: 31px 0;
+  }
+}
+

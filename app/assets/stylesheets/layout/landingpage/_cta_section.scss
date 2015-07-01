@@ -25,9 +25,5 @@
       display: inline;
       @media #{$medium-up} { display: block; }
     }
-
-    .underlined-link {
-      @include underline-link($bc-charcoal);
-    }
   }
 }
