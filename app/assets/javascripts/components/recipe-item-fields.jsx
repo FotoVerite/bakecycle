@@ -49,7 +49,7 @@ module.exports = React.createClass({
       bakersPercentage,
       id,
       inclusionableIdType,
-      inclusionableType,
+      inclusionableTypeDisplay,
       sortId,
       destroy,
       totalLeadDays,
@@ -104,10 +104,9 @@ module.exports = React.createClass({
             className={`inclusionable_type_input`}
             disabled='true'
             name={`${namePrefix}[inclusionable_type]`}
-            onChange={this.updateInclusionableType}
             style={backgroundStyle}
             type="text"
-            value={inclusionableType} />
+            value={inclusionableTypeDisplay} />
           {this.errorFor('inclusionable_type')}
         </div>
 

@@ -38,49 +38,56 @@ class DemoCreator
   def dark_rye_flour
     @_dark_rye_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Dark Rye Flour Mix'
+      name: 'Dark Rye Flour Mix',
+      ingredient_type: 'flour'
     )
   end
 
   def white_flour
     @_white_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'White Flour Blend'
+      name: 'White Flour Blend',
+      ingredient_type: 'flour'
     )
   end
 
   def whole_wheat_flour
     @_whole_wheat_flour ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Whole Wheat Flour Mix'
+      name: 'Whole Wheat Flour Mix',
+      ingredient_type: 'flour'
     )
   end
 
   def yeast
     @_yeast ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Yeast #2'
+      name: 'Yeast #2',
+      ingredient_type: 'yeast'
     )
   end
 
   def water
     @_water ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Purified Water'
+      name: 'Purified Water',
+      ingredient_type: 'hydration'
     )
   end
 
   def nicoise_olives
     @_nicoise_olives ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Black Olives'
+      name: 'Black Olives',
+      ingredient_type: 'other'
     )
   end
 
   def chives
     @_chives ||= Ingredient.create!(
       bakery: @bakery,
-      name: 'Chopped Chives'
+      name: 'Chopped Chives',
+      ingredient_type: 'other'
     )
   end
 

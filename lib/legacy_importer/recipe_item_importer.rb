@@ -12,14 +12,29 @@ module LegacyImporter
       ObjectFinder.new(
         RecipeItem,
         recipe_id: recipe.try(:id),
-        inclusionable: ingredient || included_recipe
-      ).update_if_changed(bakers_percentage: data[:recipeamt_bakerspct])
+        inclusionable: inclusionable
+      ).update_if_changed(
+        bakers_percentage: data[:recipeamt_bakerspct],
+        sort_id: sort_id
+      )
     end
 
     class SkippedRecipeItem < SkippedObject
     end
 
     private
+
+    def sort_id
+      if inclusionable.is_a? Ingredient
+        Ingredient::INGREDIENT_TYPES.index(inclusionable.ingredient_type) || 100
+      else
+        100
+      end
+    end
+
+    def inclusionable
+      @_inclusionable ||= ingredient || included_recipe
+    end
 
     def skip?
       data[:recipeamt_bakerspct] == 0
