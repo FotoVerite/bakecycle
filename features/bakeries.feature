@@ -32,7 +32,7 @@ Feature: Bakery
     And the bakery "Wonder" should not be present
 
   Scenario: As a User, with manage access to my bakery
-    Given I am logged in as an user with bakery "manage" access with a bakery called "biencuit"
+    Given I am logged in as a user with bakery "manage" access with a bakery called "biencuit"
     When I visit my bakery
     Then "Update" button should be present
     And "Delete" link should not be present
@@ -42,12 +42,12 @@ Feature: Bakery
     Then I should see that the bakery name is "Cheeky's"
 
   Scenario: As a User, with read access to my bakery
-    Given I am logged in as an user with bakery "read" access with a bakery called "biencuit"
+    Given I am logged in as a user with bakery "read" access with a bakery called "biencuit"
     When I visit my bakery
     Then "Update" button should not be present
     And "Delete" link should not be present
 
-  Scenario: As a User, with none access to my bakery
-    Given I am logged in as an user with bakery "none" access with a bakery called "biencuit"
+  Scenario: As a User, without any permissions to my bakery
+    Given I am logged in as a user with bakery "none" access with a bakery called "biencuit"
     And I am on the "bakeries" page
     Then "You are not authorized to access this page." should be present

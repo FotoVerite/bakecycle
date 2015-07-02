@@ -27,6 +27,10 @@ class UserPolicy < ApplicationPolicy
     admin? || record_is_self? || manage_bakery_record?
   end
 
+  def send_email?
+    user.admin? || user.manage_permission? && record.invited_to_sign_up?
+  end
+
   def manage_permission?
     admin? || user.user_permission == 'manage'
   end

@@ -12,11 +12,15 @@ Feature: Users
     When I go to the "users" page
     And I click on "Add New User"
     And I fill out User form with:
-      | email                | password  | password_confirmation | name     | user_permission |
-      | new_user@example.com | foobarbaz | foobarbaz             | John Doe | None            |
+      | email                | name     | user_permission |
+      | new_user@example.com | John Doe | None            |
     And I click on "Create"
-    Then "You have created a new user for John Doe with new_user@example.com" should be present
+    Then "An invitation email has been sent to new_user@example.com" should be present
 
+  Scenario: Editing a user with full access
+    Given I am logged in as an user with manage access
+    And there is a user named "Andrew"
+    And there is a user named "John Doe"
     When I edit the user "John Doe"
     And I change the user name to "James" and his user permission to "Manage"
     And I click on "Update"

@@ -56,7 +56,7 @@ describe LegacyImporter::ClientImporter do
 
   describe '#import!' do
     it 'creates a Client out of a LegacyClient' do
-      (client, _), _ = importer.import!
+      (client, _), = importer.import!
       expect(client).to be_an_instance_of(Client)
       expect(client.active).to eq(true)
       expect(client).to be_valid

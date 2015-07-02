@@ -2,6 +2,10 @@ Given(/^I am a visitor$/) do
   logout(:user)
 end
 
+Given(/^There exists a user$/) do
+  @user = FactoryGirl.create(:user)
+end
+
 When(/^I logout$/) do
   find('.logout-icon').click
 end

@@ -18,7 +18,7 @@ module LegacyImporter
     end
 
     def imported_count
-      @objects.select(&:persisted?).count
+      @objects.count(&:persisted?)
     end
 
     def invalid_count

@@ -41,7 +41,7 @@ When(/^I fill out Shipment Item form with:$/) do |table|
 end
 
 Then(/^the product "(.*?)" should be selected$/) do |product_name|
-  expect(page).to have_selector(:xpath, "//select/option[@selected='selected' and text()='#{product_name }']")
+  expect(page).to have_selector(:xpath, "//select/option[@selected='selected' and text()='#{product_name}']")
 end
 
 Then(/^the product "(.*?)" should not be selected$/) do |product_name|

@@ -165,6 +165,7 @@ describe UserPolicy do
     it "doesn't allow you to change the bakery" do
       expect(policy.permitted_attributes).to_not include(:bakery_id)
     end
+
     it 'allows you to set user_permission level' do
       expect(policy.permitted_attributes).to include(:user_permission, :product_permission)
     end

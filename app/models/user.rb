@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
   belongs_to :bakery
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :recoverable, :rememberable,
+    :trackable, :validatable, :invitable
 
   validates :name, length: { maximum: 150 }
   validates :user_permission,
