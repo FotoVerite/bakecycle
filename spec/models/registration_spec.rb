@@ -55,4 +55,18 @@ describe Registration do
     expect(registration.errors[:plan]).to include("can't be blank")
     expect(registration.errors[:base]).to contain_exactly('We had a problem creating your bakery')
   end
+
+  describe '#save_with_demo' do
+    it 'creates demo data' do
+      expect_any_instance_of(DemoCreator).to receive(:run)
+      registration = build(:registration, plan: plan)
+      expect(registration.save_with_demo).to eq(true)
+    end
+
+    it "doesn't create demo data if things are invalid" do
+      expect_any_instance_of(DemoCreator).to_not receive(:run)
+      registration = build(:registration, plan: plan, first_name: nil, last_name: nil)
+      expect(registration.save_with_demo).to eq(false)
+    end
+  end
 end

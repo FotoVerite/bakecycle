@@ -30,6 +30,10 @@ class Registration
     true
   end
 
+  def save_with_demo
+    save && create_demo
+  end
+
   def bakery
     @bakery ||= Bakery.new(
       name: bakery_name,
@@ -60,6 +64,11 @@ class Registration
   end
 
   private
+
+  def create_demo
+    DemoCreator.new(bakery).run
+    true
+  end
 
   def bakery_valid?
     return if bakery.valid?

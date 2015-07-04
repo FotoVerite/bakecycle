@@ -2,5 +2,9 @@ class Plan < ActiveRecord::Base
   has_many :bakeries
   validates :name, :display_name, presence: true, uniqueness: true
 
-  scope :for_display, -> { order('id asc').first(3) }
+  def self.for_display
+    %w(beta_small beta_medium beta_large).map do |name|
+      find_by(name: name)
+    end
+  end
 end

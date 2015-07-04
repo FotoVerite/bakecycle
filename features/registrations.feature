@@ -10,7 +10,7 @@ Feature: Registrations
       | beta_small | john  | dough | FitBake     | j@dough.com | foobarbaz |
     And I click on "Join BakeCycle"
     Then I should be on the user's dashboard page
-    And "Thank you for registering on BakeCycle" should be present
+    And "Thank you for registering with BakeCycle" should be present
 
   @javascript
   Scenario: Registerting as a user from the homepage
@@ -25,7 +25,7 @@ Feature: Registrations
       | john  | dough | FitBake     | j@dough.com | foobarbaz |
     And I click on "Join BakeCycle"
     Then I should be on the user's dashboard page
-    And "Thank you for registering on BakeCycle" should be present
+    And "Thank you for registering with BakeCycle" should be present
 
   Scenario: Attempting to register a user that email or bakery already exist
     Given I am a visitor

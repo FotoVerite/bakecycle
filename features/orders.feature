@@ -49,7 +49,7 @@ Feature: Orders
     And I click on "Create"
     Then "You have created a temporary order for andysdecaf." should be present
 
-  @javascript @firefox
+  @javascript
   Scenario: As a user I need to be able to edit and delete an order and its items
     When I am on the edit page for "andysdecaf" order
     And I fill out the order item form with:
