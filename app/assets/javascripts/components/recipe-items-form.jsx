@@ -9,7 +9,7 @@ module.exports = React.createClass({
 
   addItem: function(event) {
     event.preventDefault();
-    this.props.recipeItems.add();
+    this.props.recipeItems.add({});
   },
 
   availableInclusions: function() {
@@ -34,8 +34,8 @@ module.exports = React.createClass({
     if (!this.draggedOver) {
       return;
     }
-    var draggedId = Number(this.dragged.dataset.id);
-    var targetId = Number(this.draggedOver.dataset.id);
+    var draggedId = this.dragged.dataset.id;
+    var targetId = this.draggedOver.dataset.id;
     this.props.recipeItems.move(draggedId, targetId, this.draggedPosition === 'after');
   },
 
@@ -63,13 +63,11 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var fields = this.props.recipeItems.map((item, index) => {
+    var fields = this.props.recipeItems.map((model) => {
       return (<RecipeItemFields
-        {...item}
-        key={item._id}
+        key={model.cid}
         availableInclusions={this.availableInclusions()}
-        index={index}
-        store={this.props.recipeItems}
+        model={model}
         dragStart={this.dragStart}
         dragEnd={this.dragEnd} />);
     });

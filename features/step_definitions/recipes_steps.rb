@@ -15,11 +15,11 @@ When(/^I fill out recipe form with:$/) do |table|
   recipe = table.hashes[0]
   jquery_fill(
     '[name="recipe[name]"]' => recipe['name'],
-    '[data-field="mixSize"]' => recipe['mix_size'],
+    '[name="recipe[mix_size]"]' => recipe['mix_size'],
     '[name="recipe[lead_days]"]' => recipe['lead_days'],
-    '[data-field="note"]' => recipe['note'],
-    '[data-field="mixSizeUnit"]' => recipe['mix_size_unit'],
-    '[data-field="recipeType"]' => recipe['recipe_type']
+    '[name="recipe[note]"]' => recipe['note'],
+    '[name="recipe[mix_size_unit]"]' => recipe['mix_size_unit'],
+    '[name="recipe[recipe_type]"]' => recipe['recipe_type']
   )
 end
 

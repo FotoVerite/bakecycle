@@ -5,7 +5,7 @@ class RecipeSerializer < ActiveModel::Serializer
   has_many :recipe_items
 
   def recipe_items
-    object.recipe_items.order('sort_id asc')
+    object.recipe_items.order('sort_id asc').includes(:inclusionable)
   end
 
   def recipe_type
