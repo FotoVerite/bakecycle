@@ -9,7 +9,7 @@ def jquery_fill(fields_hash)
       var value = fields[key];
 
       if(!$target.get(0)) {
-        throw new Error('cannot find ' + key);
+        $('body').text('jquery_fill error cannot find ' + key);
       }
 
       if ($target.is('input:radio')) {
