@@ -1,9 +1,11 @@
 .about {
   text-align: center;
+  color: $bc-silver-chalice;
 
   .features {
 
     .headline {
+      color: $bc-scorpion;
       font-size: 18px;
       font-weight: 400;
       line-height: 40px;
@@ -26,6 +28,7 @@
   }
 
   .footer {
+    color: $bc-silver-chalice;
     margin: 40px 0 0 0;
     @media #{$medium-up} { margin: 71px 0 0 0;};
 

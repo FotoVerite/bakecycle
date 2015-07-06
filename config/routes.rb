@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get :sign_in, to: 'landing_pages#sign_in'
   get 'privacy_policy', to: 'landing_pages#privacy_policy'
   get 'terms_of_service', to: 'landing_pages#terms_of_service'
+  get 'plans', to: 'landing_pages#plans'
   get :dashboard, to: 'dashboard#index'
 
   resources :registrations, only: [:new, :create]
