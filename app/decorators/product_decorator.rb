@@ -6,11 +6,11 @@ class ProductDecorator < Draper::Decorator
   end
 
   def product_types_select
-    object.class.product_types.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
+    object.class.product_types.keys.map { |key| [key.humanize(capitalize: false), key] }
   end
 
   def units_select
-    object.class.units.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
+    object.class.units.keys.map { |key| [key.humanize(capitalize: false), key] }
   end
 
   def truncated_description

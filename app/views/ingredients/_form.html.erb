@@ -5,8 +5,16 @@
   <fieldset>
     <legend>Ingredient Information</legend>
     <div class="row">
-      <div class="small-12 columns">
+      <div class="small-12 medium-6 columns">
         <%= f.input :name, as: :string %>
+      </div>
+      <div class="small-12 medium-6 columns">
+        <%= f.input(
+          :ingredient_type,
+          collection: ingredient.ingredient_types_select,
+          as: :select,
+          include_blank: false
+        ) %>
       </div>
     </div>
 

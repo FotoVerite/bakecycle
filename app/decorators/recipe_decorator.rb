@@ -3,11 +3,11 @@ class RecipeDecorator < Draper::Decorator
   decorates_association :recipe_items
 
   def recipe_types_select
-    Recipe.recipe_types.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
+    Recipe.recipe_types.keys.map { |key| [key.humanize(capitalize: false), key] }
   end
 
   def mix_size_units_select
-    Recipe.mix_size_units.keys.map { |keys| [keys.humanize(capitalize: false), keys] }
+    Recipe.mix_size_units.keys.map { |key| [key.humanize(capitalize: false), key] }
   end
 
   def type

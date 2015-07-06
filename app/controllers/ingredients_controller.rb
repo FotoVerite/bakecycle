@@ -1,6 +1,7 @@
 class IngredientsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_ingredient, only: [:edit, :update, :destroy]
+  decorates_assigned :ingredients, :ingredient
 
   def index
     authorize Ingredient
@@ -8,7 +9,7 @@ class IngredientsController < ApplicationController
   end
 
   def new
-    @ingredient = policy_scope(Ingredient).build
+    @ingredient = policy_scope(Ingredient).build(ingredient_type: 'other')
     authorize @ingredient
   end
 
@@ -51,6 +52,6 @@ class IngredientsController < ApplicationController
   end
 
   def ingredient_params
-    params.require(:ingredient).permit(:name, :price, :measure, :unit, :ingredient_type, :description)
+    params.require(:ingredient).permit(:name, :ingredient_type, :description)
   end
 end

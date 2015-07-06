@@ -55,10 +55,10 @@ class Client < ActiveRecord::Base
   end
 
   def self.billing_terms_select
-    billing_terms.keys.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
+    billing_terms.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
   end
 
   def self.delivery_fee_options_select
-    delivery_fee_options.keys.map { |keys| [keys.humanize(capitalize: false).titleize, keys] }
+    delivery_fee_options.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
   end
 end

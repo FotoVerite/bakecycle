@@ -12,8 +12,8 @@ Feature: Ingredients
     When I am on the "ingredients" page
     And I click on "Add New Ingredient"
     And I fill out Ingredient form with:
-      | name  | description        |
-      | apple | I am sometimes red |
+      | name  | description        | ingredient_type |
+      | apple | I am sometimes red | Sugar           |
     And I click on "Create"
     Then "You have created apple" should be present
 

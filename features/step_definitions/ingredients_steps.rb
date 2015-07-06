@@ -12,6 +12,7 @@ Then(/^I should see a list of ingredients including "(.*?)" and "(.*?)"$/) do |i
 end
 
 When(/^I fill out Ingredient form with:$/) do |table|
+  select table.hashes[0]['ingredient_type'], from: 'ingredient_ingredient_type'
   fill_in 'ingredient_name', with: table.hashes[0]['name']
   fill_in 'ingredient_description', with: table.hashes[0]['description']
 end
