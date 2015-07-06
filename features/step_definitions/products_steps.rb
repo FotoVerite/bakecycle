@@ -36,8 +36,8 @@ end
 When(/^I fill out the price variant form with:$/) do |table|
   pricev = table.hashes[0]
   jquery_fill(
-    '.price_input:last' => pricev['price'],
-    '.quantity_input:last' => pricev['quantity']
+    '.price:last' => pricev['price'],
+    '.quantity:last' => pricev['quantity']
   )
 end
 
@@ -46,11 +46,11 @@ Then(/^I click on the last price's remove button$/) do
 end
 
 Then(/^I edit the remaining price to "(.*?)"$/) do |price|
-  all('.price_input').last.set(price)
+  all('.price').last.set(price)
 end
 
 Then(/^there should only be one price$/) do
-  all('.price_input').count == 1
+  all('.price').count == 1
 end
 
 Then(/^I should see confirmation that the product "(.*?)" was deleted$/) do |product|

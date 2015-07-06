@@ -73,6 +73,14 @@ select.inline {
   line-height: 2.5em;
 }
 
+.disabled {
+  input, select, textarea {
+    background-color: $bc-lightgrey;
+    border-color: $bc-lightgrey;
+    color: $bc-mediumgrey;
+  }
+}
+
 .bakecycle-form {
   label {
     color: $bc-silver-chalice;

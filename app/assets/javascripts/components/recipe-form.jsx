@@ -2,7 +2,7 @@ var React = require('react');
 var RecipeItemsForm = require('./recipe-items-form');
 var RecipeItemStore = require('../stores/recipe-item-store');
 var RecipeStore = require('backbone').Model;
-var BCTextInput = require('./bakecycle-text-input');
+var BCInput = require('./bakecycle-input');
 var BCTextarea = require('./bakecycle-textarea');
 var BCSelect = require('./bakecycle-select');
 
@@ -11,7 +11,7 @@ module.exports = React.createClass({
     var recipe = new RecipeStore(this.props);
     var items = new RecipeItemStore(this.props.recipeItems);
     items.addBlankForm();
-    items.on('change sort remove', () => this.setState({items}));
+    items.on('change sort remove add', () => this.setState({items}));
     recipe.on('change', () => this.setState({recipe}));
     return { items, recipe };
   },
@@ -45,7 +45,7 @@ module.exports = React.createClass({
     return (
       <div className="row">
         <div className="small-4 columns end">
-        <BCTextInput
+        <BCInput
           model={recipe}
           field='leadDays'
           name='recipe[lead_days]'
@@ -78,7 +78,7 @@ module.exports = React.createClass({
         <legend>Recipe Information</legend>
         <div className="row">
           <div className="small-12 columns">
-            <BCTextInput
+            <BCInput
               model={recipe}
               field='name'
               name='recipe[name]'
@@ -111,11 +111,12 @@ module.exports = React.createClass({
               error={this.props.errors.recipe_type} />
           </div>
           <div className="small-4 columns">
-            <BCTextInput
+            <BCInput
               model={recipe}
               field='mixSize'
               name='recipe[mix_size]'
               label='Mix Size'
+              type="number"
               required
               error={this.props.errors.mix_size} />
             <p className="help-text">

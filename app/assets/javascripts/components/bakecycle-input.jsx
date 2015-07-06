@@ -11,9 +11,16 @@ module.exports = React.createClass({
     label: React.PropTypes.string,
     model: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
-    options: React.PropTypes.array.isRequired,
+    placeholder: React.PropTypes.string,
     required: React.PropTypes.bool,
+    type: React.PropTypes.string,
     inline: React.PropTypes.bool,
+  },
+
+  getDefaultProps: function() {
+    return {
+      type: 'text'
+    };
   },
 
   render: function() {
@@ -24,22 +31,23 @@ module.exports = React.createClass({
       inline,
       model,
       name,
-      options,
+      placeholder,
+      type,
     } = this.props;
 
     return (
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
         {this.label()}
-        <select
+        <input
           id={`input-${field}`}
-          className={`select ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
+          className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}
+          type={type}
+          placeholder={placeholder}
           value={model.get(field)}
           disabled={disabled}
-        >
-          {options}
-        </select>
+        />
         {error ? <small className="error">{error}</small> : ''}
       </div>
     );

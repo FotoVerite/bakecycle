@@ -1,30 +1,18 @@
 var React = require('react');
-var ArrayStore = require('../stores/array-store');
+var PricesStore = require('../stores/prices-store');
 var PriceFields = require('./product-price-fields');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var prices = new ArrayStore(this.props.priceVariants);
-    this.addBlankForm(prices);
-    var updateState = () => {
-      this.setState({prices: prices});
-    };
-    prices.onChange(updateState);
-    return {prices: prices};
+    var prices = new PricesStore(this.props.priceVariants);
+    prices.addBlankForm();
+    prices.on('change sort remove add', () => this.setState({ prices }));
+    return { prices };
   },
 
   willReceiveProps: function(nextProps) {
-    var prices = this.state.prices.updateAll(nextProps.priceVariants);
-    this.addBlankForm(prices);
-  },
-
-  addBlankForm: function(prices) {
-    if (!prices.length()) {
-      return prices.add({});
-    }
-    if (prices.get(prices.length() - 1).id) {
-      prices.add({});
-    }
+    var prices = this.state.prices.set(nextProps.priceVariants);
+    prices.addBlankForm();
   },
 
   addPrice: function(event) {
@@ -34,11 +22,8 @@ module.exports = React.createClass({
 
   render: function() {
     var prices = this.state.prices;
-    var fields = prices.map((price, index) => {
-      return <PriceFields
-        {...price}
-        index={index}
-        store={prices} />;
+    var fields = prices.map((model) => {
+      return <PriceFields key={model.cid} model={model} />;
     });
 
     return (<div>
