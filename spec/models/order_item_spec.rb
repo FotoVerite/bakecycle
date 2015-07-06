@@ -154,6 +154,27 @@ describe OrderItem do
         expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(two_day_lead)
         expect(OrderItem.production_start_on?(today)).to contain_exactly(one_day_lead)
       end
+
+      it 'returns both standing and temp orders with same start date and different lead times' do
+        temp = create(
+          :temporary_order,
+          start_date: tomorrow,
+          product_total_lead_days: 1,
+          bakery: bakery
+        )
+        standing = create(
+          :order,
+          client: temp.client,
+          route: temp.route,
+          start_date: tomorrow + 1.day,
+          product_total_lead_days: 2,
+          bakery: bakery
+        )
+        temp_order_items = temp.order_items.first
+        standing_order_items = standing.order_items.first
+
+        expect(OrderItem.production_start_on?(today)).to contain_exactly(temp_order_items, standing_order_items)
+      end
     end
 
     context 'after_touch' do
