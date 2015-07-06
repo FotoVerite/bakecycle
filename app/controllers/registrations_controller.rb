@@ -1,6 +1,11 @@
 class RegistrationsController < ApplicationController
   before_action :skip_authorization, :skip_policy_scope
+
   def new
+    if user_signed_in?
+      flash[:notice] = 'You are already registered.'
+      return redirect_to dashboard_path
+    end
     @registration = Registration.new(plan: selected_plan || default_plan)
   end
 
@@ -8,7 +13,7 @@ class RegistrationsController < ApplicationController
     @registration = Registration.new(registration_params)
     if @registration.save_with_demo
       sign_in @registration.user
-      flash[:notice] = 'Thank you for registering with BakeCycle'
+      flash[:notice] = 'Thank you for registering with BakeCycle.'
       redirect_to dashboard_path
     else
       render 'new'

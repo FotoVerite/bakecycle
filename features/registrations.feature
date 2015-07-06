@@ -1,7 +1,7 @@
 Feature: Registrations
 
   @javascript
-  Scenario: Registerting as a user
+  Scenario: Registering as a user
     Given I am a visitor
     And There is bakery plans available
     When I go to the new registrations page
@@ -10,7 +10,10 @@ Feature: Registrations
       | beta_small | john  | dough | FitBake     | j@dough.com | foobarbaz |
     And I click on "Join BakeCycle"
     Then I should be on the user's dashboard page
-    And "Thank you for registering with BakeCycle" should be present
+    And "Thank you for registering with BakeCycle." should be present
+    When I attempt to visit the registrations page again
+    Then I should be on the user's dashboard page
+    And "You are already registered." should be present
 
   @javascript
   Scenario: Registerting as a user from the homepage
