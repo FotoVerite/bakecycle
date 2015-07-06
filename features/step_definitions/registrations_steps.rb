@@ -30,7 +30,7 @@ Then(/^I should be on the user's dashboard page$/) do
   find('h1').should have_content('Dashboard')
 end
 
-When(/^I choose small plan on pricing section of the homepage$/) do
+When(/^I choose small plan$/) do
   within('.small-plan') do
     find('.cta-btn').click
   end
@@ -55,4 +55,8 @@ When(/^I fill out the rest of the registrations form with:$/) do |table|
   fill_in 'registration_bakery_name', with: table.hashes[0]['bakery_name']
   fill_in 'registration_email', with: table.hashes[0]['email']
   fill_in 'registration_password', with: table.hashes[0]['password']
+end
+
+Then(/^I should be on the plans page$/) do
+  expect(page).to have_css('h2', text: 'Pricing')
 end
