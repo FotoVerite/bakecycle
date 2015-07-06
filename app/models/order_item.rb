@@ -41,30 +41,42 @@ class OrderItem < ActiveRecord::Base
 
   # rubocop:disable Metrics/MethodLength, Metrics/LineLength
   def self.production_start_on?(start_date)
+    # Returns order items considering active and temp orders. Start date + Lead
+    # Time of each product on each order item
     sql = <<-SQL
       order_items.id in (
         SELECT item_id
         FROM (
           SELECT
+            item_id,
+            order_id,
+            first_value(order_id) OVER (PARTITION BY client_id, route_id, ship_date ORDER BY order_type DESC) active_order_id
+          FROM (
+          SELECT
             order_items.id item_id,
             orders.id order_id,
-            first_value(orders.id) OVER (PARTITION BY client_id, route_id ORDER BY order_type DESC) active_order_id
-          FROM order_items
-          INNER JOIN orders ON orders.id = order_items.order_id
-          WHERE
-            -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
-            DATE :production_start_date >= (orders.start_date - (INTERVAL '1 day' * (select COALESCE(max(total_lead_days), 1) from order_items)))
-            AND (
-              DATE :production_start_date <= orders.end_date
-              OR orders.end_date IS NULL
-            )
+            orders.client_id client_id,
+            orders.route_id route_id,
+            orders.order_type order_type,
+            (DATE :production_start_date + (INTERVAL '1 day' * order_items.total_lead_days)) ship_date
+          FROM
+            order_items
+            INNER JOIN orders ON orders.id = order_items.order_id
+            WHERE
+              -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
+              DATE :production_start_date >= (orders.start_date - (INTERVAL '1 day' * (select COALESCE(max(total_lead_days), 1) from order_items)))
+              AND (
+                DATE :production_start_date <= orders.end_date
+                OR orders.end_date IS NULL
+              )
 
-            -- find all order items that have active orders on the production_start_date + lead time
-            AND DATE :production_start_date >= (orders.start_date - (INTERVAL '1 day' * order_items.total_lead_days))
-            AND (
-              DATE :production_start_date <= (orders.end_date - (INTERVAL '1 day' * order_items.total_lead_days))
-              OR orders.end_date IS NULL
-            )
+              -- find all order items that have active orders on the production_start_date + lead time
+              AND DATE :production_start_date >= (orders.start_date - (INTERVAL '1 day' * order_items.total_lead_days))
+              AND (
+                DATE :production_start_date <= (orders.end_date - (INTERVAL '1 day' * order_items.total_lead_days))
+                OR orders.end_date IS NULL
+              )
+            ) all_order_items
             ORDER BY
               client_id,
               route_id,
