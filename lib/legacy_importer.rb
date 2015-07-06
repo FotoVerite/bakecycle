@@ -130,6 +130,7 @@ module LegacyImporter
     ActiveRecord::Base.connection.cache do
       make_production_runs
     end
+    reset_kickoff_time
   end
 
   def self.make_shipments
@@ -157,5 +158,9 @@ module LegacyImporter
     ].each do |klass|
       klass.where(bakery: bakery).delete_all
     end
+  end
+
+  def self.reset_kickoff_time
+    bakery.update!(last_kickoff: nil)
   end
 end
