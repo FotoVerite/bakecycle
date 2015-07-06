@@ -1,79 +1,60 @@
 var React = require('react');
+var BCInput = require('./bakecycle-input');
 
 module.exports = React.createClass({
-  getDefaultProps: function() {
-    return {
-      errors: {},
-      price: '',
-      quantity: ''
-    };
-  },
-
   errorFor: function(field) {
     if (!this.props.errors[field]) { return; }
     return (<small className="error">{this.props.errors[field]}</small>);
   },
 
-  errorClassFor: function(field) {
-    if (!this.props.errors[field]) { return; }
-    return 'error';
-  },
-
   toggleDestroy: function() {
-    this.props.store.toggleDestroy(this.props._id);
-  },
-
-  updateField: function(event) {
-    var field = event.target.dataset.field;
-    this.props.store.updateField(this.props._id, field, event.target.value);
+    var model = this.props.model;
+    var destroy = model.get('destroy');
+    model.set({ destroy: !destroy });
   },
 
   render: function() {
-    var { price, quantity, id, index, destroy } = this.props;
-    var namePrefix = `product[price_variants_attributes][${index}]`;
-    var idPrefix = `product_price_variant_${index}`;
-    var backgroundStyle = destroy ? {backgroundColor: 'lightgrey'} : {};
+    var model = this.props.model;
+    var { id, destroy } = model.toJSON();
+    var namePrefix = `product[price_variants_attributes][${model.getNumericCID()}]`;
+    var disabledClass = destroy ? 'disabled' : '';
 
     var undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
     var removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
 
-    return (<div className="fields">
+    return (<div className={`fields ${disabledClass}`}>
       <input type="hidden" name={`${namePrefix}[id]`} value={id} />
       <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
       <div className="row collapse">
         <div className="small-12 medium-4 columns">
-          <label htmlFor={`${idPrefix}_price`} className="string required hide-for-medium-up">
+          <label className="string required hide-for-medium-up">
             <abbr title="required">*</abbr>Price
           </label>
-          <input
-            id={`${idPrefix}_price`}
-            data-field="price"
-            className={`price_input ${this.errorClassFor('price')}`}
-            disabled={destroy}
+          <BCInput
+            model={model}
+            field="price"
             name={`${namePrefix}[price]`}
-            onChange={this.updateField}
+            type="number"
+            error={model.getError('price')}
             placeholder="0.00"
-            style={backgroundStyle}
-            type="text"
-            value={price} />
-          {this.errorFor('price')}
+            disabled={destroy}
+            required
+          />
         </div>
         <div className="small-12 medium-4 columns">
-          <label htmlFor={`${idPrefix}_quantity`} className="string required hide-for-medium-up">
+          <label className="string required hide-for-medium-up">
             <abbr title="required">*</abbr>Quantity
           </label>
-          <input
-            id={`${idPrefix}_quantity`}
-            data-field="quantity"
-            className={`quantity_input ${this.errorClassFor('quantity')}`}
-            disabled={destroy}
+          <BCInput
+            model={model}
+            field="quantity"
             name={`${namePrefix}[quantity]`}
-            onChange={this.updateField}
+            type="number"
+            error={model.getError('quantity')}
             placeholder="0"
-            style={backgroundStyle}
-            type="text"
-            value={quantity} />
-          {this.errorFor('quantity')}
+            disabled={destroy}
+            required
+          />
         </div>
         <div className="small-12 medium-4 columns">
           {destroy ? undoButton : removeButton}

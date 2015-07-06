@@ -12,6 +12,14 @@ var RecipeItem = Backbone.Model.extend({
 
   getNumericCID: function() {
     return Number(this.cid.substring(1));
+  },
+
+  getError: function(field) {
+    var errors = this.get('errors') || {};
+    if (_.isArray(errors[field])) {
+      return errors[field][0];
+    }
+    return errors[field];
   }
 });
 

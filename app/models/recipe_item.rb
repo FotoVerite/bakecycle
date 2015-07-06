@@ -3,8 +3,9 @@ class RecipeItem < ActiveRecord::Base
   belongs_to :recipe
 
   validates :bakers_percentage, presence: true
+  validates :bakers_percentage, numericality: { greater_than: 0 }, unless: 'bakers_percentage.blank?'
   validates :inclusionable_id_type, presence: true
-  validates :bakers_percentage, format: { with: /\A\d+(?:\.\d{0,4})?\z/ }, numericality: { greater_than: 0 }
+
   validate :no_infinite_loops
 
   after_save :touch_recipe

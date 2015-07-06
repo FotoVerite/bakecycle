@@ -34,8 +34,8 @@ end
 When(/^I fill out recipe item with:$/) do |table|
   item = table.hashes[0]
   jquery_fill(
-    '.bakers_percentage_input:last' => item['percentage'],
-    '.inclusionable_id_type:last' => item['inclusionable_id_type']
+    '.bakersPercentage:last' => item['percentage'],
+    '.inclusionableIdType:last' => item['inclusionable_id_type']
   )
 end
 
