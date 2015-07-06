@@ -40,6 +40,10 @@ Then(/^I should be on the registrations page$/) do
   find('h1').should have_content('SIGN UP FOR BAKECYCLE')
 end
 
+When(/^I attempt to visit the registrations page again$/) do
+  step 'I go to the new registrations page'
+end
+
 Then(/^I should see "(.*?)" plan selected$/) do |plan_name|
   plan_id = Plan.find_by(name: plan_name).id
   expect(find(:css, "#registration_plan_id_#{plan_id}", visible: false)).to be_checked
