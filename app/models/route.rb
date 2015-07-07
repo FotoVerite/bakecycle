@@ -1,4 +1,6 @@
 class Route < ActiveRecord::Base
+  extend AlphabeticalOrder
+
   belongs_to :bakery
   has_many :orders
 

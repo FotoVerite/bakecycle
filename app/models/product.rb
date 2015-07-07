@@ -81,7 +81,7 @@ class Product < ActiveRecord::Base
 
   # price variants are probably always going to be very small set, getting all of them allows the query to be cached
   def price_by_quantity(quantity)
-    matching = price_variants.order('quantity desc').detect { |variant| variant.quantity <= quantity }
+    matching = price_variants.to_a.sort_by(&:quantity).reverse.detect { |variant| variant.quantity <= quantity }
     matching.price if matching
   end
 

@@ -14,8 +14,9 @@
 <% end %>
 
 <% if @recipes.shipments.any? %>
-  <%= link_to "<i class='fi-page-export-pdf'></i> Print Delivery List".html_safe,
-        print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf), target: '_blank', class: "button" %>
+  <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf), target: '_blank', class: "button" do %>
+    <i class='fi-page-export-pdf'></i> Print Delivery List
+  <% end %>
 
   <table class="responsive-table">
     <thead>

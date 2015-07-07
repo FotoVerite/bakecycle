@@ -136,6 +136,14 @@ describe Shipment do
       search = { client_id: client.id, date_from: yesterday, date_to: today }
       expect(Shipment.search(search)).to contain_exactly(shipment_1)
     end
+
+    it 'allows us to search by product' do
+      shipment = create(:shipment)
+      create(:shipment)
+
+      terms = { product_id: shipment.shipment_items.first.product_id }
+      expect(Shipment.search(terms)).to contain_exactly(shipment)
+    end
   end
 
   describe '.recent' do

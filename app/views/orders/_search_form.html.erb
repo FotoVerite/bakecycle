@@ -1,10 +1,13 @@
 <%= simple_form_for search_form, url: orders_destination, method: :get, as: :search do |f| %>
   <div class="row collapse">
-    <div class="small-12 medium-3 columns">
+    <div class="small-12 medium-2 columns">
       <%= f.input :client_id , collection: orders.available_clients, as: :select, include_blank: 'All', required: false %>
     </div>
-    <div class="small-12 medium-3 columns">
+    <div class="small-12 medium-2 columns">
       <%= f.input :route_id , collection: orders.available_routes, as: :select, include_blank: 'All', required: false %>
+    </div>
+    <div class="small-12 medium-2 columns">
+      <%= f.input :product_id , collection: orders.available_products, as: :select, include_blank: 'All', required: false %>
     </div>
     <div class="small-12 medium-2 columns">
       <%= f.input :date, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>

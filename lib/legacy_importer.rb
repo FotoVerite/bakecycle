@@ -112,6 +112,17 @@ module LegacyImporter
   end
 
   def self.import_all
+    import_clients
+    import_ingredients
+    import_recipes
+    import_recipe_items
+    import_products
+    import_price_variants
+    import_routes
+    import_orders
+  end
+
+  def self.import_and_collect_all
     [
       import_clients,
       import_ingredients,
@@ -124,7 +135,7 @@ module LegacyImporter
     ].sum
   end
 
-  def self.back_fill_data
+  def self.backfill_data
     ActiveRecord::Base.connection.cache do
       make_shipments
     end
@@ -134,15 +145,25 @@ module LegacyImporter
     reset_kickoff_time
   end
 
+  def self.backfill_start
+    bakery.orders.minimum(:start_date)
+  end
+
   def self.make_shipments
-    (bakery.orders.minimum(:start_date)..Time.zone.yesterday).each do |date|
+    (backfill_start..Time.zone.yesterday).each do |date|
+      starttime = Time.zone.now
       ShipmentService.new(bakery, date).run
+      elapsed = ((Time.zone.now - starttime) * 1000.0).to_i
+      puts "Created Shipments for #{date} in #{elapsed}ms"
     end
   end
 
   def self.make_production_runs
-    (bakery.orders.minimum(:start_date)..Time.zone.yesterday).each do |date|
+    (backfill_start..Time.zone.yesterday).each do |date|
+      starttime = Time.zone.now
       ProductionRunService.new(bakery, date).run
+      elapsed = ((Time.zone.now - starttime) * 1000.0).to_i
+      puts "Created Production Runs for #{date} in #{elapsed}ms"
     end
   end
 

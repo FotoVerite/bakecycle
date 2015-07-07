@@ -93,7 +93,7 @@ class ShipmentsController < ApplicationController
   end
 
   def search_params
-    search = params.permit(:utf8, :page, :format, search: [:client_id, :date_from, :date_to])
+    search = params.permit(:utf8, :page, :format, search: [:client_id, :date_from, :date_to, :product_id])
     search[:search]
   end
 

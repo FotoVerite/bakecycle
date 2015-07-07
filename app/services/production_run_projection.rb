@@ -15,7 +15,7 @@ class ProductionRunProjection
   def products_info
     @_products_info ||= groups.collect do |(_product, grouped_order_items)|
       OrderItemQuantities.new(grouped_order_items, start_date, batch_end_date)
-    end.compact
+    end
   end
 
   private

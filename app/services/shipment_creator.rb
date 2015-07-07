@@ -26,26 +26,29 @@ class ShipmentCreator
   end
 
   def create_shipment
-    Shipment.create!(shipment_attributes) do |shipment|
-      shipment.client = order.client
-      shipment.route = order.route
-      shipment.shipment_items = shipment_items
-      shipment.delivery_fee = delivery_fee
+    shipment = Shipment.create!(shipment_attributes) do |obj|
+      obj.delivery_fee = delivery_fee
     end
+    shipment_items.each do |item|
+      item.shipment = shipment
+      item.save!
+    end
+    shipment
   end
 
   def shipment_attributes
     {
-      bakery: order.bakery,
-      client_id: order.client.id,
-      route_id: order.route.id,
+      bakery_id: order.bakery_id,
+      client_id: order.client_id,
+      route_id: order.route_id,
       date: ship_date,
-      auto_generated: true
+      auto_generated: true,
+      order_id: order.id
     }
   end
 
   def shipment_items
-    @_shipment_items ||= order.order_items.map do |item|
+    @_shipment_items ||= order.order_items.includes(product: [:price_variants]).map do |item|
       next unless item.quantity(ship_date) > 0
       ShipmentItem.new(
         product: item.product,
