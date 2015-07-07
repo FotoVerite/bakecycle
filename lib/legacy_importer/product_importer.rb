@@ -56,7 +56,7 @@ module LegacyImporter
       attrs.merge(
         motherdough: motherdough,
         inclusion: inclusion,
-        # weight: adjusted_weight(attrs),
+        weight: adjusted_weight(attrs),
         product_type: PRODUCT_TYPE_MAP[attrs[:product_type]] || attrs[:product_type],
         unit: :g,
         sku: nil
