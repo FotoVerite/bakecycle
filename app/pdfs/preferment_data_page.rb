@@ -39,35 +39,57 @@ class PrefermentDataPage
   def body
     column_box([0, cursor], columns: 2, width: bounds.width) do
       @preferments.each do |recipe|
-        preferment_table(recipe)
+        table([[preferment_data(recipe)]])
+        move_down 10
       end
     end
   end
 
-  def preferment_table(recipe)
-    table(preferment_data(recipe), column_widths: [216, 65]) do
-      row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR, font_style: :bold, size: 12, height: 25)
-      row(1..-1).style(height: 20, overflow: :shrink_to_fit, min_font_size: 5)
-      column(1).style(align: :center)
-      row(-2..-1).style(font_style: :bold)
-    end
-    move_down 10
+  private
+
+  def preferment_data(recipe)
+    rows = ingredient_rows(recipe)
+    rows += [preferment_total_bowl_info(recipe), preferment_total_recipe_weight_info(recipe)]
+    rows.unshift(preferment_header(recipe))
   end
 
-  def preferment_data(recipe_data)
-    header = ["#{recipe_data.recipe.name}", "#{recipe_data.mix_bowl_count}"]
-    rows = recipe_data.ingredients.map do |ingredient_info|
+  def preferment_header(recipe)
+    styles = {
+      background_color: BasePdfReport::HEADER_ROW_COLOR, size: 12, font_style: :bold, height: 25
+    }
+    [
+      { content: "#{recipe.recipe.name}", width: 216 }.merge(styles),
+      { content: "#{recipe.mix_bowl_count}", align: :center, width: 65 }.merge(styles)
+    ]
+  end
+
+  def ingredient_rows(recipe)
+    recipe.ingredients.map do |ingredient_info|
       [
-        ingredient_info[:inclusionable].name,
-        display_weight(recipe_data.bowl_ingredient_weight(ingredient_info))
+        { content: ingredient_info[:inclusionable].name }.merge(BasePdfReport::TABLE_STYLE),
+        {
+          content: display_weight(recipe.bowl_ingredient_weight(ingredient_info)), align: :center
+        }.merge(BasePdfReport::TABLE_STYLE)
       ]
     end
-    bowl_info = [
-      ['Total Bowl', display_weight(recipe_data.total_bowl_weight)],
-      ["Total #{recipe_data.recipe.name}", display_weight(recipe_data.weight)]
+  end
+
+  def preferment_total_bowl_info(recipe)
+    [
+      { content: 'Total Bowl', font_style: :bold }.merge(BasePdfReport::TABLE_STYLE),
+      {
+        content: display_weight(recipe.total_bowl_weight), align: :center, font_style: :bold
+      }.merge(BasePdfReport::TABLE_STYLE)
     ]
-    rows += bowl_info
-    rows.unshift(header)
+  end
+
+  def preferment_total_recipe_weight_info(recipe)
+    [
+      { content: "Total #{recipe.recipe.name}", font_style: :bold }.merge(BasePdfReport::TABLE_STYLE),
+      {
+        content: display_weight(recipe.weight), align: :center, font_style: :bold
+      }.merge(BasePdfReport::TABLE_STYLE)
+    ]
   end
 
   def display_weight(weight)
