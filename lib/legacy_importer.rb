@@ -1,4 +1,5 @@
 # rubocop:disable Rails/Output
+# rubocop:disable Metrics/ModuleLength
 
 require 'legacy_importer/models'
 require 'legacy_importer/importer'

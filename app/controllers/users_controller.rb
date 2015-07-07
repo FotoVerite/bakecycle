@@ -8,6 +8,10 @@ class UsersController < ApplicationController
     @users = policy_scope(User).sort_by_bakery_and_name
   end
 
+  def edit
+    authorize @user
+  end
+
   def new
     @user = policy_scope(User).build
     authorize @user
@@ -16,16 +20,12 @@ class UsersController < ApplicationController
   def create
     @user = policy_scope(User).build(user_params)
     authorize @user
-    if @user.save
-      flash[:notice] = "You have created a new user for #{@user.name} with #{@user.email}"
-      redirect_to edit_user_path(@user)
-    else
-      render 'new'
-    end
-  end
 
-  def edit
-    authorize @user
+    if params[:user][:password].present?
+      create_user
+    else
+      invite_user
+    end
   end
 
   def update
@@ -54,6 +54,24 @@ class UsersController < ApplicationController
 
   private
 
+  def invite_user
+    if user.invite!
+      flash[:notice] = t('devise.invitations.send_instructions', email: user.email)
+      redirect_to users_path
+    else
+      render :new
+    end
+  end
+
+  def create_user
+    if @user.save
+      flash[:notice] = t('devise.invitations.user.user_added', email: user.email)
+      redirect_to users_path
+    else
+      render :new
+    end
+  end
+
   def set_user
     @user = policy_scope(User).find(params[:id])
   end
@@ -65,8 +83,13 @@ class UsersController < ApplicationController
   end
 
   def delete_passwords_if_blank(user)
-    return unless user[:password].blank? && user[:password_confirmation].blank?
+    return if password_present?
     user.delete(:password)
     user.delete(:password_confirmation)
+  end
+
+  def password_present?
+    params[:user][:password].present? &&
+      params[:user][:password_confirmation].present?
   end
 end

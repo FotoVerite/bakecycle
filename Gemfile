@@ -11,6 +11,7 @@ gem 'cancancan', '~> 1.10'
 gem 'chronic'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'devise'
+gem 'devise_invitable'
 gem 'draper'
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails'
@@ -43,6 +44,7 @@ gem 'mysql2', require: false
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'letter_opener'
   gem 'quiet_assets'
   gem 'spring'
   gem 'web-console', '~> 2.0'
@@ -67,6 +69,7 @@ group :test, :development do
 end
 
 group :test do
+  gem 'capybara-email'
   gem 'capybara-screenshot'
   gem 'capybara-webkit'
   gem 'database_cleaner'

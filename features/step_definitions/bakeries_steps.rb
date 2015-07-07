@@ -75,7 +75,7 @@ Then(/^"(.*?)" button should not be present$/) do |name|
   has_no_button?(name)
 end
 
-Given(/^I am logged in as an user with bakery "(.*?)" access with a bakery called "(.*?)"$/) do |access, name|
+Given(/^I am logged in as a user with bakery "(.*?)" access with a bakery called "(.*?)"$/) do |access, name|
   bakery = create(:bakery, name: name)
   user = create(:user, bakery: bakery, bakery_permission: access)
   login_as(user, scope: :user)
