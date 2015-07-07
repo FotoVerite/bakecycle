@@ -36,12 +36,14 @@ class ProductionRunPdf < BasePdfReport
   def header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
+    move_down 15
   end
 
   def production_run_info
     font_size 10
     text run_label
     text "#{@run_data.start_date} - #{@run_data.end_date}"
+    move_down 15
   end
 
   def recipes
@@ -59,11 +61,11 @@ class ProductionRunPdf < BasePdfReport
   def products
     @run_data.products.each do |product_type|
       products_table(product_type)
+      move_down 15
     end
   end
 
   def products_table(product_type)
-    move_down 15
     table(
       product_information_row(product_type),
       column_widths: [422, 120, 30],
