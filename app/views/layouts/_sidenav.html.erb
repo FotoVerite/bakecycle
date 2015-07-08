@@ -40,17 +40,20 @@
             </ul>
           </li>
 
-          <li class="js-subnav-toggle show-nav <%= active_nav?(:clients, :active_orders, :orders, :shipments) %>">
-            <span class="icon"><%= image_tag 'icons/icon-client.svg'%></span>
-            <span class="header">Clients</span>
+          <% if policy(Client).index? %>
+            <li class="js-subnav-toggle show-nav <%= active_nav?(:clients, :active_orders, :orders, :shipments) %>">
+              <span class="icon"><%= image_tag 'icons/icon-client.svg'%></span>
+              <span class="header">Clients</span>
 
-            <ul class="sub">
-              <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
-              <li class="<%= active_nav?(:active_orders) %>"><%= link_to("Active Orders", active_orders_path)%></li>
-              <li class="<%= active_nav?(:orders) %>"><%= link_to("Order History", orders_path) %></li>
-              <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
-            </ul>
-          </li>
+              <ul class="sub">
+                <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
+                <li class="<%= active_nav?(:active_orders) %>"><%= link_to("Active Orders", active_orders_path)%></li>
+                <li class="<%= active_nav?(:orders) %>"><%= link_to("Order History", orders_path) %></li>
+                <li class="<%= active_nav?(:shipments) %>"><%= link_to("Shipments", shipments_path) %></li>
+              </ul>
+            </li>
+          <% end %>
+
           <li class="js-subnav-toggle show-nav <%= active_nav?(:routes, :delivery_lists, :packing_slips) %>">
             <span class="icon"><%= image_tag 'icons/icon-shipping.svg'%></span>
             <span class="header">Shipping</span>

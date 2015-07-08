@@ -3,7 +3,9 @@
 <h1>Client: <%= client.name %></h1>
 
 <ul class="stack-for-small secondary button-group">
-  <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
+  <% if policy(client).edit? %>
+    <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
+  <% end %>
   <li><%= link_to 'Back', clients_path, class: "button small" %></li>
 </ul>
 

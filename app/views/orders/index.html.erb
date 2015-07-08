@@ -2,7 +2,9 @@
 
 <h1>Order History</h1>
 
-<p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
+<% if policy(Client).new? %>
+  <p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
+<% end %>
 
 <%= render partial: 'search_form', object: @search_form, locals: { orders_destination: orders_path } %>
 <%= render partial: "order_table", orders: @orders %>

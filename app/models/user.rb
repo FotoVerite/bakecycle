@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   validates :user_permission,
             :product_permission,
             :bakery_permission,
+            :client_permission,
             presence: true,
             inclusion: { in: ACCESS_LEVELS }
 

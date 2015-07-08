@@ -10,7 +10,7 @@ class ItemFinder
   end
 
   def clients
-    Client.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Client)
   end
 
   def products
@@ -35,17 +35,11 @@ class ItemFinder
   end
 
   def shipments
-    Shipment.accessible_by(ability)
-  end
-
-  def shipment_items
-    ShipmentItem
-      .joins(:shipment)
-      .where(shipments: ability.attributes_for(:read, Shipment))
+    Pundit.policy_scope!(ability.user, Shipment)
   end
 
   def orders
-    Order.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Order)
   end
 
   def users

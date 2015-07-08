@@ -41,6 +41,7 @@ class UserPolicy < ApplicationPolicy
     attributes << :user_permission if manage_permission?
     attributes << :product_permission if manage_permission?
     attributes << :bakery_permission if manage_permission?
+    attributes << :client_permission if manage_permission?
     attributes
   end
 

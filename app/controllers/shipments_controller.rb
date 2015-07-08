@@ -1,61 +1,22 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_search_form, only: [:index, :invoices, :invoices_csv, :invoices_iif]
-  before_action :skip_authorization, :skip_policy_scope
-  load_and_authorize_resource
+  before_action :set_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif]
   decorates_assigned :shipments, :shipment
 
   def index
-    @shipments = @shipments.search(@search_form).paginate(page: params[:page])
+    authorize Shipment
+    @shipments = policy_scope(Shipment).search(@search_form).paginate(page: params[:page])
   end
 
   def new
-    @shipment.shipment_items.build
-  end
-
-  def invoice
-    pdf = InvoicesPdf.new([@shipment], current_bakery)
-    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
-  end
-
-  def packing_slip
-    pdf = PackingSlipsPdf.new([@shipment], current_bakery)
-    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
-  end
-
-  def invoices_csv
-    @shipments = filtered_shipment_search
-    csv_string = InvoicesCsv.new(@shipments.decorate)
-    expires_now
-    send_data csv_string.generate, filename: 'invoices.csv', type: 'text/csv', disposition: 'attachment'
-  end
-
-  def invoices
-    @shipments = filtered_shipment_search
-    pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
-    pdf_name = 'invoices.pdf'
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
-  end
-
-  def invoice_iif
-    quickbooks_iif = InvoiceIif.new(@shipment.decorate)
-    expires_now
-    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
-  end
-
-  def invoices_iif
-    @shipments = filtered_shipment_search
-    quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery.decorate)
-    expires_now
-    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: quickbooks_iif.filename
+    @shipment = policy_scope(Shipment).build
+    authorize @shipment
   end
 
   def create
+    @shipment = policy_scope(Shipment).build(shipment_params)
+    authorize @shipment
     if @shipment.save
       flash[:notice] = "You have created a shipment for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
@@ -65,9 +26,11 @@ class ShipmentsController < ApplicationController
   end
 
   def edit
+    authorize @shipment
   end
 
   def update
+    authorize @shipment
     if @shipment.update(shipment_params)
       flash[:notice] = "You have updated the shipment for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
@@ -77,19 +40,72 @@ class ShipmentsController < ApplicationController
   end
 
   def destroy
+    authorize @shipment
     @shipment.destroy!
     flash[:notice] = "You have deleted the shipment for #{@shipment.client_name}."
     redirect_to shipments_path
   end
 
+  def invoice
+    authorize @shipment, :show?
+    pdf = InvoicesPdf.new([@shipment], current_bakery)
+    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
+    expires_now
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+  end
+
+  def packing_slip
+    authorize @shipment, :show?
+    pdf = PackingSlipsPdf.new([@shipment], current_bakery)
+    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
+    expires_now
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+  end
+
+  def invoices_csv
+    authorize Shipment, :index?
+    @shipments = filtered_shipment_search
+    csv_string = InvoicesCsv.new(@shipments.decorate)
+    expires_now
+    send_data csv_string.generate, filename: 'invoices.csv', type: 'text/csv', disposition: 'attachment'
+  end
+
+  def invoices
+    authorize Shipment, :index?
+    @shipments = filtered_shipment_search
+    pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
+    pdf_name = 'invoices.pdf'
+    expires_now
+    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+  end
+
+  def invoice_iif
+    authorize @shipment, :show?
+    quickbooks_iif = InvoiceIif.new(@shipment.decorate)
+    expires_now
+    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
+  end
+
+  def invoices_iif
+    authorize Shipment, :index?
+    @shipments = filtered_shipment_search
+    quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery.decorate)
+    expires_now
+    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: quickbooks_iif.filename
+  end
+
   private
+
+  def set_shipment
+    @shipment = policy_scope(Shipment).find(params[:id])
+  end
 
   def load_search_form
     @search_form = ShipmentSearchForm.new(search_params)
   end
 
   def filtered_shipment_search
-    @shipments.search(@search_form).includes(:shipment_items, :bakery)
+    policy_scope(Shipment).search(@search_form).includes(:shipment_items, :bakery)
   end
 
   def search_params

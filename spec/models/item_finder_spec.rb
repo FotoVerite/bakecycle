@@ -46,12 +46,6 @@ describe ItemFinder do
     expect(item_finder.shipments).to contain_exactly(shipment)
   end
 
-  it 'finds my shipments shipment items' do
-    create(:shipment, shipment_item_count: 1)
-    shipment = create(:shipment, shipment_item_count: 2, bakery: user.bakery)
-    expect(item_finder.shipment_items).to contain_exactly(*shipment.shipment_items)
-  end
-
   it 'finds my orders' do
     create(:order)
     order = create(:order, bakery: user.bakery)
