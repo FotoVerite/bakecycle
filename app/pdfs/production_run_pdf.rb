@@ -1,4 +1,6 @@
 class ProductionRunPdf < BasePdfReport
+  include WeightDisplayer
+
   def initialize(run_data)
     @run_data = run_data
     @bakery = run_data.bakery.decorate
@@ -52,10 +54,6 @@ class ProductionRunPdf < BasePdfReport
     else
       recipe_data_with_preferments
     end
-  end
-
-  def display_weight(weight)
-    weight.round(@display_precision).to_s
   end
 
   def products

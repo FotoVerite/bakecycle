@@ -1,11 +1,11 @@
 # rubocop:disable Metrics/ClassLength
 class RecipeDataPage
-  attr_reader :recipe_run_data, :display_precision
+  include WeightDisplayer
+  attr_reader :recipe_run_data
 
   def initialize(pdf, recipe_run_data)
     @pdf = pdf
     @recipe_run_data = recipe_run_data
-    @display_precision = 3
   end
 
   def render
@@ -250,10 +250,6 @@ class RecipeDataPage
       ['Bowl Weight', display_weight(recipe_run_data.total_bowl_weight)],
       ["Bowl Weight x #{recipe_run_data.mix_bowl_count}", display_weight(recipe_run_data.weight)]
     ]
-  end
-
-  def display_weight(weight)
-    weight.round(display_precision).to_s
   end
 end
 # rubocop:enable Metrics/ClassLength

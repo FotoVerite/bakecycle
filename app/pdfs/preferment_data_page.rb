@@ -1,9 +1,10 @@
 class PrefermentDataPage
+  include WeightDisplayer
+
   def initialize(pdf, preferments)
     @pdf = pdf
     @preferments = preferments
     @date = preferments.first.date
-    @display_precision = 3
   end
 
   def render
@@ -90,9 +91,5 @@ class PrefermentDataPage
         content: display_weight(recipe.weight), align: :center, font_style: :bold
       }.merge(BasePdfReport::TABLE_STYLE)
     ]
-  end
-
-  def display_weight(weight)
-    weight.round(@display_precision).to_s
   end
 end
