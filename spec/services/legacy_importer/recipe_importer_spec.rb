@@ -8,7 +8,7 @@ describe LegacyImporter::RecipeImporter do
   let(:legacy_recipe) do
     {
       recipe_id: 10000,
-      recipe_name: 'Baguette',
+      recipe_name: 'Levain',
       recipe_instructions: '',
       recipe_daystomake: 2,
       recipe_extra: BigDecimal.new('0'),
@@ -43,6 +43,12 @@ describe LegacyImporter::RecipeImporter do
       expect(recipe).to eql(updated_recipe)
       recipe.reload
       expect(recipe.name).to eq('New Name')
+    end
+
+    it 'ensures Levain has Levain feeder' do
+      recipe = importer.import!
+      levain_feeder = Recipe.find_by(bakery: bakery, name: 'Feeding Levain', recipe_type: 'dough', lead_days: 0)
+      expect(recipe.recipe_items.first.inclusionable).to eq(levain_feeder)
     end
   end
 end

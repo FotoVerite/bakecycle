@@ -27,6 +27,9 @@ module LegacyImporter
         bakery: bakery,
         legacy_id: data[:recipe_id].to_s
       ).update_if_changed(attributes)
+        .tap { |recipe|
+        add_levain_feeder_to_levain(recipe)
+      }
     end
 
     private
@@ -46,6 +49,17 @@ module LegacyImporter
       else
         data[:recipe_daystomake] - 1
       end
+    end
+
+    def add_levain_feeder_to_levain(recipe)
+      return unless recipe.name == 'Levain'
+      levain_feeder = Recipe.find_or_create_by(
+        bakery: bakery,
+        name: 'Feeding Levain',
+        recipe_type: 'dough',
+        lead_days: 0
+      )
+      recipe.recipe_items.find_or_create_by(inclusionable: levain_feeder, bakers_percentage: 50)
     end
   end
 end
