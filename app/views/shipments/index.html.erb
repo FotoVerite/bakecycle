@@ -25,15 +25,17 @@
       <th scope="col">Invoice</th>
       <th scope="col">Date</th>
       <th scope="col">Client</th>
+      <th scope="col">Price</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    <% @shipments.each do |shipment| %>
+    <% shipments.each do |shipment| %>
       <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
         <th scope="row"><%= shipment.invoice_number %></th>
         <td data-title="Date"><%= shipment.date %></td>
         <td data-title="Client Name"><%= shipment.client_name %></td>
+        <td data-title="Price"><%= shipment.price %></td>
         <td data-title="Action">
           <%= link_to edit_shipment_path(shipment) do %>
             <span class="table-action-icon icon-link-tooltip" aria-label="Edit Shipment">

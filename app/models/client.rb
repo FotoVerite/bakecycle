@@ -1,4 +1,6 @@
 class Client < ActiveRecord::Base
+  extend AlphabeticalOrder
+
   has_many :orders
   has_many :shipments
 

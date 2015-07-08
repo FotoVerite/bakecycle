@@ -69,14 +69,9 @@ describe Order do
 
   describe '#total_lead_days' do
     it 'returns lead time for order items' do
-      motherdough = create(:recipe_motherdough, bakery: bakery, lead_days: 5)
-      inclusion = create(:recipe_inclusion, bakery: bakery, lead_days: 3)
-      product_1 = create(:product, bakery: bakery, inclusion: inclusion)
-      product_2 = create(:product, bakery: bakery, motherdough: motherdough)
-
-      order.order_items << build(:order_item, product: product_1)
-      order.order_items << build(:order_item, product: product_2)
-      order.save
+      order = create(:order, order_item_count: 0)
+      create(:order_item, order: order, force_total_lead_days: 3)
+      create(:order_item, order: order, force_total_lead_days: 5)
       expect(order.total_lead_days).to eq(5)
     end
   end

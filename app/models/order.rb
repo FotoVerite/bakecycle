@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+  extend OrderSearchMethods
+
   belongs_to :client
   belongs_to :route
   belongs_to :bakery
@@ -48,7 +50,7 @@ class Order < ActiveRecord::Base
         WHERE id = active_order_id
       )
     SQL
-    where(sql, date: date, standing: 'standing', temporary: 'temporary')
+    where(sql, date: date)
   end
   # rubocop:enable Metrics/MethodLength
 
@@ -73,28 +75,6 @@ class Order < ActiveRecord::Base
   def self.sort_for_history
     includes(:client, :route)
       .order(start_date: :desc)
-  end
-
-  def self.search(fields)
-    search_by_client(fields[:client_id])
-      .search_by_route(fields[:route_id])
-      .search_by_date(fields[:date])
-  end
-
-  def self.search_by_client(client_id)
-    return all if client_id.blank?
-    where(client_id: client_id)
-  end
-
-  def self.search_by_route(route_id)
-    return all if route_id.blank?
-    where(route_id: route_id)
-  end
-
-  def self.search_by_date(date)
-    return all if date.blank?
-    where('start_date <= ?', date)
-      .where('end_date >= ? OR end_date is NULL', date)
   end
 
   def self.upcoming(date)

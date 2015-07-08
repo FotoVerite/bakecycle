@@ -20,12 +20,8 @@ namespace :bakecycle do
       require 'legacy_importer'
       puts 'Starting import'
       Resque.inline = true
-      imported_objects = LegacyImporter.import_all
-      reporter = LegacyImporter.report(imported_objects)
-      puts "#{reporter.imported_count} objects imported"
-      puts reporter.skipped_report
-      puts "#{reporter.invalid_count} errored objects"
-      puts reporter.csv
+      LegacyImporter.import_all
+      puts 'Import Completed'
     end
 
     desc 'Email the legacy biencuit bakecycle data'
@@ -33,7 +29,7 @@ namespace :bakecycle do
       require 'legacy_importer'
       puts 'Starting import'
       Resque.inline = true
-      imported_objects = LegacyImporter.import_all
+      imported_objects = LegacyImporter.import_and_collect_all
       reporter = LegacyImporter.report(imported_objects)
       puts "#{reporter.imported_count} objects imported"
       puts reporter.skipped_report
@@ -47,7 +43,7 @@ namespace :bakecycle do
     task biencuit_backfill: :environment do
       require 'legacy_importer'
       puts 'Starting backfill'
-      LegacyImporter.back_fill_data
+      LegacyImporter.backfill_data
     end
   end
 end

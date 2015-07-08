@@ -13,15 +13,13 @@ class ShipmentService
   private
 
   def process_bakery
-    orders_ready_for_production.each do |order|
-      (1..order.total_lead_days).each do |lead|
-        ship_date = run_time + lead.days
-        ShipmentCreator.new(order, ship_date).create!
-      end
+    order_items_for_production.each do |item|
+      ship_date = run_time + item.total_lead_days.days
+      ShipmentCreator.new(item.order, ship_date).create!
     end
   end
 
-  def orders_ready_for_production
-    bakery.order_items.includes(order: :products).production_start_on?(run_time).map(&:order).uniq
+  def order_items_for_production
+    bakery.order_items.includes(:order).production_start_on?(run_time)
   end
 end

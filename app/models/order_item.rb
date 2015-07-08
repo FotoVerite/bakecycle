@@ -45,19 +45,14 @@ class OrderItem < ActiveRecord::Base
     # Time of each product on each order item
     sql = <<-SQL
       order_items.id in (
-        SELECT item_id
+        SELECT
+          item_id
         FROM (
-          SELECT
-            item_id,
-            order_id,
-            first_value(order_id) OVER (PARTITION BY client_id, route_id, ship_date ORDER BY order_type DESC) active_order_id
-          FROM (
           SELECT
             order_items.id item_id,
             orders.id order_id,
             orders.client_id client_id,
             orders.route_id route_id,
-            orders.order_type order_type,
             (DATE :production_start_date + (INTERVAL '1 day' * order_items.total_lead_days)) ship_date
           FROM
             order_items
@@ -76,14 +71,27 @@ class OrderItem < ActiveRecord::Base
                 DATE :production_start_date <= (orders.end_date - (INTERVAL '1 day' * order_items.total_lead_days))
                 OR orders.end_date IS NULL
               )
-            ) all_order_items
-            ORDER BY
-              client_id,
-              route_id,
-              order_type,
-              order_id
-        ) active_items
-        WHERE active_items.order_id = active_items.active_order_id
+        ) items_to_work
+        WHERE
+          -- reduce to order items that are active on their ship_date
+          -- this step is why this query is so slow
+          order_id in (
+            SELECT id from (
+              SELECT
+                id,
+                first_value(id) OVER (PARTITION BY client_id, route_id ORDER BY order_type DESC) active_order_id
+              FROM
+                orders check_orders
+              WHERE
+                start_date <= ship_date
+                AND (
+                  end_date is null
+                  OR end_date >= ship_date
+                )
+                AND client_id = check_orders.client_id
+            ) active_orders
+            WHERE id = active_order_id
+          )
       )
     SQL
     where(sql, production_start_date: start_date)

@@ -1,15 +1,18 @@
 <%= simple_form_for search_form, url: shipments_path, method: :get, as: :search do |f| %>
   <div class="row collapse">
-    <div class="small-12 medium-3 columns">
+    <div class="small-12 medium-2 columns">
       <%= f.input :client_id , collection: shipments.available_clients, as: :select, include_blank: 'All', required: false %>
     </div>
-    <div class="small-12 medium-3 columns">
+    <div class="small-12 medium-2 columns">
+      <%= f.input :product_id , collection: shipments.available_products, as: :select, include_blank: 'All', required: false %>
+    </div>
+    <div class="small-12 medium-2 columns">
       <%= f.input :date_from, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
     </div>
-    <div class="small-12 medium-3 columns">
+    <div class="small-12 medium-2 columns">
       <%= f.input :date_to, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
     </div>
-    <div class="small-12 medium-3 columns">
+    <div class="small-12 medium-2 columns end">
       <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
     </div>
   </div>
