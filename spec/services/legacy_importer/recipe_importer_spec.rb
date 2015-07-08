@@ -47,7 +47,7 @@ describe LegacyImporter::RecipeImporter do
 
     it 'ensures Levain has Levain feeder' do
       recipe = importer.import!
-      levain_feeder = Recipe.find_by(bakery: bakery, name: 'Feeding Levain', recipe_type: 'dough', lead_days: 0)
+      levain_feeder = Ingredient.find_by(bakery: bakery, name: 'Feeding Levain')
       expect(recipe.recipe_items.first.inclusionable).to eq(levain_feeder)
     end
   end

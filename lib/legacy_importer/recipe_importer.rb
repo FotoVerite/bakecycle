@@ -53,13 +53,12 @@ module LegacyImporter
 
     def add_levain_feeder_to_levain(recipe)
       return unless recipe.name == 'Levain'
-      levain_feeder = Recipe.find_or_create_by(
+      levain_feeder = Ingredient.find_or_create_by(
         bakery: bakery,
         name: 'Feeding Levain',
-        recipe_type: 'dough',
-        lead_days: 0
+        ingredient_type: 'other'
       )
-      recipe.recipe_items.find_or_create_by(inclusionable: levain_feeder, bakers_percentage: 50)
+      recipe.recipe_items.find_or_create_by(inclusionable: levain_feeder, bakers_percentage: 50, sort_id: 100)
     end
   end
 end
