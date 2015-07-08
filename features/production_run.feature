@@ -14,6 +14,21 @@
     When I click on that production run row
     Then "Production Run:" should be present
 
+    Given I am logged in as a user with bakery "none" access
+    And I am on the Production Runs page
+    Then "You are not authorized to access this page" should be present
+
+  @javascript
+  Scenario: Printing Production runs
+    Given there is a run item for a "biencuit" production run
+    And I am on the Production Runs page
+    When I print run
+    Then "You are not authorized to access this page" should not be present
+
+    Given I am logged in as a user with bakery "none" access
+    And I am on the Production Runs page
+    Then "You are not authorized to access this page" should be present
+
   @javascript
   Scenario: Find and edit and add run items to a production run from print recipes
     Given there is a run item for a "biencuit" production run
@@ -68,6 +83,16 @@
     When I accept in the confirm box
     Then "Reset Complete" should be present
     And the product quantity should be the same as the shipment item
+
+  Scenario: Not seeing production tab
+    Given I am logged in as a user with bakery "none" access
+    And I go to the dashboard
+    Then I should not see the production nav
+
+  Scenario: Seeing production tab
+    Given I am logged in as a user with bakery "read" access
+    And I go to the dashboard
+    Then I should see the production nav
 
   @javascript
   Scenario: Projections

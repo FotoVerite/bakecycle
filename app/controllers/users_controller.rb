@@ -8,10 +8,6 @@ class UsersController < ApplicationController
     @users = policy_scope(User).sort_by_bakery_and_name
   end
 
-  def edit
-    authorize @user
-  end
-
   def new
     @user = policy_scope(User).build
     authorize @user
@@ -26,6 +22,10 @@ class UsersController < ApplicationController
     else
       invite_user
     end
+  end
+
+  def edit
+    authorize @user
   end
 
   def update

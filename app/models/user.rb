@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true, unless: 'email.blank?'
   validates :email, presence: true
   validates :user_permission,
+            :production_permission,
             :product_permission,
             :bakery_permission,
             :client_permission,

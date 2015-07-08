@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   helper_method :item_finder
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
-  rescue_from CanCan::AccessDenied, with: :not_authorized
 
   def active_nav(name = nil)
     @_active_nav = name || controller_name.to_sym
@@ -28,7 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def item_finder
-    @_item_finder ||= ItemFinder.new(current_ability)
+    @_item_finder ||= ItemFinder.new(current_user)
   end
 
   def after_sign_in_path_for(_resource)

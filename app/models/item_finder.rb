@@ -1,48 +1,47 @@
 class ItemFinder
-  attr_reader :ability
+  attr_reader :user
 
-  def initialize(ability)
-    @ability = ability
+  def initialize(user)
+    @user = user
   end
 
   def bakeries
-    Pundit.policy_scope!(ability.user, Bakery)
+    Pundit.policy_scope!(user, Bakery)
   end
 
   def clients
-    Pundit.policy_scope!(ability.user, Client)
+    Pundit.policy_scope!(user, Client)
   end
 
   def products
-    Pundit.policy_scope!(ability.user, Product)
+    Pundit.policy_scope!(user, Product)
   end
 
   def ingredients
-    Pundit.policy_scope!(ability.user, Ingredient)
+    Pundit.policy_scope!(user, Ingredient)
   end
 
   def recipes
-    Pundit.policy_scope!(ability.user, Recipe)
+    Pundit.policy_scope!(user, Recipe)
   end
 
   def routes
-    Pundit.policy_scope!(ability.user, Route)
+    Pundit.policy_scope!(user, Route)
   end
 
   def production_runs
-    ProductionRun.accessible_by(ability)
-      .includes(run_items: [:product])
+    Pundit.policy_scope!(user, ProductionRun)
   end
 
   def shipments
-    Pundit.policy_scope!(ability.user, Shipment)
+    Pundit.policy_scope!(user, Shipment)
   end
 
   def orders
-    Pundit.policy_scope!(ability.user, Order)
+    Pundit.policy_scope!(user, Order)
   end
 
   def users
-    Pundit.policy_scope!(ability.user, User)
+    Pundit.policy_scope!(user, User)
   end
 end

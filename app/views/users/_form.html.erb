@@ -101,6 +101,17 @@
           ) %>
         </div>
       </div>
+
+      <div class="row">
+        <div class="large-6 small-12 columns">
+          <%= f.input(
+            :production_permission,
+            collection: user.access_level,
+            as: :select,
+            include_blank: false
+          ) %>
+        </div>
+      </div>
     </fieldset>
   <% end %>
 

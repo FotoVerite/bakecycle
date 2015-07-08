@@ -107,3 +107,25 @@ end
 Given(/^I am on the Batch Recipes page$/) do
   visit batch_recipes_path
 end
+
+Then(/^I should not see the production nav$/) do
+  within '.main' do
+    expect(page).to_not have_content 'Production'
+  end
+end
+
+Then(/^I should see the production nav$/) do
+  within '.main' do
+    expect(page).to have_content 'Production'
+  end
+end
+
+Given(/^I am logged in as a user with bakery "(.*?)" access$/) do |access|
+  user = create(:user, production_permission: access)
+  login_as user, scope: :user
+end
+
+When(/^I print run$/) do
+  production_run = ProductionRun.last
+  visit print_production_run_path(production_run)
+end
