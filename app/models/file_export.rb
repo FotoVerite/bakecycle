@@ -2,6 +2,7 @@ class FileExport < ActiveRecord::Base
   belongs_to :bakery
 
   has_attached_file :file,
+    use_timestamp: false,
     default_url: '',
     url: '/system/:class/:id/:attachment/:filename'
 

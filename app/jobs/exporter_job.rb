@@ -15,7 +15,7 @@ class ExporterJob < ActiveJob::Base
       raise "FileExport #{file_export.id} already has a file attached."
     end
   rescue Resque::TermException
-    Rails.logger.warn "Resque job termination re-queuing #{self} #{id} #{method} #{args.join(',')}"
-    perform_later(file_export, serialized)
+    Resque.logger.error "Resque job termination re-queuing #{self} #{file_export}, #{generator}"
+    self.class.perform_later(file_export, generator)
   end
 end
