@@ -1,9 +1,10 @@
 class PrefermentDataPage
+  include WeightDisplayer
+
   def initialize(pdf, preferments)
     @pdf = pdf
     @preferments = preferments
     @date = preferments.first.date
-    @display_precision = 3
   end
 
   def render
@@ -68,9 +69,5 @@ class PrefermentDataPage
     ]
     rows += bowl_info
     rows.unshift(header)
-  end
-
-  def display_weight(weight)
-    weight.round(@display_precision).to_s
   end
 end
