@@ -7,10 +7,8 @@ class DeliveryListsController < ApplicationController
   end
 
   def print
-    pdf = DeliveryListPdf.new(date_query, current_bakery)
-    pdf_name = 'deliverylist.pdf'
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    generator = DeliveryListGenerator.new(current_bakery, date_query)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   private

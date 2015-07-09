@@ -1,5 +1,5 @@
 class DeliveryListPdf < BasePdfReport
-  def initialize(date, bakery)
+  def initialize(bakery, date)
     @recipes = ProductCounter.new(bakery, date)
     @bakery = bakery.decorate
     @date = date
