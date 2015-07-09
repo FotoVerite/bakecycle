@@ -35,6 +35,6 @@ class PackingSlipsGenerator
   end
 
   def shipments
-    Shipment.where(bakery: @bakery).search_by_date(@date).order_by_route_and_client.includes(:shipment_items)
+    Shipment.where(bakery: @bakery).search(date: @date).order_by_route_and_client.includes(:shipment_items)
   end
 end
