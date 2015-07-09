@@ -1,13 +1,15 @@
 class PackingSlipsController < ApplicationController
   before_action :authenticate_user!
-  before_action :skip_authorization, :skip_policy_scope
+  before_action :skip_policy_scope
 
   def index
+    authorize Route
     @date = date_query
-    @shipments = shipments_for(date_query)
+    @shipments = shipments_for(@date)
   end
 
   def print
+    authorize Route
     generator = PackingSlipsGenerator.new(current_bakery, slip_date, print_invoices?)
     redirect_to ExporterJob.create(current_bakery, generator)
   end

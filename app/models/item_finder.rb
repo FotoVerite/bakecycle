@@ -26,7 +26,7 @@ class ItemFinder
   end
 
   def routes
-    Route.accessible_by(ability)
+    Pundit.policy_scope!(ability.user, Route)
   end
 
   def production_runs

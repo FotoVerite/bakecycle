@@ -52,7 +52,8 @@ class Registration
       user_permission: 'manage',
       bakery_permission: 'manage',
       product_permission: 'manage',
-      client_permission: 'manage'
+      client_permission: 'manage',
+      route_permission: 'manage'
     )
   end
 
