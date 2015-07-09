@@ -28,7 +28,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def send_email?
-    user.admin? || user.manage_permission? && record.invited_to_sign_up?
+    (manage_permission? || admin?) && record.invited_to_sign_up?
   end
 
   def manage_permission?

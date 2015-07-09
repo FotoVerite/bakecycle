@@ -3,8 +3,8 @@ module Users
     before_action :configure_permitted_parameters
 
     def send_email
-      authorize current_user
       user = User.find(params[:format])
+      authorize user
       user.invite!
       set_flash_message :notice, :send_instructions, email: user.email
       redirect_to users_path
