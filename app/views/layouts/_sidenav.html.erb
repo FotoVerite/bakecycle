@@ -54,16 +54,18 @@
             </li>
           <% end %>
 
-          <li class="js-subnav-toggle show-nav <%= active_nav?(:routes, :delivery_lists, :packing_slips) %>">
-            <span class="icon"><%= image_tag 'icons/icon-shipping.svg'%></span>
-            <span class="header">Shipping</span>
+          <% if policy(Route).index? %>
+            <li class="js-subnav-toggle show-nav <%= active_nav?(:routes, :delivery_lists, :packing_slips) %>">
+              <span class="icon"><%= image_tag 'icons/icon-shipping.svg'%></span>
+              <span class="header">Shipping</span>
 
-            <ul class="sub">
-              <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
-              <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
-              <li class="<%= active_nav?(:packing_slips) %>"><%= link_to("Print Packing Slips", packing_slips_path) %></li>
-            </ul>
-          </li>
+              <ul class="sub">
+                <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
+                <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
+                <li class="<%= active_nav?(:packing_slips) %>"><%= link_to("Print Packing Slips", packing_slips_path) %></li>
+              </ul>
+            </li>
+          <% end %>
         <% end %>
 
         <li class="js-subnav-toggle show-nav <%= active_nav?(:users, :bakeries, :my_bakery) %>">

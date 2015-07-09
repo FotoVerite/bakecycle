@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
             :product_permission,
             :bakery_permission,
             :client_permission,
+            :route_permission,
             presence: true,
             inclusion: { in: ACCESS_LEVELS }
 

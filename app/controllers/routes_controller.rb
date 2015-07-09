@@ -1,20 +1,23 @@
 class RoutesController < ApplicationController
   before_action :authenticate_user!
-  before_action :skip_authorization, :skip_policy_scope
-  load_and_authorize_resource
+  before_action :set_route, only: [:edit, :update, :destroy]
   before_action :error_if_remaining_route, only: :destroy
   before_action :error_if_orders, only: :destroy
   decorates_assigned :routes, :route
 
   def index
-    @routes = @routes.order('active desc', :name)
+    authorize Route
+    @routes = policy_scope(Route).order('active desc', :name)
   end
 
   def new
-    @route = Route.new(active: true)
+    @route = policy_scope(Route).build(active: true)
+    authorize @route
   end
 
   def create
+    @route = policy_scope(Route).build(route_params)
+    authorize @route
     if @route.save
       flash[:notice] = "You have created #{@route.name}."
       redirect_to edit_route_path(@route)
@@ -24,9 +27,11 @@ class RoutesController < ApplicationController
   end
 
   def edit
+    authorize @route
   end
 
   def update
+    authorize @route
     if @route.update(route_params)
       flash[:notice] = "You have updated #{@route.name}."
       redirect_to edit_route_path(@route)
@@ -36,12 +41,21 @@ class RoutesController < ApplicationController
   end
 
   def destroy
+    authorize @route
     @route.destroy!
     flash[:notice] = "You have deleted #{@route.name}"
     redirect_to routes_path
   end
 
   private
+
+  def set_route
+    @route = policy_scope(Route).find(params[:id])
+  end
+
+  def route_params
+    params.require(:route).permit(:name, :notes, :departure_time, :active)
+  end
 
   def last_remaining_route?
     item_finder.routes.count == 1
@@ -57,9 +71,5 @@ class RoutesController < ApplicationController
     return false unless @route.orders.any?
     flash[:error] = I18n.t :route_in_use, count: @route.orders.count
     redirect_to edit_route_path(@route)
-  end
-
-  def route_params
-    params.require(:route).permit(:name, :notes, :departure_time, :active)
   end
 end

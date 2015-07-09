@@ -6,30 +6,6 @@ describe Ability do
   let(:ability) { Ability.new(user) }
   let(:competitor) { build(:user) }
 
-  describe 'managing routes' do
-    let(:route) { create(:route, bakery: user.bakery) }
-    let(:competitor_route) { create(:route, bakery: competitor.bakery) }
-
-    it 'allows users to access routes from same bakery' do
-      route_2 = create(:route, bakery: user.bakery)
-      expect(Route.accessible_by(ability)).to contain_exactly(route, route_2)
-    end
-
-    it 'allows creation of routes only for their own bakery' do
-      expect(ability).to be_able_to(:create, Route.new(bakery: user.bakery))
-      expect(ability).to_not be_able_to(:create, Route.new(bakery: competitor.bakery))
-      expect(ability.attributes_for(:create, Route)).to eq(bakery_id: user.bakery.id)
-    end
-
-    context 'admins' do
-      let(:user) { create(:user, :as_admin) }
-      it 'allows admins to see only their bakery routes' do
-        route_2 = create(:route, bakery: user.bakery)
-        expect(Route.accessible_by(ability)).to contain_exactly(route, route_2)
-      end
-    end
-  end
-
   describe 'managing production runs' do
     let(:production_run) { create(:production_run, bakery: user.bakery) }
     let(:competitor_production_run) { create(:production_run, bakery: competitor.bakery) }

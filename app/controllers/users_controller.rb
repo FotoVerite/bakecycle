@@ -89,7 +89,6 @@ class UsersController < ApplicationController
   end
 
   def password_present?
-    params[:user][:password].present? &&
-      params[:user][:password_confirmation].present?
+    params[:user][:password].present? && params[:user][:password_confirmation].present?
   end
 end
