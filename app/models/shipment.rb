@@ -1,5 +1,4 @@
 class Shipment < ActiveRecord::Base
-  extend ShipmentSearchMethods
   include Denormalization
 
   belongs_to :bakery
@@ -37,12 +36,19 @@ class Shipment < ActiveRecord::Base
     :primary_contact_name, :primary_contact_phone, :notes
   ]
 
+  scope :search, ->(terms) { ShipmentSearcher.search(self, terms) }
+
   def self.policy_class
     ClientPolicy
   end
 
   def self.weekly_subtotal(client_id, date)
-    shipments_for_week(client_id, date).map(&:subtotal).sum
+    week = Week.new(date)
+    search(
+      client_id: client_id,
+      date_from: week.start_date,
+      date_to: week.end_date
+    ).to_a.sum(&:subtotal)
   end
 
   def self.recent(client_id)

@@ -1,6 +1,4 @@
 class Order < ActiveRecord::Base
-  extend OrderSearchMethods
-
   belongs_to :client
   belongs_to :route
   belongs_to :bakery
@@ -29,6 +27,8 @@ class Order < ActiveRecord::Base
     :delivery_minimum, :name,
     to: :client, prefix: true
   )
+
+  scope :search, ->(terms) { OrderSearcher.search(self, terms) }
 
   def self.policy_class
     ClientPolicy

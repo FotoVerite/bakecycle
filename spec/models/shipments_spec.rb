@@ -74,75 +74,10 @@ describe Shipment do
   end
 
   describe '.search' do
-    it 'returns everything when called without search terms' do
-      shipments = create_list(:shipment, 2)
-      expect(Shipment.search({})).to include(*shipments)
-      nil_values = {
-        client_id: nil,
-        date_from: nil,
-        date_to: nil
-      }
-      expect(Shipment.search(nil_values)).to include(*shipments)
-    end
-
-    it 'returns shipments matching a client' do
-      shipments = create_list(:shipment, 2)
-      shipment = shipments.first
-      client_id = shipment.client_id
-      expect(Shipment.search(client_id: client_id)).to eq([shipment])
-    end
-
-    it 'allows searching by a date' do
-      shipment_1 = create(:shipment, date: today)
-      create(:shipment, date: tomorrow)
-      search = { date: today }
-      expect(Shipment.search(search)).to contain_exactly(shipment_1)
-    end
-
-    it 'returns shipments after and including a date_from' do
-      shipment_1 = create(:shipment, date: today)
-      shipment_2 = create(:shipment, date: tomorrow)
-      create(:shipment, date: yesterday)
-
-      search = { date_from: today }
-      expect(Shipment.search_by_date_from(today)).to contain_exactly(shipment_1, shipment_2)
-      expect(Shipment.search(search)).to contain_exactly(shipment_1, shipment_2)
-    end
-
-    it 'returns shipments before and include a date_to' do
-      shipment_1 = create(:shipment, date: today)
-      shipment_2 = create(:shipment, date: yesterday)
-
-      search = { date_to: today }
-      expect(Shipment.search(search)).to contain_exactly(shipment_1, shipment_2)
-    end
-
-    it 'allows to search for date ranges' do
-      shipment_1 = create(:shipment, date: today)
-      create(:shipment, date: yesterday)
-      create(:shipment, date: tomorrow)
-
-      search = { date_to: today, date_from: today }
-      expect(Shipment.search(search)).to contain_exactly(shipment_1)
-    end
-
-    it 'allows to search for both client and dates' do
-      client = create(:client)
-      shipment_1 = create(:shipment, client: client, date: yesterday)
-      create(:shipment, date: today)
-      create(:shipment, date: tomorrow)
-      create(:shipment, client: client, date: tomorrow)
-
-      search = { client_id: client.id, date_from: yesterday, date_to: today }
-      expect(Shipment.search(search)).to contain_exactly(shipment_1)
-    end
-
-    it 'allows us to search by product' do
-      shipment = create(:shipment)
-      create(:shipment)
-
-      terms = { product_id: shipment.shipment_items.first.product_id }
-      expect(Shipment.search(terms)).to contain_exactly(shipment)
+    it 'delegates to the shipment searcher' do
+      terms = { client_id: 4 }
+      expect(ShipmentSearcher).to receive(:search).with(Shipment, terms)
+      Shipment.search(terms)
     end
   end
 
@@ -172,7 +107,7 @@ describe Shipment do
     end
   end
 
-  describe '.shipments_for_week' do
+  describe '.weekly_subtotal' do
     let(:monday) { Date.new(2015, 3, 30) }
     let(:sunday) { Date.new(2015, 4, 5) }
 
@@ -182,7 +117,7 @@ describe Shipment do
         create(:shipment, client: client, bakery: client.bakery, date: monday),
         create(:shipment, client: client, bakery: client.bakery, date: sunday)
       ]
-      expect(Shipment.shipments_for_week(client.id, sunday)).to contain_exactly(*shipments)
+      expect(Shipment.weekly_subtotal(client.id, sunday)).to eq(shipments.sum(&:subtotal))
     end
   end
 
