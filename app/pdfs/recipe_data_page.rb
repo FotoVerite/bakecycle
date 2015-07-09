@@ -1,4 +1,5 @@
 # rubocop:disable Metrics/ClassLength
+
 class RecipeDataPage
   include WeightDisplayer
   attr_reader :recipe_run_data
@@ -84,7 +85,7 @@ class RecipeDataPage
       [
         { content: "#{recipe_run_data.mix_bowl_count}", size: 35 },
         { content: 'X', size: 10 },
-        { content: "#{display_weight(recipe_run_data.mix_size_with_unit)}", size: 15 }
+        display_weight(recipe_run_data.mix_size_with_unit).merge(size: 15)
       ]
     ]
   end
@@ -131,7 +132,12 @@ class RecipeDataPage
   end
 
   def products_total_weight_data
-    [['Total', display_weight(recipe_run_data.products_total_weight)]]
+    [
+      [
+        'Total',
+        display_weight(recipe_run_data.products_total_weight)
+      ]
+    ]
   end
 
   def inclusion_tables
@@ -149,16 +155,28 @@ class RecipeDataPage
 
   def inclusion_data(inclusion_info)
     rows = [
-      [inclusion_info[:inclusion].name, display_weight(total_inclusion_weight(inclusion_info))],
-      [inclusion_info[:dough].name, display_weight(total_dough_weight(inclusion_info))]
+      [
+        inclusion_info[:inclusion].name,
+        display_weight(total_inclusion_weight(inclusion_info))
+      ],
+      [
+        inclusion_info[:dough].name,
+        display_weight(total_dough_weight(inclusion_info))
+      ]
     ]
     inclusion_ingredient_rows(inclusion_info).each { |ingredient_row| rows << ingredient_row }
-    rows << ['Total Product Weight', display_weight(inclusion_info[:total_product_weight])]
+    rows << [
+      'Total Product Weight',
+      display_weight(inclusion_info[:total_product_weight])
+    ]
   end
 
   def inclusion_ingredient_rows(inclusion_info)
     inclusion_info[:ingredients].map do |ingredient|
-      [ingredient[:ingredient].name, display_weight(ingredient[:weight])]
+      [
+        ingredient[:ingredient].name,
+        display_weight(ingredient[:weight])
+      ]
     end
   end
 
@@ -247,9 +265,16 @@ class RecipeDataPage
 
   def totals_info
     [
-      ['Bowl Weight', display_weight(recipe_run_data.total_bowl_weight)],
-      ["Bowl Weight x #{recipe_run_data.mix_bowl_count}", display_weight(recipe_run_data.weight)]
+      [
+        'Bowl Weight',
+        display_weight(recipe_run_data.total_bowl_weight)
+      ],
+      [
+        "Bowl Weight x #{recipe_run_data.mix_bowl_count}",
+        display_weight(recipe_run_data.weight)
+      ]
     ]
   end
 end
+
 # rubocop:enable Metrics/ClassLength

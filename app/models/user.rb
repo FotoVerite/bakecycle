@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
     :trackable, :validatable, :invitable
 
   validates :name, length: { maximum: 150 }
+  validates :email, uniqueness: true, unless: 'email.blank?'
+  validates :email, presence: true
   validates :user_permission,
             :product_permission,
             :bakery_permission,

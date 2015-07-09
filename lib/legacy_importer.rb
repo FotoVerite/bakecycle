@@ -186,3 +186,6 @@ module LegacyImporter
     bakery.update!(last_kickoff: nil)
   end
 end
+
+# rubocop:enable Rails/Output
+# rubocop:enable Metrics/ModuleLength
