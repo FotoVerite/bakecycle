@@ -10,8 +10,7 @@ describe ProductionRunPdf do
   end
 
   it 'renders a production run with a projection run' do
-    bakery = build_stubbed(:bakery)
-    projection = stub_production_run_projection(bakery)
+    projection = new_stubed_production_run_projection
     projection_run_data = ProjectionRunData.new(projection)
     pdf = ProductionRunPdf.new(projection_run_data)
 
