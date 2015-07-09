@@ -70,6 +70,12 @@ Then(/^I should not see shipments for the client "(.*?)"$/) do |client_name|
   end
 end
 
+Then(/^I attempt to edit the first shipment on the page$/) do
+  within '.responsive-table tbody' do
+    first('tr').click
+  end
+end
+
 Given(/^there are "(.*?)" shipments for the past two weeks$/) do |bakery|
   bakery = Bakery.find_by(name: bakery)
   today = Time.zone.today

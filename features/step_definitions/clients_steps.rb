@@ -18,9 +18,9 @@ Then(/^I should not see clients "(.*?)" and "(.*?)"$/) do |client1, client2|
   expect(page).to_not have_content(client2)
 end
 
-When(/^I fill out Client form with valid data$/) do
-  fill_in 'client_name', with: 'Wizards Coffee'
-  fill_in 'client_official_company_name', with: 'Wizard Development'
+When(/^I fill out the client "(.*?)" with valid data$/) do |name|
+  fill_in 'client_name', with: name
+  fill_in 'client_official_company_name', with: name
   fill_in 'client_business_phone', with: '212-867-5309'
   fill_in 'client_delivery_address_street_1', with: 'text'
   fill_in 'client_delivery_address_street_2', with: 'text'
@@ -55,7 +55,12 @@ Then(/^the client "(.*?)" should not be present$/) do |client_name|
   end
 end
 
-When(/^I am on the edit page for "(.*?)" client$/) do |name|
+When(/^I am on the edit page for the client "(.*?)"$/) do |name|
+  client = Client.find_by(name: name)
+  visit edit_client_path(client)
+end
+
+When(/^I attempt to visit "(.*?)" edit page$/) do |name|
   client = Client.find_by(name: name)
   visit edit_client_path(client)
 end

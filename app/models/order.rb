@@ -30,6 +30,10 @@ class Order < ActiveRecord::Base
     to: :client, prefix: true
   )
 
+  def self.policy_class
+    ClientPolicy
+  end
+
   # rubocop:disable Metrics/MethodLength
   def self.active(date)
     sql = <<-SQL

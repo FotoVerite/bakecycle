@@ -56,6 +56,12 @@ Given(/^I am logged in as an user with product "(.*?)" access with a bakery call
   login_as(user, scope: :user)
 end
 
+Given(/^I am logged in as an user with client "(.*?)" access with a bakery called "(.*?)"$/) do |access, name|
+  bakery = create(:bakery, name: name)
+  user = create(:user, bakery: bakery, client_permission: access)
+  login_as(user, scope: :user)
+end
+
 Given(/^I am logged in as an admin$/) do
   user = create(:user, :as_admin, bakery: nil)
   login_as(user, scope: :user)

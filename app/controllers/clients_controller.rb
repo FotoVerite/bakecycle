@@ -1,18 +1,21 @@
 class ClientsController < ApplicationController
   before_action :authenticate_user!
-  before_action :skip_authorization, :skip_policy_scope
-  load_and_authorize_resource
+  before_action :set_client, only: [:show, :edit, :update, :destroy]
   decorates_assigned :clients, :client
 
   def index
-    @clients = @clients.order(:name)
+    authorize Client
+    @clients = policy_scope(Client).order_by_name
   end
 
   def new
-    @client = Client.new(active: true, billing_term: 'net_30')
+    @client = policy_scope(Client).build(active: true, billing_term: 'net_30')
+    authorize @client
   end
 
   def create
+    @client = policy_scope(Client).build(client_params)
+    authorize @client
     if @client.save
       flash[:notice] = "You have created #{@client.name}."
       redirect_to client_path(@client)
@@ -22,9 +25,11 @@ class ClientsController < ApplicationController
   end
 
   def edit
+    authorize @client
   end
 
   def show
+    authorize @client
     @shipments = item_finder.shipments.recent(@client).includes(:shipment_items)
     @orders =  item_finder.orders
       .where(client: @client)
@@ -32,6 +37,7 @@ class ClientsController < ApplicationController
   end
 
   def update
+    authorize @client
     if @client.update(client_params)
       flash[:notice] = "You have updated #{@client.name}."
       redirect_to client_path(@client)
@@ -41,12 +47,17 @@ class ClientsController < ApplicationController
   end
 
   def destroy
+    authorize @client
     @client.destroy!
     flash[:notice] = "You have deleted #{@client.name}"
     redirect_to clients_path
   end
 
   private
+
+  def set_client
+    @client = policy_scope(Client).find(params[:id])
+  end
 
   def client_params
     params.require(:client).permit(

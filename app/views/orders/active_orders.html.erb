@@ -1,7 +1,9 @@
 <% provide(:title, "Active Orders - #{@search_form.date.strftime('%A %b. %e, %Y')}") %>
 <h1>Active Orders &mdash; <%= @search_form.date.strftime("%A %b. %e, %Y") %>
 
-<p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
+<% if policy(Client).new? %>
+  <p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
+<% end %>
 
 <%= render partial: 'search_form', object: @search_form, locals: { orders_destination: active_orders_path }  %>
 <%= render partial: 'order_table' %>

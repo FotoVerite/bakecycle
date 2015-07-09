@@ -2,7 +2,9 @@
 
 <h1>Clients</h1>
 
-<p><%= link_to 'Add New Client', new_client_path, class: "button" %></p>
+<% if policy(Client).new? %>
+  <p><%= link_to 'Add New Client', new_client_path, class: "button" %></p>
+<% end %>
 
 <table class="responsive-table">
   <thead>

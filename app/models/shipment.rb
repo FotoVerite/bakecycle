@@ -37,6 +37,10 @@ class Shipment < ActiveRecord::Base
     :primary_contact_name, :primary_contact_phone, :notes
   ]
 
+  def self.policy_class
+    ClientPolicy
+  end
+
   def self.weekly_subtotal(client_id, date)
     shipments_for_week(client_id, date).map(&:subtotal).sum
   end

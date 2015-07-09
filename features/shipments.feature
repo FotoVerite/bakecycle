@@ -3,32 +3,29 @@ Feature: Shipments management
   Clients have shipments
   There are a lot of shipments
 
-  Background:
-    Given I am logged in as a user with a bakery called "biencuit"
+  @javascript
+  Scenario: As a user with full access to shipments
+    Given I am logged in as an user with client "manage" access with a bakery called "biencuit"
     And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
     And There are "biencuit" bakery clients named "amyavocado" and "francesco"
     And There are "biencuit" shipments with clients named "andysdecaf" and "mandos"
+    And there are "biencuit" shipments for the past two weeks
 
-  Scenario: I should be able to filter on the shipment index page
-    Given I am on the "shipments" page
+    When I am on the "shipments" page
     And I filter shipments by the client "mandos"
     Then I should see shipments for the client "mandos"
     Then I should not see shipments for the client "amyavocado"
     And I should see the search term "mandos" preserved in the client search box
 
-  Scenario: I should be able to filter dates on the shipment index page
-    Given there are "biencuit" shipments for the past two weeks
-    And  I go to the "shipments" page
+    When I am on the "shipments" page
     And I filter shipments by to and from dates for the past week
     Then I should see a list of shipments for only the past week
 
-  @javascript
-  Scenario: I should be able to manage a shipment
-    Given I am on the "shipments" page
+    When I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
-      | client    | date       | route | delivery_fee | note          |
+      | client | date       | route | delivery_fee | note          |
       | mandos | 2015-01-12 | Canal | 10.0         | leave at door |
     And I click on "Create"
     Then "You have created a shipment for mandos." should be present
@@ -51,13 +48,11 @@ Feature: Shipments management
     Then I should see confirmation the shipment for "francesco" was deleted
     And the shipment for "francesco" should not be present
 
-  @javascript
-  Scenario: I should be able to manage shipment items
-    Given I am on the "shipments" page
+    When I am on the "shipments" page
     And I click on "Add New Shipment"
     And I fill out Shipment form with:
       | client | date       | route | delivery_fee | note          |
-      | mandos | 2015-01-12 | Canal | 15           | ask for mando |
+      | mandos | 2015-01-15 | Canal | 15           | ask for mando |
     And I click on "Add Product"
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
@@ -86,9 +81,39 @@ Feature: Shipments management
     Then "You have updated the shipment" should be present
     And the product "donut tart" should not be selected
 
-  @javascript
-  Scenario: I should be able to manage shipment items
-    Given I am on the "packing_slips" page
+    When I am on the "packing_slips" page
     Then I should see a table of shipping information
     When I click on "Print Packing Slips"
     Then I should be on the "Packing Slips" index page
+
+  @javascript
+  Scenario: As a user with read access to shipments
+    Given I am logged in as an user with client "read" access with a bakery called "biencuit"
+    And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    And There are "biencuit" bakery routes named "Canal" and "Chinatown"
+    And There are "biencuit" bakery clients named "amyavocado" and "francesco"
+    And There are "biencuit" shipments with clients named "andysdecaf" and "mandos"
+    And there are "biencuit" shipments for the past two weeks
+
+    When I am on the "shipments" page
+    Then "Add New Shipment" should not be present
+    And "Export Invoices" should be present
+    And "Export CSV" should be present
+    And "Export QuickBooks" should be present
+
+    When I attempt to edit the first shipment on the page
+    Then "You are not authorized to access this page." should be present
+
+  @javascript
+  Scenario: As a user with none access to shipments
+    Given I am logged in as an user with client "none" access with a bakery called "biencuit"
+    And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    And There are "biencuit" bakery routes named "Canal" and "Chinatown"
+    And There are "biencuit" bakery clients named "amyavocado" and "francesco"
+    And There are "biencuit" shipments with clients named "andysdecaf" and "mandos"
+    And there are "biencuit" shipments for the past two weeks
+
+    When I attempt to visit the "shipments" page
+    Then "You are not authorized to access this page." should be present
+
+
