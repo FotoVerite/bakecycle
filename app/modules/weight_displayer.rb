@@ -4,10 +4,16 @@ module WeightDisplayer
   def display_weight(weight)
     weight_in_kgs = Unitwise(weight, :kg)
 
-    if weight_in_kgs > Unitwise(1, :kg)
-      weight_in_kgs.round(SIG_FIGS).to_s(:symbol)
+    if weight_in_kgs > Unitwise(0.001, :kg) || weight_in_kgs == Unitwise(0, :kg)
+      {
+        content: weight_in_kgs.round(SIG_FIGS).to_s(:symbol),
+        background_color: 'ffffff'
+      }
     else
-      weight_in_kgs.convert_to(:gram).round(SIG_FIGS).to_s(:symbol)
+      {
+        content: weight_in_kgs.convert_to(:gram).round(SIG_FIGS).to_s(:symbol),
+        background_color: 'd3d3d3'
+      }
     end
   end
 end

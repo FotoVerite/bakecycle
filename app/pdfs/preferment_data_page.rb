@@ -68,9 +68,8 @@ class PrefermentDataPage
     recipe.ingredients.map do |ingredient_info|
       [
         { content: ingredient_info[:inclusionable].name }.merge(BasePdfReport::TABLE_STYLE),
-        {
-          content: display_weight(recipe.bowl_ingredient_weight(ingredient_info)), align: :center
-        }.merge(BasePdfReport::TABLE_STYLE)
+        display_weight(recipe.bowl_ingredient_weight(ingredient_info))
+          .merge(align: :center).merge(BasePdfReport::TABLE_STYLE)
       ]
     end
   end
@@ -78,18 +77,18 @@ class PrefermentDataPage
   def preferment_total_bowl_info(recipe)
     [
       { content: 'Total Bowl', font_style: :bold }.merge(BasePdfReport::TABLE_STYLE),
-      {
-        content: display_weight(recipe.total_bowl_weight), align: :center, font_style: :bold
-      }.merge(BasePdfReport::TABLE_STYLE)
+      display_weight(recipe.total_bowl_weight)
+        .merge(align: :center, font_style: :bold)
+        .merge(BasePdfReport::TABLE_STYLE)
     ]
   end
 
   def preferment_total_recipe_weight_info(recipe)
     [
       { content: "Total #{recipe.recipe.name}", font_style: :bold }.merge(BasePdfReport::TABLE_STYLE),
-      {
-        content: display_weight(recipe.weight), align: :center, font_style: :bold
-      }.merge(BasePdfReport::TABLE_STYLE)
+      display_weight(recipe.weight)
+        .merge(align: :center, font_style: :bold)
+        .merge(BasePdfReport::TABLE_STYLE)
     ]
   end
 end
