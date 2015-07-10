@@ -1,8 +1,7 @@
 class ProductionRunsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_production_run, only: [:edit, :update, :print, :reset]
-  after_action :skip_policy_scope,
-    only: [:print_recipes, :batch_recipes, :print_projection, :print_batch]
+  after_action :skip_policy_scope, only: [:print_recipes, :print_projection]
   decorates_assigned :production_runs, :production_run
 
   def index
@@ -44,21 +43,9 @@ class ProductionRunsController < ApplicationController
     @projection = ProductionRunProjection.new(current_bakery, @date) unless @production_run
   end
 
-  def batch_recipes
-    authorize ProductionRun, :can_print?
-    active_nav(:batch_recipes)
-    @projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
-  end
-
   def print_projection
     authorize ProductionRun, :can_print?
     generator = ProjectionGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_bakery, generator)
-  end
-
-  def print_batch
-    authorize ProductionRun, :can_print?
-    generator = BatchGenerator.new(current_bakery, start_date, end_date)
     redirect_to ExporterJob.create(current_bakery, generator)
   end
 
@@ -78,14 +65,6 @@ class ProductionRunsController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date]) || Time.zone.today
-  end
-
-  def start_date
-    Chronic.parse(params[:start_date]) || Time.zone.today
-  end
-
-  def end_date
-    Chronic.parse(params[:end_date]) || Time.zone.today + 6.days
   end
 
   def production_run_for_date(date)
