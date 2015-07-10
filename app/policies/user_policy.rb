@@ -44,6 +44,7 @@ class UserPolicy < ApplicationPolicy
       attributes << :bakery_permission
       attributes << :client_permission
       attributes << :route_permission
+      attributes << :production_permission
     end
     attributes
   end

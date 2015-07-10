@@ -1,7 +1,7 @@
 <% if @date %>
- <p class="projection">Projection based on active orders</p>
- <%= link_to "<i class='fi-page-export-pdf'></i> Print Recipes for Projected Run".html_safe,
-  print_projection_production_runs_path(date: @date.strftime("%Y-%m-%d"), format: :pdf), target: "_blank", class: "button small"%>
+  <p class="projection">Projection based on active orders</p>
+  <%= link_to "<i class='fi-page-export-pdf'></i> Print Recipes for Projected Run".html_safe,
+    print_projection_production_runs_path(date: @date.strftime("%Y-%m-%d"), format: :pdf), target: "_blank", class: "button small"%>
 <% else %>
   <p class="projection">Batch based on active orders</p>
   <%= link_to "<i class='fi-page-export-pdf'></i> Print Recipes for Projected Run".html_safe,

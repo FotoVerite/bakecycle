@@ -11,6 +11,7 @@ FactoryGirl.define do
     bakery_permission 'manage'
     client_permission 'manage'
     route_permission 'manage'
+    production_permission 'manage'
 
     trait :as_admin do
       admin true

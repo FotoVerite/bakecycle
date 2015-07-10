@@ -2,8 +2,7 @@ require 'rails_helper'
 
 describe ItemFinder do
   let(:user) { create(:user) }
-  let(:ability) { Ability.new(user) }
-  let(:item_finder) { ItemFinder.new(ability) }
+  let(:item_finder) { ItemFinder.new(user) }
 
   it 'finds my bakeries' do
     create(:bakery)

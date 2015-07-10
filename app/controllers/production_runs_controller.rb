@@ -1,17 +1,22 @@
 class ProductionRunsController < ApplicationController
   before_action :authenticate_user!
-  before_action :skip_authorization, :skip_policy_scope
-  load_and_authorize_resource
+  before_action :set_production_run, only: [:edit, :update, :print, :reset]
+  after_action :skip_policy_scope,
+    only: [:print_recipes, :batch_recipes, :print_projection, :print_batch]
   decorates_assigned :production_runs, :production_run
 
   def index
-    @production_runs = @production_runs.order(date: :desc).paginate(page: params[:page])
+    authorize ProductionRun
+    @production_runs = policy_scope(ProductionRun)
+      .order(date: :desc).paginate(page: params[:page])
   end
 
   def edit
+    authorize @production_run
   end
 
   def update
+    authorize @production_run
     if @production_run.update(production_run_params)
       redirect_to edit_production_run_path(@production_run), notice: 'Successfully updated'
     else
@@ -19,7 +24,20 @@ class ProductionRunsController < ApplicationController
     end
   end
 
+  def print
+    authorize @production_run
+    generator = ProductionRunGenerator.new(@production_run)
+    redirect_to ExporterJob.create(current_bakery, generator)
+  end
+
+  def reset
+    authorize @production_run
+    ProductionRunService.new(@production_run.bakery, @production_run.date).run
+    redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'
+  end
+
   def print_recipes
+    authorize ProductionRun, :can_print?
     active_nav(:print_recipes)
     @date = date_query
     @production_run = production_run_for_date(@date)
@@ -27,31 +45,28 @@ class ProductionRunsController < ApplicationController
   end
 
   def batch_recipes
+    authorize ProductionRun, :can_print?
     active_nav(:batch_recipes)
     @projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
   end
 
-  def print
-    generator = ProductionRunGenerator.new(@production_run)
-    redirect_to ExporterJob.create(current_bakery, generator)
-  end
-
   def print_projection
+    authorize ProductionRun, :can_print?
     generator = ProjectionGenerator.new(current_bakery, date_query)
     redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def print_batch
+    authorize ProductionRun, :can_print?
     generator = BatchGenerator.new(current_bakery, start_date, end_date)
     redirect_to ExporterJob.create(current_bakery, generator)
   end
 
-  def reset
-    ProductionRunService.new(@production_run.bakery, @production_run.date).run
-    redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'
-  end
-
   private
+
+  def set_production_run
+    @production_run = policy_scope(ProductionRun).find(params[:id])
+  end
 
   def production_run_params
     params.require(:production_run).permit(
