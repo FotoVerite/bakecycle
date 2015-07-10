@@ -10,8 +10,8 @@
   },
   "scripts": {
     "test": "npm run jscs && npm run jsxhint",
-    "jscs": "find app/assets/javascripts -name '*.js*' | xargs jscs",
-    "jsxhint": "find app/assets/javascripts -name '*.js*' | xargs jsxhint"
+    "jscs": "find app/assets/javascripts -type f -name '*.js*' | grep -v '/vendor/' | xargs jscs",
+    "jsxhint": "find app/assets/javascripts -type f -name '*.js*' | grep -v '/vendor/' | xargs jsxhint"
   },
   "dependencies": {
     "backbone": "^1.2.1",

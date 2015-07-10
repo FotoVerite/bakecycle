@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_search_form, only: [:index, :active_orders]
+  before_action :set_search_form, only: [:index, :active_orders]
   before_action :set_order, only: [:edit, :update, :destroy, :copy]
   decorates_assigned :orders, :order
 
@@ -74,8 +74,12 @@ class OrdersController < ApplicationController
     @order = policy_scope(Order).find(params[:id])
   end
 
-  def load_search_form
-    @search_form = OrderSearchForm.new(params[:search])
+  def set_search_form
+    @search_form = OrderSearchForm.new(search_params)
+  end
+
+  def search_params
+    params[:search].permit(OrderSearchForm.params) if params[:search]
   end
 
   def order_params

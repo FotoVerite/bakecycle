@@ -1,18 +1,18 @@
 <%= simple_form_for search_form, url: orders_destination, method: :get, as: :search do |f| %>
   <div class="row collapse">
-    <div class="small-12 medium-2 columns">
-      <%= f.input :client_id , collection: orders.available_clients, as: :select, include_blank: 'All', required: false %>
-    </div>
-    <div class="small-12 medium-2 columns">
-      <%= f.input :route_id , collection: orders.available_routes, as: :select, include_blank: 'All', required: false %>
-    </div>
-    <div class="small-12 medium-2 columns">
-      <%= f.input :product_id , collection: orders.available_products, as: :select, include_blank: 'All', required: false %>
-    </div>
-    <div class="small-12 medium-2 columns">
+    <div class="small-12 medium-1 columns">
       <%= f.input :date, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
     </div>
-    <div class="small-12 medium-2 columns end">
+    <div class="small-12 medium-4 columns">
+      <%= f.input :client_id , collection: orders.available_clients, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Clients' } } %>
+    </div>
+    <div class="small-12 medium-4 columns">
+      <%= f.input :product_id , collection: orders.available_products, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Products' } } %>
+    </div>
+    <div class="small-12 medium-2 columns">
+      <%= f.input :route_id , collection: orders.available_routes, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Routes' } } %>
+    </div>
+    <div class="small-12 medium-1 columns end">
       <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
     </div>
   </div>

@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require jquery.ui.datepicker
 //= require jquery.timepicker.js
+//= require_tree ./vendor
 //= require angular/angular
 //= require ngmap
 //= require foundation/foundation
@@ -22,10 +23,10 @@
 
 // Angular components
 //= require ./angular/app.js
-//= require_tree ./angular/
+//= require_tree ./angular
 
 // JQuery components
-//= require_tree ./jquery-components/
+//= require_tree ./jquery-components
 
 // Browserify'd app components
 //= require app

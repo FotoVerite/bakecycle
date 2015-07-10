@@ -196,7 +196,7 @@
     </table>
   </div>
   <div class="row">
-   <%= link_to 'View More Orders', orders_path(search: {client_id: @client.id}), class: "button small right" %>
+   <%= link_to 'View More Orders', orders_path(search: {client_id: [@client.id]}), class: "button small right" %>
   </div>
 </fieldset>
 
@@ -232,6 +232,6 @@
     </table>
   </div>
   <div class="row">
-   <%= link_to 'View More Shipments', shipments_path(search: {client_id: @client.id}), class: "button small right" %>
+   <%= link_to 'View More Shipments', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
   </div>
 </fieldset>

@@ -1,0 +1,71 @@
+// customization
+.chosen-container .chosen-results li {
+  line-height: inherit;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice {
+  line-height: inherit;
+
+  .search-choice-close {
+    top: 10px;
+  }
+}
+
+.chosen-container .chosen-choices {
+  border: solid 2px $bc-lightgrey;
+          border-radius: 5px;
+     -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+  margin-top: -2px;
+  margin-bottom: -2px;
+}
+
+// stolen from foundation
+.chosen-container-active .chosen-choices {
+  box-shadow: 0 0 5px #999999;
+  transition: box-shadow 0.45s, border-color 0.45s ease-in-out;
+          border-bottom-left-radius: 0;
+     -moz-border-bottom-left-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+     -moz-border-bottom-right-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+}
+
+// Change the image stuff to use the asset pipeline
+.chosen-container-single .chosen-single abbr {
+  background: image-url('chosen-sprite.png') -42px 1px no-repeat;
+}
+
+.chosen-container-single .chosen-single div b {
+  background: image-url('chosen-sprite.png') no-repeat 0px 2px;
+}
+
+.chosen-container-single .chosen-search input[type="text"] {
+  background: white image-url('chosen-sprite.png') no-repeat 100% -20px;
+  background: image-url('chosen-sprite.png') no-repeat 100% -20px;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  background: image-url('chosen-sprite.png') -42px 1px no-repeat;
+}
+
+.chosen-rtl .chosen-search input[type="text"] {
+  background: white image-url('chosen-sprite.png') no-repeat -30px -20px;
+  background: image-url('chosen-sprite.png') no-repeat -30px -20px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi), only screen and (min-resolution: 1.5dppx) {
+  .chosen-rtl .chosen-search input[type="text"],
+  .chosen-container-single .chosen-single abbr,
+  .chosen-container-single .chosen-single div b,
+  .chosen-container-single .chosen-search input[type="text"],
+  .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
+  .chosen-container .chosen-results-scroll-down span,
+  .chosen-container .chosen-results-scroll-up span {
+    background-image: image-url('chosen-sprite@2x.png') !important;
+  }
+}
