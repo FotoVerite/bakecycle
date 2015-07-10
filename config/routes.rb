@@ -55,12 +55,14 @@ Rails.application.routes.draw do
 
   get 'active-orders', to: 'orders#active_orders'
   get 'print-recipes', to: 'production_runs#print_recipes'
-  get 'batch-recipes', to: 'production_runs#batch_recipes'
 
-  resources :production_runs do
+  resources :batch_recipes, only: [:index] do
+    get 'print', on: :collection
+  end
+
+  resources :production_runs, only: [:index, :edit, :update] do
     get 'print', on: :member
     get 'print_projection', on: :collection
-    get 'print_batch', on: :collection
     put 'reset', on: :member
 
     resources :run_items
