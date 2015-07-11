@@ -16,7 +16,6 @@ Feature: Shipments management
     And I filter shipments by the client "mandos"
     Then I should see shipments for the client "mandos"
     Then I should not see shipments for the client "amyavocado"
-    And I should see the search term "mandos" preserved in the client search box
 
     When I am on the "shipments" page
     And I filter shipments by to and from dates for the past week

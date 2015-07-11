@@ -1,9 +1,25 @@
 // Made by a Wizard
+@import 'vendor/jquery_ui';
+@import 'vendor/chosen';
+
 @import 'base/font_setup';
 @import 'base/foundation_and_overrides';
 @import 'base/mixins';
 @import 'base/variables';
 @import 'base/buttons';
 @import 'base/main';
-@import 'layout/base';
-@import 'vendor/jquery_ui';
+
+@import 'app/chosen';
+@import 'app/dashboard';
+@import 'app/devise';
+@import 'app/file_exporter';
+@import 'app/forms';
+@import 'app/loading_indicator';
+@import 'app/maps';
+@import 'app/pagination';
+@import 'app/responsive_table';
+@import 'app/sidenav';
+@import 'app/topmenusection';
+
+@import 'landingpage/base';
+@import 'registration/base';

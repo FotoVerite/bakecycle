@@ -54,8 +54,8 @@ When(/^I delete "(.*?)" shipment item$/) do |name|
 end
 
 When(/^I filter shipments by the client "(.*?)"$/) do |client_name|
-  select client_name, from: 'search[client_id]'
-  click_button 'Search'
+  find('#search_client_id_chosen').click
+  find('.active-result', text: client_name).click
 end
 
 Then(/^I should see shipments for the client "(.*?)"$/) do |client_name|
@@ -105,10 +105,6 @@ Then(/^I should see a list of shipments for only the past week$/) do
     expect(page).to_not have_content((today - 11.days).strftime('%Y-%m-%d'))
     expect(page).to_not have_content((today - 15.days).strftime('%Y-%m-%d'))
   end
-end
-
-Then(/^I should see the search term "(.*?)" preserved in the client search box$/) do |client|
-  find(:xpath, "//select/option[@selected='selected' and text()='#{client}']")
 end
 
 Then(/^I should see confirmation the shipment for "(.*?)" was deleted$/) do |shipment|

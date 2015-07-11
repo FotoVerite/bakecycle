@@ -19,14 +19,19 @@ class ShipmentSearcher
 
   private
 
-  def search_by_date(date)
-    return if date.blank?
-    @collection = @collection.where(date: date)
-  end
-
   def search_by_client(client_id)
     return if client_id.blank?
     @collection = @collection.where(client_id: client_id)
+  end
+
+  def search_by_product(product_id)
+    return if product_id.blank?
+    @collection = @collection.joins(:shipment_items).where(shipment_items: { product_id: product_id })
+  end
+
+  def search_by_date(date)
+    return if date.blank?
+    @collection = @collection.where(date: date)
   end
 
   def search_by_route(route_id)
@@ -42,10 +47,5 @@ class ShipmentSearcher
   def search_by_date_to(date_to)
     return if date_to.blank?
     @collection = @collection.where('date <= ?', date_to)
-  end
-
-  def search_by_product(product_id)
-    return if product_id.blank?
-    @collection = @collection.joins(:shipment_items).where(shipment_items: { product_id: product_id })
   end
 end
