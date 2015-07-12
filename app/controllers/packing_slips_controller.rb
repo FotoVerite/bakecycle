@@ -9,7 +9,7 @@ class PackingSlipsController < ApplicationController
   end
 
   def print
-    authorize Route
+    authorize Route, :print?
     generator = PackingSlipsGenerator.new(current_bakery, slip_date, print_invoices?)
     redirect_to ExporterJob.create(current_bakery, generator)
   end

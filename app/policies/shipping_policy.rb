@@ -1,4 +1,4 @@
-class RoutePolicy < ApplicationPolicy
+class ShippingPolicy < ApplicationPolicy
   def index?
     (admin? || read_permission?) && user.bakery
   end
@@ -28,13 +28,17 @@ class RoutePolicy < ApplicationPolicy
   end
 
   def manage_permission?
-    user.route_permission == 'manage'
+    user.shipping_permission == 'manage'
+  end
+
+  def print?
+    index?
   end
 
   private
 
   def read_permission?
-    %(read manage).include?(user.route_permission)
+    %(read manage).include?(user.shipping_permission)
   end
 
   class Scope < Scope
@@ -44,7 +48,7 @@ class RoutePolicy < ApplicationPolicy
     end
 
     def read_permission?
-      user.bakery && (admin? || %w(read manage).include?(user.route_permission))
+      user.bakery && (admin? || %w(read manage).include?(user.shipping_permission))
     end
   end
 end
