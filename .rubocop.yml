@@ -10,7 +10,6 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'config/initializers/simple_form.rb'
     - 'config/initializers/simple_form_foundation.rb'
-    - 'app/models/ability.rb'
 
 Metrics/LineLength:
   Max: 120
