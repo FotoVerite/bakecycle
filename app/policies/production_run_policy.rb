@@ -25,16 +25,16 @@ class ProductionRunPolicy < ApplicationPolicy
 
   private
 
+  def can_manage?
+    user.production_permission == 'manage'
+  end
+
   def bakery?
     user.bakery.present?
   end
 
   def belongs_to_bakery?
     record.bakery == user.bakery
-  end
-
-  def can_manage?
-    user.production_permission == 'manage'
   end
 
   def can_read?

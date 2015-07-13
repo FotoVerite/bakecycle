@@ -15,19 +15,21 @@
 
   <%= render partial: "run_items", locals: {f: f} %>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <% if f.object.persisted? %>
-        <%= f.submit "Update", class: "button", name: nil %>
-        <%= link_to 'Delete', production_run_path(f.object),
-          class: "button alert",
-          method: :delete,
-          data: { confirm: 'Are you sure?' } %>
-        <%= link_to 'Reset', reset_production_run_path(f.object),
-          class: "button alert",
-          method: :put,
-          data: { confirm: "You will lose all custom overbake products and quantities on this run.\n\nContinue resetting?" } %>
-      <% end %>
+  <% if policy(@production_run).update? %>
+    <div class="row">
+      <div class="small-12 columns">
+        <% if f.object.persisted? %>
+          <%= f.submit "Update", class: "button", name: nil %>
+          <%= link_to 'Delete', production_run_path(f.object),
+            class: "button alert",
+            method: :delete,
+            data: { confirm: 'Are you sure?' } %>
+          <%= link_to 'Reset', reset_production_run_path(f.object),
+            class: "button alert",
+            method: :put,
+            data: { confirm: "You will lose all custom overbake products and quantities on this run.\n\nContinue resetting?" } %>
+        <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 <% end %>
