@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
   resources :batch_recipes, only: [:index] do
     get 'print', on: :collection
+    get 'export_csv', on: :collection
   end
 
   resources :production_runs, only: [:index, :edit, :update] do

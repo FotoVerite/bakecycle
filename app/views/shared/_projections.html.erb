@@ -19,6 +19,16 @@
     ),
     target: "_blank", class: "button small"
   ) %>
+
+  <%= link_to(
+    "<i class='fi-page-export-pdf'></i>Export as CSV".html_safe,
+    export_csv_batch_recipes_path(
+      start_date: @projection.start_date.strftime("%Y-%m-%d"),
+      end_date: @projection.batch_end_date.strftime("%Y-%m-%d"),
+      format: :csv
+    ),
+    class: "button small"
+  ) %>
 <% end %>
 
 <table class="responsive-table production-run-projection">
@@ -32,21 +42,21 @@
     </tr>
   </thead>
   <tbody>
-    <% @projection.products_info.each do |projection| %>
+    <% @projection.products_info.each do |product_info| %>
       <tr>
         <th scope="row">
           <a class="product-info-tooltip">
-            <%= projection.product_name %>
+            <%= product_info.product_name %>
             <span>
-              <strong>Product Type:</strong> <%= projection.product_type %><br />
-              <strong>Total Lead Days:</strong> <%= projection.product_total_lead_days %>
+              <strong>Product Type:</strong> <%= product_info.product_type %><br />
+              <strong>Total Lead Days:</strong> <%= product_info.product_total_lead_days %>
             </span>
           </a>
         </th>
-        <td data-title="Total Qty"><%= projection.total_quantity %></td>
-        <td data-title="Order Qty"><%= projection.order_quantity %></td>
-        <td data-title="Over Bake %"><%= projection.product_over_bake %></td>
-        <td data-title="Over Bake Qty"><%= projection.overbake_quantity %></td>
+        <td data-title="Total Qty"><%= product_info.total_quantity %></td>
+        <td data-title="Order Qty"><%= product_info.order_quantity %></td>
+        <td data-title="Over Bake %"><%= product_info.product_over_bake %></td>
+        <td data-title="Over Bake Qty"><%= product_info.overbake_quantity %></td>
       </tr>
     <% end %>
   </tbody>
