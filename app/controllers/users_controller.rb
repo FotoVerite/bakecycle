@@ -55,8 +55,12 @@ class UsersController < ApplicationController
   private
 
   def invite_user
-    if user.invite!
-      flash[:notice] = t('devise.invitations.send_instructions', email: user.email)
+    @user.password = temp_password
+    @user.password_confirmation = temp_password
+
+    if @user.valid?
+      @user.invite!(current_user)
+      flash[:notice] = t('devise.invitations.send_instructions', email: @user.email)
       redirect_to users_path
     else
       render :new
@@ -70,6 +74,10 @@ class UsersController < ApplicationController
     else
       render :new
     end
+  end
+
+  def temp_password
+    @_temp_password ||= SecureRandom.hex
   end
 
   def set_user

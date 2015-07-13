@@ -49,6 +49,5 @@ module Bakecycle
     end
 
     ActionMailer::Base.delivery_method = :smtp
-    config.action_mailer.default_url_options = { host: 'bakecycle.com' }
   end
 end

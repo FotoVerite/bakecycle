@@ -5,7 +5,7 @@ module Users
     def send_email
       user = User.find(params[:format])
       authorize user
-      user.invite!
+      user.invite!(current_user)
       set_flash_message :notice, :send_instructions, email: user.email
       redirect_to users_path
     end
