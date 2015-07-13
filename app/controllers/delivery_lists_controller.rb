@@ -8,7 +8,7 @@ class DeliveryListsController < ApplicationController
   end
 
   def print
-    authorize Route
+    authorize Route, :print?
     generator = DeliveryListGenerator.new(current_bakery, date_query)
     redirect_to ExporterJob.create(current_bakery, generator)
   end

@@ -9,6 +9,10 @@ class Route < ActiveRecord::Base
   validates :active, inclusion: [true, false]
   validates :bakery, presence: true
 
+  def self.policy_class
+    ShippingPolicy
+  end
+
   def self.active
     where(active: true)
   end

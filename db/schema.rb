@@ -332,7 +332,7 @@ ActiveRecord::Schema.define(version: 20150713155551) do
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
     t.string   "client_permission",      default: "none", null: false
-    t.string   "route_permission",       default: "none", null: false
+    t.string   "shipping_permission",    default: "none", null: false
     t.string   "production_permission",  default: "none", null: false
   end
 

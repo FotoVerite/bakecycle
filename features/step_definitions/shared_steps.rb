@@ -62,9 +62,19 @@ Given(/^I am logged in as an user with client "(.*?)" access with a bakery calle
   login_as(user, scope: :user)
 end
 
-Given(/^I am logged in as an user with route "(.*?)" access with a bakery called "(.*?)"$/) do |access, name|
+Given(/^I am logged in as an user with shipping "(.*?)" access with a bakery called "(.*?)"$/) do |access, name|
   bakery = create(:bakery, name: name)
-  user = create(:user, bakery: bakery, route_permission: access)
+  user = create(:user, bakery: bakery, shipping_permission: access)
+  login_as(user, scope: :user)
+end
+
+Given(/^Theres a bakery called "(.*?)"$/) do |name|
+  create(:bakery, name: name)
+end
+
+Given(/^I am logged in as an user apart of "(.*?)" bakery with shipping "(.*?)" access$/) do |bakery_name, access|
+  bakery = Bakery.find_by(name: bakery_name)
+  user = create(:user, bakery: bakery, shipping_permission: access)
   login_as(user, scope: :user)
 end
 
@@ -99,4 +109,10 @@ end
 
 Given(/^I click on "(.*?)" and don't enter any information$/) do |linkable_text|
   click_on(linkable_text, match: :first)
+end
+
+Then(/^I should see the pdf generated page with "(.*?)" included in the url$/) do |pdf_name|
+  page.within_window(page.windows.last) do
+    current_url.include?(pdf_name)
+  end
 end

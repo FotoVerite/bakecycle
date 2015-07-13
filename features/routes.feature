@@ -1,8 +1,8 @@
 Feature: Routes
 
   @javascript
-  Scenario: As a user with full access to routes
-    Given I am logged in as an user with route "manage" access with a bakery called "biencuit"
+  Scenario: As a user with full access to shipping routes
+    Given I am logged in as an user with shipping "manage" access with a bakery called "biencuit"
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
 
     When I am on the "routes" page
@@ -44,8 +44,8 @@ Feature: Routes
     And "Flatbush" should be present
     And "Chinatown" should not be present
 
-  Scenario: As a user with read access to routes
-    Given I am logged in as an user with route "read" access with a bakery called "biencuit"
+  Scenario: As a user with read access to shipping routes
+    Given I am logged in as an user with shipping "read" access with a bakery called "biencuit"
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
 
     When I am on the "routes" page
@@ -53,8 +53,8 @@ Feature: Routes
     When I click on "Canal"
     Then "You are not authorized to access this page." should be present
 
-  Scenario: As a user with none access to routes
-    Given I am logged in as an user with route "none" access with a bakery called "biencuit"
+  Scenario: As a user with none access to shipping routes
+    Given I am logged in as an user with shipping "none" access with a bakery called "biencuit"
     And There are "biencuit" bakery routes named "Canal" and "Chinatown"
     When I attempt to visit the "routes" page
     Then "You are not authorized to access this page." should be present

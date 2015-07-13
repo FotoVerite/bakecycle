@@ -43,7 +43,7 @@ class UserPolicy < ApplicationPolicy
       attributes << :product_permission
       attributes << :bakery_permission
       attributes << :client_permission
-      attributes << :route_permission
+      attributes << :shipping_permission
       attributes << :production_permission
     end
     attributes
