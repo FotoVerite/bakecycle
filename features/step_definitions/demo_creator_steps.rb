@@ -10,5 +10,5 @@ end
 
 Then(/^"(.*?)" bakery should have demodata in the database$/) do |name|
   bakery = Bakery.find_by(name: name)
-  expect(bakery.products.size).to eq(3)
+  expect(bakery.products.count).to be > 5
 end

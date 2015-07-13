@@ -87,7 +87,7 @@ class Registration
   end
 
   def create_demo
-    DemoCreator.new(bakery).run
+    DemoCreatorJob.perform_later(bakery)
     true
   end
 
