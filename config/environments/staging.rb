@@ -69,4 +69,8 @@ Rails.application.configure do
     domain: 'staging.bakecycle.com',
     enable_starttls_auto: true
   }
+  config.action_mailer.default_url_options = {
+    protocol: 'https',
+    host: 'staging.bakecycle.com'
+  }
 end

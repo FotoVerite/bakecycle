@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   devise_scope :user do
     post '/users/invitations/send_email', to: 'users/invitations#send_email', as: 'send_user_invitation'
     get '/users/invitations/accept', to: 'users/invitations#edit', as: 'accept_user_invitation'
-    post '/users/invitation', to: 'users/invitations#update'
+    put '/users/invitations/', to: 'users/invitations#update', as: 'user_invitation'
+    post '/users/invitations/', to: 'users/invitations#create'
   end
   get :sign_in, to: 'landing_pages#sign_in'
   get 'privacy_policy', to: 'landing_pages#privacy_policy'
