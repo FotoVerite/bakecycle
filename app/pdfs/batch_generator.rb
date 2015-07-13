@@ -38,6 +38,6 @@ class BatchGenerator
   end
 
   def pdf
-    ProductionRunPdf.new(projection_data)
+    BatchRunPdf.new(projection_data)
   end
 end
