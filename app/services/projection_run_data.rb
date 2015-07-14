@@ -27,5 +27,6 @@ class ProjectionRunData < ProductionRunData
   end
 
   def id
+    nil
   end
 end
