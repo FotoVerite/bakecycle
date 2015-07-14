@@ -14,6 +14,7 @@ module.exports = {
   },
 
   label: function() {
+    var model = this.props.model;
     var {
       required,
       label,
@@ -21,7 +22,7 @@ module.exports = {
     } = this.props;
     if (label) {
       return (
-        <label className={this.requiredClass()} htmlFor={`input-${field}`}>
+        <label className={this.requiredClass()} htmlFor={`input-${field}-${model.cid}`}>
           {label} { required ? <abbr title="required">*</abbr> : '' }
         </label>
       );

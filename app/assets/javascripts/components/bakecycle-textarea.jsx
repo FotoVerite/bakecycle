@@ -12,7 +12,7 @@ module.exports = React.createClass({
     label: React.PropTypes.string,
     model: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
-    required: React.PropTypes.bool,
+    required: React.PropTypes.bool
   },
 
   render: function() {
@@ -29,7 +29,7 @@ module.exports = React.createClass({
       <div className={`input ${this.requiredClass()} ${error ? 'error' : ''}`}>
         {this.label()}
         <textarea
-          id={`input-${field}`}
+          id={`input-${field}-${model.cid}`}
           className={`textarea ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}

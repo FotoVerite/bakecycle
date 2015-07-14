@@ -13,7 +13,7 @@ module.exports = React.createClass({
     name: React.PropTypes.string.isRequired,
     options: React.PropTypes.array.isRequired,
     required: React.PropTypes.bool,
-    inline: React.PropTypes.bool,
+    inline: React.PropTypes.bool
   },
 
   render: function() {
@@ -31,7 +31,7 @@ module.exports = React.createClass({
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
         {this.label()}
         <select
-          id={`input-${field}`}
+          id={`input-${field}-${model.cid}`}
           className={`select ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}

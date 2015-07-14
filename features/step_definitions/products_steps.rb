@@ -39,6 +39,7 @@ When(/^I fill out the price variant form with:$/) do |table|
     '.price:last' => pricev['price'],
     '.quantity:last' => pricev['quantity']
   )
+  select pricev[:client], from: 'input-clientId-c1'
 end
 
 Then(/^I click on the last price's remove button$/) do
@@ -63,4 +64,12 @@ Then(/^The product "(.*?)" should not be present$/) do |product|
   within '.responsive-table' do
     expect(page).to_not have_content(product)
   end
+end
+
+Given(/^"(.*?)" is a client of "(.*?)"$/) do |client, bakery|
+  client = FactoryGirl.create(:client, name: client)
+  bakery = Bakery.find_by(name: bakery)
+  bakery.clients << client
+  bakery.save
+  bakery.reload
 end

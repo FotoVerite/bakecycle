@@ -54,21 +54,36 @@ describe Product do
     end
   end
 
-  describe '#price' do
+  describe '.price(qty, client)' do
     let(:product) { create(:product, base_price: 10) }
+    let(:client_1) { create(:client) }
+    let(:client_2) { create(:client) }
 
     it 'gives the base price if no variants' do
-      expect(product.price(1)).to eq(10)
+      expect(product.price(1, client_1)).to eq(10)
     end
 
-    it 'returns the matching variant price based upon quantity' do
-      create(:price_variant, product: product, price: 9, quantity: 2)
-      create(:price_variant, product: product, price: 8, quantity: 3)
-      create(:price_variant, product: product, price: 7, quantity: 4)
-      expect(product.price(1)).to eq(10)
-      expect(product.price(2)).to eq(9)
-      expect(product.price(3)).to eq(8)
-      expect(product.price(4)).to eq(7)
+    it 'returns the matching variant price based upon quantity and client' do
+      create(:price_variant, product: product, price: 2, quantity: 50)
+      create(:price_variant, product: product, client: client_1, price: 9, quantity: 10)
+      create(:price_variant, product: product, client: client_1, price: 8, quantity: 15)
+      create(:price_variant, product: product, client: client_1, price: 7, quantity: 20)
+      create(:price_variant, product: product, client: client_2, price: 5, quantity: 10)
+      create(:price_variant, product: product, client: client_2, price: 4, quantity: 15)
+      create(:price_variant, product: product, client: client_2, price: 3, quantity: 20)
+
+      expect(product.price(1, client_1)).to eq(10)
+      expect(product.price(9, client_1)).to eq(10)
+      expect(product.price(13, client_1)).to eq(9)
+      expect(product.price(20, client_1)).to eq(7)
+      expect(product.price(21, client_1)).to eq(7)
+      expect(product.price(1, client_2)).to eq(10)
+      expect(product.price(9, client_2)).to eq(10)
+      expect(product.price(13, client_2)).to eq(5)
+      expect(product.price(20, client_2)).to eq(3)
+      expect(product.price(25, client_2)).to eq(3)
+      expect(product.price(50, client_2)).to eq(2)
+      expect(product.price(50, client_1)).to eq(2)
     end
   end
 
@@ -96,8 +111,8 @@ describe Product do
     describe '.perform' do
       it 'fetches the id and runs the method' do
         expect(Product).to receive(:find).with(4).and_return(product)
-        expect(product).to receive(:price).with(:dude)
-        Product.perform(4, :price, :dude)
+        expect(product).to receive(:price).with(:wohhh, :dude)
+        Product.perform(4, :price, :wohhh, :dude)
       end
 
       it 're-enqueues itself when terminated' do

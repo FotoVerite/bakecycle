@@ -22,22 +22,28 @@ module.exports = React.createClass({
 
   render: function() {
     var prices = this.state.prices;
-    var fields = prices.map((model) => {
-      return <PriceFields key={model.cid} model={model} />;
+    var clients = this.props.clients;
+    var fields = prices.map((priceVariant) => {
+      return <PriceFields key={priceVariant.cid} model={priceVariant} clients={clients} />;
     });
 
     return (<div>
       <fieldset>
         <legend>Prices</legend>
         <div className="row collapse">
-          <div className="small-12 medium-4 columns">
+          <div className="small-12 medium-3 columns">
             <label className="string required hide-for-small-down">
-              <abbr title="required">*</abbr>Price
+              Client
             </label>
           </div>
-          <div className="small-12 medium-4 columns end">
+          <div className="small-12 medium-3 columns end">
             <label className="string required hide-for-small-down">
-              <abbr title="required">*</abbr>Quantity
+              Quantity <abbr title="required">*</abbr>
+            </label>
+          </div>
+          <div className="small-12 medium-3 columns end">
+            <label className="string required hide-for-small-down">
+              Price <abbr title="required">*</abbr>
             </label>
           </div>
         </div>

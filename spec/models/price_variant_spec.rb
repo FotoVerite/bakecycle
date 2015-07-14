@@ -7,6 +7,7 @@ describe PriceVariant do
     expect(price_variant).to respond_to(:price)
     expect(price_variant).to respond_to(:quantity)
     expect(price_variant).to belong_to(:product)
+    expect(price_variant).to belong_to(:client)
   end
 
   it 'validations' do

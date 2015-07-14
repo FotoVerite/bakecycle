@@ -62,15 +62,18 @@ describe OrderItem do
     end
   end
 
-  context '#total_quantity_price' do
+  describe '.total_quantity_price' do
+    let(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
+
     it 'calculates total quantity price for an order item' do
       apple = create(:product, name: 'Apple', base_price: 0.5)
-      create(:price_variant, product: apple, quantity: 11, price: 0.4)
-      create(:price_variant, product: apple, quantity: 13, price: 0.2)
-      create(:price_variant, product: apple, quantity: 15, price: 0.1)
+      create(:price_variant, product: apple, quantity: 11, price: 0.4, client: order.client)
+      create(:price_variant, product: apple, quantity: 13, price: 0.2, client: order.client)
+      create(:price_variant, product: apple, quantity: 15, price: 0.1, client: order.client)
 
       order_item = create(
         :order_item,
+        order: order,
         product: apple,
         monday: 1,
         tuesday: 1,
