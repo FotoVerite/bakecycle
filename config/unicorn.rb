@@ -1,6 +1,6 @@
 # rubocop:disable Rails/Output
 
-worker_processes Integer(ENV['WEB_CONCURRENCY'] || 3)
+worker_processes Integer(ENV['WEB_CONCURRENCY'] || 2)
 timeout Integer(ENV['WEB_TIMEOUT'] || 25)
 preload_app true
 
