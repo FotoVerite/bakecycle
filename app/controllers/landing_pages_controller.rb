@@ -1,4 +1,5 @@
 class LandingPagesController < ApplicationController
+  skip_before_action :authenticate_user!
   before_action :skip_authorization, :skip_policy_scope
 
   def index

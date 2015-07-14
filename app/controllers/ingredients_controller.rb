@@ -1,5 +1,4 @@
 class IngredientsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_ingredient, only: [:edit, :update, :destroy]
   decorates_assigned :ingredients, :ingredient
 
