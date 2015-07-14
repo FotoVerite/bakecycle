@@ -19,11 +19,15 @@
   <td data-title="Total Qty"><strong><%= f.object.total_quantity %></strong></td>
   <td data-title="Order Qty"><%= f.object.order_quantity %></td>
   <td data-title="Over Bake %"><%= f.object.product_over_bake %> %</td>
-  <td data-title="Over Bake Qty"><%= f.input :overbake_quantity, label: false %></td>
-  <% unless f.object.from_shipment? %>
-    <td>
-      <%= f.hidden_field :_destroy, value: false %>
-      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
-    </td>
+  <% if policy(@production_run).update? %>
+    <td data-title="Over Bake Qty"><%= f.input :overbake_quantity, label: false %></td>
+    <% unless f.object.from_shipment? %>
+      <td>
+        <%= f.hidden_field :_destroy, value: false %>
+        <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
+      </td>
+    <% end %>
+  <% else %>
+    <td data-title="Over Bake Qty"><%= f.object.overbake_quantity %></td>
   <% end %>
 </tr>

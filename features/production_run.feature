@@ -84,6 +84,12 @@ Feature: Production Run Editing
     Then "Reset Complete" should be present
     And the product quantity should be the same as the shipment item
 
+  Scenario: As a user with read access, I can't modify product recipes
+    Given there is a run item and shipment item for a "biencuit" production run
+    And I have "read" production permission
+    And I am on the Print Recipes page
+    Then "Reset" should not be present
+
   Scenario: Not seeing production tab
     Given I am logged in as a user with bakery "none" access
     And I go to the dashboard

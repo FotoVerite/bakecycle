@@ -7,7 +7,9 @@
         <th>Order Quantity</th>
         <th>Over Bake %</th>
         <th>Over Bake Quantity</th>
-        <th>Delete</th>
+        <% if policy(@production_run).update? %>
+          <th>Delete</th>
+        <% end %>
       </tr>
     </thead>
 
@@ -25,5 +27,7 @@
     </tbody>
   </table>
 
-  <%= link_to('Add Product', '', :'ng-click' => "add()", class: "button") if f.object.persisted? %>
+  <% if policy(@production_run).update? %>
+    <%= link_to('Add Product', '', :'ng-click' => "add()", class: "button") if f.object.persisted? %>
+  <% end %>
 </div>
