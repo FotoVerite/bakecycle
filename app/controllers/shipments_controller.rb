@@ -1,5 +1,4 @@
 class ShipmentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_search_form, only: [:index, :invoices, :invoices_csv, :invoices_iif]
   before_action :set_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif]
   decorates_assigned :shipments, :shipment

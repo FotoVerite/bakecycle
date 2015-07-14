@@ -1,5 +1,4 @@
 class DailyTotalsController < ApplicationController
-  before_action :authenticate_user!
   before_action :skip_authorization, :skip_policy_scope
 
   def index

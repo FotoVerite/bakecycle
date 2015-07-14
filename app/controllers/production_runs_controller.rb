@@ -1,5 +1,4 @@
 class ProductionRunsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_production_run, only: [:edit, :update, :print, :reset]
   after_action :skip_policy_scope, only: [:print_recipes, :print_projection]
   decorates_assigned :production_runs, :production_run

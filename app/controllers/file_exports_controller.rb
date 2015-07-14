@@ -1,5 +1,4 @@
 class FileExportsController < ApplicationController
-  before_action :authenticate_user!
   decorates_assigned :file_export
 
   def show

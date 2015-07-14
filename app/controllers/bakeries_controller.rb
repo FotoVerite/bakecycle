@@ -1,5 +1,4 @@
 class BakeriesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_bakery, only: [:edit, :update, :destroy]
   decorates_assigned :bakeries, :bakery
 

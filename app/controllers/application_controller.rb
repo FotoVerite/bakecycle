@@ -1,12 +1,13 @@
 class ApplicationController < ActionController::Base
   include Pundit
-  protect_from_forgery with: :exception
+  after_action :verify_authorized, :verify_policy_scoped, unless: :devise_controller?
   before_action :active_nav
+  before_action :authenticate_user!
   before_action :default_side_nav
   before_action :resque_no_worker if Rails.env.development?
-  after_action :verify_authorized, :verify_policy_scoped, unless: :devise_controller?
   helper_method :current_bakery
   helper_method :item_finder
+  protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
 

@@ -1,5 +1,4 @@
 class RecipesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_recipe, only: [:edit, :update, :destroy]
   decorates_assigned :recipes, :recipe
 

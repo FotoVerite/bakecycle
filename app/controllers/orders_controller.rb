@@ -1,5 +1,4 @@
 class OrdersController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_search_form, only: [:index, :active_orders]
   before_action :set_order, only: [:edit, :update, :destroy, :copy]
   decorates_assigned :orders, :order

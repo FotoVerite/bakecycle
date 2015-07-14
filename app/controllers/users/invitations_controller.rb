@@ -1,5 +1,6 @@
 module Users
   class InvitationsController < Devise::InvitationsController
+    skip_before_action :authenticate_user!
     before_action :configure_permitted_parameters
 
     def send_email

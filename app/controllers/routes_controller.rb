@@ -1,5 +1,4 @@
 class RoutesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_route, only: [:edit, :update, :destroy]
   before_action :error_if_remaining_route, only: :destroy
   before_action :error_if_orders, only: :destroy
