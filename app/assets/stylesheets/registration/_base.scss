@@ -90,10 +90,6 @@
     margin-bottom: 21px;
   }
 
-  hr {
-    margin-bottom: 32px;
-  }
-
   .join-cta-button {
     @extend .default-btn;
     background-color: $bc-shakespeare;
@@ -112,8 +108,9 @@
   }
 
   .basic-info-container,
-  .your-account-container {
-    margin-bottom: 80px;
+  .your-account-container,
+  .credit-card-container {
+    margin-bottom: 33px;
   }
 
   .join-message {
@@ -128,5 +125,14 @@
     @extend .radius;
     background-color: $bc-alizarin-crimson;
     margin-left: 10px;
+  }
+
+  .payment-information-messsage {
+    color: $bc-silver-chalice;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
+    margin-top: 16px;
+    margin-bottom: 35px;
   }
 }

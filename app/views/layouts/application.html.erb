@@ -6,6 +6,7 @@
     <title><%= full_title(yield(:title)) %></title>
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
+    <%= yield :head %>
     <%= csrf_meta_tags %>
   </head>
 

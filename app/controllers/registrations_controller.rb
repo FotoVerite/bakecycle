@@ -12,7 +12,7 @@ class RegistrationsController < ApplicationController
 
   def create
     @registration = Registration.new(registration_params)
-    if @registration.save_with_demo
+    if @registration.save_and_setup
       sign_in @registration.user
       flash[:notice] = 'Thank you for registering with BakeCycle.'
       redirect_to dashboard_path
@@ -32,6 +32,8 @@ class RegistrationsController < ApplicationController
   end
 
   def registration_params
-    params.require(:registration).permit(:first_name, :last_name, :bakery_name, :email, :password, :plan_id)
+    params.require(:registration).permit(
+      :first_name, :last_name, :bakery_name, :email, :password, :plan_id, :stripe_token
+    )
   end
 end
