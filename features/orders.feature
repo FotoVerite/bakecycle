@@ -26,7 +26,7 @@ Feature: Orders
     Then "You have created a standing order for mandos." should be present
     When I click on "Create New Order From This Order"
     And I click on "Create"
-    Then "This order overlaps with ids" should be present
+    Then "Please review the errors below" should be present
     When I edit the order form with:
       | order_type | start_date |
       | temporary  | 2014-11-11 |

@@ -62,8 +62,8 @@ class OrdersController < ApplicationController
   end
 
   def copy
-    @order = OrderDuplicate.new(@order).order_dup
-    authorize @order, :create?
+    @order = OrderDuplicate.new(@order).duplicate
+    authorize @order, :new?
     render 'new'
   end
 
