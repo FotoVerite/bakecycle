@@ -21,12 +21,12 @@
   <td data-title="Over Bake %"><%= f.object.product_over_bake %> %</td>
   <% if policy(@production_run).update? %>
     <td data-title="Over Bake Qty"><%= f.input :overbake_quantity, label: false %></td>
-    <% unless f.object.from_shipment? %>
-      <td>
+    <td>
+      <% unless f.object.from_shipment? %>
         <%= f.hidden_field :_destroy, value: false %>
         <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
-      </td>
-    <% end %>
+      <% end %>
+    </td>
   <% else %>
     <td data-title="Over Bake Qty"><%= f.object.overbake_quantity %></td>
   <% end %>
