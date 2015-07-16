@@ -4,7 +4,9 @@ class ProductsController < ApplicationController
 
   def index
     authorize Product
-    @products = policy_scope(Product).order_by_name
+    @products = policy_scope(Product)
+      .order_by_name
+      .paginate(page: params[:page])
   end
 
   def new

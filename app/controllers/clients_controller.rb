@@ -4,7 +4,9 @@ class ClientsController < ApplicationController
 
   def index
     authorize Client
-    @clients = policy_scope(Client).order_by_name
+    @clients = policy_scope(Client)
+      .order_by_name
+      .paginate(page: params[:page])
   end
 
   def new

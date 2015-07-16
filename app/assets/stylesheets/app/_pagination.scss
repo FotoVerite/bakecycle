@@ -1,6 +1,7 @@
 .pagination {
-  background: #f1f1f1;
-  border: 1px solid #e5e5e5;
+  margin-bottom: 20px;
+  background: $bc-wild-sand;
+  border: 1px solid $bc-silver;
   text-align: center;
   padding: 1em;
   cursor: default;
@@ -10,7 +11,7 @@
   }
 
   .disabled {
-    color: #aaaaaa;
+    color: $bc-silver-chalice;
   }
 
   .current {
