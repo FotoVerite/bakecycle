@@ -39,7 +39,7 @@ module.exports = React.createClass({
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
         {this.label()}
         <input
-          id={`input-${field}`}
+          id={`input-${field}-${model.cid}`}
           className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}

@@ -68,24 +68,21 @@ class Product < ActiveRecord::Base
     attributes['quantity'].blank? && (attributes['price'] == '0.0' || attributes['price'].blank?)
   end
 
-  def save(*args)
-    super
-  rescue ActiveRecord::RecordNotUnique
-    errors[:base] << 'Quantity must be unique'
-    false
-  end
-
-  def price(quantity)
-    price_by_quantity(quantity) || base_price
-  end
-
-  # price variants are probably always going to be very small set, getting all of them allows the query to be cached
-  def price_by_quantity(quantity)
-    matching = price_variants.to_a.sort_by(&:quantity).reverse.detect { |variant| variant.quantity <= quantity }
-    matching.price if matching
+  def price(quantity, client)
+    price_by_quantity(quantity, client) || base_price
   end
 
   def weight_with_unit
     Unitwise(weight, unit)
+  end
+
+  private
+
+  def price_by_quantity(quantity, client)
+    matching = price_variants
+      .where('client_id IS NULL OR client_id = ?', client.id)
+      .order(quantity: :desc)
+      .detect { |variant| variant.quantity <= quantity }
+    matching.price if matching
   end
 end

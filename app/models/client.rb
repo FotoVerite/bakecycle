@@ -1,8 +1,9 @@
 class Client < ActiveRecord::Base
   extend AlphabeticalOrder
 
-  has_many :orders
+  has_many :orders, dependent: :destroy
   has_many :shipments
+  has_many :price_variants, dependent: :destroy
 
   belongs_to :bakery
 

@@ -105,11 +105,11 @@ class OrderItem < ActiveRecord::Base
   end
 
   def product_price
-    product.price(total_quantity) if product
+    product.price(total_quantity, order.client) if product && order
   end
 
   def total_quantity_price
-    product_price * total_quantity if product
+    product_price * total_quantity if product_price
   end
 
   def total_quantity

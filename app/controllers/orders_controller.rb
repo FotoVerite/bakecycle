@@ -25,6 +25,7 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
     else
+      @order.order_items.each { |item| item.order = @order }
       render 'new'
     end
   end
@@ -85,7 +86,8 @@ class OrdersController < ApplicationController
     params.require(:order).permit(
       :start_date, :end_date, :client_id, :route_id, :note, :order_type,
       order_items_attributes:
-      [:id, :product_id, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :_destroy]
+        [:id, :product_id, :monday, :tuesday, :wednesday,
+         :thursday, :friday, :saturday, :sunday, :_destroy]
     )
   end
 end

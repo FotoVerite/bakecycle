@@ -1,5 +1,6 @@
 var React = require('react');
 var BCInput = require('./bakecycle-input');
+var BCSelect = require('./bakecycle-select');
 
 module.exports = React.createClass({
   errorFor: function(field) {
@@ -16,6 +17,10 @@ module.exports = React.createClass({
   render: function() {
     var model = this.props.model;
     var { id, destroy } = model.toJSON();
+    var clients = this.props.clients.map((client) => {
+      return <option value={client.id}>{client.name}</option>;
+    });
+    clients.unshift(<option value="">All</option>);
     var namePrefix = `product[price_variants_attributes][${model.getNumericCID()}]`;
     var disabledClass = destroy ? 'disabled' : '';
 
@@ -26,24 +31,23 @@ module.exports = React.createClass({
       <input type="hidden" name={`${namePrefix}[id]`} value={id} />
       <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
       <div className="row collapse">
-        <div className="small-12 medium-4 columns">
+        <div className="small-12 medium-3 columns">
           <label className="string required hide-for-medium-up">
-            <abbr title="required">*</abbr>Price
+            Client
           </label>
-          <BCInput
+          <BCSelect
             model={model}
-            field="price"
-            name={`${namePrefix}[price]`}
+            field="clientId"
+            options={clients}
+            name={`${namePrefix}[client_id]`}
             type="number"
-            error={model.getError('price')}
-            placeholder="0.00"
+            error={model.getError('client_id')}
             disabled={destroy}
-            required
           />
         </div>
-        <div className="small-12 medium-4 columns">
+        <div className="small-12 medium-3 columns">
           <label className="string required hide-for-medium-up">
-            <abbr title="required">*</abbr>Quantity
+            Quantity <abbr title="required">*</abbr>
           </label>
           <BCInput
             model={model}
@@ -56,10 +60,25 @@ module.exports = React.createClass({
             required
           />
         </div>
-        <div className="small-12 medium-4 columns">
+        <div className="small-12 medium-3 columns">
+          <label className="string required hide-for-medium-up">
+            Price <abbr title="required">*</abbr>
+          </label>
+          <BCInput
+            model={model}
+            field="price"
+            name={`${namePrefix}[price]`}
+            type="number"
+            error={model.getError('price')}
+            placeholder="0.00"
+            disabled={destroy}
+            required
+          />
+        </div>
+        <div className="small-12 medium-3 columns">
           {destroy ? undoButton : removeButton}
         </div>
       </div>
     </div>);
-  },
+  }
 });
