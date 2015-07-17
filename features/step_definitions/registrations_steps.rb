@@ -16,14 +16,20 @@ When(/^I go to the new registrations page$/) do
   visit new_registration_path
 end
 
-When(/^I fill out the registrations form with:$/) do |table|
-  plan = Plan.find_by(name: table.hashes[0]['plan'])
+When(/^I submit the registration form with valid data$/) do
+  plan = Plan.find_by(name: 'beta_small')
   find("label[for=registration_plan_id_#{plan.id}]").click
-  fill_in 'registration_first_name', with: table.hashes[0]['first']
-  fill_in 'registration_last_name', with: table.hashes[0]['last']
-  fill_in 'registration_bakery_name', with: table.hashes[0]['bakery_name']
-  fill_in 'registration_email', with: table.hashes[0]['email']
-  fill_in 'registration_password', with: table.hashes[0]['password']
+  fill_in 'registration_first_name', with: 'john'
+  fill_in 'registration_last_name', with: 'dough'
+  fill_in 'registration_bakery_name', with: 'FitBake'
+  fill_in 'registration_email', with: 'j@dough.com'
+  fill_in 'registration_password', with: 'foobarbaz'
+  fill_in 'registration_card_number', with: '4242424242424242'
+  fill_in 'registration_card_zipcode', with: '12123'
+  fill_in 'registration_card_code', with: '121'
+  select '2', from: 'registration_card_month'
+  select '2016', from: 'registration_card_year'
+  click_on 'Join BakeCycle'
 end
 
 Then(/^I should be on the user's dashboard page$/) do

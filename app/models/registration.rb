@@ -2,7 +2,10 @@ class Registration
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :first_name, :last_name, :bakery_name, :email, :password, :bakery, :user, :plan, :id
+  attr_accessor :first_name, :last_name, :bakery_name, :email, :password, :bakery, :user,
+                :plan, :id, :card_number, :stripe_token
+  attr_reader :card_zipcode, :card_code, :card_month, :card_year, :card_token
+
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :bakery_name, presence: true
@@ -30,8 +33,18 @@ class Registration
     true
   end
 
-  def save_with_demo
-    save && create_demo
+  def save_and_setup
+    save && create_demo && create_customer
+  end
+
+  def month
+    1..12
+  end
+
+  def year
+    start_date = Time.zone.now.year
+    end_date = Time.zone.now.year + 15
+    start_date..end_date
   end
 
   def bakery
@@ -67,6 +80,11 @@ class Registration
   end
 
   private
+
+  def create_customer
+    StripeUserCreateJob.perform_later(user, stripe_token)
+    true
+  end
 
   def create_demo
     DemoCreator.new(bakery).run

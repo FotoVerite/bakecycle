@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714201332) do
+ActiveRecord::Schema.define(version: 20150717201032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20150714201332) do
     t.string   "quickbooks_account",                null: false
     t.boolean  "group_preferments",  default: true
     t.integer  "plan_id",                           null: false
+    t.string   "stripe_customer_id"
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree

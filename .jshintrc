@@ -11,7 +11,8 @@
   "futurehostile": true,
   "globals": {
     "angular": false,
-    "google": false
+    "google": false,
+    "Stripe": false
   },
   "iterator": true,
   "jquery": true,

@@ -27,6 +27,7 @@ gem 'prawn'
 gem 'prawn-table'
 gem 'pundit'
 gem 'rails', '4.2.2'
+gem 'stripe'
 gem 'react-rails'
 gem 'resque', require: 'resque/server'
 gem 'riif'
@@ -76,6 +77,7 @@ group :test do
   gem 'launchy'
   gem 'rspec-activejob'
   gem 'selenium-webdriver'
+  gem 'stripe-ruby-mock', '~> 2.1.1', require: false
   gem 'test_after_commit'
   gem 'webmock', require: false
 end
