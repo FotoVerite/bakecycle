@@ -32,6 +32,33 @@ describe Recipe do
     expect(recipe).to validate_numericality_of(:mix_size)
   end
 
+  describe '#destroy' do
+    it "wont destroy if it's used in a product as a motherdough" do
+      bakery = create(:bakery)
+      motherdough = create(:recipe_motherdough, bakery: bakery)
+      create(:product, motherdough: motherdough, bakery: bakery)
+      expect(motherdough.destroy).to eq(false)
+      expect(motherdough.errors.to_a).to eq(['This recipe is still used in a product'])
+    end
+
+    it "wont destroy if it's used in a product as an inclusion" do
+      bakery = create(:bakery)
+      inclusion = create(:recipe_inclusion, bakery: bakery)
+      create(:product, inclusion: inclusion, bakery: bakery)
+      expect(inclusion.destroy).to eq(false)
+      expect(inclusion.errors.to_a).to eq(['This recipe is still used in a product'])
+    end
+
+    it "wont destroy if it's used in another recipe" do
+      bakery = create(:bakery)
+      inclusion = create(:recipe_inclusion, bakery: bakery)
+      recipe = create(:recipe, bakery: bakery)
+      create(:recipe_item, recipe: recipe, inclusionable: inclusion)
+      expect(inclusion.destroy).to eq(false)
+      expect(inclusion.errors.to_a).to eq(['This recipe is still used in another recipe'])
+    end
+  end
+
   describe 'unique tests' do
     it 'has validations that need the db' do
       recipe = build(:recipe, name: 'parent recipe')

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717201032) do
+ActiveRecord::Schema.define(version: 20150719162110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 20150717201032) do
   add_index "order_items", ["total_lead_days"], name: "index_order_items_on_total_lead_days", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "client_id"
+    t.integer  "client_id",  null: false
     t.integer  "route_id"
     t.date     "start_date"
     t.date     "end_date"

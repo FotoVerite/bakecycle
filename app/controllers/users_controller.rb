@@ -39,7 +39,7 @@ class UsersController < ApplicationController
 
   def destroy
     authorize @user
-    @user.destroy
+    @user.destroy!
     flash[:notice] = "You have deleted #{@user.name}"
     redirect_to users_path
   end

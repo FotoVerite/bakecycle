@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Product do
   let(:product) { build(:product) }
 
-  it 'has model attributes' do
+  it 'has a shape' do
     expect(product).to respond_to(:name)
     expect(product).to respond_to(:product_type)
     expect(product).to respond_to(:description)
@@ -14,9 +14,6 @@ describe Product do
     expect(product).to respond_to(:inclusion)
     expect(product).to respond_to(:base_price)
     expect(product).to respond_to(:sku)
-  end
-
-  it 'has association' do
     expect(product).to belong_to(:bakery)
     expect(product).to belong_to(:motherdough)
     expect(product).to belong_to(:inclusion)
@@ -30,6 +27,16 @@ describe Product do
     expect(product).to validate_presence_of(:weight)
     expect(product).to validate_presence_of(:unit)
     expect(product).to validate_presence_of(:over_bake)
+  end
+
+  describe '#destroy' do
+    it "wont destroy if it's used in an order" do
+      bakery = create(:bakery)
+      product = create(:product, bakery: bakery)
+      create(:order, product: product, bakery: bakery)
+      expect(product.destroy).to eq(false)
+      expect(product.errors.to_a).to eq(['This product is still used in orders'])
+    end
   end
 
   describe 'name' do

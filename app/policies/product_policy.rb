@@ -4,7 +4,7 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def new?
-    (admin? || manage_permission?) && user.bakery
+    manage_permission? && user.bakery
   end
 
   def show?
@@ -12,23 +12,23 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def create?
-    (admin? || manage_permission?) && belongs_to_bakery?
+    manage_permission? && belongs_to_bakery?
   end
 
   def update?
-    (admin? || manage_permission?) && belongs_to_bakery?
+    manage_permission? && belongs_to_bakery?
   end
 
   def edit?
-    (admin? || manage_permission?) && belongs_to_bakery?
+    manage_permission? && belongs_to_bakery?
   end
 
   def destroy?
-    (admin? || manage_permission?) && belongs_to_bakery?
+    manage_permission? && belongs_to_bakery?
   end
 
   def manage_permission?
-    user.product_permission == 'manage'
+    admin? || (user.product_permission == 'manage')
   end
 
   private

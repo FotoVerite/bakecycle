@@ -39,9 +39,12 @@ class RecipesController < ApplicationController
 
   def destroy
     authorize @recipe
-    @recipe.destroy!
-    flash[:notice] = "You have deleted #{@recipe.name}"
-    redirect_to recipes_path
+    if @recipe.destroy
+      flash[:notice] = "You have deleted #{@recipe.name}"
+      redirect_to recipes_path
+    else
+      render 'edit'
+    end
   end
 
   private

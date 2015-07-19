@@ -41,9 +41,12 @@ class ProductsController < ApplicationController
 
   def destroy
     authorize @product
-    @product.destroy!
-    flash[:notice] = "You have deleted #{@product.name}."
-    redirect_to products_path
+    if @product.destroy
+      flash[:notice] = "You have deleted #{@product.name}."
+      redirect_to products_path
+    else
+      render 'edit'
+    end
   end
 
   private

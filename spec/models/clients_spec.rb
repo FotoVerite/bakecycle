@@ -4,7 +4,7 @@ describe Client do
   let(:client) { build(:client) }
   let(:client_with_fee) { build(:client, :with_delivery_fee) }
 
-  it 'has model attributes' do
+  it 'has a shape' do
     expect(client).to respond_to(:name)
     expect(client).to respond_to(:notes)
     expect(client).to respond_to(:official_company_name)
@@ -33,9 +33,7 @@ describe Client do
     expect(client).to respond_to(:delivery_fee_option)
     expect(client).to respond_to(:delivery_minimum)
     expect(client).to respond_to(:delivery_fee)
-  end
 
-  it 'has association' do
     expect(client).to belong_to(:bakery)
   end
 
@@ -77,9 +75,44 @@ describe Client do
     expect(client_with_fee).to_not be_valid
   end
 
-  it 'is not a number' do
+  it 'delivery fee validations' do
     expect(build(:client, :with_delivery_fee, delivery_minimum: 'not a number')).to_not be_valid
     expect(build(:client, :with_delivery_fee, delivery_fee: 'not a number')).to_not be_valid
+  end
+
+  describe 'geocoding' do
+    it 'geocodes new records' do
+      client = build(:client, latitude: nil, longitude: nil)
+      expect(client).to receive(:latitude=).and_call_original
+      expect(client).to receive(:longitude=).and_call_original
+      client.valid?
+      expect(client.latitude).to_not be_nil
+      expect(client.longitude).to_not be_nil
+    end
+
+    it "create doesn't geocode if the lat/long is supplied already" do
+      client = build(:client)
+      expect(client).to_not receive(:latitude=)
+      expect(client).to_not receive(:longitude=)
+      client.valid?
+      expect(client.latitude).to_not be_nil
+      expect(client.longitude).to_not be_nil
+    end
+
+    it 'geocodes address changes' do
+      client = create(:client)
+      expect(client).to receive(:latitude=)
+      expect(client).to receive(:longitude=)
+      client.delivery_address_street_2 = 'Apt. 4'
+      client.valid?
+    end
+
+    it "doesn't geocode if the address doesn't chanage" do
+      client = create(:client)
+      expect(client).to_not receive(:latitude=)
+      expect(client).to_not receive(:longitude=)
+      client.valid?
+    end
   end
 
   describe '.billing_term_days' do
