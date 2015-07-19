@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :client do
+    bakery
+
     sequence(:name) { |n| "#{Faker::Company.name} #{Faker::Company.suffix} #{n}" }
     business_phone { Faker::PhoneNumber.cell_phone }
     active true
@@ -25,8 +27,6 @@ FactoryGirl.define do
     primary_contact_email { Faker::Internet.email }
 
     billing_term { [:net_45, :net_30, :net_15, :net_7, :credit_card, :cod].sample }
-
-    bakery
 
     delivery_fee_option :no_delivery_fee
 

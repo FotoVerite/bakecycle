@@ -23,3 +23,7 @@ en:
   route_in_use:
     one: 'This route is being used in an order. Please reassign it before deleting this route. Or consider marking this route inactive.'
     other: 'This route is being used in %{count} orders. Please reassign them before deleting this route. Or consider marking this route inactive.'
+  product_in_use: 'This product is still used in orders'
+  ingredient_in_use: 'This ingredient is still used in a recipe'
+  recipe_in_use_products: 'This recipe is still used in a product'
+  recipe_in_use_recipies: 'This recipe is still used in another recipe'

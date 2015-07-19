@@ -8,15 +8,17 @@
   <thead>
     <tr>
       <th scope="col">Name</th>
+      <th scope="col">Type</th>
       <% if policy(Product).manage_permission? %>
         <th scope="col">Action</th>
       <% end %>
     </tr>
   </thead>
   <tbody>
-    <% @ingredients.each do |ingredient| %>
+    <% ingredients.each do |ingredient| %>
       <tr class="js-clickable-row" href="<%= edit_ingredient_path(ingredient) %>">
         <th scope="row"><%= link_to ingredient.name, edit_ingredient_path(ingredient) %></th>
+        <th scope="row"><%= ingredient.ingredient_type %></th>
         <% if policy(ingredient).edit? %>
           <td data-title="Action">
             <%= link_to edit_ingredient_path(ingredient) do %>

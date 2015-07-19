@@ -26,6 +26,8 @@ class Recipe < ActiveRecord::Base
 
   before_save :set_recipe_lead_days
   before_save :set_total_lead_days
+  before_destroy :check_for_products
+  before_destroy :check_for_parent_recipes
   after_commit :queue_touch_parent_objects, on: [:create, :update]
   after_touch :update_total_lead_days
 
@@ -93,6 +95,18 @@ class Recipe < ActiveRecord::Base
   end
 
   private
+
+  def check_for_products
+    return unless products.any?
+    errors.add(:base, I18n.t(:recipe_in_use_products))
+    false
+  end
+
+  def check_for_parent_recipes
+    return unless parent_recipes.any?
+    errors.add(:base, I18n.t(:recipe_in_use_recipies))
+    false
+  end
 
   def motherdough?
     recipe_type == 'dough'

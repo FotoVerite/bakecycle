@@ -9,6 +9,8 @@ class Route < ActiveRecord::Base
   validates :active, inclusion: [true, false]
   validates :bakery, presence: true
 
+  before_destroy :check_for_orders
+
   def self.policy_class
     ShippingPolicy
   end
@@ -17,8 +19,11 @@ class Route < ActiveRecord::Base
     where(active: true)
   end
 
-  def formatted_time
-    return unless departure_time
-    departure_time.strftime('%I:%M %p')
+  private
+
+  def check_for_orders
+    return unless orders.any?
+    errors.add(:base, I18n.t(:route_in_use, count: orders.count))
+    false
   end
 end

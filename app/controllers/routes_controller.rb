@@ -1,7 +1,6 @@
 class RoutesController < ApplicationController
   before_action :set_route, only: [:edit, :update, :destroy]
   before_action :error_if_remaining_route, only: :destroy
-  before_action :error_if_orders, only: :destroy
   decorates_assigned :routes, :route
 
   def index
@@ -41,9 +40,12 @@ class RoutesController < ApplicationController
 
   def destroy
     authorize @route
-    @route.destroy!
-    flash[:notice] = "You have deleted #{@route.name}"
-    redirect_to routes_path
+    if @route.destroy
+      flash[:notice] = "You have deleted #{@route.name}"
+      redirect_to routes_path
+    else
+      render 'edit'
+    end
   end
 
   private
@@ -63,12 +65,6 @@ class RoutesController < ApplicationController
   def error_if_remaining_route
     return false unless last_remaining_route?
     flash[:error] = 'Cannot delete last remaining route'
-    redirect_to edit_route_path(@route)
-  end
-
-  def error_if_orders
-    return false unless @route.orders.any?
-    flash[:error] = I18n.t :route_in_use, count: @route.orders.count
     redirect_to edit_route_path(@route)
   end
 end

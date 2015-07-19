@@ -3,31 +3,30 @@ require 'rails_helper'
 describe Ingredient do
   let(:ingredient) { build(:ingredient) }
 
-  it 'has model attributes' do
+  it 'has a shape' do
     expect(ingredient).to respond_to(:name)
     expect(ingredient).to respond_to(:description)
-  end
-
-  it 'has association' do
     expect(ingredient).to belong_to(:bakery)
   end
 
-  describe 'validations' do
-    describe 'name' do
-      it { expect(ingredient).to validate_presence_of(:name) }
-      it { expect(ingredient).to validate_length_of(:name).is_at_most(150) }
-      it { expect(ingredient).to validate_uniqueness_of(:name).scoped_to(:bakery_id) }
+  it 'has validations' do
+    expect(ingredient).to validate_presence_of(:name)
+    expect(ingredient).to validate_length_of(:name).is_at_most(150)
+    expect(ingredient).to validate_length_of(:description).is_at_most(500)
+  end
 
-      it 'can have same name if are apart of different bakeries' do
-        biencuit = create(:bakery)
-        ingredient_name = 'Carrots'
-        create(:ingredient, name: ingredient_name, bakery: biencuit)
-        expect(create(:ingredient, name: ingredient_name)).to be_valid
-      end
-    end
+  it 'validates uniqueness of name' do
+    expect(ingredient).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+  end
 
-    describe 'description' do
-      it { expect(ingredient).to validate_length_of(:description).is_at_most(500) }
+  describe '#destroy' do
+    it "wont destroy if it's used in a recipe" do
+      bakery = create(:bakery)
+      inclusion = create(:ingredient, bakery: bakery)
+      recipe = create(:recipe, bakery: bakery)
+      create(:recipe_item, recipe: recipe, inclusionable: inclusion)
+      expect(inclusion.destroy).to eq(false)
+      expect(inclusion.errors.to_a).to eq(['This ingredient is still used in a recipe'])
     end
   end
 end

@@ -39,9 +39,12 @@ class IngredientsController < ApplicationController
 
   def destroy
     authorize @ingredient
-    @ingredient.destroy!
-    flash[:notice] = "You have deleted #{@ingredient.name}"
-    redirect_to ingredients_path
+    if @ingredient.destroy
+      flash[:notice] = "You have deleted #{@ingredient.name}"
+      redirect_to ingredients_path
+    else
+      render 'edit'
+    end
   end
 
   private

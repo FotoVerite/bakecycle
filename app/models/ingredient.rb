@@ -3,7 +3,7 @@ class Ingredient < ActiveRecord::Base
 
   INGREDIENT_TYPES = %w(flour salt yeast sugar hydration eggs fats other)
 
-  has_many :recipe_parts, as: :inclusionable, class_name: 'RecipeItem'
+  has_many :recipe_items, as: :inclusionable, class_name: 'RecipeItem'
 
   belongs_to :bakery
 
@@ -14,11 +14,21 @@ class Ingredient < ActiveRecord::Base
             inclusion: { in: INGREDIENT_TYPES }
   validates :bakery, presence: true
 
+  before_destroy :check_for_recipes
+
   def self.policy_class
     ProductPolicy
   end
 
   def total_lead_days
     0
+  end
+
+  private
+
+  def check_for_recipes
+    return unless recipe_items.any?
+    errors.add(:base, I18n.t(:ingredient_in_use))
+    false
   end
 end

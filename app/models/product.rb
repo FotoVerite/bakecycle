@@ -37,6 +37,7 @@ class Product < ActiveRecord::Base
   before_save :set_total_lead_days, if: :update_total_lead_days?
   after_commit :queue_touch_order_items, on: [:create, :update]
   after_touch :update_total_lead_days
+  before_destroy :check_for_order_items
 
   def strip_name
     self.name = name.strip if name
@@ -61,7 +62,7 @@ class Product < ActiveRecord::Base
   end
 
   def touch_order_items
-    OrderItem.where(product_id: id).find_each(&:touch)
+    order_items.find_each(&:touch)
   end
 
   def reject_price_variants?(attributes)
@@ -77,6 +78,16 @@ class Product < ActiveRecord::Base
   end
 
   private
+
+  def order_items
+    OrderItem.where(product_id: id)
+  end
+
+  def check_for_order_items
+    return unless order_items.any?
+    errors.add(:base, I18n.t(:product_in_use))
+    false
+  end
 
   def price_by_quantity(quantity, client)
     matching = price_variants
