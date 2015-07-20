@@ -26,7 +26,6 @@ module LegacyImporter
       legacy_order_items.each_with_object({}) { |legacy_item, item_index|
         product = lookup_product(legacy_item)
         next unless product
-        next unless legacy_item[:orderitem_quantity] > 0
 
         item = item_index[product] ||= OrderItem.new(product: product)
         set_quantity_on_day(item, legacy_item)
