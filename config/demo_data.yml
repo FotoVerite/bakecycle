@@ -1,0 +1,1338 @@
+---
+:clients:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Café Sonata Kitchen
+    official_company_name: Café Sonata Kitchen NY, LLC
+    business_phone: 
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 108 Ninth Ave
+    delivery_address_street_2: ''
+    delivery_address_city: New York
+    delivery_address_state: NY
+    delivery_address_zipcode: '10011'
+    billing_address_street_1: 
+    billing_address_street_2: 
+    billing_address_city: 
+    billing_address_state: 
+    billing_address_zipcode: 
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.7428853
+    longitude: -74.0036991
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.7E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: daily_delivery_fee
+    ein: 
+    notes: Use loading dock on west 17th st
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Santagio's Sports
+    official_company_name: Santagio Wonderful Sports and Cafe
+    business_phone: 
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 135 W 20th St
+    delivery_address_street_2: ''
+    delivery_address_city: New York
+    delivery_address_state: NY
+    delivery_address_zipcode: '10011'
+    billing_address_street_1: 135 W 20th St
+    billing_address_street_2: ''
+    billing_address_city: New York
+    billing_address_state: NY
+    billing_address_zipcode: '10011'
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.7418976
+    longitude: -73.995485
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.7E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.35E2
+    delivery_fee_option: daily_delivery_fee
+    ein: 
+    notes: Use Master Key
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Full Cup Coffee - Soho
+    official_company_name: 'Full Cup Coffee #2 Inc'
+    business_phone: 
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 242 Mott St
+    delivery_address_street_2: ''
+    delivery_address_city: New York
+    delivery_address_state: NY
+    delivery_address_zipcode: '10012'
+    billing_address_street_1: 
+    billing_address_street_2: 
+    billing_address_city: 
+    billing_address_state: 
+    billing_address_zipcode: 
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.7232006
+    longitude: -73.9946873
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.65E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: daily_delivery_fee
+    ein: 
+    notes: 
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Grand Grocery - Chelsea
+    official_company_name: GGC of New York Corp
+    business_phone: ''
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 318 W 22nd St
+    delivery_address_street_2: ''
+    delivery_address_city: New York
+    delivery_address_state: NY
+    delivery_address_zipcode: '10011'
+    billing_address_street_1: 318 W 22nd St
+    billing_address_street_2: ''
+    billing_address_city: New York
+    billing_address_state: NY
+    billing_address_zipcode: '10011'
+    accounts_payable_contact_name: ''
+    accounts_payable_contact_phone: ''
+    accounts_payable_contact_email: ''
+    primary_contact_name: ''
+    primary_contact_phone: ''
+    primary_contact_email: ''
+    secondary_contact_name: ''
+    secondary_contact_phone: ''
+    secondary_contact_email: ''
+    latitude: 40.7448776
+    longitude: -73.9999827
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.5E3
+    delivery_fee: !ruby/object:BigDecimal 18:0.35E2
+    delivery_fee_option: weekly_delivery_fee
+    ein: ''
+    notes: ''
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Shakespeare Garden
+    official_company_name: ''
+    business_phone: 
+    business_fax: ''
+    active: true
+    delivery_address_street_1: '79th St Transverse '
+    delivery_address_street_2: ''
+    delivery_address_city: New York
+    delivery_address_state: NY
+    delivery_address_zipcode: '10024'
+    billing_address_street_1: 
+    billing_address_street_2: 
+    billing_address_city: 
+    billing_address_state: 
+    billing_address_zipcode: 
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.7791523
+    longitude: -73.9690607
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.65E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: daily_delivery_fee
+    ein: 
+    notes: To be on time or not to be on time, either way the restaurant receiving
+      loading dock is at the bottom of the ramp
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Tweed Courthouse
+    official_company_name: New York City Department of Education
+    business_phone: 
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 52 Chambers St
+    delivery_address_street_2: 
+    delivery_address_city: New York
+    delivery_address_state: NY
+    delivery_address_zipcode: '10007'
+    billing_address_street_1: 
+    billing_address_street_2: 
+    billing_address_city: 
+    billing_address_state: 
+    billing_address_zipcode: 
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.7133953
+    longitude: -74.0055456
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.65E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: daily_delivery_fee
+    ein: 
+    notes: Please ignore the history of this building
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Total Coffee House
+    official_company_name: All the grounds, LLC
+    business_phone: ''
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 1047 Manhattan Ave.
+    delivery_address_street_2: ''
+    delivery_address_city: Brooklyn
+    delivery_address_state: NY
+    delivery_address_zipcode: '11222'
+    billing_address_street_1: ''
+    billing_address_street_2: ''
+    billing_address_city: ''
+    billing_address_state: ''
+    billing_address_zipcode: ''
+    accounts_payable_contact_name: ''
+    accounts_payable_contact_phone: ''
+    accounts_payable_contact_email: ''
+    primary_contact_name: ''
+    primary_contact_phone: ''
+    primary_contact_email: ''
+    secondary_contact_name: ''
+    secondary_contact_phone: ''
+    secondary_contact_email: ''
+    latitude: 40.7346217
+    longitude: -73.9552168
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.65E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: daily_delivery_fee
+    ein: ''
+    notes: gentle with the gate please
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: More Than Pizza
+    official_company_name: 
+    business_phone: 
+    business_fax: 
+    active: true
+    delivery_address_street_1: 33 Havemeyer St
+    delivery_address_street_2: 
+    delivery_address_city: Brooklyn
+    delivery_address_state: NY
+    delivery_address_zipcode: '11211'
+    billing_address_street_1: 
+    billing_address_street_2: 
+    billing_address_city: 
+    billing_address_state: 
+    billing_address_zipcode: 
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.715565
+    longitude: -73.9534511
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.65E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: weekly_delivery_fee
+    ein: 
+    notes: 
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Big Cookies of the Big Apple
+    official_company_name: Best Produce Inc.
+    business_phone: 
+    business_fax: ''
+    active: true
+    delivery_address_street_1: 723 Fulton St
+    delivery_address_street_2: 
+    delivery_address_city: Brooklyn
+    delivery_address_state: NY
+    delivery_address_zipcode: '11217'
+    billing_address_street_1: 
+    billing_address_street_2: 
+    billing_address_city: 
+    billing_address_state: 
+    billing_address_zipcode: 
+    accounts_payable_contact_name: 
+    accounts_payable_contact_phone: 
+    accounts_payable_contact_email: 
+    primary_contact_name: 
+    primary_contact_phone: 
+    primary_contact_email: 
+    secondary_contact_name: 
+    secondary_contact_phone: 
+    secondary_contact_email: 
+    latitude: 40.6872623
+    longitude: -73.9763382
+    billing_term: net_30
+    delivery_minimum: !ruby/object:BigDecimal 18:0.5E2
+    delivery_fee: !ruby/object:BigDecimal 18:0.12E2
+    delivery_fee_option: daily_delivery_fee
+    ein: 
+    notes: Deliver to Bread Box
+:routes:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Smith St Pickup
+    notes: 
+    active: true
+    departure_time: 2000-01-01 03:00:00.000000000 -05:00
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: UPTOWN
+    notes: Van
+    active: true
+    departure_time: 2000-01-01 02:30:00.000000000 -05:00
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: DOWNTOWN
+    notes: Truck
+    active: true
+    departure_time: 2000-01-01 02:30:00.000000000 -05:00
+:ingredients:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Flour, Bread Blend
+    description: ''
+    ingredient_type: flour
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Instant Yeast
+    description: ''
+    ingredient_type: yeast
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Salt
+    description: 
+    ingredient_type: salt
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Water
+    description: 
+    ingredient_type: hydration
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Whole Wheat Flour
+    description: 
+    ingredient_type: flour
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Walnut Halves
+    description: 
+    ingredient_type: other
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Olive Oil
+    description: ''
+    ingredient_type: fats
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Granulated Sugar
+    description: ''
+    ingredient_type: sugar
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Whole Milk
+    description: ''
+    ingredient_type: hydration
+  10: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Butter, Sweet High Fat
+    description: ''
+    ingredient_type: other
+  11: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Flour, Pastry
+    description: ''
+    ingredient_type: flour
+  12: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Red Onion
+    description: 
+    ingredient_type: other
+  13: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Green Olives
+    description: 
+    ingredient_type: other
+  14: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Thompson Raisins
+    description: 
+    ingredient_type: other
+  15: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Peppercorns
+    description: ''
+    ingredient_type: other
+  16: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Feeding Levain
+    description: 
+    ingredient_type: other
+:recipes:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Croissant
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: dough
+    lead_days: 0
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Red Onion Baguette
+    note: ''
+    mix_size: 
+    mix_size_unit: kg
+    recipe_type: inclusion
+    lead_days: 0
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Raisin Walnut Campagne
+    note: ''
+    mix_size: 
+    mix_size_unit: kg
+    recipe_type: inclusion
+    lead_days: 0
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Green Olives for Campagne
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: inclusion
+    lead_days: 0
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Baguette Starter
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: preferment
+    lead_days: 1
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Ciabatta Starter
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: preferment
+    lead_days: 1
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Levain
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: preferment
+    lead_days: 1
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Ciabatta
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: dough
+    lead_days: 2
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Campagne
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.3E2
+    mix_size_unit: kg
+    recipe_type: dough
+    lead_days: 1
+  10: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Baguette
+    note: ''
+    mix_size: !ruby/object:BigDecimal 18:0.6E2
+    mix_size_unit: kg
+    recipe_type: dough
+    lead_days: 1
+  11: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Ham and Brie
+    note: Prepackaged
+    mix_size: 
+    mix_size_unit: oz
+    recipe_type: inclusion
+    lead_days: 0
+:recipe_items:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 7
+    inclusionable_id: 16
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E2
+    sort_id: 3
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 9
+    inclusionable_id: 7
+    inclusionable_type: Recipe
+    bakers_percentage: !ruby/object:BigDecimal 18:0.4E2
+    sort_id: 7
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 9
+    inclusionable_id: 4
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.85E2
+    sort_id: 4
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 9
+    inclusionable_id: 3
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.4E1
+    sort_id: 2
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 9
+    inclusionable_id: 2
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E0
+    sort_id: 3
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 10
+    inclusionable_id: 7
+    inclusionable_type: Recipe
+    bakers_percentage: !ruby/object:BigDecimal 18:0.25E2
+    sort_id: 100
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 10
+    inclusionable_id: 5
+    inclusionable_type: Recipe
+    bakers_percentage: !ruby/object:BigDecimal 18:0.95E2
+    sort_id: 100
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 10
+    inclusionable_id: 4
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.6E2
+    sort_id: 4
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 9
+    inclusionable_id: 5
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.2E2
+    sort_id: 1
+  10: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 8
+    inclusionable_id: 6
+    inclusionable_type: Recipe
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 100
+  11: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 8
+    inclusionable_id: 7
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E1
+    sort_id: 7
+  12: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 8
+    inclusionable_id: 4
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.85E2
+    sort_id: 4
+  13: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 8
+    inclusionable_id: 3
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E1
+    sort_id: 1
+  14: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 8
+    inclusionable_id: 2
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.4E0
+    sort_id: 2
+  15: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 10
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.35E2
+    sort_id: 6
+  16: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 9
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.25E2
+    sort_id: 7
+  17: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 8
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.2E2
+    sort_id: 4
+  18: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 3
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.4E1
+    sort_id: 2
+  19: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 2
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.25E1
+    sort_id: 3
+  20: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 11
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.2E2
+    sort_id: 0
+  21: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 1
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.8E2
+    sort_id: 1
+  22: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 2
+    inclusionable_id: 12
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.3E1
+    sort_id: 7
+  23: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 3
+    inclusionable_id: 15
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E0
+    sort_id: 7
+  24: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 3
+    inclusionable_id: 14
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E1
+    sort_id: 7
+  25: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 3
+    inclusionable_id: 6
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E1
+    sort_id: 7
+  26: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 4
+    inclusionable_id: 13
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E2
+    sort_id: 7
+  27: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 10
+    inclusionable_id: 3
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.4E1
+    sort_id: 1
+  28: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 5
+    inclusionable_id: 4
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 4
+  29: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 5
+    inclusionable_id: 2
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E0
+    sort_id: 2
+  30: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 5
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 0
+  31: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 6
+    inclusionable_id: 4
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 4
+  32: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 6
+    inclusionable_id: 2
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.4E0
+    sort_id: 2
+  33: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 6
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 0
+  34: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 7
+    inclusionable_id: 4
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E2
+    sort_id: 2
+  35: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 7
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.25E2
+    sort_id: 1
+  36: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 7
+    inclusionable_id: 5
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.75E2
+    sort_id: 0
+  37: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 10
+    inclusionable_id: 2
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.5E0
+    sort_id: 2
+  38: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 9
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.8E2
+    sort_id: 0
+  39: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 8
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 0
+  40: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    recipe_id: 10
+    inclusionable_id: 1
+    inclusionable_type: Ingredient
+    bakers_percentage: !ruby/object:BigDecimal 18:0.1E3
+    sort_id: 0
+:products:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Raisin Walnut Campagne
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.52E2
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.5E1
+    motherdough_id: 9
+    inclusion_id: 3
+    base_price: !ruby/object:BigDecimal 18:0.37E0
+    sku: ''
+    batch_recipe: false
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Raisin Walnut Campagne (large)
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.127E4
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 9
+    inclusion_id: 3
+    base_price: !ruby/object:BigDecimal 18:0.694E1
+    sku: ''
+    batch_recipe: false
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Campagne Olive Loaf
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.12E4
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 9
+    inclusion_id: 4
+    base_price: !ruby/object:BigDecimal 18:0.275E1
+    sku: ''
+    batch_recipe: false
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Croissant
+    product_type: vienoisserie
+    weight: !ruby/object:BigDecimal 18:0.15E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.4E1
+    motherdough_id: 1
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.11E1
+    sku: ''
+    batch_recipe: false
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Chocolate Croissant
+    product_type: vienoisserie
+    weight: !ruby/object:BigDecimal 18:0.2E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 1
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.238E1
+    sku: 
+    batch_recipe: false
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Almond Croissant
+    product_type: vienoisserie
+    weight: !ruby/object:BigDecimal 18:0.25E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 1
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.243E1
+    sku: 
+    batch_recipe: false
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Ham & Brie Croissant
+    product_type: vienoisserie
+    weight: !ruby/object:BigDecimal 18:0.2E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 1
+    inclusion_id: 11
+    base_price: !ruby/object:BigDecimal 18:0.25E1
+    sku: ''
+    batch_recipe: false
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Baguette 400g Loaf
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.4E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.2E1
+    motherdough_id: 10
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.24E1
+    sku: ''
+    batch_recipe: false
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Baguette 600g Loaf
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.6E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 10
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.162E1
+    sku: ''
+    batch_recipe: false
+  10: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Chocolate Chip Cookies
+    product_type: cookie
+    weight: !ruby/object:BigDecimal 18:0.15E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.5E1
+    motherdough_id: 
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.135E1
+    sku: ''
+    batch_recipe: true
+  11: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Croissant (75g)
+    product_type: vienoisserie
+    weight: !ruby/object:BigDecimal 18:0.75E2
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 1
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.79E0
+    sku: ''
+    batch_recipe: false
+  12: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Chocolate Croissant (75g)
+    product_type: vienoisserie
+    weight: !ruby/object:BigDecimal 18:0.75E2
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 1
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.54E0
+    sku: ''
+    batch_recipe: false
+  13: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Ciabatta Loaf
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.16E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 8
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.71E0
+    sku: ''
+    batch_recipe: false
+  14: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Campagne Loaf 0.6kg
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.6E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 9
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.222E1
+    sku: ''
+    batch_recipe: false
+  15: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Ciabatta Sandwich Bun
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.16E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.4E1
+    motherdough_id: 8
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.93E0
+    sku: 
+    batch_recipe: false
+  16: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Peanut Butter Cookie
+    product_type: cookie
+    weight: !ruby/object:BigDecimal 18:0.15E3
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 
+    inclusion_id: 
+    base_price: !ruby/object:BigDecimal 18:0.15E1
+    sku: ''
+    batch_recipe: true
+  17: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    name: Caramelized Onion Baguette
+    product_type: bread
+    weight: !ruby/object:BigDecimal 18:0.5E2
+    unit: g
+    description: ''
+    over_bake: !ruby/object:BigDecimal 18:0.0
+    motherdough_id: 10
+    inclusion_id: 2
+    base_price: !ruby/object:BigDecimal 18:0.56E0
+    sku: ''
+    batch_recipe: false
+:orders:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 9
+    route_id: 3
+    start_date: 2014-11-07
+    end_date: 
+    note: Please individually bag cookies
+    order_type: standing
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 3
+    route_id: 2
+    start_date: 2014-12-31
+    end_date: 
+    note: ''
+    order_type: standing
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 1
+    route_id: 3
+    start_date: 2015-01-10
+    end_date: 
+    note: ''
+    order_type: standing
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 4
+    route_id: 3
+    start_date: 2015-02-04
+    end_date: 
+    note: ''
+    order_type: standing
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 8
+    route_id: 1
+    start_date: 2015-02-11
+    end_date: 
+    note: ''
+    order_type: standing
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 5
+    route_id: 2
+    start_date: 2015-02-14
+    end_date: 
+    note: ''
+    order_type: standing
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 2
+    route_id: 3
+    start_date: 2014-02-05
+    end_date: 
+    note: ''
+    order_type: standing
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 6
+    route_id: 2
+    start_date: 2014-07-16
+    end_date: 2015-07-19
+    note: ''
+    order_type: standing
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 7
+    route_id: 2
+    start_date: 2015-04-01
+    end_date: 
+    note: ''
+    order_type: standing
+  10: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    client_id: 7
+    route_id: 2
+    start_date: 2015-07-18
+    end_date: 2015-07-18
+    note: ''
+    order_type: temporary
+:order_items:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 9
+    product_id: 7
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 3
+    monday: 5
+    tuesday: 0
+    wednesday: 5
+    thursday: 0
+    friday: 0
+    saturday: 5
+    sunday: 0
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 7
+    product_id: 11
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 7
+    product_id: 12
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  5: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 8
+    monday: 21
+    tuesday: 21
+    wednesday: 21
+    thursday: 21
+    friday: 21
+    saturday: 24
+    sunday: 24
+  6: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 8
+    product_id: 1
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  7: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 8
+    product_id: 2
+    monday: 1
+    tuesday: 1
+    wednesday: 1
+    thursday: 1
+    friday: 1
+    saturday: 1
+    sunday: 1
+  8: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 9
+    product_id: 6
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  9: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 1
+    product_id: 10
+    monday: 10
+    tuesday: 15
+    wednesday: 12
+    thursday: 12
+    friday: 10
+    saturday: 25
+    sunday: 5
+  10: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 1
+    product_id: 16
+    monday: 15
+    tuesday: 20
+    wednesday: 15
+    thursday: 12
+    friday: 10
+    saturday: 35
+    sunday: 5
+  11: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 2
+    product_id: 7
+    monday: 3
+    tuesday: 3
+    wednesday: 3
+    thursday: 3
+    friday: 3
+    saturday: 3
+    sunday: 3
+  12: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 2
+    product_id: 6
+    monday: 4
+    tuesday: 4
+    wednesday: 4
+    thursday: 4
+    friday: 4
+    saturday: 4
+    sunday: 4
+  13: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 2
+    product_id: 4
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  14: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 2
+    product_id: 5
+    monday: 5
+    tuesday: 5
+    wednesday: 5
+    thursday: 5
+    friday: 5
+    saturday: 5
+    sunday: 5
+  15: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 3
+    product_id: 15
+    monday: 100
+    tuesday: 90
+    wednesday: 90
+    thursday: 120
+    friday: 80
+    saturday: 30
+    sunday: 30
+  16: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 14
+    monday: 5
+    tuesday: 0
+    wednesday: 5
+    thursday: 0
+    friday: 0
+    saturday: 5
+    sunday: 0
+  17: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 13
+    monday: 16
+    tuesday: 16
+    wednesday: 16
+    thursday: 16
+    friday: 16
+    saturday: 16
+    sunday: 16
+  18: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 6
+    monday: 8
+    tuesday: 8
+    wednesday: 8
+    thursday: 8
+    friday: 8
+    saturday: 8
+    sunday: 8
+  19: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 7
+    monday: 8
+    tuesday: 8
+    wednesday: 8
+    thursday: 8
+    friday: 8
+    saturday: 8
+    sunday: 8
+  20: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 4
+    monday: 10
+    tuesday: 10
+    wednesday: 10
+    thursday: 10
+    friday: 10
+    saturday: 10
+    sunday: 10
+  21: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 4
+    product_id: 5
+    monday: 10
+    tuesday: 10
+    wednesday: 10
+    thursday: 10
+    friday: 10
+    saturday: 10
+    sunday: 10
+  22: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 5
+    product_id: 6
+    monday: 0
+    tuesday: 2
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 2
+    sunday: 0
+  23: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 5
+    product_id: 5
+    monday: 0
+    tuesday: 2
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 2
+    sunday: 0
+  24: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 6
+    product_id: 9
+    monday: 3
+    tuesday: 3
+    wednesday: 3
+    thursday: 3
+    friday: 4
+    saturday: 4
+    sunday: 4
+  25: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 8
+    product_id: 17
+    monday: 3
+    tuesday: 3
+    wednesday: 3
+    thursday: 3
+    friday: 3
+    saturday: 3
+    sunday: 3
+  26: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 9
+    product_id: 4
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  27: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 5
+    product_id: 4
+    monday: 0
+    tuesday: 2
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 2
+    sunday: 0
+  28: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 9
+    product_id: 5
+    monday: 6
+    tuesday: 6
+    wednesday: 6
+    thursday: 6
+    friday: 6
+    saturday: 6
+    sunday: 6
+  29: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 10
+    product_id: 4
+    monday: 0
+    tuesday: 0
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 6
+    sunday: 0
+  30: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 10
+    product_id: 5
+    monday: 0
+    tuesday: 0
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 6
+    sunday: 0
+  31: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 10
+    product_id: 9
+    monday: 0
+    tuesday: 0
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 5
+    sunday: 0
+  32: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 5
+    product_id: 10
+    monday: 0
+    tuesday: 2
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 2
+    sunday: 0
+  33: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 5
+    product_id: 16
+    monday: 0
+    tuesday: 2
+    wednesday: 0
+    thursday: 0
+    friday: 0
+    saturday: 2
+    sunday: 0
+  34: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    order_id: 3
+    product_id: 14
+    monday: 50
+    tuesday: 50
+    wednesday: 50
+    thursday: 25
+    friday: 30
+    saturday: 20
+    sunday: 20
+:price_variants:
+  1: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    product_id: 14
+    price: !ruby/object:BigDecimal 18:0.21E1
+    quantity: 10
+    client_id: 
+  2: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    product_id: 14
+    price: !ruby/object:BigDecimal 18:0.215E1
+    quantity: 1
+    client_id: 9
+  3: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    product_id: 10
+    price: !ruby/object:BigDecimal 18:0.145E1
+    quantity: 1
+    client_id: 9
+  4: !ruby/hash:ActiveSupport::HashWithIndifferentAccess
+    product_id: 16
+    price: !ruby/object:BigDecimal 18:0.165E1
+    quantity: 1
+    client_id: 9

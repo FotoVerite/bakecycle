@@ -58,14 +58,14 @@ describe Registration do
 
   describe '#save_and_setup' do
     it 'creates demo data and stripe customer' do
-      expect_any_instance_of(DemoCreator).to receive(:run)
+      expect(DemoCreatorJob).to receive(:perform_later)
       # expect(StripeUserCreateJob).to receive(:perform_later)
       registration = build(:registration, plan: plan)
       expect(registration.save_and_setup).to eq(true)
     end
 
     it "doesn't create demo data or stripe customer if things are invalid" do
-      expect_any_instance_of(DemoCreator).to_not receive(:run)
+      expect(DemoCreatorJob).to_not receive(:perform_later)
       expect(StripeUserCreateJob).to_not receive(:perform_later)
       registration = build(:registration, plan: plan, first_name: nil, last_name: nil)
       expect(registration.save_and_setup).to eq(false)
