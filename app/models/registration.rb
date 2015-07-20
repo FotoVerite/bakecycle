@@ -34,7 +34,7 @@ class Registration
   end
 
   def save_and_setup
-    save && create_demo && create_customer
+    save && create_demo # && create_stripe_customer
   end
 
   def month
@@ -81,7 +81,7 @@ class Registration
 
   private
 
-  def create_customer
+  def create_stripe_customer
     StripeUserCreateJob.perform_later(user, stripe_token)
     true
   end
