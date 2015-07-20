@@ -67,8 +67,12 @@ describe LegacyImporter::OrderItemsBuilder do
         { orderitem_day: 'tue', orderitem_quantity: 0, orderitem_productid: 2 }
       ]
     end
-    it 'ignores items with no quantities' do
-      expect(builder.make_order_items).to be_empty
+    it 'includes items with no quantities' do
+      item = builder.make_order_items.first
+      expect(item).to be_a(OrderItem)
+      expect(item).to be_valid
+      expect(item.product).to eq(product)
+      expect(item.monday).to eq(0)
     end
   end
 end
