@@ -109,7 +109,7 @@ end
 
 Then(/^I should see confirmation the shipment for "(.*?)" was deleted$/) do |shipment|
   within '.alert-box' do
-    expect(page).to have_content("You have deleted the shipment for #{shipment}")
+    expect(page).to have_content("You have deleted the invoice for #{shipment}")
   end
 end
 

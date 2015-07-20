@@ -17,7 +17,7 @@ class ShipmentsController < ApplicationController
     @shipment = policy_scope(Shipment).build(shipment_params)
     authorize @shipment
     if @shipment.save
-      flash[:notice] = "You have created a shipment for #{@shipment.client_name}."
+      flash[:notice] = "You have created an invoice for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
       render 'new'
@@ -31,7 +31,7 @@ class ShipmentsController < ApplicationController
   def update
     authorize @shipment
     if @shipment.update(shipment_params)
-      flash[:notice] = "You have updated the shipment for #{@shipment.client_name}."
+      flash[:notice] = "You have updated the invoice for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
       render 'edit'
@@ -41,7 +41,7 @@ class ShipmentsController < ApplicationController
   def destroy
     authorize @shipment
     @shipment.destroy!
-    flash[:notice] = "You have deleted the shipment for #{@shipment.client_name}."
+    flash[:notice] = "You have deleted the invoice for #{@shipment.client_name}."
     redirect_to shipments_path
   end
 

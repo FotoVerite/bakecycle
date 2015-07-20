@@ -39,8 +39,8 @@ Feature: Navigation
   Scenario: As a user, I should be able to visit Shipments index from the dashboard
     Given I am logged in as a user
     When I go to the dashboard
-    And I click on "Shipments"
-    Then "Add New Shipment" should be present
+    And I click on "Invoices"
+    Then "Add New Invoice" should be present
 
   Scenario: As a admin, I should be able to visit Bakeries index from the dashboard
     Given I am logged in as an admin

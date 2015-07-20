@@ -1,22 +1,28 @@
-<% provide(:title, "Shipments") %>
+<% provide(:title, "Invoices") %>
 
-<h1>Shipments</h1>
+<h1>Invoices</h1>
 <% if policy(Shipment).new? %>
-  <p><%= link_to 'Add New Shipment', new_shipment_path, class: "button" %></p>
+  <p><%= link_to 'Add New Invoice', new_shipment_path, class: "button" %></p>
 <% end %>
 
 <%= render partial: 'search_form', object: @search_form %>
 
 <% if @shipments.any? %>
   <ul class="stack-for-small secondary button-group">
-    <li><%= link_to "<i class='fi-page-export-pdf'></i> Export Invoices".html_safe,
-      invoices_shipments_path(search: params[:search]), target: '_blank', class: "button" %>
+    <li>
+      <%= link_to invoices_shipments_path(search: params[:search]), target: '_blank', class: "button" do %>
+        <i class="fi-page-export-pdf"></i> Print Invoices
+      <% end %>
     </li>
-    <li><%= link_to "<i class='fi-page-export-csv'></i> Export CSV".html_safe,
-      invoices_csv_shipments_path(search: params[:search]), class: "button" %>
+    <li>
+      <%= link_to invoices_csv_shipments_path(search: params[:search]), class: "button" do %>
+        <i class="fi-page-export-csv"></i> Export CSV
+      <% end %>
     </li>
-    <li><%= link_to "<i class='fi-page-export'></i> Export QuickBooks".html_safe,
-        invoices_iif_shipments_path(search: params[:search]), class: "button" %>
+    <li>
+      <%= link_to invoices_iif_shipments_path(search: params[:search]), class: "button" do %>
+        <i class="fi-page-export"></i> Export QuickBooks
+      <% end %>
     </li>
   </ul>
 <% end %>
@@ -40,7 +46,7 @@
         <td data-title="Price"><%= shipment.price %></td>
         <td data-title="Action">
           <%= link_to edit_shipment_path(shipment) do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Shipment">
+            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Invoice">
               <i class="fi-page-edit"></i>
             </span>
           <% end %>
