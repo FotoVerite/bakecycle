@@ -17,34 +17,32 @@
   <fieldset>
     <legend>Product Information</legend>
     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :name, as: :string %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
+        <%= f.input :product_type, collection: product.product_types_select, prompt: "Select One", as: :select %>
+      </div>
+      <div class="small-12 medium-4 columns">
         <%= f.input :sku, as: :string %>
       </div>
     </div>
     <div class="row">
-      <div class="small-12 medium-6 columns">
-        <%= f.input :product_type, collection: product.product_types_select, prompt: "Select One", as: :select %>
-      </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :base_price, as: :string %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :weight, as: :string%>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :unit, collection: product.units_select, as: :select, include_blank: false %>
       </div>
     </div>
     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :over_bake, label: "over bake %", as: :string%>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns end">
         <%= f.label :total_lead_days %>
         <input ng-disabled="true" type="text" value="<%= product.total_lead_days %>" />
       </div>
