@@ -36,8 +36,10 @@
     Stripe.card.createToken(stripeRequiredInfo, stripeResponseHandler);
   };
 
-  $(function() {
-    $('#registration-form').on('submit', formHandler);
-  });
+  window.stripeForm = formHandler;
 
+  // DISABLED
+  //   $(function() {
+  //     $('#registration-form').on('submit', formHandler);
+  //   });
 })();

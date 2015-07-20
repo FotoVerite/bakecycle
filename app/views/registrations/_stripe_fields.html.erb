@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="credit-card-container">
+    <h2>Your Payment Information</h2>
+    <span class="payment-errors"></span>
+    <div class="row">
+      <div class="small-12 medium-5 columns">
+        <%= f.input(
+          :card_number,
+          as: :string,
+          label: "Card Number",
+          input_html: {
+            "data-stripe": "number",
+            name: nil,
+            autocomplete: 'off'
+          },
+          required: true
+        ) %>
+      </div>
+      <div class="small-12 medium-4 columns">
+        <%= f.input(
+          :card_zipcode,
+          as: :string,
+          label: "Postal/Zip",
+          input_html: {
+            "data-stripe": "address_zip",
+            name: nil,
+            autocomplete: 'off'
+          },
+          required: true
+        ) %>
+      </div>
+      <div class="small-12 medium-3 columns">
+        <%= f.input(
+          :card_code,
+          as: :string,
+          label: "CVC",
+          input_html: {
+            "data-stripe": "cvc",
+            name: nil,
+            autocomplete: 'off'
+          },
+          required: true
+        ) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 medium-5 columns">
+        <%= f.input(
+          :card_month,
+          collection: @registration.month,
+          prompt: "Please Select",
+          label: "Month",
+          input_html: {
+            class: "cc-dropdown",
+            "data-stripe": "exp-month",
+            name: nil,
+            autocomplete: 'off'
+          },
+          required: true
+        ) %>
+      </div>
+      <div class="small-12 medium-3 columns end">
+        <%= f.input(
+          :card_year,
+          collection: @registration.year,
+          prompt: "Please Select",
+          label: "Year",
+          input_html: {
+            class: "cc-dropdown",
+            "data-stripe": "exp-year",
+            name: nil,
+            autocomplete: 'off'
+          },
+          required: true
+        ) %>
+      </div>
+    </div>
+    <p class="payment-information-messsage">We can accept a PO or paying by invoice if you have a large group. Please <%= mail_to "support@bakecycle.com", "email us", html_options = { class:"underlined-link" } %> and we'll be happy to help.</p>
+    <hr>
+  </div>
+</div>
