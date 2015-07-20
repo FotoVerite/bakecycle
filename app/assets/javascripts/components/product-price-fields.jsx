@@ -31,7 +31,7 @@ module.exports = React.createClass({
       <input type="hidden" name={`${namePrefix}[id]`} value={id} />
       <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
       <div className="row collapse">
-        <div className="small-12 medium-3 columns">
+        <div className="small-12 medium-5 columns">
           <label className="string required hide-for-medium-up">
             Client
           </label>
@@ -47,7 +47,7 @@ module.exports = React.createClass({
         </div>
         <div className="small-12 medium-3 columns">
           <label className="string required hide-for-medium-up">
-            Quantity <abbr title="required">*</abbr>
+            Minimum Quantity <abbr title="required">*</abbr>
           </label>
           <BCInput
             model={model}
@@ -75,7 +75,7 @@ module.exports = React.createClass({
             required
           />
         </div>
-        <div className="small-12 medium-3 columns">
+        <div className="small-12 medium-1 columns end">
           {destroy ? undoButton : removeButton}
         </div>
       </div>

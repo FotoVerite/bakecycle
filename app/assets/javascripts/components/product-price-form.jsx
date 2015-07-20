@@ -31,7 +31,7 @@ module.exports = React.createClass({
       <fieldset>
         <legend>Prices</legend>
         <div className="row collapse">
-          <div className="small-12 medium-3 columns">
+          <div className="small-12 medium-5 columns">
             <label className="string required hide-for-small-down">
               Client
             </label>

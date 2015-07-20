@@ -117,7 +117,6 @@ module.exports = React.createClass({
               name='recipe[mix_size]'
               label='Mix Size'
               type="number"
-              required
               error={this.props.errors.mix_size} />
             <p className="help-text">
               * Pre-ferment mix bowls will match motherdough bowls when only included in one motherdough

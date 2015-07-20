@@ -26,9 +26,9 @@
         </p>
       </div>
     </div>
+    <% unless f.object.persisted? %>
     <div class="row">
-      <% unless f.object.persisted? %>
-        <div class="small-12 medium-6 columns">
+        <div class="small-12 medium-4 columns">
           <%= f.input(
             :client_id,
             collection: order.available_clients,
@@ -38,8 +38,26 @@
             as: :select
           )%>
         </div>
-      <% end %>
-      <div class="small-12 medium-6 columns">
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="small-12 medium-4 columns">
+        <%= f.input(
+          :start_date,
+          as: :string,
+          label: "Start Date",
+          input_html: { class: "js-datepicker", "ng-model" => "order.startDate" }
+        ) %>
+      </div>
+      <div class="small-12 medium-4 columns end" ng-hide="isTemporary()">
+        <%= f.input(
+          :end_date,
+          as: :string,
+          label: "End Date",
+          input_html: { class: "js-datepicker"}
+        ) %>
+      </div>
+      <div class="small-12 medium-4 columns end">
         <%= f.input(
           :route_id,
           collection: order.available_routes,
@@ -50,27 +68,6 @@
         ) %>
       </div>
     </div>
-
-    <div class="row">
-      <div class="small-12 medium-6 columns">
-        <%= f.input(
-          :start_date,
-          as: :string,
-          label: "Start Date",
-          input_html: { class: "js-datepicker", "ng-model" => "order.startDate" }
-        ) %>
-      </div>
-      <div class="small-12 medium-6 columns end" ng-hide="isTemporary()">
-        <%= f.input(
-          :end_date,
-          as: :string,
-          label: "End Date",
-          input_html: { class: "js-datepicker"}
-        ) %>
-      </div>
-    </div>
-
-
     <div class="row">
       <div class="small-12 columns">
         <%= f.input :note, label: "Special Notes", as: :text %>
@@ -80,7 +77,7 @@
     <% if f.object.persisted? %>
       <div class="row">
         <div class="small-12 medium-6 columns">
-          <p><strong>Order Lead Time: <%= order.total_lead_days %></strong></p>
+          <p><strong>Order Lead Days: <%= order.total_lead_days %></strong></p>
         </div>
       </div>
     <% end %>

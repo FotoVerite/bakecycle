@@ -6,20 +6,22 @@
     <legend>Information</legend>
 
     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :client_id, collection: shipment.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
       </div>
-
-      <div class="small-12 medium-6 columns">
+     <div class="small-12 medium-4 columns">
+        <%= f.input :date, as: :string, label: "Shipment Date", input_html: { class: "js-datepicker" } %>
+      </div>
+      <div class="small-12 medium-4 columns">
         <%= f.input :route_id, collection: shipment.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
       </div>
     </div>
 
     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :delivery_fee %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-2 end columns">
         <%= f.label :auto_generated %>
         <input ng-disabled="true" type="text" value="<%= shipment.auto_generated? %>" />
       </div>
@@ -32,9 +34,6 @@
     </div>
 
     <div class="row">
-      <div class="small-12 medium-4 columns">
-        <%= f.input :date, as: :string, label: "Shipment Date", input_html: { class: "js-datepicker" } %>
-      </div>
 
       <% if f.object.persisted? %>
         <div class="small-12 medium-4 columns">

@@ -84,7 +84,7 @@ module.exports = React.createClass({
             value={totalLeadDays} />
         </div>
 
-        <div className="small-12 medium-2 columns">
+        <div className="small-12 medium-1 end columns">
           {destroy ? undoButton : removeButton}
         </div>
       </div>
