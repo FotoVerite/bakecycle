@@ -2,12 +2,19 @@
 
 <h1>Client: <%= client.name %></h1>
 
-<ul class="stack-for-small secondary button-group">
-  <% if policy(client).edit? %>
-    <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
-  <% end %>
-  <li><%= link_to 'Back', clients_path, class: "button small" %></li>
-</ul>
+<div class="client-actions">
+  <ul class="stack-for-small secondary button-group left">
+    <% if policy(client).edit? %>
+      <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
+    <% end %>
+    <li><%= link_to 'Back', clients_path, class: "button small" %></li>
+  </ul>
+
+<% if policy(Client).new? %>
+  <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button right" %>
+<% end %>
+</div>
+
 
 <div
   class="map-container"

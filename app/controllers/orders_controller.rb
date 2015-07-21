@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_search_form, only: [:index, :active_orders]
+  before_action :set_search_form, only: :index
   before_action :set_order, only: [:edit, :update, :destroy, :copy]
   decorates_assigned :orders, :order
 
@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = policy_scope(Order).build(order_type: 'standing', start_date: Time.zone.today)
+    @order = policy_scope(Order).build(client: client, order_type: 'standing', start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
     @order.order_items.build
     authorize @order
@@ -51,17 +51,6 @@ class OrdersController < ApplicationController
     redirect_to orders_path
   end
 
-  def active_orders
-    authorize Order, :index?
-    active_nav(:active_orders)
-    @search_form.date ||= Time.zone.today
-    @orders = policy_scope(Order)
-      .active(@search_form.date)
-      .search(@search_form)
-      .sort_for_active
-      .paginate(page: params[:page])
-  end
-
   def copy
     @order = OrderDuplicate.new(@order).duplicate
     authorize @order, :new?
@@ -76,6 +65,10 @@ class OrdersController < ApplicationController
 
   def set_search_form
     @search_form = OrderSearchForm.new(search_params)
+  end
+
+  def client
+    @client = Client.find(params[:client_id]) if params[:client_id]
   end
 
   def search_params
