@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :set_search_form, only: :index
-  before_action :set_order, only: [:edit, :update, :destroy, :copy]
+  before_action :set_order, only: [:edit, :update, :destroy, :copy, :print]
   decorates_assigned :orders, :order
 
   def index
@@ -55,6 +55,12 @@ class OrdersController < ApplicationController
     @order = OrderDuplicate.new(@order).duplicate
     authorize @order, :new?
     render 'new'
+  end
+
+  def print
+    authorize @order, :show?
+    generator = OrderGenerator.new(@order)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   private

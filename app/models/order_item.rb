@@ -15,12 +15,17 @@ class OrderItem < ActiveRecord::Base
     :saturday,
     :sunday
   ]
-
   validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
   before_save :set_total_lead_days, if: :update_total_lead_days?
   after_touch :update_total_lead_days
+
+  scope :order_by_product_type_and_name, -> { joins(:product).order('products.product_type asc, products.name asc') }
+
+  def self.group_and_order_by_product
+    order_by_product_type_and_name.group_by { |order_item| order_item.product.product_type }
+  end
 
   def update_total_lead_days?
     new_record? || product_id_changed?
