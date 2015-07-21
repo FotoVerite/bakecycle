@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/wizarddevelopment/unitwise/
+  remote: git@github.com:wizarddevelopment/unitwise.git
   revision: 38e10b63b6a1ab89bbedd63f44889180bd6a189b
   branch: upgrade-parslet
   specs:
