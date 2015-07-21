@@ -1,14 +1,3 @@
-GIT
-  remote: git://github.com/wizarddevelopment/unitwise.git
-  revision: 38e10b63b6a1ab89bbedd63f44889180bd6a189b
-  branch: upgrade-parslet
-  specs:
-    unitwise (1.0.4)
-      liner (~> 0.2)
-      memoizable (~> 0.4)
-      parslet (~> 1.5)
-      signed_multiset (~> 0.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -471,6 +460,11 @@ GEM
       rack
       raindrops (~> 0.7)
     uniform_notifier (1.8.0)
+    unitwise-193 (1.0.4)
+      liner (~> 0.2)
+      memoizable (~> 0.4)
+      parslet (~> 1.5)
+      signed_multiset (~> 0.2)
     vegas (0.1.11)
       rack (>= 1.0.0)
     warden (1.2.3)
@@ -563,7 +557,7 @@ DEPENDENCIES
   test_after_commit
   uglifier (>= 1.3.0)
   unicorn
-  unitwise!
+  unitwise-193
   web-console (~> 2.0)
   webmock
   will_paginate (~> 3.0.6)
