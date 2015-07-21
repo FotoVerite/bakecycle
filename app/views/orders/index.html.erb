@@ -1,6 +1,6 @@
 <% provide(:title, "Orders") %>
 
-<h1>Order History</h1>
+<h1>Orders</h1>
 
 <% if policy(Client).new? %>
   <p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>

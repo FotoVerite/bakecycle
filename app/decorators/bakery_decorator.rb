@@ -22,4 +22,8 @@ class BakeryDecorator < Draper::Decorator
   def parameterized_name
     object.name.parameterize
   end
+
+  def plans_select
+    Plan.all.map { |plan| [plan.display_name, plan.id] }
+  end
 end

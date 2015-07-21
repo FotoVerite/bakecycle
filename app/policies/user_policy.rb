@@ -37,15 +37,17 @@ class UserPolicy < ApplicationPolicy
 
   def permitted_attributes
     attributes = [:name, :email, :password, :password_confirmation]
-    attributes << :bakery_id if admin?
     if manage_permission?
-      attributes << :user_permission
-      attributes << :product_permission
-      attributes << :bakery_permission
-      attributes << :client_permission
-      attributes << :shipping_permission
-      attributes << :production_permission
+      attributes += [
+        :user_permission,
+        :product_permission,
+        :bakery_permission,
+        :client_permission,
+        :shipping_permission,
+        :production_permission
+      ]
     end
+    attributes << :bakery_id if admin?
     attributes
   end
 

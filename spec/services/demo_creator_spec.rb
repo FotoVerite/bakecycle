@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 describe DemoCreator do
-  it 'can import from the current yml' do
-    bakery = create(:bakery)
-    DemoCreator.new(bakery).run
-  end
-
   it 'can recreate data' do
     bakery = create(:bakery)
     create(:order, bakery: bakery)

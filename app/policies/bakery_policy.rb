@@ -35,6 +35,19 @@ class BakeryPolicy < ApplicationPolicy
     user.bakery == record
   end
 
+  def change_plan?
+    admin?
+  end
+
+  def permitted_attributes
+    attributes = [
+      :name, :logo, :email, :phone_number, :address_street_1, :address_street_2, :address_city,
+      :address_state, :address_zipcode, :kickoff_time, :quickbooks_account, :group_preferments
+    ]
+    attributes << :plan_id if change_plan?
+    attributes
+  end
+
   private
 
   def read_permission?

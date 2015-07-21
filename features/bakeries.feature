@@ -1,9 +1,10 @@
 Feature: Bakery
 
   @javascript
-  Scenario: As an Admin, I can manage bakeries
+  Scenario: As an admin, I can manage bakeries
     Given I am logged in as an admin
     And there are bakeries named "Biencuit","Grumpy" and "Wonder"
+    And There is bakery plans available
     And I am on the "bakeries" page
     Then I should see a list of bakeries including "Biencuit", "Grumpy" and "Wonder"
     When I click on "Wonder"
@@ -15,6 +16,7 @@ Feature: Bakery
     And I upload my Bakery logo
     And I click on "Create"
     Then "You have created" should be present
+    Then "Au Bon Pain" bakery should have demodata in the database
 
     And I am on the edit page for "Grumpy" bakery
     When I change the bakery name to "Cheeky's"
