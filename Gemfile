@@ -35,7 +35,7 @@ gem 'sass-rails'
 gem 'simple_form'
 gem 'uglifier', '>= 1.3.0'
 gem 'unicorn', require: false
-gem 'unitwise', git: 'git@github.com:wizarddevelopment/unitwise.git', branch: 'upgrade-parslet'
+gem 'unitwise', github: 'wizarddevelopment/unitwise', branch: 'upgrade-parslet'
 gem 'will_paginate', '~> 3.0.6'
 gem 'wizarddev-heroku'
 
