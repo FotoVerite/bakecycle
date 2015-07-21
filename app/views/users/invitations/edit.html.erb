@@ -1,5 +1,9 @@
 <h2><%= t 'devise.invitations.edit.header' %></h2>
 
+<p>
+  <%= t("devise.invitations.edit.welcome_text", bakery_name: resource.bakery.name) %>
+</p>
+
 <%= simple_form_for resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put } do |f| %>
   <%= devise_error_messages! %>
   <%= f.hidden_field :invitation_token %>
@@ -8,4 +12,7 @@
   <%= f.input :password_confirmation %>
 
   <%= f.button :submit, t("devise.invitations.edit.submit_button") %>
+
+  <p class="join-message">When you click join BakeCycle, you are also agreeing to our <%= link_to "Terms of Service", terms_of_service_path, class: "underlined-link", target: '_blank' %> and our <%= link_to "Privacy Policy", privacy_policy_path, class: "underlined-link", target: '_blank' %>.</p>
+
 <% end %>

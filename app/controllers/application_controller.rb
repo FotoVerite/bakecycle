@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(_resource)
-    root_path
+    root_path(message: true)
   end
 
   def resque_no_worker
@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_path
     return dashboard_path if user_signed_in?
-    root_path
+    root_path(message: true)
   end
 
   def not_authorized
