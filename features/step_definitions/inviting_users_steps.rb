@@ -32,6 +32,6 @@ end
 Then(/^There should be an email to confirm the account$/) do
   @user ||= User.last
   open_email(@user.email)
-  expect(current_email).to have_content "Hello #{@user.email}"
+  expect(current_email).to have_content "Hello #{@user.name || @user.email}"
   expect(current_email).to have_content 'Accept invitation'
 end

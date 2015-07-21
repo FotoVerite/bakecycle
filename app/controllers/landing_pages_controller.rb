@@ -3,7 +3,8 @@ class LandingPagesController < ApplicationController
   before_action :skip_authorization, :skip_policy_scope
 
   def index
-    expires_in 2.minutes, public: true
+    # don't send cache headers if we're told there's going to be a flash
+    expires_in 2.minutes, public: true unless params[:message]
   end
 
   def privacy_policy

@@ -23,11 +23,11 @@
   <fieldset>
     <legend>Bakery Address</legend>
     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :address_street_1, as: :string %>
       </div>
 
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 end columns">
         <%= f.input :address_street_2, as: :string %>
       </div>
     </div>
@@ -50,10 +50,10 @@
   <fieldset>
     <legend>Run Time</legend>
     <div class="row">
-      <div class="small-12 medium-6 columns select-time-wrapper">
+      <div class="small-12 medium-4 columns select-time-wrapper">
         <%= f.input :kickoff_time, as: :string, placeholder: "Select Start Time", input_html: { value: "#{bakery.display_kickoff_time}", class: "js-timepicker" } %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 end columns">
         <%= f.label :last_kickoff %>
         <input ng-disabled="true" type="text" value="<%= bakery.display_last_kickoff %>" />
       </div>
@@ -63,10 +63,10 @@
   <fieldset>
     <legend>Bakery Setting</legend>
     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :quickbooks_account, as: :string %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="small-12 medium-4 end columns">
         <%= f.label :group_preferments, "Print all the preferments together at the end?"%>
         <%= f.radio_button(:group_preferments, "true") %>
         <%= f.label(:group_preferments_true, "Yes") %>

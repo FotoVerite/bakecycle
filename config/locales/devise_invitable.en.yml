@@ -6,7 +6,7 @@ en:
       user:
         user_added: "The user %{email} has been correctly added."
       send_instructions: "An invitation email has been sent to %{email}."
-      invitation_token_invalid: "The invitation token provided is not valid!"
+      invitation_token_invalid: "Your invitation to BakeCycle may have already been claimed. Try signing in or recovering your password."
       updated: "Your password was set successfully. You are now signed in."
       updated_not_active: "Your password was set successfully."
       no_invitations_remaining: "No invitations remaining"
@@ -15,12 +15,13 @@ en:
         header: "Send invitation"
         submit_button: "Send an invitation"
       edit:
-        header: "Set your password"
-        submit_button: "Set my password"
+        welcome_text: "You have been invited to join %{bakery_name} on BakeCycle. Set your password below to login and get started."
+        header: "Welcome to BakeCycle!"
+        submit_button: "Join BakeCycle"
     mailer:
       invitation_instructions:
-        subject: "Invitation instructions"
-        hello: "Hello %{email}"
-        someone_invited_you: "%{inviter} has invited you to %{url}, you can accept it through the link below."
+        subject: "Invitation to BakeCycle!"
+        hello: "Hello %{name}"
+        someone_invited_you: "%{inviter} has invited you to join BakeCycle! You can accept it through the link below."
         accept: "Accept invitation"
-        ignore: "If you don't want to accept the invitation, please reply or contact %{inviter}"
+        ignore: "If you don't want to accept the invitation, please reply or contact %{inviter}."

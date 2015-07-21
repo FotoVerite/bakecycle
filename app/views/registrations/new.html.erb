@@ -5,7 +5,7 @@
   <div class="small-12 medium-10 medium-offset-1 large-8 large-offset-2 columns main-container">
     <%= simple_form_for @registration, html: { id: "registration-form" } do |f| %>
       <div class="row">
-        <h1>Sign up for bakecycle</h1>
+        <h1>Sign up for BakeCycle</h1>
         <p>
           <label>Plan Type
             <% if f.object.errors[:plan].any? %>
@@ -68,7 +68,7 @@
       <div class="row">
         <%= f.submit "Join BakeCycle", class: "join-cta-button", name: nil %>
         <hr>
-        <p class="join-message">When you click join BakeCycle, yourou are also agreeing to our <%= link_to "Terms of Service", terms_of_service_path, class: "underlined-link", target: '_blank' %> and our <%= link_to "Privacy Policy", privacy_policy_path, class: "underlined-link", target: '_blank' %>.</p>
+        <p class="join-message">When you click join BakeCycle, you are also agreeing to our <%= link_to "Terms of Service", terms_of_service_path, class: "underlined-link", target: '_blank' %> and our <%= link_to "Privacy Policy", privacy_policy_path, class: "underlined-link", target: '_blank' %>.</p>
       </div>
     <% end %>
   </div>
