@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :clients
   resources :orders, except: [:show] do
     get 'copy', on: :member
+    get 'print', on: :member
   end
   resources :users, except: [:show] do
     get 'myaccount', on: :collection, as: 'my'
