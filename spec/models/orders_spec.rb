@@ -163,6 +163,85 @@ describe Order do
     end
   end
 
+  describe '#overrideable_order' do
+    it 'returns an order that can be overridden if found - with nil end date' do
+      order.destroy
+      route = create(:route, bakery: bakery)
+      old_order = create(:order, bakery: bakery, start_date: today, end_date: nil, route: route, client: client)
+      combinations = [
+        { start_date: yesterday, end_date: yesterday, result: false },
+        { start_date: yesterday, end_date: today, result: true },
+        { start_date: yesterday, end_date: tomorrow, result: true },
+        { start_date: yesterday, end_date: next_week, result: true },
+        { start_date: yesterday, end_date: nil, result: true },
+        { start_date: next_week, end_date: nil, result: false },
+        { start_date: today, end_date: today, result: false },
+        { start_date: today, end_date: tomorrow, result: false },
+        { start_date: today, end_date: next_week, result: false },
+        { start_date: today, end_date: nil, result: false },
+        { start_date: tomorrow, end_date: tomorrow, result: false },
+        { start_date: tomorrow, end_date: next_week, result: false },
+        { start_date: tomorrow, end_date: nil, result: false }
+      ]
+
+      combinations.each do |combo|
+        start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
+        old_order.update(start_date: start_date, end_date: end_date)
+        new_order = build_stubbed(:order,
+          bakery: bakery,
+          start_date: today,
+          end_date: nil,
+          route: route,
+          client: client
+                                 )
+        expect(new_order.overrideable_order.present?).to eq(result)
+      end
+    end
+
+    it 'returns an order that can be overridden if found - with end date' do
+      order.destroy
+      route = create(:route, bakery: bakery)
+      old_order = create(
+        :order,
+        bakery: bakery,
+        start_date: today,
+        end_date: nil,
+        route: route,
+        client: client
+      )
+
+      combinations = [
+        { start_date: yesterday, end_date: yesterday, result: false },
+        { start_date: yesterday, end_date: today, result: true },
+        { start_date: yesterday, end_date: tomorrow, result: true },
+        { start_date: yesterday, end_date: next_week, result: false },
+        { start_date: yesterday, end_date: nil, result: true },
+        { start_date: next_week, end_date: nil, result: false },
+        { start_date: today, end_date: today, result: false },
+        { start_date: today, end_date: tomorrow, result: false },
+        { start_date: today, end_date: next_week, result: false },
+        { start_date: today, end_date: nil, result: false },
+        { start_date: tomorrow, end_date: tomorrow, result: false },
+        { start_date: tomorrow, end_date: next_week, result: false },
+        { start_date: tomorrow, end_date: nil, result: false }
+      ]
+
+      combinations.each do |combo|
+        start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
+        old_order.update(start_date: start_date, end_date: end_date)
+        new_order = build_stubbed(
+          :order,
+          bakery: bakery,
+          start_date: today,
+          end_date: tomorrow,
+          route: route,
+          client: client
+        )
+        expect(new_order.overrideable_order.present?).to eq(result)
+      end
+    end
+  end
+
   describe '.temporary' do
     it 'returns all temporary orders on a date' do
       temp_order = create(:temporary_order, start_date: today)

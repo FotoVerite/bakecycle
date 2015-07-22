@@ -1,0 +1,8 @@
+<% if order.overlapping? %>
+  <ul>
+    Overlapping orders:
+    <% order.overlapping_orders.each do |overlap| %>
+      <li><%= link_to "Order ##{overlap.id}", edit_order_path(overlap), class: '.underlined-link' %></li>
+    <% end %>
+  </ul>
+<% end %>

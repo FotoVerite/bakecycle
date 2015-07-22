@@ -1,4 +1,5 @@
 class Order < ActiveRecord::Base
+  attr_accessor :confirm_override
   belongs_to :client
   belongs_to :route
   belongs_to :bakery
@@ -20,7 +21,7 @@ class Order < ActiveRecord::Base
   validate  :end_date_is_not_before_start_date
   validates :order_type, presence: true, inclusion: %w(standing temporary)
   validates :bakery, presence: true
-  validate  :standing_order_date_can_not_overlap
+  validates_with OverlappingOrdersValidator
 
   delegate(
     :weekly_delivery_fee?, :daily_delivery_fee?, :delivery_fee,
@@ -91,13 +92,8 @@ class Order < ActiveRecord::Base
     errors.add(:end_date, 'The end date cannot be before the start date')
   end
 
-  def standing_order_date_can_not_overlap
-    ids = overlapping_orders.map(&:id).join(',')
-    errors.add(:start_date, "This order overlaps with ids (#{ids})") if overlapping?
-  end
-
-  def overlapping?
-    overlapping_orders.count > 0
+  def set_end_date_to_start
+    self.end_date = start_date
   end
 
   def overlapping_orders
@@ -109,8 +105,15 @@ class Order < ActiveRecord::Base
     overlapping
   end
 
-  def set_end_date_to_start
-    self.end_date = start_date
+  def overlapping?
+    overlapping_orders.any?
+  end
+
+  def overrideable_order
+    return if overlapping_orders.count > 1
+    overrideable = overlapping_orders.where('start_date < ?', start_date)
+    overrideable = overrideable.where('end_date <= ? OR end_date is null', end_date) if end_date
+    overrideable.last
   end
 
   def temporary?
@@ -129,5 +132,9 @@ class Order < ActiveRecord::Base
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
     end
+  end
+
+  def overriding?
+    overrideable_order
   end
 end

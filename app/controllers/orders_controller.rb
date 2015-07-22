@@ -21,9 +21,9 @@ class OrdersController < ApplicationController
   def create
     @order = policy_scope(Order).build(order_params)
     authorize @order
-    if @order.save
-      flash[:notice] = "You have created a #{@order.order_type} order for #{@order.client_name}."
-      redirect_to edit_order_path(@order)
+    order_creator = OrderCreator.new(@order, params[:confirm_override])
+    if order_creator.run
+      redirect_to edit_order_path(@order, updated: order_creator.updated_id), notice: order_creator.success_message
     else
       @order.order_items.each { |item| item.order = @order }
       render 'new'
@@ -32,6 +32,7 @@ class OrdersController < ApplicationController
 
   def edit
     authorize @order
+    @updated = Order.find_by(id: params[:updated])
   end
 
   def update
