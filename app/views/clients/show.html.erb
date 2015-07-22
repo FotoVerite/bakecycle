@@ -208,7 +208,7 @@
 </fieldset>
 
 <fieldset>
-  <legend>Client's Recent Shipments</legend>
+  <legend>Client's Recent Invoices</legend>
   <div class="row">
     <table class="responsive-table recent-shipment">
       <thead>
@@ -230,7 +230,7 @@
             <td data-title="Total"><%= number_to_currency(shipment.price, precision: 2) %></td>
             <td data-title="Action">
               <%= link_to edit_shipment_path(shipment) do %>
-                <span class="table-action-icon icon-link-tooltip" aria-label="Edit Shipment"><i class="fi-page-edit"></i></span>
+                <span class="table-action-icon icon-link-tooltip" aria-label="Edit Invoice"><i class="fi-page-edit"></i></span>
               <% end %>
             </td>
           </tr>
@@ -239,6 +239,6 @@
     </table>
   </div>
   <div class="row">
-   <%= link_to 'View More Shipments', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
+   <%= link_to 'View More Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
   </div>
 </fieldset>

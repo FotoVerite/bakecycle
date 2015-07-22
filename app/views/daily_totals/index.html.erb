@@ -17,7 +17,7 @@
   <%= link_to "<i class='fi-page-export-pdf'></i> Print Daily Totals".html_safe,
     print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf), target: "_blank", class: "button small"%>
 
-  <h2><%= pluralize(@recipes.shipments.count, "Shipment") %> on the following Routes</h2>
+  <h2><%= pluralize(@recipes.shipments.count, "Invoice") %> on the following Routes</h2>
   <table class="responsive-table">
     <thead>
       <tr>

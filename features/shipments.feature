@@ -22,12 +22,12 @@ Feature: Shipments management
     Then I should see a list of shipments for only the past week
 
     When I am on the "shipments" page
-    And I click on "Add New Shipment"
+    And I click on "Add New Invoice"
     And I fill out Shipment form with:
       | client | date       | route | delivery_fee | note          |
       | mandos | 2015-01-12 | Canal | 10.0         | leave at door |
     And I click on "Create"
-    Then "You have created a shipment for mandos." should be present
+    Then "You have created an invoice for mandos." should be present
     And "Payment Due Date" should be present
     And "Total Price: $10.00" should be present
 
@@ -40,7 +40,7 @@ Feature: Shipments management
     Then "can't be blank" should be present
     When I change the shipment date to "2015-01-01"
     And I click on "Update"
-    Then "You have updated the shipment" should be present
+    Then "You have updated the invoice" should be present
 
     And I click on "Delete"
     And I confirm popup
@@ -48,7 +48,7 @@ Feature: Shipments management
     And the shipment for "francesco" should not be present
 
     When I am on the "shipments" page
-    And I click on "Add New Shipment"
+    And I click on "Add New Invoice"
     And I fill out Shipment form with:
       | client | date       | route | delivery_fee | note          |
       | mandos | 2015-01-15 | Canal | 15           | ask for mando |
@@ -58,14 +58,14 @@ Feature: Shipments management
       | baguette cookie | 10.00         | 50       |
     And I click on "Add Product" and don't enter any information
     When I click on "Create"
-    Then "You have created a shipment" should be present
+    Then "You have created an invoice" should be present
     And the product "baguette cookie" should be selected
 
     When I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | donut tart      | 5.00         | 10       |
     And I click on "Update"
-    Then "You have updated the shipment" should be present
+    Then "You have updated the invoice" should be present
     And the product "baguette cookie" should not be selected
     And the product "donut tart" should be selected
 
@@ -74,10 +74,10 @@ Feature: Shipments management
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |
     When I click on "Update"
-    Then "You have updated the shipment" should be present
+    Then "You have updated the invoice" should be present
     When I delete "donut tart" shipment item
     And I click on "Update"
-    Then "You have updated the shipment" should be present
+    Then "You have updated the invoice" should be present
     And the product "donut tart" should not be selected
 
     When I am on the "packing_slips" page
@@ -95,8 +95,8 @@ Feature: Shipments management
     And there are "biencuit" shipments for the past two weeks
 
     When I am on the "shipments" page
-    Then "Add New Shipment" should not be present
-    And "Export Invoices" should be present
+    Then "Add New Invoice" should not be present
+    And "Print Invoices" should be present
     And "Export CSV" should be present
     And "Export QuickBooks" should be present
 

@@ -9,8 +9,8 @@
       <div class="small-12 medium-4 columns">
         <%= f.input :client_id, collection: shipment.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
       </div>
-     <div class="small-12 medium-4 columns">
-        <%= f.input :date, as: :string, label: "Shipment Date", input_html: { class: "js-datepicker" } %>
+      <div class="small-12 medium-4 columns">
+        <%= f.input :date, as: :string, label: "Invoice Date", input_html: { class: "js-datepicker" } %>
       </div>
       <div class="small-12 medium-4 columns">
         <%= f.input :route_id, collection: shipment.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
@@ -34,14 +34,13 @@
     </div>
 
     <div class="row">
-
       <% if f.object.persisted? %>
         <div class="small-12 medium-4 columns">
           <%= f.input :payment_due_date, as: :string, label: "Payment Due Date", readonly: true %>
         </div>
 
-        <div class="small-12 medium-4 columns">
-          <%= f.label :production_start, "Shipment Production Start" %>
+        <div class="small-12 medium-4 columns end">
+          <%= f.label :production_start, "Invoice Production Start" %>
           <input ng-disabled="true" type="text" value="<%= f.object.production_start %>" />
         </div>
       <% end %>
