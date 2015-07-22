@@ -4,14 +4,11 @@ fieldset legend {
 
 .search-button {
   margin-top: 21px;
+  width: 100%;
 }
 
 .fields {
   @media #{$small-only} { margin-bottom: 30px;}
-}
-
-.search-button {
-  width: 100%;
 }
 
 .view-pdf-button {
@@ -22,7 +19,7 @@ fieldset legend {
 
 .js-datepicker {
   position: relative;
-  z-index:100;
+  z-index: 100;
 }
 
 .row .back-button {
@@ -34,27 +31,26 @@ fieldset legend {
 }
 
 .help-text-order-type {
-  color: #6f6f6f;
+  color: $bc-scorpion;
 }
 
 .help-text {
-  margin-top: -1.2em;
   font-weight: 300;
+  margin-top: -1.2em;
 }
 
 .draggable-placeholder {
   background: $bc-verylightgrey;
-  height: 32px;
   border: solid 1px $bc-mediumgrey;
+  height: 32px;
   margin-bottom: 20px;
   margin-left: 20px;
 }
 
 .draggable-placeholder:before {
-  content: "Drop here";
   color: $bc-mediumgrey;
+  content: 'Drop here';
   padding: 5px;
-
 }
 
 .inline {
@@ -69,12 +65,14 @@ select.inline {
 .drag-handle {
   cursor: pointer;
   float: left;
-  width: 5%;
   line-height: 2.5em;
+  width: 5%;
 }
 
 .disabled {
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     background-color: $bc-lightgrey;
     border-color: $bc-lightgrey;
     color: $bc-mediumgrey;
@@ -118,7 +116,6 @@ select.inline {
   }
 
   .error {
-
     abbr,
     label {
       color: $bc-alizarin-crimson;
@@ -150,4 +147,61 @@ select.inline {
 .cc-dropdown {
   background-color: $bc-mercury;
   color: $bc-scorpion;
+}
+
+.order-item-product-selection,
+.order-item-price-per-qt,
+.order-item-price-total,
+.order-item-day-input {
+  @media #{$large-up} {
+    display: inline-block;
+
+    input {
+      padding: 8px 1px;
+      text-align: center;
+    }
+  }
+}
+
+.order-item-product-selection {
+  @media #{$large-up} {
+    width: 35%;
+  }
+}
+
+.order-item-price-per-qt {
+  @media #{$large-up} {
+    width: 16%;
+  }
+}
+
+.order-item-price-total {
+  @media #{$large-up} {
+    width: 12%;
+  }
+}
+
+.order-item-day-input {
+  @media #{$large-up} {
+    width: 4%;
+  }
+}
+
+.order-item-delete-button {
+  background: $bc-alizarin-crimson;
+  border-radius: 5px;
+  min-height: 40px;
+  padding: 10px 8px 8px;
+  text-align: center;
+  width: 100%;
+
+  a {
+    color: $white;
+    display: block;
+  }
+
+  @media #{$large-up} {
+    display: inline-block;
+    width: 4%;
+  }
 }
