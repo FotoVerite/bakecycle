@@ -63,6 +63,13 @@
   <fieldset>
     <legend>Bakery Setting</legend>
     <div class="row">
+
+      <% if policy(Bakery).change_plan? %>
+        <div class="small-12 medium-4 columns">
+          <%= f.input :plan_id, as: :select, collection: bakery.plans_select %>
+        </div>
+      <% end %>
+
       <div class="small-12 medium-4 columns">
         <%= f.input :quickbooks_account, as: :string %>
       </div>
@@ -112,15 +119,17 @@
 
   <div class="row">
     <div class="small-12 columns">
-      <%= f.input :plan_id, as: :hidden%>
-      <% if policy(current_user).update? %>
-        <%= f.submit (@bakery.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% if @bakery.new_record? && policy(@bakery).create? %>
+        <%= f.submit "Create", class: "button", name: nil %>
       <% end %>
-      <% unless @bakery.new_record? %>
-        <% if policy(Bakery).destroy? %>
-          <%= link_to 'Delete', bakery_path(@bakery), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
-        <% end %>
+
+      <% if @bakery.persisted? && policy(@bakery).update?%>
+        <%= f.submit "Update", class: "button", name: nil %>
+      <% end %>
+
+      <% if @bakery.persisted? && policy(@bakery).destroy? %>
+        <%= link_to 'Delete', bakery_path(@bakery), class: "button alert",
+                    method: :delete, data: { confirm: 'Are you sure?' } %>
       <% end %>
     </div>
   </div>

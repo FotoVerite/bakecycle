@@ -16,6 +16,7 @@ class Bakery < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 150 }
   validates :plan, presence: true
+  validates :plan_id, presence: true
   validates :kickoff_time, presence: true
   validates :quickbooks_account, presence: true
   has_attached_file :logo, styles: { invoice: ['1800x200>', :png], thumb: ['300x200>', :png] }

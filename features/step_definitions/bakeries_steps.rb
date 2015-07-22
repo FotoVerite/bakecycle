@@ -31,14 +31,7 @@ end
 
 When(/^I fill out Bakery form with valid data$/) do
   fill_in 'bakery_name', with: 'Au Bon Pain'
-  fill_in 'bakery_email', with: 'test@example.com'
-  fill_in 'bakery_phone_number', with: '999-888-7777'
-  fill_in 'bakery_address_street_1', with: '123 Example St.'
-  fill_in 'bakery_address_city', with: 'Bake'
-  fill_in 'bakery_address_state', with: 'NY'
-  fill_in 'bakery_address_zipcode', with: '10001'
-  fill_in 'bakery_kickoff_time', with: '3:00PM'
-  fill_in 'bakery_quickbooks_account', with: 'Sales:Sales - Wholesale'
+  select 'Small Bakery', from: 'bakery_plan_id'
 end
 
 Then(/^I should see confirmation the bakery was deleted$/) do

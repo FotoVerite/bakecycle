@@ -27,6 +27,10 @@ describe BakeryPolicy do
         expect(policy.scope).to contain_exactly(bakery, record)
       end
     end
+
+    it 'allows you to change bakery plans' do
+      expect(policy.permitted_attributes).to include(:plan_id)
+    end
   end
 
   context 'When you do not belong to a bakery' do
@@ -50,6 +54,10 @@ describe BakeryPolicy do
         it 'returns all the bakeries' do
           expect(policy.scope).to contain_exactly(bakery, record)
         end
+      end
+
+      it 'allows you to change bakery plans' do
+        expect(policy.permitted_attributes).to include(:plan_id)
       end
     end
 
@@ -186,6 +194,10 @@ describe BakeryPolicy do
       current_user = create(:user, bakery: bakery, bakery_permission: 'manage')
       policy = BakeryPolicy.new(current_user, record)
       expect(policy.scope).to contain_exactly(bakery)
+    end
+
+    it "doesn't allows you to change your bakery plan" do
+      expect(policy.permitted_attributes).to_not include(:plan_id)
     end
   end
 end
