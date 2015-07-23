@@ -1,0 +1,11 @@
+<%= f.error_notification %>
+
+<% if f.object.errors.any? %>
+  <div id="error_explanation">
+    <ul>
+      <% f.object.errors.to_a.each do |msg| %>
+        <li> <%= "* #{msg}" %> </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -8,8 +8,6 @@ class User < ActiveRecord::Base
 
   validates :name, length: { maximum: 150 }
   validates :name, presence: true
-  validates :email, uniqueness: true, unless: 'email.blank?'
-  validates :email, presence: true
   validates :user_permission,
             :production_permission,
             :product_permission,

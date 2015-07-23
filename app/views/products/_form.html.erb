@@ -1,18 +1,6 @@
 <%= simple_form_for @product do |f| %>
 
-  <%= f.error_notification %>
-
-  <% if @product.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-        <% @product.errors.full_messages.each do |msg| %>
-          <% if msg == "Quantity must be unique" %>
-            <li><%= msg %></li>
-          <% end %>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
     <legend>Product Information</legend>
@@ -29,10 +17,10 @@
     </div>
     <div class="row">
       <div class="small-12 medium-4 columns">
-        <%= f.input :base_price, as: :string %>
+        <%= f.input :base_price, as: :integer %>
       </div>
       <div class="small-12 medium-4 columns">
-        <%= f.input :weight, as: :string%>
+        <%= f.input :weight, as: :integer%>
       </div>
       <div class="small-12 medium-4 columns">
         <%= f.input :unit, collection: product.units_select, as: :select, include_blank: false %>
@@ -40,7 +28,7 @@
     </div>
     <div class="row">
       <div class="small-12 medium-4 columns">
-        <%= f.input :over_bake, label: "over bake %", as: :string%>
+        <%= f.input :over_bake, label: "over bake %", as: :integer%>
       </div>
       <div class="small-12 medium-4 columns end">
         <%= f.label :total_lead_days %>

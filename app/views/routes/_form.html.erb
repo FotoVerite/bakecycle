@@ -1,7 +1,6 @@
 <%= simple_form_for @route do |f| %>
-  <% if @route.errors.any? %>
-    <%= f.error_notification %>
-  <% end %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
   <legend>Route Information</legend>

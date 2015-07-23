@@ -14,8 +14,8 @@ class Order < ActiveRecord::Base
 
   before_validation :set_end_date_to_start, if: :temporary?
 
-  validates :route, :route_id, presence: true
-  validates :client, :client_id, presence: true
+  validates :route_id, presence: true
+  validates :client_id, presence: true
   validates :start_date, presence: true
   validate  :end_date_is_not_before_start_date
   validates :order_type, presence: true, inclusion: %w(standing temporary)
