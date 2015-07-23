@@ -1,0 +1,16 @@
+/* TEAM */
+Amy Gimma
+Armando Amador
+Elijah Kim
+Francis Gulotta
+
+/* THANKS */
+
+Andy Gimma
+Kate Wheatcroft of Bien Cuit
+
+/* BakeCycle.com */
+Last update: Every few days
+Standards: HTML5, CSS3, ES6
+Components: Modernizr, jQuery, React
+Software: Vim, Sublime Text, rubocop, and dozens more

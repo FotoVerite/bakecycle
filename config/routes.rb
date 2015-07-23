@@ -82,4 +82,6 @@ Rails.application.routes.draw do
   constraints resque_web_constraint do
     mount Resque::Server, at: '/resque'
   end
+
+  get 'robots.txt', to: 'robots#robots'
 end
