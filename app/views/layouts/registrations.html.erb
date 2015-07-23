@@ -12,10 +12,11 @@
 
   <body class="registration-body">
     <div>
-      <%= render 'layouts/flash_messages' %>
+      <%= render 'flash_messages' %>
       <%= yield %>
     </div>
     <%= javascript_include_tag "application" %>
+    <%= render "tracking" %>
   </body>
 </html>
 

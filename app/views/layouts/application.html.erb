@@ -13,18 +13,19 @@
   <body ng-app="bakecycle">
     <div class="row full-width wrapper">
       <div class="large-12 columns content-bg">
-        <%= render 'layouts/topmenusection' %>
+        <%= render 'topmenusection' %>
         <div class="row">
           <% if render_side_nav? %>
-            <%= render 'layouts/sidenav' %>
+            <%= render 'sidenav' %>
           <% end %>
           <div class="<%= class_for_main_content %>">
-            <%= render 'layouts/flash_messages' %>
+            <%= render 'flash_messages' %>
             <%= yield %>
           </div>
         </div>
       </div>
     </div>
     <%= javascript_include_tag "application" %>
+    <%= render "tracking" %>
   </body>
 </html>
