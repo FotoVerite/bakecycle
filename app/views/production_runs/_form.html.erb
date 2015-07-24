@@ -1,17 +1,8 @@
 <%= link_to "<i class='fi-page-export-pdf'></i> Print Recipes for Production Run".html_safe, print_production_run_path(production_run, format: :pdf), target: "_blank", class: "button small"%>
 
 <%= simple_form_for @production_run do |f| %>
-  <%= f.error_notification %>
 
-  <% if f.object.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-        <% f.object.errors.each do |attribute, msg| %>
-          <li class='alert-box alert'><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <%= render partial: "run_items", locals: {f: f} %>
 

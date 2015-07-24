@@ -1,7 +1,6 @@
 <%= simple_form_for @user do |f| %>
-  <% if @user.errors.any? %>
-    <%= f.error_notification %>
-  <% end %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
   <legend>User Information</legend>
@@ -10,7 +9,7 @@
         <%= f.input :name, as: :string %>
       </div>
       <div class="large-6 small-12 columns">
-        <%= f.input :email, as: :string %>
+        <%= f.input :email, as: :string, required: true %>
       </div>
     </div>
 

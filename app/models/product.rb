@@ -27,10 +27,10 @@ class Product < ActiveRecord::Base
   validates :bakery, presence: true
   validates :name, presence: true, uniqueness: { scope: :bakery }
   validates :product_type, presence: true
-  validates :weight, numericality: true, presence: true
+  validates :weight, presence: true, numericality: true
   validates :unit, presence: true
-  validates :over_bake, numericality: true, presence: true
-  validates :base_price, numericality: true, presence: true
+  validates :over_bake, presence: true, numericality: true
+  validates :base_price, presence: true, numericality: true
   validates :description, length: { maximum: 500 }
 
   before_validation :strip_name

@@ -1,16 +1,6 @@
 <%= simple_form_for order do |f| %>
-  <%= f.error_notification %>
-  <% if f.object.errors.any? %>
-      <div id="error_explanation">
-        <ul>
-          <% f.object.errors.each do |attribute, msg| %>
-            <% if attribute == :order_items %>
-              <li><%= msg %></li>
-            <% end %>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
     <legend>Information</legend>
@@ -35,7 +25,8 @@
             label_method: :name,
             value_method: :id,
             prompt: "Select One",
-            as: :select
+            as: :select,
+            required: true
           )%>
         </div>
       </div>
@@ -64,7 +55,8 @@
           label_method: :name,
           value_method: :id,
           prompt: "Select One",
-          as: :select
+          as: :select,
+          required: true
         ) %>
       </div>
     </div>

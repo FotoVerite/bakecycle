@@ -1,6 +1,6 @@
 <%= simple_form_for @ingredient do |f| %>
 
-  <%= f.error_notification %>
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
     <legend>Ingredient Information</legend>

@@ -1,19 +1,19 @@
 <%= simple_form_for @shipment do |f| %>
 
-  <%= f.error_notification %>
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
     <legend>Information</legend>
 
     <div class="row">
       <div class="small-12 medium-4 columns">
-        <%= f.input :client_id, collection: shipment.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select  %>
+        <%= f.input :client_id, collection: shipment.available_clients, label_method: :name, value_method: :id, prompt: "Select One", as: :select, required: true %>
       </div>
       <div class="small-12 medium-4 columns">
         <%= f.input :date, as: :string, label: "Invoice Date", input_html: { class: "js-datepicker" } %>
       </div>
       <div class="small-12 medium-4 columns">
-        <%= f.input :route_id, collection: shipment.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select %>
+        <%= f.input :route_id, collection: shipment.available_routes, label_method: :name, value_method: :id, prompt: "Select One", as: :select, required: true %>
       </div>
     </div>
 

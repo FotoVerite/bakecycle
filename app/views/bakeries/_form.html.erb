@@ -1,7 +1,6 @@
 <%= simple_form_for @bakery do |f| %>
-  <% if @bakery.errors.any? %>
-    <%= f.error_notification %>
-  <% end %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <fieldset>
   <legend>Bakery Information</legend>

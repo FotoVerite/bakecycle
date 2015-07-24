@@ -66,8 +66,10 @@ input[type="text"] {
 }
 
 #error_explanation {
+  color: $bc-alizarin-crimson;
   ul {
-    list-style-type: none;
+    list-style: none;
+    margin: 0 0 18px 0;
   }
 }
 

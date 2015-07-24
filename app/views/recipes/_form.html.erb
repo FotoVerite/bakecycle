@@ -1,15 +1,5 @@
-<div>
 <%= simple_form_for recipe do |f| %>
-  <%= f.error_notification %>
-  <% if f.object.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-        <% f.object.errors.full_messages.each do |msg| %>
-          <li> * <%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <%= react_component('RecipeForm', recipe.to_json) %>
 
@@ -23,4 +13,3 @@
     </div>
   </div>
 <% end %>
-</div>

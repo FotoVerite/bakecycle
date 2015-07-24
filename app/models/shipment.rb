@@ -16,13 +16,8 @@ class Shipment < ActiveRecord::Base
   validates :bakery, presence: true
   validates :payment_due_date, presence: true
   validates :delivery_fee, presence: true, numericality: true
-  validates :client_id,
-            :client_name,
-            :client_billing_term,
-            :client_billing_term_days, presence: true
-  validates :route_id,
-            :route_name,
-            :route_departure_time, presence: true
+  validates :client_id, presence: true
+  validates :route_id, presence: true
 
   # create route= and route_id= methods
   denormalize :route, [:id, :name, :departure_time]
