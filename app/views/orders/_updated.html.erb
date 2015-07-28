@@ -1,0 +1,4 @@
+<% if updated.present? %>
+  <p>The following order has been updated:
+  <%= link_to "Order ##{updated.id}", edit_order_path(updated), class: '.underlined-link' %></p>
+<% end %>

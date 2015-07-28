@@ -25,11 +25,18 @@ Feature: Orders
     And I click on "Create"
     Then "You have created a standing order for mandos." should be present
     When I click on "Create New Order From This Order"
-    And I click on "Create"
-    Then "Please review the errors below" should be present
     When I edit the order form with:
       | order_type | start_date |
-      | temporary  | 2014-11-11 |
+      | standing  | 2014-11-12 |
+    And I click on "Create"
+    And I click on "Create and Override Existing Order"
+    And I confirm popup
+    Then "You have created a standing order for mandos." should be present
+    When I click on "Create New Order From This Order"
+
+    When I edit the order form with:
+      | order_type | start_date |
+      | temporary  | 2014-11-12 |
     And I click on "Create"
     Then "You have created a temporary order for mandos." should be present
 

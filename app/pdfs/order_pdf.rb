@@ -12,6 +12,7 @@ class OrderPdf < BasePdfReport
     note
     information
     grouped_tables
+    footer
   end
 
   def order_header
@@ -51,7 +52,7 @@ class OrderPdf < BasePdfReport
   end
 
   def order_items_rows(order_items)
-    header = ['Product Name', 'Unit Price', 'Order Price', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    header = ['Product', 'Unit Price', 'Order Price', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     rows = order_items.map do |item|
       item_row(item)
     end
