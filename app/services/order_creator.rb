@@ -4,12 +4,12 @@ class OrderCreator
   def initialize(order, confirm_override = nil)
     @order = order
     @confirm_override = confirm_override
-    @overrideable = order.overrideable_order
+    @overrideable = order.overridable_order
   end
 
   def run
     order.validate
-    if confirm_override && order.overriding?
+    if confirm_override && order.overridable_order?
       update_orders
     else
       order.save

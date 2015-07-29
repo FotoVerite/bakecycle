@@ -1,0 +1,28 @@
+<div class="overridable-orders panel callout radius">
+  <h5>This order conflicts with an existing standing order. Overriding the existing order will set it's end date to <%= f.object.overridable_end_date %>.</h5>
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Client</th>
+        <th scope="col">Type</th>
+        <th scope="col">Route</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render 'order_target_blank', order: f.object.overridable_order %>
+    </tbody>
+  </table>
+  <%= f.submit(
+      (f.object.new_record? ? "Create and Override Existing Order" : "Update and Override Existing Order"),
+      class: "button",
+      name: :confirm_override,
+      data: {
+        confirm: 'This will end an existing standing order the day before the new order starts. Continue?'
+      }
+    )
+  %>
+</div>

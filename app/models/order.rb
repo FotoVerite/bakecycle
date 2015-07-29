@@ -97,6 +97,7 @@ class Order < ActiveRecord::Base
   end
 
   def overlapping_orders
+    return Order.none unless start_date
     overlapping = Order
       .where(bakery: bakery, client: client, route: route, order_type: order_type)
       .where.not(id: id)
@@ -109,11 +110,15 @@ class Order < ActiveRecord::Base
     overlapping_orders.any?
   end
 
-  def overrideable_order
+  def overridable_order
     return if overlapping_orders.count > 1
     overrideable = overlapping_orders.where('start_date < ?', start_date)
     overrideable = overrideable.where('end_date <= ? OR end_date is null', end_date) if end_date
     overrideable.last
+  end
+
+  def overridable_order?
+    overridable_order.present?
   end
 
   def temporary?
@@ -132,9 +137,5 @@ class Order < ActiveRecord::Base
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
     end
-  end
-
-  def overriding?
-    overrideable_order
   end
 end

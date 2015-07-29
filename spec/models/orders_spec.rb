@@ -163,7 +163,7 @@ describe Order do
     end
   end
 
-  describe '#overrideable_order' do
+  describe '#overridable_order' do
     it 'returns an order that can be overridden if found - with nil end date' do
       order.destroy
       route = create(:route, bakery: bakery)
@@ -194,7 +194,7 @@ describe Order do
           route: route,
           client: client
                                  )
-        expect(new_order.overrideable_order.present?).to eq(result)
+        expect(new_order.overridable_order.present?).to eq(result)
       end
     end
 
@@ -237,7 +237,7 @@ describe Order do
           route: route,
           client: client
         )
-        expect(new_order.overrideable_order.present?).to eq(result)
+        expect(new_order.overridable_order.present?).to eq(result)
       end
     end
   end

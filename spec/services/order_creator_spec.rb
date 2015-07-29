@@ -8,10 +8,10 @@ describe OrderCreator do
   let(:new_order) { build(:order, start_date: Time.zone.now, bakery: bakery, client: client, route: route) }
 
   describe '#run' do
-    it 'overrides an order and saves new order if there is an overrideable order' do
+    it 'overrides an order and saves new order if there is an overridable order' do
       old_order
       allow_any_instance_of(OrderCreator).to receive(:overlap_errors_only?)
-      allow_any_instance_of(Order).to receive(:overrideable_order).and_return(old_order)
+      allow_any_instance_of(Order).to receive(:overridable_order).and_return(old_order)
       expect_any_instance_of(Order).to receive(:update).and_call_original
       creator = OrderCreator.new(new_order, true)
       expect(creator.run).to eq(true)
@@ -20,7 +20,7 @@ describe OrderCreator do
     it 'adds an error if it could not override an order and does not save new order' do
       old_order
       allow_any_instance_of(OrderCreator).to receive(:overlap_errors_only?).and_return(true)
-      allow_any_instance_of(Order).to receive(:overrideable_order).and_return(old_order)
+      allow_any_instance_of(Order).to receive(:overridable_order).and_return(old_order)
       allow_any_instance_of(Order).to receive(:save).and_return(false)
       creator = OrderCreator.new(new_order, true)
       expect(creator.run).to eq(false)
@@ -28,7 +28,7 @@ describe OrderCreator do
       expect(new_order.errors.full_messages).to include(message)
     end
 
-    it 'saves an order if there is not an overrideable order' do
+    it 'saves an order if there is not an overridable order' do
       expect_any_instance_of(Order).not_to receive(:update).and_call_original
       creator = OrderCreator.new(new_order)
       expect(creator.run).to eq(true)

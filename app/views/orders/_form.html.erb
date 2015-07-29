@@ -1,8 +1,11 @@
 <%= simple_form_for order do |f| %>
-
-    <%= render partial: "shared/error_messages", locals: {f: f} %>
-    <%= render 'overlapping_orders', order: f.object %>
-    <%= render 'updated', updated: @updated %>
+  <%= render "shared/error_messages", f: f %>
+  <% if f.object.overridable_order? %>
+    <%= render  'overridable_order', f: f %>
+  <% elsif f.object.overlapping? %>
+    <%= render 'overlapping_orders', f: f %>
+  <% end %>
+  <%= render 'updated', updated: @updated %>
 
   <fieldset>
     <legend>Information</legend>
@@ -120,15 +123,6 @@
   <div class="row">
     <div class="small-12 columns">
       <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% if f.object.overriding? %>
-        <%= hidden_field_tag('confirm_override', true ) %>
-        <%= f.submit (f.object.new_record? ? "Create and Override Existing Order" : "Update and Override Existing Order"),
-          class: "button",
-          name: nil,
-          data: { confirm: 'This will end an exisiting standing order the day before the new order starts. Continue?' }
-        %>
-      <% end %>
-
       <% unless f.object.new_record? %>
         <%= link_to 'Delete', order_path(f.object),
           class: "button alert",

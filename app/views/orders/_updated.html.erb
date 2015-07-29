@@ -1,4 +1,4 @@
 <% if updated.present? %>
-  <p>The following order has been updated:
-  <%= link_to "Order ##{updated.id}", edit_order_path(updated), class: '.underlined-link' %></p>
+  <p>The end date of the following conflicting order has been modified:
+  <%= link_to "Order ##{updated.id}", edit_order_path(updated), class: 'underlined-link' %></p>
 <% end %>
