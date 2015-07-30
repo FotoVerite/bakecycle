@@ -1,8 +1,21 @@
-<% if order.overlapping? %>
-  <ul>
-    Overlapping orders:
-    <% order.overlapping_orders.each do |overlap| %>
-      <li><%= link_to "Order ##{overlap.id}", edit_order_path(overlap), class: '.underlined-link' %></li>
+<div class="overridable-orders panel callout radius">
+  <h5>This order conflicts with the <%= pluralize(f.object.overlapping_orders.count, 'order') %> and cannot be saved.</h5>
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Client</th>
+        <th scope="col">Type</th>
+        <th scope="col">Route</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% f.object.overlapping_orders.each do |overlapping_order| %>
+      <%= render 'order_target_blank', order: overlapping_order %>
     <% end %>
-  </ul>
-<% end %>
+    </tbody>
+  </table>
+</div>

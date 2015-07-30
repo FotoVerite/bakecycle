@@ -1,6 +1,8 @@
 class OrderDecorator < Draper::Decorator
   delegate_all
   decorates_association :order_items
+  decorates_association :overridable_order
+  decorates_association :overlapping_orders
 
   def route_name
     route.name if route
@@ -28,5 +30,9 @@ class OrderDecorator < Draper::Decorator
 
   def to_json
     OrderSerializer.new(object).to_json
+  end
+
+  def overridable_end_date
+    object.start_date - 1.day
   end
 end
