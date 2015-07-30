@@ -61,4 +61,4 @@ Style/AlignParameters:
   Enabled: false
 
 Style/FirstParameterIndentation:
-  Enabled: flase
+  Enabled: false
