@@ -12,12 +12,15 @@ describe ProductionRunProjection do
   let(:bakery) { create(:bakery) }
   let(:client) { create(:client, bakery: bakery) }
   let!(:active_order) {
-    create(:order, :active,
-           bakery: bakery,
-           client: client,
-           order_item_count: 3,
-           product_total_lead_days: 2,
-           product_batch_recipe: true)
+    create(
+      :order,
+      :active,
+      bakery: bakery,
+      client: client,
+      order_item_count: 3,
+      product_total_lead_days: 2,
+      product_batch_recipe: true
+    )
   }
 
   let!(:inactive_order) {
@@ -31,7 +34,7 @@ describe ProductionRunProjection do
     active_order.reload
   end
 
-  describe '#new' do
+  describe '.products_info' do
     it 'sets products_info with product names and quantities for order items' do
       order_product = active_order.products.first
 

@@ -112,11 +112,11 @@ describe OrderItem do
       end
     end
 
-    describe '.production_start_on?(date)' do
+    describe '.production_date(date)' do
       it 'returns only order_items that have a quantity for a given date' do
-        expect(OrderItem.production_start_on?(today)).to contain_exactly(order_item)
-        expect(OrderItem.production_start_on?(two_days_ago)).to contain_exactly(order_item)
-        expect(OrderItem.production_start_on?(last_week)).to_not contain_exactly(order_item)
+        expect(OrderItem.production_date(today)).to contain_exactly(order_item)
+        expect(OrderItem.production_date(two_days_ago)).to contain_exactly(order_item)
+        expect(OrderItem.production_date(last_week)).to_not contain_exactly(order_item)
       end
 
       it 'only returns items from active orders' do
@@ -131,8 +131,8 @@ describe OrderItem do
           product_total_lead_days: 2
         )
         temp_order_item = temp_order.order_items.first
-        expect(OrderItem.production_start_on?(two_days_ago)).to contain_exactly(order_item)
-        expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(temp_order_item)
+        expect(OrderItem.production_date(two_days_ago)).to contain_exactly(order_item)
+        expect(OrderItem.production_date(yesterday)).to contain_exactly(temp_order_item)
       end
 
       it 'only returns items from active orders when there are expired orders' do
@@ -147,15 +147,15 @@ describe OrderItem do
           order_item_count: 1,
           product_total_lead_days: 2
         )
-        expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(order_item)
+        expect(OrderItem.production_date(yesterday)).to contain_exactly(order_item)
       end
 
       it 'returns orders with multiple lead times' do
         order = create(:temporary_order, start_date: tomorrow, order_item_count: 0, bakery: bakery)
         two_day_lead = create(:order_item, force_total_lead_days: 2, order: order, bakery: bakery)
         one_day_lead = create(:order_item, force_total_lead_days: 1, order: order, bakery: bakery)
-        expect(OrderItem.production_start_on?(yesterday)).to contain_exactly(two_day_lead)
-        expect(OrderItem.production_start_on?(today)).to contain_exactly(one_day_lead)
+        expect(OrderItem.production_date(yesterday)).to contain_exactly(two_day_lead)
+        expect(OrderItem.production_date(today)).to contain_exactly(one_day_lead)
       end
 
       it 'returns both standing and temp orders with same start date and different lead times' do
@@ -176,7 +176,7 @@ describe OrderItem do
         temp_order_items = temp.order_items.first
         standing_order_items = standing.order_items.first
 
-        expect(OrderItem.production_start_on?(today)).to contain_exactly(temp_order_items, standing_order_items)
+        expect(OrderItem.production_date(today)).to contain_exactly(temp_order_items, standing_order_items)
       end
     end
 

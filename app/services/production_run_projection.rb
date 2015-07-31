@@ -8,8 +8,12 @@ class ProductionRunProjection
   end
 
   def order_items
-    return @_order_items ||= batched_order_items if batch_end_date
-    @_order_items ||= order_items_for(start_date)
+    @_order_items ||=
+      if batch_end_date
+        batched_order_items
+      else
+        order_items_for(start_date)
+      end
   end
 
   def products_info
@@ -27,7 +31,7 @@ class ProductionRunProjection
   def order_items_for(start_date)
     bakery
       .order_items
-      .production_start_on?(start_date)
+      .production_date(start_date)
       .order_by_product_type_and_name
       .select { |order_item| order_item.production_start_on?(start_date) }
   end
@@ -36,7 +40,7 @@ class ProductionRunProjection
     bakery
       .order_items.includes(:product)
       .where('products.batch_recipe' => true)
-      .production_start_on?(date)
+      .production_date(date)
       .order_by_product_type_and_name
       .select { |order_item| order_item.production_start_on?(date) }
   end
