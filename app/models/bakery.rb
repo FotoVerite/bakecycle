@@ -19,7 +19,7 @@ class Bakery < ActiveRecord::Base
   validates :plan_id, presence: true
   validates :kickoff_time, presence: true
   validates :quickbooks_account, presence: true
-  has_attached_file :logo, styles: { invoice: ['1800x200>', :png], thumb: ['300x200>', :png] }
+  has_attached_file :logo, styles: { invoice: ["1800x200>", :png], thumb: ["300x200>", :png] }
   validates_attachment :logo, content_type: { content_type: %r{\Aimage/(jpeg|png|tiff|bmp)$} }
 
   def logo_local_file(style = logo.default_style)
@@ -32,7 +32,7 @@ class Bakery < ActiveRecord::Base
   end
 
   def write_logo_to_tempfile(style)
-    tempfile = Tempfile.new('bakecycle-bakery-logo')
+    tempfile = Tempfile.new("bakecycle-bakery-logo")
     logo.copy_to_local_file(style, tempfile.path)
     tempfile
   end

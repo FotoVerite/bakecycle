@@ -7,7 +7,7 @@ Given(/^There exists a user$/) do
 end
 
 When(/^I logout$/) do
-  find('.logout-icon').click
+  find(".logout-icon").click
 end
 
 When(/^I pry$/) do
@@ -122,7 +122,7 @@ Then(/^I should see the pdf generated page with "(.*?)" included in the url$/) d
 end
 
 Then(/^"(.*?)" link should not be on the side nav$/) do |link|
-  within '.side-navigation' do
+  within ".side-navigation" do
     page.has_no_link?(link)
   end
 end

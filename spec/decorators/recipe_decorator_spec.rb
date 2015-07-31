@@ -1,14 +1,14 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe RecipeDecorator do
   let(:recipe) { build_stubbed(:recipe) }
   let(:recipe_decorator) { RecipeDecorator.new(recipe) }
 
-  it 'items' do
-    sugar = create(:ingredient, name: 'Sugar')
+  it "items" do
+    sugar = create(:ingredient, name: "Sugar")
     allow(recipe_decorator).to receive(:ingredients).and_return(sugar)
 
-    ciabatta = create(:recipe, name: 'Ciabatta')
+    ciabatta = create(:recipe, name: "Ciabatta")
     allow(recipe_decorator).to receive(:recipes).and_return(ciabatta)
 
     inclusions = [

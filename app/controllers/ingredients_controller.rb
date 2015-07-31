@@ -8,7 +8,7 @@ class IngredientsController < ApplicationController
   end
 
   def new
-    @ingredient = policy_scope(Ingredient).build(ingredient_type: 'other')
+    @ingredient = policy_scope(Ingredient).build(ingredient_type: "other")
     authorize @ingredient
   end
 
@@ -19,7 +19,7 @@ class IngredientsController < ApplicationController
       flash[:notice] = "You have created #{@ingredient.name}."
       redirect_to edit_ingredient_path(@ingredient)
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -33,7 +33,7 @@ class IngredientsController < ApplicationController
       flash[:notice] = "You have updated #{@ingredient.name}."
       redirect_to edit_ingredient_path(@ingredient)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -43,7 +43,7 @@ class IngredientsController < ApplicationController
       flash[:notice] = "You have deleted #{@ingredient.name}"
       redirect_to ingredients_path
     else
-      render 'edit'
+      render "edit"
     end
   end
 

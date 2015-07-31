@@ -2,8 +2,8 @@ class Product < ActiveRecord::Base
   extend AlphabeticalOrder
   include ResqueJobs
 
-  belongs_to :inclusion, class_name: 'Recipe'
-  belongs_to :motherdough, class_name: 'Recipe'
+  belongs_to :inclusion, class_name: "Recipe"
+  belongs_to :motherdough, class_name: "Recipe"
   belongs_to :bakery
 
   has_many :price_variants, dependent: :destroy
@@ -66,7 +66,7 @@ class Product < ActiveRecord::Base
   end
 
   def reject_price_variants?(attributes)
-    attributes['quantity'].blank? && (attributes['price'] == '0.0' || attributes['price'].blank?)
+    attributes["quantity"].blank? && (attributes["price"] == "0.0" || attributes["price"].blank?)
   end
 
   def price(quantity, client)
@@ -91,7 +91,7 @@ class Product < ActiveRecord::Base
 
   def price_by_quantity(quantity, client)
     matching = price_variants
-      .where('client_id IS NULL OR client_id = ?', client.id)
+      .where("client_id IS NULL OR client_id = ?", client.id)
       .order(quantity: :desc)
       .detect { |variant| variant.quantity <= quantity }
     matching.price if matching

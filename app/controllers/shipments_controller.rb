@@ -20,7 +20,7 @@ class ShipmentsController < ApplicationController
       flash[:notice] = "You have created an invoice for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -34,7 +34,7 @@ class ShipmentsController < ApplicationController
       flash[:notice] = "You have updated the invoice for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -50,7 +50,7 @@ class ShipmentsController < ApplicationController
     pdf = InvoicesPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
   end
 
   def packing_slip
@@ -58,7 +58,7 @@ class ShipmentsController < ApplicationController
     pdf = PackingSlipsPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
   end
 
   def invoices_csv
@@ -66,23 +66,23 @@ class ShipmentsController < ApplicationController
     @shipments = scope_with_search
     csv_string = InvoicesCsv.new(@shipments.decorate)
     expires_now
-    send_data csv_string.generate, filename: 'invoices.csv', type: 'text/csv', disposition: 'attachment'
+    send_data csv_string.generate, filename: "invoices.csv", type: "text/csv", disposition: "attachment"
   end
 
   def invoices
     authorize Shipment, :index?
     @shipments = scope_with_search
     pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
-    pdf_name = 'invoices.pdf'
+    pdf_name = "invoices.pdf"
     expires_now
-    send_data pdf.render, filename: pdf_name, type: 'application/pdf', disposition: 'inline'
+    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
   end
 
   def invoice_iif
     authorize @shipment, :show?
     quickbooks_iif = InvoiceIif.new(@shipment.decorate)
     expires_now
-    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: 'bakecycle-quickbook-export.iif'
+    send_data quickbooks_iif.generate, content_type: "text/plain", filename: "bakecycle-quickbook-export.iif"
   end
 
   def invoices_iif
@@ -90,7 +90,7 @@ class ShipmentsController < ApplicationController
     @shipments = scope_with_search
     quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery.decorate)
     expires_now
-    send_data quickbooks_iif.generate, content_type: 'text/plain', filename: quickbooks_iif.filename
+    send_data quickbooks_iif.generate, content_type: "text/plain", filename: quickbooks_iif.filename
   end
 
   private

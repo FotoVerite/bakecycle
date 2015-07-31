@@ -11,22 +11,22 @@ end
 When(/^I fill out run item form with:$/) do |table|
   pr = table.hashes[0]
   jquery_fill(
-    '.new_run_item_overbake_quantity:last' => pr['overbake_quantity'],
-    'select:last' => pr['product']
+    ".new_run_item_overbake_quantity:last" => pr["overbake_quantity"],
+    "select:last" => pr["product"]
   )
 end
 
 When(/^I change the overbake quantity on the existing run item$/) do
   jquery_fill(
-    '#production_run_run_items_attributes_0_overbake_quantity' => 33
+    "#production_run_run_items_attributes_0_overbake_quantity" => 33
   )
 end
 
 When(/^I click an a run item delete button on the donut$/) do
-  product = Product.find_by(name: 'donut tart')
+  product = Product.find_by(name: "donut tart")
   run_item = RunItem.find_by(product: product)
   within("#run_item_#{run_item.id}") do
-    click_on 'X'
+    click_on "X"
   end
 end
 
@@ -54,17 +54,17 @@ Given(/^"(.*?)" has clients and active orders$/) do |bakery|
 end
 
 When(/^I search for tomorrow's recipe runs$/) do
-  formatted_date = (Time.zone.now + 1.day).strftime('%m-%d-%Y')
-  fill_in 'search_date', with: formatted_date
-  click_on 'Search'
+  formatted_date = (Time.zone.now + 1.day).strftime("%m-%d-%Y")
+  fill_in "search_date", with: formatted_date
+  click_on "Search"
 end
 
 Then(/^I should see a warning that I am seeing a projection$/) do
-  expect(page).to have_content('Projection')
+  expect(page).to have_content("Projection")
 end
 
 Then(/^I should rows of projected product quantities$/) do
-  expect(page.all('.production-run-projection tr').count).to eq(2)
+  expect(page.all(".production-run-projection tr").count).to eq(2)
 end
 
 Given(/^there is a run item and shipment item for a "(.*?)" production run$/) do |bakery|
@@ -109,14 +109,14 @@ Given(/^I am on the Batch Recipes page$/) do
 end
 
 Then(/^I should not see the production nav$/) do
-  within '.main' do
-    expect(page).to_not have_content 'Production'
+  within ".main" do
+    expect(page).to_not have_content "Production"
   end
 end
 
 Then(/^I should see the production nav$/) do
-  within '.main' do
-    expect(page).to have_content 'Production'
+  within ".main" do
+    expect(page).to have_content "Production"
   end
 end
 
@@ -131,7 +131,7 @@ When(/^I print run$/) do
 end
 
 Given(/^I have "(.*?)" production permission$/) do |access|
-  bakery = Bakery.find_by(name: 'biencuit')
+  bakery = Bakery.find_by(name: "biencuit")
   user = FactoryGirl.create(:user, bakery: bakery, production_permission: access)
   login_as user, scope: :user
 end

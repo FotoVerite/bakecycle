@@ -62,3 +62,6 @@ Style/AlignParameters:
 
 Style/FirstParameterIndentation:
   Enabled: false
+
+StringLiterals:
+  EnforcedStyle: double_quotes

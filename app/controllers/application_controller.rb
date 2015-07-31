@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
   def resque_no_worker
     return if Resque.info[:workers] > 0 || Resque.inline
-    flash.alert = 'There are no resque workers and Resque.inline is false'
+    flash.alert = "There are no resque workers and Resque.inline is false"
   end
 
   private
@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authorized
-    flash[:alert] = 'You are not authorized to access this page.'
+    flash[:alert] = "You are not authorized to access this page."
     redirect_to(request.referrer || redirect_path)
   end
 end

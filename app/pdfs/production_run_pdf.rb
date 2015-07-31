@@ -19,7 +19,7 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def header_stamp
-    stamp_or_create('header') { header }
+    stamp_or_create("header") { header }
   end
 
   def run_stamp
@@ -32,7 +32,7 @@ class ProductionRunPdf < BasePdfReport
 
   def run_label
     return "Production Run ##{@run_data.id}" if @run_data.id
-    'Production Run PROJECTION'
+    "Production Run PROJECTION"
   end
 
   def header
@@ -77,7 +77,7 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def product_information_row(product_type)
-    header = ["#{product_type.first.titleize}", 'Qty', nil]
+    header = ["#{product_type.first.titleize}", "Qty", nil]
     rows = product_type[1].map do |run_item|
       [
         run_item.product.name,

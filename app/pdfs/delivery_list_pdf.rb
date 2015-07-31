@@ -21,7 +21,7 @@ class DeliveryListPdf < BasePdfReport
         bakery_info(@bakery)
       end
       grid([0.2, 8], [0.2, 11]).bounding_box do
-        text 'Client Delivery List', size: 13, align: :right, style: :bold
+        text "Client Delivery List", size: 13, align: :right, style: :bold
       end
       grid([0.41, 8], [0.41, 11]).bounding_box do
         text delivery_date, size: 13, align: :right, style: :italic
@@ -54,7 +54,7 @@ class DeliveryListPdf < BasePdfReport
   end
 
   def client_data
-    header = ['Client Name', 'Contact', 'Phone', 'Address', 'D-time']
+    header = ["Client Name", "Contact", "Phone", "Address", "D-time"]
     client_rows.unshift(header)
   end
 
@@ -75,10 +75,10 @@ class DeliveryListPdf < BasePdfReport
   end
 
   def client_notes_row(client)
-    [content: client.notes, colspan: 5, background_color: 'FFFFCC']
+    [content: client.notes, colspan: 5, background_color: "FFFFCC"]
   end
 
   def delivery_date
-    @date.strftime('%A %B %e, %Y')
+    @date.strftime("%A %B %e, %Y")
   end
 end

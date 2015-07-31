@@ -44,7 +44,7 @@ class Client < ActiveRecord::Base
       delivery_address_city,
       delivery_address_state,
       delivery_address_zipcode
-    ].compact.join(' ')
+    ].compact.join(" ")
   end
 
   def billing_term_days

@@ -4,7 +4,7 @@ class RegistrationsController < ApplicationController
 
   def new
     if user_signed_in?
-      flash[:notice] = 'You are already registered.'
+      flash[:notice] = "You are already registered."
       return redirect_to dashboard_path
     end
     @registration = Registration.new(plan: selected_plan || default_plan)
@@ -14,17 +14,17 @@ class RegistrationsController < ApplicationController
     @registration = Registration.new(registration_params)
     if @registration.save_and_setup
       sign_in @registration.user
-      flash[:notice] = 'Thank you for registering with BakeCycle.'
+      flash[:notice] = "Thank you for registering with BakeCycle."
       redirect_to dashboard_path
     else
-      render 'new'
+      render "new"
     end
   end
 
   private
 
   def default_plan
-    Plan.find_by(name: 'beta_large')
+    Plan.find_by(name: "beta_large")
   end
 
   def selected_plan

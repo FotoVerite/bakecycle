@@ -21,7 +21,7 @@ class ProductCounter
   end
 
   def routes
-    @_routes ||= Route.where(bakery: bakery, id: shipments.pluck(:route_id)).order('departure_time ASC')
+    @_routes ||= Route.where(bakery: bakery, id: shipments.pluck(:route_id)).order("departure_time ASC")
   end
 
   def route_shipment_clients(route)
@@ -41,7 +41,7 @@ class ProductCounter
   end
 
   def date_formatted
-    date.strftime('%a %b. %e, %Y')
+    date.strftime("%a %b. %e, %Y")
   end
 
   private

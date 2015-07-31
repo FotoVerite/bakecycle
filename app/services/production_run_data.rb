@@ -18,11 +18,11 @@ class ProductionRunData
   end
 
   def start_date
-    run_date.strftime('%A %b. %e, %Y')
+    run_date.strftime("%A %b. %e, %Y")
   end
 
   def end_date
-    (run_date + max_product_lead_day).strftime('%A %b. %e, %Y')
+    (run_date + max_product_lead_day).strftime("%A %b. %e, %Y")
   end
 
   def products
@@ -45,13 +45,13 @@ class ProductionRunData
 
   def recipes_without_preferments
     recipes.reject do |recipe|
-      recipe.recipe.recipe_type == 'preferment'
+      recipe.recipe.recipe_type == "preferment"
     end
   end
 
   def preferments
     recipes.select do |recipe|
-      recipe.recipe.recipe_type == 'preferment'
+      recipe.recipe.recipe_type == "preferment"
     end
   end
 

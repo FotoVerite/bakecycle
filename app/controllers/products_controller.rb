@@ -21,7 +21,7 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have created #{@product.name}."
       redirect_to edit_product_path(@product)
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -35,7 +35,7 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have updated #{@product.name}."
       redirect_to edit_product_path(@product)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -45,7 +45,7 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have deleted #{@product.name}."
       redirect_to products_path
     else
-      render 'edit'
+      render "edit"
     end
   end
 

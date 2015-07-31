@@ -6,7 +6,7 @@ class RunItem < ActiveRecord::Base
 
   validates :product, presence: true, uniqueness: {
     scope: :production_run_id,
-    message: 'Cannot add same product more than once'
+    message: "Cannot add same product more than once"
   }
   validates :overbake_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :order_quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }

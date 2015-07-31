@@ -18,7 +18,7 @@ class BatchRecipesController < ApplicationController
     projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
     respond_to do |format|
       format.csv {
-        response.headers['Content-Disposition'] = 'attachment; filename="' + "batch_recipes_#{Time.zone.now}" + '.csv"'
+        response.headers["Content-Disposition"] = 'attachment; filename="' + "batch_recipes_#{Time.zone.now}" + '.csv"'
         render text: BatchRecipesCsv.new(projection).to_csv
       }
     end

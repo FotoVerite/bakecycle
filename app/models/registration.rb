@@ -51,8 +51,8 @@ class Registration
     @bakery ||= Bakery.new(
       name: bakery_name,
       plan: plan,
-      kickoff_time: Chronic.parse('4 pm'),
-      quickbooks_account: 'Sales:Sales - Wholesale'
+      kickoff_time: Chronic.parse("4 pm"),
+      quickbooks_account: "Sales:Sales - Wholesale"
     )
   end
 
@@ -62,12 +62,12 @@ class Registration
       password: password,
       email: email,
       bakery: bakery,
-      user_permission: 'manage',
-      bakery_permission: 'manage',
-      product_permission: 'manage',
-      client_permission: 'manage',
-      shipping_permission: 'manage',
-      production_permission: 'manage'
+      user_permission: "manage",
+      bakery_permission: "manage",
+      product_permission: "manage",
+      client_permission: "manage",
+      shipping_permission: "manage",
+      production_permission: "manage"
     )
   end
 
@@ -96,7 +96,7 @@ class Registration
     if bakery.errors[:name].any?
       errors.add(:bakery_name, bakery.errors[:name].first)
     else
-      errors.add(:base, 'We had a problem creating your bakery')
+      errors.add(:base, "We had a problem creating your bakery")
     end
   end
 
@@ -105,7 +105,7 @@ class Registration
     if user.errors[:email].any?
       errors.add(:email, user.errors[:email].first)
     else
-      errors.add(:base, 'We had a problem creating your user')
+      errors.add(:base, "We had a problem creating your user")
     end
   end
 end

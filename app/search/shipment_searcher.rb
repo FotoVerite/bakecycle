@@ -41,11 +41,11 @@ class ShipmentSearcher
 
   def search_by_date_from(date_from)
     return if date_from.blank?
-    @collection = @collection.where('date >= ?', date_from)
+    @collection = @collection.where("date >= ?", date_from)
   end
 
   def search_by_date_to(date_to)
     return if date_to.blank?
-    @collection = @collection.where('date <= ?', date_to)
+    @collection = @collection.where("date <= ?", date_to)
   end
 end

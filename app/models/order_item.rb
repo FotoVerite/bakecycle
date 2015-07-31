@@ -21,7 +21,7 @@ class OrderItem < ActiveRecord::Base
   before_save :set_total_lead_days, if: :update_total_lead_days?
   after_touch :update_total_lead_days
 
-  scope :order_by_product_type_and_name, -> { joins(:product).order('products.product_type asc, products.name asc') }
+  scope :order_by_product_type_and_name, -> { joins(:product).order("products.product_type asc, products.name asc") }
 
   def self.group_and_order_by_product
     order_by_product_type_and_name.group_by { |order_item| order_item.product.product_type }
@@ -118,7 +118,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def quantity(date)
-    day = date.strftime('%A').downcase.to_sym
+    day = date.strftime("%A").downcase.to_sym
     send(day) || 0
   end
 

@@ -7,7 +7,7 @@ class Shipment < ActiveRecord::Base
   accepts_nested_attributes_for(
     :shipment_items,
     allow_destroy: true,
-    reject_if: proc { |attributes| attributes['product_id'].blank? }
+    reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
   before_validation :set_payment_due_date
@@ -52,12 +52,12 @@ class Shipment < ActiveRecord::Base
 
   def self.upcoming(order, date = Time.zone.today)
     where(client_id: order.client.id, route_id: order.route.id)
-      .where('date >= ?', date)
-      .order('date ASC')
+      .where("date >= ?", date)
+      .order("date ASC")
   end
 
   def self.order_by_route_and_client
-    order('route_departure_time asc, route_name asc, client_name asc')
+    order("route_departure_time asc, route_name asc, client_name asc")
   end
 
   def subtotal

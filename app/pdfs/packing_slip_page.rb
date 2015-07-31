@@ -23,22 +23,22 @@ class PackingSlipPage
   end
 
   def packing_slip_header_stamp
-    stamp_or_create('packing slip header') { packing_slip_header }
+    stamp_or_create("packing slip header") { packing_slip_header }
   end
 
   def packing_slip_header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
-    grid([0, 9], [0, 11]).bounding_box { text 'Packing Slip', size: 20 }
+    grid([0, 9], [0, 11]).bounding_box { text "Packing Slip", size: 20 }
   end
 
   def addresses
     grid([1.1, 0], [1.3, 3]).bounding_box do
-      text 'Shipped To:', size: 9
+      text "Shipped To:", size: 9
       client_address(:delivery)
     end
     grid([1.1, 4], [1.3, 7]).bounding_box do
-      text 'Billed To:', size: 9
+      text "Billed To:", size: 9
       client_address(:billing)
     end
   end
@@ -79,14 +79,14 @@ class PackingSlipPage
 
   def packing_slip_info_data
     [
-      ['Date:', @shipment.date],
-      ['Invoice #:', @shipment.invoice_number],
-      ['Route:', @shipment.route_name]
+      ["Date:", @shipment.date],
+      ["Invoice #:", @shipment.invoice_number],
+      ["Route:", @shipment.route_name]
     ]
   end
 
   def shipment_items_rows
-    header = ['Item Name', 'Product Type', 'Ordered', 'Shipped', 'Pack Check']
+    header = ["Item Name", "Product Type", "Ordered", "Shipped", "Pack Check"]
     rows = @shipment_items.map do |item|
       item = item.decorate
       [item.product_name_and_sku, item.product_type, item.product_quantity, item.product_quantity, nil]
@@ -105,9 +105,9 @@ class PackingSlipPage
 
   def pieces_shipped_row
     [
-      ['Total pieces shipped:', @shipment.total_quantity, nil],
-      ['# BOXES shipped:', nil, nil],
-      ['# BAGS shipped:', nil, nil]
+      ["Total pieces shipped:", @shipment.total_quantity, nil],
+      ["# BOXES shipped:", nil, nil],
+      ["# BAGS shipped:", nil, nil]
     ]
   end
 
@@ -122,7 +122,7 @@ class PackingSlipPage
   end
 
   def notes_data
-    text 'Notes', style: :bold
+    text "Notes", style: :bold
     text @shipment.client_notes if @shipment.client_notes.present?
     text @shipment.note if @shipment.note.present?
     move_down 15

@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe DemoCreator do
-  it 'can recreate data' do
+  it "can recreate data" do
     bakery = create(:bakery)
     create(:order, bakery: bakery)
     create(:recipe, bakery: bakery)

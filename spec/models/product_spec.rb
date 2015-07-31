@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Product do
   let(:product) { build(:product) }
 
-  it 'has a shape' do
+  it "has a shape" do
     expect(product).to respond_to(:name)
     expect(product).to respond_to(:product_type)
     expect(product).to respond_to(:description)
@@ -19,7 +19,7 @@ describe Product do
     expect(product).to belong_to(:inclusion)
   end
 
-  it 'has validations' do
+  it "has validations" do
     expect(product).to validate_presence_of(:name)
     expect(product).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     expect(product).to validate_presence_of(:product_type)
@@ -29,48 +29,48 @@ describe Product do
     expect(product).to validate_presence_of(:over_bake)
   end
 
-  describe '#destroy' do
+  describe "#destroy" do
     it "wont destroy if it's used in an order" do
       bakery = create(:bakery)
       product = create(:product, bakery: bakery)
       create(:order, product: product, bakery: bakery)
       expect(product.destroy).to eq(false)
-      expect(product.errors.to_a).to eq(['This product is still used in orders'])
+      expect(product.errors.to_a).to eq(["This product is still used in orders"])
     end
   end
 
-  describe 'name' do
-    it 'strips the spaces around names' do
-      bread = build(:product, name: ' bread ')
+  describe "name" do
+    it "strips the spaces around names" do
+      bread = build(:product, name: " bread ")
       bread.valid?
-      expect(bread.name).to eq('bread')
+      expect(bread.name).to eq("bread")
     end
   end
 
-  describe '#total_lead_days' do
-    it 'calculates lead time for a product' do
+  describe "#total_lead_days" do
+    it "calculates lead time for a product" do
       motherdough = create(:recipe_motherdough, lead_days: 5)
       inclusion = create(:recipe_inclusion, lead_days: 2)
       product = create(:product, inclusion: inclusion, motherdough: motherdough)
       expect(product.total_lead_days).to eq(5)
     end
 
-    it 'returns 1 if no recipes' do
+    it "returns 1 if no recipes" do
       product.save
       expect(product.total_lead_days).to eq(1)
     end
   end
 
-  describe '.price(qty, client)' do
+  describe ".price(qty, client)" do
     let(:product) { create(:product, base_price: 10) }
     let(:client_1) { create(:client) }
     let(:client_2) { create(:client) }
 
-    it 'gives the base price if no variants' do
+    it "gives the base price if no variants" do
       expect(product.price(1, client_1)).to eq(10)
     end
 
-    it 'returns the matching variant price based upon quantity and client' do
+    it "returns the matching variant price based upon quantity and client" do
       create(:price_variant, product: product, price: 2, quantity: 50)
       create(:price_variant, product: product, client: client_1, price: 9, quantity: 10)
       create(:price_variant, product: product, client: client_1, price: 8, quantity: 15)
@@ -94,8 +94,8 @@ describe Product do
     end
   end
 
-  describe 'after touch' do
-    it 'updates its total lead days based on the motherdough' do
+  describe "after touch" do
+    it "updates its total lead days based on the motherdough" do
       dough = FactoryGirl.create(:recipe_motherdough)
       product = FactoryGirl.create(:product, motherdough: dough)
 
@@ -107,25 +107,25 @@ describe Product do
   end
 
   describe ResqueJobs do
-    describe '#async' do
+    describe "#async" do
       let(:product) { create(:product) }
-      it 'enqueues the job' do
+      it "enqueues the job" do
         expect(Resque).to receive(:enqueue).with(Product, product.id, :wohhh, :dude)
         product.async(:wohhh, :dude)
       end
     end
 
-    describe '.perform' do
-      it 'fetches the id and runs the method' do
+    describe ".perform" do
+      it "fetches the id and runs the method" do
         expect(Product).to receive(:find).with(4).and_return(product)
         expect(product).to receive(:price).with(:wohhh, :dude)
         Product.perform(4, :price, :wohhh, :dude)
       end
 
-      it 're-enqueues itself when terminated' do
+      it "re-enqueues itself when terminated" do
         id = 5
         method = :wohhh
-        expect(Product).to receive(:find).and_raise(Resque::TermException, 'TERM')
+        expect(Product).to receive(:find).and_raise(Resque::TermException, "TERM")
         expect(Resque).to receive(:enqueue).with(Product, id, method)
         Product.perform(id, method)
       end

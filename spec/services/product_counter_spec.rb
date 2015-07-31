@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe ProductCounter do
   let(:today) { Time.zone.today }
@@ -6,28 +6,28 @@ describe ProductCounter do
   let(:bakery) { create(:bakery) }
   let(:product_counter) { ProductCounter.new(bakery, today) }
 
-  describe '#date' do
-    it 'returns date' do
+  describe "#date" do
+    it "returns date" do
       expect(product_counter.date).to eq(today)
     end
   end
 
-  describe '#bakery' do
-    it 'returns bakery' do
+  describe "#bakery" do
+    it "returns bakery" do
       expect(product_counter.bakery).to eq(bakery)
     end
   end
 
-  describe '#shipments' do
-    it 'returns collection of shipments for the date' do
+  describe "#shipments" do
+    it "returns collection of shipments for the date" do
       shipment = create(:shipment, bakery: bakery, date: today)
       create(:shipment, bakery: bakery, date: tomorrow)
       expect(product_counter.shipments).to contain_exactly(shipment)
     end
   end
 
-  describe '#products' do
-    it 'returns collection of products from shipment items' do
+  describe "#products" do
+    it "returns collection of products from shipment items" do
       create_list(:shipment, 2, date: today, bakery: bakery)
       create(:shipment, date: tomorrow)
       products = Product.all.to_a - [Product.last]
@@ -35,8 +35,8 @@ describe ProductCounter do
     end
   end
 
-  describe '#product_types' do
-    it 'returns sorted and uniq value collection of products product types' do
+  describe "#product_types" do
+    it "returns sorted and uniq value collection of products product types" do
       shipment = create(:shipment, date: today, shipment_item_count: 0, bakery: bakery)
       bread = create(:product, product_type: :bread, bakery: bakery)
       cookie = create(:product, product_type: :cookie, bakery: bakery)
@@ -46,17 +46,17 @@ describe ProductCounter do
     end
   end
 
-  describe '#routes' do
-    it 'returns a ordered collection of routes from shipments' do
+  describe "#routes" do
+    it "returns a ordered collection of routes from shipments" do
       create_list(:shipment, 2, date: today, bakery: bakery)
       route = create(:route, bakery: bakery)
-      routes = Route.order('departure_time ASC').to_a - [route]
+      routes = Route.order("departure_time ASC").to_a - [route]
       expect(product_counter.routes).to match_array(routes)
     end
   end
 
-  describe '#route_shipment_clients' do
-    it 'returns a collection of clients for a particlular shipment route' do
+  describe "#route_shipment_clients" do
+    it "returns a collection of clients for a particlular shipment route" do
       client1 = create(:client, bakery: bakery)
       client2 = create(:client, bakery: bakery)
       client3 = create(:client, bakery: bakery)
@@ -69,8 +69,8 @@ describe ProductCounter do
     end
   end
 
-  describe '#product_counts' do
-    it 'returns the count of products on each route' do
+  describe "#product_counts" do
+    it "returns the count of products on each route" do
       am = create(:route, bakery: bakery)
       pm = create(:route, bakery: bakery)
       shipment = create(:shipment, date: today, shipment_item_count: 0, route: am, bakery: bakery)
@@ -100,7 +100,7 @@ describe ProductCounter do
       expect(product_counter.product_counts).to eq(counts)
     end
 
-    it 'caches the output' do
+    it "caches the output" do
       create_list(:shipment, 2, date: today)
       expect(product_counter.product_counts).to be(product_counter.product_counts)
     end

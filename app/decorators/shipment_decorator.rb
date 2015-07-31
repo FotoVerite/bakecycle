@@ -20,7 +20,7 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def auto_generated?
-    auto_generated ? 'Yes' : 'No'
+    auto_generated ? "Yes" : "No"
   end
 
   def price
@@ -36,11 +36,11 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def date_for_iif
-    object.date.strftime('%-m/%d/%y')
+    object.date.strftime("%-m/%d/%y")
   end
 
   def due_date_for_iif
-    object.payment_due_date.strftime('%-m/%d/%y')
+    object.payment_due_date.strftime("%-m/%d/%y")
   end
 
   def delivery_fee

@@ -28,7 +28,7 @@ class ClientPolicy < ApplicationPolicy
   end
 
   def manage_permission?
-    user.client_permission == 'manage'
+    user.client_permission == "manage"
   end
 
   private

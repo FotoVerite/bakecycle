@@ -3,7 +3,7 @@ class Ingredient < ActiveRecord::Base
 
   INGREDIENT_TYPES = %w(flour salt yeast sugar hydration eggs fats other)
 
-  has_many :recipe_items, as: :inclusionable, class_name: 'RecipeItem'
+  has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
 
   belongs_to :bakery
 

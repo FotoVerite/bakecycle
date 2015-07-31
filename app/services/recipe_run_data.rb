@@ -36,11 +36,11 @@ class RecipeRunData
   end
 
   def ingredients
-    recipe_items.select { |item| item[:inclusionable_type] == 'Ingredient' }
+    recipe_items.select { |item| item[:inclusionable_type] == "Ingredient" }
   end
 
   def nested_recipes
-    recipe_items.select { |item| item[:inclusionable_type] == 'Recipe' }
+    recipe_items.select { |item| item[:inclusionable_type] == "Recipe" }
   end
 
   attr_writer :mix_bowl_count
@@ -101,7 +101,7 @@ class RecipeRunData
 
   def inclusion_ingredients(inclusion, total_inclusion_weight)
     inclusion.recipe_items.map do |recipe_item|
-      next unless recipe_item.inclusionable_type == 'Ingredient'
+      next unless recipe_item.inclusionable_type == "Ingredient"
       {
         ingredient: recipe_item.inclusionable,
         weight: weight_for(inclusion, recipe_item.bakers_percentage, total_inclusion_weight)

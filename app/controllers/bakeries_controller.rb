@@ -9,8 +9,8 @@ class BakeriesController < ApplicationController
 
   def new
     @bakery = policy_scope(Bakery).build(
-      kickoff_time: Chronic.parse('2 pm'),
-      quickbooks_account: 'Sales:Sales - Wholesale'
+      kickoff_time: Chronic.parse("2 pm"),
+      quickbooks_account: "Sales:Sales - Wholesale"
     )
     authorize @bakery
   end
@@ -23,7 +23,7 @@ class BakeriesController < ApplicationController
       flash[:notice] = "You have created #{@bakery.name}."
       redirect_to bakeries_path
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -37,7 +37,7 @@ class BakeriesController < ApplicationController
       flash[:notice] = "You have updated #{@bakery.name}."
       redirect_to edit_bakery_path(@bakery)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -52,7 +52,7 @@ class BakeriesController < ApplicationController
     active_nav(:my_bakery)
     @bakery = policy_scope(Bakery).find(current_bakery)
     authorize @bakery, :edit?
-    render 'edit'
+    render "edit"
   end
 
   private

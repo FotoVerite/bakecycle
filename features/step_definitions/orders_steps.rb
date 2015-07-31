@@ -8,7 +8,7 @@ Given(/^There are "(.*?)" bakery orders with clients named "(.*?)" and "(.*?)"$/
 end
 
 Then(/^I should see a list of orders including clients named "(.*?)" and "(.*?)"$/) do |name1, name2|
-  within '.responsive-table' do
+  within ".responsive-table" do
     expect(page).to have_content(name1)
     expect(page).to have_content(name2)
   end
@@ -16,24 +16,24 @@ end
 
 When(/^I fill out Order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
-  select table.hashes[0]['route'], from: 'order_route_id'
-  select table.hashes[0]['client'], from: 'order_client_id'
+  select table.hashes[0]["route"], from: "order_route_id"
+  select table.hashes[0]["client"], from: "order_client_id"
   order = table.hashes[0]
   jquery_fill(
-    '#order_start_date' => order['start_date'],
-    '#order_end_date' => order['end_date'],
-    '#order_note' => order['note']
+    "#order_start_date" => order["start_date"],
+    "#order_end_date" => order["end_date"],
+    "#order_note" => order["note"]
   )
 end
 
 When(/^I fill out temporary order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
-  select table.hashes[0]['route'], from: 'order_route_id'
-  select table.hashes[0]['client'], from: 'order_client_id'
+  select table.hashes[0]["route"], from: "order_route_id"
+  select table.hashes[0]["client"], from: "order_client_id"
   order = table.hashes[0]
   jquery_fill(
-    '#order_start_date' => order['start_date'],
-    '#order_note' => order['note']
+    "#order_start_date" => order["start_date"],
+    "#order_note" => order["note"]
   )
 end
 
@@ -41,7 +41,7 @@ When(/^I edit the order form with:$/) do |table|
   choose "order_order_type_#{table.hashes[0]['order_type']}"
   order = table.hashes[0]
   jquery_fill(
-    '#order_start_date' => order['start_date']
+    "#order_start_date" => order["start_date"]
   )
 end
 
@@ -54,28 +54,28 @@ end
 When(/^I fill out the order item form with:$/) do |table|
   form = table.hashes[0]
   jquery_fill(
-    '.fields:last .monday_input' => form['monday'],
-    '.fields:last .tuesday_input' => form['tuesday'],
-    '.fields:last .wednesday_input' => form['wednesday'],
-    '.fields:last .thursday_input' => form['thursday'],
-    '.fields:last .friday_input' => form['friday'],
-    '.fields:last .saturday_input' => form['saturday'],
-    '.fields:last .sunday_input' => form['sunday'],
-    '.fields:last .select' => form['product']
+    ".fields:last .monday_input" => form["monday"],
+    ".fields:last .tuesday_input" => form["tuesday"],
+    ".fields:last .wednesday_input" => form["wednesday"],
+    ".fields:last .thursday_input" => form["thursday"],
+    ".fields:last .friday_input" => form["friday"],
+    ".fields:last .saturday_input" => form["saturday"],
+    ".fields:last .sunday_input" => form["sunday"],
+    ".fields:last .select" => form["product"]
   )
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|
   form = table.hashes[0]
   jquery_fill(
-    '.fields:last .select' => form['product'],
-    '.fields:last .friday_input' => form['friday']
+    ".fields:last .select" => form["product"],
+    ".fields:last .friday_input" => form["friday"]
   )
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
   form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../../..")
-  form.find('a', text: 'X').click
+  form.find("a", text: "X").click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
@@ -92,13 +92,13 @@ Then(/^the order item "(.*?)" should not be present$/) do |name|
 end
 
 Then(/^The order "(.*?)" should not be present$/) do |order|
-  within '.responsive-table' do
+  within ".responsive-table" do
     expect(page).to_not have_content(order)
   end
 end
 
 Then(/^I should see confirmation that the "(.*?)" order "(.*?)" was deleted$/) do |order_type, order|
-  within '.alert-box' do
+  within ".alert-box" do
     expect(page).to have_content("You have deleted the #{order_type} order for #{order}")
   end
 end
@@ -110,7 +110,7 @@ end
 When(/^I click the order "(.*?)"$/) do |order_client|
   client = Client.find_by(name: order_client)
   order = Order.find_by(client: client)
-  within('.responsive-table') do
+  within(".responsive-table") do
     find("a.order-#{order.id}").click
   end
 end

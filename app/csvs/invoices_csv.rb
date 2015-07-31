@@ -18,8 +18,8 @@ class InvoicesCsv
 
   def header
     [
-      'Invoice Number', 'Client Name', 'Client ID',
-      'Invoice Date', 'Invoice Subtotal', 'Invoice fees', 'Invoice total'
+      "Invoice Number", "Client Name", "Client ID",
+      "Invoice Date", "Invoice Subtotal", "Invoice fees", "Invoice total"
     ]
   end
 

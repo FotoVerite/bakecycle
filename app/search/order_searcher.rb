@@ -20,8 +20,8 @@ class OrderSearcher
   def search_by_date(date)
     return if date.blank?
     @collection = @collection
-      .where('start_date <= ?', date)
-      .where('end_date >= ? OR end_date is NULL', date)
+      .where("start_date <= ?", date)
+      .where("end_date >= ? OR end_date is NULL", date)
   end
 
   def search_by_client(client_id)
@@ -36,12 +36,12 @@ class OrderSearcher
 
   def search_by_date_from(date_from)
     return if date_from.blank?
-    @collection = @collection.where('date >= ?', date_from)
+    @collection = @collection.where("date >= ?", date_from)
   end
 
   def search_by_date_to(date_to)
     return if date_to.blank?
-    @collection = @collection.where('date <= ?', date_to)
+    @collection = @collection.where("date <= ?", date_to)
   end
 
   def search_by_product(product_id)

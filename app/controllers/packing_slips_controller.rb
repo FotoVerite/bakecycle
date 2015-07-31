@@ -28,6 +28,6 @@ class PackingSlipsController < ApplicationController
   end
 
   def print_invoices?
-    params[:print][:include_invoices] == '1'
+    params[:print][:include_invoices] == "1"
   end
 end

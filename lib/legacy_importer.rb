@@ -1,22 +1,22 @@
 # rubocop:disable Rails/Output
 # rubocop:disable Metrics/ModuleLength
 
-require 'legacy_importer/models'
-require 'legacy_importer/importer'
-require 'legacy_importer/reporter'
-require 'legacy_importer/client_importer'
-require 'legacy_importer/ingredient_importer'
-require 'legacy_importer/recipe_importer'
-require 'legacy_importer/recipe_item_importer'
-require 'legacy_importer/product_importer'
-require 'legacy_importer/price_variant_importer'
-require 'legacy_importer/route_importer'
-require 'legacy_importer/order_importer'
-require 'legacy_importer/order_items_importer'
+require "legacy_importer/models"
+require "legacy_importer/importer"
+require "legacy_importer/reporter"
+require "legacy_importer/client_importer"
+require "legacy_importer/ingredient_importer"
+require "legacy_importer/recipe_importer"
+require "legacy_importer/recipe_item_importer"
+require "legacy_importer/product_importer"
+require "legacy_importer/price_variant_importer"
+require "legacy_importer/route_importer"
+require "legacy_importer/order_importer"
+require "legacy_importer/order_items_importer"
 
 module LegacyImporter
   def self.bakery
-    @_bakery ||= Bakery.find_by!(name: 'Bien Cuit')
+    @_bakery ||= Bakery.find_by!(name: "Bien Cuit")
   end
 
   def self.report(imported_objects)
@@ -24,7 +24,7 @@ module LegacyImporter
   end
 
   def self.import_clients
-    puts 'Importing Clients'
+    puts "Importing Clients"
     Importer.new(
       bakery: bakery,
       collection: Clients.all,
@@ -35,7 +35,7 @@ module LegacyImporter
   end
 
   def self.import_ingredients
-    puts 'Importing Ingredients'
+    puts "Importing Ingredients"
     Importer.new(
       bakery: bakery,
       collection: Ingredients.all,
@@ -46,7 +46,7 @@ module LegacyImporter
   end
 
   def self.import_recipes
-    puts 'Importing Recipes'
+    puts "Importing Recipes"
     Importer.new(
       bakery: bakery,
       collection: Recipes.all,
@@ -57,7 +57,7 @@ module LegacyImporter
   end
 
   def self.import_recipe_items
-    puts 'Importing RecipeItems'
+    puts "Importing RecipeItems"
     Importer.new(
       bakery: bakery,
       collection: RecipeItems.all,
@@ -68,7 +68,7 @@ module LegacyImporter
   end
 
   def self.import_products
-    puts 'Importing Products'
+    puts "Importing Products"
     Importer.new(
       bakery: bakery,
       collection: Products.all,
@@ -79,7 +79,7 @@ module LegacyImporter
   end
 
   def self.import_price_variants
-    puts 'Importing PriceVariants'
+    puts "Importing PriceVariants"
     Importer.new(
       bakery: bakery,
       collection: PriceVariants.all,
@@ -90,7 +90,7 @@ module LegacyImporter
   end
 
   def self.import_routes
-    puts 'Importing Routes'
+    puts "Importing Routes"
     Importer.new(
       bakery: bakery,
       collection: Routes.all,
@@ -101,7 +101,7 @@ module LegacyImporter
   end
 
   def self.import_orders
-    puts 'Importing Orders'
+    puts "Importing Orders"
     Importer.new(
       bakery: bakery,
       collection: Orders.all.to_a,

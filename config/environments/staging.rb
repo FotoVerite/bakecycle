@@ -17,10 +17,10 @@ Rails.application.configure do
   config.assets.digest = true
 
   # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.0'
+  config.assets.version = "1.0"
 
   # Set static assets cache expiration to a year
-  config.static_cache_control = 'public, max-age=31536000'
+  config.static_cache_control = "public, max-age=31536000"
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -61,16 +61,16 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   ActionMailer::Base.smtp_settings = {
-    address: 'smtp.sendgrid.net',
-    port: '587',
+    address: "smtp.sendgrid.net",
+    port: "587",
     authentication: :plain,
-    user_name: ENV['SENDGRID_USERNAME'],
-    password: ENV['SENDGRID_PASSWORD'],
-    domain: 'staging.bakecycle.com',
+    user_name: ENV["SENDGRID_USERNAME"],
+    password: ENV["SENDGRID_PASSWORD"],
+    domain: "staging.bakecycle.com",
     enable_starttls_auto: true
   }
   config.action_mailer.default_url_options = {
-    protocol: 'https',
-    host: 'staging.bakecycle.com'
+    protocol: "https",
+    host: "staging.bakecycle.com"
   }
 end

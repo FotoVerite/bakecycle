@@ -17,7 +17,7 @@ class RunItemQuantifier
 
   def validate_shipment_items
     return unless shipment_items.detect { |item| item.product_id != run_item.product_id }
-    raise ArgumentError, 'run_item and shipment items have different products'
+    raise ArgumentError, "run_item and shipment items have different products"
   end
 
   def set_order_quantity

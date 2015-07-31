@@ -39,7 +39,7 @@ class ProductionRunProjection
   def batch_order_items_for(date)
     bakery
       .order_items.includes(:product)
-      .where('products.batch_recipe' => true)
+      .where("products.batch_recipe" => true)
       .production_date(date)
       .order_by_product_type_and_name
       .select { |order_item| order_item.production_start_on?(date) }

@@ -1,33 +1,33 @@
 namespace :bakecycle do
   namespace :legacy_import do
-    desc 'reload all of biencuits data'
+    desc "reload all of biencuits data"
     task biencuit_reload: :environment do
-      Rake::Task['bakecycle:legacy_import:biencuit_delete'].invoke
-      Rake::Task['bakecycle:legacy_import:biencuit'].invoke
-      Rake::Task['bakecycle:legacy_import:biencuit_backfill'].invoke
+      Rake::Task["bakecycle:legacy_import:biencuit_delete"].invoke
+      Rake::Task["bakecycle:legacy_import:biencuit"].invoke
+      Rake::Task["bakecycle:legacy_import:biencuit_backfill"].invoke
     end
 
-    desc 'delete of of biencuits data'
+    desc "delete of of biencuits data"
     task biencuit_delete: :environment do
-      require 'legacy_importer'
-      puts 'Deleting existing data'
+      require "legacy_importer"
+      puts "Deleting existing data"
       LegacyImporter.delete_all
-      puts 'Done'
+      puts "Done"
     end
 
-    desc 'Import the legacy biencuit bakecycle data'
+    desc "Import the legacy biencuit bakecycle data"
     task biencuit: :environment do
-      require 'legacy_importer'
-      puts 'Starting import'
+      require "legacy_importer"
+      puts "Starting import"
       Resque.inline = true
       LegacyImporter.import_all
-      puts 'Import Completed'
+      puts "Import Completed"
     end
 
-    desc 'Email the legacy biencuit bakecycle data'
+    desc "Email the legacy biencuit bakecycle data"
     task biencuit_email: :environment do
-      require 'legacy_importer'
-      puts 'Starting import'
+      require "legacy_importer"
+      puts "Starting import"
       Resque.inline = true
       imported_objects = LegacyImporter.import_and_collect_all
       reporter = LegacyImporter.report(imported_objects)
@@ -36,13 +36,13 @@ namespace :bakecycle do
       puts "#{reporter.invalid_count} errored objects"
       puts reporter.csv
       reporter.send_email
-      puts 'Finished import and email'
+      puts "Finished import and email"
     end
 
-    desc 'create shipments and production runs for legacy biencuit data'
+    desc "create shipments and production runs for legacy biencuit data"
     task biencuit_backfill: :environment do
-      require 'legacy_importer'
-      puts 'Starting backfill'
+      require "legacy_importer"
+      puts "Starting backfill"
       LegacyImporter.backfill_data
     end
   end

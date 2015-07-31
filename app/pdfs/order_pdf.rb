@@ -18,7 +18,7 @@ class OrderPdf < BasePdfReport
   def order_header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
-    grid([0, 9], [0, 11]).bounding_box { text 'Order', size: 40 }
+    grid([0, 9], [0, 11]).bounding_box { text "Order", size: 40 }
   end
 
   def information
@@ -30,7 +30,7 @@ class OrderPdf < BasePdfReport
   end
 
   def information_rows
-    [['Client', 'Type', 'Route', 'Start Date', 'End Date']] +
+    [["Client", "Type", "Route", "Start Date", "End Date"]] +
       [[
         @order.client.name, @order.order_type.capitalize, @order.route_name, @order.start_date,
         @order.end_date
@@ -52,7 +52,7 @@ class OrderPdf < BasePdfReport
   end
 
   def order_items_rows(order_items)
-    header = ['Product', 'Unit Price', 'Order Price', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    header = ["Product", "Unit Price", "Order Price", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     rows = order_items.map do |item|
       item_row(item)
     end
@@ -80,7 +80,7 @@ class OrderPdf < BasePdfReport
   end
 
   def notes_data
-    text 'Notes', style: :bold
+    text "Notes", style: :bold
     text @order.note
     move_down 15
   end

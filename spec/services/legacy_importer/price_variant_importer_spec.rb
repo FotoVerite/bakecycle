@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'legacy_importer'
+require "rails_helper"
+require "legacy_importer"
 
 describe LegacyImporter::PriceVariantImporter do
   let(:bakery) { create(:bakery) }
@@ -13,8 +13,8 @@ describe LegacyImporter::PriceVariantImporter do
     }
   end
 
-  describe '#import!' do
-    it 'imports product variant as product base price for existing product' do
+  describe "#import!" do
+    it "imports product variant as product base price for existing product" do
       price_variant = importer.import!
       product.reload
       expect(product.base_price).to eq(price_variant.base_price)

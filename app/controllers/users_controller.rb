@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       flash[:notice] = "You have updated #{@user.name}."
       redirect_to edit_user_path(@user)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     @user = policy_scope(User).find(current_user)
     active_nav(:my_user)
     authorize @user, :edit?
-    render 'edit'
+    render "edit"
   end
 
   private
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
 
     if @user.valid?
       @user.invite!(current_user)
-      flash[:notice] = t('devise.invitations.send_instructions', email: @user.email)
+      flash[:notice] = t("devise.invitations.send_instructions", email: @user.email)
       redirect_to users_path
     else
       render :new
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
 
   def create_user
     if @user.save
-      flash[:notice] = t('devise.invitations.user.user_added', email: user.email)
+      flash[:notice] = t("devise.invitations.user.user_added", email: user.email)
       redirect_to users_path
     else
       render :new

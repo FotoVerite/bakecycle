@@ -11,7 +11,7 @@ class BakeryDecorator < Draper::Decorator
 
   def display_kickoff_time
     return unless kickoff_time
-    kickoff_time.strftime('%I:%M%p')
+    kickoff_time.strftime("%I:%M%p")
   end
 
   def display_last_kickoff

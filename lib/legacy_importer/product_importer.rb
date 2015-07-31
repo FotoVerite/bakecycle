@@ -20,15 +20,15 @@ module LegacyImporter
     # product_shortname     sku
 
     PRODUCT_TYPE_MAP = {
-      'Bread' => :bread,
-      'Vienoisserie' =>  :vienoisserie,
-      'Cookie' => :cookie,
-      'Sandwich & Tartine' => :sandwich_and_tartine,
-      'Quiche' => :quiche,
-      'Tart & Dessert' => :tart_and_desert,
-      'Pot Pie' => :pot_pie,
-      'Other' => :other,
-      'Dry Goods' => :dry_goods
+      "Bread" => :bread,
+      "Vienoisserie" =>  :vienoisserie,
+      "Cookie" => :cookie,
+      "Sandwich & Tartine" => :sandwich_and_tartine,
+      "Quiche" => :quiche,
+      "Tart & Dessert" => :tart_and_desert,
+      "Pot Pie" => :pot_pie,
+      "Other" => :other,
+      "Dry Goods" => :dry_goods
     }
 
     def import!

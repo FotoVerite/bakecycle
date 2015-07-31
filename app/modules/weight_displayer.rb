@@ -7,12 +7,12 @@ module WeightDisplayer
     if weight_in_kgs > Unitwise(0.001, :kg) || weight_in_kgs == Unitwise(0, :kg)
       {
         content: weight_in_kgs.round(SIG_FIGS).to_s(:symbol),
-        background_color: 'ffffff'
+        background_color: "ffffff"
       }
     else
       {
         content: weight_in_kgs.convert_to(:gram).round(SIG_FIGS).to_s(:symbol),
-        background_color: 'd3d3d3'
+        background_color: "d3d3d3"
       }
     end
   end

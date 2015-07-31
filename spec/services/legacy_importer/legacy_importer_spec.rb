@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'legacy_importer'
+require "rails_helper"
+require "legacy_importer"
 
 describe LegacyImporter do
   let(:bakery) { create(:bakery) }

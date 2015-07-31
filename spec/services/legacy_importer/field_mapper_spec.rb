@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'legacy_importer'
+require "rails_helper"
+require "legacy_importer"
 
 describe LegacyImporter::FieldMapper do
   let(:mapper) { LegacyImporter::FieldMapper.new(fields_map) }
@@ -15,20 +15,20 @@ describe LegacyImporter::FieldMapper do
     )
   end
 
-  describe '.translate' do
-    it 'returns an empty hash for empty hash' do
+  describe ".translate" do
+    it "returns an empty hash for empty hash" do
       expect(mapper.translate({})).to eq({})
     end
 
-    it 'copies and changes keys only for known fields' do
+    it "copies and changes keys only for known fields" do
       legacy = {
-        product_name: 'Apples',
-        product_shortname: '11215',
+        product_name: "Apples",
+        product_shortname: "11215",
         unknown_attr: 4
       }
       translated = {
-        name: 'Apples',
-        sku: '11215'
+        name: "Apples",
+        sku: "11215"
       }
       expect(mapper.translate(legacy)).to eq(translated)
     end

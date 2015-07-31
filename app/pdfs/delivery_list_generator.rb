@@ -2,7 +2,7 @@ class DeliveryListGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
-    bakery_id, date_string = global_id.split('_')
+    bakery_id, date_string = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     date = Date.iso8601(date_string)
     new(bakery, date)
@@ -18,7 +18,7 @@ class DeliveryListGenerator
   end
 
   def filename
-    formatted_date = @date.strftime('%Y-%m-%d')
+    formatted_date = @date.strftime("%Y-%m-%d")
     "delivery_list_#{formatted_date}.pdf"
   end
 

@@ -10,7 +10,7 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for(
     :order_items,
     allow_destroy: true,
-    reject_if: proc { |attributes| attributes['product_id'].blank? }
+    reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
   before_validation :set_end_date_to_start, if: :temporary?
@@ -58,20 +58,20 @@ class Order < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength
 
   def self.temporary(date)
-    where(order_type: 'temporary', start_date: date)
+    where(order_type: "temporary", start_date: date)
   end
 
   def self.standing(date)
-    where(order_type: 'standing')
-      .where('start_date <= ? ', date)
-      .where('end_date is null or end_date >= ? ', date)
+    where(order_type: "standing")
+      .where("start_date <= ? ", date)
+      .where("end_date is null or end_date >= ? ", date)
   end
 
   def self.sort_for_active
     includes(:client, :route)
       .joins(:client, :route)
-      .order('clients.name asc')
-      .order('routes.departure_time asc')
+      .order("clients.name asc")
+      .order("routes.departure_time asc")
       .order(start_date: :desc)
   end
 
@@ -81,13 +81,13 @@ class Order < ActiveRecord::Base
   end
 
   def self.upcoming(date)
-    where('end_date >= ? OR end_date is NULL', date)
+    where("end_date >= ? OR end_date is NULL", date)
   end
 
   def end_date_is_not_before_start_date
     return unless end_date && start_date
     return unless end_date < start_date
-    errors.add(:end_date, 'The end date cannot be before the start date')
+    errors.add(:end_date, "The end date cannot be before the start date")
   end
 
   def set_end_date_to_start
@@ -99,8 +99,8 @@ class Order < ActiveRecord::Base
     overlapping = Order
       .where(bakery: bakery, client: client, route: route, order_type: order_type)
       .where.not(id: id)
-      .where('end_date >= ? OR end_date is null', start_date)
-    overlapping = overlapping.where('start_date <= ?', end_date) if end_date
+      .where("end_date >= ? OR end_date is null", start_date)
+    overlapping = overlapping.where("start_date <= ?", end_date) if end_date
     overlapping
   end
 
@@ -110,8 +110,8 @@ class Order < ActiveRecord::Base
 
   def overridable_order
     return if overlapping_orders.count > 1
-    overrideable = overlapping_orders.where('start_date < ?', start_date)
-    overrideable = overrideable.where('end_date <= ? OR end_date is null', end_date) if end_date
+    overrideable = overlapping_orders.where("start_date < ?", start_date)
+    overrideable = overrideable.where("end_date <= ? OR end_date is null", end_date) if end_date
     overrideable.last
   end
 
@@ -120,11 +120,11 @@ class Order < ActiveRecord::Base
   end
 
   def temporary?
-    order_type == 'temporary'
+    order_type == "temporary"
   end
 
   def standing?
-    order_type == 'standing'
+    order_type == "standing"
   end
 
   def total_lead_days

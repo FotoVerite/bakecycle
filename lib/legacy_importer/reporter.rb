@@ -8,7 +8,7 @@ module LegacyImporter
 
     def csv
       CSV.generate(headers: true) do |csv|
-        csv << ['Type', 'Name', 'Legacy ID', 'Errors']
+        csv << ["Type", "Name", "Legacy ID", "Errors"]
         invalid_report.each { |row| csv << row }
       end
     end
@@ -68,7 +68,7 @@ module LegacyImporter
 
       def legacy_identifier
         return object.legacy_id if object.respond_to? :legacy_id
-        ''
+        ""
       end
 
       def errors?
@@ -87,7 +87,7 @@ module LegacyImporter
 
     def invalid_report
       invalid_objects.map do |object|
-        errors = object.errors.full_messages.join('|')
+        errors = object.errors.full_messages.join("|")
         [object.type_name, object.to_s, object.legacy_identifier, errors]
       end
     end

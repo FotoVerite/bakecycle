@@ -22,7 +22,7 @@ class ProductionRunService
 
   def shipment_items
     @_shipment_items ||= bakery.shipment_items.where(production_start: date)
-      .where('production_run_id IS NULL OR production_run_id = ?', production_run.id)
+      .where("production_run_id IS NULL OR production_run_id = ?", production_run.id)
   end
 
   def create_or_update_run_items

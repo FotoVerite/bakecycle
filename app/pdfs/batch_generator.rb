@@ -2,7 +2,7 @@ class BatchGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
-    bakery_id, start_date_string, end_date_string = global_id.split('_')
+    bakery_id, start_date_string, end_date_string = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     start_date = Date.iso8601(start_date_string)
     end_date = Date.iso8601(end_date_string)
@@ -20,7 +20,7 @@ class BatchGenerator
   end
 
   def filename
-    'BatchRecipes.pdf'
+    "BatchRecipes.pdf"
   end
 
   def generate

@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
 
   def self.sort_by_bakery_and_name
     includes(:bakery)
-      .joins('LEFT OUTER JOIN bakeries ON bakeries.id = users.bakery_id')
-      .order('lower(bakeries.name) ASC', 'lower(users.name) ASC')
+      .joins("LEFT OUTER JOIN bakeries ON bakeries.id = users.bakery_id")
+      .order("lower(bakeries.name) ASC", "lower(users.name) ASC")
   end
 end
