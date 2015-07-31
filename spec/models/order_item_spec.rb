@@ -158,7 +158,7 @@ describe OrderItem do
         expect(OrderItem.production_date(today)).to contain_exactly(one_day_lead)
       end
 
-      it "returns both standing and temp orders with same start date and different lead times" do
+      it "returns both standing and temp orders with same production date and different ship dates" do
         temp = create(
           :temporary_order,
           start_date: tomorrow,
@@ -177,6 +177,90 @@ describe OrderItem do
         standing_order_items = standing.order_items.first
 
         expect(OrderItem.production_date(today)).to contain_exactly(temp_order_items, standing_order_items)
+        expect(OrderItem.production_date(tomorrow)).to contain_exactly(standing_order_items)
+      end
+
+      it "returns respects temporary orders that are being produced way longer than the standing order" do
+        standing = create(
+          :order,
+          start_date: last_week,
+          product_total_lead_days: 1,
+          bakery: bakery
+        )
+
+        temp = create(
+          :temporary_order,
+          client: standing.client,
+          route: standing.route,
+          start_date: today,
+          product_total_lead_days: 4,
+          bakery: bakery
+        )
+
+        temp_order_items = temp.order_items.first
+        standing_order_items = standing.order_items.first
+
+        expect(OrderItem.production_date(last_week - 2.days)).to be_empty
+        expect(OrderItem.production_date(last_week - 1.day)).to contain_exactly(standing_order_items)
+        expect(OrderItem.production_date(last_week)).to contain_exactly(standing_order_items)
+        expect(OrderItem.production_date(today - 4.days)).to contain_exactly(temp_order_items, standing_order_items)
+        expect(OrderItem.production_date(today - 2.days)).to contain_exactly(standing_order_items)
+        expect(OrderItem.production_date(yesterday)).to be_empty
+        expect(OrderItem.production_date(today)).to contain_exactly(standing_order_items)
+      end
+
+      it "returns respects temporary orders that are being produced way shorter than the standing order" do
+        standing = create(
+          :order,
+          start_date: last_week,
+          product_total_lead_days: 4,
+          bakery: bakery
+        )
+
+        temp = create(
+          :temporary_order,
+          client: standing.client,
+          route: standing.route,
+          start_date: today,
+          product_total_lead_days: 1,
+          bakery: bakery
+        )
+
+        temp_order_items = temp.order_items.first
+        standing_order_items = standing.order_items.first
+
+        expect(OrderItem.production_date(last_week - 5.days)).to be_empty
+        expect(OrderItem.production_date(last_week - 4.days)).to contain_exactly(standing_order_items)
+        expect(OrderItem.production_date(last_week)).to contain_exactly(standing_order_items)
+        expect(OrderItem.production_date(today - 4.days)).to be_empty
+        expect(OrderItem.production_date(today - 2.days)).to contain_exactly(standing_order_items)
+        expect(OrderItem.production_date(yesterday)).to contain_exactly(temp_order_items, standing_order_items)
+        expect(OrderItem.production_date(today)).to contain_exactly(standing_order_items)
+      end
+
+      it "respects differences in routes" do
+        temp = create(
+          :temporary_order,
+          start_date: tomorrow,
+          product_total_lead_days: 1,
+          bakery: bakery
+        )
+        standing = create(
+          :order,
+          client: temp.client,
+          start_date: tomorrow,
+          product_total_lead_days: 1,
+          bakery: bakery
+        )
+        temp_order_items = temp.order_items.first
+        standing_order_items = standing.order_items.first
+
+        expect(OrderItem.production_date(today)).to contain_exactly(temp_order_items, standing_order_items)
+      end
+    end
+
+    describe ".production_date_range" do
+      it "returns the order items for a date range" do
       end
     end
 
