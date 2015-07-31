@@ -65,9 +65,9 @@ class RecipeDataPage
   end
 
   def header_info_data
-    lead_days = ['Lead Days', recipe_run_data.total_lead_days]
-    mix = ['Mix', display_date(recipe_run_data.date)]
-    bake = ['Bake', display_date(recipe_run_data.finished_date)]
+    lead_days = ["Lead Days", recipe_run_data.total_lead_days]
+    mix = ["Mix", display_date(recipe_run_data.date)]
+    bake = ["Bake", display_date(recipe_run_data.finished_date)]
     [lead_days, mix, bake]
   end
 
@@ -84,7 +84,7 @@ class RecipeDataPage
     [
       [
         { content: "#{recipe_run_data.mix_bowl_count}", size: 35 },
-        { content: 'X', size: 10 },
+        { content: "X", size: 10 },
         display_weight(recipe_run_data.mix_size_with_unit).merge(size: 15)
       ]
     ]
@@ -103,7 +103,7 @@ class RecipeDataPage
   end
 
   def product_data
-    header = ['Item Wt', 'Product Name', 'Qty', 'Total Wt']
+    header = ["Item Wt", "Product Name", "Qty", "Total Wt"]
     product_rows.unshift(header)
   end
 
@@ -134,7 +134,7 @@ class RecipeDataPage
   def products_total_weight_data
     [
       [
-        'Total',
+        "Total",
         display_weight(recipe_run_data.products_total_weight)
       ]
     ]
@@ -166,7 +166,7 @@ class RecipeDataPage
     ]
     inclusion_ingredient_rows(inclusion_info).each { |ingredient_row| rows << ingredient_row }
     rows << [
-      'Total Product Weight',
+      "Total Product Weight",
       display_weight(inclusion_info[:total_product_weight])
     ]
   end
@@ -196,7 +196,7 @@ class RecipeDataPage
         display_weight(recipe_run_data.bowl_ingredient_weight(ingredient_info))
       ]
     end
-    rows.unshift(['Ingredient', 'Baker %', 'Wt / Bowl'])
+    rows.unshift(["Ingredient", "Baker %", "Wt / Bowl"])
   end
 
   def ingredients_table
@@ -208,7 +208,7 @@ class RecipeDataPage
   end
 
   def nested_recipes_data
-    header = ['Nested Recipe', 'Baker %', 'Wt / Bowl']
+    header = ["Nested Recipe", "Baker %", "Wt / Bowl"]
     rows = recipe_run_data.nested_recipes.map do |ingredient_info|
       [
         ingredient_info[:inclusionable].name,
@@ -230,7 +230,7 @@ class RecipeDataPage
   end
 
   def parent_recipes_data
-    header = ['Used In Recipe', 'Weight']
+    header = ["Used In Recipe", "Weight"]
     rows = recipe_run_data.sorted_parent_recipes.map do |recipe_info|
       [
         recipe_info[:parent_recipe].name.titleize,
@@ -251,7 +251,7 @@ class RecipeDataPage
   end
 
   def display_date(date)
-    date.strftime('%a, %b %d, %Y')
+    date.strftime("%a, %b %d, %Y")
   end
 
   def totals
@@ -266,7 +266,7 @@ class RecipeDataPage
   def totals_info
     [
       [
-        'Bowl Weight',
+        "Bowl Weight",
         display_weight(recipe_run_data.total_bowl_weight)
       ],
       [

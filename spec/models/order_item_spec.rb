@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe OrderItem do
   let(:bakery) { create(:bakery) }
@@ -9,7 +9,7 @@ describe OrderItem do
   let(:last_week) { today - 7.days }
   let(:two_days_ago) { today - 2.days }
 
-  it 'has a shape' do
+  it "has a shape" do
     expect(order_item).to respond_to(:product)
     expect(order_item).to respond_to(:monday)
     expect(order_item).to respond_to(:tuesday)
@@ -21,14 +21,14 @@ describe OrderItem do
     expect(order_item).to belong_to(:product)
   end
 
-  it 'has days of week default to 0' do
+  it "has days of week default to 0" do
     order_item = build(:order_item, monday: nil)
     expect(order_item.monday).to eq(nil)
     order_item.save
     expect(order_item.monday).to eq(0)
   end
 
-  it 'has validations' do
+  it "has validations" do
     expect(order_item).to validate_numericality_of(:monday)
     expect(order_item).to validate_numericality_of(:tuesday)
     expect(order_item).to validate_numericality_of(:wednesday)
@@ -38,8 +38,8 @@ describe OrderItem do
     expect(order_item).to validate_numericality_of(:sunday)
   end
 
-  describe '#total_quantity' do
-    it 'sums up the quantity of each day' do
+  describe "#total_quantity" do
+    it "sums up the quantity of each day" do
       order_item = build(
         :order_item,
         monday: 1,
@@ -54,19 +54,19 @@ describe OrderItem do
     end
   end
 
-  describe '#quantity' do
-    it 'returns the quantity ordered on a date' do
+  describe "#quantity" do
+    it "returns the quantity ordered on a date" do
       order_item = OrderItem.new(monday: 4)
-      monday = Date.parse('16/02/2015')
+      monday = Date.parse("16/02/2015")
       expect(order_item.quantity(monday)).to eq(order_item.monday)
     end
   end
 
-  describe '.total_quantity_price' do
+  describe ".total_quantity_price" do
     let(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
 
-    it 'calculates total quantity price for an order item' do
-      apple = create(:product, name: 'Apple', base_price: 0.5)
+    it "calculates total quantity price for an order item" do
+      apple = create(:product, name: "Apple", base_price: 0.5)
       create(:price_variant, product: apple, quantity: 11, price: 0.4, client: order.client)
       create(:price_variant, product: apple, quantity: 13, price: 0.2, client: order.client)
       create(:price_variant, product: apple, quantity: 15, price: 0.1, client: order.client)
@@ -94,32 +94,32 @@ describe OrderItem do
     end
   end
 
-  context 'start dates' do
+  context "start dates" do
     let(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
     let(:order_item) { order.order_items.first }
     let(:lead_time) { order_item.total_lead_days }
 
-    describe '#production_start_on?(date)' do
-      it 'returns true if production can start on the date given based on lead time and day of week' do
+    describe "#production_start_on?(date)" do
+      it "returns true if production can start on the date given based on lead time and day of week" do
         sunday = Time.zone.now.sunday
         expect(order_item.production_start_on?(sunday)).to eq(true)
       end
 
-      it 'returns false if production cannot start on the date given based on lead time and day of week' do
+      it "returns false if production cannot start on the date given based on lead time and day of week" do
         order_item.update(wednesday: 0)
         monday = Time.zone.now.monday
         expect(order_item.production_start_on?(monday)).to eq(false)
       end
     end
 
-    describe '.production_date(date)' do
-      it 'returns only order_items that have a quantity for a given date' do
+    describe ".production_date(date)" do
+      it "returns only order_items that have a quantity for a given date" do
         expect(OrderItem.production_date(today)).to contain_exactly(order_item)
         expect(OrderItem.production_date(two_days_ago)).to contain_exactly(order_item)
         expect(OrderItem.production_date(last_week)).to_not contain_exactly(order_item)
       end
 
-      it 'only returns items from active orders' do
+      it "only returns items from active orders" do
         order.update!(start_date: last_week)
         temp_order = create(
           :temporary_order,
@@ -135,7 +135,7 @@ describe OrderItem do
         expect(OrderItem.production_date(yesterday)).to contain_exactly(temp_order_item)
       end
 
-      it 'only returns items from active orders when there are expired orders' do
+      it "only returns items from active orders when there are expired orders" do
         order.update!(start_date: last_week)
         create(
           :temporary_order,
@@ -150,7 +150,7 @@ describe OrderItem do
         expect(OrderItem.production_date(yesterday)).to contain_exactly(order_item)
       end
 
-      it 'returns orders with multiple lead times' do
+      it "returns orders with multiple lead times" do
         order = create(:temporary_order, start_date: tomorrow, order_item_count: 0, bakery: bakery)
         two_day_lead = create(:order_item, force_total_lead_days: 2, order: order, bakery: bakery)
         one_day_lead = create(:order_item, force_total_lead_days: 1, order: order, bakery: bakery)
@@ -158,7 +158,7 @@ describe OrderItem do
         expect(OrderItem.production_date(today)).to contain_exactly(one_day_lead)
       end
 
-      it 'returns both standing and temp orders with same start date and different lead times' do
+      it "returns both standing and temp orders with same start date and different lead times" do
         temp = create(
           :temporary_order,
           start_date: tomorrow,
@@ -180,9 +180,9 @@ describe OrderItem do
       end
     end
 
-    context 'after_touch' do
-      describe 'update_total_lead_days' do
-        it 'updates its total_lead_days when the product is updated' do
+    context "after_touch" do
+      describe "update_total_lead_days" do
+        it "updates its total_lead_days when the product is updated" do
           order_item = create(:order_item, total_lead_days: 3)
           product = order_item.product
           product.update(total_lead_days: 8)

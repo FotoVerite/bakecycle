@@ -5,7 +5,7 @@ class RoutesController < ApplicationController
 
   def index
     authorize Route
-    @routes = policy_scope(Route).order('active desc', :name)
+    @routes = policy_scope(Route).order("active desc", :name)
   end
 
   def new
@@ -20,7 +20,7 @@ class RoutesController < ApplicationController
       flash[:notice] = "You have created #{@route.name}."
       redirect_to edit_route_path(@route)
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -34,7 +34,7 @@ class RoutesController < ApplicationController
       flash[:notice] = "You have updated #{@route.name}."
       redirect_to edit_route_path(@route)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -44,7 +44,7 @@ class RoutesController < ApplicationController
       flash[:notice] = "You have deleted #{@route.name}"
       redirect_to routes_path
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -64,7 +64,7 @@ class RoutesController < ApplicationController
 
   def error_if_remaining_route
     return false unless last_remaining_route?
-    flash[:error] = 'Cannot delete last remaining route'
+    flash[:error] = "Cannot delete last remaining route"
     redirect_to edit_route_path(@route)
   end
 end

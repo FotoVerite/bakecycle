@@ -1,5 +1,5 @@
 class DemoExporter
-  DEMO_DATA_YAML = 'config/demo_data.yml'
+  DEMO_DATA_YAML = "config/demo_data.yml"
 
   attr_reader :bakery
 
@@ -145,12 +145,12 @@ class DemoExporter
       reindex_fk(id_map, :recipe_items, :recipe_id)
       reindex_fk(id_map, :products, :motherdough_id)
       reindex_fk(id_map, :products, :inclusion_id)
-      reindex_inclusionables('Recipe', id_map)
+      reindex_inclusionables("Recipe", id_map)
     end
 
     def reindex_ingredients
       id_map = reindex_table(:ingredients)
-      reindex_inclusionables('Ingredient', id_map)
+      reindex_inclusionables("Ingredient", id_map)
     end
 
     def reindex_inclusionables(type, id_map)

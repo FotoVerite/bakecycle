@@ -28,7 +28,7 @@ class ShippingPolicy < ApplicationPolicy
   end
 
   def manage_permission?
-    user.shipping_permission == 'manage'
+    user.shipping_permission == "manage"
   end
 
   def print?

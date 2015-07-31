@@ -56,21 +56,21 @@ FactoryGirl.define do
 
   sequence :recipe_name do |n|
     recipes = [
-      'Baguette',
-      'Baguette Poolish',
-      'Black sesame petit pain',
-      'Brioche',
-      'Brioche Cocoa Nib',
-      'Brioche Orange Blossom',
-      'Brioche Traditional',
-      'Broa',
-      'Broa Biga',
-      'Campagne',
-      'Challah',
-      'Challah Milk Poolish',
-      'Chive Lobster Roll',
-      'Chive Pain au Lait',
-      'Ciabatta'
+      "Baguette",
+      "Baguette Poolish",
+      "Black sesame petit pain",
+      "Brioche",
+      "Brioche Cocoa Nib",
+      "Brioche Orange Blossom",
+      "Brioche Traditional",
+      "Broa",
+      "Broa Biga",
+      "Campagne",
+      "Challah",
+      "Challah Milk Poolish",
+      "Chive Lobster Roll",
+      "Chive Pain au Lait",
+      "Ciabatta"
     ]
     "#{recipes.sample} ##{n}"
   end

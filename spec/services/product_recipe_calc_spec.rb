@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe ProductRecipeCalc do
   let(:product) { create(:product, :with_recipe_items) }
@@ -10,8 +10,8 @@ describe ProductRecipeCalc do
   let(:percent_weight) { product_weight / (dough_percentage + inclusion_percentage) }
   let(:dough_weight) { dough_percentage * percent_weight }
 
-  describe '.product_info' do
-    it 'returns an object containing product, quantity and product weight' do
+  describe ".product_info" do
+    it "returns an object containing product, quantity and product weight" do
       product_info = {
         product: product,
         quantity: quantity,
@@ -22,13 +22,13 @@ describe ProductRecipeCalc do
     end
   end
 
-  describe '.inclusion_info' do
-    it 'returns nil if product has no inclusion' do
+  describe ".inclusion_info" do
+    it "returns nil if product has no inclusion" do
       product.inclusion = nil
       expect(calculator.inclusion_info).to be_nil
     end
 
-    it 'returns an object containing recipe inclusion and weight' do
+    it "returns an object containing recipe inclusion and weight" do
       inclusion_info = {
         dough_weight: dough_weight,
         inclusion_weight: (product_weight - dough_weight).round(10),
@@ -42,8 +42,8 @@ describe ProductRecipeCalc do
     end
   end
 
-  describe '.dough_weight' do
-    it 'returns a recipes dough weight' do
+  describe ".dough_weight" do
+    it "returns a recipes dough weight" do
       dough_weight = dough_percentage * percent_weight
       expect(calculator.dough_weight).to eq(dough_weight)
     end

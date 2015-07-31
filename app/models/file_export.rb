@@ -3,8 +3,8 @@ class FileExport < ActiveRecord::Base
 
   has_attached_file :file,
     use_timestamp: false,
-    default_url: '',
-    url: '/system/:class/:id/:attachment/:filename'
+    default_url: "",
+    url: "/system/:class/:id/:attachment/:filename"
 
   do_not_validate_attachment_file_type :file
 

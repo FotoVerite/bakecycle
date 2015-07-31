@@ -1,18 +1,18 @@
 # rubocop:disable Metrics/MethodLength
-require 'uri'
-require 'mysql2'
+require "uri"
+require "mysql2"
 
 module LegacyImporter
   module DB
     extend ActiveSupport::Benchmarkable
 
-    def self.connection(connection_url: ENV['LEGACY_BAKECYCLE_DATABASE_URL'], connection: nil)
+    def self.connection(connection_url: ENV["LEGACY_BAKECYCLE_DATABASE_URL"], connection: nil)
       @connection ||= connection || connect(connection_url)
     end
 
     def self.connect(connection_url)
       info = URI.parse(connection_url)
-      database = info.path.gsub(%r{^/}, '')
+      database = info.path.gsub(%r{^/}, "")
       Mysql2::Client.new(
         host: info.host,
         username: info.user,
@@ -35,31 +35,31 @@ module LegacyImporter
 
   class Clients
     def self.all
-      DB.query('SELECT * FROM bc_clients')
+      DB.query("SELECT * FROM bc_clients")
     end
   end
 
   class Ingredients
     def self.all
-      DB.query('SELECT * FROM bc_ingredients')
+      DB.query("SELECT * FROM bc_ingredients")
     end
   end
 
   class Recipes
     def self.all
-      DB.query('SELECT * FROM bc_recipes')
+      DB.query("SELECT * FROM bc_recipes")
     end
   end
 
   class RecipeItems
     def self.all
-      DB.query('SELECT * FROM bc_recipeamts')
+      DB.query("SELECT * FROM bc_recipeamts")
     end
   end
 
   class Products
     def self.all
-      DB.query('SELECT * FROM bc_products')
+      DB.query("SELECT * FROM bc_products")
     end
   end
 
@@ -88,7 +88,7 @@ module LegacyImporter
 
   class Routes
     def self.all
-      DB.query('SELECT * FROM bc_routes')
+      DB.query("SELECT * FROM bc_routes")
     end
   end
 
@@ -134,7 +134,7 @@ module LegacyImporter
     class << self
       extend Memoist
       def all
-        DB.query('SELECT * FROM bc_orderitems')
+        DB.query("SELECT * FROM bc_orderitems")
       end
 
       def find_for_order(order_id)

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :order do
-    order_type 'standing'
+    order_type "standing"
     start_date  { Time.zone.today - 4.days + Faker::Number.number(1).to_i.days }
     end_date  nil
     bakery
@@ -46,7 +46,7 @@ FactoryGirl.define do
     end
 
     factory :temporary_order do
-      order_type 'temporary'
+      order_type "temporary"
       end_date nil
     end
   end

@@ -28,7 +28,7 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def manage_permission?
-    admin? || (user.product_permission == 'manage')
+    admin? || (user.product_permission == "manage")
   end
 
   private

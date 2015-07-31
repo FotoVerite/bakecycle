@@ -30,7 +30,7 @@ class PrefermentDataPage
   end
 
   def header_title
-    text_box 'Preferments', size: 35, align: :left, valign: :center
+    text_box "Preferments", size: 35, align: :left, valign: :center
   end
 
   def header_date
@@ -76,7 +76,7 @@ class PrefermentDataPage
 
   def preferment_total_bowl_info(recipe)
     [
-      { content: 'Total Bowl', font_style: :bold }.merge(BasePdfReport::TABLE_STYLE),
+      { content: "Total Bowl", font_style: :bold }.merge(BasePdfReport::TABLE_STYLE),
       display_weight(recipe.total_bowl_weight)
         .merge(align: :center, font_style: :bold)
         .merge(BasePdfReport::TABLE_STYLE)

@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Bakery do
   let(:bakery) { build(:bakery) }
 
-  it 'has model attributes' do
+  it "has model attributes" do
     expect(bakery).to respond_to(:name)
     expect(bakery).to respond_to(:logo)
     expect(bakery).to respond_to(:email)
@@ -25,20 +25,20 @@ describe Bakery do
     expect(bakery).to respond_to(:last_kickoff)
   end
 
-  it 'has validations' do
+  it "has validations" do
     expect(bakery).to validate_presence_of(:name)
     expect(bakery).to validate_length_of(:name).is_at_most(150)
     expect(bakery).to validate_uniqueness_of(:name)
     expect(bakery).to validate_presence_of(:plan)
   end
 
-  describe '#logo_local_file' do
-    it 'gives the path of the logo' do
+  describe "#logo_local_file" do
+    it "gives the path of the logo" do
       bakery = create(:bakery, :with_logo)
-      expect(bakery.logo_local_file).to include('.png')
+      expect(bakery.logo_local_file).to include(".png")
     end
 
-    it 'returns nil with no logo' do
+    it "returns nil with no logo" do
       bakery = create(:bakery)
       expect(bakery.logo_local_file).to be_nil
     end

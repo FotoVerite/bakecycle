@@ -1,5 +1,5 @@
 namespace :bakecycle do
-  desc 'Export the first bakery data and save it as demo data source'
+  desc "Export the first bakery data and save it as demo data source"
   task export_demo_data: :environment do
     bakery = Bakery.first
     exporter = DemoExporter.new(bakery)
@@ -8,7 +8,7 @@ namespace :bakecycle do
     puts "Written to #{DemoExporter::DEMO_DATA_YAML}"
   end
 
-  desc 'Reset the first bakery with demodata'
+  desc "Reset the first bakery with demodata"
   task import_demo_data: :environment do
     def delete_all(bakery)
       ProductionRun.where(bakery: bakery).delete_all

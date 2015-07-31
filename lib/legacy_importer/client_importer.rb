@@ -60,11 +60,11 @@ module LegacyImporter
     # client_sendstatements
 
     BILLING_TERMS_MAP = {
-      'Net 30' => :net_30,
-      'Credit Card' => :credit_card,
-      'COD' => :cod,
-      'Net 15' => :net_15,
-      '' => :net_30
+      "Net 30" => :net_30,
+      "Credit Card" => :credit_card,
+      "COD" => :cod,
+      "Net 15" => :net_15,
+      "" => :net_30
     }
 
     def import!
@@ -90,17 +90,17 @@ module LegacyImporter
     end
 
     def not_active?
-      data[:client_active] != 'Y'
+      data[:client_active] != "Y"
     end
 
     def sample?
-      data[:client_business_name].include?('Samples') ||
-        data[:client_dba].include?('Samples')
+      data[:client_business_name].include?("Samples") ||
+        data[:client_dba].include?("Samples")
     end
 
     def catering?
-      data[:client_business_name].include?('Catering') ||
-        data[:client_dba].include?('Catering')
+      data[:client_business_name].include?("Catering") ||
+        data[:client_dba].include?("Catering")
     end
 
     def attributes
@@ -115,7 +115,7 @@ module LegacyImporter
     end
 
     def active?
-      data[:client_active] == 'Y'
+      data[:client_active] == "Y"
     end
 
     def delivery_fee

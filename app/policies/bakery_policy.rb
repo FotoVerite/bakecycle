@@ -28,7 +28,7 @@ class BakeryPolicy < ApplicationPolicy
   end
 
   def manage_permission?
-    user.bakery_permission == 'manage'
+    user.bakery_permission == "manage"
   end
 
   def current_bakery?

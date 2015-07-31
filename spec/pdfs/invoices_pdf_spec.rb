@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe InvoicesPdf do
-  it 'renders invoices from a collection of shipments' do
+  it "renders invoices from a collection of shipments" do
     bakery = build_stubbed(:bakery)
     build_stubbed_list(:shipment, 2, bakery: bakery)
     pdf = InvoicesPdf.new(Shipment.all.decorate, bakery)

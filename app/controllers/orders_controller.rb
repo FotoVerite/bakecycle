@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = policy_scope(Order).build(client: client, order_type: 'standing', start_date: Time.zone.today)
+    @order = policy_scope(Order).build(client: client, order_type: "standing", start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
     @order.order_items.build
     authorize @order
@@ -26,7 +26,7 @@ class OrdersController < ApplicationController
       redirect_to edit_order_path(@order, updated: order_creator.updated_id), notice: order_creator.success_message
     else
       @order.order_items.each { |item| item.order = @order }
-      render 'new'
+      render "new"
     end
   end
 
@@ -41,7 +41,7 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -55,7 +55,7 @@ class OrdersController < ApplicationController
   def copy
     @order = OrderDuplicate.new(@order).duplicate
     authorize @order, :new?
-    render 'new'
+    render "new"
   end
 
   def print

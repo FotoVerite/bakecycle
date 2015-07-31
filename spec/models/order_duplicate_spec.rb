@@ -1,16 +1,16 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe OrderDuplicate do
   let(:order) { create(:order, order_item_count: 2) }
 
-  it 'creates a duplicate of order without dates' do
+  it "creates a duplicate of order without dates" do
     order_copy = OrderDuplicate.new(order).duplicate
     expect(order_copy).to_not be_persisted
     expect(order_copy.id).to be_nil
     expect(order_copy.start_date).to be_nil
     expect(order_copy.end_date).to be_nil
 
-    order_copy.update!(order_type: 'temporary', start_date: Time.zone.today)
+    order_copy.update!(order_type: "temporary", start_date: Time.zone.today)
 
     expect(order_copy.id).to_not eq(order.id)
     expect(Order.count).to eq(2)

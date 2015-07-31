@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe PackingSlipsGenerator do
-  it 'supports a date range' do
+  it "supports a date range" do
     bakery = create(:bakery)
     generator = PackingSlipsGenerator.new(bakery, Time.zone.today, true)
     expect(generator.filename).to match(/packing_slips_(.+)\.pdf/)

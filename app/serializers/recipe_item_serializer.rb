@@ -11,7 +11,7 @@ class RecipeItemSerializer < ActiveModel::Serializer
   end
 
   def inclusionable_type_display
-    if object.inclusionable_type == 'Ingredient'
+    if object.inclusionable_type == "Ingredient"
       object.inclusionable.ingredient_type.capitalize
     else
       object.inclusionable_type.capitalize

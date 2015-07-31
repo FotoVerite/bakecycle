@@ -5,16 +5,16 @@ Given(/^There are "(.*?)" bakery routes named "(.*?)" and "(.*?)"$/) do |bakery,
 end
 
 Then(/^I should see a list of routes including "(.*?)" and "(.*?)"$/) do |route1, route2|
-  within '.responsive-table' do
+  within ".responsive-table" do
     expect(page).to have_content(route1)
     expect(page).to have_content(route2)
   end
 end
 
 When(/^I fill out Route form with:$/) do |table|
-  fill_in 'route_name', with: table.hashes[0]['name']
-  fill_in 'route_notes', with: table.hashes[0]['notes']
-  fill_in 'route_departure_time', with: table.hashes[0]['time']
+  fill_in "route_name", with: table.hashes[0]["name"]
+  fill_in "route_notes", with: table.hashes[0]["notes"]
+  fill_in "route_departure_time", with: table.hashes[0]["time"]
   choose "route_active_#{table.hashes[0]['active']}"
 end
 
@@ -24,7 +24,7 @@ When(/^I am on the edit page for "(.*?)" route$/) do |name|
 end
 
 When(/^I change the route name to "(.*?)"$/) do |name|
-  fill_in 'route_name', with: name
+  fill_in "route_name", with: name
 end
 
 Then(/^I should see that the route name is "(.*?)"$/) do |name|
@@ -32,13 +32,13 @@ Then(/^I should see that the route name is "(.*?)"$/) do |name|
 end
 
 Then(/^The route "(.*?)" should not be present$/) do |client|
-  within '.responsive-table' do
+  within ".responsive-table" do
     expect(page).to_not have_content(client)
   end
 end
 
 Then(/^I should see confirmation that the route "(.*?)" was deleted$/) do |client|
-  within '.alert-box' do
+  within ".alert-box" do
     expect(page).to have_content("You have deleted #{client}")
   end
 end

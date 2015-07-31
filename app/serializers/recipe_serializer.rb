@@ -5,19 +5,19 @@ class RecipeSerializer < ActiveModel::Serializer
   has_many :recipe_items
 
   def recipe_items
-    object.recipe_items.order('sort_id asc').includes(:inclusionable)
+    object.recipe_items.order("sort_id asc").includes(:inclusionable)
   end
 
   def recipe_type
-    object.recipe_type || ''
+    object.recipe_type || ""
   end
 
   def available_inclusions
-    object.decorate.available_inclusions.unshift(['Select One', ''])
+    object.decorate.available_inclusions.unshift(["Select One", ""])
   end
 
   def available_recipe_ingredients
-    object.decorate.available_ingredients.unshift(['Select One', ''])
+    object.decorate.available_ingredients.unshift(["Select One", ""])
   end
 
   def recipe_types

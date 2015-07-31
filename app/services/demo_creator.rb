@@ -1,5 +1,5 @@
 class DemoCreator
-  DEMO_DATA_YAML = 'config/demo_data.yml'
+  DEMO_DATA_YAML = "config/demo_data.yml"
 
   attr_reader :kickoff, :bakery
 
@@ -53,7 +53,7 @@ class DemoCreator
   def import_recipe_items
     import_objects(:recipe_items) do |data|
       inclusionable_id = data.delete(:inclusionable_id)
-      if data[:inclusionable_type] == 'Recipe'
+      if data[:inclusionable_type] == "Recipe"
         inclusionable = imported(:recipes)[inclusionable_id]
       else
         inclusionable = imported(:ingredients)[inclusionable_id]

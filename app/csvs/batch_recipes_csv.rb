@@ -7,8 +7,8 @@ class BatchRecipesCsv
 
   def to_csv
     CSV.generate do |csv|
-      csv << ['Product', 'Total Quantity', 'Order Quantity',
-              'Over Bake %', 'Over Bake Quantity']
+      csv << ["Product", "Total Quantity", "Order Quantity",
+              "Over Bake %", "Over Bake Quantity"]
       @projection.products_info.each do |product|
         csv << [
           product.product_name,

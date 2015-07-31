@@ -18,7 +18,7 @@ module LegacyImporter
     # recipe_print
 
     RECIPE_TYPE_MAP = {
-      'motherdough' => :dough
+      "motherdough" => :dough
     }
 
     def import!
@@ -44,7 +44,7 @@ module LegacyImporter
     end
 
     def calculate_lead_days
-      if data[:recipe_type] == 'preferment'
+      if data[:recipe_type] == "preferment"
         1
       else
         data[:recipe_daystomake] - 1
@@ -52,11 +52,11 @@ module LegacyImporter
     end
 
     def add_levain_feeder_to_levain(recipe)
-      return unless recipe.name == 'Levain'
+      return unless recipe.name == "Levain"
       levain_feeder = Ingredient.find_or_create_by(
         bakery: bakery,
-        name: 'Feeding Levain',
-        ingredient_type: 'other'
+        name: "Feeding Levain",
+        ingredient_type: "other"
       )
       recipe.recipe_items.find_or_create_by(inclusionable: levain_feeder, bakers_percentage: 50, sort_id: 100)
     end

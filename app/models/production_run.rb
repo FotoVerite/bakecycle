@@ -6,7 +6,7 @@ class ProductionRun < ActiveRecord::Base
   accepts_nested_attributes_for(
     :run_items,
     allow_destroy: true,
-    reject_if: proc { |attributes| attributes['product_id'].blank? }
+    reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
   def self.for_date(date)
@@ -16,7 +16,7 @@ class ProductionRun < ActiveRecord::Base
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique
-    errors[:base] << 'Cannot add same product more than once'
+    errors[:base] << "Cannot add same product more than once"
     false
   end
 end

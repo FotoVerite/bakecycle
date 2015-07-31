@@ -19,7 +19,7 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have created #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -33,7 +33,7 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have updated #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
     else
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -43,7 +43,7 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have deleted #{@recipe.name}"
       redirect_to recipes_path
     else
-      render 'edit'
+      render "edit"
     end
   end
 

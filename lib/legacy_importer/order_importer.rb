@@ -47,7 +47,7 @@ module LegacyImporter
     end
 
     def order_deleted?
-      data[:order_deleted] == 'Y'
+      data[:order_deleted] == "Y"
     end
   end
 

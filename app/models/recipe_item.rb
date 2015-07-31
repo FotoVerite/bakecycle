@@ -3,7 +3,7 @@ class RecipeItem < ActiveRecord::Base
   belongs_to :recipe
 
   validates :bakers_percentage, presence: true
-  validates :bakers_percentage, numericality: { greater_than: 0 }, unless: 'bakers_percentage.blank?'
+  validates :bakers_percentage, numericality: { greater_than: 0 }, unless: "bakers_percentage.blank?"
   validates :inclusionable_id_type, presence: true
 
   validate :no_infinite_loops
@@ -22,7 +22,7 @@ class RecipeItem < ActiveRecord::Base
   end
 
   def inclusionable_id_type=(composit_id)
-    self.inclusionable_id, self.inclusionable_type = composit_id.split('-')
+    self.inclusionable_id, self.inclusionable_type = composit_id.split("-")
   end
 
   def inclusionable_id_type

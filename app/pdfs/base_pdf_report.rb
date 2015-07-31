@@ -1,11 +1,11 @@
 class BasePdfReport < Prawn::Document
-  HEADER_ROW_COLOR = 'b0b0b0'
-  INDENTED_ROW_COLOR = 'd3d3d3'
+  HEADER_ROW_COLOR = "b0b0b0"
+  INDENTED_ROW_COLOR = "d3d3d3"
   TABLE_STYLE = { size: 10, height: 18, overflow: :shrink_to_fit, min_font_size: 5 }
 
   def initialize(options = {})
     super(default_options.merge(options))
-    fill_color '000000'
+    fill_color "000000"
     font_size 10
     setup_grid
     @stamps = {}
@@ -38,7 +38,7 @@ class BasePdfReport < Prawn::Document
       start_count_at: 1,
       size: 8
     }
-    number_pages 'Page <page> of <total>', options
+    number_pages "Page <page> of <total>", options
   end
 
   def timestamp
@@ -77,10 +77,10 @@ class BasePdfReport < Prawn::Document
   end
 
   def current_date
-    Time.zone.today.strftime('%A %B %e, %Y')
+    Time.zone.today.strftime("%A %B %e, %Y")
   end
 
   def current_time
-    Time.zone.now.strftime('%l:%M%P')
+    Time.zone.now.strftime("%l:%M%P")
   end
 end

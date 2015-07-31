@@ -19,7 +19,7 @@ class DailyTotalPdf < BasePdfReport
 
   def header_left
     bounding_box([bounds.left, bounds.top], width: (bounds.width / 2.0)) do
-      text 'Daily Totals', size: 20, align: :left
+      text "Daily Totals", size: 20, align: :left
     end
   end
 

@@ -16,7 +16,7 @@ class ProductionRunsController < ApplicationController
   def update
     authorize @production_run
     if @production_run.update(production_run_params)
-      redirect_to edit_production_run_path(@production_run), notice: 'Successfully updated'
+      redirect_to edit_production_run_path(@production_run), notice: "Successfully updated"
     else
       render :edit
     end
@@ -31,7 +31,7 @@ class ProductionRunsController < ApplicationController
   def reset
     authorize @production_run
     ProductionRunService.new(@production_run.bakery, @production_run.date).run
-    redirect_to edit_production_run_path(@production_run), notice: 'Reset Complete'
+    redirect_to edit_production_run_path(@production_run), notice: "Reset Complete"
   end
 
   def print_recipes

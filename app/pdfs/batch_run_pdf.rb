@@ -1,6 +1,6 @@
 class BatchRunPdf < ProductionRunPdf
   def run_label
-    'Production Run BATCH PROJECTION'
+    "Production Run BATCH PROJECTION"
   end
 
   def production_run_info

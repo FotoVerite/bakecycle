@@ -22,22 +22,22 @@ class InvoicePage
   end
 
   def invoice_header_stamp
-    stamp_or_create('invoice header') { invoice_header }
+    stamp_or_create("invoice header") { invoice_header }
   end
 
   def invoice_header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
-    grid([0, 9], [0, 11]).bounding_box { text 'Invoice', size: 40 }
+    grid([0, 9], [0, 11]).bounding_box { text "Invoice", size: 40 }
   end
 
   def addresses
     grid([1.1, 0], [1.3, 3]).bounding_box do
-      text 'Shipped To:', size: 9
+      text "Shipped To:", size: 9
       client_address(:delivery)
     end
     grid([1.1, 4], [1.3, 7]).bounding_box do
-      text 'Billed To:', size: 9
+      text "Billed To:", size: 9
       client_address(:billing)
     end
   end
@@ -61,7 +61,7 @@ class InvoicePage
   end
 
   def information_rows
-    [['Invoice Number', 'Invoice Date', 'Terms', 'Due Date', 'Total Due']] +
+    [["Invoice Number", "Invoice Date", "Terms", "Due Date", "Total Due"]] +
       [[
         @shipment.invoice_number, @shipment.date, @shipment.terms,
         @shipment.payment_due_date, @shipment.price
@@ -78,7 +78,7 @@ class InvoicePage
   end
 
   def shipment_items_row
-    header = ['Item Name', 'Product Type', 'Quantity', 'Price Each', 'Total']
+    header = ["Item Name", "Product Type", "Quantity", "Price Each", "Total"]
     sorted_order_items = @shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
     rows = sorted_order_items.map do |item|
       item = item.decorate
@@ -98,7 +98,7 @@ class InvoicePage
   end
 
   def totals_row
-    [['Subtotal:', @shipment.subtotal], ['Delivery Fee:', @shipment.delivery_fee], ['Total:', @shipment.price]]
+    [["Subtotal:", @shipment.subtotal], ["Delivery Fee:", @shipment.delivery_fee], ["Total:", @shipment.price]]
   end
 
   def note
@@ -106,7 +106,7 @@ class InvoicePage
   end
 
   def notes_data
-    text 'Notes', style: :bold
+    text "Notes", style: :bold
     text @shipment.note
     move_down 15
   end

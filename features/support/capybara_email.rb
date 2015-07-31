@@ -1,2 +1,2 @@
-require 'capybara/email'
+require "capybara/email"
 World(Capybara::Email::DSL)

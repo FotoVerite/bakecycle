@@ -40,6 +40,6 @@ class OrderItemQuantities
 
   def validate_single_product
     return if @order_items.to_a.uniq(&:product_id).count == 1
-    raise ArgumentError, 'Order Items must belong to the same product'
+    raise ArgumentError, "Order Items must belong to the same product"
   end
 end

@@ -2,10 +2,10 @@ class PackingSlipsGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
-    bakery_id, date_string, print_string = global_id.split('_')
+    bakery_id, date_string, print_string = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     date = Date.iso8601(date_string)
-    print_invoices = print_string == 'true'
+    print_invoices = print_string == "true"
     new(bakery, date, print_invoices)
   end
 
@@ -20,7 +20,7 @@ class PackingSlipsGenerator
   end
 
   def filename
-    formatted_date = @date.strftime('%Y-%m-%d')
+    formatted_date = @date.strftime("%Y-%m-%d")
     "packing_slips_#{formatted_date}.pdf"
   end
 

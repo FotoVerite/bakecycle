@@ -1,18 +1,18 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe ProductionRunService do
   let(:bakery) { create(:bakery) }
   let(:today) { Time.zone.today }
   let(:service) { ProductionRunService.new(bakery, today) }
 
-  it 'creates a production run' do
+  it "creates a production run" do
     service.run
     expect(service.production_run).to be_persisted
     expect(service.production_run).to be_valid
     expect(service.production_run).to be_a(ProductionRun)
   end
 
-  it 'updates a production run' do
+  it "updates a production run" do
     create(:shipment, bakery: bakery, date: today + 2.days)
     service.run
     pr = service.production_run
@@ -24,8 +24,8 @@ describe ProductionRunService do
     expect(pr).to eq(service.production_run)
   end
 
-  describe '#associate_shipment_item' do
-    it 'associates shipment items to the production run' do
+  describe "#associate_shipment_item" do
+    it "associates shipment items to the production run" do
       shipment = create(
         :shipment,
         bakery: bakery,
@@ -38,8 +38,8 @@ describe ProductionRunService do
     end
   end
 
-  describe '#create_run_items' do
-    it 'creates run items for the shipment items in a production run' do
+  describe "#create_run_items" do
+    it "creates run items for the shipment items in a production run" do
       create(:shipment, bakery: bakery, shipment_item_count: 1, date: today + 2.days)
       create(:shipment, bakery: bakery, shipment_item_count: 1, date: today + 2.days)
       service.run

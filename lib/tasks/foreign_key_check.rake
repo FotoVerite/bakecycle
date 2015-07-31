@@ -1,9 +1,9 @@
 namespace :immigrant do
-  desc 'Checks for missing foreign key relationships in the database'
+  desc "Checks for missing foreign key relationships in the database"
   task my_check_keys: :environment do
     Rails.application.eager_load!
 
-    config_file = '.immigrant.yml'
+    config_file = ".immigrant.yml"
     if File.exist?(config_file)
       ignore_keys = YAML.load_file(config_file)
     else
@@ -14,7 +14,7 @@ namespace :immigrant do
     warnings.values.each { |warning| $stderr.puts "WARNING: #{warning}" }
 
     keys.select! do |key|
-      !ignore_keys.include?('from_table' => key.from_table, 'to_table' => key.to_table)
+      !ignore_keys.include?("from_table" => key.from_table, "to_table" => key.to_table)
     end
 
     keys.each do |key|
@@ -24,7 +24,7 @@ namespace :immigrant do
     end
 
     if keys.present?
-      puts 'Found missing foreign keys, run `rails generate immigration MigrationName` or add them.'
+      puts "Found missing foreign keys, run `rails generate immigration MigrationName` or add them."
       puts "Or add them to #{config_file} to ignore them."
       exit keys.count
     end

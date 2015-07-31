@@ -30,12 +30,12 @@ module LegacyImporter
     end
 
     def route_active_status?
-      data[:route_active] == 'Y'
+      data[:route_active] == "Y"
     end
 
     def attr_map
       FIELDS_MAP.each_with_object({}) do |(legacy_field, field), data_hash|
-        data_hash[field] = data[legacy_field] unless data[legacy_field] == ''
+        data_hash[field] = data[legacy_field] unless data[legacy_field] == ""
       end
     end
   end

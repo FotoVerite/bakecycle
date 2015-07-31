@@ -5,13 +5,13 @@ module LegacyImporter
     end
 
     DAY_OF_WEEK_MAP = {
-      'mon' => :monday,
-      'tue' => :tuesday,
-      'wed' => :wednesday,
-      'thu' => :thursday,
-      'fri' => :friday,
-      'sat' => :saturday,
-      'sun' => :sunday
+      "mon" => :monday,
+      "tue" => :tuesday,
+      "wed" => :wednesday,
+      "thu" => :thursday,
+      "fri" => :friday,
+      "sat" => :saturday,
+      "sun" => :sunday
     }
 
     attr_reader :bakery, :data, :order_items

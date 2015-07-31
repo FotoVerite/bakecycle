@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe RecipeCalc do
-  describe '#ingredients_info' do
-    it 'returns info for recipe items' do
+  describe "#ingredients_info" do
+    it "returns info for recipe items" do
       ingredient = Ingredient.new
       included_recipe = Recipe.new
       recipe_items = [
@@ -26,7 +26,7 @@ describe RecipeCalc do
           inclusionable: ingredient,
           weight: Unitwise(10, :kg),
           bakers_percentage: BigDecimal.new(100),
-          inclusionable_type: 'Ingredient',
+          inclusionable_type: "Ingredient",
           sort_id: 1
         },
         {
@@ -34,7 +34,7 @@ describe RecipeCalc do
           inclusionable: included_recipe,
           weight: Unitwise(5, :kg),
           bakers_percentage: BigDecimal.new(50),
-          inclusionable_type: 'Recipe',
+          inclusionable_type: "Recipe",
           sort_id: 2
         }
       ]

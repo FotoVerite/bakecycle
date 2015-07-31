@@ -28,12 +28,12 @@ class OrderCreator
       @updated_id = overrideable.id
       order.save
     else
-      order.errors.add(:base, 'Could not override overlapping order, please update it manually.')
+      order.errors.add(:base, "Could not override overlapping order, please update it manually.")
       false
     end
   end
 
   def overlap_errors_only?
-    order.errors.count == 2 && order.errors[:start_date].join.include?('overlap')
+    order.errors.count == 2 && order.errors[:start_date].join.include?("overlap")
   end
 end

@@ -10,7 +10,7 @@ class ClientsController < ApplicationController
   end
 
   def new
-    @client = policy_scope(Client).build(active: true, billing_term: 'net_30')
+    @client = policy_scope(Client).build(active: true, billing_term: "net_30")
     authorize @client
   end
 
@@ -21,7 +21,7 @@ class ClientsController < ApplicationController
       flash[:notice] = "You have created #{@client.name}."
       redirect_to client_path(@client)
     else
-      render 'new'
+      render "new"
     end
   end
 
@@ -43,7 +43,7 @@ class ClientsController < ApplicationController
       flash[:notice] = "You have updated #{@client.name}."
       redirect_to client_path(@client)
     else
-      render 'edit'
+      render "edit"
     end
   end
 

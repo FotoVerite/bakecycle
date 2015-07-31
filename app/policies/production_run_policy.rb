@@ -26,7 +26,7 @@ class ProductionRunPolicy < ApplicationPolicy
   private
 
   def can_manage?
-    user.production_permission == 'manage'
+    user.production_permission == "manage"
   end
 
   def bakery?
