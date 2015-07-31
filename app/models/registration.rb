@@ -34,7 +34,7 @@ class Registration
   end
 
   def save_and_setup
-    save && create_demo # && create_stripe_customer
+    save && create_demo && create_stripe_customer
   end
 
   def month

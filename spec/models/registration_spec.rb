@@ -59,7 +59,7 @@ describe Registration do
   describe "#save_and_setup" do
     it "creates demo data and stripe customer" do
       expect(DemoCreatorJob).to receive(:perform_later)
-      # expect(StripeUserCreateJob).to receive(:perform_later)
+      expect(StripeUserCreateJob).to receive(:perform_later)
       registration = build(:registration, plan: plan)
       expect(registration.save_and_setup).to eq(true)
     end
