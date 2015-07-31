@@ -1,5 +1,7 @@
 <% provide(:title, "Registration") %>
 
+<%= render 'stripe_meta_tag' %>
+
 <section class="registration">
 
   <div class="small-12 medium-10 medium-offset-1 large-8 large-offset-2 columns main-container">
@@ -64,6 +66,8 @@
           <hr>
         </div>
       </div>
+
+      <%= render 'stripe_fields', f: f %>
 
       <div class="row">
         <%= f.submit "Join BakeCycle", class: "join-cta-button", name: nil %>

@@ -24,11 +24,11 @@ When(/^I submit the registration form with valid data$/) do
   fill_in "registration_bakery_name", with: "FitBake"
   fill_in "registration_email", with: "j@dough.com"
   fill_in "registration_password", with: "foobarbaz"
-  # fill_in 'registration_card_number', with: '4242424242424242'
-  # fill_in 'registration_card_zipcode', with: '12123'
-  # fill_in 'registration_card_code', with: '121'
-  # select '2', from: 'registration_card_month'
-  # select '2016', from: 'registration_card_year'
+  fill_in "registration_card_number", with: "4242424242424242"
+  fill_in "registration_card_zipcode", with: "12123"
+  fill_in "registration_card_code", with: "121"
+  select "2", from: "registration_card_month"
+  select "2016", from: "registration_card_year"
   click_on "Join BakeCycle"
 end
 
