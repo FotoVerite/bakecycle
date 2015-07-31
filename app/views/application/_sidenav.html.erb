@@ -23,24 +23,6 @@
           <% end %>
 
         <% if current_bakery %>
-          <% if policy(Product).index? %>
-            <li class="js-subnav-toggle show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
-              <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
-              <span class="header">Products</span>
-              <ul class="sub">
-                <li class="<%= active_nav?(:ingredients) %>">
-                  <%= link_to("Ingredients", ingredients_path)%>
-                </li>
-                <li class="<%= active_nav?(:recipes) %>">
-                  <%= link_to("Recipes", recipes_path) %>
-                </li>
-                <li class="<%= active_nav?(:products) %>">
-                  <%= link_to("Products", products_path) %>
-                </li>
-              </ul>
-            </li>
-          <% end %>
-
           <% if policy(ProductionRun).index? %>
             <li class="js-subnav-toggle show-nav <%= active_nav?(:print_recipes, :batch_recipes, :production_runs, :daily_totals) %>">
               <span class="icon"><%= image_tag 'icons/icon-production.svg'%></span>
@@ -48,6 +30,7 @@
 
               <ul class="sub">
                 <li class="<%= active_nav?(:print_recipes) %>"><%= link_to("Print Recipes", print_recipes_path) %></li>
+                <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to("Print Batch Recipes", batch_recipes_path) %></li>
                 <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
                 <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
               </ul>
@@ -63,6 +46,24 @@
                 <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
                 <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
                 <li class="<%= active_nav?(:packing_slips) %>"><%= link_to("Print Packing Slips", packing_slips_path) %></li>
+              </ul>
+            </li>
+          <% end %>
+
+          <% if policy(Product).index? %>
+            <li class="js-subnav-toggle show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
+              <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
+              <span class="header">Products</span>
+              <ul class="sub">
+                <li class="<%= active_nav?(:ingredients) %>">
+                  <%= link_to("Ingredients", ingredients_path)%>
+                </li>
+                <li class="<%= active_nav?(:recipes) %>">
+                  <%= link_to("Recipes", recipes_path) %>
+                </li>
+                <li class="<%= active_nav?(:products) %>">
+                  <%= link_to("Products", products_path) %>
+                </li>
               </ul>
             </li>
           <% end %>

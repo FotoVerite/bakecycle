@@ -20,6 +20,6 @@ class ShipmentService
   end
 
   def order_items_for_production
-    bakery.order_items.includes(:order).production_start_on?(run_time)
+    bakery.order_items.includes(:order).production_date(run_time)
   end
 end

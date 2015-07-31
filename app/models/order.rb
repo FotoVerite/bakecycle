@@ -43,10 +43,8 @@ class Order < ActiveRecord::Base
           SELECT
             id,
             first_value(id) OVER (PARTITION BY client_id, route_id ORDER BY order_type DESC) active_order_id
-          FROM
-            orders
-          WHERE
-            start_date <= :date and (end_date is null OR end_date >= :date)
+          FROM orders
+          WHERE start_date <= :date and (end_date is null OR end_date >= :date)
           ORDER BY
             client_id,
             route_id,

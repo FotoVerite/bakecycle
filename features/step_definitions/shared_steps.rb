@@ -24,6 +24,10 @@ When(/^I click on "(.*?)"$/) do |linkable_text|
   click_on(linkable_text, match: :first)
 end
 
+When(/^I click on the "(.*?)" link$/) do |name|
+  click_link name
+end
+
 Then(/^"(.*?)" should not be present$/) do |content|
   expect(page).to_not have_content(content)
 end
