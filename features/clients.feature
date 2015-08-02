@@ -46,6 +46,7 @@ Feature: Clients
     When I click on "View More Orders"
     Then I should be on the orders index page with "mandos" shipments and none from "andysdecaf"
 
+  @javascript
   Scenario: As a user with read access to clients
     Given I am logged in as an user with client "read" access with a bakery called "biencuit"
     And There are "biencuit" bakery clients named "mandos" and "andysdecaf"

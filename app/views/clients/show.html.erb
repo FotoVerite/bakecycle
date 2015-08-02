@@ -4,10 +4,10 @@
 
 <div class="client-actions">
   <ul class="stack-for-small secondary button-group left">
+    <li><%= link_to 'Back', clients_path, class: "button small" %></li>
     <% if policy(client).edit? %>
       <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
     <% end %>
-    <li><%= link_to 'Back', clients_path, class: "button small" %></li>
   </ul>
 
 <% if policy(Client).new? %>
@@ -196,6 +196,9 @@
               <%= link_to edit_order_path(order) do %>
                 <span class="table-action-icon icon-link-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
               <% end %>
+              <%= link_to copy_order_path(order) do %>
+                <span class="table-action-icon icon-link-tooltip" aria-label="Copy Order"><i class="fi-page-copy"></i></span>
+              <% end %>
             </td>
           </tr>
         <% end %>
@@ -203,7 +206,12 @@
     </table>
   </div>
   <div class="row">
-   <%= link_to 'View More Orders', orders_path(search: {client_id: [@client.id]}), class: "button small right" %>
+    <% if policy(Order).new? %>
+      <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button small right" %>
+    <% end %>
+    <% if policy(Order).index? %>
+      <%= link_to 'View More Orders', orders_path(search: {client_id: [@client.id]}), class: "button small right" %>
+    <% end %>
   </div>
 </fieldset>
 
@@ -239,6 +247,8 @@
     </table>
   </div>
   <div class="row">
-   <%= link_to 'View More Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
+    <% if policy(Shipment).index? %>
+      <%= link_to 'View More Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
+    <% end %>
   </div>
 </fieldset>

@@ -1,3 +1,7 @@
 class ClientsDecorator < Draper::CollectionDecorator
-  delegate :current_page, :per_page, :offset, :total_entries, :total_pages
+  def to_json
+    {
+      data: object.map { |client| ClientSerializer.new(client) }
+    }
+  end
 end
