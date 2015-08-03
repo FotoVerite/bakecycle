@@ -44,58 +44,53 @@ class OrderItem < ActiveRecord::Base
     quantity(ready_date) > 0
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/LineLength
+  # rubocop:disable Metrics/MethodLength
+  # Returns order items considering active and temp orders. Start date + Lead
+  # Time of each product on each order item
   def self.production_date(start_date)
-    # Returns order items considering active and temp orders. Start date + Lead
-    # Time of each product on each order item
     sql = <<-SQL
-      order_items.id in (
-        SELECT
-          item_id
-        FROM (
+      order_items.id in(
+        WITH items_to_work AS (
           SELECT
             order_items.id item_id,
             orders.id order_id,
             orders.client_id client_id,
             orders.route_id route_id,
-            (DATE :production_date + (INTERVAL '1 day' * order_items.total_lead_days)) ship_date
+            (DATE :production_date + order_items.total_lead_days) ship_date
           FROM order_items
           INNER JOIN orders ON orders.id = order_items.order_id
           WHERE
             -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
-            DATE :production_date >= (orders.start_date - (INTERVAL '1 day' * (select COALESCE(max(total_lead_days), 1) from order_items)))
+            DATE :production_date >= (orders.start_date - (SELECT COALESCE(max(total_lead_days), 1) FROM order_items))
             AND (
               DATE :production_date <= orders.end_date
               OR orders.end_date IS NULL
             )
-
             -- find all order items that have active orders on the production_date + lead time
-            AND DATE :production_date >= (orders.start_date - (INTERVAL '1 day' * order_items.total_lead_days))
+            AND DATE :production_date >= (orders.start_date::date - order_items.total_lead_days)
             AND (
-              DATE :production_date <= (orders.end_date - (INTERVAL '1 day' * order_items.total_lead_days))
+              DATE :production_date <= (orders.end_date::date - order_items.total_lead_days)
               OR orders.end_date IS NULL
             )
-        ) items_to_work
+        )
+
+        SELECT
+          item_id
+        FROM items_to_work
         WHERE
           -- reduce to order items that are active on their ship_date
           -- this step is why this query is so slow
           order_id in (
-            SELECT id from (
-              SELECT
-                id,
-                first_value(id) OVER (PARTITION BY client_id, route_id ORDER BY order_type DESC) active_order_id
-              FROM orders check_orders
-              WHERE
-                start_date <= ship_date AND (end_date is null OR end_date >= ship_date)
-                AND client_id = check_orders.client_id
-            ) active_orders
-            WHERE id = active_order_id
+            SELECT DISTINCT ON (client_id, route_id) id
+            FROM orders
+            WHERE start_date <= ship_date and (end_date IS NULL OR end_date >= ship_date)
+            ORDER BY client_id, route_id, order_type DESC
           )
       )
     SQL
     where(sql, production_date: start_date)
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/LineLength
+  # rubocop:enable Metrics/MethodLength
 
   def set_quantity_zero_if_blank
     DAYS_OF_WEEK.each do |day|

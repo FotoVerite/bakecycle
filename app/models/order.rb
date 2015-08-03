@@ -35,27 +35,17 @@ class Order < ActiveRecord::Base
     ClientPolicy
   end
 
-  # rubocop:disable Metrics/MethodLength
   def self.active(date)
     sql = <<-SQL
       orders.id in (
-        SELECT id from (
-          SELECT
-            id,
-            first_value(id) OVER (PARTITION BY client_id, route_id ORDER BY order_type DESC) active_order_id
-          FROM orders
-          WHERE start_date <= :date and (end_date is null OR end_date >= :date)
-          ORDER BY
-            client_id,
-            route_id,
-            order_type
-        ) active_orders
-        WHERE id = active_order_id
+        SELECT DISTINCT ON (client_id, route_id) id
+        FROM orders
+        WHERE start_date <= :date and (end_date IS NULL OR end_date >= :date)
+        ORDER BY client_id, route_id, order_type DESC
       )
     SQL
     where(sql, date: date)
   end
-  # rubocop:enable Metrics/MethodLength
 
   def self.temporary(date)
     where(order_type: "temporary", start_date: date)
