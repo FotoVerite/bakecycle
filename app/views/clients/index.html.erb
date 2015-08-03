@@ -6,36 +6,4 @@
   <p><%= link_to 'Add New Client', new_client_path, class: "button" %></p>
 <% end %>
 
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Active</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% clients.each do |client| %>
-      <tr class="js-clickable-row" href="<%= client_path(client) %>">
-        <th scope="row"><%= link_to client.name, client_path(client) %></th>
-        <td data-title="Active"><%= client.active_status %></td>
-        <td data-title="Actions">
-
-          <%= link_to edit_client_path(client) do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Client"><i class="fi-page-edit"></i></span>
-          <% end %>
-
-          <%= link_to client_path(client) do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="View Client"><i class="fi-eye"></i></span>
-          <% end %>
-
-          <%= link_to new_order_path do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="Add Order For This Client"><i class="fi-page-add"></i></span>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= will_paginate clients %>
+<%= react_component('ClientsTable', clients.to_json) %>
