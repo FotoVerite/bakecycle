@@ -18,7 +18,7 @@ class ProjectionGenerator
   end
 
   def filename
-    "ProjectionRunRecipe.pdf"
+    "Production_Run_Projection_#{@start_date}.pdf"
   end
 
   def generate
