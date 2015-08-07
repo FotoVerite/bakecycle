@@ -56,7 +56,7 @@ end
 When(/^I search for tomorrow's recipe runs$/) do
   formatted_date = (Time.zone.now + 1.day).strftime("%m-%d-%Y")
   fill_in "search_date", with: formatted_date
-  click_on "Search"
+  click_on "Select Date"
 end
 
 Then(/^I should see a warning that I am seeing a projection$/) do

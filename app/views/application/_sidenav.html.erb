@@ -31,8 +31,8 @@
               <ul class="sub">
                 <li class="<%= active_nav?(:print_recipes) %>"><%= link_to("Print Recipes", print_recipes_path) %></li>
                 <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to("Print Batch Recipes", batch_recipes_path) %></li>
-                <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
                 <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
+                <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
               </ul>
             </li>
           <% end %>
@@ -43,9 +43,9 @@
               <span class="header">Shipping</span>
 
               <ul class="sub">
-                <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
                 <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
                 <li class="<%= active_nav?(:packing_slips) %>"><%= link_to("Print Packing Slips", packing_slips_path) %></li>
+                <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
               </ul>
             </li>
           <% end %>

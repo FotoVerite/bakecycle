@@ -18,8 +18,7 @@ class DeliveryListGenerator
   end
 
   def filename
-    formatted_date = @date.strftime("%Y-%m-%d")
-    "delivery_list_#{formatted_date}.pdf"
+    "delivery_list_#{@date}.pdf"
   end
 
   def generate

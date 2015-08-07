@@ -11,7 +11,7 @@
       <%= f.input :end_date, input_html: { value: @projection.batch_end_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :end_date}, required: false %>
     </div>
     <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
+      <%= f.submit 'Select Dates', class: "button postfix search-button", name: nil %>
     </div>
   </div>
 <% end %>

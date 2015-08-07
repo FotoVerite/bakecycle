@@ -16,9 +16,10 @@ class BatchRecipesController < ApplicationController
   def export_csv
     authorize ProductionRun, :can_print?
     projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
+    filename = "Batch_Recipes_#{projection.start_date}_#{projection.batch_end_date}.csv"
     respond_to do |format|
       format.csv {
-        response.headers["Content-Disposition"] = 'attachment; filename="' + "batch_recipes_#{Time.zone.now}" + '.csv"'
+        response.headers["Content-Disposition"] = 'attachment; filename="' + filename + '"'
         render text: BatchRecipesCsv.new(projection).to_csv
       }
     end
