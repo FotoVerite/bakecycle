@@ -45,7 +45,7 @@ describe RunItem do
     it "enforces uniqueness" do
       expect(create(:run_item)).to validate_uniqueness_of(:product)
         .scoped_to(:production_run_id)
-        .with_message("Cannot add same product more than once")
+        .with_message("Cannot add the same product more than once")
     end
   end
 end

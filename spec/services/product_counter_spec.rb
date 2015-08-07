@@ -75,26 +75,29 @@ describe ProductCounter do
       pm = create(:route, bakery: bakery)
       shipment = create(:shipment, date: today, shipment_item_count: 0, route: am, bakery: bakery)
       shipment_2 = create(:shipment, date: today, shipment_item_count: 0, route: pm, bakery: bakery)
-      bread = create(:product, product_type: :bread, bakery: bakery, over_bake: 10)
-      cookie = create(:product, product_type: :cookie, bakery: bakery, over_bake: 10)
-      create(:shipment_item, shipment: shipment, product: bread, product_quantity: 10, bakery: bakery)
-      create(:shipment_item, shipment: shipment, product: cookie, product_quantity: 10, bakery: bakery)
-      create(:shipment_item, shipment: shipment_2, product: bread, product_quantity: 10, bakery: bakery)
-      create(:shipment_item, shipment: shipment_2, product: cookie, product_quantity: 10, bakery: bakery)
+      bread = create(:product, product_type: :bread, bakery: bakery, over_bake: 25)
+      cookie = create(:product, product_type: :cookie, bakery: bakery, over_bake: 25)
+      create(:shipment_item, shipment: shipment, product: bread, product_quantity: 150, bakery: bakery)
+      create(:shipment_item, shipment: shipment, product: cookie, product_quantity: 100, bakery: bakery)
+      create(:shipment_item, shipment: shipment_2, product: bread, product_quantity: 100, bakery: bakery)
+      create(:shipment_item, shipment: shipment_2, product: cookie, product_quantity: 100, bakery: bakery)
       ProductionRunService.new(bakery, today - 1.days).run
+      RunItem.where(product: cookie).last.update!(overbake_quantity: 17)
 
       counts = {
         bread.id => {
-          am.id => 10,
-          pm.id => 10,
-          overbake_count: 2,
-          total: 22
+          am.id => 150,
+          pm.id => 100,
+          order_count: 250,
+          overbake_count: 63,
+          total: 313
         },
         cookie.id => {
-          am.id => 10,
-          pm.id => 10,
-          overbake_count: 2,
-          total: 22
+          am.id => 100,
+          pm.id => 100,
+          order_count: 200,
+          overbake_count: 17,
+          total: 217
         }
       }
       expect(product_counter.product_counts).to eq(counts)

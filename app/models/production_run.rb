@@ -16,7 +16,7 @@ class ProductionRun < ActiveRecord::Base
   def save(*args)
     super
   rescue ActiveRecord::RecordNotUnique
-    errors[:base] << "Cannot add same product more than once"
+    errors[:base] << "Cannot add the same product more than once"
     false
   end
 end

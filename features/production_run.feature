@@ -66,7 +66,7 @@ Feature: Production Run Editing
       | product         | overbake_quantity|
       | donut tart      | 15               |
     And I click on "Update"
-    Then "Cannot add same product more than once" should be present
+    Then "Cannot add the same product more than once" should be present
     When I click on "Add Product"
     And I fill out run item form with:
       | product         | overbake_quantity|
