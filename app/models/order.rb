@@ -30,6 +30,7 @@ class Order < ActiveRecord::Base
   )
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
+  scope :latest, -> (count) { order(id: :desc).limit(count) }
 
   def self.policy_class
     ClientPolicy
@@ -68,10 +69,6 @@ class Order < ActiveRecord::Base
   def self.sort_for_history
     includes(:client, :route)
       .order(start_date: :desc)
-  end
-
-  def self.upcoming(date)
-    where("end_date >= ? OR end_date is NULL", date)
   end
 
   def end_date_is_not_before_start_date

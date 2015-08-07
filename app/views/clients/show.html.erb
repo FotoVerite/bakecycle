@@ -170,7 +170,7 @@
 </div>
 
 <fieldset>
-  <legend>Client's Upcoming Orders</legend>
+  <legend>Client's Recent Orders</legend>
   <div class="row">
     <table class="responsive-table upcoming-orders">
       <thead>
@@ -185,13 +185,13 @@
       </thead>
 
       <tbody>
-        <% @orders.each do |order| %>
+        <% client.latest_orders.each do |order| %>
           <tr class="js-clickable-row" href="<%= edit_order_path(order) %>">
-            <td data-title="Number"><%= order.id %></td>
-            <th scope="row"><%= order.route_name %></th>
-            <th scope="row"><%= order.start_date %></th>
-            <th scope="row"><%= order.end_date %></th>
-            <th scope="row"><%= order.type %></th>
+            <th scope="row" data-title="Number"><%= order.id %></th>
+            <td data-title="Route"><%= order.route_name %></td>
+            <td data-title="Start Date"><%= order.start_date %></td>
+            <td data-title="End Date"><%= order.end_date %></td>
+            <td data-title="Order Type"><%= order.type %></td>
             <td data-title="Action">
               <%= link_to edit_order_path(order) do %>
                 <span class="table-action-icon icon-link-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
