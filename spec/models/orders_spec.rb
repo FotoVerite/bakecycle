@@ -281,37 +281,4 @@ describe Order do
       expect(client.orders.active(today)).to contain_exactly(order)
     end
   end
-
-  describe ".upcoming" do
-    it "shows all orders that are not past their end date" do
-      route = create(:route, bakery: bakery)
-      route_2 = create(:route, bakery: bakery)
-      combinations = [
-        { start_date: yesterday, end_date: yesterday, route: route, order_type: "temporary" },
-        { start_date: today, end_date: today, route: route, order_type: "temporary" },
-        { start_date: yesterday, end_date: nil, route: route, order_type: "standing" },
-        { start_date: yesterday, end_date: nil, route: route_2, order_type: "standing" },
-        { start_date: tomorrow, end_date: tomorrow, route: route, order_type: "temporary" }
-      ]
-
-      combinations.each do |combo|
-        start_date, end_date, route, order_type = combo.values_at(:start_date, :end_date, :route, :order_type)
-        create(
-          :order,
-          bakery: bakery,
-          route: route,
-          client: client,
-          start_date: start_date,
-          end_date: end_date,
-          order_type: order_type,
-          order_item_count: 0
-        )
-      end
-
-      expired_order = Order.find_by(end_date: yesterday)
-
-      expect(Order.upcoming(today).count).to eq(4)
-      expect(Order.upcoming(today)).not_to include(expired_order)
-    end
-  end
 end

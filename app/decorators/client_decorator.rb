@@ -1,6 +1,8 @@
 class ClientDecorator < Draper::Decorator
   delegate_all
 
+  decorates_association :orders
+
   def active_status
     active ? "Yes" : "No"
   end
@@ -11,5 +13,9 @@ class ClientDecorator < Draper::Decorator
 
   def delivery_fee_display
     delivery_fee_option.humanize(capitalize: false).titleize if delivery_fee_option
+  end
+
+  def latest_orders
+    object.orders.latest(10).decorate
   end
 end
