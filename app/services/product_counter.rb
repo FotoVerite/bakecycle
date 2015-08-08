@@ -48,16 +48,16 @@ class ProductCounter
 
   def assign_overbake_count_and_product_total(product_counts)
     product_counts.each do |product_id, product_count|
-      product_count[:overbake_count] = overbake_by_product[product_id] || 0
-      product_count[:total] = product_count.values.sum
+      product_count[:order_count] = product_count.values.sum
+      product_count[:overbake_count] = overbake_by_order_count(product_id)
+      product_count[:total] = product_count[:order_count] + product_count[:overbake_count]
     end
     product_counts
   end
 
-  def overbake_by_product
-    @_run_items ||= RunItem.where(production_run_id: shipment_items.pluck(:production_run_id))
-      .group(:product_id)
-      .sum(:overbake_quantity)
+  def overbake_by_order_count(product_id)
+    runs_ids = shipment_items.where(product_id: product_id).pluck(:production_run_id)
+    RunItem.where(production_run_id: runs_ids, product_id: product_id).sum(:overbake_quantity)
   end
 
   def shipment_items
