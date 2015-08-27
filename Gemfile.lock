@@ -154,7 +154,7 @@ GEM
       http_parser.rb (~> 0.6.0)
     erubis (2.7.0)
     eventmachine (1.0.7)
-    execjs (2.5.2)
+    execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -449,7 +449,7 @@ GEM
     ttfunk (1.4.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.7.1)
+    uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unf (0.1.4)
@@ -562,3 +562,6 @@ DEPENDENCIES
   webmock
   will_paginate (~> 3.0.6)
   wizarddev-heroku
+
+BUNDLED WITH
+   1.10.6
