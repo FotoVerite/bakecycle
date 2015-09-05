@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
   def resque_no_worker
     return if Resque.info[:workers] > 0 || Resque.inline
-    flash.alert = "There are no resque workers and Resque.inline is false"
+    flash.now.alert = "There are no resque workers and Resque.inline is false"
   end
 
   private

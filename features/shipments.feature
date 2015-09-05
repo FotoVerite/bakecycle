@@ -96,7 +96,7 @@ Feature: Shipments management
 
     When I am on the "shipments" page
     Then "Add New Invoice" should not be present
-    And "Print Invoices" should be present
+    And "Export Invoices" should be present
     And "Export CSV" should be present
     And "Export QuickBooks" should be present
 

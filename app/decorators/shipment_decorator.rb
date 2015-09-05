@@ -64,7 +64,7 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def client_state_zipcode
-    "#{object.client_delivery_address_state} #{client_delivery_zipcode}"
+    "#{object.client_delivery_address_state} #{client_delivery_zipcode}".strip
   end
 
   def client_delivery_city_state_zip

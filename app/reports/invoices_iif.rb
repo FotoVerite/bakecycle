@@ -1,26 +1,27 @@
-class InvoiceIif
-  attr_reader :shipment
+class InvoicesIif
+  attr_reader :shipments
 
-  def initialize(shipment)
-    @shipment = shipment
+  def initialize(shipments)
+    @shipments = shipments
   end
 
   def generate
-    invoice(@shipment).output
+    invoices(shipments).output
   end
 
   private
 
-  def invoice(shipment)
+  def invoices(shipments)
     counter = LineCounter.new
     Riif::IIF.new do |riif|
-      shipment_data(riif, shipment, counter)
+      shipments.includes(:shipment_items).find_each do |shipment|
+        invoice_data(riif, shipment.decorate, counter)
+      end
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
-  def shipment_data(riif, shipment, row_counter)
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def invoice_data(riif, shipment, row_counter)
     riif.trns do
       row do
         trnsid row_counter.next
@@ -93,8 +94,8 @@ class InvoiceIif
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
   class LineCounter
     def initialize
       @count = 0
