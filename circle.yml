@@ -13,4 +13,4 @@ test:
     - bundle exec rake immigrant:my_check_keys
     - bundle exec 'bundle-audit update && bundle-audit check'
     - bundle exec rubocop -D -c .rubocop.yml
-    - bundle exec brakeman -z
+    - bundle exec brakeman -z -w2
