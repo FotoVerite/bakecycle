@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/MethodLength
 class AddPlansForBakery < ActiveRecord::Migration
   def change
     create_table :plans do |t|
@@ -22,6 +23,6 @@ class AddPlansForBakery < ActiveRecord::Migration
     eos
 
     change_column :bakeries, :plan_id, :integer, null: false
-    add_foreign_key 'bakeries', 'plans'
+    add_foreign_key "bakeries", "plans"
   end
 end

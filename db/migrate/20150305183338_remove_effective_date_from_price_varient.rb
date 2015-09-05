@@ -9,6 +9,6 @@ class RemoveEffectiveDateFromPriceVarient < ActiveRecord::Migration
   def down
     remove_index :price_varients, name: "unique_price_varient_quantity"
     add_column :price_varients, :effective_date, :date
-    add_index :price_varients, [:product_id, :quantity, :effective_date], unique: true , name: "unique_price_varient"
+    add_index :price_varients, [:product_id, :quantity, :effective_date], unique: true, name: "unique_price_varient"
   end
 end

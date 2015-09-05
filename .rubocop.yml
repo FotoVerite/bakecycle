@@ -3,13 +3,8 @@ require: rubocop-rspec
 AllCops:
   RunRailsCops: true
   Exclude:
-    - 'lib/tasks/cucumber.rake'
-    - 'Guardfile'
-    - 'bin/**/*'
-    - 'db/**/*'
+    - 'db/schema.rb'
     - 'vendor/bundle/**/*'
-    - 'config/initializers/simple_form.rb'
-    - 'config/initializers/simple_form_foundation.rb'
 
 Metrics/LineLength:
   Max: 120
@@ -21,7 +16,7 @@ Metrics/AbcSize:
   Max: 18
 
 Metrics/ClassLength:
-  Max: 124
+  Max: 111
 
 RSpec/DescribedClass:
   Enabled: false
@@ -52,7 +47,7 @@ Style/StringLiterals:
   Enabled: false
 
 Style/StringLiterals:
-  EnforcedStyle: single_quotes
+  EnforcedStyle: double_quotes
 
 Style/SingleLineBlockParams:
   Enabled: false
@@ -62,6 +57,3 @@ Style/AlignParameters:
 
 Style/FirstParameterIndentation:
   Enabled: false
-
-StringLiterals:
-  EnforcedStyle: double_quotes

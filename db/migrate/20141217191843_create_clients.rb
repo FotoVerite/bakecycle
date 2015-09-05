@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 class CreateClients < ActiveRecord::Migration
   def change
     create_table :clients do |t|

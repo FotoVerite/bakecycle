@@ -1,6 +1,6 @@
 class CreateFileExports < ActiveRecord::Migration
   def change
-    enable_extension 'uuid-ossp'
+    enable_extension "uuid-ossp"
     create_table :file_exports, id: :uuid do |t|
       t.integer :bakery_id, null: false
       t.attachment :file

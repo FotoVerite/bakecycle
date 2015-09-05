@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/MethodLength
 class AddClientAttributesToShipments < ActiveRecord::Migration
   def change
     change_table :shipments do |t|
