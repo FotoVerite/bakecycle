@@ -15,6 +15,5 @@ class DbaDbNothing < ActiveRecord::Migration
 
     change_column_null :shipments, :route_id, false
     change_column_null :shipments, :route_name, false
-
   end
 end

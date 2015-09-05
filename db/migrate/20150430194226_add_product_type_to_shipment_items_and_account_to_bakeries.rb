@@ -11,7 +11,7 @@ class AddProductTypeToShipmentItemsAndAccountToBakeries < ActiveRecord::Migratio
     change_column :shipment_items, :product_product_type, :string, null: false
 
     add_column :bakeries, :quickbooks_account, :string
-    Bakery.update_all(quickbooks_account: 'Sales:Sales - Wholesale')
+    Bakery.update_all(quickbooks_account: "Sales:Sales - Wholesale")
     change_column :bakeries, :quickbooks_account, :string, null: false
   end
 end
