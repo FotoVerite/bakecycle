@@ -1,5 +1,6 @@
 class BaseSearchForm
   attr_reader :params
+  include GlobalID::Identification
 
   def self.params
     @params ||= []
@@ -15,7 +16,7 @@ class BaseSearchForm
       params.push(field => [])
 
       define_method field do
-        process_array params[field]
+        process_array(params[field]).map(&:to_i)
       end
       define_method :"#{field}=" do |value|
         params[field] = value
@@ -37,6 +38,11 @@ class BaseSearchForm
     end
   end
 
+  def self.find(id)
+    params = Rack::Utils.parse_nested_query(id).symbolize_keys
+    new(params)
+  end
+
   def initialize(params)
     @params = params || {}
   end
@@ -45,6 +51,10 @@ class BaseSearchForm
     self.class.accessible_fields.each_with_object({}) do |field, object|
       object[field] = send(field)
     end
+  end
+
+  def id
+    to_h.to_query
   end
 
   delegate :[], to: :to_h

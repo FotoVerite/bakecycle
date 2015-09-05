@@ -43,4 +43,21 @@ describe BaseSearchForm do
     expect(form[:client_id]).to eq([1])
     expect(form[:date_to]).to be_nil
   end
+
+  describe "global_id" do
+    let(:form) do
+      MySearchForm.new(
+        client_id: [1, 2, 3],
+        product_id: [4, 5, 6],
+        date_from: Date.parse("30/12/2015"),
+        date_to: Date.parse("30/12/2015")
+      )
+    end
+
+    it "serializes and de-serialize via GlobalID" do
+      id = form.to_global_id.to_s
+      new_form = GlobalID::Locator.locate id
+      expect(new_form.to_h).to eq(form.to_h)
+    end
+  end
 end

@@ -51,7 +51,7 @@ module.exports = React.createClass({
 
   render: function() {
     if (this.state.ready) {
-      window.location.replace(this.state.links.pdf);
+      window.location.replace(this.state.links.file);
       return <div>The report is ready!</div>;
     }
 
