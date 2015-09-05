@@ -48,6 +48,7 @@ group :development do
   gem "letter_opener"
   gem "quiet_assets"
   gem "spring"
+  gem "spring-commands-rspec"
   gem "web-console", "~> 2.0"
   gem "foreman", require: false
 end
