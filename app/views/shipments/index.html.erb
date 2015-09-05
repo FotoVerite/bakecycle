@@ -5,7 +5,7 @@
   <p><%= link_to 'Add New Invoice', new_shipment_path, class: "button" %></p>
 <% end %>
 
-<%= render partial: 'search_form', object: @search_form %>
+<%= render partial: 'search_form', object: search_form %>
 
 <% if @shipments.any? %>
   <ul class="stack-for-small secondary button-group">
@@ -15,12 +15,12 @@
       <% end %>
     </li>
     <li>
-      <%= link_to invoices_csv_shipments_path(search: params[:search]), class: "button" do %>
+      <%= link_to invoices_csv_shipments_path(search: params[:search]), target: "_blank", class: "button" do %>
         <i class="fi-page-export-csv"></i> Export CSV
       <% end %>
     </li>
     <li>
-      <%= link_to invoices_iif_shipments_path(search: params[:search]), class: "button" do %>
+      <%= link_to invoices_iif_shipments_path(search: params[:search]), target: "_blank", class: "button" do %>
         <i class="fi-page-export"></i> Export QuickBooks
       <% end %>
     </li>

@@ -1,7 +1,8 @@
 class ShipmentsController < ApplicationController
-  before_action :set_search_form, only: [:index, :invoices, :invoices_csv, :invoices_iif]
-  before_action :set_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif]
+  before_action :load_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif]
+  after_action :skip_policy_scope, only: [:invoices_csv]
   decorates_assigned :shipments, :shipment
+  helper_method :search_form
 
   def index
     authorize Shipment
@@ -63,10 +64,8 @@ class ShipmentsController < ApplicationController
 
   def invoices_csv
     authorize Shipment, :index?
-    @shipments = scope_with_search
-    csv_string = InvoicesCsv.new(@shipments.decorate)
-    expires_now
-    send_data csv_string.generate, filename: "invoices.csv", type: "text/csv", disposition: "attachment"
+    generator = InvoicesCsvGenerator.new(current_bakery, search_form)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def invoices
@@ -95,16 +94,16 @@ class ShipmentsController < ApplicationController
 
   private
 
-  def set_shipment
+  def load_shipment
     @shipment = policy_scope(Shipment).find(params[:id])
   end
 
-  def set_search_form
-    @search_form = ShipmentSearchForm.new(search_params)
+  def search_form
+    @_search_form ||= ShipmentSearchForm.new(search_params)
   end
 
   def scope_with_search
-    policy_scope(Shipment).search(@search_form).includes(:shipment_items)
+    policy_scope(Shipment).search(search_form).includes(:shipment_items)
   end
 
   def search_params

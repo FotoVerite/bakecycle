@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
   resources :file_exports, only: [:show]
 
-  resources :shipments, except: [:show] do
+  resources :shipments, path: "invoices", except: [:show] do
     get "invoice", on: :member
     get "invoice_iif", on: :member
     get "packing_slip", on: :member

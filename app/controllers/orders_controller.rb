@@ -1,12 +1,12 @@
 class OrdersController < ApplicationController
-  before_action :set_search_form, only: :index
   before_action :set_order, only: [:edit, :update, :destroy, :copy, :print]
   decorates_assigned :orders, :order
+  helper_method :search_form
 
   def index
     authorize Order
     @orders = policy_scope(Order)
-      .search(@search_form)
+      .search(search_form)
       .sort_for_history
       .paginate(page: params[:page])
   end
@@ -70,8 +70,8 @@ class OrdersController < ApplicationController
     @order = policy_scope(Order).find(params[:id])
   end
 
-  def set_search_form
-    @search_form = OrderSearchForm.new(search_params)
+  def search_form
+    @_search_form ||= OrderSearchForm.new(search_params)
   end
 
   def client

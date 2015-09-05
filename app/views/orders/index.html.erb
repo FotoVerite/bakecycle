@@ -6,5 +6,5 @@
   <p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
 <% end %>
 
-<%= render partial: 'search_form', object: @search_form, locals: { orders_destination: orders_path } %>
+<%= render partial: 'search_form', object: search_form, locals: { orders_destination: orders_path } %>
 <%= render partial: "order_table", orders: @orders %>

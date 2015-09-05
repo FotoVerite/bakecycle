@@ -4,11 +4,13 @@ class FileExportSerializer < ActiveModel::Serializer
   def links
     {
       self: Rails.application.routes.url_helpers.api_file_export_path(object),
-      pdf: pdf
+      file: file
     }
   end
 
-  def pdf
+  private
+
+  def file
     object.file.url if object.ready?
   end
 end
