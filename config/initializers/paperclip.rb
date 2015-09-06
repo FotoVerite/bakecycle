@@ -1,3 +1,7 @@
+Paperclip.options[:content_type_mappings] = {
+  iif: "text/plain"
+}
+
 if ENV["AWS_S3_KEY"]
   Paperclip::Attachment.default_options[:storage] = :s3
   Paperclip::Attachment.default_options[:s3_credentials] = {

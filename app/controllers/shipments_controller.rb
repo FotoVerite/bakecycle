@@ -1,6 +1,6 @@
 class ShipmentsController < ApplicationController
   before_action :load_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif]
-  after_action :skip_policy_scope, only: [:invoices_csv]
+  after_action :skip_policy_scope, only: [:export_csv, :export_iif, :export_pdf]
   decorates_assigned :shipments, :shipment
   helper_method :search_form
 
@@ -48,10 +48,8 @@ class ShipmentsController < ApplicationController
 
   def invoice
     authorize @shipment, :show?
-    pdf = InvoicesPdf.new([@shipment], current_bakery)
-    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+    generator = InvoicePdfGenerator.new(current_bakery, @shipment)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def packing_slip
@@ -62,34 +60,29 @@ class ShipmentsController < ApplicationController
     send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
   end
 
-  def invoices_csv
+  def export_csv
     authorize Shipment, :index?
     generator = InvoicesCsvGenerator.new(current_bakery, search_form)
     redirect_to ExporterJob.create(current_bakery, generator)
   end
 
-  def invoices
+  def export_iif
     authorize Shipment, :index?
-    @shipments = scope_with_search
-    pdf = InvoicesPdf.new(@shipments.decorate, current_bakery)
-    pdf_name = "invoices.pdf"
-    expires_now
-    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+    generator = InvoicesIifGenerator.new(current_bakery, search_form)
+    redirect_to ExporterJob.create(current_bakery, generator)
+  end
+
+  def export_pdf
+    authorize Shipment, :index?
+    generator = InvoicesPdfGenerator.new(current_bakery, search_form)
+    redirect_to ExporterJob.create(current_bakery, generator)
   end
 
   def invoice_iif
     authorize @shipment, :show?
-    quickbooks_iif = InvoiceIif.new(@shipment.decorate)
+    quickbooks_iif = InvoicesIif.new([@shipment])
     expires_now
     send_data quickbooks_iif.generate, content_type: "text/plain", filename: "bakecycle-quickbook-export.iif"
-  end
-
-  def invoices_iif
-    authorize Shipment, :index?
-    @shipments = scope_with_search
-    quickbooks_iif = InvoicesIif.new(@shipments.decorate, current_bakery.decorate)
-    expires_now
-    send_data quickbooks_iif.generate, content_type: "text/plain", filename: quickbooks_iif.filename
   end
 
   private

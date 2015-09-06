@@ -34,9 +34,9 @@ Rails.application.routes.draw do
     get "invoice", on: :member
     get "invoice_iif", on: :member
     get "packing_slip", on: :member
-    get "invoices", on: :collection
-    get "invoices_csv", on: :collection
-    get "invoices_iif", on: :collection
+    get "export_pdf", on: :collection
+    get "export_csv", on: :collection
+    get "export_iif", on: :collection
   end
 
   resources :bakeries, except: [:show] do

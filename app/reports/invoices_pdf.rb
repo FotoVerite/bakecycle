@@ -1,13 +1,15 @@
 class InvoicesPdf < BasePdfReport
-  def initialize(shipments, bakery)
-    @shipments = shipments
+  attr_reader :bakery, :shipments
+
+  def initialize(bakery, shipments)
     @bakery = bakery.decorate
+    @shipments = shipments
     super(skip_page_creation: true)
   end
 
   def setup
-    @shipments.each do |shipment|
-      InvoicePage.new(shipment, @bakery, self).render
+    shipments.includes(:shipment_items).find_each do |shipment|
+      InvoicePage.new(shipment, bakery, self).render
     end
     timestamp
   end
