@@ -1,5 +1,5 @@
 class FileExportSerializer < ActiveModel::Serializer
-  attributes :id, :created_at, :updated_at, :links, :ready?
+  attributes :id, :created_at, :updated_at, :links, :ready?, :loading_message
 
   def links
     {
@@ -12,5 +12,9 @@ class FileExportSerializer < ActiveModel::Serializer
 
   def file
     object.file.url if object.ready?
+  end
+
+  def loading_message
+    LoadingMessages.sample
   end
 end

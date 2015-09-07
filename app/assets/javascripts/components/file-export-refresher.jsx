@@ -2,27 +2,26 @@ var React = require('react');
 var FileExportStore = require('backbone').Model;
 
 module.exports = React.createClass({
-
-  getInitialState: function() {
+  getInitialState() {
     return {
       status: '',
       ready: false
     };
   },
 
-  componentWillMount: function() {
+  componentWillMount() {
     this.store = new FileExportStore();
     this.store.on('change', store => this.setState(store.toJSON()));
     this.store.set(this.props);
     this.poll();
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this.store.off('change');
     this.stopPoll();
   },
 
-  poll: function() {
+  poll() {
     this.jxr = $.get(this.props.links.self);
     this.jxr.done(data => this.store.set(data));
     this.jxr.done(() => this.status(''));
@@ -36,25 +35,51 @@ module.exports = React.createClass({
     this.jxr.fail(() => this.timeout = window.setTimeout(this.poll, 5000));
   },
 
-  status: function(message) {
+  status(message) {
     this.setState({status: message});
   },
 
-  stopPoll: function() {
+  stopPoll() {
     window.clearTimeout(this.timeout);
     if (this.jxr) { this.jxr.abort(); }
   },
 
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps(newProps) {
     this.store.update(newProps);
   },
 
-  render: function() {
-    if (this.state.ready) {
-      window.location.replace(this.state.links.file);
-      return <div>The report is ready!</div>;
-    }
+  loading() {
+    return (
+      <div>
+        <h2 className="loading-message">{this.props.loadingMessage}</h2>
+        <div className="loading-indicator">
+          <div className="bounce1"></div>
+          <div className="bounce2"></div>
+          <div className="bounce3"></div>
+        </div>
+        <div>{this.state.status}</div>
+      </div>
+    );
+  },
 
-    return <div>{this.state.status}</div>;
+  complete() {
+    window.location.replace(this.state.links.file);
+    return (
+      <div>
+        <h1>The report is ready!</h1>
+        <p>
+          It should begine downloading in a moment.
+          If it doesn't you can
+          <a href={this.state.links.file} className="underlined-link">click here</a>
+          to download it now.
+        </p>
+      </div>
+    );
+  },
+
+  render() {
+    return (<div className="loading-report">
+      {this.state.ready ? this.complete() : this.loading()}
+    </div>);
   }
 });
