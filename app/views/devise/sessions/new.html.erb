@@ -8,7 +8,8 @@
       <div><%= f.input :email, required: false, autofocus: true %></div>
       <div><%= f.input :password, required: false %></div>
       <div><%= f.button :submit, "Log in", class: "full-width" %></div>
+      <p><%= link_to "Forgot your password?", new_password_path(:user), class: "underlined-link" %></p>
+      <p>Need an account? <%= link_to 'Sign up', new_registration_path, class: "underlined-link" %> for a free trial.</p>
     </div>
   </div>
-
 <% end %>
