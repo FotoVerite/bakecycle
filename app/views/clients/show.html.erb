@@ -98,16 +98,15 @@
       <legend>Delivery Address</legend>
       <p><%= client.delivery_address_street_1 %></p>
       <p><%= client.delivery_address_street_2 %></p>
-      <p><%= client.delivery_address_city %>, <%= client.delivery_address_state %> <%= client.delivery_address_zipcode %></p>
+      <p><%= "#{client.delivery_address_city}, " if client.delivery_address_city.present? %><%= client.delivery_address_state %> <%= client.delivery_address_zipcode %></p>
     </fieldset>
   </div>
   <div class="small-12 medium-4 columns end">
     <fieldset>
       <legend>Billing Address</legend>
-
       <p><%= client.billing_address_street_1 %></p>
       <p><%= client.billing_address_street_2 %></p>
-      <p><%= client.billing_address_city %>, <%= client.billing_address_state %> <%= client.billing_address_zipcode %></p>
+      <p><%= "#{client.billing_address_city}, " if client.billing_address_city.present? %><%= client.billing_address_state %> <%= client.billing_address_zipcode %></p>
     </fieldset>
   </div>
 </div>

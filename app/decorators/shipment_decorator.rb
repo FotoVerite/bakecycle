@@ -68,11 +68,13 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def client_delivery_city_state_zip
-    "#{object.client_delivery_address_city}, #{object.client_delivery_address_state} #{client_delivery_zipcode}"
+    city = "#{object.client_delivery_address_city}, " if object.client_delivery_address_city.present?
+    "#{city}#{object.client_delivery_address_state} #{client_delivery_zipcode}".strip
   end
 
   def client_billing_city_state_zip
-    "#{object.client_billing_address_city}, #{object.client_billing_address_state} #{client_billing_zipcode}"
+    city = "#{object.client_billing_address_city}, " if object.client_billing_address_city.present?
+    "#{city}#{object.client_billing_address_state} #{client_billing_zipcode}".strip
   end
 
   def client_billing_name

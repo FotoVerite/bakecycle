@@ -1,10 +1,10 @@
 module ApplicationHelper
-  def render_side_nav?
-    @_render_side_nav
+  def render_nav?
+    @_render_nav
   end
 
   def class_for_main_content
-    return "large-10 medium-12 small-12 columns light-grey-bg-pattern" if render_side_nav?
+    return "large-10 medium-12 small-12 columns light-grey-bg-pattern" if render_nav?
     "medium-6 medium-offset-3 small-10 small-offset-1 columns light-grey-bg-pattern"
   end
 
