@@ -6,4 +6,4 @@
   <p><%= link_to 'Add New Client', new_client_path, class: "button" %></p>
 <% end %>
 
-<%= react_component('ClientsTable', clients.to_json) %>
+<%= react_component('ClientsTable', clients.serializable_hash) %>

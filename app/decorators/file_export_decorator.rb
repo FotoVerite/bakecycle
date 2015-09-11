@@ -1,7 +1,7 @@
 class FileExportDecorator < Draper::Decorator
   delegate_all
 
-  def to_json
-    FileExportSerializer.new(object).to_json
+  def serializable_hash
+    FileExportSerializer.new(object).serializable_hash
   end
 end

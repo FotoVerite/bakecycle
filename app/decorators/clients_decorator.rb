@@ -1,7 +1,5 @@
 class ClientsDecorator < Draper::CollectionDecorator
-  def to_json
-    {
-      data: object.map { |client| ClientSerializer.new(client) }
-    }
+  def serializable_hash
+    { data: map(&:serializable_hash) }
   end
 end

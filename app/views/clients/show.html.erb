@@ -10,30 +10,12 @@
     <% end %>
   </ul>
 
-<% if policy(Client).new? %>
-  <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button right" %>
-<% end %>
+  <% if policy(Client).new? %>
+    <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button right" %>
+  <% end %>
 </div>
 
-
-<div
-  class="map-container"
-  ng-controller="mapCtrl"
-  ng-init="center=<%= [client.latitude,client.longitude].to_json %>"
-  map-lazy-load="https://maps.google.com/maps/api/js"
->
-  <map
-    center="{{center}}"
-    visible = "true"
-    draggable = "false"
-    zoom-control = "true"
-    scrollwheel = "false"
-    max-zoom="15"
-    min-zoom="15"
-  >
-    <marker position = "{{center}}" on-click="openMap(center)"></marker>
-  </map>
-</div>
+<%= react_component('ClientMap', client.serializable_hash) %>
 
 <fieldset>
   <legend>Business Information</legend>
