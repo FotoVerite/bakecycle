@@ -15,9 +15,7 @@
       <div class="large-12 columns content-bg">
         <%= render 'topmenusection' %>
         <div class="row">
-          <% if render_side_nav? %>
-            <%= render 'sidenav' %>
-          <% end %>
+          <%= render 'nav' if render_nav? %>
           <div class="<%= class_for_main_content %>">
             <%= render 'flash_messages' %>
             <%= yield %>
