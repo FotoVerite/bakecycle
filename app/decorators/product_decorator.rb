@@ -31,7 +31,7 @@ class ProductDecorator < Draper::Decorator
     sku
   end
 
-  def to_json
-    ProductSerializer.new(object).to_json
+  def serializable_hash
+    ProductSerializer.new(object).serializable_hash
   end
 end

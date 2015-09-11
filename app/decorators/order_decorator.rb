@@ -28,8 +28,8 @@ class OrderDecorator < Draper::Decorator
     Shipment.upcoming(object)
   end
 
-  def to_json
-    OrderSerializer.new(object).to_json
+  def serializable_hash
+    OrderSerializer.new(object).serializable_hash
   end
 
   def overridable_end_date

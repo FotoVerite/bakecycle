@@ -4,6 +4,6 @@
 
 <%= link_to 'Back', new_order_return_path, class: "button small" %>
 
-<div ng-controller="OrderCtrl" ng-init="order=<%= order.to_json %>">
+<div ng-controller="OrderCtrl" ng-init="order=<%= order.serializable_hash.to_json %>">
   <%= render "form"%>
 </div>

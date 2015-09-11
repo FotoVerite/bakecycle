@@ -1,8 +1,6 @@
 {
   "name": "dsl-generated dependencies",
   "dependencies": {
-    "angular": "latest",
-    "ngmap": "latest",
-    "html5shiv": "latest"
+    "angular": "latest"
   }
 }

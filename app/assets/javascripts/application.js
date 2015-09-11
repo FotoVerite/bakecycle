@@ -17,7 +17,6 @@
 //= require jquery.timepicker.js
 //= require_tree ./vendor
 //= require angular/angular
-//= require ngmap
 //= require foundation/foundation
 //= require foundation/foundation.alert
 

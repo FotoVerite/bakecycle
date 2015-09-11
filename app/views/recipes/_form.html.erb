@@ -1,7 +1,7 @@
 <%= simple_form_for recipe do |f| %>
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <%= react_component('RecipeForm', recipe.to_json) %>
+  <%= react_component('RecipeForm', recipe.serializable_hash) %>
 
   <div class="row">
     <div class="small-12 columns">
