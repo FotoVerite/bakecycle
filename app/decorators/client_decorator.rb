@@ -19,6 +19,10 @@ class ClientDecorator < Draper::Decorator
     object.orders.includes(:route).latest(10).decorate
   end
 
+  def latest_shipments
+    object.shipments.includes(:shipment_items).latest(10).decorate
+  end
+
   def serializable_hash
     ClientSerializer.new(client).serializable_hash
   end

@@ -5,6 +5,7 @@ AllCops:
   Exclude:
     - 'db/schema.rb'
     - 'vendor/bundle/**/*'
+    - 'node_modules/**/*'
 
 Metrics/LineLength:
   Max: 120

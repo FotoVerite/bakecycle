@@ -99,7 +99,7 @@ describe Client do
       expect(client.longitude).to_not be_nil
     end
 
-    it "geocodes address changes" do
+    it "geocodes delivery address changes" do
       client = create(:client)
       expect(client).to receive(:latitude=)
       expect(client).to receive(:longitude=)
@@ -107,7 +107,7 @@ describe Client do
       client.valid?
     end
 
-    it "doesn't geocode if the address doesn't chanage" do
+    it "doesn't geocode if the delivery address doesn't change" do
       client = create(:client)
       expect(client).to_not receive(:latitude=)
       expect(client).to_not receive(:longitude=)

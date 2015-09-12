@@ -43,14 +43,16 @@ class PackingSlipPage
     end
   end
 
+  # This calls
+  # shipment.client_delivery_address
+  # shipment.client_billing_address
   def client_address(type)
     font_size 10
-    text @shipment.send("client_#{type}_name"), style: :bold
-    text @shipment.send("client_#{type}_address_street_1"), style: :bold
-    if @shipment.send("client_#{type}_address_street_2")
-      text @shipment.send("client_#{type}_address_street_2"), style: :bold
+    text @shipment.client_name, style: :bold
+    full_array = @shipment.send(:"client_#{type}_address").full_array
+    full_array.each do |line|
+      text line, style: :bold
     end
-    text @shipment.send("client_#{type}_city_state_zip"), style: :bold
   end
 
   def shipment_items_table

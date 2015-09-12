@@ -30,7 +30,6 @@ class ClientsController < ApplicationController
 
   def show
     authorize @client
-    @shipments = item_finder.shipments.recent(@client).includes(:shipment_items)
   end
 
   def update

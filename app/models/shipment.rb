@@ -32,6 +32,7 @@ class Shipment < ActiveRecord::Base
   ]
 
   scope :search, ->(terms) { ShipmentSearcher.search(self, terms) }
+  scope :latest, -> (count) { order(date: :desc).limit(count) }
 
   def self.policy_class
     ClientPolicy
@@ -46,18 +47,20 @@ class Shipment < ActiveRecord::Base
     ).to_a.sum(&:subtotal)
   end
 
-  def self.recent(client_id)
-    where(client_id: client_id).order(date: :desc).limit(10)
-  end
-
-  def self.upcoming(order, date = Time.zone.today)
-    where(client_id: order.client.id, route_id: order.route.id)
-      .where("date >= ?", date)
-      .order("date ASC")
+  def self.upcoming(date)
+    where("date >= ?", date).order("date ASC")
   end
 
   def self.order_by_route_and_client
     order("route_departure_time asc, route_name asc, client_name asc")
+  end
+
+  def client_delivery_address
+    @_client_delivery_address ||= Address.new(self, "client_delivery_address")
+  end
+
+  def client_billing_address
+    @_client_billing_address ||= Address.new(self, "client_billing_address")
   end
 
   def subtotal

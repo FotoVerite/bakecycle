@@ -80,7 +80,7 @@ class ShipmentsController < ApplicationController
 
   def invoice_iif
     authorize @shipment, :show?
-    quickbooks_iif = InvoicesIif.new([@shipment])
+    quickbooks_iif = InvoicesIif.new(Shipment.where(id: @shipment))
     expires_now
     send_data quickbooks_iif.generate, content_type: "text/plain", filename: "bakecycle-quickbook-export.iif"
   end

@@ -31,8 +31,8 @@ module.exports = React.createClass({
   },
 
   openMap() {
-    var { latitude, longitude } = this.props;
-    window.open(`https://www.google.com/maps?z=12&t=m&q=loc:${latitude}+${longitude}`);
+    var { deliveryAddressFull } = this.props;
+    window.open(`http://maps.google.com/?q=${encodeURIComponent(deliveryAddressFull)}`);
   },
 
   render() {

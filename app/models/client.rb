@@ -20,7 +20,7 @@ class Client < ActiveRecord::Base
   validates :primary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
 
-  geocoded_by :full_delivery_address
+  geocoded_by :delivery_address_full
   after_validation :geocode, if: :needs_geocode?
 
   scope :active, -> { where(active: true) }
@@ -37,15 +37,15 @@ class Client < ActiveRecord::Base
     !no_delivery_fee?
   end
 
-  def full_delivery_address
-    [
-      delivery_address_street_1,
-      delivery_address_street_2,
-      delivery_address_city,
-      delivery_address_state,
-      delivery_address_zipcode
-    ].compact.join(" ")
+  def delivery_address
+    @_delivery_address ||= Address.new(self, "delivery_address")
   end
+
+  def billing_address
+    @_billing_address ||= Address.new(self, "billing_address")
+  end
+
+  delegate :full, to: :delivery_address, prefix: true
 
   def billing_term_days
     return 0 if %w(credit_card cod).include? billing_term
@@ -54,19 +54,9 @@ class Client < ActiveRecord::Base
 
   private
 
-  def delivery_address_changed?
-    delivery_address_street_1_changed? ||
-      delivery_address_street_2_changed? ||
-      delivery_address_city_changed? ||
-      delivery_address_state_changed? ||
-      delivery_address_zipcode_changed?
-  end
-
   def needs_geocode?
-    if new_record?
-      latitude.nil? && longitude.nil?
-    else
-      delivery_address_changed?
-    end
+    new_and_blank = new_record? && latitude.blank? && longitude.blank?
+    persisted_and_changed = persisted? && delivery_address.changed?
+    new_and_blank || persisted_and_changed
   end
 end

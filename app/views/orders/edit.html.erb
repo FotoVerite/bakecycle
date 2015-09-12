@@ -8,5 +8,5 @@
 </ul>
 <div ng-controller="OrderCtrl" ng-init="order=<%= order.serializable_hash.to_json %>">
   <%= render "form"%>
-  <%= render partial: 'upcoming_shipments' if order.shipments.any? %>
+  <%= render partial: 'upcoming_shipments' if order.upcoming_shipments.any? %>
 </div>
