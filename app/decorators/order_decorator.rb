@@ -1,8 +1,8 @@
 class OrderDecorator < Draper::Decorator
   delegate_all
   decorates_association :order_items
-  decorates_association :overridable_order
   decorates_association :overlapping_orders
+  decorates_association :overridable_order
 
   def route_name
     route.name if route
@@ -24,8 +24,8 @@ class OrderDecorator < Draper::Decorator
     h.item_finder.clients.order(:name)
   end
 
-  def shipments
-    Shipment.upcoming(object)
+  def upcoming_shipments
+    object.shipments.upcoming(Time.zone.today).decorate
   end
 
   def serializable_hash

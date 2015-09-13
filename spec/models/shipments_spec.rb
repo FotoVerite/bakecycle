@@ -83,29 +83,28 @@ describe Shipment do
     end
   end
 
-  describe ".recent" do
+  describe ".latest" do
     it "returns the latest shipments for a client" do
-      client = create(:client, bakery: bakery, name: "Mando")
-      route = create(:route, bakery: bakery)
-      create(:shipment, bakery: bakery, route: route, shipment_item_count: 0, client: client, date: today - 1)
-      client_shipments = create_list(
+      create(:shipment, date: today - 1)
+      shipments = create_list(
         :shipment,
         10,
-        bakery: bakery,
-        route: route,
-        shipment_item_count: 0,
-        client: client
+        date: today
       )
-      expect(Shipment.recent(client)).to contain_exactly(*client_shipments)
+      expect(Shipment.latest(10)).to contain_exactly(*shipments)
     end
   end
 
   describe ".upcoming" do
-    it "returns shipments for an order" do
-      order = create(:order)
-      shipment = create(:shipment, client: order.client, route: order.route, date: today)
-      create(:shipment, client: order.client, route: order.route, date: today - 1.day)
-      expect(Shipment.upcoming(order)).to contain_exactly(shipment)
+    let(:shipment) { create(:shipment, date: today) }
+
+    it "returns upcoming shipments" do
+      create(:shipment, date: today - 1.day)
+      expect(Shipment.upcoming(today)).to contain_exactly(shipment)
+    end
+    it "returns upcoming by a date" do
+      shipment_2 = create(:shipment, date: today - 1.day)
+      expect(Shipment.upcoming(yesterday)).to contain_exactly(shipment, shipment_2)
     end
   end
 

@@ -36,10 +36,10 @@ class InvoicesIif
         clear "Y"
         toprint "N"
         addr1 shipment.client_name
-        addr2 shipment.client_delivery_address_street_1
-        addr3 shipment.client_delivery_address_street_2
-        addr4 shipment.client_state_zipcode
-        addr5
+        addr2 shipment.client_delivery_address.full_array[0]
+        addr3 shipment.client_delivery_address.full_array[1]
+        addr4 shipment.client_delivery_address.full_array[2]
+        addr5 shipment.client_delivery_address.full_array[3]
         duedate shipment.due_date_for_iif
         terms shipment.terms
         paid "N"

@@ -55,36 +55,6 @@ class ShipmentDecorator < Draper::Decorator
     object.client_billing_term.titleize
   end
 
-  def client_delivery_zipcode
-    object.client_delivery_address_zipcode
-  end
-
-  def client_billing_zipcode
-    object.client_billing_address_zipcode
-  end
-
-  def client_state_zipcode
-    "#{object.client_delivery_address_state} #{client_delivery_zipcode}".strip
-  end
-
-  def client_delivery_city_state_zip
-    city = "#{object.client_delivery_address_city}, " if object.client_delivery_address_city.present?
-    "#{city}#{object.client_delivery_address_state} #{client_delivery_zipcode}".strip
-  end
-
-  def client_billing_city_state_zip
-    city = "#{object.client_billing_address_city}, " if object.client_billing_address_city.present?
-    "#{city}#{object.client_billing_address_state} #{client_billing_zipcode}".strip
-  end
-
-  def client_billing_name
-    object.client_name
-  end
-
-  def client_delivery_name
-    object.client_name
-  end
-
   delegate :name, to: :bakery, prefix: true
   delegate :address_street_1, to: :bakery, prefix: true
   delegate :address_street_2, to: :bakery, prefix: true

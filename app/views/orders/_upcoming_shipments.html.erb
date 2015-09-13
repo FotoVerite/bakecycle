@@ -1,4 +1,4 @@
-<h3>Upcoming invoices for <%= order.client_name %> on <%= order.route_name %> route</h3>
+<h3>Upcoming Invoices for this Order</h3>
 <table class="responsive-table">
   <thead>
     <tr>
@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <% order.shipments.each do |shipment| %>
+    <% order.upcoming_shipments.each do |shipment| %>
       <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
         <th scope="row"><%= shipment.invoice_number %></th>
         <td data-title="Date"><%= shipment.date %></td>

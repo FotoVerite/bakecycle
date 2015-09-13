@@ -1,5 +1,6 @@
 class ClientSerializer < ActiveModel::Serializer
-  attributes :id, :name, :official_company_name, :active, :errors, :links, :latitude, :longitude
+  attributes :id, :name, :official_company_name, :active, :errors, :links, :latitude, :longitude,
+    :delivery_address_full
 
   def links
     {

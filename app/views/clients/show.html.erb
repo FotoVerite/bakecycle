@@ -78,17 +78,17 @@
   <div class="small-12 medium-4 columns">
     <fieldset>
       <legend>Delivery Address</legend>
-      <p><%= client.delivery_address_street_1 %></p>
-      <p><%= client.delivery_address_street_2 %></p>
-      <p><%= "#{client.delivery_address_city}, " if client.delivery_address_city.present? %><%= client.delivery_address_state %> <%= client.delivery_address_zipcode %></p>
+      <% client.delivery_address.full_array.each do |line| %>
+        <%= line %><br />
+      <% end %>
     </fieldset>
   </div>
   <div class="small-12 medium-4 columns end">
     <fieldset>
       <legend>Billing Address</legend>
-      <p><%= client.billing_address_street_1 %></p>
-      <p><%= client.billing_address_street_2 %></p>
-      <p><%= "#{client.billing_address_city}, " if client.billing_address_city.present? %><%= client.billing_address_state %> <%= client.billing_address_zipcode %></p>
+      <% client.billing_address.full_array.each do |line| %>
+        <%= line %><br />
+      <% end %>
     </fieldset>
   </div>
 </div>
@@ -202,8 +202,8 @@
     <table class="responsive-table recent-shipment">
       <thead>
         <tr>
-          <th scope="col">Date</th>
           <th scope="col">Number</th>
+          <th scope="col">Date</th>
           <th scope="col">Route</th>
           <th scope="col">Total</th>
           <th scope="col">Action</th>
@@ -211,12 +211,12 @@
       </thead>
 
       <tbody>
-        <% @shipments.each do |shipment| %>
+        <% client.latest_shipments.each do |shipment| %>
           <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
-            <th scope="row"><%= shipment.date %></th>
-            <td data-title="Number"><%= shipment.id %></td>
+            <th scope="row"><%= shipment.invoice_number %></th>
+            <td data-title="Date"><%= shipment.date %></td>
             <td data-title="Route"><%= shipment.route_name %></td>
-            <td data-title="Total"><%= number_to_currency(shipment.price, precision: 2) %></td>
+            <td data-title="Total"><%= shipment.price %></td>
             <td data-title="Action">
               <%= link_to edit_shipment_path(shipment) do %>
                 <span class="table-action-icon icon-link-tooltip" aria-label="Edit Invoice"><i class="fi-page-edit"></i></span>
