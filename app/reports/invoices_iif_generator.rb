@@ -20,6 +20,10 @@ class InvoicesIifGenerator
     "#{bakery_file_name}_quickbooks#{date}.iif"
   end
 
+  def content_type
+    "text/iif"
+  end
+
   def generate
     InvoicesIif.new(invoices).generate
   end

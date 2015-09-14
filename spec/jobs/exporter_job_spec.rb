@@ -29,7 +29,7 @@ describe ExporterJob do
 
     it "re-enqueues itself when terminated" do
       export = FileExport.create!(bakery: bakery)
-      expect(export).to receive(:update!).and_raise(Resque::TermException, "TERM")
+      expect(export).to receive(:save!).and_raise(Resque::TermException, "TERM")
       expect { ExporterJob.new.perform(export, generator) }.to enqueue_a(ExporterJob)
     end
   end

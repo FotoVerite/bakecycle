@@ -17,11 +17,30 @@ class InvoicesCsvGenerator
   end
 
   def filename
-    "invoices.csv"
+    "#{bakery_file_name}_invoices#{date}.csv"
+  end
+
+  def content_type
+    "text/csv"
   end
 
   def generate
-    invoices = bakery.shipments.search(search).includes(:shipment_items)
-    InvoicesCsv.new(invoices).generate
+    InvoicesCsv.new(invoices.includes(:shipment_items)).generate
+  end
+
+  private
+
+  def bakery_file_name
+    bakery.decorate.parameterized_name
+  end
+
+  def invoices
+    @_invoices ||= bakery.shipments.search(search)
+  end
+
+  def date
+    date_from = invoices.minimum(:date)
+    date_to = invoices.maximum(:date)
+    "_#{date_from}_#{date_to}" if date_to && date_from
   end
 end
