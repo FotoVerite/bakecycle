@@ -27,6 +27,10 @@ class ClientPolicy < ApplicationPolicy
     (admin? || manage_permission?) && belongs_to_bakery?
   end
 
+  def dashboard?
+    index?
+  end
+
   def manage_permission?
     user.client_permission == "manage"
   end

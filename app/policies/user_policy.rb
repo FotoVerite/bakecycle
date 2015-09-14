@@ -51,6 +51,10 @@ class UserPolicy < ApplicationPolicy
     attributes
   end
 
+  def dashboard?
+    index?
+  end
+
   private
 
   def record_is_self?

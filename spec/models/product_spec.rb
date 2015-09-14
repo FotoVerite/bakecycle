@@ -1,7 +1,8 @@
 require "rails_helper"
 
 describe Product do
-  let(:product) { build(:product) }
+  let(:bakery) { build(:bakery) }
+  let(:product) { build(:product, bakery: bakery) }
 
   it "has a shape" do
     expect(product).to respond_to(:name)
@@ -33,7 +34,8 @@ describe Product do
     it "wont destroy if it's used in an order" do
       bakery = create(:bakery)
       product = create(:product, bakery: bakery)
-      create(:order, product: product, bakery: bakery)
+      order = create(:order, bakery: bakery)
+      order.order_items.first.update!(product: product)
       expect(product.destroy).to eq(false)
       expect(product.errors.to_a).to eq(["This product is still used in orders"])
     end
@@ -47,16 +49,23 @@ describe Product do
     end
   end
 
-  describe "#total_lead_days" do
+  describe "lead days" do
     it "calculates lead time for a product" do
-      motherdough = create(:recipe_motherdough, lead_days: 5)
-      inclusion = create(:recipe_inclusion, lead_days: 2)
-      product = create(:product, inclusion: inclusion, motherdough: motherdough)
+      motherdough = create(:recipe_motherdough, lead_days: 5, bakery: bakery)
+      inclusion = create(:recipe_inclusion, lead_days: 2, bakery: bakery)
+      product = create(:product, inclusion: inclusion, motherdough: motherdough, bakery: bakery)
       expect(product.total_lead_days).to eq(5)
     end
 
     it "returns 1 if no recipes" do
       product.save
+      expect(product.total_lead_days).to eq(1)
+    end
+
+    it "updates when products are removed" do
+      product = create(:product, :with_motherdough, force_total_lead_days: 5)
+      expect(product.total_lead_days).to eq(5)
+      product.update!(motherdough: nil)
       expect(product.total_lead_days).to eq(1)
     end
   end

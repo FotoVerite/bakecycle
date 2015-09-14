@@ -25,10 +25,16 @@ class Order < ActiveRecord::Base
   validates_with OverlappingOrdersValidator
 
   delegate(
-    :weekly_delivery_fee?, :daily_delivery_fee?, :delivery_fee,
-    :delivery_minimum, :name,
+    :weekly_delivery_fee?,
+    :daily_delivery_fee?,
+    :delivery_fee,
+    :delivery_minimum,
+    :name,
     to: :client, prefix: true
   )
+
+  before_save :set_total_lead_days
+  after_touch :update_total_lead_days
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
   scope :latest, -> (count) { order(id: :desc).limit(count) }
@@ -72,6 +78,14 @@ class Order < ActiveRecord::Base
       .order(start_date: :desc)
   end
 
+  def set_total_lead_days
+    self.total_lead_days = order_items.maximum(:total_lead_days) || 1
+  end
+
+  def update_total_lead_days
+    update_columns(total_lead_days: set_total_lead_days) if persisted?
+  end
+
   def end_date_is_not_before_start_date
     return unless end_date && start_date
     return unless end_date < start_date
@@ -113,10 +127,6 @@ class Order < ActiveRecord::Base
 
   def standing?
     order_type == "standing"
-  end
-
-  def total_lead_days
-    products.maximum(:total_lead_days) || 0
   end
 
   def daily_subtotal(date)

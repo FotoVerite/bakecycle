@@ -9,6 +9,10 @@ class ProductionRun < ActiveRecord::Base
     reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
+  def self.policy_class
+    ProductionPolicy
+  end
+
   def self.for_date(date)
     where(date: date)
   end

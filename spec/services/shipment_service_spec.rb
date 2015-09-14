@@ -8,15 +8,15 @@ describe ShipmentService do
 
   context "creates shipments" do
     it "creates shipments for orders and dates where the production date is today" do
-      create(:order, bakery: bakery, start_date: today, product_total_lead_days: 1)
-      create(:order, bakery: bakery, start_date: tomorrow, product_total_lead_days: 1)
-      create(:order, bakery: bakery, start_date: today + 2.days, product_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: today, force_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: tomorrow, force_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: today + 2.days, force_total_lead_days: 1)
       shipment_service.run
       expect(Shipment.count).to eq(2)
     end
 
     it "doesn't create multiple shipments for the same client, route, and date" do
-      create(:order, bakery: bakery, start_date: tomorrow, product_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: tomorrow, force_total_lead_days: 1)
       shipment_service.run
       expect(Shipment.count).to eq(1)
       shipment_service.run
@@ -24,9 +24,9 @@ describe ShipmentService do
     end
 
     it "creates shipments for all clients of bakery" do
-      create(:order, bakery: bakery, start_date: today, product_total_lead_days: 1)
-      create(:order, bakery: bakery, start_date: today + 1.day, product_total_lead_days: 1)
-      create(:order, bakery: bakery, start_date: today + 2.days, product_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: today, force_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: today + 1.day, force_total_lead_days: 1)
+      create(:order, bakery: bakery, start_date: today + 2.days, force_total_lead_days: 1)
       shipment_service.run
       expect(Shipment.count).to eq(2)
     end

@@ -1,5 +1,5 @@
 class JobPolicy < ApplicationPolicy
-  def index?
+  def dashboard?
     admin?
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801155430) do
+ActiveRecord::Schema.define(version: 20150917015831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
 
   create_table "bakeries", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "email"
     t.string   "phone_number"
     t.string   "address_street_1"
@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.decimal  "delivery_fee",                   default: 0.0, null: false
     t.string   "legacy_id"
     t.integer  "delivery_fee_option",                          null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "ein"
     t.string   "notes"
   end
@@ -101,8 +101,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
   create_table "ingredients", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.integer  "bakery_id",                         null: false
     t.string   "legacy_id"
     t.string   "ingredient_type", default: "other", null: false
@@ -112,17 +112,17 @@ ActiveRecord::Schema.define(version: 20150801155430) do
   add_index "ingredients", ["name", "bakery_id"], name: "index_ingredients_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "order_items", force: :cascade do |t|
-    t.integer  "order_id"
-    t.integer  "product_id"
-    t.integer  "monday"
-    t.integer  "tuesday"
-    t.integer  "wednesday"
-    t.integer  "thursday"
-    t.integer  "friday"
-    t.integer  "saturday"
-    t.integer  "sunday"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "order_id",        null: false
+    t.integer  "product_id",      null: false
+    t.integer  "monday",          null: false
+    t.integer  "tuesday",         null: false
+    t.integer  "wednesday",       null: false
+    t.integer  "thursday",        null: false
+    t.integer  "friday",          null: false
+    t.integer  "saturday",        null: false
+    t.integer  "sunday",          null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "total_lead_days", null: false
   end
 
@@ -130,16 +130,17 @@ ActiveRecord::Schema.define(version: 20150801155430) do
   add_index "order_items", ["total_lead_days"], name: "index_order_items_on_total_lead_days", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "client_id",  null: false
+    t.integer  "client_id",                    null: false
     t.integer  "route_id"
-    t.date     "start_date", null: false
+    t.date     "start_date",                   null: false
     t.date     "end_date"
-    t.text     "note"
-    t.string   "order_type", null: false
-    t.integer  "bakery_id",  null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.text     "note",            default: "", null: false
+    t.string   "order_type",                   null: false
+    t.integer  "bakery_id",                    null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "legacy_id"
+    t.integer  "total_lead_days",              null: false
   end
 
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
@@ -149,8 +150,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
   create_table "plans", force: :cascade do |t|
     t.string   "name",         null: false
     t.string   "display_name", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "plans", ["name"], name: "index_plans_on_name", unique: true, using: :btree
@@ -186,8 +187,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.decimal  "over_bake",       default: 0.0,   null: false
     t.integer  "motherdough_id"
     t.integer  "inclusion_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.decimal  "base_price",                      null: false
     t.integer  "bakery_id",                       null: false
     t.string   "sku"
@@ -204,8 +205,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.integer  "inclusionable_id"
     t.string   "inclusionable_type"
     t.decimal  "bakers_percentage",  default: 0.0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "sort_id",            default: 0,   null: false
   end
 
@@ -234,8 +235,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.boolean  "active",         null: false
     t.time     "departure_time", null: false
     t.integer  "bakery_id",      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "legacy_id"
   end
 
@@ -262,8 +263,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.decimal  "product_price",           default: 0.0, null: false
     t.string   "product_sku"
     t.date     "production_start",                      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.integer  "production_run_id"
     t.string   "product_product_type",                  null: false
     t.integer  "product_total_lead_days",               null: false
@@ -298,8 +299,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.text     "note"
     t.string   "client_primary_contact_name"
     t.string   "client_primary_contact_phone"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
     t.time     "route_departure_time",                             null: false
     t.string   "client_notes"
     t.integer  "order_id"
@@ -320,8 +321,8 @@ ActiveRecord::Schema.define(version: 20150801155430) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "bakery_id"
     t.boolean  "admin",                  default: false
     t.string   "user_permission",        default: "none", null: false

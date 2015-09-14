@@ -47,6 +47,7 @@ describe Order do
         order = create(:order, start_date: today)
         overlaping_order = build(
           :order,
+          order_item_count: 0,
           bakery: order.bakery,
           route: order.route,
           client: order.client,
@@ -68,10 +69,38 @@ describe Order do
 
   describe "#total_lead_days" do
     it "returns lead time for order items" do
-      order = create(:order, order_item_count: 0)
-      create(:order_item, order: order, force_total_lead_days: 3)
-      create(:order_item, order: order, force_total_lead_days: 5)
+      order = create(:order, order_item_count: 0, bakery: bakery)
+      create(:order_item, order: order, force_total_lead_days: 3, bakery: bakery)
+      create(:order_item, order: order, force_total_lead_days: 5, bakery: bakery)
       expect(order.total_lead_days).to eq(5)
+    end
+  end
+
+  describe "lead days" do
+    it "has a total_lead_days of 1 by default" do
+      order = create(:order, bakery: bakery, order_item_count: 0)
+      expect(order.total_lead_days).to eq(1)
+    end
+
+    it "has updates total lead days when order items are created" do
+      order = create(:order, bakery: bakery, order_item_count: 0)
+      create(:order_item, order: order, force_total_lead_days: 3, bakery: bakery)
+      expect(order.total_lead_days).to eq(3)
+    end
+
+    it "updates it's total_lead_days when the product is updated" do
+      order = create(:order, force_total_lead_days: 3)
+      product = order.order_items.first.product
+      product.update!(total_lead_days: 8)
+      order.reload
+      expect(order.total_lead_days).to eq(8)
+    end
+
+    it "updates the total_lead_days when an order item is removed" do
+      order = create(:order, force_total_lead_days: 3, order_item_count: 1, bakery: bakery)
+      expect(order.total_lead_days).to eq(3)
+      order.order_items.destroy_all
+      expect(order.total_lead_days).to eq(1)
     end
   end
 

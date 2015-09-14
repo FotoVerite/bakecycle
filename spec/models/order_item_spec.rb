@@ -63,7 +63,7 @@ describe OrderItem do
   end
 
   describe ".total_quantity_price" do
-    let(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
+    let(:order) { create(:order, start_date: today, order_item_count: 1, force_total_lead_days: 2) }
 
     it "calculates total quantity price for an order item" do
       apple = create(:product, name: "Apple", base_price: 0.5)
@@ -95,7 +95,7 @@ describe OrderItem do
   end
 
   context "start dates" do
-    let(:order) { create(:order, start_date: today, order_item_count: 1, product_total_lead_days: 2) }
+    let(:order) { create(:order, start_date: today, order_item_count: 1, force_total_lead_days: 2) }
     let(:order_item) { order.order_items.first }
     let(:lead_time) { order_item.total_lead_days }
 
@@ -128,7 +128,7 @@ describe OrderItem do
           route: order.route,
           start_date: tomorrow,
           order_item_count: 1,
-          product_total_lead_days: 2
+          force_total_lead_days: 2
         )
         temp_order_item = temp_order.order_items.first
         expect(OrderItem.production_date(two_days_ago)).to contain_exactly(order_item)
@@ -145,7 +145,7 @@ describe OrderItem do
           start_date: last_week,
           end_date: last_week,
           order_item_count: 1,
-          product_total_lead_days: 2
+          force_total_lead_days: 2
         )
         expect(OrderItem.production_date(yesterday)).to contain_exactly(order_item)
       end
@@ -162,7 +162,7 @@ describe OrderItem do
         temp = create(
           :temporary_order,
           start_date: tomorrow,
-          product_total_lead_days: 1,
+          force_total_lead_days: 1,
           bakery: bakery
         )
         standing = create(
@@ -170,7 +170,7 @@ describe OrderItem do
           client: temp.client,
           route: temp.route,
           start_date: tomorrow + 1.day,
-          product_total_lead_days: 2,
+          force_total_lead_days: 2,
           bakery: bakery
         )
         temp_order_items = temp.order_items.first
@@ -184,7 +184,7 @@ describe OrderItem do
         standing = create(
           :order,
           start_date: last_week,
-          product_total_lead_days: 1,
+          force_total_lead_days: 1,
           bakery: bakery
         )
 
@@ -193,7 +193,7 @@ describe OrderItem do
           client: standing.client,
           route: standing.route,
           start_date: today,
-          product_total_lead_days: 4,
+          force_total_lead_days: 4,
           bakery: bakery
         )
 
@@ -213,7 +213,7 @@ describe OrderItem do
         standing = create(
           :order,
           start_date: last_week,
-          product_total_lead_days: 4,
+          force_total_lead_days: 4,
           bakery: bakery
         )
 
@@ -222,7 +222,7 @@ describe OrderItem do
           client: standing.client,
           route: standing.route,
           start_date: today,
-          product_total_lead_days: 1,
+          force_total_lead_days: 1,
           bakery: bakery
         )
 
@@ -242,14 +242,14 @@ describe OrderItem do
         temp = create(
           :temporary_order,
           start_date: tomorrow,
-          product_total_lead_days: 1,
+          force_total_lead_days: 1,
           bakery: bakery
         )
         standing = create(
           :order,
           client: temp.client,
           start_date: tomorrow,
-          product_total_lead_days: 1,
+          force_total_lead_days: 1,
           bakery: bakery
         )
         temp_order_items = temp.order_items.first
@@ -264,15 +264,37 @@ describe OrderItem do
       end
     end
 
-    context "after_touch" do
-      describe "update_total_lead_days" do
-        it "updates its total_lead_days when the product is updated" do
-          order_item = create(:order_item, total_lead_days: 3)
-          product = order_item.product
-          product.update(total_lead_days: 8)
-          order_item.reload
-          expect(order_item.total_lead_days).to eq(8)
-        end
+    describe "lead days" do
+      it "updates it's own total_lead_days when created" do
+        product = create(
+          :product,
+          :with_motherdough,
+          bakery: bakery,
+          force_total_lead_days: 1
+        )
+        order = create(:order, bakery: bakery)
+        order_item = OrderItem.create!(product: product, order: order)
+        expect(order_item.total_lead_days).to eq(1)
+      end
+      it "updates it's total_lead_days when the product is updated" do
+        order_item = create(:order_item, force_total_lead_days: 3)
+        product = order_item.product
+        product.update!(total_lead_days: 8)
+        order_item.reload
+        expect(order_item.total_lead_days).to eq(8)
+      end
+
+      it "updates the total_lead_days when a product is replaced" do
+        order_item = create(:order_item, force_total_lead_days: 3)
+        product = create(
+          :product,
+          :with_motherdough,
+          bakery: bakery,
+          force_total_lead_days: 1
+        )
+        expect(order_item.total_lead_days).to eq(3)
+        order_item.update!(product: product)
+        expect(order_item.total_lead_days).to eq(1)
       end
     end
   end

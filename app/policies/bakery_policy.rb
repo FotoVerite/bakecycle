@@ -48,6 +48,10 @@ class BakeryPolicy < ApplicationPolicy
     attributes
   end
 
+  def dashboard?
+    index?
+  end
+
   private
 
   def read_permission?

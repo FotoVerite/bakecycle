@@ -1,4 +1,4 @@
-class ProductionRunPolicy < ApplicationPolicy
+class ProductionPolicy < ApplicationPolicy
   def index?
     (admin? || can_read?) && bakery?
   end
@@ -21,6 +21,10 @@ class ProductionRunPolicy < ApplicationPolicy
 
   def can_print?
     (admin? || can_read?) && bakery?
+  end
+
+  def dashboard?
+    index?
   end
 
   private
