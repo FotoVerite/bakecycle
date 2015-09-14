@@ -13,7 +13,7 @@ describe InvoicesCsvGenerator do
   let(:generator) { InvoicesCsvGenerator.new(bakery, search_form) }
 
   it "produces a file and a filename" do
-    expect(generator.filename).to eq("invoices.csv")
+    expect(generator.filename).to match(/invoices.*\.csv/)
     expect_any_instance_of(InvoicesCsv).to receive(:generate).and_call_original
     expect(generator.generate).to_not be_nil
   end
