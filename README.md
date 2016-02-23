@@ -19,6 +19,7 @@ We use papertrail via heroku goto the dashboard
  - `bundle install`
  - Setup your direnv file
  - Decide what you want to do about workers (run your own or set the env file to run them inline)
+ - Reset your database with development data `rake db:devdata`
 
 ## Server
 
@@ -47,4 +48,10 @@ We use postgresql and redis
 `foreman start worker`
 
 ### To access the front-end interface visit `http://localhost:3000/resque` as an admin
+
+## Dev Data
+
+See (and modify) `dev_data.rake` to see what development data gets loaded. It creates users, plans, bakers, etc.
+
+You can use the user `admin@example.com` or `user@example.com` with the password `foobarbaz`
 
