@@ -1,12 +1,4 @@
 (function() {
-  var stripeResponseHandler = function(status, response) {
-    if (response.error) {
-      errorHandler(response);
-    } else {
-      successHandler(response);
-    }
-  };
-
   var errorHandler = function(response) {
     var $form = $('#registration-form');
     $form.find('.payment-errors').text(response.error.message);
@@ -18,6 +10,14 @@
     var token = response.id;
     $form.append($('<input type="hidden" name="registration[stripe_token]" />').val(token));
     $form.get(0).submit();
+  };
+
+  var stripeResponseHandler = function(status, response) {
+    if (response.error) {
+      errorHandler(response);
+    } else {
+      successHandler(response);
+    }
   };
 
   var formHandler = function(event) {
