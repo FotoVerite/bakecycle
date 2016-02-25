@@ -33,7 +33,7 @@ When(/^I submit the registration form with valid data$/) do
 end
 
 Then(/^I should be on the user's dashboard page$/) do
-  find("h1").should have_content("Dashboard")
+  first("h2").should have_content("Clients")
 end
 
 When(/^I choose small plan$/) do

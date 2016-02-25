@@ -31,6 +31,10 @@ class ProductPolicy < ApplicationPolicy
     admin? || (user.product_permission == "manage")
   end
 
+  def dashboard?
+    index?
+  end
+
   private
 
   def read_permission?

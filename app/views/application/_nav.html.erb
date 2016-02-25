@@ -2,7 +2,7 @@
   <div class="large-2 medium-12 small-12 columns">
     <div class="side-navigation js-nav-toggle">
       <ul class="main">
-        <li class="js-subnav-toggle show-nav <%= active_nav?(:dashboard) %>">
+        <li class="show-nav <%= active_nav?(:dashboard) %>">
           <%= link_to dashboard_path do %>
               <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
               <span class="header">Dashboard</span>
@@ -10,7 +10,7 @@
         </li>
 
         <% if policy(Client).index? %>
-            <li class="js-subnav-toggle show-nav <%= active_nav?(:clients, :orders, :shipments) %>">
+            <li class="show-nav <%= active_nav?(:clients, :orders, :shipments) %>">
               <span class="icon"><%= image_tag 'icons/icon-client.svg'%></span>
               <span class="header">Clients</span>
 
@@ -24,7 +24,7 @@
 
         <% if current_bakery %>
           <% if policy(ProductionRun).index? %>
-            <li class="js-subnav-toggle show-nav <%= active_nav?(:print_recipes, :batch_recipes, :production_runs, :daily_totals) %>">
+            <li class="show-nav <%= active_nav?(:print_recipes, :batch_recipes, :production_runs, :daily_totals) %>">
               <span class="icon"><%= image_tag 'icons/icon-production.svg'%></span>
               <span class="header">Production</span>
 
@@ -38,7 +38,7 @@
           <% end %>
 
           <% if policy(Route).index? %>
-            <li class="js-subnav-toggle show-nav <%= active_nav?(:routes, :delivery_lists, :packing_slips) %>">
+            <li class="show-nav <%= active_nav?(:routes, :delivery_lists, :packing_slips) %>">
               <span class="icon"><%= image_tag 'icons/icon-shipping.svg'%></span>
               <span class="header">Shipping</span>
 
@@ -51,7 +51,7 @@
           <% end %>
 
           <% if policy(Product).index? %>
-            <li class="js-subnav-toggle show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
+            <li class="show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
               <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
               <span class="header">Products</span>
               <ul class="sub">
@@ -69,7 +69,7 @@
           <% end %>
         <% end %>
 
-        <li class="js-subnav-toggle show-nav <%= active_nav?(:users, :bakeries, :my_bakery) %>">
+        <li class="show-nav <%= active_nav?(:users, :bakeries, :my_bakery) %>">
           <span class="icon"><%= image_tag 'icons/icon-account.svg'%></span>
           <span class="header">Admin</span>
 
@@ -98,7 +98,7 @@
               </li>
             <% end %>
 
-            <% if policy(:job).index? %>
+            <% if policy(:job).dashboard? %>
               <li><%= link_to "Resque", resque_server_path %></li>
             <% end %>
 

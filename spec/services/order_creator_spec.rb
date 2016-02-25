@@ -4,8 +4,12 @@ describe OrderCreator do
   let(:bakery) { create(:bakery) }
   let(:client) { create(:client) }
   let(:route) { create(:route) }
-  let(:old_order) { create(:order, start_date: Time.zone.now - 1.day, bakery: bakery, client: client, route: route) }
-  let(:new_order) { build(:order, start_date: Time.zone.now, bakery: bakery, client: client, route: route) }
+  let(:old_order) {
+    create(:order, order_item_count: 0, start_date: Time.zone.now - 1.day, bakery: bakery, client: client, route: route)
+  }
+  let(:new_order) {
+    build(:order, order_item_count: 0, start_date: Time.zone.now, bakery: bakery, client: client, route: route)
+  }
 
   describe "#run" do
     it "overrides an order and saves new order if there is an overridable order" do

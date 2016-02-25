@@ -1,0 +1,40 @@
+<% if policy(:user).dashboard? || policy(:bakery).dashboard? || policy(:job).dashboard? %>
+  <div class="row">
+    <div class="small-12 columns">
+      <h2>Admin</h2>
+    </div>
+    <% if policy(:user).dashboard? %>
+      <%= link_to users_path do %>
+        <div class="large-4 medium-6 small-12 columns end">
+          <div class="stats border">
+            <div class="left">
+              Users
+              <h3><%= item_finder.users.count %></h3>
+            </div>
+            <i class="fi-torso right"></i>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if policy(:bakery).dashboard? %>
+      <%= link_to bakeries_path do %>
+        <div class="large-4 medium-6 small-12 columns end">
+          <div class="stats border">
+            <div class="left">
+              Bakeries
+              <h3><%= item_finder.bakeries.count %></h3>
+            </div>
+            <i class="fi-torsos-all right"></i>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if policy(:job).dashboard? %>
+      <%= resque_info_table %>
+    <% end %>
+  </div>
+<% end %>
