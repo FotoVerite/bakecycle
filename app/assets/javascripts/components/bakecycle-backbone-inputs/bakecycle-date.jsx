@@ -1,7 +1,9 @@
-var React = require('react');
-var formMixin = require('./bakecycle-form-mixin');
+import React from 'react';
+import formMixin from './bakecycle-form-mixin';
+let DatePicker = require('react-datepicker');
+let moment = require('moment');
 
-module.exports = React.createClass({
+let BCDate = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
@@ -12,19 +14,25 @@ module.exports = React.createClass({
     model: React.PropTypes.object.isRequired,
     name: React.PropTypes.string.isRequired,
     placeholder: React.PropTypes.string,
+    labelClass: React.PropTypes.string,
     required: React.PropTypes.bool,
-    type: React.PropTypes.string,
     inline: React.PropTypes.bool,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       type: 'text'
     };
   },
 
-  render: function() {
-    var {
+  onChangeDate(date) {
+    let data = {};
+    data[this.props.field] = date && date.format();
+    this.props.model.set(data);
+  },
+
+  render() {
+    let {
       disabled,
       error,
       field,
@@ -35,21 +43,31 @@ module.exports = React.createClass({
       type,
     } = this.props;
 
+    let date = model.get(field) && moment(model.get(field));
+
     return (
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
         {this.label()}
         <input
-          id={`input-${field}-${model.cid}`}
-          className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
+          type="hidden"
           name={name}
-          onChange={this.onChange}
-          type={type}
-          placeholder={placeholder}
           value={model.get(field)}
           disabled={disabled}
         />
+
+        <DatePicker
+          id={`input-${field}-${model.cid}`}
+          selected={date}
+          onChange={this.onChangeDate}
+          placeholderText={placeholder}
+          showTodayButton="Today"
+          className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
+        />
+
         {error ? <small className="error">{error}</small> : ''}
       </div>
     );
   }
 });
+
+export default BCDate;

@@ -23,7 +23,7 @@
       </div>
       <div class="small-12 medium-2 end columns">
         <%= f.label :auto_generated %>
-        <input ng-disabled="true" type="text" value="<%= shipment.auto_generated? %>" />
+        <input disabled="true" type="text" value="<%= shipment.auto_generated? %>" />
       </div>
     </div>
 
@@ -41,7 +41,7 @@
 
         <div class="small-12 medium-4 columns end">
           <%= f.label :production_start, "Invoice Production Start" %>
-          <input ng-disabled="true" type="text" value="<%= f.object.production_start %>" />
+          <input disabled="true" type="text" value="<%= f.object.production_start %>" />
         </div>
       <% end %>
     </div>

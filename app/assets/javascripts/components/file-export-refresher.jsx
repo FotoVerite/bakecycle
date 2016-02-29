@@ -1,7 +1,7 @@
-var React = require('react');
-var FileExportStore = require('backbone').Model;
+import React from 'react';
+import { Model as FileExportStore } from 'backbone';
 
-module.exports = React.createClass({
+let FileExportRefresher = React.createClass({
   getInitialState() {
     return {
       status: '',
@@ -83,3 +83,5 @@ module.exports = React.createClass({
     </div>);
   }
 });
+
+export default FileExportRefresher;

@@ -1,9 +1,8 @@
-var GoogleMap = require('google-map-react');
-var Marker = require('./client-marker');
-var React = require('react');
+let GoogleMap = require('google-map-react');
+let Marker = require('./client-marker');
+let React = require('react');
 
-module.exports = React.createClass({
-
+var ClientMap = React.createClass({
   propTypes: {
     name: React.PropTypes.string.isRequired,
     longitude: React.PropTypes.number.isRequired,
@@ -19,7 +18,7 @@ module.exports = React.createClass({
   },
 
   onResize() {
-    var width = window.innerWidth;
+    let width = window.innerWidth;
     this.setState({width});
   },
 
@@ -31,12 +30,12 @@ module.exports = React.createClass({
   },
 
   openMap() {
-    var { deliveryAddressFull } = this.props;
+    let { deliveryAddressFull } = this.props;
     window.open(`http://maps.google.com/?q=${encodeURIComponent(deliveryAddressFull)}`);
   },
 
   render() {
-    var center = [this.props.latitude, this.props.longitude];
+    let center = [this.props.latitude, this.props.longitude];
     return (<div className="map-container">
       <GoogleMap
         ref="gmap"
@@ -48,9 +47,10 @@ module.exports = React.createClass({
           lng={this.props.longitude}
           title={this.props.name}
           onClick={this.openMap} >
-
         </Marker>
       </GoogleMap>
     </div>);
   }
 });
+
+module.exports = ClientMap;

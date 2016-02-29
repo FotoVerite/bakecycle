@@ -1,10 +1,9 @@
-var React = require('react');
+import React from 'react';
+import { BCInput, BCTextarea, BCSelect } from './bakecycle-backbone-inputs';
+import { Model as RecipeStore } from 'backbone';
+
 var RecipeItemsForm = require('./recipe-items-form');
 var RecipeItemStore = require('../stores/recipe-item-store');
-var RecipeStore = require('backbone').Model;
-var BCInput = require('./bakecycle-input');
-var BCTextarea = require('./bakecycle-textarea');
-var BCSelect = require('./bakecycle-select');
 
 module.exports = React.createClass({
   getInitialState: function() {

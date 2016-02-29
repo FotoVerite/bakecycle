@@ -1,3 +1,4 @@
+/*eslint object-shorthand: 0*/
 window.Stripe = {
   setPublishableKey: function() { },
   card: {

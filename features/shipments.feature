@@ -56,7 +56,7 @@ Feature: Shipments management
     And I fill out Shipment Item form with:
       | product         | product_price | quantity |
       | baguette cookie | 10.00         | 50       |
-    And I click on "Add Product" and don't enter any information
+    And I click on "Add Product"
     When I click on "Create"
     Then "You have created an invoice" should be present
     And the product "baguette cookie" should be selected

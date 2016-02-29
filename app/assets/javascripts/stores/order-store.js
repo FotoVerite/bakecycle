@@ -1,21 +1,24 @@
-import Backbone from 'backbone';
+import { Model, Collection } from 'backbone';
 import { isArray } from 'underscore';
 
-var PriceVarient = Backbone.Model.extend({
-  getNumericCID() {
-    return Number(this.cid.substring(1));
-  },
+export var Order = Model.extend({});
 
+export var OrderItem = Model.extend({
   getError(field) {
     var errors = this.get('errors') || {};
     if (isArray(errors[field])) {
       return errors[field][0];
     }
     return errors[field];
+  },
+
+  getNumericCID() {
+    return Number(this.cid.substring(1));
   }
+
 });
 
-var PricesStore = Backbone.Collection.extend({
+export var OrderItems = Collection.extend({
   initialize() {
     this.on('change:destroy', this.onToggleDestroy);
   },
@@ -26,7 +29,7 @@ var PricesStore = Backbone.Collection.extend({
     }
   },
 
-  model: PriceVarient,
+  model: OrderItem,
 
   addBlankForm() {
     if (this.length === 0) {
@@ -37,5 +40,3 @@ var PricesStore = Backbone.Collection.extend({
     }
   }
 });
-
-export default PricesStore;

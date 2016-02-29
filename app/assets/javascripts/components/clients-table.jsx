@@ -1,13 +1,13 @@
-var React = require('react');
-var _ = require('underscore');
+let React = require('react');
+let _ = require('underscore');
 
 function filterClients(collection, filter) {
   function nameMatch(client) {
-    var name = client.name.toLowerCase();
-    var search = filter.name.toLowerCase();
+    let name = client.name.toLowerCase();
+    let search = filter.name.toLowerCase();
 
-    var searchChars = _.reject(search.split(''), char => char === ' ');
-    var lastPostion = 0;
+    let searchChars = _.reject(search.split(''), char => char === ' ');
+    let lastPostion = 0;
     return !_.detect(searchChars, char => {
       lastPostion = name.indexOf(char, lastPostion) + 1;
       if (lastPostion === 0) {
@@ -17,7 +17,7 @@ function filterClients(collection, filter) {
   }
 
   function activeMatch(client) {
-    var activeSearch = filter.active;
+    let activeSearch = filter.active;
     if (activeSearch === 'any') {
       return true;
     }
@@ -31,16 +31,16 @@ function filterClients(collection, filter) {
   return _.filter(collection, matchAll);
 }
 
-module.exports = React.createClass({
+var ClientsTable = React.createClass({
   getInitialState() {
-    var clients = this.props.data;
-    var search = { active: 'true', name: '' };
-    var filteredClients = filterClients(clients, search);
+    let clients = this.props.data;
+    let search = { active: 'true', name: '' };
+    let filteredClients = filterClients(clients, search);
     return { clients, search, filteredClients };
   },
 
   setSearch(search) {
-    var filteredClients = filterClients(this.state.clients, search);
+    let filteredClients = filterClients(this.state.clients, search);
     this.setState({ filteredClients, search });
   },
 
@@ -65,7 +65,7 @@ module.exports = React.createClass({
 
   chooseName(e) {
     if (e.key !== 'Enter') { return; }
-    var clients = this.state.filteredClients;
+    let clients = this.state.filteredClients;
     if (clients.length === 1) {
       document.location.href = clients[0].links.view;
     }
@@ -155,3 +155,5 @@ module.exports = React.createClass({
     </div>);
   }
 });
+
+module.exports = ClientsTable;

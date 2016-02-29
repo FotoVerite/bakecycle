@@ -6,11 +6,11 @@ Feature: Navigation
     And I click on the "Ingredients" link
     Then "Add New Ingredient" should be present
 
-  Scenario: As a user, I should be able to visit recipes index from the dashboard
+  Scenario: As a user, I should be able to visit production runs index from the dashboard
     Given I am logged in as a user
     When I go to the dashboard
-    And I click on the "Recipes" link
-    Then "Add New Recipe" should be present
+    And I click on the "Print Recipes" link
+    Then "Print Recipes" should be present
 
   Scenario: As a user, I should be able to visit products index from the dashboard
     Given I am logged in as a user

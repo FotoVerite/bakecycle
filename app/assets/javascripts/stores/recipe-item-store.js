@@ -2,19 +2,16 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 
 var RecipeItem = Backbone.Model.extend({
-  defaults: function() {
-    var sortId = this.getNumericCID();
-    if (this.collection) {
-      sortId = this.collection.nextSortId();
-    }
+  defaults() {
+    var sortId = this.collection ? this.collection.nextSortId() : this.getNumericCID();
     return { sortId };
   },
 
-  getNumericCID: function() {
+  getNumericCID() {
     return Number(this.cid.substring(1));
   },
 
-  getError: function(field) {
+  getError(field) {
     var errors = this.get('errors') || {};
     if (_.isArray(errors[field])) {
       return errors[field][0];
@@ -24,11 +21,11 @@ var RecipeItem = Backbone.Model.extend({
 });
 
 var RecipeItemStore = Backbone.Collection.extend({
-  initialize: function() {
+  initialize() {
     this.on('change:destroy', this.onToggleDestroy);
   },
 
-  onToggleDestroy: function(model) {
+  onToggleDestroy(model) {
     if (!model.id) {
       this.remove(model);
     }
@@ -36,7 +33,7 @@ var RecipeItemStore = Backbone.Collection.extend({
 
   model: RecipeItem,
 
-  move: function(cid, targetCid, after) {
+  move(cid, targetCid, after) {
     var movedItem = this.get(cid);
     var targetItem = this.get(targetCid);
     if (!movedItem || !targetItem) { return; }
@@ -50,7 +47,7 @@ var RecipeItemStore = Backbone.Collection.extend({
     this.sort();
   },
 
-  nextSortId: function() {
+  nextSortId() {
     if (this.length === 0) { return 0; }
     var lastItem = this.max(function(model) {return model.get('sortId');});
     return Number(lastItem.get('sortId')) + 1;
@@ -58,15 +55,14 @@ var RecipeItemStore = Backbone.Collection.extend({
 
   comparator: 'sortId',
 
-  addBlankForm: function() {
+  addBlankForm() {
     if (this.length === 0) {
       return this.add({});
     }
     if (this.last().id) {
       this.add({});
     }
-  },
-
+  }
 });
 
 module.exports = RecipeItemStore;

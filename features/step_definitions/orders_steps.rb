@@ -15,34 +15,36 @@ Then(/^I should see a list of orders including clients named "(.*?)" and "(.*?)"
 end
 
 When(/^I fill out Order form with:$/) do |table|
-  choose "order_order_type_#{table.hashes[0]['order_type']}"
-  select table.hashes[0]["route"], from: "order_route_id"
-  select table.hashes[0]["client"], from: "order_client_id"
+  choose table.hashes[0]["order_type"].titleize
+  select table.hashes[0]["route"], from: "Route"
+  select table.hashes[0]["client"], from: "Client"
   order = table.hashes[0]
+  fill_in "Start Date", with: ""
+  fill_in "Start Date", with: order["start_date"]
+  fill_in "End Date", with: ""
+  fill_in "End Date", with: order["end_date"]
   jquery_fill(
-    "#order_start_date" => order["start_date"],
-    "#order_end_date" => order["end_date"],
-    "#order_note" => order["note"]
+    ".note" => order["note"]
   )
 end
 
 When(/^I fill out temporary order form with:$/) do |table|
-  choose "order_order_type_#{table.hashes[0]['order_type']}"
-  select table.hashes[0]["route"], from: "order_route_id"
-  select table.hashes[0]["client"], from: "order_client_id"
+  choose table.hashes[0]["order_type"].titleize
+  select table.hashes[0]["route"], from: "Route"
+  select table.hashes[0]["client"], from: "Client"
   order = table.hashes[0]
+  fill_in "Start Date", with: ""
+  fill_in "Start Date", with: order["start_date"]
   jquery_fill(
-    "#order_start_date" => order["start_date"],
-    "#order_note" => order["note"]
+    ".note" => order["note"]
   )
 end
 
 When(/^I edit the order form with:$/) do |table|
-  choose "order_order_type_#{table.hashes[0]['order_type']}"
+  choose table.hashes[0]["order_type"].titleize
   order = table.hashes[0]
-  jquery_fill(
-    "#order_start_date" => order["start_date"]
-  )
+  fill_in "Start Date", with: ""
+  fill_in "Start Date", with: order["start_date"]
 end
 
 When(/^I am on the edit page for "(.*?)" order$/) do |name|
@@ -54,14 +56,14 @@ end
 When(/^I fill out the order item form with:$/) do |table|
   form = table.hashes[0]
   jquery_fill(
-    ".fields:last .monday_input" => form["monday"],
-    ".fields:last .tuesday_input" => form["tuesday"],
-    ".fields:last .wednesday_input" => form["wednesday"],
-    ".fields:last .thursday_input" => form["thursday"],
-    ".fields:last .friday_input" => form["friday"],
-    ".fields:last .saturday_input" => form["saturday"],
-    ".fields:last .sunday_input" => form["sunday"],
-    ".fields:last .select" => form["product"]
+    ".fields:last .monday" => form["monday"],
+    ".fields:last .tuesday" => form["tuesday"],
+    ".fields:last .wednesday" => form["wednesday"],
+    ".fields:last .thursday" => form["thursday"],
+    ".fields:last .friday" => form["friday"],
+    ".fields:last .saturday" => form["saturday"],
+    ".fields:last .sunday" => form["sunday"],
+    ".fields:last select" => form["product"]
   )
 end
 
@@ -74,21 +76,25 @@ When(/^I fill out the temporary order item form with:$/) do |table|
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../../..")
-  form.find("a", text: "X").click
+  row = find(:xpath, "//option[@selected and text()='#{name}']/../../../..")
+  row.find("a", text: "X").click
+end
+
+When(/^I delete the first order item$/) do
+  all("a", text: "X").first.click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
-  form = find(:xpath, "//select/option[@selected='selected' and text()='#{name}']/../../../../../..")
+  form = find(:xpath, "//select/option[@selected and text()='#{name}']/../../../..")
   form.find_field(day).set(quantity)
 end
 
 Then(/^the order item "(.*?)" should be present$/) do |name|
-  expect(page).to have_xpath("//select/option[@selected='selected' and text()='#{name}']")
+  expect(page).to have_xpath("//select/option[@selected and text()='#{name}']")
 end
 
 Then(/^the order item "(.*?)" should not be present$/) do |name|
-  expect(page).to have_no_selector(:xpath, "//select/option[@selected='selected' and text()='#{name}']")
+  expect(page).to have_no_selector(:xpath, "//select/option[@selected and text()='#{name}']")
 end
 
 Then(/^The order "(.*?)" should not be present$/) do |order|
