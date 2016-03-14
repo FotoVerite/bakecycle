@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ACCESS_LEVELS = %w(none read manage)
+  ACCESS_LEVELS = %w(none read manage).freeze
   belongs_to :bakery
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

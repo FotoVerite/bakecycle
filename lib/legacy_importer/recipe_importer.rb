@@ -12,14 +12,14 @@ module LegacyImporter
       recipe_instructions note
       recipe_type         recipe_type
       recipe_mix_size     mix_size
-    )
+    ).freeze
     # recipe_extra
     # recipe_active
     # recipe_print
 
     RECIPE_TYPE_MAP = {
       "motherdough" => :dough
-    }
+    }.freeze
 
     def import!
       ObjectFinder.new(

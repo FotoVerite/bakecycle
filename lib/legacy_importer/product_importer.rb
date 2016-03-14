@@ -16,12 +16,12 @@ module LegacyImporter
       product_weight_g      weight
       product_extra         over_bake
       product_type          product_type
-    )
+    ).freeze
     # product_shortname     sku
 
     PRODUCT_TYPE_MAP = {
       "Bread" => :bread,
-      "Vienoisserie" =>  :vienoisserie,
+      "Vienoisserie" => :vienoisserie,
       "Cookie" => :cookie,
       "Sandwich & Tartine" => :sandwich_and_tartine,
       "Quiche" => :quiche,
@@ -29,7 +29,7 @@ module LegacyImporter
       "Pot Pie" => :pot_pie,
       "Other" => :other,
       "Dry Goods" => :dry_goods
-    }
+    }.freeze
 
     def import!
       return SkippedProduct.new(data) if skip?

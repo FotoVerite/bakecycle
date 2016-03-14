@@ -14,7 +14,7 @@ class OrderItem < ActiveRecord::Base
     :friday,
     :saturday,
     :sunday
-  ]
+  ].freeze
   validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
@@ -89,7 +89,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def production_start_on?(start_date)
-    ready_date =  start_date + total_lead_days.days
+    ready_date = start_date + total_lead_days.days
     quantity(ready_date) > 0
   end
 

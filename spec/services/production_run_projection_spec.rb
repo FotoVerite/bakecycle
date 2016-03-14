@@ -3,7 +3,7 @@ require "rails_helper"
 describe ProductionRunProjection do
   let(:sunday) { monday - 1.day }
   let(:monday) { Time.zone.today.beginning_of_week }
-  let(:tuesday) { monday + 1.days }
+  let(:tuesday) { monday + 1.day }
   let(:wednesday) { monday + 2.days }
   let(:thursday) { monday + 3.days }
   let(:friday) { monday + 4.days }

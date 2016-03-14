@@ -43,7 +43,7 @@ module LegacyImporter
       client_deliverynotes      notes
       client_fax                business_fax
       client_phone              business_phone
-    )
+    ).freeze
 
     # Fields we have yet to import
     # client_ap_emailcc
@@ -65,7 +65,7 @@ module LegacyImporter
       "COD" => :cod,
       "Net 15" => :net_15,
       "" => :net_30
-    }
+    }.freeze
 
     def import!
       return SkippedClient.new(attributes) if skip?

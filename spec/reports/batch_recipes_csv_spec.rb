@@ -22,7 +22,7 @@ class MockProjection
   attr_reader :products_info
 
   def initialize
-    @products_info = 5.times.map { MockProductInfo.new }
+    @products_info = Array.new(5) { MockProductInfo.new }
   end
 end
 

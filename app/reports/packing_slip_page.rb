@@ -56,7 +56,7 @@ class PackingSlipPage
   end
 
   def shipment_items_table
-    table(shipment_items_rows, column_widths: [300, 100, 57.3, 57.3, 57.3])do
+    table(shipment_items_rows, column_widths: [300, 100, 57.3, 57.3, 57.3]) do
       row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       column(0).style(align: :left)
       row(1..-1).column(2..3).style(font_style: :bold)
@@ -74,7 +74,7 @@ class PackingSlipPage
     grid([1.1, 9], [1.3, 11]).bounding_box do
       font_size 9
       packing_slip_info_data.each do |row|
-        text "#{row[1]}", align: :left
+        text (row[1]).to_s, align: :left
       end
     end
   end
@@ -112,8 +112,6 @@ class PackingSlipPage
       ["# BAGS shipped:", nil, nil]
     ]
   end
-
-  private
 
   def shipment_or_client_notes_present?
     @shipment.client_notes.present? || @shipment.note.present?

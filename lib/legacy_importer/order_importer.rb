@@ -12,7 +12,7 @@ module LegacyImporter
     FIELDS_MAP = %w(
       order_notes     note
       order_type      order_type
-    )
+    ).freeze
 
     def import!
       return SkippedOrder.new(attributes) if skip?

@@ -83,7 +83,7 @@ class RecipeDataPage
   def bowl_data
     [
       [
-        { content: "#{recipe_run_data.mix_bowl_count}", size: 35 },
+        { content: recipe_run_data.mix_bowl_count.to_s, size: 35 },
         { content: "X", size: 10 },
         display_weight(recipe_run_data.mix_size_with_unit).merge(size: 15)
       ]

@@ -64,7 +64,6 @@ group :test, :development do
   gem "rack-livereload"
   gem "rspec-rails"
   gem "rubocop", require: false
-  gem "rubocop-rspec", require: false
   gem "shoulda-matchers", require: false
 end
 

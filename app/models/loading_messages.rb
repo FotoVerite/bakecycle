@@ -21,7 +21,7 @@ class LoadingMessages
     'Hope you\'re having a challah good day!',
     "I hate to brioche the subject but this report is pretty big!",
     "Your report is almost ready to dough!"
-  ]
+  ].freeze
 
   def self.messages
     MESSAGES

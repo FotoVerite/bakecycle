@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :order do
     order_type "standing"
-    start_date  { Time.zone.today - 4.days + Faker::Number.number(1).to_i.days }
-    end_date  nil
+    start_date { Time.zone.today - 4.days + Faker::Number.number(1).to_i.days }
+    end_date nil
     bakery
 
     client { |t| t.association(:client, bakery: bakery) }
@@ -15,7 +15,7 @@ FactoryGirl.define do
     end
 
     order_items do |t|
-      order_item_count.times.map do
+      Array.new(order_item_count) do
         t.association(
           :order_item,
           force_total_lead_days: force_total_lead_days,
@@ -32,7 +32,7 @@ FactoryGirl.define do
 
     trait :inactive do
       start_date  { Time.zone.today - 2.weeks }
-      end_date  { Time.zone.today - 1.week }
+      end_date { Time.zone.today - 1.week }
     end
 
     factory :temporary_order do

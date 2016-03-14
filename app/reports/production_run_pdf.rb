@@ -77,7 +77,7 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def product_information_row(product_type)
-    header = ["#{product_type.first.titleize}", "Qty", nil]
+    header = [product_type.first.titleize.to_s, "Qty", nil]
     rows = product_type[1].map do |run_item|
       [
         run_item.product.name,

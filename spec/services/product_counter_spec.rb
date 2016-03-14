@@ -81,7 +81,7 @@ describe ProductCounter do
       create(:shipment_item, shipment: shipment, product: cookie, product_quantity: 100, bakery: bakery)
       create(:shipment_item, shipment: shipment_2, product: bread, product_quantity: 100, bakery: bakery)
       create(:shipment_item, shipment: shipment_2, product: cookie, product_quantity: 100, bakery: bakery)
-      ProductionRunService.new(bakery, today - 1.days).run
+      ProductionRunService.new(bakery, today - 1.day).run
       RunItem.where(product: cookie).last.update!(overbake_quantity: 17)
 
       counts = {
