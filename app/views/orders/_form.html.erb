@@ -1,3 +1,4 @@
+<div>
 <%= simple_form_for order do |f| %>
   <%= render "shared/error_messages", f: f %>
   <% if f.object.overridable_order? %>
@@ -7,119 +8,8 @@
   <% end %>
   <%= render 'updated', updated: @updated %>
 
-  <fieldset>
-    <legend>Information</legend>
-    <div class="row">
-      <div class="small-12 columns end">
-        <%= f.label :order_type, "Order Type"%>
-        <%= f.radio_button(:order_type, "standing", "ng-model" => "order.orderType") %>
-        <%= f.label(:order_type_standing, "Standing") %>
-        <%= f.radio_button(:order_type, "temporary", "ng-model"=> "order.orderType") %>
-        <%= f.label(:order_type_temporary, "Temporary") %>
-        <p class="help-text-order-type">
-          Standing orders repeat every week, temporary orders override standing orders for a specific date
-        </p>
-      </div>
-    </div>
-    <% unless f.object.persisted? %>
-    <div class="row">
-        <div class="small-12 medium-4 columns">
-          <%= f.input(
-            :client_id,
-            collection: order.available_clients,
-            label_method: :name,
-            value_method: :id,
-            prompt: "Select One",
-            as: :select,
-            required: true
-          )%>
-        </div>
-      </div>
-    <% end %>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
-        <%= f.input(
-          :start_date,
-          as: :string,
-          label: "Start Date",
-          input_html: { class: "js-datepicker", "ng-model" => "order.startDate" }
-        ) %>
-      </div>
-      <div class="small-12 medium-4 columns end" ng-hide="isTemporary()">
-        <%= f.input(
-          :end_date,
-          as: :string,
-          label: "End Date",
-          input_html: { class: "js-datepicker"}
-        ) %>
-      </div>
-      <div class="small-12 medium-4 columns end">
-        <%= f.input(
-          :route_id,
-          collection: order.available_routes,
-          label_method: :name,
-          value_method: :id,
-          prompt: "Select One",
-          as: :select,
-          required: true
-        ) %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
-        <%= f.input :note, label: "Special Notes", as: :text %>
-      </div>
-    </div>
+  <%= react_component('OrderForm', OrderForm.new(order: @order, user: current_user).serializable_hash) %>
 
-    <% if f.object.persisted? %>
-      <div class="row">
-        <div class="small-12 medium-6 columns">
-          <p><strong>Order Lead Days: <%= order.total_lead_days %></strong></p>
-        </div>
-      </div>
-    <% end %>
-  </fieldset>
-
-  <fieldset>
-    <legend>Products</legend>
-    <div class="row show-for-large-up">
-      <div class="small-12 columns">
-        <div class="order-item-product-selection">
-          <%= f.label :product_id, "Product" %>
-        </div>
-        <div class="order-item-price-per-qt">
-          <label>Price</label>
-        </div>
-
-        <div class="order-item-price-total">
-          <label>Total</label>
-        </div>
-
-        <div class="order-item-day-input">
-          <%= f.label :monday, "Mon" %>
-        </div>
-        <div class="order-item-day-input">
-          <%= f.label :tuesday, "Tue" %>
-        </div>
-        <div class="order-item-day-input">
-          <%= f.label :wednesday, "Wed" %>
-        </div>
-        <div class="order-item-day-input">
-          <%= f.label :thursday, "Thur" %>
-        </div>
-        <div class="order-item-day-input">
-          <%= f.label :friday, "Fri" %>
-        </div>
-        <div class="order-item-day-input">
-          <%= f.label :saturday, "Sat" %>
-        </div>
-        <div class="order-item-day-input end">
-          <%= f.label :sunday, "Sun" %>
-        </div>
-      </div>
-    </div>
-    <%= render partial: "order_items", locals: {f: f} %>
-  </fieldset>
   <div class="row">
     <div class="small-12 columns">
       <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
@@ -133,3 +23,4 @@
     </div>
   </div>
 <% end %>
+</div>

@@ -1,8 +1,7 @@
-var React = require('react');
-var BCInput = require('./bakecycle-input');
-var BCSelect = require('./bakecycle-select');
+import React from 'react';
+import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
 
-module.exports = React.createClass({
+var ProductPriceField = React.createClass({
   errorFor: function(field) {
     if (!this.props.errors[field]) { return; }
     return (<small className="error">{this.props.errors[field]}</small>);
@@ -18,18 +17,26 @@ module.exports = React.createClass({
     var model = this.props.model;
     var { id, destroy } = model.toJSON();
     var clients = this.props.clients.map((client) => {
-      return <option value={client.id}>{client.name}</option>;
+      return <option key={`client-${model.getNumericCID()}-${client.id}`} value={client.id}>{client.name}</option>;
     });
-    clients.unshift(<option value="">All</option>);
+    clients.unshift(<option key={`client-${model.getNumericCID()}-all`} value="">All</option>);
     var namePrefix = `product[price_variants_attributes][${model.getNumericCID()}]`;
     var disabledClass = destroy ? 'disabled' : '';
 
     var undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
     var removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
 
+    if (id) {
+      var idField = <input type="hidden" name={`${namePrefix}[id]`} value={id} />;
+    }
+
+    if (destroy) {
+      var destroyField = <input type="hidden" name={`${namePrefix}[_destroy]`} value="true" />;
+    }
+
     return (<div className={`fields ${disabledClass}`}>
-      <input type="hidden" name={`${namePrefix}[id]`} value={id} />
-      <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
+      {idField}
+      {destroyField}
       <div className="row collapse">
         <div className="small-12 medium-5 columns">
           <label className="string required hide-for-medium-up">
@@ -82,3 +89,5 @@ module.exports = React.createClass({
     </div>);
   }
 });
+
+export default ProductPriceField;

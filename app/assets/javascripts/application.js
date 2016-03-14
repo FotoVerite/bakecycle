@@ -10,22 +10,17 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+
 //= require jquery
-//= require react_ujs
+//= require_tree ./vendor
+
+// JQuery components
 //= require jquery_ujs
 //= require jquery.ui.datepicker
 //= require jquery.timepicker.js
-//= require_tree ./vendor
-//= require angular/angular
 //= require foundation/foundation
 //= require foundation/foundation.alert
-
-// Angular components
-//= require ./angular/app.js
-//= require_tree ./angular
-
-// JQuery components
 //= require_tree ./jquery-components
 
 // Browserify'd app components
-//= require app
+require('./app');

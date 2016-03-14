@@ -1,17 +1,17 @@
-var React = require('react');
-var PricesStore = require('../stores/prices-store');
-var PriceFields = require('./product-price-fields');
+import React from 'react';
+import PricesStore from '../stores/prices-store';
+import PriceFields from './product-price-fields';
 
-module.exports = React.createClass({
+let ProductPriceForm = React.createClass({
   getInitialState: function() {
-    var prices = new PricesStore(this.props.priceVariants);
+    let prices = new PricesStore(this.props.priceVariants);
     prices.addBlankForm();
     prices.on('change sort remove add', () => this.setState({ prices }));
     return { prices };
   },
 
   willReceiveProps: function(nextProps) {
-    var prices = this.state.prices.set(nextProps.priceVariants);
+    let prices = this.state.prices.set(nextProps.priceletiants);
     prices.addBlankForm();
   },
 
@@ -21,9 +21,9 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var prices = this.state.prices;
-    var clients = this.props.clients;
-    var fields = prices.map((priceVariant) => {
+    let prices = this.state.prices;
+    let clients = this.props.clients;
+    let fields = prices.map((priceVariant) => {
       return <PriceFields key={priceVariant.cid} model={priceVariant} clients={clients} />;
     });
 
@@ -53,3 +53,5 @@ module.exports = React.createClass({
     </div>);
   }
 });
+
+export default ProductPriceForm;

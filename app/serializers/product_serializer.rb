@@ -1,5 +1,5 @@
 class ProductSerializer < ActiveModel::Serializer
-  attributes :clients, :id, :name, :errors
+  attributes :clients, :id, :name, :errors, :base_price
   has_many :price_variants
 
   def clients

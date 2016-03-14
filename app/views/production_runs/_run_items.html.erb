@@ -1,4 +1,4 @@
-<div ng-controller="NestedItemCtrl">
+<div data-controller="NestedItemCtrl">
   <table class="responsive-table recent-shipment">
     <thead>
       <tr>
@@ -17,17 +17,15 @@
       <%= f.simple_fields_for :run_items, @production_run.run_items.order_by_product_type_and_name do |builder| %>
           <%= render 'run_item_fields', f: builder %>
       <% end %>
-
-      <tr ng-repeat="nestedItem in nestedItems">
+      <tr data-repeat>
         <%= f.simple_fields_for :run_items, @production_run.run_items.build do |builder| %>
            <%= render 'new_run_item_fields', f: builder %>
         <% end %>
       </tr>
-
     </tbody>
   </table>
 
   <% if policy(@production_run).update? %>
-    <%= link_to('Add Product', '', :'ng-click' => "add()", class: "button") if f.object.persisted? %>
+    <%= link_to('Add Product', '', data:{ add: true }, class: "button") if f.object.persisted? %>
   <% end %>
 </div>

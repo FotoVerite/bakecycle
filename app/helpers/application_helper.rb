@@ -29,4 +29,27 @@ module ApplicationHelper
   def loading_indicator
     render "loading_indicator"
   end
+
+  # rubocop:disable Metrics/MethodLength
+  def react_component(name, props)
+    html = <<-eos
+    <script>
+    (function(){
+      var name = #{name.to_json};
+      var props = #{props.to_json};
+      var node = document.createElement('div');
+      node.setAttribute('data-reactComponent', name);
+
+      var scripts = document.getElementsByTagName('script');
+      var scriptTag = scripts[scripts.length-1];
+      scriptTag.parentNode.insertBefore(node, scriptTag);
+
+      window.reactComponents = window.reactComponents || [];
+      window.reactComponents.push([name, props, node]);
+    })();
+    </script>
+    eos
+    html.html_safe
+  end
+  # rubocop:enable Metrics/MethodLength
 end

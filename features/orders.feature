@@ -21,10 +21,10 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on "Add Product" and don't enter any information
+    And I click on the "Add Product" link
     And I click on "Create"
     Then "You have created a standing order for mandos." should be present
-    When I click on "Create New Order From This Order"
+    When I click on "Copy Order"
     When I edit the order form with:
       | order_type | start_date |
       | standing  | 2014-11-12 |
@@ -32,8 +32,7 @@ Feature: Orders
     And I click on "Create and Override Existing Order"
     And I confirm popup
     Then "You have created a standing order for mandos." should be present
-    When I click on "Create New Order From This Order"
-
+    When I click on "Copy Order"
     When I edit the order form with:
       | order_type | start_date |
       | temporary  | 2014-11-12 |
@@ -44,7 +43,7 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on "Add Product"
+    And I click on the "Add Product" link
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
@@ -63,9 +62,9 @@ Feature: Orders
     And The order "andysdecaf" should not be present
 
     When I am on the edit page for "mandos" order
-    And I click on "X"
+    And I delete the first order item
     And I click on "Update"
-    When I click on "Add Product"
+    And I click on the "Add Product" link
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |

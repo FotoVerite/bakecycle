@@ -1,33 +1,33 @@
-<div class="fields" ng-show="true">
+<div class="fields">
   <div class="row collapse">
     <div class="small-12 large-4 columns">
       <%= f.label :product_id, "Product", class: "hide-for-large-up" %>
-      <%= f.input :product_id, collection: shipment.available_products, label: false, input_html: { id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_id", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_id]" }, include_blank: "--None--", as: :select%>
+      <%= f.input :product_id, collection: shipment.available_products, label: false, input_html: { id: "shipment_shipment_items_attributes_${ID}_product_id", name: "shipment[shipment_items_attributes][${ID}][product_id]" }, include_blank: "--None--", as: :select%>
     </div>
 
     <div class="small-12 large-2 columns">
       <%= f.label :product_product_type, "Product Type", class: "hide-for-large-up" %>
-      <input ng-disabled="true" type="text" value="<%= f.object.product_product_type %>" />
+      <input disabled="true" type="text" value="<%= f.object.product_product_type %>" />
     </div>
 
     <div class="small-12 large-1 columns">
       <%= f.label :product_quantity, "Quantity", class: "hide-for-large-up" %>
-      <%= f.input :product_quantity, as: :string, label: false, input_html: { class: "product_quantity_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_quantity", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_quantity]" }%>
+      <%= f.input :product_quantity, as: :string, label: false, input_html: { class: "product_quantity_input", id: "shipment_shipment_items_attributes_${ID}_product_quantity", name: "shipment[shipment_items_attributes][${ID}][product_quantity]" }%>
     </div>
 
     <div class="small-12 large-1 columns">
       <%= f.label :product_price, "Price", class: "hide-for-large-up" %>
-      <%= f.input :product_price, as: :string, label: false, input_html: { class: "product_price_input", id: "shipment_shipment_items_attributes_{{getRandomId($index)}}_product_price", name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][product_price]" }%>
+      <%= f.input :product_price, as: :string, label: false, input_html: { class: "product_price_input", id: "shipment_shipment_items_attributes_${ID}_product_price", name: "shipment[shipment_items_attributes][${ID}][product_price]" }%>
     </div>
 
      <div class="small-12 large-2 columns">
       <%= f.label :production_start, "Production Start", class: "hide-for-large-up" %>
-      <input ng-disabled="true" type="text" value="<%= f.object.production_start %>" />
+      <input disabled="true" type="text" value="<%= f.object.production_start %>" />
     </div>
 
     <div class="small-12 large-2 columns">
-      <%= f.hidden_field :_destroy, value: false, name: "shipment[shipment_items_attributes][{{getRandomId($index)}}][_destroy]" %>
-      <%= link_to 'X', '', :'ng-click' => "remove($event)",class: "button alert postfix"  %>
+      <%= f.hidden_field :_destroy, value: false, name: "shipment[shipment_items_attributes][${ID}][_destroy]" %>
+      <%= link_to 'X', '', data: {remove: true }, class: "button alert postfix"  %>
     </div>
   </div>
 </div>

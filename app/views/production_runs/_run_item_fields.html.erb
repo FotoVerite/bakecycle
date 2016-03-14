@@ -1,4 +1,4 @@
-<tr class="fields" id="run_item_<%= f.object.id %>" ng-show="true">
+<tr class="fields" id="run_item_<%= f.object.id %>">
   <% if f.object.persisted? %>
     <th scope="row">
       <a class="product-info-tooltip">
@@ -24,7 +24,7 @@
     <td>
       <% unless f.object.from_shipment? %>
         <%= f.hidden_field :_destroy, value: false %>
-        <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
+        <%= link_to 'X', '', data:{ remove: true }, class: "button alert postfix" %>
       <% end %>
     </td>
   <% else %>

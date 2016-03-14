@@ -16,8 +16,8 @@ describe OrderDuplicate do
     expect(Order.count).to eq(2)
     expect(order).to eq(Order.find(order.id))
 
-    order_products = order.order_items.pluck(:product_id)
-    order_copy_products = order_copy.order_items.pluck(:product_id)
+    order_products = order.order_items.pluck(:product_id).sort
+    order_copy_products = order_copy.order_items.pluck(:product_id).sort
     expect(order_copy_products).to eq(order_products)
   end
 end

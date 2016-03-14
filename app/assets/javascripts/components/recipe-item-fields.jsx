@@ -1,6 +1,5 @@
-var React = require('react');
-var BCInput = require('./bakecycle-input');
-var BCSelect = require('./bakecycle-select');
+import React from 'react';
+import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
 
 module.exports = React.createClass({
   toggleDestroy: function() {

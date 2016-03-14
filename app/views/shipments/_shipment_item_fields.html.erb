@@ -1,4 +1,4 @@
-<div class="fields" ng-show="true">
+<div class="fields">
   <div class="row collapse">
     <div class="small-12 large-4 columns">
       <%= f.label :product_id, "Product", class: "hide-for-large-up" %>
@@ -6,7 +6,7 @@
     </div>
     <div class="small-12 large-2 columns">
       <%= f.label :product_product_type, "Type", class: "hide-for-large-up" %>
-      <input ng-disabled="true" type="text" value="<%= f.object.product_type %>" />
+      <input disabled="true" type="text" value="<%= f.object.product_type %>" />
     </div>
     <div class="small-12 large-1 columns">
       <%= f.label :product_quantity, "Quantity", class: "hide-for-large-up" %>
@@ -20,12 +20,12 @@
 
     <div class="small-12 large-2 columns">
       <%= f.label :production_start, "Production Start", class: "hide-for-large-up" %>
-      <input ng-disabled="true" type="text" value="<%= f.object.production_start %>" />
+      <input disabled="true" type="text" value="<%= f.object.production_start %>" />
     </div>
 
     <div class="small-12 large-2 columns">
       <%= f.hidden_field :_destroy, value: false %>
-      <%= link_to 'X', '', :'ng-click' => "remove($event)", class: " button alert postfix" %>
+      <%= link_to 'X', '', data: {remove: true }, class: " button alert postfix" %>
     </div>
   </div>
 </div>

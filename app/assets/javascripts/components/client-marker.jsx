@@ -1,8 +1,8 @@
-var React = require('react');
+let React = require('react');
 
-var Marker = React.createClass({
+let Marker = React.createClass({
   render() {
-    var className = this.props.$hover ? 'map-marker hover' : 'map-marker';
+    let className = this.props.$hover ? 'map-marker hover' : 'map-marker';
     return (
       <div
         className={className}

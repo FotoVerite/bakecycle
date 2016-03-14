@@ -25,7 +25,7 @@ When(/^I click on "(.*?)"$/) do |linkable_text|
 end
 
 When(/^I click on the "(.*?)" link$/) do |name|
-  click_link name
+  all("a", text: name).first.click
 end
 
 Then(/^"(.*?)" should not be present$/) do |content|
@@ -109,10 +109,6 @@ end
 
 Then(/^I should see "(.*?)" information about "(.*?)"$/) do |object, name|
   expect(page).to have_content("#{object}: #{name}")
-end
-
-Given(/^I click on "(.*?)" and don't enter any information$/) do |linkable_text|
-  click_on(linkable_text, match: :first)
 end
 
 Then(/^I should see the pdf generated page with "(.*?)" included in the url$/) do |pdf_name|

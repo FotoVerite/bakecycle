@@ -38,8 +38,8 @@ Feature: Production Run Editing
     And I fill out run item form with:
       | product         | overbake_quantity|
       | donut tart      | 15               |
-    And I click on "Add Product" and don't enter any information
-    When I click on "Update"
+    And I click on "Add Product"
+    And I click on "Update"
     Then "Successfully updated" should be present
     And "baguette cookie" should be present
     When I click an a run item delete button on the donut

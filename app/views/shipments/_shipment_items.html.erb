@@ -1,13 +1,13 @@
-<div ng-controller="NestedItemCtrl">
+<div data-controller="NestedItemCtrl">
   <%= f.simple_fields_for :shipment_items, shipment.sorted_shipment_items do |builder| %>
     <%= render "shipment_item_fields", f: builder %>
   <% end %>
-
-  <div ng-repeat="nestedItem in nestedItems">
-    <%= f.simple_fields_for :shipment_items, @shipment.shipment_items.build do |builder| %>
-      <%= render "new_shipment_item_fields", f: builder %>
-    <% end %>
+  <div>
+    <div data-repeat>
+      <%= f.simple_fields_for :shipment_items, @shipment.shipment_items.build do |builder| %>
+        <%= render "new_shipment_item_fields", f: builder %>
+      <% end %>
+    </div>
   </div>
-
-  <%= link_to 'Add Product', '', :'ng-click' => "add()", class: "button" %>
+  <%= link_to 'Add Product', '', data: { add: true }, class: "button" %>
 </div>
