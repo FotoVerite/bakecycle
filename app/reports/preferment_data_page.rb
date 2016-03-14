@@ -34,7 +34,7 @@ class PrefermentDataPage
   end
 
   def header_date
-    text "#{@date.strftime('%A %B %e, %Y')}", size: 20, align: :right, valign: :center
+    text @date.strftime("%A %B %e, %Y").to_s, size: 20, align: :right, valign: :center
   end
 
   def body
@@ -45,8 +45,6 @@ class PrefermentDataPage
       end
     end
   end
-
-  private
 
   def preferment_data(recipe)
     rows = ingredient_rows(recipe)
@@ -59,8 +57,8 @@ class PrefermentDataPage
       background_color: BasePdfReport::HEADER_ROW_COLOR, size: 12, font_style: :bold, height: 25
     }
     [
-      { content: "#{recipe.recipe.name}", width: 216 }.merge(styles),
-      { content: "#{recipe.mix_bowl_count}", align: :center, width: 65 }.merge(styles)
+      { content: recipe.recipe.name.to_s, width: 216 }.merge(styles),
+      { content: recipe.mix_bowl_count.to_s, align: :center, width: 65 }.merge(styles)
     ]
   end
 

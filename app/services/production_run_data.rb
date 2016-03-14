@@ -71,7 +71,7 @@ class ProductionRunData
   end
 
   def add_to_recipe_run_data(product, quantity)
-    motherdough =  product.motherdough
+    motherdough = product.motherdough
     return unless motherdough
     recipe_data = recipes_collection.find_or_create(motherdough, run_date)
     recipe_data.add_product(product, quantity)

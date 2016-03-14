@@ -1,11 +1,11 @@
-require: rubocop-rspec
-
 AllCops:
-  RunRailsCops: true
+  TargetRubyVersion: 2.2
   Exclude:
     - 'db/schema.rb'
     - 'vendor/bundle/**/*'
     - 'node_modules/**/*'
+Rails:
+  Enabled: true
 
 Metrics/LineLength:
   Max: 120
@@ -18,9 +18,6 @@ Metrics/AbcSize:
 
 Metrics/ClassLength:
   Max: 111
-
-RSpec/DescribedClass:
-  Enabled: false
 
 # it would be great to use EnforcedStyle: semantic here but it complains way too much
 Style/BlockDelimiters:
@@ -41,7 +38,7 @@ Style/MultilineOperationIndentation:
 Style/SignalException:
   Enabled: false
 
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Enabled: false
 
 Style/StringLiterals:
@@ -57,4 +54,10 @@ Style/AlignParameters:
   Enabled: false
 
 Style/FirstParameterIndentation:
+  Enabled: false
+
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/ConditionalAssignment:
   Enabled: false

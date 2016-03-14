@@ -90,7 +90,7 @@ end
 
 When(/^I filter shipments by to and from dates for the past week$/) do
   fill_in "search_date_from", with: (Time.zone.today - 7.days).to_s
-  fill_in "search_date_to", with: (Time.zone.today).to_s
+  fill_in "search_date_to", with: Time.zone.today.to_s
   click_button "Search"
 end
 

@@ -57,7 +57,7 @@ describe Address do
       address.city = nil
       address.state = nil
       address.street_1 = nil
-      full_address = "#{address.zipcode}"
+      full_address = address.zipcode.to_s
       expect(address.full).to eq(full_address)
     end
   end

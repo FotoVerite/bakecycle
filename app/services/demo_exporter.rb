@@ -1,5 +1,5 @@
 class DemoExporter
-  DEMO_DATA_YAML = "config/demo_data.yml"
+  DEMO_DATA_YAML = "config/demo_data.yml".freeze
 
   attr_reader :bakery
 
@@ -93,7 +93,7 @@ class DemoExporter
     def pluck_fields(model, *skip_fields)
       skip = [:id, :total_lead_days, :bakery_id, :updated_at, :created_at, :legacy_id, *skip_fields]
       fields = model.column_names.map(&:to_sym) - skip
-      model.order(:id).all.each_with_object({}) { |i, o| o[i.id] =  i.slice(*fields) }
+      model.order(:id).all.each_with_object({}) { |i, o| o[i.id] = i.slice(*fields) }
     end
   end
 

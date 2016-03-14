@@ -13,7 +13,7 @@ FactoryGirl.define do
     end
 
     shipment_items do |t|
-      shipment_item_count.times.map do
+      Array.new(shipment_item_count) do
         t.association(
           :shipment_item,
           shipment: t.instance_variable_get(:@instance),

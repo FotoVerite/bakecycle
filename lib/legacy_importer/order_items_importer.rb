@@ -12,7 +12,7 @@ module LegacyImporter
       "fri" => :friday,
       "sat" => :saturday,
       "sun" => :sunday
-    }
+    }.freeze
 
     attr_reader :bakery, :data, :order_items
 

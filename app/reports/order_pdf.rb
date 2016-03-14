@@ -22,7 +22,7 @@ class OrderPdf < BasePdfReport
   end
 
   def information
-    table(information_rows, column_widths: [200, 93, 93, 93, 93])  do
+    table(information_rows, column_widths: [200, 93, 93, 93, 93]) do
       column(0..4).style(align: :center)
       row(0).style(background_color: HEADER_ROW_COLOR)
       row(1).style(overflow: :shrink_to_fit, min_font_size: 10)
@@ -43,8 +43,8 @@ class OrderPdf < BasePdfReport
 
   def items_table(group)
     move_down 20
-    text "#{group[0].capitalize}", style: :bold, size: 15
-    table(order_items_rows(group[1]), column_widths: [200, 70, 70, 33, 33, 33, 33, 33, 33, 33])do
+    text group[0].capitalize.to_s, style: :bold, size: 15
+    table(order_items_rows(group[1]), column_widths: [200, 70, 70, 33, 33, 33, 33, 33, 33, 33]) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..9).style(align: :center)

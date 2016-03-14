@@ -30,9 +30,9 @@ module LegacyImporter
       name = data[:ingredient_name]
       return "other" if name.blank?
       Ingredient::INGREDIENT_TYPES.each do |type|
-        return type if /#{type}/i.match(name)
+        return type if /#{type}/i =~ name
       end
-      return "hydration" if /water/i.match(name)
+      return "hydration" if /water/i =~ name
       "other"
     end
 

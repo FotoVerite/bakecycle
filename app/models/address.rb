@@ -7,7 +7,7 @@ class Address
     :city,
     :state,
     :zipcode
-  ]
+  ].freeze
 
   def initialize(object, address_type)
     @object = object
