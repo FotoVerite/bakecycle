@@ -1,6 +1,40 @@
-Airbrake.configure do |config|
-  config.api_key = ENV["AIRBRAKE_KEY"]
-  config.host    = ENV["AIRBRAKE_HOST"]
-  config.port    = 80
-  config.secure  = config.port == 443
+# Configuration details:
+# https://github.com/airbrake/airbrake-ruby#configuration
+Airbrake.configure do |c|
+  # You must set both project_id & project_key. To find your project_id and
+  c.project_id = ENV["AIRBRAKE_PROJECT_ID"] || "nope"
+  c.project_key = ENV["AIRBRAKE_API_KEY"] || "nope"
+
+  # Configures the root directory of your project. Expects a String or a
+  # Pathname, which represents the path to your project. Providing this option
+  # helps us to filter out repetitive data from backtrace frames and link to
+  # GitHub files from our dashboard.
+  # https://github.com/airbrake/airbrake-ruby#root_directory
+  c.root_directory = Rails.root
+
+  # By default, Airbrake Ruby outputs to STDOUT. In Rails apps it makes sense to
+  # use the Rails' logger.
+  # https://github.com/airbrake/airbrake-ruby#logger
+  c.logger = Rails.logger
+
+  # Configures the environment the application is running in. Helps the Airbrake
+  # dashboard to distinguish between exceptions occurring in different
+  # environments. By default, it's not set.
+  # NOTE: This option must be set in order to make the 'ignore_environments'
+  # option work.
+  # https://github.com/airbrake/airbrake-ruby#environment
+  c.environment = Rails.env
+
+  # Setting this option allows Airbrake to filter exceptions occurring in
+  # unwanted environments such as :test. By default, it is equal to an empty
+  # Array, which means Airbrake Ruby sends exceptions occurring in all
+  # environments.
+  # NOTE: This option *does not* work if you don't set the 'environment' option.
+  # https://github.com/airbrake/airbrake-ruby#ignore_environments
+  c.ignore_environments = %w(test development)
 end
+
+# If Airbrake doesn't send any expected exceptions, we suggest to uncomment the
+# line below. It might simplify debugging of background Airbrake workers, which
+# can silently die.
+# Thread.abort_on_exception = ['test', 'development'].include?(Rails.env)
