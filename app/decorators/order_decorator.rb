@@ -28,10 +28,6 @@ class OrderDecorator < Draper::Decorator
     object.shipments.upcoming(Time.zone.today).decorate
   end
 
-  def serializable_hash
-    OrderSerializer.new(object).serializable_hash
-  end
-
   def overridable_end_date
     object.start_date - 1.day
   end

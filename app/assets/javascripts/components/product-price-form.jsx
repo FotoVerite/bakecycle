@@ -4,7 +4,7 @@ import PriceFields from './product-price-fields';
 
 let ProductPriceForm = React.createClass({
   getInitialState: function() {
-    let prices = new PricesStore(this.props.priceVariants);
+    let prices = new PricesStore(this.props.product.priceVariants);
     prices.addBlankForm();
     prices.on('change sort remove add', () => this.setState({ prices }));
     return { prices };

@@ -30,8 +30,4 @@ class ProductDecorator < Draper::Decorator
     return "N/A" unless sku.present?
     sku
   end
-
-  def serializable_hash
-    ProductSerializer.new(object).serializable_hash
-  end
 end

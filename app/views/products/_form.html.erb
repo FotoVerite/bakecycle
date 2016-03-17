@@ -55,7 +55,7 @@
     </div>
   </fieldset>
 
-  <%= react_component('ProductPriceForm', product.serializable_hash) %>
+  <%= react_component('ProductPriceForm', ProductForm.new(product: @product, user: current_user).serializable_hash) %>
 
   <div class="row">
     <div class="small-12 columns">
