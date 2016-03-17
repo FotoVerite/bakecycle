@@ -70,7 +70,7 @@ class Product < ActiveRecord::Base
   end
 
   def price(quantity, client)
-    price_by_quantity(quantity, client) || base_price
+    lookup_price_variant(quantity, client) || base_price
   end
 
   def weight_with_unit
@@ -89,7 +89,7 @@ class Product < ActiveRecord::Base
     false
   end
 
-  def price_by_quantity(quantity, client)
+  def lookup_price_variant(quantity, client)
     matching = price_variants
       .where("client_id IS NULL OR client_id = ?", client.id)
       .order(quantity: :desc)

@@ -11,7 +11,7 @@ class OrderForm
   end
 
   def available_products
-    item_finder.products.order(:name)
+    item_finder.products.includes(:price_variants).order(:name)
   end
 
   def available_routes
