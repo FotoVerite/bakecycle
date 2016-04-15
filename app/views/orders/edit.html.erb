@@ -1,5 +1,5 @@
-<% provide(:title, "Editing Order: #{order.id}") %>
-<h1>Editing Order: <%= order.id %> - <%= order.client_name %></h1>
+<% provide(:title, "Editing Order ##{order.id}") %>
+<h1>Editing Order #<%= order.id %> - <%= link_to order.client_name, order.client, class: "underlined-link" %></h1>
 
 <ul class="stack-for-small secondary button-group">
   <li><%= link_to 'Back', orders_path, class: "button small" %></li>
