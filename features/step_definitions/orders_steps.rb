@@ -110,7 +110,7 @@ Then(/^I should see confirmation that the "(.*?)" order "(.*?)" was deleted$/) d
 end
 
 Then(/^I should see order information about "(.*?)"$/) do |name|
-  expect(page).to have_content(/Editing Order: \d+ \- #{name}/)
+  expect(page).to have_content(/Editing Order #\d+ \- #{name}/)
 end
 
 When(/^I click the order "(.*?)"$/) do |order_client|
