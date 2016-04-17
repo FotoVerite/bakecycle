@@ -191,7 +191,7 @@
       <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button small right" %>
     <% end %>
     <% if policy(Order).index? %>
-      <%= link_to 'View More Orders', orders_path(search: {client_id: [@client.id]}), class: "button small right" %>
+      <%= link_to 'View All Orders', orders_path(search: {client_id: [@client.id]}), class: "button small right" %>
     <% end %>
   </div>
 </fieldset>
@@ -229,7 +229,7 @@
   </div>
   <div class="row">
     <% if policy(Shipment).index? %>
-      <%= link_to 'View More Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
+      <%= link_to 'View All Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
     <% end %>
   </div>
 </fieldset>

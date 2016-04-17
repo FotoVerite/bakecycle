@@ -8,5 +8,5 @@ $.fn.outerHTML = function(){
       var contents = div.innerHTML;
       div = null;
       return contents;
-  })(this[0]));
+    })(this[0]));
 };

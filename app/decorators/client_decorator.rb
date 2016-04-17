@@ -16,7 +16,7 @@ class ClientDecorator < Draper::Decorator
   end
 
   def latest_orders
-    object.orders.includes(:route).latest(10).decorate
+    object.orders.includes(:route).order_by_active.limit(10).decorate
   end
 
   def latest_shipments

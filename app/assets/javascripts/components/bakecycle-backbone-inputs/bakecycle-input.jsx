@@ -1,30 +1,33 @@
 import React from 'react';
 import formMixin from './bakecycle-form-mixin';
 
+const {PropTypes} = React;
+
 let BCInput = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: React.PropTypes.bool,
-    error: React.PropTypes.string,
-    field: React.PropTypes.string.isRequired,
-    label: React.PropTypes.string,
-    model: React.PropTypes.object.isRequired,
-    name: React.PropTypes.string.isRequired,
-    placeholder: React.PropTypes.string,
-    labelClass: React.PropTypes.string,
-    required: React.PropTypes.bool,
-    type: React.PropTypes.string,
-    inline: React.PropTypes.bool,
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
+    field: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    model: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    labelClass: PropTypes.string,
+    required: PropTypes.bool,
+    type: PropTypes.string,
+    inline: PropTypes.bool,
+    autoComplete: PropTypes.string,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       type: 'text'
     };
   },
 
-  render: function() {
+  render() {
     let {
       disabled,
       error,
@@ -34,6 +37,7 @@ let BCInput = React.createClass({
       name,
       placeholder,
       type,
+      autoComplete,
     } = this.props;
 
     return (
@@ -48,6 +52,7 @@ let BCInput = React.createClass({
           placeholder={placeholder}
           value={model.get(field)}
           disabled={disabled}
+          autoComplete={autoComplete}
         />
         {error ? <small className="error">{error}</small> : ''}
       </div>

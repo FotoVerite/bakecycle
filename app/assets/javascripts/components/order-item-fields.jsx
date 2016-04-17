@@ -2,7 +2,7 @@ import React from 'react';
 import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
 
 module.exports = React.createClass({
-  toggleDestroy: function(e) {
+  toggleDestroy(e) {
     e.preventDefault();
     var model = this.props.model;
     var destroy = model.get('destroy');
@@ -33,7 +33,7 @@ module.exports = React.createClass({
       ['Thur', 'thursday', 4],
       ['Fri', 'friday', 5],
       ['Sat', 'saturday', 6],
-      ['Sun', 'sunday', 0]
+      ['Sun', 'sunday', 0],
     ];
 
     return days.map((day) => {
@@ -46,13 +46,14 @@ module.exports = React.createClass({
             label={day[0]}
             labelClass="hide-for-large-up"
             disabled={this.checkDisabled(day[2])}
+            autoComplete="off"
           />
         </div>
       );
     });
   },
 
-  render: function() {
+  render() {
     var {
       availableProducts,
       model,

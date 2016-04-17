@@ -7,7 +7,8 @@ class OrdersController < ApplicationController
     authorize Order
     @orders = policy_scope(Order)
       .search(search_form)
-      .sort_for_history
+      .includes(:client, :route)
+      .order_by_active
       .paginate(page: params[:page])
   end
 

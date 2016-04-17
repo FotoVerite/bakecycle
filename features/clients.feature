@@ -38,12 +38,12 @@ Feature: Clients
 
     When I am on the view page for "mandos"
     Then I should see recent shipments information
-    When I click on "View More Invoices"
+    When I click on "View All Invoices"
     Then I should be on the shipment's index page with "mandos" shipments and none from "andysdecaf"
 
     When I am on the view page for "mandos"
     Then I should see upcoming orders information
-    When I click on "View More Orders"
+    When I click on "View All Orders"
     Then I should be on the orders index page with "mandos" shipments and none from "andysdecaf"
 
   @javascript

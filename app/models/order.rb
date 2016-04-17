@@ -37,7 +37,6 @@ class Order < ActiveRecord::Base
   after_touch :update_total_lead_days
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
-  scope :latest, -> (count) { order(id: :desc).limit(count) }
 
   def self.policy_class
     ClientPolicy
@@ -55,6 +54,11 @@ class Order < ActiveRecord::Base
     where(sql, date: date)
   end
 
+  # sorts orders by their end date, putting open ended standing orders in for today
+  def self.order_by_active
+    order("COALESCE(orders.end_date, now()) DESC")
+  end
+
   def self.temporary(date)
     where(order_type: "temporary", start_date: date)
   end
@@ -63,19 +67,6 @@ class Order < ActiveRecord::Base
     where(order_type: "standing")
       .where("start_date <= ? ", date)
       .where("end_date is null or end_date >= ? ", date)
-  end
-
-  def self.sort_for_active
-    includes(:client, :route)
-      .joins(:client, :route)
-      .order("clients.name asc")
-      .order("routes.departure_time asc")
-      .order(start_date: :desc)
-  end
-
-  def self.sort_for_history
-    includes(:client, :route)
-      .order(start_date: :desc)
   end
 
   def set_total_lead_days

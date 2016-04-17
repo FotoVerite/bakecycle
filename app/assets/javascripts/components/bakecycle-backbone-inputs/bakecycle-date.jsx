@@ -1,7 +1,14 @@
 import React from 'react';
 import formMixin from './bakecycle-form-mixin';
-let DatePicker = require('react-datepicker');
-let moment = require('moment');
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+
+// Set the first day of the week to be a Monday to match all other calendars
+moment.updateLocale('en', {
+  week : {
+    dow : 1
+  }
+});
 
 let BCDate = React.createClass({
   mixins: [formMixin],
@@ -60,7 +67,7 @@ let BCDate = React.createClass({
           selected={date}
           onChange={this.onChangeDate}
           placeholderText={placeholder}
-          showTodayButton="Today"
+          todayButton="Today"
           className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
         />
 
