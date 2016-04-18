@@ -1,29 +1,34 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import PricesStore from '../stores/prices-store';
 import PriceFields from './product-price-fields';
 
-let ProductPriceForm = React.createClass({
-  getInitialState: function() {
-    let prices = new PricesStore(this.props.product.priceVariants);
+const ProductPriceForm = React.createClass({
+  propTypes: {
+    product: PropTypes.object.isRequired,
+    clients: PropTypes.array.isRequired,
+  },
+
+  getInitialState() {
+    const prices = new PricesStore(this.props.product.priceVariants);
     prices.addBlankForm();
     prices.on('change sort remove add', () => this.setState({ prices }));
     return { prices };
   },
 
-  willReceiveProps: function(nextProps) {
-    let prices = this.state.prices.set(nextProps.priceletiants);
+  willReceiveProps(nextProps) {
+    const prices = this.state.prices.set(nextProps.priceletiants);
     prices.addBlankForm();
   },
 
-  addPrice: function(event) {
+  addPrice(event) {
     event.preventDefault();
     this.state.prices.add({});
   },
 
-  render: function() {
-    let prices = this.state.prices;
-    let clients = this.props.clients;
-    let fields = prices.map((priceVariant) => {
+  render() {
+    const { prices } = this.state;
+    const { clients } = this.props;
+    const fields = prices.map((priceVariant) => {
       return <PriceFields key={priceVariant.cid} model={priceVariant} clients={clients} />;
     });
 
@@ -48,7 +53,7 @@ let ProductPriceForm = React.createClass({
           </div>
         </div>
         {fields}
-        <a href='#' onClick={this.addPrice} className="button" >Add New Price</a>
+        <a href="#" onClick={this.addPrice} className="button" >Add New Price</a>
       </fieldset>
     </div>);
   }

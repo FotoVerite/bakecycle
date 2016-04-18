@@ -22,5 +22,5 @@
 //= require foundation/foundation.alert
 //= require_tree ./jquery-components
 
-// Browserify'd app components
+// Browserify'd app components can't use import
 require('./app');

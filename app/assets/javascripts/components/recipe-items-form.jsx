@@ -1,18 +1,26 @@
-var React = require('react');
-var RecipeItemFields = require('./recipe-item-fields');
+import React from 'react';
+import RecipeItemFields from './recipe-item-fields';
 
-module.exports = React.createClass({
-  componentWillMount: function() {
+const { PropTypes } = React;
+
+const RecipeItemsForm = React.createClass({
+
+  propTypes: {
+    recipeItems: PropTypes.object,
+    recipe: PropTypes.object
+  },
+
+  componentWillMount() {
     this.placeholder = document.createElement('div');
     this.placeholder.className = 'draggable-placeholder';
   },
 
-  addItem: function(event) {
+  addItem(event) {
     event.preventDefault();
     this.props.recipeItems.add({});
   },
 
-  availableInclusions: function() {
+  availableInclusions() {
     if (this.props.recipe.get('recipeType') === 'dough') {
       return this.props.recipe.get('availableInclusions');
     } else {
@@ -20,7 +28,7 @@ module.exports = React.createClass({
     }
   },
 
-  dragStart: function(e) {
+  dragStart(e) {
     this.dragged = e.target;
     this.draggedOver = false;
     e.dataTransfer.effectAllowed = 'move';
@@ -28,7 +36,7 @@ module.exports = React.createClass({
     e.dataTransfer.setData('text/html', this.dragged);
   },
 
-  dragEnd: function() {
+  dragEnd() {
     this.dragged.style.display = 'block';
     this.placeholder.remove();
     if (!this.draggedOver) {
@@ -39,7 +47,7 @@ module.exports = React.createClass({
     this.props.recipeItems.move(draggedId, targetId, this.draggedPosition === 'after');
   },
 
-  dragOver: function(e) {
+  dragOver(e) {
     e.preventDefault();
     var over = $(e.target).closest('[draggable=true]').get(0);
     if (!over) {
@@ -62,8 +70,8 @@ module.exports = React.createClass({
     }
   },
 
-  render: function() {
-    var fields = this.props.recipeItems.map((model) => {
+  render() {
+    const fields = this.props.recipeItems.map((model) => {
       return (<RecipeItemFields
         key={model.cid}
         availableInclusions={this.availableInclusions()}
@@ -90,8 +98,10 @@ module.exports = React.createClass({
           </div>
         </div>
         {fields}
-        <a href='#' onClick={this.addItem} className="button" >Add New Ingredient</a>
+        <a href="#" onClick={this.addItem} className="button" >Add New Ingredient</a>
       </fieldset>
     </div>);
   }
 });
+
+export default RecipeItemsForm;

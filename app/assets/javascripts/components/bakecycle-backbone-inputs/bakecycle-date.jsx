@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import formMixin from './bakecycle-form-mixin';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -10,20 +10,21 @@ moment.updateLocale('en', {
   }
 });
 
-let BCDate = React.createClass({
+const BCDate = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: React.PropTypes.bool,
-    error: React.PropTypes.string,
-    field: React.PropTypes.string.isRequired,
-    label: React.PropTypes.string,
-    model: React.PropTypes.object.isRequired,
-    name: React.PropTypes.string.isRequired,
-    placeholder: React.PropTypes.string,
-    labelClass: React.PropTypes.string,
-    required: React.PropTypes.bool,
-    inline: React.PropTypes.bool,
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
+    field: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    model: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    labelClass: PropTypes.string,
+    required: PropTypes.bool,
+    inline: PropTypes.bool,
+    type: PropTypes.string
   },
 
   getDefaultProps() {
@@ -33,13 +34,13 @@ let BCDate = React.createClass({
   },
 
   onChangeDate(date) {
-    let data = {};
+    const data = {};
     data[this.props.field] = date && date.format();
     this.props.model.set(data);
   },
 
   render() {
-    let {
+    const {
       disabled,
       error,
       field,

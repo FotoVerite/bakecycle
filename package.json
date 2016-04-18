@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "npm run eslint",
-    "eslint": "eslint --ignore-pattern 'vendor/' app/assets/javascripts/"
+    "eslint": "eslint --ignore-pattern 'vendor/' app/assets/javascripts/ --ext .jsx,.js"
   },
   "dependencies": {
     "babel-plugin-transform-strict-mode": "^6.6.5",

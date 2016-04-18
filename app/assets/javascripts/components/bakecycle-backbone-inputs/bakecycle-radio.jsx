@@ -1,7 +1,7 @@
 import React from 'react';
 import formMixin from './bakecycle-form-mixin';
 
-let BCRadio = React.createClass({
+const BCRadio = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
@@ -16,18 +16,18 @@ let BCRadio = React.createClass({
   },
 
   makeRadio(option) {
-    let label = option[0];
-    let value = option[1];
+    const label = option[0];
+    const value = option[1];
 
-    let {
+    const {
       disabled,
       field,
       model,
       name,
     } = this.props;
 
-    let isChecked = String(model.get(field)) === String(value);
-    let id = `input-${field}-${model.cid}-${value}`;
+    const isChecked = String(model.get(field)) === String(value);
+    const id = `input-${field}-${model.cid}-${value}`;
 
     return (
       <span key={id}>
@@ -48,7 +48,7 @@ let BCRadio = React.createClass({
   },
 
   render() {
-    let {
+    const {
       error,
       options,
     } = this.props;

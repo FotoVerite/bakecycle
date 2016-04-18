@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import OrderItemsForm from './order-items-form';
 import { Order, OrderItems } from '../stores/order-store';
 import {BCDate, BCTextarea, BCSelect, BCRadio } from './bakecycle-backbone-inputs';
 
-let OrderForm = React.createClass({
+const OrderForm = React.createClass({
+  propTypes: {
+    order: PropTypes.object.isRequired,
+    availableClients: PropTypes.array.isRequired,
+    availableRoutes: PropTypes.array.isRequired,
+    availableProducts: PropTypes.array.isRequired,
+  },
+
   getInitialState() {
-    let order = new Order(this.props.order);
-    let items = new OrderItems(this.props.order.orderItems);
+    const order = new Order(this.props.order);
+    const items = new OrderItems(this.props.order.orderItems);
     items.addBlankForm();
     items.on('change sort remove add', () => this.setState({items}));
     order.on('change', () => this.setState({order}));
@@ -32,12 +39,12 @@ let OrderForm = React.createClass({
   },
 
   errorFor(field) {
-    let errors = this.state.order.get('errors');
+    const errors = this.state.order.get('errors');
     return errors[field] && errors[field][0];
   },
 
   showClients() {
-    let order = this.state.order;
+    const { order } = this.state;
     if (order.id) {
       return;
     }
@@ -46,10 +53,10 @@ let OrderForm = React.createClass({
         <div className="small-12 medium-4 columns">
           <BCSelect
             model={order}
-            field='clientId'
+            field="clientId"
             options={this.clientOptions()}
-            name='order[client_id]'
-            label='Client'
+            name="order[client_id]"
+            label="Client"
             required
             error={this.errorFor('client_id')}
           />
@@ -59,7 +66,7 @@ let OrderForm = React.createClass({
   },
 
   showLeadDays() {
-    let order = this.state.order;
+    const { order } = this.state;
     if (!order.id) {
       return;
     }
@@ -73,17 +80,16 @@ let OrderForm = React.createClass({
   },
 
   render() {
-    let order = this.state.order;
-
+    const { order } = this.state;
     let endDate;
     if (order.get('orderType') !== 'temporary') {
       endDate = (
         <div className="small-12 medium-4 columns">
           <BCDate
             model={order}
-            field='endDate'
-            name='order[end_date]'
-            label='End Date'
+            field="endDate"
+            name="order[end_date]"
+            label="End Date"
             placeholder="YYYY-MM-DD"
             error={this.errorFor('end_date')}
           />
@@ -99,10 +105,10 @@ let OrderForm = React.createClass({
           <div className="small-12 columns end">
             <BCRadio
               model={order}
-              field='orderType'
+              field="orderType"
               options={[['Standing', 'standing'], ['Temporary', 'temporary']]}
-              name='order[order_type]'
-              label='Order Type'
+              name="order[order_type]"
+              label="Order Type"
               required
               error={this.errorFor('order_type')}
             />
@@ -115,9 +121,9 @@ let OrderForm = React.createClass({
           <div className="small-12 medium-4 columns">
             <BCDate
               model={order}
-              field='startDate'
-              name='order[start_date]'
-              label='Start Date'
+              field="startDate"
+              name="order[start_date]"
+              label="Start Date"
               placeholder="YYYY-MM-DD"
               required
               error={this.errorFor('start_date')}
@@ -127,10 +133,10 @@ let OrderForm = React.createClass({
           <div className="small-12 medium-4 columns end">
             <BCSelect
               model={order}
-              field='routeId'
+              field="routeId"
               options={this.routesOptions()}
-              name='order[route_id]'
-              label='Route'
+              name="order[route_id]"
+              label="Route"
               required
               error={this.errorFor('route_id')}
             />

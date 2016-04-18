@@ -1,17 +1,20 @@
-let React = require('react');
+import React, { PropTypes } from 'react';
 
-let Marker = React.createClass({
-  render() {
-    let className = this.props.$hover ? 'map-marker hover' : 'map-marker';
-    return (
-      <div
-        className={className}
-        title={this.props.title}
-        onClick={this.props.onClick} >
-        {this.props.children}
-      </div>
-    );
-  }
-});
+export default function Marker({$hover, title, onClick, children}){
+  const className = $hover ? 'map-marker hover' : 'map-marker';
+  return (
+    <div
+      className={className}
+      title={title}
+      onClick={onClick} >
+      {children}
+    </div>
+  );
+}
 
-module.exports = Marker;
+Marker.propTypes = {
+  '$hover': PropTypes.bool,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
+  children: PropTypes.node,
+};

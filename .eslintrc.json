@@ -27,16 +27,20 @@
         "promise"
     ],
     "rules": {
+        "comma-dangle": ["error", "only-multiline"],
         "indent": ["error", 2],
+        "jsx-quotes": ["error", "prefer-double"],
         "linebreak-style": ["error", "unix"],
+        "no-nested-ternary": "error",
+        "no-var": "off",
+        "object-shorthand": ["error", "always"],
+        "object-shorthand": ["error", "always"],
+        "operator-assignment": ["error", "never"],
+        "prefer-const": "error",
         "quotes": ["error", "single"],
-        "semi": ["error", "always"],
-        "react/prop-types": 0,
-        "react/jsx-indent": [1, 2],
-        "object-shorthand": [2, "always"],
-        "operator-assignment": [2, "never"],
-        "jsx-quotes": [2, "prefer-double"],
-        "no-nested-ternary": 2,
-        "no-var": 0
+        "react/jsx-indent": ["error", 2],
+        "react/prefer-stateless-function": ["warn"],
+        "react/prop-types": "error",
+        "semi": ["error", "always"]
     }
 }

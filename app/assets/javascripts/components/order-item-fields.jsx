@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
 
-module.exports = React.createClass({
+const OrderItemFields = React.createClass({
+  propTypes: {
+    model: PropTypes.object.isRequired,
+    temporaryOrder: PropTypes.bool.isRequired,
+    availableProducts: PropTypes.array.isRequired,
+    startDate: PropTypes.string,
+  },
+
   toggleDestroy(e) {
     e.preventDefault();
     var model = this.props.model;
@@ -127,3 +134,5 @@ module.exports = React.createClass({
     );
   },
 });
+
+export default OrderItemFields;

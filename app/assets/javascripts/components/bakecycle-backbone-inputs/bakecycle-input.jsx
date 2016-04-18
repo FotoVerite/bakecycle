@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import formMixin from './bakecycle-form-mixin';
 
-const {PropTypes} = React;
-
-let BCInput = React.createClass({
+const BCInput = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
@@ -28,7 +26,7 @@ let BCInput = React.createClass({
   },
 
   render() {
-    let {
+    const {
       disabled,
       error,
       field,

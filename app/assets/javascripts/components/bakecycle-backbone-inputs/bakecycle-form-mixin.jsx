@@ -1,30 +1,30 @@
 import React from 'react';
 
 export default {
-  requiredClass: function() {
+  requiredClass() {
     return this.props.required ? 'required' : 'optional';
   },
 
-  onChange: function(event) {
+  onChange(event) {
     if (this.props.model) {
-      let data = {};
+      const data = {};
       data[this.props.field] = event.target.value;
       this.props.model.set(data);
     }
   },
 
-  label: function() {
-    let model = this.props.model;
-    let {
+  label() {
+    const {
       required,
       label,
       field,
-      labelClass
+      model,
+      labelClass,
     } = this.props;
-    labelClass = labelClass || '';
+
     if (label) {
       return (
-        <label className={`${labelClass} ${this.requiredClass()}`} htmlFor={`input-${field}-${model.cid}`}>
+        <label className={`${labelClass || ''} ${this.requiredClass()}`} htmlFor={`input-${field}-${model.cid}`}>
           {label} { required ? <abbr title="required">*</abbr> : '' }
         </label>
       );

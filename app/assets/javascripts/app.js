@@ -1,6 +1,5 @@
 // Polyfills for older browsers
-import polyFill from './util/poly-fill';
-polyFill();
+import 'classlist-polyfill';
 
 // 3rd party library code
 import React from 'react';
@@ -15,9 +14,9 @@ import ClientsTable from './components/clients-table';
 import ClientMap from './components/client-map';
 
 // React Component Loader
-let componentsToRender = window.reactComponents || [];
+const componentsToRender = window.reactComponents || [];
 
-let components = {
+const bcComponents = window.bcComponents =  {
   ProductPriceForm,
   OrderForm,
   RecipeForm,
@@ -27,5 +26,5 @@ let components = {
 };
 
 componentsToRender.forEach(([name, props, node]) => {
-  ReactDOM.render(React.createElement(components[name], props), node);
+  ReactDOM.render(React.createElement(bcComponents[name], props), node);
 });

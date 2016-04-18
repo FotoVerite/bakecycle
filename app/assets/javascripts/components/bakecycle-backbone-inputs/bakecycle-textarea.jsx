@@ -1,7 +1,7 @@
 import React from 'react';
 import formMixin from './bakecycle-form-mixin';
 
-var BCTextArea = React.createClass({
+const BCTextArea = React.createClass({
   displayName: 'BCTextArea',
   mixins: [formMixin],
 
@@ -16,8 +16,8 @@ var BCTextArea = React.createClass({
     required: React.PropTypes.bool
   },
 
-  render: function() {
-    let {
+  render() {
+    const {
       disabled,
       error,
       field,

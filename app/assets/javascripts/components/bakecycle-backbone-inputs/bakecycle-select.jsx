@@ -1,7 +1,7 @@
 import React from 'react';
 import formMixin from './bakecycle-form-mixin';
 
-let BCSelect =  React.createClass({
+const BCSelect =  React.createClass({
   displayName: 'BCSelect',
   mixins: [formMixin],
 
@@ -18,8 +18,8 @@ let BCSelect =  React.createClass({
     includeBlank: React.PropTypes.string
   },
 
-  render: function() {
-    let {
+  render() {
+    const {
       disabled,
       error,
       field,

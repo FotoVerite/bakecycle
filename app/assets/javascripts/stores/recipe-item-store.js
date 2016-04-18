@@ -1,9 +1,9 @@
-var Backbone = require('backbone');
-var _ = require('underscore');
+import Backbone from 'backbone';
+import _ from 'underscore';
 
-var RecipeItem = Backbone.Model.extend({
+const RecipeItem = Backbone.Model.extend({
   defaults() {
-    var sortId = this.collection ? this.collection.nextSortId() : this.getNumericCID();
+    const sortId = this.collection ? this.collection.nextSortId() : this.getNumericCID();
     return { sortId };
   },
 
@@ -12,7 +12,7 @@ var RecipeItem = Backbone.Model.extend({
   },
 
   getError(field) {
-    var errors = this.get('errors') || {};
+    const errors = this.get('errors') || {};
     if (_.isArray(errors[field])) {
       return errors[field][0];
     }
@@ -20,7 +20,7 @@ var RecipeItem = Backbone.Model.extend({
   }
 });
 
-var RecipeItemStore = Backbone.Collection.extend({
+const RecipeItemStore = Backbone.Collection.extend({
   initialize() {
     this.on('change:destroy', this.onToggleDestroy);
   },
@@ -34,11 +34,11 @@ var RecipeItemStore = Backbone.Collection.extend({
   model: RecipeItem,
 
   move(cid, targetCid, after) {
-    var movedItem = this.get(cid);
-    var targetItem = this.get(targetCid);
+    const movedItem = this.get(cid);
+    const targetItem = this.get(targetCid);
     if (!movedItem || !targetItem) { return; }
-    var sorted = this.without(movedItem);
-    var newIndex = _.indexOf(sorted, targetItem);
+    const sorted = this.without(movedItem);
+    let newIndex = _.indexOf(sorted, targetItem);
     if (after) {
       newIndex = newIndex + 1;
     }
@@ -49,7 +49,7 @@ var RecipeItemStore = Backbone.Collection.extend({
 
   nextSortId() {
     if (this.length === 0) { return 0; }
-    var lastItem = this.max(function(model) {return model.get('sortId');});
+    const lastItem = this.max(function(model) {return model.get('sortId');});
     return Number(lastItem.get('sortId')) + 1;
   },
 
@@ -65,4 +65,4 @@ var RecipeItemStore = Backbone.Collection.extend({
   }
 });
 
-module.exports = RecipeItemStore;
+export default RecipeItemStore;

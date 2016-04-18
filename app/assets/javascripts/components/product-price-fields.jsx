@@ -1,37 +1,45 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
 
-var ProductPriceField = React.createClass({
-  errorFor: function(field) {
+const ProductPriceField = React.createClass({
+  propTypes: {
+    errors: PropTypes.object.isRequired,
+    model: PropTypes.object.isRequired,
+    clients: PropTypes.array.isRequired
+  },
+
+  errorFor(field) {
     if (!this.props.errors[field]) { return; }
     return (<small className="error">{this.props.errors[field]}</small>);
   },
 
-  toggleDestroy: function() {
-    var model = this.props.model;
-    var destroy = model.get('destroy');
+  toggleDestroy() {
+    const model = this.props.model;
+    const destroy = model.get('destroy');
     model.set({ destroy: !destroy });
   },
 
-  render: function() {
-    var model = this.props.model;
-    var { id, destroy } = model.toJSON();
-    var clients = this.props.clients.map((client) => {
+  render() {
+    const model = this.props.model;
+    const { id, destroy } = model.toJSON();
+    const clients = this.props.clients.map((client) => {
       return <option key={`client-${model.getNumericCID()}-${client.id}`} value={client.id}>{client.name}</option>;
     });
     clients.unshift(<option key={`client-${model.getNumericCID()}-all`} value="">All</option>);
-    var namePrefix = `product[price_variants_attributes][${model.getNumericCID()}]`;
-    var disabledClass = destroy ? 'disabled' : '';
+    const namePrefix = `product[price_variants_attributes][${model.getNumericCID()}]`;
+    const disabledClass = destroy ? 'disabled' : '';
 
-    var undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
-    var removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
+    const undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
+    const removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
 
+    let idField;
     if (id) {
-      var idField = <input type="hidden" name={`${namePrefix}[id]`} value={id} />;
+      idField = <input type="hidden" name={`${namePrefix}[id]`} value={id} />;
     }
 
+    let destroyField;
     if (destroy) {
-      var destroyField = <input type="hidden" name={`${namePrefix}[_destroy]`} value="true" />;
+      destroyField = <input type="hidden" name={`${namePrefix}[_destroy]`} value="true" />;
     }
 
     return (<div className={`fields ${disabledClass}`}>

@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Model as FileExportStore } from 'backbone';
 
-let FileExportRefresher = React.createClass({
+const FileExportRefresher = React.createClass({
+  propTypes: {
+    links: PropTypes.object.isRequired,
+    loadingMessage: PropTypes.string.isRequired,
+  },
+
   getInitialState() {
     return {
       status: '',

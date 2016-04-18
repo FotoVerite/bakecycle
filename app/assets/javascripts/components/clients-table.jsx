@@ -1,12 +1,12 @@
-let React = require('react');
-let _ = require('underscore');
+import React, { PropTypes } from 'react';
+import _ from 'underscore';
 
 function filterClients(collection, filter) {
   function nameMatch(client) {
-    let name = client.name.toLowerCase();
-    let search = filter.name.toLowerCase();
+    const name = client.name.toLowerCase();
+    const search = filter.name.toLowerCase();
 
-    let searchChars = _.reject(search.split(''), char => char === ' ');
+    const searchChars = _.reject(search.split(''), char => char === ' ');
     let lastPostion = 0;
     return !_.detect(searchChars, char => {
       lastPostion = name.indexOf(char, lastPostion) + 1;
@@ -17,7 +17,7 @@ function filterClients(collection, filter) {
   }
 
   function activeMatch(client) {
-    let activeSearch = filter.active;
+    const activeSearch = filter.active;
     if (activeSearch === 'any') {
       return true;
     }
@@ -31,16 +31,20 @@ function filterClients(collection, filter) {
   return _.filter(collection, matchAll);
 }
 
-var ClientsTable = React.createClass({
+const ClientsTable = React.createClass({
+  propTypes: {
+    data: PropTypes.object.isRequired,
+  },
+
   getInitialState() {
-    let clients = this.props.data;
-    let search = { active: 'true', name: '' };
-    let filteredClients = filterClients(clients, search);
+    const clients = this.props.data;
+    const search = { active: 'true', name: '' };
+    const filteredClients = filterClients(clients, search);
     return { clients, search, filteredClients };
   },
 
   setSearch(search) {
-    let filteredClients = filterClients(this.state.clients, search);
+    const filteredClients = filterClients(this.state.clients, search);
     this.setState({ filteredClients, search });
   },
 
@@ -65,7 +69,7 @@ var ClientsTable = React.createClass({
 
   chooseName(e) {
     if (e.key !== 'Enter') { return; }
-    let clients = this.state.filteredClients;
+    const clients = this.state.filteredClients;
     if (clients.length === 1) {
       document.location.href = clients[0].links.view;
     }
@@ -156,4 +160,4 @@ var ClientsTable = React.createClass({
   }
 });
 
-module.exports = ClientsTable;
+export default ClientsTable;
