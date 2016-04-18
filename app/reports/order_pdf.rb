@@ -18,7 +18,10 @@ class OrderPdf < BasePdfReport
   def order_header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
-    grid([0, 9], [0, 11]).bounding_box { text "Order", size: 40 }
+    grid([0, 8], [0, 11]).bounding_box do
+      text(@order.client.name, size: 15, align: :right, style: :bold)
+      text("#{@order.order_type.titleize} Order", size: 15, align: :right, style: :italic)
+    end
   end
 
   def information
@@ -30,7 +33,7 @@ class OrderPdf < BasePdfReport
   end
 
   def information_rows
-    [["Client", "Type", "Route", "Start Date", "End Date"]] +
+    [["Client", "Order Type", "Route", "Start Date", "End Date"]] +
       [[
         @order.client.name, @order.order_type.capitalize, @order.route_name, @order.start_date,
         @order.end_date
@@ -53,13 +56,11 @@ class OrderPdf < BasePdfReport
 
   def order_items_rows(order_items)
     header = ["Product", "Unit Price", "Order Price", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    rows = order_items.map do |item|
-      item_row(item)
-    end
-    rows.unshift(header)
+    [header] + order_items.map { |item| item_row(item) }.compact
   end
 
   def item_row(item)
+    return if item.total_quantity == 0
     item = item.decorate
     [
       item.product.name,

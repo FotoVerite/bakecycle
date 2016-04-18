@@ -51,7 +51,7 @@ const BCDate = React.createClass({
       type,
     } = this.props;
 
-    let date = model.get(field) && moment(model.get(field));
+    const date = model.get(field) && moment(model.get(field));
 
     return (
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
