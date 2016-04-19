@@ -74,9 +74,7 @@ const FileExportRefresher = React.createClass({
         <h1>The report is ready!</h1>
         <p>
           It should begine downloading in a moment.
-          If it doesn't you can
-          <a href={this.state.links.file} className="underlined-link">click here</a>
-          to download it now.
+          If it doesn't you can <a href={this.state.links.file} className="underlined-link">click here</a> to download it now.
         </p>
       </div>
     );
