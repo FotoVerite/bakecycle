@@ -60,13 +60,12 @@ class DeliveryListPdf < BasePdfReport
 
   def client_rows
     rows = []
-
     @recipes.route_shipment_clients(@route).each do |client|
       rows << [
         client.name,
         client.primary_contact_name,
         client.primary_contact_phone,
-        client.full_delivery_address,
+        client.delivery_address.full,
         nil
       ]
       rows << client_notes_row(client) if client.notes.present?

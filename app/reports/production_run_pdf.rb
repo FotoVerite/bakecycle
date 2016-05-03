@@ -1,5 +1,6 @@
 class ProductionRunPdf < BasePdfReport
   include WeightDisplayer
+  attr_reader :run_data
 
   def initialize(run_data)
     @run_data = run_data
@@ -31,7 +32,7 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def run_label
-    return "Production Run ##{@run_data.id}" if @run_data.id
+    return "Production Run ##{run_data.id}" if run_data.id
     "Production Run PROJECTION"
   end
 
@@ -44,7 +45,7 @@ class ProductionRunPdf < BasePdfReport
   def production_run_info
     font_size 10
     text run_label
-    text "#{@run_data.start_date} - #{@run_data.end_date}"
+    text "#{run_data.start_date} - #{run_data.end_date}"
     move_down 15
   end
 
@@ -57,7 +58,7 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def products
-    @run_data.products.each do |product_type|
+    run_data.products.each do |product_type|
       products_table(product_type)
       move_down 15
     end
@@ -89,19 +90,19 @@ class ProductionRunPdf < BasePdfReport
   end
 
   def recipe_data_with_single_preferment_page
-    @run_data.recipes_without_preferments.each do |motherdough|
+    run_data.recipes_without_preferments.each do |motherdough|
       RecipeDataPage.new(self, motherdough).render
     end
     render_preferment_pages
   end
 
   def recipe_data_with_preferments
-    @run_data.recipes.each do |motherdough|
+    run_data.recipes.each do |motherdough|
       RecipeDataPage.new(self, motherdough).render
     end
   end
 
   def render_preferment_pages
-    PrefermentDataPage.new(self, @run_data.preferments).render if @run_data.preferments.any?
+    PrefermentDataPage.new(self, run_data.preferments).render if run_data.preferments.any?
   end
 end
