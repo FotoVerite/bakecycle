@@ -1,0 +1,7 @@
+title: BakeCycle Entity Relationship Diagram
+filename: bakecycle-erd
+filetype: pdf
+orientation: vertical
+notation: simple
+attributes: content
+polymorphism: true

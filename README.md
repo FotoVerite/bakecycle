@@ -55,3 +55,5 @@ See (and modify) `dev_data.rake` to see what development data gets loaded. It cr
 
 You can use the user `admin@example.com` or `user@example.com` with the password `foobarbaz`
 
+## ERD Diagram
+Run `bundle exec erd` to generate

@@ -22,3 +22,4 @@ config/database.yml
 .envrc
 
 node_modules
+bakecycle-erd.pdf

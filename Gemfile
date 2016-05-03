@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
 ruby "2.2.2"
-
 gem "active_model_serializers", "~>0.9.3"
 gem "airbrake"
 gem "aws-sdk", "< 2.0"
@@ -26,11 +25,12 @@ gem "prawn"
 gem "prawn-table"
 gem "pundit"
 gem "rails", "4.2.6"
-gem "stripe"
+gem "rails-erd", require: false
 gem "resque", "~> 1.26.0", require: "resque/server"
 gem "riif"
 gem "sass-rails"
 gem "simple_form"
+gem "stripe"
 gem "uglifier", ">= 1.3.0"
 gem "unicorn", require: false
 gem "unitwise-193", require: "unitwise"
