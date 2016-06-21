@@ -1,40 +1,37 @@
 import React from 'react';
+import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
 const BCRadio = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: React.PropTypes.bool,
-    error: React.PropTypes.string,
-    field: React.PropTypes.string.isRequired,
-    label: React.PropTypes.string,
-    model: React.PropTypes.object.isRequired,
-    name: React.PropTypes.string.isRequired,
+    ...formMixin.mixinPropTypes,
     options: React.PropTypes.array.isRequired,
-    required: React.PropTypes.bool
   },
 
   makeRadio(option) {
     const label = option[0];
-    const value = option[1];
+    const labelValue = option[1];
 
     const {
       disabled,
       field,
-      model,
+      value,
       name,
     } = this.props;
 
-    const isChecked = String(model.get(field)) === String(value);
-    const id = `input-${field}-${model.cid}-${value}`;
+    const cid = uniqueId();
+
+    const isChecked = String(value) === String(labelValue);
+    const id = `input-${field}-${cid}-${value}`;
 
     return (
       <span key={id}>
         <input
           id={id}
           type="radio"
-          value={value}
+          value={labelValue}
           checked={isChecked}
           name={name}
           disabled={disabled}
@@ -53,9 +50,11 @@ const BCRadio = React.createClass({
       options,
     } = this.props;
 
+    const cid = uniqueId();
+
     return (
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
-        {this.label()}
+        {this.label(cid)}
         {options.map(this.makeRadio)}
         {error ? <small className="error">{error}</small> : ''}
       </div>

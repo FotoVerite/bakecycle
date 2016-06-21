@@ -31,10 +31,6 @@ Circle CI deploys our staging env. The deploy script, pushes, migrates and resta
 
 `rake deploy:staging` or `rake deploy:production`
 
-## Bower
-
-List packages in the `Bowerfile` and then run  `rake bower:install` to install them.
-
 ## Direnv
 
 Is great, use it.
@@ -57,3 +53,9 @@ You can use the user `admin@example.com` or `user@example.com` with the password
 
 ## ERD Diagram
 Run `bundle exec erd` to generate
+
+## Integration tests
+
+We use cucumber to run the integration tests. You can tag any test with `@javascript` to use a headless web browser and `@javascript @firefox` to use firefox.
+
+HTML and png screenshots are taken on test failures and are available as test artifacts on the CI

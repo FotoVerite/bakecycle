@@ -39,7 +39,7 @@ When(/^I fill out the price variant form with:$/) do |table|
     ".price:last" => pricev["price"],
     ".quantity:last" => pricev["quantity"]
   )
-  select pricev[:client], from: "input-clientId-c1"
+  select pricev[:client], from: "input-clientId-1"
 end
 
 Then(/^I click on the last price's remove button$/) do

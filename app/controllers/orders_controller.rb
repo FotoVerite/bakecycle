@@ -15,7 +15,6 @@ class OrdersController < ApplicationController
   def new
     @order = policy_scope(Order).build(client: client, order_type: "standing", start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
-    @order.order_items.build
     authorize @order
   end
 

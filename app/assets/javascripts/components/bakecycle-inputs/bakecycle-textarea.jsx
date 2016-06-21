@@ -1,4 +1,5 @@
 import React from 'react';
+import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
 const BCTextArea = React.createClass({
@@ -6,14 +7,7 @@ const BCTextArea = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: React.PropTypes.bool,
-    error: React.PropTypes.string,
-    field: React.PropTypes.string.isRequired,
-    inline: React.PropTypes.bool,
-    label: React.PropTypes.string,
-    model: React.PropTypes.object.isRequired,
-    name: React.PropTypes.string.isRequired,
-    required: React.PropTypes.bool
+    ...formMixin.mixinPropTypes,
   },
 
   render() {
@@ -22,19 +16,21 @@ const BCTextArea = React.createClass({
       error,
       field,
       inline,
-      model,
+      value,
       name,
     } = this.props;
 
+    const cid = uniqueId();
+
     return (
       <div className={`input ${this.requiredClass()} ${error ? 'error' : ''}`}>
-        {this.label()}
+        {this.label(cid)}
         <textarea
-          id={`input-${field}-${model.cid}`}
+          id={`input-${field}-${cid}`}
           className={`textarea ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}
-          value={model.get(field)}
+          value={value}
           disabled={disabled}
         />
         {error ? <small className="error">{error}</small> : ''}

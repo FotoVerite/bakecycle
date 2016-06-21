@@ -43,7 +43,6 @@ end
 When(/^I edit the order form with:$/) do |table|
   choose table.hashes[0]["order_type"].titleize
   order = table.hashes[0]
-  fill_in "Start Date", with: ""
   fill_in "Start Date", with: order["start_date"]
 end
 
@@ -62,17 +61,17 @@ When(/^I fill out the order item form with:$/) do |table|
     ".fields:last .thursday" => form["thursday"],
     ".fields:last .friday" => form["friday"],
     ".fields:last .saturday" => form["saturday"],
-    ".fields:last .sunday" => form["sunday"],
-    ".fields:last select" => form["product"]
+    ".fields:last .sunday" => form["sunday"]
   )
+  all("option", text: form["product"]).last.select_option
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|
   form = table.hashes[0]
   jquery_fill(
-    ".fields:last .select" => form["product"],
     ".fields:last .friday_input" => form["friday"]
   )
+  all("option", text: form["product"]).last.select_option
 end
 
 When(/^I delete "(.*?)" order item$/) do |name|

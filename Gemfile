@@ -33,7 +33,7 @@ gem "simple_form"
 gem "stripe"
 gem "uglifier", ">= 1.3.0"
 gem "unicorn", require: false
-gem "unitwise-193", require: "unitwise"
+gem "unitwise", require: "unitwise"
 gem "will_paginate", "~> 3.0.6"
 gem "wizarddev-heroku"
 

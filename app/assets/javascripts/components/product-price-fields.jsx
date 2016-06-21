@@ -1,16 +1,10 @@
 import React, { PropTypes } from 'react';
-import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
+import { BCInput, BCSelect } from './bakecycle-inputs';
 
 const ProductPriceField = React.createClass({
   propTypes: {
-    errors: PropTypes.object.isRequired,
     model: PropTypes.object.isRequired,
     clients: PropTypes.array.isRequired
-  },
-
-  errorFor(field) {
-    if (!this.props.errors[field]) { return; }
-    return (<small className="error">{this.props.errors[field]}</small>);
   },
 
   toggleDestroy() {
@@ -21,7 +15,9 @@ const ProductPriceField = React.createClass({
 
   render() {
     const model = this.props.model;
-    const { id, destroy } = model.toJSON();
+    const onChange = model.set.bind(model);
+    const data = model.toJSON();
+    const { id, destroy } = data;
     const clients = this.props.clients.map((client) => {
       return <option key={`client-${model.getNumericCID()}-${client.id}`} value={client.id}>{client.name}</option>;
     });
@@ -51,13 +47,14 @@ const ProductPriceField = React.createClass({
             Client
           </label>
           <BCSelect
-            model={model}
+            value={data.clientId}
             field="clientId"
             options={clients}
             name={`${namePrefix}[client_id]`}
             type="number"
             error={model.getError('client_id')}
             disabled={destroy}
+            onChange={onChange}
           />
         </div>
         <div className="small-12 medium-3 columns">
@@ -65,7 +62,7 @@ const ProductPriceField = React.createClass({
             Minimum Quantity <abbr title="required">*</abbr>
           </label>
           <BCInput
-            model={model}
+            value={data.quantity}
             field="quantity"
             name={`${namePrefix}[quantity]`}
             type="number"
@@ -73,6 +70,7 @@ const ProductPriceField = React.createClass({
             placeholder="0"
             disabled={destroy}
             required
+            onChange={onChange}
           />
         </div>
         <div className="small-12 medium-3 columns">
@@ -80,7 +78,7 @@ const ProductPriceField = React.createClass({
             Price <abbr title="required">*</abbr>
           </label>
           <BCInput
-            model={model}
+            value={data.price}
             field="price"
             name={`${namePrefix}[price]`}
             type="number"
@@ -88,6 +86,7 @@ const ProductPriceField = React.createClass({
             placeholder="0.00"
             disabled={destroy}
             required
+            onChange={onChange}
           />
         </div>
         <div className="small-12 medium-1 columns end">

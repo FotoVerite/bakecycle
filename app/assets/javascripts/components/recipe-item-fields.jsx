@@ -1,14 +1,22 @@
 import React, { PropTypes } from 'react';
-import { BCInput, BCSelect } from './bakecycle-backbone-inputs';
+import { BCInput, BCSelect } from './bakecycle-inputs';
 
-export default function RecipeItemFields({ availableInclusions, dragEnd, dragStart, model }) {
-  var {
+export default function RecipeItemFields({
+  availableInclusions,
+  dragEnd,
+  dragStart,
+  model,
+}) {
+  const data = model.toJSON();
+  const {
     id,
     inclusionableTypeDisplay,
     sortId,
     destroy,
     totalLeadDays,
-  } = model.toJSON();
+  } = data;
+
+  const onChange = model.set.bind(model);
 
   const toggleDestroy = () => {
     var destroy = model.get('destroy');
@@ -37,7 +45,7 @@ export default function RecipeItemFields({ availableInclusions, dragEnd, dragSta
       <div className="small-12 medium-4 columns">
         <i className="drag-handle fi-record inline"></i>
         <BCSelect
-          model={model}
+          value={data['inclusionableIdType']}
           field="inclusionableIdType"
           name={`${namePrefix}[inclusionable_id_type]`}
           options={recipeOptions}
@@ -45,11 +53,12 @@ export default function RecipeItemFields({ availableInclusions, dragEnd, dragSta
           disabled={destroy}
           required
           inline
+          onChange={onChange}
         />
       </div>
       <div className="small-12 medium-2 columns">
         <BCInput
-          model={model}
+          value={data['bakersPercentage']}
           field="bakersPercentage"
           name={`${namePrefix}[bakers_percentage]`}
           type="number"
@@ -57,6 +66,7 @@ export default function RecipeItemFields({ availableInclusions, dragEnd, dragSta
           placeholder="0"
           disabled={destroy}
           required
+          onChange={onChange}
         />
       </div>
 

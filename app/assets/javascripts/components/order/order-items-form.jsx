@@ -1,21 +1,29 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import OrderItemFields from './order-item-fields';
+import * as orderActions from '../../actions/order';
 
-export default function OrderItemsForm({ temporaryOrder, startDate, nestedItems, availableProducts }) {
-  const fields = nestedItems.map((model) => {
+const OrderItemsForm = ({
+    addOrderItem,
+    availableProducts,
+    orderItems,
+    orderType,
+    startDate,
+    toggleDestroy,
+    updateOrderItem,
+  }) => {
+  const fields = orderItems.map((model, index) => {
     return (<OrderItemFields
-      key={`orderitem-${model.cid}`}
+      addOrderItem={addOrderItem}
       availableProducts={availableProducts}
+      key={`orderitem-${index}`}
       model={model}
-      temporaryOrder={temporaryOrder}
+      onChange={updateOrderItem.bind(null, model)}
       startDate={startDate}
+      temporaryOrder={orderType === 'temporary'}
+      toggleDestroy={toggleDestroy}
     />);
   });
-
-  const addItem = (event) => {
-    event.preventDefault();
-    nestedItems.add({});
-  };
 
   return (
     <fieldset>
@@ -55,14 +63,29 @@ export default function OrderItemsForm({ temporaryOrder, startDate, nestedItems,
         </div>
       </div>
       {fields}
-      <a onClick={addItem} className="button" >Add Product</a>
     </fieldset>
   );
-}
+};
 
 OrderItemsForm.propTypes = {
-  nestedItems: PropTypes.object.isRequired,
-  temporaryOrder: PropTypes.bool.isRequired,
-  startDate: PropTypes.string.isRequired,
+  addOrderItem: PropTypes.func.isRequired,
   availableProducts: PropTypes.array.isRequired,
+  orderItems: PropTypes.array.isRequired,
+  orderType: PropTypes.string.isRequired,
+  toggleDestroy: PropTypes.func.isRequired,
+  updateOrderItem: PropTypes.func.isRequired,
+  startDate: PropTypes.string,
 };
+
+const stateToProps = state => {
+  const {availableProducts, orderItems, order} = state;
+  const {orderType, startDate} = order;
+  return {
+    availableProducts,
+    orderItems,
+    orderType,
+    startDate,
+  };
+};
+
+export default connect(stateToProps, orderActions)(OrderItemsForm);

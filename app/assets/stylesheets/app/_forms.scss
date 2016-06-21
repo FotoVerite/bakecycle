@@ -185,19 +185,8 @@ select.inline {
   }
 }
 
-.order-item-delete-button {
-  background: $bc-alizarin-crimson;
-  border-radius: 5px;
-  min-height: 40px;
-  padding: 10px 8px 8px;
+.order-item-action-button {
   text-align: center;
-  width: 100%;
-
-  a {
-    color: $white;
-    display: block;
-  }
-
   @media #{$large-up} {
     display: inline-block;
     width: 4%;

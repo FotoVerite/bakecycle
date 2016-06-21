@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
-import formMixin from './bakecycle-form-mixin';
-import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import React from 'react';
+import uniqueId from 'lodash.uniqueid';
+import formMixin from './bakecycle-form-mixin';
 
 // Set the first day of the week to be a Monday to match all other calendars
 moment.updateLocale('en', {
@@ -14,29 +15,13 @@ const BCDate = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: PropTypes.bool,
-    error: PropTypes.string,
-    field: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    model: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-    placeholder: PropTypes.string,
-    labelClass: PropTypes.string,
-    required: PropTypes.bool,
-    inline: PropTypes.bool,
-    type: PropTypes.string
-  },
-
-  getDefaultProps() {
-    return {
-      type: 'text'
-    };
+    ...formMixin.mixinPropTypes,
   },
 
   onChangeDate(date) {
     const data = {};
-    data[this.props.field] = date && date.format();
-    this.props.model.set(data);
+    data[this.props.field] = date && date.format('YYYY-MM-DD');
+    this.props.onChange(data);
   },
 
   render() {
@@ -45,31 +30,31 @@ const BCDate = React.createClass({
       error,
       field,
       inline,
-      model,
+      value,
       name,
       placeholder,
-      type,
     } = this.props;
 
-    const date = model.get(field) && moment(model.get(field));
+    const date = value && moment(value);
+    const cid = uniqueId();
 
     return (
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
-        {this.label()}
+        {this.label(cid)}
         <input
           type="hidden"
           name={name}
-          value={model.get(field)}
+          value={value}
           disabled={disabled}
         />
 
         <DatePicker
-          id={`input-${field}-${model.cid}`}
+          id={`input-${field}-${cid}`}
           selected={date}
           onChange={this.onChangeDate}
           placeholderText={placeholder}
           todayButton="Today"
-          className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
+          className={`text ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
         />
 
         {error ? <small className="error">{error}</small> : ''}

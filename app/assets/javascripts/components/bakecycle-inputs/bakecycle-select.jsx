@@ -1,4 +1,5 @@
 import React from 'react';
+import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
 const BCSelect =  React.createClass({
@@ -6,16 +7,9 @@ const BCSelect =  React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: React.PropTypes.bool,
-    error: React.PropTypes.string,
-    field: React.PropTypes.string.isRequired,
-    label: React.PropTypes.string,
-    model: React.PropTypes.object.isRequired,
-    name: React.PropTypes.string.isRequired,
+    ...formMixin.mixinPropTypes,
     options: React.PropTypes.array.isRequired,
-    required: React.PropTypes.bool,
-    inline: React.PropTypes.bool,
-    includeBlank: React.PropTypes.string
+    includeBlank: React.PropTypes.string,
   },
 
   render() {
@@ -23,12 +17,14 @@ const BCSelect =  React.createClass({
       disabled,
       error,
       field,
+      includeBlank,
       inline,
-      model,
+      value,
       name,
       options,
-      includeBlank
     } = this.props;
+
+    const cid = uniqueId();
 
     let blank;
     if (includeBlank) {
@@ -37,13 +33,13 @@ const BCSelect =  React.createClass({
 
     return (
       <div className={`input select ${this.requiredClass()} ${error ? 'error' : ''}`}>
-        {this.label()}
+        {this.label(cid)}
         <select
-          id={`input-${field}-${model.cid}`}
+          id={`input-${field}-${cid}`}
           className={`select ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}
-          value={model.get(field)}
+          value={value || ''}
           disabled={disabled}
         >
           {blank}

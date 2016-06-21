@@ -28,9 +28,7 @@ module Bakecycle
 
     # Browserify
     config.browserify_rails.source_map_environments = %w(development staging)
-    # rubocop:disable Metrics/LineLength
-    config.browserify_rails.commandline_options = '-t [ babelify --presets [ es2015 react ] --plugins [ transform-strict-mode ] ] --extension=".jsx"'
-    # rubocop:enable Metrics/LineLength
+    config.browserify_rails.commandline_options = '-t [ babelify ] --extension=".jsx"'
 
     # for bower stuff
     config.assets.paths << Rails.root.join("vendor", "assets", "bower_components")

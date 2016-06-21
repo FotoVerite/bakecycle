@@ -21,7 +21,7 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on the "Add Product" link
+    And I click on the "Add" link
     And I click on "Create"
     Then "You have created a standing order for mandos." should be present
     When I click on "Copy Order"
@@ -43,7 +43,7 @@ Feature: Orders
     And I fill out the order item form with:
       | product         | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | baguette cookie | 10     | 1       | 2         | 3        | 4      | 5        | 3      |
-    And I click on the "Add Product" link
+    And I click on the "Add" link
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
@@ -64,7 +64,7 @@ Feature: Orders
     When I am on the edit page for "mandos" order
     And I delete the first order item
     And I click on "Update"
-    And I click on the "Add Product" link
+    And I click on the "Add" link
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |

@@ -1,5 +1,7 @@
 machine:
   timezone: America/New_York
+  node:
+    version: 4.4
 deployment:
   staging:
     branch: master

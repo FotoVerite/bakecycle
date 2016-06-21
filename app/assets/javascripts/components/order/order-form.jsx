@@ -1,29 +1,20 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import * as orderActions from '../../actions/order';
 import OrderItemsForm from './order-items-form';
-import { Order, OrderItems } from '../stores/order-store';
-import {BCDate, BCTextarea, BCSelect, BCRadio } from './bakecycle-backbone-inputs';
+import {
+  BCDate,
+  BCRadio,
+  BCSelect,
+  BCTextarea,
+} from '../bakecycle-inputs';
 
 const OrderForm = React.createClass({
   propTypes: {
     order: PropTypes.object.isRequired,
     availableClients: PropTypes.array.isRequired,
     availableRoutes: PropTypes.array.isRequired,
-    availableProducts: PropTypes.array.isRequired,
-  },
-
-  getInitialState() {
-    const order = new Order(this.props.order);
-    const items = new OrderItems(this.props.order.orderItems);
-    items.addBlankForm();
-    items.on('change sort remove add', () => this.setState({items}));
-    order.on('change', () => this.setState({order}));
-    return { items, order };
-  },
-
-  willReceiveProps(nextProps) {
-    this.state.items.set(nextProps.orderItems);
-    this.state.items.addBlankForm();
-    this.state.order.set(nextProps);
+    updateOrder: PropTypes.func.isRequired,
   },
 
   clientOptions() {
@@ -39,12 +30,12 @@ const OrderForm = React.createClass({
   },
 
   errorFor(field) {
-    const errors = this.state.order.get('errors');
+    const { errors } = this.props.order;
     return errors[field] && errors[field][0];
   },
 
   showClients() {
-    const { order } = this.state;
+    const { order, updateOrder } = this.props;
     if (order.id) {
       return;
     }
@@ -52,13 +43,14 @@ const OrderForm = React.createClass({
       <div className="row">
         <div className="small-12 medium-4 columns">
           <BCSelect
-            model={order}
+            value={order.clientId}
             field="clientId"
             options={this.clientOptions()}
             name="order[client_id]"
             label="Client"
             required
             error={this.errorFor('client_id')}
+            onChange={updateOrder}
           />
         </div>
       </div>
@@ -66,32 +58,33 @@ const OrderForm = React.createClass({
   },
 
   showLeadDays() {
-    const { order } = this.state;
+    const { order } = this.props;
     if (!order.id) {
       return;
     }
     return (
       <div className="row">
         <div className="small-12 medium-6 columns">
-          <p><strong>Order Lead Days: {order.get('totalLeadDays')}</strong></p>
+          <p><strong>Order Lead Days: {order.totalLeadDays}</strong></p>
         </div>
       </div>
     );
   },
 
   render() {
-    const { order } = this.state;
+    const { order, updateOrder } = this.props;
     let endDate;
-    if (order.get('orderType') !== 'temporary') {
+    if (order.orderType !== 'temporary') {
       endDate = (
         <div className="small-12 medium-4 columns">
           <BCDate
-            model={order}
+            value={order.endDate}
             field="endDate"
             name="order[end_date]"
             label="End Date"
             placeholder="YYYY-MM-DD"
             error={this.errorFor('end_date')}
+            onChange={updateOrder}
           />
         </div>
       );
@@ -104,13 +97,14 @@ const OrderForm = React.createClass({
         <div className="row">
           <div className="small-12 columns end">
             <BCRadio
-              model={order}
+              value={order.orderType}
               field="orderType"
               options={[['Standing', 'standing'], ['Temporary', 'temporary']]}
               name="order[order_type]"
               label="Order Type"
               required
               error={this.errorFor('order_type')}
+              onChange={updateOrder}
             />
             <p className="help-text-order-type">
               Standing orders repeat every week, temporary orders override standing orders for a specific date
@@ -120,50 +114,52 @@ const OrderForm = React.createClass({
         <div className="row">
           <div className="small-12 medium-4 columns">
             <BCDate
-              model={order}
+              value={order.startDate}
               field="startDate"
               name="order[start_date]"
               label="Start Date"
               placeholder="YYYY-MM-DD"
               required
               error={this.errorFor('start_date')}
+              onChange={updateOrder}
             />
           </div>
           {endDate}
           <div className="small-12 medium-4 columns end">
             <BCSelect
-              model={order}
+              value={order.routeId}
               field="routeId"
               options={this.routesOptions()}
               name="order[route_id]"
               label="Route"
               required
               error={this.errorFor('route_id')}
+              onChange={updateOrder}
             />
           </div>
         </div>
         <div className="row">
           <div className="small-12 columns">
             <BCTextarea
-              model={order}
+              value={order.note}
               field="note"
               name="order[note]"
               label="Special Notes"
+              onChange={updateOrder}
             />
           </div>
         </div>
         {this.showLeadDays()}
       </fieldset>
-      <OrderItemsForm
-        model={this.state.order}
-        availableProducts={this.props.availableProducts}
-        nestedItems={this.state.items}
-        temporaryOrder={order.get('orderType') === 'temporary'}
-        startDate={order.get('startDate')}
-      />
+      <OrderItemsForm />
     </div>);
   }
 });
 
-export default OrderForm;
+const stateToProps = state => ({
+  order: state.order,
+  availableClients: state.availableClients,
+  availableRoutes: state.availableRoutes,
+});
 
+export default connect(stateToProps, orderActions)(OrderForm);

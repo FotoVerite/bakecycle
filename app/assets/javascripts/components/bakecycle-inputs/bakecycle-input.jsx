@@ -1,54 +1,42 @@
 import React, { PropTypes } from 'react';
+import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
 const BCInput = React.createClass({
   mixins: [formMixin],
 
   propTypes: {
-    disabled: PropTypes.bool,
-    error: PropTypes.string,
-    field: PropTypes.string.isRequired,
-    label: PropTypes.string,
-    model: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
-    placeholder: PropTypes.string,
-    labelClass: PropTypes.string,
-    required: PropTypes.bool,
+    ...formMixin.mixinPropTypes,
     type: PropTypes.string,
-    inline: PropTypes.bool,
     autoComplete: PropTypes.string,
-  },
-
-  getDefaultProps() {
-    return {
-      type: 'text'
-    };
   },
 
   render() {
     const {
+      autoComplete,
       disabled,
       error,
       field,
       inline,
-      model,
+      value,
       name,
       placeholder,
       type,
-      autoComplete,
     } = this.props;
+
+    const cid = uniqueId();
 
     return (
       <div className={`input ${this.requiredClass()} ${error ? 'error' : ''}`}>
-        {this.label()}
+        {this.label(cid)}
         <input
-          id={`input-${field}-${model.cid}`}
-          className={`${type} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
+          id={`input-${field}-${cid}`}
+          className={`${type || 'text'} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}
-          type={type}
+          type={type || 'text'}
           placeholder={placeholder}
-          value={model.get(field)}
+          value={value}
           disabled={disabled}
           autoComplete={autoComplete}
         />

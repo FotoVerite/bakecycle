@@ -8,7 +8,7 @@
   <% end %>
   <%= render 'updated', updated: @updated %>
 
-  <%= react_component('OrderForm', OrderForm.new(order: @order, user: current_user).serializable_hash) %>
+  <%= react_component('OrderFormProvider', OrderForm.new(order: @order, user: current_user).serializable_hash) %>
 
   <div class="row">
     <div class="small-12 columns">

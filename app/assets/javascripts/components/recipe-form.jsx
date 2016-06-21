@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Model as RecipeStore } from 'backbone';
 
-import { BCInput, BCTextarea, BCSelect } from './bakecycle-backbone-inputs';
+import { BCInput, BCTextarea, BCSelect } from './bakecycle-inputs';
 import RecipeItemsForm from './recipe-items-form';
 import RecipeItemStore from '../stores/recipe-item-store';
 
@@ -44,18 +44,20 @@ const RecipeForm = React.createClass({
 
   showLeadDays() {
     var recipe = this.state.recipe;
-    var { recipeType } = recipe.toJSON();
-    if (recipeType !== 'dough') { return; }
+    var data = recipe.toJSON();
+    if (data.recipeType !== 'dough') { return; }
     return (
       <div className="row">
         <div className="small-4 columns end">
           <BCInput
-            model={recipe}
+            value={data['leadDays']}
             field="leadDays"
             name="recipe[lead_days]"
             label="Lead Days"
             required
-            error={this.props.errors.lead_days} />
+            error={this.props.errors.lead_days}
+            onChange={recipe.set.bind(recipe)}
+          />
         </div>
       </div>
     );
@@ -76,64 +78,74 @@ const RecipeForm = React.createClass({
   },
 
   render() {
-    var recipe = this.state.recipe;
+    const recipe = this.state.recipe;
+    const data = recipe.toJSON();
+    const onChange = recipe.set.bind(recipe);
     return (<div>
       <fieldset>
         <legend>Recipe Information</legend>
         <div className="row">
           <div className="small-12 columns">
             <BCInput
-              model={recipe}
+              value={data['name']}
               field="name"
               name="recipe[name]"
               label="Name"
               required
               error={this.props.errors.name}
+              onChange={onChange}
             />
           </div>
         </div>
         <div className="row">
           <div className="small-12 columns">
             <BCTextarea
-              model={recipe}
+              value={data['note']}
               field="note"
               name="recipe[note]"
               label="Note"
               error={this.props.errors.note}
+              onChange={onChange}
             />
           </div>
         </div>
         <div className="row">
           <div className="small-4 columns">
             <BCSelect
-              model={recipe}
+              value={data['recipeType']}
               field="recipeType"
               options={this.recipeTypeOptions()}
               name="recipe[recipe_type]"
               label="Recipe type"
               required
-              error={this.props.errors.recipe_type} />
+              error={this.props.errors.recipe_type}
+              onChange={onChange}
+            />
           </div>
           <div className="small-4 columns">
             <BCInput
-              model={recipe}
+              value={data['mixSize']}
               field="mixSize"
               name="recipe[mix_size]"
               label="Mix Size"
               type="number"
-              error={this.props.errors.mix_size} />
+              error={this.props.errors.mix_size}
+              onChange={onChange}
+            />
             <p className="help-text">
               * Pre-ferment mix bowls will match motherdough bowls when only included in one motherdough
             </p>
           </div>
           <div className="small-4 columns">
             <BCSelect
-              model={recipe}
+              value={data['mixSizeUnit']}
               field="mixSizeUnit"
               options={this.mixUnitsOptions()}
               name="recipe[mix_size_unit]"
               label="Mix Units"
-              error={this.props.errors.mix_size_unit} />
+              error={this.props.errors.mix_size_unit}
+              onChange={onChange}
+            />
           </div>
         </div>
         {this.showLeadDays()}
