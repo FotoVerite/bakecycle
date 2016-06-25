@@ -14,7 +14,7 @@ export default function OrderItemFields({
 
   function onDestroy(e) {
     e.preventDefault();
-    toggleDestroy(model);
+    toggleDestroy();
   }
 
   function checkDisabled(dayNum) {

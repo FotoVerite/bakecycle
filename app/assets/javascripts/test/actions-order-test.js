@@ -1,6 +1,32 @@
 import {assert} from 'chai';
-import {toggleDestroy} from '../actions/order';
+import {updateOrderItem, toggleDestroy} from '../actions/order';
 import * as types from '../constants/action-types';
+
+describe('updateOrderItem', () => {
+  it('casts all non empty strings to numbers', () => {
+    assert.isDefined(types.ORDER_ITEM_UPDATE);
+    const item = {id: 4};
+    assert.deepEqual(updateOrderItem(item, {
+      productId: '4',
+      string: '',
+      destroy: false,
+      keep: true,
+      undef: undefined,
+      null: null,
+    }), {
+      type: types.ORDER_ITEM_UPDATE,
+      orderItem: item,
+      data: {
+        productId: 4,
+        string: '',
+        destroy: false,
+        keep: true,
+        undef: undefined,
+        null: null,
+      }
+    });
+  });
+});
 
 describe('toggleDestroy', () => {
   it('toggles destroy if the item has an id', () => {

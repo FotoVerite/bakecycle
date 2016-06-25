@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import differenceBy from 'lodash.differenceby';
 import OrderItemFields from './order-item-fields';
 import * as orderActions from '../../actions/order';
 
@@ -12,16 +13,21 @@ const OrderItemsForm = ({
     toggleDestroy,
     updateOrderItem,
   }) => {
+
+  const usedProducts = orderItems.map(item => item.productId);
+
   const fields = orderItems.map((model, index) => {
+    const removeProductIds = usedProducts.filter(p => p !== model.productId);
+    const productsForItem = differenceBy(availableProducts, removeProductIds, p => p && p.id || p);
     return (<OrderItemFields
       addOrderItem={addOrderItem}
-      availableProducts={availableProducts}
+      availableProducts={productsForItem}
       key={`orderitem-${index}`}
       model={model}
       onChange={updateOrderItem.bind(null, model)}
       startDate={startDate}
       temporaryOrder={orderType === 'temporary'}
-      toggleDestroy={toggleDestroy}
+      toggleDestroy={toggleDestroy.bind(null, model)}
     />);
   });
 

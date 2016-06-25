@@ -10,27 +10,31 @@ export var order = (state = {}, action) => {
 };
 
 export var orderItems = (state = [{}], action) => {
-  if (action.type === types.ORDER_ITEM_ADD) {
-    const newState = state.slice();
-    newState.push(action.data);
-    return newState;
-  }
-  if (action.type === types.ORDER_ITEM_UPDATE) {
-    return state.map(function(item){
-      if (item === action.orderItem) {
-        return Object.assign({}, item, action.data);
-      }
-      return item;
-    });
-  }
-  if (action.type === types.ORDER_ITEM_REMOVE) {
-    const newState = without(state, action.data);
-    if (newState.length === 0) {
-      newState.push({});
+  switch (action.type) {
+    case types.ORDER_ITEM_ADD: {
+      const newState = state.slice();
+      newState.push(action.data);
+      return newState;
     }
-    return newState;
+    case types.ORDER_ITEM_UPDATE: {
+      return state.map(function(item){
+        if (item === action.orderItem) {
+          return Object.assign({}, item, action.data);
+        }
+        return item;
+      });
+    }
+    case types.ORDER_ITEM_REMOVE: {
+      const newState = without(state, action.data);
+      if (newState.length === 0) {
+        newState.push({});
+      }
+      return newState;
+    }
+    default: {
+      return state;
+    }
   }
-  return state;
 };
 
 export var passthrough = (state = {}) => {

@@ -29,9 +29,13 @@
     ],
     "rules": {
         "comma-dangle": ["error", "only-multiline"],
-        "indent": ["error", 2],
+        "default-case": "error",
+        "indent": ["error", 2, {
+          "SwitchCase": 1
+        }],
         "jsx-quotes": ["error", "prefer-double"],
         "linebreak-style": ["error", "unix"],
+        "no-fallthrough": "error",
         "no-nested-ternary": "error",
         "no-var": "off",
         "object-shorthand": ["error", "always"],

@@ -1,4 +1,5 @@
 import * as types from '../constants/action-types';
+import mapValues from 'lodash.mapvalues';
 
 export function updateOrder(data) {
   data = Object.assign({}, data);
@@ -9,6 +10,12 @@ export function updateOrder(data) {
 }
 
 export function updateOrderItem(orderItem, data) {
+  data = mapValues(data, data => {
+    if (typeof data === 'string' && data !== '') {
+      return Number(data);
+    }
+    return data;
+  });
   return {
     type: types.ORDER_ITEM_UPDATE,
     orderItem,
