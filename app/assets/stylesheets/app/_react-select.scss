@@ -1,0 +1,10 @@
+.bakecycle-form {
+  @media #{$large-up} {
+    .Select {
+      margin-bottom: -13px;
+    }
+  }
+  .Select .Select-input > input {
+    border: 0 none;
+  }
+}

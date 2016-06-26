@@ -63,7 +63,9 @@ When(/^I fill out the order item form with:$/) do |table|
     ".fields:last .saturday" => form["saturday"],
     ".fields:last .sunday" => form["sunday"]
   )
-  all("option", text: form["product"]).last.select_option
+  product_selector = all(".select .productId input").last
+  product_selector.set(form["product"])
+  send_return(product_selector)
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|
@@ -71,29 +73,31 @@ When(/^I fill out the temporary order item form with:$/) do |table|
   jquery_fill(
     ".fields:last .friday_input" => form["friday"]
   )
-  all("option", text: form["product"]).last.select_option
+  product_selector = all(".select .productId input").last
+  product_selector.set(form["product"])
+  product_selector.native.send_keys(:return)
 end
 
-When(/^I delete "(.*?)" order item$/) do |name|
-  row = find(:xpath, "//option[@selected and text()='#{name}']/../../../..")
-  row.find("a", text: "X").click
-end
-
-When(/^I delete the first order item$/) do
-  all("a", text: "X").first.click
+When(/^I delete the "(.*?)" order item$/) do |product_name|
+  form = find(:xpath, "//span[text()='#{product_name}']/../../../../../..")
+  form.find("a", text: "X").click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
-  form = find(:xpath, "//select/option[@selected and text()='#{name}']/../../../..")
+  form = find(:xpath, "//span[text()='#{name}']/../../../../../..")
   form.find_field(day).set(quantity)
 end
 
 Then(/^the order item "(.*?)" should be present$/) do |name|
-  expect(page).to have_xpath("//select/option[@selected and text()='#{name}']")
+  within ".edit_order" do
+    expect(page).to have_content name
+  end
 end
 
 Then(/^the order item "(.*?)" should not be present$/) do |name|
-  expect(page).to have_no_selector(:xpath, "//select/option[@selected and text()='#{name}']")
+  within ".edit_order" do
+    expect(page).to_not have_content name
+  end
 end
 
 Then(/^The order "(.*?)" should not be present$/) do |order|

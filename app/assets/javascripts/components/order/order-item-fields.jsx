@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import uniqueId from 'lodash.uniqueid';
-import { BCInput, BCSelect } from '../bakecycle-inputs';
+import { BCInput, BCSearchableSelect } from '../bakecycle-inputs';
 
 export default function OrderItemFields({
     model,
@@ -88,9 +88,10 @@ export default function OrderItemFields({
     var idField = <input type="hidden" name={`${namePrefix}[id]`} value={id} />;
   }
 
-  var productOptions = availableProducts.map((product) => {
-    return <option key={`product-${product.id}`} value={product.id}>{product.name}</option>;
-  });
+  var productOptions = availableProducts.map(product => ({
+    value: product.id,
+    label: product.name,
+  }));
 
   return (
     <div className={`fields ${disabledClass}`} >
@@ -99,7 +100,7 @@ export default function OrderItemFields({
       <div className="row">
         <div className="small-12 columns">
           <div className="order-item-product-selection">
-            <BCSelect
+            <BCSearchableSelect
               value={model.productId}
               field="productId"
               name={`${namePrefix}[product_id]`}

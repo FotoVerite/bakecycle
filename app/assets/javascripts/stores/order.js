@@ -4,9 +4,7 @@ import orderReducer from '../reducers/order';
 const configureStore = initialState => {
   // take the order items off of the order so we can separate out the reducers
   const orderItems = initialState.order.orderItems;
-  if (orderItems.length === 0) {
-    orderItems.push({});
-  }
+  orderItems.push({});
   delete initialState.order.orderItems;
   return createStore(orderReducer, {
     ...initialState,

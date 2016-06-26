@@ -1,7 +1,10 @@
-// Made by a Wizard
+/* Made by a Wizard */
 @import 'vendor/jquery_ui';
 @import 'vendor/chosen';
+
+// Manually copied from the npm packages
 @import 'vendor/react-datepicker';
+@import 'vendor/react-select';
 
 @import 'base/font_setup';
 @import 'base/foundation_and_overrides';
@@ -10,7 +13,10 @@
 @import 'base/buttons';
 @import 'base/main';
 
+// Overrides to vendor styles
+@import 'app/react-select';
 @import 'app/chosen';
+
 @import 'app/dashboard';
 @import 'app/devise';
 @import 'app/file_exporter';

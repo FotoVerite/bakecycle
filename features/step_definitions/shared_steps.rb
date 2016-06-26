@@ -104,7 +104,7 @@ Given(/^I am on the "(.*?)" page$/) do |page|
 end
 
 Then(/^"(.*?)" button should be present "(.*?)" times$/) do |button_class, count|
-  have_css(".#{button_class}", count: count.to_i)
+  expect(page).to have_css(".#{button_class}", count: count.to_i)
 end
 
 Then(/^I should see "(.*?)" information about "(.*?)"$/) do |object, name|

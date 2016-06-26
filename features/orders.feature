@@ -1,6 +1,6 @@
 Feature: Orders
 
-  @javascript
+  @javascript @firefox
   Scenario: As a user with full access to orders
     Given I am logged in as an user with client "manage" access with a bakery called "biencuit"
     And There are "biencuit" bakery clients named "andysdecaf" and "mandos"
@@ -24,6 +24,7 @@ Feature: Orders
     And I click on the "Add" link
     And I click on "Create"
     Then "You have created a standing order for mandos." should be present
+    Then "baguette cookie" should be present
     When I click on "Copy Order"
     When I edit the order form with:
       | order_type | start_date |
@@ -49,7 +50,8 @@ Feature: Orders
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
     And I click on "Update"
     Then "You have updated the standing order for andysdecaf" should be present
-    When I delete "donut tart" order item
+    And "donut tart" should be present
+    When I delete the "donut tart" order item
     And I edit the order item "baguette cookie" "Mon" quantity with "10"
     And I click on "Update"
     Then the order item "baguette cookie" should be present
@@ -62,14 +64,11 @@ Feature: Orders
     And The order "andysdecaf" should not be present
 
     When I am on the edit page for "mandos" order
-    And I delete the first order item
-    And I click on "Update"
-    And I click on the "Add" link
     And I fill out the order item form with:
       | product    | monday | tuesday | wednesday | thursday | friday | saturday | sunday |
       | donut tart | 9      | 5       | 6         | 8        | 9      | 8        | 4      |
     And I click on "Update"
-    Then "remove_order_item" button should be present "2" times
+    Then "remove_order_item" button should be present "3" times
 
   Scenario: As a user with read access to orders
     Given I am logged in as an user with client "read" access with a bakery called "biencuit"
