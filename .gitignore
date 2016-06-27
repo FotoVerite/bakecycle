@@ -23,3 +23,5 @@ config/database.yml
 
 node_modules
 bakecycle-erd.pdf
+screenshot_*.png
+screenshot_*.html
