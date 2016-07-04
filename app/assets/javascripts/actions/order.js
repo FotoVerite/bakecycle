@@ -1,5 +1,6 @@
 import * as types from '../constants/action-types';
 import mapValues from 'lodash.mapvalues';
+import isFinite from 'lodash.isfinite';
 
 export function updateOrder(data) {
   data = Object.assign({}, data);
@@ -10,11 +11,14 @@ export function updateOrder(data) {
 }
 
 export function updateOrderItem(orderItem, data) {
-  data = mapValues(data, data => {
-    if (typeof data === 'string' && data !== '') {
-      return Number(data);
+  data = mapValues(data, (value, key) => {
+    if (typeof value === 'string' && value !== '') {
+      value = Number(value);
+      if (!isFinite(value)) {
+        return orderItem[key];
+      }
     }
-    return data;
+    return value;
   });
   return {
     type: types.ORDER_ITEM_UPDATE,

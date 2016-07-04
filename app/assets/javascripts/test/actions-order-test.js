@@ -12,6 +12,7 @@ describe('updateOrderItem', () => {
       destroy: false,
       keep: true,
       undef: undefined,
+      nan: 'NaN',
       null: null,
     }), {
       type: types.ORDER_ITEM_UPDATE,
@@ -22,9 +23,24 @@ describe('updateOrderItem', () => {
         destroy: false,
         keep: true,
         undef: undefined,
+        nan: undefined,
         null: null,
       }
     });
+  });
+
+  it('ignores updates that would produce a NaN', () => {
+    const item = {something: 4};
+    assert.deepEqual(updateOrderItem(item, {
+      something: 'notanumber',
+    }), {
+      type: types.ORDER_ITEM_UPDATE,
+      orderItem: item,
+      data: {
+        something: 4,
+      }
+    });
+
   });
 });
 
