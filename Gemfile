@@ -24,8 +24,7 @@ gem "pg"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "4.2.6"
-gem "rails-erd", require: false
+gem "rails", "4.2.7.1"
 gem "resque", "~> 1.26.0", require: "resque/server"
 gem "riif"
 gem "sass-rails"
@@ -43,12 +42,13 @@ gem "mysql2", require: false
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
+  gem "foreman", require: false
   gem "letter_opener"
   gem "quiet_assets"
+  gem "rails-erd", require: false
   gem "spring"
   gem "spring-commands-rspec"
   gem "web-console", "~> 2.0"
-  gem "foreman", require: false
 end
 
 group :test, :development do
