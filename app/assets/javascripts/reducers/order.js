@@ -6,9 +6,11 @@ export var order = (state = {}, action) => {
   if (action.type === types.ORDER_UPDATE) {
     return Object.assign({}, state, action.data);
   }
+  if (action.type === types.ORDER_VALIDATE) {
+    return Object.assign({}, state, action.data);
+  }
   return state;
 };
-
 export var orderItems = (state = [{}], action) => {
   switch (action.type) {
     case types.ORDER_ITEM_ADD: {

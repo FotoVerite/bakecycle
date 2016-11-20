@@ -221,8 +221,7 @@ describe Order do
           start_date: today,
           end_date: nil,
           route: route,
-          client: client
-                                 )
+          client: client)
         expect(new_order.overridable_order.present?).to eq(result)
       end
     end
@@ -308,6 +307,37 @@ describe Order do
       order = create(:order, start_date: yesterday)
       client = order.client
       expect(client.orders.active(today)).to contain_exactly(order)
+    end
+  end
+
+  describe "processed_shipment_for_today?" do
+    it "returns true if it is before kickoff" do
+      order = create(:order, start_date: yesterday)
+      Timecop.freeze(Time.zone.now.change(hour: 9)) do
+        expect(order.processed_shipment_for_today?).to be_truthy
+      end
+    end
+
+    it "returns true if there is a shipment for today" do
+      order = create(:order, start_date: yesterday)
+      create(:shipment, date: Time.zone.today, order: order)
+      Timecop.freeze(Time.zone.now.change(hour: 15)) do
+        expect(order.processed_shipment_for_today?).to be_truthy
+      end
+    end
+
+    it "returns true if there is a shipment for today and the order isn't active" do
+      order = create(:order, start_date: tomorrow)
+      Timecop.freeze(Time.zone.now.change(hour: 14, min: 20)) do
+        expect(order.processed_shipment_for_today?).to be_truthy
+      end
+    end
+
+    it "returns false if there is a shipment for today" do
+      order = create(:order, start_date: yesterday)
+      Timecop.freeze(Time.zone.now.change(hour: 14, min: 20)) do
+        expect(order.processed_shipment_for_today?).to be_falsy
+      end
     end
   end
 end

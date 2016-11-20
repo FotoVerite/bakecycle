@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as orderActions from '../../actions/order';
 import OrderItemsForm from './order-items-form';
+import includes from 'lodash.includes';
 import {
   BCDate,
   BCRadio,
@@ -15,6 +16,7 @@ const OrderForm = React.createClass({
     availableClients: PropTypes.array.isRequired,
     availableRoutes: PropTypes.array.isRequired,
     updateOrder: PropTypes.func.isRequired,
+    validateOrderStartDate: PropTypes.func.isRequired
   },
 
   clientOptions() {
@@ -59,9 +61,6 @@ const OrderForm = React.createClass({
 
   showLeadDays() {
     const { order } = this.props;
-    if (!order.id) {
-      return;
-    }
     return (
       <div className="row">
         <div className="small-12 medium-6 columns">
@@ -69,6 +68,26 @@ const OrderForm = React.createClass({
         </div>
       </div>
     );
+  },
+
+  componentDidUpdate (prevProps) {
+    const prevOrder = prevProps.order;
+    const order = this.props.order;
+    if (
+        prevOrder.totalLeadDays !== order.totalLeadDays ||
+        prevOrder.startDate !== order.startDate ||
+        prevOrder.endDate !== order.endDate
+      )
+    {
+      this.props.validateOrderStartDate(order);
+    }
+    if(order.errors.start_date && order.errors.start_date.length){
+      $('input[type="submit"]').addClass('warning');
+      $('#kickoff-warning').removeClass('hide');
+    } else {
+      $('input[type="submit"]').removeClass('warning');
+      $('#kickoff-warning').addClass('hide');
+    }
   },
 
   render() {
@@ -89,7 +108,6 @@ const OrderForm = React.createClass({
         </div>
       );
     }
-
     return (<div>
       <fieldset>
         <legend>Order Information</legend>
@@ -156,10 +174,22 @@ const OrderForm = React.createClass({
   }
 });
 
-const stateToProps = state => ({
-  order: state.order,
+const calculateTotalLeadDays = function(availableProducts, orderItems) {
+  const orderItemsIds = orderItems.map((orderItem) => {
+    return orderItem.productId;
+  });
+  const totalLeadDays = availableProducts.filter(a => includes(orderItemsIds, a.id)).map(p => p.totalLeadDays);
+  return totalLeadDays.length === 0 ? 0 : Math.max(...totalLeadDays);
+};
+
+const stateToProps = function(state) {
+  const totalLeadDays = {
+    totalLeadDays: calculateTotalLeadDays(state.availableProducts, state.orderItems)
+  };
+  return {order:  Object.assign({}, state.order, totalLeadDays),
   availableClients: state.availableClients,
   availableRoutes: state.availableRoutes,
-});
+  };
+};
 
 export default connect(stateToProps, orderActions)(OrderForm);

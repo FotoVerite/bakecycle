@@ -2,6 +2,7 @@ class Shipment < ActiveRecord::Base
   include Denormalization
 
   belongs_to :bakery
+  belongs_to :order
   has_many :shipment_items, dependent: :destroy
 
   accepts_nested_attributes_for(

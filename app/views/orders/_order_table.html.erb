@@ -1,4 +1,4 @@
-<table class="responsive-table">
+<table class="responsive-table order-index-table">
   <thead>
     <tr>
       <th scope="col">ID</th>
@@ -11,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= render orders %>
+    <%= render partial: "order", collection: OrderDecorator.decorate_collection(orders), locals: {missing_shipment_ids: missing_shipment_ids } %>
   </tbody>
 </table>
 

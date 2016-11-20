@@ -1,5 +1,5 @@
 class ProductSerializer < ActiveModel::Serializer
-  attributes :id, :name, :errors, :base_price
+  attributes :id, :name, :errors, :base_price, :total_lead_days
   has_many :price_variants
 
   def price_variants

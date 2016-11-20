@@ -6,5 +6,12 @@
   <li><%= link_to "Print", print_order_path(order), target: "_blank", class: "button small" %></li>
   <li><%= link_to "Copy Order", copy_order_path(order), class: "button small" %></li>
 </ul>
+
+<% unless order.processed_shipment_for_today? %>
+  <div class="overridable-orders panel callout radius">
+    <h5>This order is missing it's invoice for today.</h5>
+  </div>
+<% end %>
+
 <%= render "form", order: order %>
 <%= render partial: 'upcoming_shipments' if order.upcoming_shipments.any? %>

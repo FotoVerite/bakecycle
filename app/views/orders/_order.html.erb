@@ -1,4 +1,4 @@
-<tr class="js-clickable-row" href="<%= edit_order_path(order) %>">
+<tr class="js-clickable-row <%= 'missing' if missing_shipment_ids.include?(order.id) %>" href="<%= edit_order_path(order) %>">
   <th scope="row"><%= link_to order.id, edit_order_path(order), class: "order-#{order.id}" %></th>
   <td data-title="Start-Date"><%= order.start_date %></td>
   <td data-title="End-Date"><%= order.end_date %></td>

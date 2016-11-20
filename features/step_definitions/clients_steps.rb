@@ -120,7 +120,7 @@ Then(/^I should see upcoming orders information$/) do
 end
 
 Then(/^I should be on the orders index page with "(.*?)" shipments and none from "(.*?)"$/) do |name1, name2|
-  within ".responsive-table" do
+  within ".order-index-table" do
     expect(page).to have_content(name1)
     expect(page).to_not have_content(name2)
   end

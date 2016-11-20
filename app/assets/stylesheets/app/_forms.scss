@@ -88,6 +88,17 @@ select.inline {
     margin-bottom: -3px;
   }
 
+  .warning {
+    background: $bc-alizarin-crimson;
+  }
+  #kickoff-warning {
+    font-size:16px;
+    display:inline-block;
+    margin-left:15px;
+    border: 1px $bc-alizarin-crimson solid;
+    padding: 15px;
+  }
+
   input:not([type='submit']),
   select,
   textarea {

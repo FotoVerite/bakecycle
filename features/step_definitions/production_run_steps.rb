@@ -78,14 +78,12 @@ Given(/^there is a run item and shipment item for a "(.*?)" production run$/) do
          production_run: production_run,
          bakery: bakery,
          product: product,
-         product_quantity: 10
-        )
+         product_quantity: 10)
   create(:run_item,
          production_run: production_run,
          bakery: bakery,
          product: product,
-         order_quantity: 10
-        )
+         order_quantity: 10)
 end
 
 Then(/^the product quantity should be the same as the shipment item$/) do

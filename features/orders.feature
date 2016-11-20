@@ -1,5 +1,18 @@
 Feature: Orders
 
+  @javascript
+  Scenario: As a user with full access views orders missing shipments
+    Given I am logged in as an user with client "manage" access with a bakery called "biencuit"
+    And There are "biencuit" bakery clients named "andysdecaf" and "mandos"
+    And There are "biencuit" bakery orders without shipments with clients named "andysdecaf" and "mandos"
+    And There are "biencuit" bakery routes named "Canal" and "Chinatown"
+    And There are "biencuit" bakery products named "baguette cookie" and "donut tart"
+    When I go to the "orders" page
+    Then I should see a list of missing shipments including clients named "andysdecaf" and "mandos"
+    When I click the order "andysdecaf"
+    Then I should see the callout "This order is missing it's invoice for today."
+
+
   @javascript @firefox
   Scenario: As a user with full access to orders
     Given I am logged in as an user with client "manage" access with a bakery called "biencuit"

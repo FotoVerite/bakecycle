@@ -1,5 +1,7 @@
 class Order < ActiveRecord::Base
   attr_accessor :confirm_override
+  attr_accessor :kickoff_time
+
   belongs_to :client
   belongs_to :route
   belongs_to :bakery
@@ -52,6 +54,12 @@ class Order < ActiveRecord::Base
       )
     SQL
     where(sql, date: date)
+  end
+
+  def processed_shipment_for_today?
+    return true unless Time.zone.today >= start_date && (end_date.nil? || Time.zone.today < end_date)
+    return true unless after_kickoff_time?
+    !shipments.upcoming(Time.zone.today).empty?
   end
 
   # sorts orders by their end date, putting open ended standing orders in for today
@@ -124,5 +132,15 @@ class Order < ActiveRecord::Base
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
     end
+  end
+
+  private
+
+  def after_kickoff_time?
+    kickoff = bakery.kickoff_time
+    now = Time.zone.now
+    # Add a few minutes to account for processing time.
+    kickoff_today = Time.zone.local(now.year, now.month, now.day, kickoff.hour, kickoff.min, kickoff.sec) + 5.minutes
+    kickoff_today <= now
   end
 end

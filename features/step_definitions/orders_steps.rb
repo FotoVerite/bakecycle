@@ -3,12 +3,38 @@ Given(/^There are "(.*?)" bakery orders with clients named "(.*?)" and "(.*?)"$/
   client1 = Client.find_by(name: name1)
   client2 = Client.find_by(name: name2)
   route = create(:route, bakery: bakery)
-  create(:order, client: client1, bakery: bakery, route: route)
-  create(:order, client: client2, bakery: bakery, route: route)
+  order1 = create(:order, client: client1, bakery: bakery, route: route)
+  order2 = create(:order, client: client2, bakery: bakery, route: route)
+  create(:shipment, client: client1, bakery: bakery, date: Time.zone.now, order: order1)
+  create(:shipment, client: client1, bakery: bakery, date: Time.zone.now, order: order2)
+end
+
+# rubocop:disable LineLength
+Given(/^There are "(.*?)" bakery orders without shipments with clients named "(.*?)" and "(.*?)"$/) do |bakery, name1, name2|
+  bakery = Bakery.find_by(name: bakery)
+  client1 = Client.find_by(name: name1)
+  client2 = Client.find_by(name: name2)
+  route = create(:route, bakery: bakery)
+  create(:order, :active, client: client1, bakery: bakery, route: route)
+  create(:order, :active, client: client2, bakery: bakery, route: route)
+end
+# rubocop:enable LineLength
+
+Then(/^I should see a list of missing shipments including clients named "(.*?)" and "(.*?)"$/) do |name1, name2|
+  within ".orders-missing-shipment-table" do
+    expect(page).to have_content(name1)
+    expect(page).to have_content(name2)
+  end
+end
+
+And(/^I should see the callout "(.*?)"$/) do |text|
+  within "div.callout" do
+    page.should have_content(text)
+  end
 end
 
 Then(/^I should see a list of orders including clients named "(.*?)" and "(.*?)"$/) do |name1, name2|
-  within ".responsive-table" do
+  within ".order-index-table" do
     expect(page).to have_content(name1)
     expect(page).to have_content(name2)
   end
@@ -101,7 +127,7 @@ Then(/^the order item "(.*?)" should not be present$/) do |name|
 end
 
 Then(/^The order "(.*?)" should not be present$/) do |order|
-  within ".responsive-table" do
+  within ".order-index-table" do
     expect(page).to_not have_content(order)
   end
 end
@@ -119,7 +145,7 @@ end
 When(/^I click the order "(.*?)"$/) do |order_client|
   client = Client.find_by(name: order_client)
   order = Order.find_by(client: client)
-  within(".responsive-table") do
+  within(".order-index-table") do
     find("a.order-#{order.id}").click
   end
 end

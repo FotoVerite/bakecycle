@@ -23,6 +23,8 @@ class OrderForm
   end
 
   def serializable_hash
-    OrderFormSerializer.new(self).serializable_hash
+    hash = OrderFormSerializer.new(self).serializable_hash
+    hash[:order]["kickoff_time"] = @order.bakery.kickoff_time
+    hash
   end
 end

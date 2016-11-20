@@ -28,6 +28,21 @@ describe('orders reducer', () => {
     );
   });
 
+  it('handles ORDER_VALIDATE', () => {
+    assert.isDefined(types.ORDER_VALIDATE);
+    assert.deepEqual(
+      reducer(undefined, {
+        type: types.ORDER_VALIDATE,
+        data: {
+          errors: {start_date: ['msg']}
+        }
+      }).order,
+      {
+        errors: {start_date: ['msg']}
+      }
+    );
+  });
+
   it('handles ORDER_ITEM_ADD', () => {
     assert.isDefined(types.ORDER_ITEM_ADD);
     assert.deepEqual(
