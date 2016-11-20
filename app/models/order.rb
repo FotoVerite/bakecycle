@@ -56,6 +56,11 @@ class Order < ActiveRecord::Base
     where(sql, date: date)
   end
 
+  def self.production_date(date)
+    order_ids = OrderItem.production_date(date).map(&:order_id).uniq
+    where(id: order_ids)
+  end
+
   def processed_shipment_for_today?
     return true unless Time.zone.today >= start_date && (end_date.nil? || Time.zone.today < end_date)
     return true unless after_kickoff_time?

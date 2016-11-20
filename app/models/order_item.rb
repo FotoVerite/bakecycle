@@ -29,8 +29,8 @@ class OrderItem < ActiveRecord::Base
   end
 
   # rubocop:disable Metrics/MethodLength
-  # Returns order items considering active and temp orders. Start date + Lead
-  # Time of each product on each order item
+  # Returns order items that need to start production on a date considering which orders on active when they need to
+  # ship and the lead time of the product on the order item
   def self.production_date(start_date)
     sql = <<-SQL
       order_items.id in(

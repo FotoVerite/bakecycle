@@ -310,7 +310,13 @@ describe Order do
     end
   end
 
-  describe "processed_shipment_for_today?" do
+  describe ".production_date" do
+    it "runs" do
+      Order.production_date(Time.zone.today)
+    end
+  end
+
+  describe "#processed_shipment_for_today?" do
     it "returns true if it is before kickoff" do
       order = create(:order, start_date: yesterday)
       Timecop.freeze(Time.zone.now.change(hour: 9)) do
@@ -333,7 +339,7 @@ describe Order do
       end
     end
 
-    it "returns false if there is a shipment for today" do
+    it "returns false if there isn't a shipment for today" do
       order = create(:order, start_date: yesterday)
       Timecop.freeze(Time.zone.now.change(hour: 14, min: 20)) do
         expect(order.processed_shipment_for_today?).to be_falsy

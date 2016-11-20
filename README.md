@@ -2,6 +2,11 @@
 
 Centuries old tradition doesn't need to be changed, centuries old technology does.
 
+# URLS
+
+- https://staging.bakecycle.com/
+- https://www.bakecycle.com/
+
 # Management
 We use Pivotal Tracker for project management. [BakeCycle Tracker Board](https://www.pivotaltracker.com/n/projects/1187388)
 
