@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: recipes
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  note            :text
+#  mix_size        :decimal(, )
+#  mix_size_unit   :integer
+#  recipe_type     :integer
+#  lead_days       :integer          default(0), not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  bakery_id       :integer          not null
+#  legacy_id       :string
+#  total_lead_days :integer          not null
+#
+
 class RecipeSerializer < ActiveModel::Serializer
   attributes :id, :name, :recipe_type, :note, :mix_size, :mix_size_unit, :lead_days, :total_lead_days,
    :available_inclusions, :available_recipe_ingredients, :recipe_types, :mix_units,

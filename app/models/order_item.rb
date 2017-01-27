@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: order_items
+#
+#  id              :integer          not null, primary key
+#  order_id        :integer          not null
+#  product_id      :integer          not null
+#  monday          :integer          not null
+#  tuesday         :integer          not null
+#  wednesday       :integer          not null
+#  thursday        :integer          not null
+#  friday          :integer          not null
+#  saturday        :integer          not null
+#  sunday          :integer          not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  total_lead_days :integer          not null
+#
+
 class OrderItem < ActiveRecord::Base
   extend OrderByProduct
 
@@ -29,8 +48,9 @@ class OrderItem < ActiveRecord::Base
   end
 
   # rubocop:disable Metrics/MethodLength
-  # Returns order items that need to start production on a date considering which orders on active when they need to
-  # ship and the lead time of the product on the order item
+  # Returns order items that need to start production for a date using
+  # their lead time date.
+  # Orders will be active for a ship date to return a list of order items.
   def self.production_date(start_date)
     sql = <<-SQL
       order_items.id in(

@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: recipe_items
+#
+#  id                 :integer          not null, primary key
+#  recipe_id          :integer          not null
+#  inclusionable_id   :integer
+#  inclusionable_type :string
+#  bakers_percentage  :decimal(, )      default(0.0), not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  sort_id            :integer          default(0), not null
+#
+
 class RecipeItem < ActiveRecord::Base
   belongs_to :inclusionable, polymorphic: true
   belongs_to :recipe

@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: run_items
+#
+#  id                :integer          not null, primary key
+#  production_run_id :integer          not null
+#  product_id        :integer          not null
+#  total_quantity    :integer
+#  order_quantity    :integer
+#  overbake_quantity :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
 require "rails_helper"
 
 describe RunItem do

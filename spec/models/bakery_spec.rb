@@ -1,3 +1,30 @@
+# == Schema Information
+#
+# Table name: bakeries
+#
+#  id                 :integer          not null, primary key
+#  name               :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  email              :string
+#  phone_number       :string
+#  address_street_1   :string
+#  address_street_2   :string
+#  address_city       :string
+#  address_state      :string
+#  address_zipcode    :string
+#  logo_file_name     :string
+#  logo_content_type  :string
+#  logo_file_size     :integer
+#  logo_updated_at    :datetime
+#  kickoff_time       :time             not null
+#  last_kickoff       :datetime
+#  quickbooks_account :string           not null
+#  group_preferments  :boolean          default(TRUE)
+#  plan_id            :integer          not null
+#  stripe_customer_id :string
+#
+
 require "rails_helper"
 
 describe Bakery do

@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: recipes
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  note            :text
+#  mix_size        :decimal(, )
+#  mix_size_unit   :integer
+#  recipe_type     :integer
+#  lead_days       :integer          default(0), not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  bakery_id       :integer          not null
+#  legacy_id       :string
+#  total_lead_days :integer          not null
+#
+
 class Recipe < ActiveRecord::Base
   extend AlphabeticalOrder
   include ResqueJobs

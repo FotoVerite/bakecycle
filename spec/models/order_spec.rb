@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: orders
+#
+#  id              :integer          not null, primary key
+#  client_id       :integer          not null
+#  route_id        :integer
+#  start_date      :date             not null
+#  end_date        :date
+#  note            :text             default(""), not null
+#  order_type      :string           not null
+#  bakery_id       :integer          not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  legacy_id       :integer
+#  total_lead_days :integer          not null
+#
+
 require "rails_helper"
 
 describe Order do

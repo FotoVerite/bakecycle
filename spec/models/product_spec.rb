@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: products
+#
+#  id              :integer          not null, primary key
+#  name            :string           not null
+#  product_type    :integer          not null
+#  weight          :decimal(, )      not null
+#  unit            :integer          not null
+#  description     :text
+#  over_bake       :decimal(, )      default(0.0), not null
+#  motherdough_id  :integer
+#  inclusion_id    :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  base_price      :decimal(, )      not null
+#  bakery_id       :integer          not null
+#  sku             :string
+#  legacy_id       :string
+#  total_lead_days :integer          not null
+#  batch_recipe    :boolean          default(FALSE)
+#
+
 require "rails_helper"
 
 describe Product do

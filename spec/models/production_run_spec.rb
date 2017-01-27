@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: production_runs
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  date       :date             not null
+#  bakery_id  :integer          not null
+#
+
 require "rails_helper"
 
 describe ProductionRun do

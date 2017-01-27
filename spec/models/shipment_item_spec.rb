@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: shipment_items
+#
+#  id                      :integer          not null, primary key
+#  shipment_id             :integer
+#  product_id              :integer
+#  product_name            :string
+#  product_quantity        :integer          default(0), not null
+#  product_price           :decimal(, )      default(0.0), not null
+#  product_sku             :string
+#  production_start        :date             not null
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  production_run_id       :integer
+#  product_product_type    :string           not null
+#  product_total_lead_days :integer          not null
+#
+
 require "rails_helper"
 
 describe ShipmentItem do

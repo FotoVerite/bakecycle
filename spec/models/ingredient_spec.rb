@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: ingredients
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  description     :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  bakery_id       :integer          not null
+#  legacy_id       :string
+#  ingredient_type :string           default("other"), not null
+#
+
 require "rails_helper"
 
 describe Ingredient do
