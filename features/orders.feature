@@ -10,7 +10,7 @@ Feature: Orders
     When I go to the "orders" page
     Then I should see a list of missing shipments including clients named "andysdecaf" and "mandos"
     When I click the order "andysdecaf"
-    Then I should see the callout "This order is missing it's invoice for today."
+    Then I should see the callout "This order is missing"
 
 
   @javascript @firefox

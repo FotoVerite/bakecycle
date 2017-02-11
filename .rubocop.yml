@@ -17,7 +17,7 @@ Metrics/AbcSize:
   Max: 18
 
 Metrics/ClassLength:
-  Max: 120
+  Max: 150
 
 # it would be great to use EnforcedStyle: semantic here but it complains way too much
 Style/BlockDelimiters:

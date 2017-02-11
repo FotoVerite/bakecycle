@@ -28,7 +28,7 @@ When(/^I submit the registration form with valid data$/) do
   fill_in "registration_card_zipcode", with: "12123"
   fill_in "registration_card_code", with: "121"
   select "2", from: "registration_card_month"
-  select "2016", from: "registration_card_year"
+  select Time.zone.now.year, from: "registration_card_year"
   click_on "Join BakeCycle"
 end
 

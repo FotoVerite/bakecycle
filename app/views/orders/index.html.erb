@@ -8,7 +8,7 @@
 
 <% unless @missing_shipments.empty? %>
   <div class="overridable-orders panel callout radius">
-    <h5>These <%= pluralize(@missing_shipments.count, 'order') %> are missing invoicing for today.</h5>
+    <h5>These <%= pluralize(@missing_shipments.count, 'order') %> are missing invoices.</h5>
     <table class="responsive-table orders-missing-shipment-table">
       <thead>
         <tr>

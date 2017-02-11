@@ -74,17 +74,31 @@ class Order < ActiveRecord::Base
     where(sql, date: date)
   end
 
-  #TODO make more efficient and secure
+  # TODO: make more efficient and secure
   def self.production_date(date)
     order_ids = OrderItem.production_date(date).map(&:order_id).uniq
     where(id: order_ids)
   end
 
-  def processed_shipment_for_today?
-    return true unless Time.zone.today >= start_date && (end_date.nil? || Time.zone.today < end_date)
-    return true unless after_kickoff_time?
-    !shipments.upcoming(Time.zone.today).empty?
+  def no_outstanding_shipments?
+    missing_shipment_dates.empty?
   end
+
+  # rubocop:disable Metrics/AbcSize
+  def missing_shipment_dates(for_date_time = Time.zone.now)
+    last_date = for_date_time + total_lead_days.days
+    dates = []
+    (for_date_time.to_date..last_date.to_date).each do |date|
+      # if it's before kickoff we do not expect the next active invoice by lead time to be ready
+      next if date == (for_date_time + total_lead_days.days).to_date && before_kickoff_time?
+      # test if for this day of the week there are any items. If not there should be no invoice.
+      next if order_items.sum(date.strftime("%A").downcase).zero?
+      next if self.class.active(date).where(id: id).empty?
+      dates.push date if shipments.where(date: date).empty?
+    end
+    dates
+  end
+  # rubocop:enable Metrics/AbcSize
 
   # sorts orders by their end date, putting open ended standing orders in for today
   def self.order_by_active
@@ -159,6 +173,10 @@ class Order < ActiveRecord::Base
   end
 
   private
+
+  def before_kickoff_time?
+    !after_kickoff_time?
+  end
 
   def after_kickoff_time?
     kickoff = bakery.kickoff_time

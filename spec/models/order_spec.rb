@@ -334,33 +334,97 @@ describe Order do
     end
   end
 
-  describe "#processed_shipment_for_today?" do
-    it "returns true if it is before kickoff" do
-      order = create(:order, start_date: yesterday)
-      Timecop.freeze(Time.zone.now.change(hour: 9)) do
-        expect(order.processed_shipment_for_today?).to be_truthy
+  describe "#no_outstanding_shipments?" do
+    describe "order that goes to production today" do
+      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 1, bakery: bakery) }
+
+      it "returns true if it is before kickoff" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 9)) do
+          expect(order.no_outstanding_shipments?).to be_truthy
+        end
+      end
+
+      it "returns false if it's after kickoff" do
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_falsy
+        end
+      end
+
+      it "returns false after kickoff if older shipment is missing" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_falsy
+        end
+      end
+
+      it "returns false after kickoff if latest shipment is missing" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_falsy
+        end
+      end
+
+      it "returns true after kickoff if there is are shipments" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 1.day, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_truthy
+        end
+      end
+
+      it "returns true after kickoff if there is the order is active but has no items for that day." do
+        order.order_items.update_all(Time.zone.today.strftime("%A").downcase => 0)
+        create(:shipment, date: Time.zone.today + 1.day, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_truthy
+        end
       end
     end
 
-    it "returns true if there is a shipment for today" do
-      order = create(:order, start_date: yesterday)
-      create(:shipment, date: Time.zone.today, order: order)
-      Timecop.freeze(Time.zone.now.change(hour: 15)) do
-        expect(order.processed_shipment_for_today?).to be_truthy
+    describe "order that has a total_lead_days of 2" do
+      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 2, bakery: bakery) }
+
+      it "returns true if it is before kickoff" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 1.day, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 2.days, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 9)) do
+          expect(order.no_outstanding_shipments?).to be_truthy
+        end
+      end
+
+      it "returns false after kickoff if older shipment is missing" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 2.days, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_falsy
+        end
+      end
+
+      it "returns false after kickoff if latest shipment is missing" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 1.day, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_falsy
+        end
+      end
+
+      it "returns true after kickoff if there is are shipments" do
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 1.day, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today + 2.days, order: order, bakery: bakery)
+        create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
+        Timecop.freeze(Time.zone.now.change(hour: 15)) do
+          expect(order.no_outstanding_shipments?).to be_truthy
+        end
       end
     end
 
-    it "returns true if there is a shipment for today and the order isn't active" do
-      order = create(:order, start_date: tomorrow)
-      Timecop.freeze(Time.zone.now.change(hour: 14, min: 20)) do
-        expect(order.processed_shipment_for_today?).to be_truthy
-      end
-    end
-
-    it "returns false if there isn't a shipment for today" do
-      order = create(:order, start_date: yesterday)
-      Timecop.freeze(Time.zone.now.change(hour: 14, min: 20)) do
-        expect(order.processed_shipment_for_today?).to be_falsy
+    describe "inactive orders" do
+      it "returns true if the order is inactive" do
+        order = create(:order, :inactive)
+        expect(order.no_outstanding_shipments?).to be_truthy
       end
     end
   end

@@ -10,9 +10,9 @@ class OrdersController < ApplicationController
       .includes(:client, :route)
       .order_by_active
       .paginate(page: params[:page])
-    @missing_shipments = Order.production_date(Time.zone.today)
+    @missing_shipments = policy_scope(Order).production_date(Time.zone.today)
       .search(search_form)
-      .reject(&:processed_shipment_for_today?)
+      .reject(&:no_outstanding_shipments?)
   end
 
   def new

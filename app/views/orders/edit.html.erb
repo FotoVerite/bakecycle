@@ -7,9 +7,13 @@
   <li><%= link_to "Copy Order", copy_order_path(order), class: "button small" %></li>
 </ul>
 
-<% unless order.processed_shipment_for_today? %>
+<% unless order.no_outstanding_shipments? %>
   <div class="overridable-orders panel callout radius">
-    <h5>This order is missing it's invoice for today.</h5>
+    <h5>This order is missing invoices for <%= pluralize(order.missing_shipment_dates.size, 'date') %></h5>
+    <ul><% for date in order.missing_shipment_dates %>
+        <li><%= date %></li>
+        <% end %>
+    </ul>
   </div>
 <% end %>
 
