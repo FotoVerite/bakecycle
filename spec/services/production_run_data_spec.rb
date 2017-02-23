@@ -42,14 +42,12 @@ describe ProductionRunData do
   def mock_recipe_run_preferment(parent_recipes_array)
     instance_double("RecipeRunData",
       mix_bowl_count: 1,
-      parent_recipes: parent_recipes_array
-                   )
+      parent_recipes: parent_recipes_array)
   end
 
   def mock_parent_recipe
     instance_double("RecipeRunData",
       mix_bowl_count: 3,
-      parent_recipes: []
-                   )
+      parent_recipes: [])
   end
 end

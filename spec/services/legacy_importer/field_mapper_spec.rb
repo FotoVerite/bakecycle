@@ -6,12 +6,12 @@ describe LegacyImporter::FieldMapper do
 
   let(:fields_map) do
     %w(
-      product_name          name
-      product_shortname     sku
-      product_description   description
-      product_weight_g      weight
-      product_extra         over_bake
-      product_type          product_type
+      product_name name
+      product_shortname sku
+      product_description description
+      product_weight_g weight
+      product_extra over_bake
+      product_type product_type
     )
   end
 

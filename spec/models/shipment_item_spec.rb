@@ -94,6 +94,75 @@ describe ShipmentItem do
     end
   end
 
+  describe "product_duration" do
+    it "returns an array of dates" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      expect(shipment_item.product_duration).to eq(Time.zone.today..Time.zone.today + 1.day)
+      Timecop.return
+    end
+  end
+
+  describe "in_production?" do
+    it "returns false if item hasn't gone to production" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight - 1.day)
+      expect(shipment_item.in_production?).to be_falsey
+      Timecop.return
+    end
+
+    it "returns false if item in production after kickoff_time but it's before kickoff" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight + shipment_item.shipment.bakery.kickoff_time.hour.hours - 10.minutes)
+      expect(shipment_item.in_production?).to be_falsey
+      Timecop.return
+    end
+
+    it "returns true if item in production" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight + shipment_item.shipment.bakery.kickoff_time.hour.hours + 10.minutes)
+      expect(shipment_item.in_production?).to be_truthy
+      Timecop.return
+    end
+
+    it "returns false if item out of production" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight + 2.days)
+      expect(shipment_item.in_production?).to be_falsey
+      Timecop.return
+    end
+  end
+
+  describe "after_production?" do
+    it "returns false if item hasn't gone to production" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight - 1.day)
+      expect(shipment_item.after_production?).to be_falsey
+      Timecop.return
+    end
+
+    it "returns false if item in production production" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight + 1.hour)
+      expect(shipment_item.after_production?).to be_falsey
+      Timecop.return
+    end
+
+    it "returns true if item out of production" do
+      Timecop.freeze(Time.zone.now.midnight)
+      shipment_item.production_start = Time.zone.today
+      Timecop.freeze(Time.zone.now.midnight + 2.days)
+      expect(shipment_item.after_production?).to be_truthy
+      Timecop.return
+    end
+  end
+
   describe ".earliest_production_date" do
     it "returns the earliest production date for shipment items collection" do
       shipment = create(:shipment, shipment_item_count: 5)

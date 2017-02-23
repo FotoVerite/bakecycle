@@ -203,3 +203,23 @@ select.inline {
     width: 4%;
   }
 }
+
+.form-icon-holder {
+  border: solid 2px gainsboro;
+  padding: 7px;
+  background:white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 18px;
+  min-height: 40px;
+  position: relative;
+  &.green {
+    color:green;
+  }
+  &.red {
+    color:red;
+  }
+}

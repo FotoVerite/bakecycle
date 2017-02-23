@@ -11,6 +11,7 @@ class ProductionRunsController < ApplicationController
 
   def edit
     authorize @production_run
+    @missing_items = current_bakery.shipment_items.where(production_start: @production_run.date, production_run_id: nil)
   end
 
   def update

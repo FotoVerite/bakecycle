@@ -11,11 +11,11 @@ module LegacyImporter
     end
 
     FIELDS_MAP = %w(
-      product_name          name
-      product_description   description
-      product_weight_g      weight
-      product_extra         over_bake
-      product_type          product_type
+      product_name name
+      product_description description
+      product_weight_g weight
+      product_extra over_bake
+      product_type product_type
     ).freeze
     # product_shortname     sku
 

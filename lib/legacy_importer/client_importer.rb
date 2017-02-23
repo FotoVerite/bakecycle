@@ -9,40 +9,40 @@ module LegacyImporter
     end
 
     FIELDS_MAP = %w(
-      client_active             active
-      client_business_name      official_company_name
-      client_dba                name
+      client_active active
+      client_business_name official_company_name
+      client_dba name
 
-      client_billing_address1   billing_address_street_1
-      client_billing_address2   billing_address_street_2
-      client_billing_city       billing_address_city
-      client_billing_state      billing_address_state
-      client_billing_zip        billing_address_zipcode
+      client_billing_address1 billing_address_street_1
+      client_billing_address2 billing_address_street_2
+      client_billing_city billing_address_city
+      client_billing_state billing_address_state
+      client_billing_zip billing_address_zipcode
 
-      client_delivery_address1  delivery_address_street_1
-      client_delivery_address2  delivery_address_street_2
-      client_delivery_city      delivery_address_city
-      client_delivery_state     delivery_address_state
-      client_delivery_zip       delivery_address_zipcode
+      client_delivery_address1 delivery_address_street_1
+      client_delivery_address2 delivery_address_street_2
+      client_delivery_city delivery_address_city
+      client_delivery_state delivery_address_state
+      client_delivery_zip delivery_address_zipcode
 
-      client_ap_email           accounts_payable_contact_email
-      client_ap_name            accounts_payable_contact_name
-      client_ap_phone           accounts_payable_contact_phone
+      client_ap_email accounts_payable_contact_email
+      client_ap_name accounts_payable_contact_name
+      client_ap_phone accounts_payable_contact_phone
 
-      client_delivery_name1     primary_contact_name
-      client_delivery_email1    primary_contact_email
-      client_delivery_phone1    primary_contact_phone
+      client_delivery_name1 primary_contact_name
+      client_delivery_email1 primary_contact_email
+      client_delivery_phone1 primary_contact_phone
 
-      client_delivery_name2     secondary_contact_name
-      client_delivery_email2    secondary_contact_email
-      client_delivery_phone2    secondary_contact_phone
+      client_delivery_name2 secondary_contact_name
+      client_delivery_email2 secondary_contact_email
+      client_delivery_phone2 secondary_contact_phone
 
-      client_deliveryfee        delivery_fee
-      client_deliverymin        delivery_minimum
-      client_deliveryterms      billing_term
-      client_deliverynotes      notes
-      client_fax                business_fax
-      client_phone              business_phone
+      client_deliveryfee delivery_fee
+      client_deliverymin delivery_minimum
+      client_deliveryterms billing_term
+      client_deliverynotes notes
+      client_fax business_fax
+      client_phone business_phone
     ).freeze
 
     # Fields we have yet to import

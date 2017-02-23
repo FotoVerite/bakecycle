@@ -69,6 +69,8 @@ class Shipment < ActiveRecord::Base
     :primary_contact_name, :primary_contact_phone, :notes
   ]
 
+  delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
+
   scope :search, ->(terms) { ShipmentSearcher.search(self, terms) }
   scope :latest, -> (count) { order(date: :desc).limit(count) }
 

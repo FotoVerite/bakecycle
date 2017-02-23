@@ -36,6 +36,8 @@ class ShipmentItem < ActiveRecord::Base
   before_validation :set_product_quantity_and_price
   before_save :set_production_start
 
+  delegate :after_kickoff_time?, :before_kickoff_time?, to: :shipment
+
   def self.order_by_product_type_and_name
     order("product_product_type asc, product_name asc")
   end
@@ -46,6 +48,19 @@ class ShipmentItem < ActiveRecord::Base
 
   def price
     product_price * product_quantity
+  end
+
+  def product_duration
+    production_start..production_start + product_total_lead_days.days
+  end
+
+  def in_production?
+    return false if production_start == Time.zone.today && !after_kickoff_time?
+    product_duration.include?(Time.zone.today)
+  end
+
+  def after_production?
+    production_start + product_total_lead_days.days < Time.zone.today
   end
 
   def set_production_start

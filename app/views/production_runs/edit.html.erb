@@ -1,4 +1,21 @@
 <% provide(:title, "Production Run: #{@production_run.date.strftime("%A %b. %e, %Y")} ##{@production_run.id}") %>
 <h1>Production Run: <%= @production_run.date.strftime("%A %b. %e, %Y") %> #<%= @production_run.id %></h1>
 
+<% unless @missing_items.nil? || @missing_items.try(:empty?) %>
+  <div class="overridable-orders panel callout radius">
+    <% grouped_items = @missing_items.group_by(&:product_name) %>
+    <h5><%= pluralize(grouped_items.size, 'product') %> missing from this run</h5>
+    <ul><% grouped_items.each do |product,group|  %>
+        <li>
+          <%= pluralize(group.sum(&:product_quantity), product) %>
+        </li>
+        <% end %>
+    </ul>
+      <%= link_to 'Add these items', reset_production_run_path(@production_run),
+    class: "button alert",
+    method: :put,
+    data: { confirm: "Overbakes will be recaculated from the new totals. Continue?" } %>
+  </div>
+<% end %>
+
 <%= render partial: "form" %>

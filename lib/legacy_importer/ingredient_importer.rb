@@ -8,8 +8,8 @@ module LegacyImporter
     end
 
     FIELDS_MAP = %w(
-      ingredient_name           name
-      ingredient_description    description
+      ingredient_name name
+      ingredient_description description
     ).map(&:to_sym).each_slice(2)
     # ingredient_active
     # ingredient_cost

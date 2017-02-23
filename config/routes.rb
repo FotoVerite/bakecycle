@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :orders, except: [:show] do
     get "copy", on: :member
     get "print", on: :member
+    put :add_invoices, on: :member
   end
   resources :users, except: [:show] do
     get "myaccount", on: :collection, as: "my"
@@ -66,6 +67,7 @@ Rails.application.routes.draw do
     get "print", on: :member
     get "print_projection", on: :collection
     put "reset", on: :member
+    put "add", on: :member
 
     resources :run_items
   end

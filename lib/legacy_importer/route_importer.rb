@@ -8,9 +8,9 @@ module LegacyImporter
     end
 
     FIELDS_MAP = %w(
-      route_time    departure_time
-      route_name    name
-      route_notes   notes
+      route_time departure_time
+      route_name name
+      route_notes notes
     ).map(&:to_sym).each_slice(2)
 
     def import!

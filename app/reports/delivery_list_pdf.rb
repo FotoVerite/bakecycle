@@ -30,7 +30,7 @@ class DeliveryListPdf < BasePdfReport
   end
 
   def body
-    bounding_box([bounds.left, bounds.top - 80], width:  bounds.width, height: bounds.height - 100) do
+    bounding_box([bounds.left, bounds.top - 80], width: bounds.width, height: bounds.height - 100) do
       routes
     end
   end

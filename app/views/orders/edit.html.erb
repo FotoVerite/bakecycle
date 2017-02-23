@@ -14,6 +14,10 @@
         <li><%= date %></li>
         <% end %>
     </ul>
+    <%= link_to 'Create these invoices', add_invoices_order_path(@order),
+          class: "button alert",
+          method: :put,
+          data: { confirm: "Production Run will need to be updated manually." } %>
   </div>
 <% end %>
 

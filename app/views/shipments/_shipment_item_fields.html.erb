@@ -10,7 +10,7 @@
     </div>
     <div class="small-12 large-1 columns">
       <%= f.label :product_quantity, "Quantity", class: "hide-for-large-up" %>
-      <%= f.input :product_quantity, as: :string, label: false, input_html: { class: "product_quantity_input" } %>
+      <%= f.input :product_quantity, as: :string, label: false, input_html: { class: "product_quantity_input", disabled: f.object.production_run_id.present? } %>
     </div>
 
     <div class="small-12 large-1 columns">
@@ -20,12 +20,29 @@
 
     <div class="small-12 large-2 columns">
       <%= f.label :production_start, "Production Start", class: "hide-for-large-up" %>
-      <input disabled="true" type="text" value="<%= f.object.production_start %>" />
+      <input disabled="true" type="text" value="<%= f.object.production_start %>"/>
     </div>
-
-    <div class="small-12 large-2 columns">
-      <%= f.hidden_field :_destroy, value: false %>
-      <%= link_to 'X', '', data: {remove: true }, class: " button alert postfix" %>
+    <div class="small-12 large-1 columns">
+      <%= f.label :production_start, "In Production", class: "hide-for-large-up" %>
+      <% if f.object.in_production? || f.object.after_production? %>
+        <% if f.object.production_run_id %>
+          <div class='form-icon-holder postfix green'>
+            <i class="fi-checkbox "></i>
+          </div>
+        <% else %>
+          <div class='form-icon-holder postfix red'>
+            <i class="fi-x "></i>
+          </div>
+        <% end %>
+      <% else %>
+        <input disabled="true" type="text" value="NA" class="text-center"/>
+      <% end %>
     </div>
+      <div class="small-12 large-1 columns">
+        <% if f.object.production_run_id.nil? %>
+          <%= f.hidden_field :_destroy, value: false %>
+          <%= link_to 'X', '', data: {remove: true }, class: " button alert postfix" %>
+        <% end %>
+      </div>
   </div>
 </div>

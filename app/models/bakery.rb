@@ -63,4 +63,16 @@ class Bakery < ActiveRecord::Base
     logo.copy_to_local_file(style, tempfile.path)
     tempfile
   end
+
+  def before_kickoff_time?
+    !after_kickoff_time?
+  end
+
+  def after_kickoff_time?
+    kickoff = kickoff_time
+    now = Time.zone.now
+    # Add a few minutes to account for processing time.
+    kickoff_today = Time.zone.local(now.year, now.month, now.day, kickoff.hour, kickoff.min, kickoff.sec) + 5.minutes
+    kickoff_today <= now
+  end
 end

@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:edit, :update, :destroy, :copy, :print]
+  before_action :set_order, only: [:add_invoices, :edit, :update, :destroy, :copy, :print]
   decorates_assigned :orders, :order
   helper_method :search_form
 
@@ -53,6 +53,14 @@ class OrdersController < ApplicationController
     @order.destroy!
     flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client_name}."
     redirect_to orders_path
+  end
+
+  def add_invoices
+    authorize @order, :edit?
+    @order.missing_shipment_dates.each do |ship_date|
+      ShipmentCreator.new(@order, ship_date).create!
+    end
+    redirect_to edit_order_path(@order)
   end
 
   def copy

@@ -41,6 +41,8 @@ class RunItem < ActiveRecord::Base
   def zero_fields_if_blank
     self.overbake_quantity ||= 0
     self.order_quantity ||= 0
+    # NB fix if you are removing all items from a production run
+    self.order_quantity = 0 if order_quantity < 0
   end
 
   def update_total_quantity

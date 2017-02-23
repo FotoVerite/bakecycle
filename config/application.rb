@@ -34,7 +34,7 @@ module Bakecycle
     config.assets.paths << Rails.root.join("vendor", "assets", "bower_components")
 
     # for foundation
-    config.assets.precompile += %w( vendor/modernizr.js )
+    config.assets.precompile += %w(vendor/modernizr.js)
 
     # fonts
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/

@@ -53,6 +53,8 @@ class Order < ActiveRecord::Base
     to: :client, prefix: true
   )
 
+  delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
+
   before_save :set_total_lead_days
   after_touch :update_total_lead_days
 
@@ -170,19 +172,5 @@ class Order < ActiveRecord::Base
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
     end
-  end
-
-  private
-
-  def before_kickoff_time?
-    !after_kickoff_time?
-  end
-
-  def after_kickoff_time?
-    kickoff = bakery.kickoff_time
-    now = Time.zone.now
-    # Add a few minutes to account for processing time.
-    kickoff_today = Time.zone.local(now.year, now.month, now.day, kickoff.hour, kickoff.min, kickoff.sec) + 5.minutes
-    kickoff_today <= now
   end
 end

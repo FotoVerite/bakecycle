@@ -30,7 +30,7 @@ class DailyTotalPdf < BasePdfReport
   end
 
   def body
-    bounding_box([bounds.left, bounds.top - 40], width:  bounds.width, height: bounds.height - 50) do
+    bounding_box([bounds.left, bounds.top - 40], width: bounds.width, height: bounds.height - 50) do
       information
     end
   end
