@@ -9,7 +9,7 @@ class BakeriesController < ApplicationController
 
   def new
     @bakery = policy_scope(Bakery).build(
-      kickoff_time: Chronic.parse("2 pm"),
+      kickoff_time: Chronic.parse("5 pm"),
       quickbooks_account: "Sales:Sales - Wholesale"
     )
     authorize @bakery

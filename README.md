@@ -56,6 +56,17 @@ See (and modify) `dev_data.rake` to see what development data gets loaded. It cr
 
 You can use the user `admin@example.com` or `user@example.com` with the password `foobarbaz`
 
+## Legacy Data
+
+The `rake bakecycle:legacy_import:biencuit_reload` task will delete all data for a bakery named "Bien Cuit" and import data from bakecycle.org into the local environment. See the `LegacyImporter` class and rake files for details. This command takes a bit of memory and cpu and when run remotely should be run with a larger dyno if possible.
+
+```bash
+heroku run:detached --app bakecycle-staging "rake bakecycle:legacy_import:biencuit_reload"
+heroku run:detached --app bakecycle-production -s standard-2x "rake bakecycle:legacy_import:biencuit_reload"
+```
+
+Logs can be viewed through `heroku logs -t -a bakecycle-production run.xxx` (where `xxx` is the process number) or paper trail.
+
 ## ERD Diagram
 Run `bundle exec erd` to generate
 
