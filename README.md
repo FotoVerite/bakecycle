@@ -62,7 +62,7 @@ The `rake bakecycle:legacy_import:biencuit_reload` task will delete all data for
 
 ```bash
 heroku run:detached --app bakecycle-staging "rake bakecycle:legacy_import:biencuit_reload"
-heroku run:detached --app bakecycle-production -s standard-2x "rake bakecycle:legacy_import:biencuit_reload"
+heroku run:detached --app bakecycle-production -s performance-l "rake bakecycle:legacy_import:biencuit_reload"
 ```
 
 Logs can be viewed through `heroku logs -t -a bakecycle-production run.xxx` (where `xxx` is the process number) or paper trail.
