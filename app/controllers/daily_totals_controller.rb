@@ -6,7 +6,7 @@ class DailyTotalsController < ApplicationController
   end
 
   def print
-    generator = DailyTotalGenerator.new(current_bakery, date_query)
+    generator = DailyTotalGenerator.new(current_bakery, date_query, params[:show_routes])
     redirect_to ExporterJob.create(current_bakery, generator)
   end
 

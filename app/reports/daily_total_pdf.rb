@@ -1,6 +1,7 @@
 class DailyTotalPdf < BasePdfReport
-  def initialize(bakery, date)
+  def initialize(bakery, date, show_routes = true)
     @recipes = ProductCounter.new(bakery, date)
+    @show_routes = show_routes
     super()
   end
 
@@ -66,15 +67,19 @@ class DailyTotalPdf < BasePdfReport
 
   def information_header
     data = [%w(Item Total Overbake)]
-    @recipes.routes.each do |route|
-      data[0] << route.name.titleize
+    if @show_routes
+      @recipes.routes.each do |route|
+        data[0] << route.name.titleize
+      end
     end
     data
   end
 
   def product_items(type)
     recipe_products(type).map do |product|
-      [product.name, total_count(product), overbake_count(product)] + route_counts(product)
+      array = [product.name, total_count(product), overbake_count(product)]
+      array += route_counts(product) if @show_routes
+      array
     end
   end
 
