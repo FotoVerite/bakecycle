@@ -15,6 +15,14 @@ class ClientPolicy < ApplicationPolicy
     (admin? || manage_permission?) && belongs_to_bakery?
   end
 
+  def created_at?
+    (admin? || read_permission?) && user.bakery
+  end
+
+  def updated_at?
+    (admin? || read_permission?) && user.bakery
+  end
+
   def update?
     (admin? || manage_permission?) && belongs_to_bakery?
   end

@@ -33,6 +33,8 @@
 <%= render partial: 'search_form', object: search_form, locals: { orders_destination: orders_path } %>
 <%= render partial: "order_table", locals: {
     orders: @orders,
-    missing_shipment_ids: @missing_shipments.map(&:id)
+    missing_shipment_ids: @missing_shipments.map(&:id),
+    show_created_whodoneit: false,
+    show_updated_at_whodoneit: false
   }
 %>

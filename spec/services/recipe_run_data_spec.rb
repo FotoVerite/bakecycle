@@ -13,7 +13,8 @@ describe RecipeRunData do
         product: product,
         quantity: 1,
         weight: Unitwise(1, :g),
-        dough_weight: Unitwise(0, :kg)
+        dough_weight: Unitwise(0, :kg),
+        inclusion: false
       }
       run_data.add_product(product, 1)
       expect(run_data.products).to include(product_info)

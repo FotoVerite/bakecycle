@@ -100,6 +100,18 @@ class Product < ActiveRecord::Base
     Unitwise(weight, unit)
   end
 
+  def dough_weight_with_unit
+    Unitwise(product_dough_weight, unit)
+  end
+
+  def product_dough_weight
+    dough_percentage * percent_weight
+  end
+
+  def product_inclusion_weight
+    (inclusion_percentage * percent_weight)
+  end
+
   private
 
   def order_items
@@ -110,6 +122,20 @@ class Product < ActiveRecord::Base
     return unless order_items.any?
     errors.add(:base, I18n.t(:product_in_use))
     false
+  end
+
+  def dough_percentage
+    motherdough.total_bakers_percentage
+  end
+
+  def percent_weight
+    return weight if dough_percentage.zero? && inclusion_percentage.zero?
+    weight / (dough_percentage + inclusion_percentage)
+  end
+
+  def inclusion_percentage
+    return 0 unless inclusion
+    inclusion.total_bakers_percentage
   end
 
   def lookup_price_variant(quantity, client)

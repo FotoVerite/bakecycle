@@ -1,3 +1,4 @@
+<% show_whodunnit = show_created_whodoneit || show_updated_at_whodoneit || false %>
 <table class="responsive-table order-index-table">
   <thead>
     <tr>
@@ -7,11 +8,19 @@
       <th scope="col">Client</th>
       <th scope="col">Type</th>
       <th scope="col">Route</th>
+       <% if show_whodunnit %>
+        <th scope="col">By</th>
+      <% end %>
       <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "order", collection: OrderDecorator.decorate_collection(orders), locals: {missing_shipment_ids: missing_shipment_ids } %>
+    <%= render partial: "order", collection: OrderDecorator.decorate_collection(orders), locals: {
+        missing_shipment_ids: missing_shipment_ids,
+        show_created_whodoneit: show_created_whodoneit,
+        show_updated_at_whodoneit: show_updated_at_whodoneit
+        }
+      %>
   </tbody>
 </table>
 

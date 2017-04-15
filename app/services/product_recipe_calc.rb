@@ -8,7 +8,13 @@ class ProductRecipeCalc
   end
 
   def product_info
-    { product: product, quantity: quantity, weight: product_weight, dough_weight: dough_weight }
+    {
+      dough_weight: dough_weight,
+      inclusion: inclusion.present?,
+      product: product,
+      quantity: quantity,
+      weight: product_weight
+    }
   end
 
   def inclusion_info

@@ -31,4 +31,12 @@ class OrderDecorator < Draper::Decorator
   def overridable_end_date
     object.start_date - 1.day
   end
+
+  def created_whodunnit
+    object.created_by_user.name if object.created_by_user
+  end
+
+  def updated_at_whodunnit
+    object.last_updated_by_user.name
+  end
 end

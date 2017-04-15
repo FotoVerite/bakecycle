@@ -23,8 +23,12 @@ class Order < ActiveRecord::Base
   belongs_to :client
   belongs_to :route
   belongs_to :bakery
+  belongs_to :created_by_user, class_name: "User"
+  belongs_to :last_updated_by_user, class_name: "User"
 
-  has_many :order_items, dependent: :destroy
+  has_many :order_items, -> { where(removed: false) }, dependent: :destroy
+  has_many :all_order_items, dependent: :destroy, class_name: "OrderItem"
+
   has_many :products, through: :order_items
   has_many :shipments
 
@@ -59,6 +63,11 @@ class Order < ActiveRecord::Base
   after_touch :update_total_lead_days
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
+  scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :updated_at_date, lambda { |date = Time.zone.today|
+    where(updated_at: date.beginning_of_day..date.end_of_day)
+      .where("version_number > 0")
+  }
 
   def self.policy_class
     ClientPolicy

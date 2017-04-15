@@ -16,7 +16,8 @@ describe ProductRecipeCalc do
         product: product,
         quantity: quantity,
         weight: product_weight,
-        dough_weight: dough_weight
+        dough_weight: dough_weight,
+        inclusion: true
       }
       expect(calculator.product_info).to eq(product_info)
     end

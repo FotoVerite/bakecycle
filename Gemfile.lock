@@ -273,6 +273,9 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     orm_adapter (0.5.0)
+    paper_trail (7.0.1)
+      activerecord (>= 4.0, < 5.2)
+      request_store (~> 1.1)
     paperclip (4.3.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -538,6 +541,7 @@ DEPENDENCIES
   memoist
   mysql2
   newrelic_rpm
+  paper_trail
   paperclip (~> 4.2)
   pg
   prawn
@@ -576,4 +580,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.14.3
+   1.14.6

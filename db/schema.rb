@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150917015831) do
+ActiveRecord::Schema.define(version: 20170418001615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 20150917015831) do
     t.datetime "updated_at",                                   null: false
     t.string   "ein"
     t.string   "notes"
+    t.integer  "default_packing_slips",          default: 1
+    t.integer  "default_invoice_copies",         default: 1
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
@@ -112,39 +114,45 @@ ActiveRecord::Schema.define(version: 20150917015831) do
   add_index "ingredients", ["name", "bakery_id"], name: "index_ingredients_on_name_and_bakery_id", unique: true, using: :btree
 
   create_table "order_items", force: :cascade do |t|
-    t.integer  "order_id",        null: false
-    t.integer  "product_id",      null: false
-    t.integer  "monday",          null: false
-    t.integer  "tuesday",         null: false
-    t.integer  "wednesday",       null: false
-    t.integer  "thursday",        null: false
-    t.integer  "friday",          null: false
-    t.integer  "saturday",        null: false
-    t.integer  "sunday",          null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "total_lead_days", null: false
+    t.integer  "order_id",                    null: false
+    t.integer  "product_id",                  null: false
+    t.integer  "monday",                      null: false
+    t.integer  "tuesday",                     null: false
+    t.integer  "wednesday",                   null: false
+    t.integer  "thursday",                    null: false
+    t.integer  "friday",                      null: false
+    t.integer  "saturday",                    null: false
+    t.integer  "sunday",                      null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "total_lead_days",             null: false
+    t.integer  "removed",         default: 0
   end
 
   add_index "order_items", ["order_id"], name: "index_order_items_on_order_id", using: :btree
   add_index "order_items", ["total_lead_days"], name: "index_order_items_on_total_lead_days", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "client_id",                    null: false
+    t.integer  "client_id",                            null: false
     t.integer  "route_id"
-    t.date     "start_date",                   null: false
+    t.date     "start_date",                           null: false
     t.date     "end_date"
-    t.text     "note",            default: "", null: false
-    t.string   "order_type",                   null: false
-    t.integer  "bakery_id",                    null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.text     "note",                    default: "", null: false
+    t.string   "order_type",                           null: false
+    t.integer  "bakery_id",                            null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.integer  "legacy_id"
-    t.integer  "total_lead_days",              null: false
+    t.integer  "total_lead_days",                      null: false
+    t.integer  "version_number",          default: 0
+    t.integer  "created_by_user_id"
+    t.integer  "last_updated_by_user_id"
   end
 
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
+  add_index "orders", ["created_by_user_id"], name: "index_orders_on_created_by_user_id", using: :btree
+  add_index "orders", ["last_updated_by_user_id"], name: "index_orders_on_last_updated_by_user_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
 
   create_table "plans", force: :cascade do |t|
@@ -259,18 +267,26 @@ ActiveRecord::Schema.define(version: 20150917015831) do
     t.integer  "shipment_id"
     t.integer  "product_id"
     t.string   "product_name"
-    t.integer  "product_quantity",        default: 0,   null: false
-    t.decimal  "product_price",           default: 0.0, null: false
+    t.integer  "product_quantity",        default: 0,     null: false
+    t.decimal  "product_price",           default: 0.0,   null: false
     t.string   "product_sku"
-    t.date     "production_start",                      null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.date     "production_start",                        null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "production_run_id"
-    t.string   "product_product_type",                  null: false
-    t.integer  "product_total_lead_days",               null: false
+    t.string   "product_product_type",                    null: false
+    t.integer  "product_total_lead_days",                 null: false
+    t.datetime "removed_at"
+    t.boolean  "removed",                 default: false
+    t.integer  "removed_by_user_id"
+    t.datetime "additional_added_at"
+    t.boolean  "additional",              default: false
+    t.integer  "additional_by_user_id"
   end
 
+  add_index "shipment_items", ["additional"], name: "index_shipment_items_on_additional", using: :btree
   add_index "shipment_items", ["production_run_id"], name: "index_shipment_items_on_production_run_id", using: :btree
+  add_index "shipment_items", ["removed"], name: "index_shipment_items_on_removed", using: :btree
   add_index "shipment_items", ["shipment_id"], name: "index_shipment_items_on_shipment_id", using: :btree
 
   create_table "shipments", force: :cascade do |t|
@@ -344,6 +360,18 @@ ActiveRecord::Schema.define(version: 20150917015831) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",      null: false
+    t.integer  "item_id",        null: false
+    t.string   "event",          null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+    t.text     "object_changes"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "bakeries", "plans"
   add_foreign_key "clients", "bakeries", name: "clients_bakery_id_fk"

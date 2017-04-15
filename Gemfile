@@ -35,6 +35,7 @@ gem "unicorn", require: false
 gem "unitwise", require: "unitwise"
 gem "will_paginate", "~> 3.0.6"
 gem "wizarddev-heroku"
+gem "paper_trail"
 
 # legacy import
 gem "mysql2", require: false

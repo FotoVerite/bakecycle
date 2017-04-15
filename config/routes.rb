@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   resources :routes, except: [:show]
   resources :clients
   resources :orders, except: [:show] do
+    get "created_at", on: :collection
+    get "updated_at", on: :collection
+    get "papertrail", on: :member
     get "copy", on: :member
     get "print", on: :member
     put :add_invoices, on: :member

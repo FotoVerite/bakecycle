@@ -3,5 +3,6 @@
   <%= render 'clients' if policy(:client).dashboard? %>
   <%= render 'production' if policy(:production).dashboard? %>
   <%= render 'products' if policy(:product).dashboard? %>
+  <%= render 'changes' if policy(:client).dashboard? %>
   <%= render 'admin' %>
 </div>

@@ -99,7 +99,7 @@ class RecipeDataPage
       column(1).style(align: :left)
       row(1..-1).column(2).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
     end
-    products_table_total_weight
+    products_table_total_dough_weight
   end
 
   def product_data
@@ -110,17 +110,21 @@ class RecipeDataPage
   def product_rows
     recipe_run_data.sorted_recipe_run_date_products.map do |product|
       [
-        display_weight(product[:product].weight_with_unit.to_kg),
+        display_weight(product[:product].dough_weight_with_unit.to_kg),
         product[:product].name,
         product[:quantity],
-        display_weight(product[:weight])
+        if product[:inclusion]
+          display_weight(product[:dough_weight])
+        else
+          display_weight(product[:weight])
+        end
       ]
     end
   end
 
-  def products_table_total_weight
+  def products_table_total_dough_weight
     table(
-      products_total_weight_data,
+      products_total_dough_weight_data,
       position: :right,
       column_widths: [32, 52],
       cell_style: BasePdfReport::TABLE_STYLE
@@ -131,11 +135,11 @@ class RecipeDataPage
     end
   end
 
-  def products_total_weight_data
+  def products_total_dough_weight_data
     [
       [
         "Total",
-        display_weight(recipe_run_data.products_total_weight)
+        display_weight(recipe_run_data.products_total_dough_weight)
       ]
     ]
   end

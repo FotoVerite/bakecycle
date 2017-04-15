@@ -18,6 +18,7 @@
 #
 
 class OrderItem < ActiveRecord::Base
+  has_paper_trail
   extend OrderByProduct
 
   belongs_to :product
@@ -144,5 +145,10 @@ class OrderItem < ActiveRecord::Base
 
   def daily_subtotal(date)
     quantity(date) * product.price(total_quantity)
+  end
+
+  def destroy
+    self.removed = true
+    save
   end
 end

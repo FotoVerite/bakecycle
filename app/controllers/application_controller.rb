@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :default_nav
   before_action :resque_no_worker if Rails.env.development?
+  before_action :set_paper_trail_whodunnit
+
   helper_method :current_bakery
   helper_method :item_finder
   protect_from_forgery with: :exception

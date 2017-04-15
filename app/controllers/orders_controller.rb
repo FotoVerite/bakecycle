@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:add_invoices, :edit, :update, :destroy, :copy, :print]
+  before_action :set_order, only: [:add_invoices, :edit, :update, :destroy, :copy, :print, :papertrail]
   decorates_assigned :orders, :order
   helper_method :search_form
 
@@ -15,6 +15,14 @@ class OrdersController < ApplicationController
       .reject(&:no_outstanding_shipments?)
   end
 
+  def created_at
+    authorize Order
+    @date = date_query
+    @orders = policy_scope(Order)
+      .created_at_date(@date)
+      .paginate(page: params[:page])
+  end
+
   def new
     @order = policy_scope(Order).build(client: client, order_type: "standing", start_date: Time.zone.today)
     @order.route = item_finder.routes.first if item_finder.routes.count == 1
@@ -23,6 +31,7 @@ class OrdersController < ApplicationController
 
   def create
     @order = policy_scope(Order).build(order_params)
+    @order.created_by_user = current_user
     authorize @order
     order_creator = OrderCreator.new(@order, params[:confirm_override])
     if order_creator.run
@@ -38,8 +47,18 @@ class OrdersController < ApplicationController
     @updated = Order.find_by(id: params[:updated])
   end
 
+  def updated_at
+    authorize Order
+    @date = date_query
+    @orders = policy_scope(Order)
+      .updated_at_date(@date)
+      .paginate(page: params[:page])
+  end
+
   def update
     authorize @order
+    @order.last_updated_by_user = current_user
+    @order.increment(:version_number)
     if @order.update(order_params)
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
@@ -61,6 +80,10 @@ class OrdersController < ApplicationController
       ShipmentCreator.new(@order, ship_date).create!
     end
     redirect_to edit_order_path(@order)
+  end
+
+  def papertrail
+    authorize @order, :show?
   end
 
   def copy
@@ -100,5 +123,9 @@ class OrdersController < ApplicationController
         [:id, :product_id, :monday, :tuesday, :wednesday,
          :thursday, :friday, :saturday, :sunday, :_destroy]
     )
+  end
+
+  def date_query
+    Chronic.parse(params[:date] || params[:id]) || Time.zone.today
   end
 end

@@ -5,9 +5,20 @@
   <td data-title="Client"><%= order.client_name %></td>
   <td data-title="Type"><%= order.type %></td>
   <td data-title="Route"><%= order.route_name %></td>
+  <% if show_created_whodoneit %>
+    <td data-title="By"><%= order.created_whodunnit %></td>
+  <% end %>
+  <% if show_updated_at_whodoneit %>
+    <td data-title="By"><%= order.updated_at_whodunnit %></td>
+  <% end %>
   <td data-title="Action">
     <%= link_to edit_order_path(order) do %>
       <span class="table-action-icon icon-link-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
+    <% end %>
+    <% if show_updated_at_whodoneit %>
+      <%= link_to papertrail_order_path(order) do %>
+        <span class="table-action-icon icon-link-tooltip" aria-label="Papertrail"><i class="fi-eye"></i></span>
+      <% end %>
     <% end %>
     <%= link_to copy_order_path(order) do %>
       <span class="table-action-icon icon-link-tooltip" aria-label="Copy Order"><i class="fi-page-copy"></i></span>
