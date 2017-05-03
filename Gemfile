@@ -36,7 +36,8 @@ gem "unitwise", require: "unitwise"
 gem "will_paginate", "~> 3.0.6"
 gem "wizarddev-heroku"
 gem "paper_trail"
-
+gem "axlsx", "2.0.1"
+gem "rubyzip", "1.0.0"
 # legacy import
 gem "mysql2", require: false
 

@@ -29,6 +29,8 @@ class Product < ActiveRecord::Base
   belongs_to :motherdough, class_name: "Recipe"
   belongs_to :bakery
 
+  has_many :run_items
+
   has_many :price_variants, dependent: :destroy
 
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?

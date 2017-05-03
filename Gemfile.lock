@@ -49,6 +49,10 @@ GEM
     aws-sdk-v1 (1.64.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
     bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -204,6 +208,7 @@ GEM
       tilt
     highline (1.7.3)
     hitimes (1.2.2)
+    htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     http_parser.rb (0.6.0)
@@ -400,7 +405,7 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.7.1)
       sexp_processor (~> 4.1)
-    rubyzip (1.2.0)
+    rubyzip (1.0.0)
     safe_yaml (1.0.4)
     sass (3.3.14)
     sass-rails (5.0.3)
@@ -505,6 +510,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.9.3)
   airbrake
   aws-sdk (< 2.0)
+  axlsx (= 2.0.1)
   better_errors
   binding_of_caller
   brakeman
@@ -558,6 +564,7 @@ DEPENDENCIES
   rspec-activejob
   rspec-rails
   rubocop
+  rubyzip (= 1.0.0)
   sass-rails
   selenium-webdriver
   shoulda-matchers

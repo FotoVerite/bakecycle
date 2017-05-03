@@ -49,6 +49,12 @@ class ProductionRunsController < ApplicationController
     redirect_to ExporterJob.create(current_bakery, generator)
   end
 
+  def print_year_total_to_date
+    authorize ProductionRun, :can_print?
+    runs = policy_scope(ProductionRun).after_date
+    redirect_to WeeklyProductTotalsGenerator.create(current_bakery, Date.today)
+  end
+
   private
 
   def set_production_run

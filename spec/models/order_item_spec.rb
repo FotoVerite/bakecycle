@@ -15,6 +15,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  total_lead_days :integer          not null
+#  removed         :integer          default(0)
 #
 
 require "rails_helper"

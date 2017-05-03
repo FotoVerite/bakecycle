@@ -15,6 +15,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  total_lead_days :integer          not null
+#  removed         :integer          default(0)
 #
 
 class OrderItem < ActiveRecord::Base
@@ -115,7 +116,11 @@ class OrderItem < ActiveRecord::Base
   end
 
   def touch_order
-    order.touch if order && !order.destroyed?
+    if order && !order.destroyed?
+      order.last_updated_by_user_id
+      order.increment(:version_number)
+      order.save
+    end
   end
 
   def set_quantity_zero_if_blank

@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   resources :production_runs, only: [:index, :edit, :update] do
     get "print", on: :member
     get "print_projection", on: :collection
+    get "print_year_total_to_date", on: :collection
     put "reset", on: :member
     put "add", on: :member
 
