@@ -110,14 +110,10 @@ class RecipeDataPage
   def product_rows
     recipe_run_data.sorted_recipe_run_date_products.map do |product|
       [
-        display_weight(product[:product].dough_weight_with_unit.to_kg),
+        display_weight(product[:product].weight_with_unit.to_kg),
         product[:product].name,
         product[:quantity],
-        if product[:inclusion]
-          display_weight(product[:dough_weight])
-        else
-          display_weight(product[:weight])
-        end
+        display_weight(product[:weight])
       ]
     end
   end
@@ -161,7 +157,7 @@ class RecipeDataPage
     rows = [
       [
         inclusion_info[:inclusion].name,
-        display_weight(total_inclusion_weight(inclusion_info))
+        nil
       ],
       [
         inclusion_info[:dough].name,

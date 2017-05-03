@@ -8,18 +8,18 @@ module WeightDisplayer
       # Old way, will figure out a way to give a boolean
       if weight_in_kgs > Unitwise(0.001, :kg) || weight_in_kgs == Unitwise(0, :kg)
         {
-          content: weight_in_kgs.round(SIG_FIGS).to_s(:symbol),
+          content: sprintf("%0.#{SIG_FIGS}f", weight_in_kgs.round(SIG_FIGS)),
           background_color: "ffffff"
         }
       else
         {
-          content: weight_in_kgs.convert_to(:gram).round(SIG_FIGS).to_s(:symbol),
+          content: sprintf("%0.#{SIG_FIGS}f", weight_in_kgs.convert_to(:gram).round(SIG_FIGS)),
           background_color: "d3d3d3"
         }
       end
     else
       {
-        content: weight_in_kgs.convert_to(:gram).round(2).to_s(:symbol),
+        content: sprintf("%0.#{SIG_FIGS}f", weight_in_kgs.convert_to(:gram).round(SIG_FIGS)),
         background_color: "ffffff"
       }
     end
