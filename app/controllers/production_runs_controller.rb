@@ -1,6 +1,11 @@
 class ProductionRunsController < ApplicationController
   before_action :set_production_run, only: [:edit, :update, :print, :reset]
-  after_action :skip_policy_scope, only: [:print_recipes, :print_projection]
+  after_action :skip_policy_scope, only: [
+    :print_projection,
+    :print_recipes,
+    :print_weekly_daily_production_report,
+    :weekly_daily_production_report
+  ]
   decorates_assigned :production_runs, :production_run
 
   def index
@@ -35,6 +40,18 @@ class ProductionRunsController < ApplicationController
     redirect_to edit_production_run_path(@production_run), notice: "Reset Complete"
   end
 
+  def weekly_daily_production_report
+    authorize ProductionRun, :can_print?
+    @date = date_query
+  end
+
+  def print_weekly_daily_production_report
+    authorize ProductionRun, :can_print?
+    @date = date_query
+    generator = ProductionRunReport.new(current_bakery, date_query, params[:type])
+    redirect_to ExporterJob.create(current_bakery, generator)
+  end
+
   def print_recipes
     authorize ProductionRun, :can_print?
     active_nav(:print_recipes)
@@ -51,8 +68,7 @@ class ProductionRunsController < ApplicationController
 
   def print_year_total_to_date
     authorize ProductionRun, :can_print?
-    runs = policy_scope(ProductionRun).after_date
-    redirect_to WeeklyProductTotalsGenerator.create(current_bakery, Date.today)
+    redirect_to WeeklyProductTotalsGenerator.create(current_bakery, Time.zone.today)
   end
 
   private

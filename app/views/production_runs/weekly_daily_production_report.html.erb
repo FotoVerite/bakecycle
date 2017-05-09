@@ -1,0 +1,14 @@
+<% provide(:title, "Generate Weekly/Daily Reports") %>
+
+<h1>Generate Weekly/Daily Report</h1>
+
+<%= simple_form_for "", url: print_weekly_daily_production_report_production_runs_path, method: :get, :html => {:target => '_blank'}  do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+    </div>
+  </div>
+<%= button_tag "<i class='fi-page-export-pdf'></i> Print Daily Totals".html_safe, name: 'type', value: 'daily' %>
+<%= button_tag "<i class='fi-page-export-pdf'></i> Print Weekly Totals".html_safe, name: 'type', value: 'weekly' %>
+
+<% end %>

@@ -116,11 +116,10 @@ class OrderItem < ActiveRecord::Base
   end
 
   def touch_order
-    if order && !order.destroyed?
-      order.last_updated_by_user_id
-      order.increment(:version_number)
-      order.save
-    end
+    return unless order && !order.destroyed?
+    order.last_updated_by_user_id
+    order.increment(:version_number)
+    order.save
   end
 
   def set_quantity_zero_if_blank

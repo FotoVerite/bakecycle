@@ -1,7 +1,7 @@
 class WeeklyProductTotalsGenerator < ActiveJob::Base
   queue_as :file_exporter
 
-  def self.create(bakery, start_date = Date.today)
+  def self.create(bakery, start_date = Time.zone.today)
     FileExport.create!(bakery: bakery).tap do |file_export|
       perform_later(file_export, "#{bakery.id}_#{start_date.iso8601}")
     end
@@ -10,15 +10,14 @@ class WeeklyProductTotalsGenerator < ActiveJob::Base
   def generate(bakery)
     runs = bakery.production_runs.limit(5)
     hash = create_hash_of_products(runs)
-    array = create_array_of_rows(hash, Date.today.beginning_of_year - Date.today)
+    array = create_array_of_rows(hash, Time.zone.today.beginning_of_year - Time.zone.today)
     create_xlsl(array)
   end
 
   def perform(file_export, global_id)
     return if file_export.file.present?
-    bakery_id, start_date_string = global_id.split("_")
+    bakery_id, _start_date_string = global_id.split("_")
     bakery = Bakery.find(bakery_id)
-    start_date = Date.iso8601(start_date_string)
     file_export.file = generate(bakery)
     file_export.save!
   rescue Resque::TermException
@@ -27,6 +26,8 @@ class WeeklyProductTotalsGenerator < ActiveJob::Base
   end
 
   private
+
+  # rubocop:disable Metrics/AbcSize
 
   def create_hash_of_products(runs)
     hash = {}
@@ -69,6 +70,8 @@ class WeeklyProductTotalsGenerator < ActiveJob::Base
     array
   end
 
+  # rubocop:enable Metrics/AbcSize
+
   def create_xlsl(array)
     p = Axlsx::Package.new
     wb = p.workbook
@@ -95,4 +98,5 @@ class WeeklyProductTotalsGenerator < ActiveJob::Base
     outstrio.write(p.to_stream.read)
     FakeFileIO.new("Weekly_Production_Report.xlsx", outstrio.string)
   end
+
 end

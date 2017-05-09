@@ -20,7 +20,7 @@ class ProductionRun < ActiveRecord::Base
     reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
-  scope :after_date, ->(date = Date.today.beginning_of_year) { where("production_runs.date >= ?", date) }
+  scope :after_date, ->(date = Time.zone.today.beginning_of_year) { where("production_runs.date >= ?", date) }
 
   def self.policy_class
     ProductionPolicy
