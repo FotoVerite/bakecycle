@@ -4,30 +4,9 @@
 <% if policy(Product).new? %>
   <p><%= link_to 'Add New Recipe', new_recipe_path, class: "button" %></p>
 <% end %>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Type</th>
-      <% if policy(Product).manage_permission? %>
-        <th scope="col">Action</th>
-      <% end %>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% recipes.each do |recipe| %>
-      <tr class="js-clickable-row" href="<%= edit_recipe_path(recipe) %>">
-        <th scope="row"><%= link_to recipe.name, edit_recipe_path(recipe) %></th>
-        <td data-title="Type"><%= recipe.type %></td>
-        <% if policy(recipe).manage_permission? %>
-          <td data-title="Action">
-            <%= link_to edit_recipe_path(recipe) do %>
-              <span class="table-action-icon icon-link-tooltip" aria-label="Edit Recipe"><i class="fi-page-edit"></i></span>
-            <% end %>
-          </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render partial: 'recipe_table', locals: {
+    recipes: recipes,
+    show_created_whodoneit: false,
+    show_updated_at_whodoneit: false
+  }
+%>

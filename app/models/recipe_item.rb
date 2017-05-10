@@ -10,9 +10,11 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  sort_id            :integer          default(0), not null
+#  removed            :integer          default(0)
 #
 
 class RecipeItem < ActiveRecord::Base
+  has_paper_trail
   belongs_to :inclusionable, polymorphic: true
   belongs_to :recipe
 
@@ -45,5 +47,10 @@ class RecipeItem < ActiveRecord::Base
 
   def touch_recipe
     recipe.try(:touch)
+  end
+
+  def destroy
+    self.removed = true
+    save
   end
 end

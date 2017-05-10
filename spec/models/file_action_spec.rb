@@ -4,6 +4,7 @@
 #
 #  id             :integer          not null, primary key
 #  user_id        :integer
+#  bakery_id      :integer
 #  file_export_id :uuid
 #  action         :string
 #  created_at     :datetime         not null

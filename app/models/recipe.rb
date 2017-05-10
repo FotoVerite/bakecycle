@@ -19,13 +19,15 @@
 class Recipe < ActiveRecord::Base
   extend AlphabeticalOrder
   include ResqueJobs
+  has_paper_trail
 
   belongs_to :bakery
   has_many :parent_recipe_items, class_name: "RecipeItem", as: :inclusionable
   has_many :parent_recipes, through: :parent_recipe_items, source: :recipe
-  has_many :recipe_items, dependent: :destroy
-  has_many :child_recipes, through: :recipe_items, source: :inclusionable, source_type: "Recipe"
-  has_many :ingredients, through: :recipe_items, source: :inclusionable, source_type: "Ingredient"
+  has_many :recipe_items, -> { where(removed: false) }, dependent: :destroy
+  has_many :recipe_items_with_removes, dependent: :destroy, class_name: "RecipeItem"
+  has_many :child_recipes, -> { where('recipe_items.removed': false) }, through: :recipe_items, source: :inclusionable, source_type: "Recipe"
+  has_many :ingredients, -> { where('recipe_items.removed': false) }, through: :recipe_items, source: :inclusionable, source_type: "Ingredient"
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
@@ -51,6 +53,9 @@ class Recipe < ActiveRecord::Base
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
+  scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :updated_at_date, lambda { |date = Time.zone.today|
+    where(updated_at: date.beginning_of_day..date.end_of_day) }
 
   def self.policy_class
     ProductPolicy

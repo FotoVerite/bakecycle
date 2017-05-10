@@ -1,0 +1,25 @@
+<% provide(:title, "Updated Recipe - #{@date.strftime('%A %b. %e, %Y')}") %>
+
+<h1>Updated Recipe &mdash; <%= @date.strftime("%A %b. %e, %Y") %></h1>
+
+<%= simple_form_for :search, method: :get do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <%= f.submit 'Select Date', class: "button postfix search-button", name: nil %>
+    </div>
+  </div>
+<% end %>
+
+<% if @recipes.any? %>
+<%= render partial: "recipe_table", locals: {
+    recipes: @recipes,
+    show_created_whodoneit: false,
+    show_updated_at_whodoneit: true
+  }
+%>
+<% else %>
+  <h2>No Recipes updated at this date.</h2>
+<% end %>

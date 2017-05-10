@@ -1,5 +1,5 @@
 class RecipesController < ApplicationController
-  before_action :set_recipe, only: [:edit, :update, :destroy]
+  before_action :set_recipe, only: [:edit, :papertrail, :update, :destroy]
   decorates_assigned :recipes, :recipe
 
   def index
@@ -23,8 +23,24 @@ class RecipesController < ApplicationController
     end
   end
 
+  def created_at
+    authorize Recipe
+    @date = date_query
+    @recipes = policy_scope(Recipe)
+      .created_at_date(@date)
+      .paginate(page: params[:page])
+  end
+
   def edit
     authorize @recipe
+  end
+
+  def updated_at
+    authorize Recipe
+    @date = date_query
+    @recipes = policy_scope(Recipe)
+      .updated_at_date(@date)
+      .paginate(page: params[:page])
   end
 
   def update
@@ -47,6 +63,10 @@ class RecipesController < ApplicationController
     end
   end
 
+  def papertrail
+    authorize @recipe, :index?
+  end
+
   private
 
   def set_recipe
@@ -58,5 +78,9 @@ class RecipesController < ApplicationController
       :name, :note, :mix_size, :mix_size_unit, :recipe_type, :lead_days,
       recipe_items_attributes: [:id, :inclusionable_id_type, :bakers_percentage, :sort_id, :_destroy]
     )
+  end
+
+  def date_query
+    Chronic.parse(params[:date] || params[:id]) || Time.zone.today
   end
 end

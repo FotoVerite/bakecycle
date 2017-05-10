@@ -16,7 +16,12 @@ Rails.application.routes.draw do
   resources :registrations, only: [:new, :create]
 
   resources :ingredients, except: [:show]
-  resources :recipes, except: [:show]
+  resources :recipes, except: [:show] do
+    get "created_at", on: :collection
+    get "updated_at", on: :collection
+    get "papertrail", on: :member
+  end
+
   resources :products, except: [:show]
   resources :routes, except: [:show]
   resources :clients

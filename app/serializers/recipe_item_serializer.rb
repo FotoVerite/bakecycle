@@ -10,6 +10,7 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  sort_id            :integer          default(0), not null
+#  removed            :integer          default(0)
 #
 
 class RecipeItemSerializer < ActiveModel::Serializer

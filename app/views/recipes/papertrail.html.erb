@@ -1,0 +1,35 @@
+<% provide(:title, "Papertrail of Recipe ##{@recipe.id}") %>
+<h1>Papertrail of Recipe #<%= recipe.id %></h1>
+<p>Last edited by <%= User.find(@recipe.versions.last.whodunnit).name %> at <%= @recipe.updated_at.strftime("%Y-%m-%d %k:%M%p") %></p>
+<% @recipe.versions.reverse.each do | version| %>
+  changed by <%= User.find(version.whodunnit).name %> at <%= version.changeset['updated_at'][1].strftime("%Y-%m-%d %k:%M%p") %>
+  <% version.changeset.except!('updated_at').each do |k, v| %>
+    <% changed_from = (v[0].is_a?(String) && v[0].blank?) ? 'blank' : v[0] %>
+   <p> <%= "#{k} from #{changed_from} to #{v[1]}" %></p>
+  <% end %>
+<% end %>
+<h2>Recipe Items</h2>
+<% @recipe.recipe_items_with_removes.order('updated_at DESC').each do |item| %>
+  <h3>
+    <%= item.inclusionable.name %>
+    <hr />
+  </h3>
+  <% for version in item.versions.reverse %>
+    <% if version.changeset.has_key?(:recipe_id) %>
+      <p>Created By: <%= User.find(version.whodunnit).name %>
+        at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
+      </p>
+    <% elsif version.changeset.has_key?(:removed) %>
+      <p>
+      Removed By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
+      </p>
+    <% else %>
+     <p>
+      Edited By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
+         <% version.changeset.except!('updated_at').each do |k, v| %>
+          <p> <%= "#{k} from #{v[0]} to #{v[1]}" %></p>
+         <% end %>
+      </p>
+    <% end %>
+  <% end %>
+<% end %>
