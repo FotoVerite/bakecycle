@@ -4,37 +4,4 @@
 <% if policy(Product).new? %>
   <p><%= link_to 'Add New Product', new_product_path, class: "button" %></p>
 <% end %>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Product Type</th>
-      <th scope="col">Description</th>
-      <th scope="col">SKU</th>
-      <% if policy(Product).manage_permission? %>
-        <th scope="col">Action</th>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <% products.each do |product| %>
-      <tr class="js-clickable-row" href="<%= edit_product_path(product) %>">
-        <th scope="row"><%= link_to product.name, edit_product_path(product) %></th>
-        <td data-title="Product Type"><%= product.type %></td>
-        <td data-title="Description"><%= product.truncated_description %></td>
-        <td data-title="SKU"><%= product.sku_display %></td>
-        <% if policy(product).manage_permission? %>
-          <td data-title="Action">
-            <%= link_to edit_product_path(product) do %>
-              <span class="table-action-icon icon-link-tooltip" aria-label="Edit Product">
-                <i class="fi-page-edit large"></i>
-              </span>
-            <% end %>
-          </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= will_paginate products %>

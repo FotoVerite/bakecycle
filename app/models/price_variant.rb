@@ -9,9 +9,12 @@
 #  created_at :datetime
 #  updated_at :datetime
 #  client_id  :integer
+#  removed    :integer          default(0)
 #
 
 class PriceVariant < ActiveRecord::Base
+  has_paper_trail
+
   belongs_to :product
   belongs_to :client
 
@@ -29,5 +32,10 @@ class PriceVariant < ActiveRecord::Base
     else
       ""
     end
+  end
+
+  def destroy
+    self.removed = true
+    save
   end
 end

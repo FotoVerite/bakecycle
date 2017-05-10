@@ -9,6 +9,7 @@
 #  created_at :datetime
 #  updated_at :datetime
 #  client_id  :integer
+#  removed    :integer          default(0)
 #
 
 require "rails_helper"

@@ -22,7 +22,11 @@ Rails.application.routes.draw do
     get "papertrail", on: :member
   end
 
-  resources :products, except: [:show]
+  resources :products, except: [:show] do
+    get "created_at", on: :collection
+    get "updated_at", on: :collection
+    get "papertrail", on: :member
+  end
   resources :routes, except: [:show]
   resources :clients
   resources :orders, except: [:show] do

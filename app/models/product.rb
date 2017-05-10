@@ -24,6 +24,7 @@
 class Product < ActiveRecord::Base
   extend AlphabeticalOrder
   include ResqueJobs
+  has_paper_trail
 
   belongs_to :inclusion, class_name: "Recipe"
   belongs_to :motherdough, class_name: "Recipe"
@@ -31,7 +32,8 @@ class Product < ActiveRecord::Base
 
   has_many :run_items
 
-  has_many :price_variants, dependent: :destroy
+  has_many :price_variants, -> { where(removed: false) }, dependent: :destroy
+  has_many :price_variants_with_removes, dependent: :destroy, class_name: "PriceVariant"
 
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
 
@@ -63,6 +65,11 @@ class Product < ActiveRecord::Base
   after_commit :queue_touch_order_items, on: [:create, :update]
   after_touch :update_total_lead_days
   before_destroy :check_for_order_items
+
+  scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :updated_at_date, lambda { |date = Time.zone.today|
+    where(updated_at: date.beginning_of_day..date.end_of_day) }
+
 
   def strip_name
     self.name = name.strip if name

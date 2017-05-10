@@ -40,9 +40,6 @@
 </div>
 
 <div class="row">
-  <div class="small-12 columns">
-    <h2>Changes</h2>
-  </div>
   <%= link_to created_at_recipes_path do %>
     <div class="large-4 medium-6 small-12 columns">
       <div class="stats border">
@@ -61,6 +58,33 @@
         <div class="left">
           Recipes Updated Today
           <h3><%= item_finder.recipes.updated_at_date.select {|r| r.versions.size > 1}.size %></h3>
+        </div>
+        <i class="fi-info right"></i>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="row">
+  <%= link_to created_at_products_path do %>
+    <div class="large-4 medium-6 small-12 columns">
+      <div class="stats border">
+        <div class="left">
+          Products Created Today
+          <h3><%= item_finder.products.created_at_date.count %></h3>
+        </div>
+        <i class="fi-info right"></i>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  <% end %>
+  <%= link_to updated_at_products_path do %>
+    <div class="large-4 medium-6 small-12 columns">
+      <div class="stats border">
+        <div class="left">
+          Products Updated Today
+          <h3><%= item_finder.products.updated_at_date.select {|r| r.versions.size > 1}.size %></h3>
         </div>
         <i class="fi-info right"></i>
         <div class="clearfix"></div>

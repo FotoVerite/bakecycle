@@ -1,6 +1,6 @@
-<% provide(:title, "Updated Recipe - #{@date.strftime('%A %b. %e, %Y')}") %>
+<% provide(:title, "Created Products - #{@date.strftime('%A %b. %e, %Y')}") %>
 
-<h1>Updated Recipe &mdash; <%= @date.strftime("%A %b. %e, %Y") %></h1>
+<h1>Created Products &mdash; <%= @date.strftime("%A %b. %e, %Y") %></h1>
 
 <%= simple_form_for :search, method: :get do |f| %>
   <div class="row collapse">
@@ -13,13 +13,13 @@
   </div>
 <% end %>
 
-<% if @recipes.any? %>
-<%= render partial: "recipe_table", locals: {
-    recipes: @recipes.decorate,
-    show_created_whodoneit: false,
-    show_updated_at_whodoneit: true
+<% if @products.any? %>
+<%= render partial: "product_table", locals: {
+    products: @products.decorate,
+    show_created_whodoneit: true,
+    show_updated_at_whodoneit: false
   }
 %>
 <% else %>
-  <h2>No Recipes updated at this date.</h2>
+  <h2>No Products created for this date.</h2>
 <% end %>

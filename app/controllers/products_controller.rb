@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:edit, :update, :destroy]
+  before_action :set_product, only: [:edit, :papertrail, :update, :destroy]
   decorates_assigned :products, :product
 
   def index
@@ -12,6 +12,14 @@ class ProductsController < ApplicationController
   def new
     @product = policy_scope(Product).build(unit: :kg)
     authorize @product
+  end
+
+   def created_at
+    authorize Product
+    @date = date_query
+    @products = policy_scope(Product)
+      .created_at_date(@date)
+      .paginate(page: params[:page])
   end
 
   def create
@@ -27,6 +35,14 @@ class ProductsController < ApplicationController
 
   def edit
     authorize @product
+  end
+
+  def updated_at
+    authorize Product
+    @date = date_query
+    @products = policy_scope(Product)
+      .updated_at_date(@date)
+      .paginate(page: params[:page])
   end
 
   def update
@@ -49,6 +65,11 @@ class ProductsController < ApplicationController
     end
   end
 
+  def papertrail
+    authorize @product, :index?
+  end
+
+
   private
 
   def set_product
@@ -61,5 +82,9 @@ class ProductsController < ApplicationController
       :motherdough_id, :inclusion_id, :base_price, :sku, :batch_recipe,
       price_variants_attributes: [:id, :client_id, :quantity, :price, :_destroy]
     )
+  end
+
+  def date_query
+    Chronic.parse(params[:date] || params[:id]) || Time.zone.today
   end
 end

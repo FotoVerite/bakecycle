@@ -15,7 +15,7 @@
 
 <% if @recipes.any? %>
 <%= render partial: "recipe_table", locals: {
-    recipes: @recipes,
+    recipes: @recipes.decorate,
     show_created_whodoneit: true,
     show_updated_at_whodoneit: false
   }
