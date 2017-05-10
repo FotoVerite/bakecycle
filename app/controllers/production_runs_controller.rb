@@ -31,7 +31,7 @@ class ProductionRunsController < ApplicationController
   def print
     authorize @production_run
     generator = ProductionRunGenerator.new(@production_run)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def reset
@@ -49,7 +49,7 @@ class ProductionRunsController < ApplicationController
     authorize ProductionRun, :can_print?
     @date = date_query
     generator = ProductionRunReport.new(current_bakery, date_query, params[:type])
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def print_recipes
@@ -63,7 +63,7 @@ class ProductionRunsController < ApplicationController
   def print_projection
     authorize ProductionRun, :can_print?
     generator = ProjectionGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def print_year_total_to_date

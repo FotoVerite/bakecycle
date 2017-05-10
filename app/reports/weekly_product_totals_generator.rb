@@ -98,5 +98,4 @@ class WeeklyProductTotalsGenerator < ActiveJob::Base
     outstrio.write(p.to_stream.read)
     FakeFileIO.new("Weekly_Production_Report.xlsx", outstrio.string)
   end
-
 end

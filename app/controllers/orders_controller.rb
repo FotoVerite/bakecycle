@@ -95,7 +95,7 @@ class OrdersController < ApplicationController
   def print
     authorize @order, :show?
     generator = OrderGenerator.new(@order)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   private

@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170418001615) do
+ActiveRecord::Schema.define(version: 20170509201656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "bakeries", force: :cascade do |t|
@@ -79,13 +80,24 @@ ActiveRecord::Schema.define(version: 20170418001615) do
     t.datetime "updated_at",                                   null: false
     t.string   "ein"
     t.string   "notes"
-    t.integer  "default_packing_slips",          default: 1
-    t.integer  "default_invoice_copies",         default: 1
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
   add_index "clients", ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
+
+  create_table "file_actions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "bakery_id"
+    t.uuid     "file_export_id"
+    t.string   "action"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "file_actions", ["bakery_id"], name: "index_file_actions_on_bakery_id", using: :btree
+  add_index "file_actions", ["file_export_id"], name: "index_file_actions_on_file_export_id", using: :btree
+  add_index "file_actions", ["user_id"], name: "index_file_actions_on_user_id", using: :btree
 
   create_table "file_exports", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.integer  "bakery_id",         null: false
@@ -267,26 +279,18 @@ ActiveRecord::Schema.define(version: 20170418001615) do
     t.integer  "shipment_id"
     t.integer  "product_id"
     t.string   "product_name"
-    t.integer  "product_quantity",        default: 0,     null: false
-    t.decimal  "product_price",           default: 0.0,   null: false
+    t.integer  "product_quantity",        default: 0,   null: false
+    t.decimal  "product_price",           default: 0.0, null: false
     t.string   "product_sku"
-    t.date     "production_start",                        null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.date     "production_start",                      null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.integer  "production_run_id"
-    t.string   "product_product_type",                    null: false
-    t.integer  "product_total_lead_days",                 null: false
-    t.datetime "removed_at"
-    t.boolean  "removed",                 default: false
-    t.integer  "removed_by_user_id"
-    t.datetime "additional_added_at"
-    t.boolean  "additional",              default: false
-    t.integer  "additional_by_user_id"
+    t.string   "product_product_type",                  null: false
+    t.integer  "product_total_lead_days",               null: false
   end
 
-  add_index "shipment_items", ["additional"], name: "index_shipment_items_on_additional", using: :btree
   add_index "shipment_items", ["production_run_id"], name: "index_shipment_items_on_production_run_id", using: :btree
-  add_index "shipment_items", ["removed"], name: "index_shipment_items_on_removed", using: :btree
   add_index "shipment_items", ["shipment_id"], name: "index_shipment_items_on_shipment_id", using: :btree
 
   create_table "shipments", force: :cascade do |t|

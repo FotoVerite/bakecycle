@@ -1,0 +1,9 @@
+<h1>File Actions </h1>
+
+<ul class='file-actions'>
+
+  <% @file_actions.each do |action| %>
+      <li><%= action.user.name %> <%= action.action %> <%= action.file_export.file_file_name %> <%= action.created_at.strftime("%-m/%d/%y %I:%M %p") %></li>
+  <% end %>
+
+</ul>

@@ -49,7 +49,7 @@ class ShipmentsController < ApplicationController
   def invoice
     authorize @shipment, :show?
     generator = InvoicePdfGenerator.new(current_bakery, @shipment)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def packing_slip
@@ -63,19 +63,19 @@ class ShipmentsController < ApplicationController
   def export_csv
     authorize Shipment, :index?
     generator = InvoicesCsvGenerator.new(current_bakery, search_form)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def export_iif
     authorize Shipment, :index?
     generator = InvoicesIifGenerator.new(current_bakery, search_form)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def export_pdf
     authorize Shipment, :index?
     generator = InvoicesPdfGenerator.new(current_bakery, search_form)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def invoice_iif

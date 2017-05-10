@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     get "myaccount", on: :collection, as: "my"
   end
 
+  resources :file_actions, only: [:index]
+
   resources :file_exports, only: [:show]
 
   resources :shipments, path: "invoices", except: [:show] do

@@ -18,7 +18,7 @@ class WeeklyProductionRunTotalsXlxs
     p = Axlsx::Package.new
     wb = p.workbook
     styles = wb.styles
-    @header     = styles.add_style :bg_color => "DD", :sz => 16, :b => true, :alignment => {:horizontal => :center}
+    @header = styles.add_style bg_color: "DD", sz: 16, b: true, alignment: { horizontal: :center }
     wb.add_worksheet(name: "Data Sheet") do |sheet|
       sheet.add_row headers
       add_rows(hash, sheet)
@@ -40,12 +40,11 @@ class WeeklyProductionRunTotalsXlxs
     hash
   end
 
-
   def hash_product_info(hash, item, day_name)
     product_name = item.product.name
     total_quantity = item.total_quantity
     hash[product_name] = {} unless hash[product_name]
-    hash[product_name]['weight'] = format("%0.3f",  item.product.weight_with_unit.to_kg.round(3)) + " kg" unless hash[product_name]['weight']
+    hash[product_name]["weight"] = format("%0.3f", item.product.weight_with_unit.to_kg.round(3)) + " kg" unless hash[product_name]["weight"]
     # days
     hash[product_name][day_name] = (total_quantity + hash[product_name][day_name].to_i)
     # product price
@@ -56,34 +55,34 @@ class WeeklyProductionRunTotalsXlxs
 
   def add_rows(hash, sheet)
     array = []
-    #Set Product Type Row
+    # Set Product Type Row
     hash.each do |key, product_values|
-      sheet.add_row [key], :style => @header
-      sheet.merge_cells("A#{sheet.rows.last.index + 1 }:J#{sheet.rows.last.index + 1 }")
-      sheet.add_row ['']
+      sheet.add_row [key], style: @header
+      sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
+      sheet.add_row [""]
       create_product_rows(product_values, sheet)
-      sheet.add_row ['']
+      sheet.add_row [""]
     end
-    return array
+    array
   end
 
   def create_product_rows(product_values, sheet)
-      start = sheet.rows.last.index + 2
-      product_values.each do |key, value|
-        row = [value['weight']]
-        row.push(key)
-        @weekday_order.each do |day|
-          row.push(value[day] || 0)
-        end
-        row.push(value["total_products"] || 0)
-        sheet.add_row row
+    start = sheet.rows.last.index + 2
+    product_values.each do |key, value|
+      row = [value["weight"]]
+      row.push(key)
+      @weekday_order.each do |day|
+        row.push(value[day] || 0)
       end
-      end_of = sheet.rows.last.index + 1
-      total_row = [nil, nil]
-      ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].each do |sum|
-        total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
-      end
-      sheet.add_row total_row
+      row.push(value["total_products"] || 0)
+      sheet.add_row row
+    end
+    end_of = sheet.rows.last.index + 1
+    total_row = [nil, nil]
+    %w(C D E F G H I J).each do |sum|
+      total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
+    end
+    sheet.add_row total_row
   end
 
   def create_output_string(p)

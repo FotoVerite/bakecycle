@@ -10,7 +10,7 @@ class BatchRecipesController < ApplicationController
   def print
     authorize ProductionRun, :can_print?
     generator = BatchGenerator.new(current_bakery, start_date, end_date)
-    redirect_to ExporterJob.create(current_bakery, generator)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def export_csv
