@@ -1,5 +1,4 @@
 class FileActionPolicy < ApplicationPolicy
-
   def index?
     (admin? || read_permission?) && user.bakery
   end

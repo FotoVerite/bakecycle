@@ -14,13 +14,13 @@ class ProductsController < ApplicationController
     authorize @product
   end
 
-   def created_at
+  def created_at
     authorize Product
     @date = date_query
     @products = policy_scope(Product)
       .created_at_date(@date)
       .paginate(page: params[:page])
-  end
+   end
 
   def create
     @product = policy_scope(Product).build(product_params)
@@ -68,7 +68,6 @@ class ProductsController < ApplicationController
   def papertrail
     authorize @product, :index?
   end
-
 
   private
 

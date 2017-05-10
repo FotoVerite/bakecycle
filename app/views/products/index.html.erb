@@ -5,3 +5,9 @@
   <p><%= link_to 'Add New Product', new_product_path, class: "button" %></p>
 <% end %>
 
+<%= render partial: "product_table", locals: {
+    products: @products.decorate,
+    show_created_whodoneit: false,
+    show_updated_at_whodoneit: false
+  }
+%>

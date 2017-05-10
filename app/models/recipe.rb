@@ -55,7 +55,8 @@ class Recipe < ActiveRecord::Base
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
   scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|
-    where(updated_at: date.beginning_of_day..date.end_of_day) }
+    where(updated_at: date.beginning_of_day..date.end_of_day)
+  }
 
   def self.policy_class
     ProductPolicy
