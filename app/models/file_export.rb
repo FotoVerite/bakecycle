@@ -16,7 +16,7 @@
 class FileExport < ActiveRecord::Base
   belongs_to :bakery
   has_attached_file :file,
-    s3_header: {"Content-Disposition" => "attachment"},
+    s3_headers: { :content_disposition => 'attachment' },
     use_timestamp: false,
     default_url: "",
     url: "/system/:class/:id/:attachment/:filename"
