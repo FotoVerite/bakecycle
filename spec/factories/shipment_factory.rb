@@ -33,6 +33,7 @@
 #  route_departure_time             :time             not null
 #  client_notes                     :string
 #  order_id                         :integer
+#  invoice_sequence                 :integer
 #
 
 FactoryGirl.define do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510193505) do
+ActiveRecord::Schema.define(version: 20170515201902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20170510193505) do
     t.datetime "updated_at",                                   null: false
     t.string   "ein"
     t.string   "notes"
+    t.integer  "sequence_number"
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
@@ -326,6 +327,7 @@ ActiveRecord::Schema.define(version: 20170510193505) do
     t.time     "route_departure_time",                             null: false
     t.string   "client_notes"
     t.integer  "order_id"
+    t.integer  "sequence_number"
   end
 
   add_index "shipments", ["bakery_id"], name: "index_shipments_on_bakery_id", using: :btree

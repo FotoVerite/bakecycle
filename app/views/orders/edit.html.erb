@@ -5,6 +5,8 @@
   <li><%= link_to 'Back', orders_path, class: "button small" %></li>
   <li><%= link_to "Print", print_order_path(order), target: "_blank", class: "button small" %></li>
   <li><%= link_to "Copy Order", copy_order_path(order), class: "button small" %></li>
+  <li><%= link_to "Create Future Invoices", future_invoices_order_path(order), class: "button small" %></li>
+
 </ul>
 
 <% unless order.no_outstanding_shipments? %>

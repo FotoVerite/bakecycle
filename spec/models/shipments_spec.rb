@@ -172,7 +172,7 @@ describe Shipment do
 
       it "sets route_name from the name of the related route" do
         route = create(:route, name: "Route1")
-        shipment = build(:shipment, route: nil)
+        shipment = build(:shipment, route: nil, order: nil)
         shipment.route_id = route.id
         expect(shipment.route_name).to eq("Route1")
       end

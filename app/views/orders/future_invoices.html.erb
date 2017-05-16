@@ -1,0 +1,15 @@
+<% provide(:title, "Created Invoices from - #{@date.strftime('%A %b. %e, %Y')}") %>
+
+<h1>Created Invoices from &mdash; <%= @date.strftime("%A %b. %e, %Y") %></h1>
+
+<%= simple_form_for :future_invoices, url: add_invoices_order_path, method: :put do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <%= f.submit 'Create Invoices', class: "button postfix search-button", name: nil %>
+    </div>
+  </div>
+<% end %>
+

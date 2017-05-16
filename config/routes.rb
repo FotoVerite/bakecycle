@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get "papertrail", on: :member
     get "copy", on: :member
     get "print", on: :member
+    get :future_invoices, on: :member
     put :add_invoices, on: :member
   end
   resources :users, except: [:show] do

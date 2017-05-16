@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:add_invoices, :edit, :update, :destroy, :copy, :print, :papertrail]
+  before_action :set_order, only: [:add_invoices, :edit, :future_invoices, :update, :destroy, :copy, :print, :papertrail]
   decorates_assigned :orders, :order
   helper_method :search_form
 
@@ -74,9 +74,19 @@ class OrdersController < ApplicationController
     redirect_to orders_path
   end
 
+  def future_invoices
+    authorize @order, :edit?
+    @date = Chronic.parse @order.shipments.last.date + 1.day
+  end
+
   def add_invoices
     authorize @order, :edit?
-    @order.missing_shipment_dates.each do |ship_date|
+    if params[:date]
+      dates = (@order.shipments.last.date + 1.day)..Date.parse(params[:date])
+    else
+      dates = @order.missing_shipment_dates
+    end
+    dates.each do |ship_date|
       ShipmentCreator.new(@order, ship_date).create!
     end
     redirect_to edit_order_path(@order)

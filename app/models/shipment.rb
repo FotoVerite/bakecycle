@@ -33,6 +33,7 @@
 #  route_departure_time             :time             not null
 #  client_notes                     :string
 #  order_id                         :integer
+#  invoice_sequence                 :integer
 #
 
 class Shipment < ActiveRecord::Base
@@ -40,6 +41,8 @@ class Shipment < ActiveRecord::Base
 
   belongs_to :bakery
   belongs_to :order
+  belongs_to :client
+
   has_many :shipment_items, dependent: :destroy
 
   accepts_nested_attributes_for(
@@ -49,6 +52,8 @@ class Shipment < ActiveRecord::Base
   )
 
   before_validation :set_payment_due_date
+  before_create :set_invoice_sequence
+  after_create :increment_client_sequence
 
   validates :date, presence: true
   validates :bakery, presence: true
@@ -116,7 +121,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def invoice_number
-    "#{id}-#{client_id}"
+    "#{invoice_sequence}-#{client_id}"
   end
 
   def set_payment_due_date
@@ -126,5 +131,14 @@ class Shipment < ActiveRecord::Base
 
   def production_start
     shipment_items.earliest_production_date
+  end
+
+  def set_invoice_sequence
+    self.invoice_sequence = client.invoice_sequence
+  end
+
+  def increment_client_sequence
+    client.increment(:invoice_sequence)
+    client.save
   end
 end

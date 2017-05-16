@@ -4,6 +4,7 @@ describe ProductCounter do
   let(:today) { Time.zone.today }
   let(:tomorrow) { Time.zone.tomorrow }
   let(:bakery) { create(:bakery) }
+  let(:client) {create(:client, bakery: bakery)}
   let(:product_counter) { ProductCounter.new(bakery, today) }
 
   describe "#date" do
@@ -20,7 +21,7 @@ describe ProductCounter do
 
   describe "#shipments" do
     it "returns collection of shipments for the date" do
-      shipment = create(:shipment, bakery: bakery, date: today)
+      shipment = create(:shipment, bakery: bakery, date: today, client: client)
       create(:shipment, bakery: bakery, date: tomorrow)
       expect(product_counter.shipments).to contain_exactly(shipment)
     end

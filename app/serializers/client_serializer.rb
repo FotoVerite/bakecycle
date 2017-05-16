@@ -39,6 +39,7 @@
 #  updated_at                     :datetime         not null
 #  ein                            :string
 #  notes                          :string
+#  invoice_sequence               :integer          default(5000)
 #
 
 class ClientSerializer < ActiveModel::Serializer
