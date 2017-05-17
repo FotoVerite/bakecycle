@@ -33,7 +33,7 @@
 #  route_departure_time             :time             not null
 #  client_notes                     :string
 #  order_id                         :integer
-#  invoice_sequence                 :integer
+#  sequence_number                  :integer
 #
 
 class Shipment < ActiveRecord::Base
@@ -52,7 +52,7 @@ class Shipment < ActiveRecord::Base
   )
 
   before_validation :set_payment_due_date
-  before_create :set_invoice_sequence
+  before_create :set_sequence_number
   after_create :increment_client_sequence
 
   validates :date, presence: true
@@ -121,7 +121,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def invoice_number
-    "#{invoice_sequence}-#{client_id}"
+    "#{sequence_number}-#{client_id}"
   end
 
   def set_payment_due_date
@@ -133,12 +133,12 @@ class Shipment < ActiveRecord::Base
     shipment_items.earliest_production_date
   end
 
-  def set_invoice_sequence
-    self.invoice_sequence = client.invoice_sequence
+  def set_sequence_number
+    self.sequence_number = client.sequence_number
   end
 
   def increment_client_sequence
-    client.increment(:invoice_sequence)
+    client.increment(:sequence_number)
     client.save
   end
 end
