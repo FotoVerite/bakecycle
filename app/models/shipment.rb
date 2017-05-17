@@ -33,7 +33,7 @@
 #  route_departure_time             :time             not null
 #  client_notes                     :string
 #  order_id                         :integer
-#  sequence_number                  :integer
+#  sequence_number                 :integer
 #
 
 class Shipment < ActiveRecord::Base
@@ -42,6 +42,7 @@ class Shipment < ActiveRecord::Base
   belongs_to :bakery
   belongs_to :order
   belongs_to :client
+  belongs_to :route
 
   has_many :shipment_items, dependent: :destroy
 
@@ -121,7 +122,11 @@ class Shipment < ActiveRecord::Base
   end
 
   def invoice_number
-    "#{sequence_number}-#{client_id}"
+    if client.try(:legacy_id)
+      "#{sequence_number}-#{"%03d" % route.legacy_id}-#{client.legacy_id}"
+    else
+      "#{sequence_number}-#{"%03d" % route_id}-#{client_id}"
+    end
   end
 
   def set_payment_due_date
