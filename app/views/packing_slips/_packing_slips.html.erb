@@ -1,3 +1,12 @@
+<%= simple_form_for :print, url:  print_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
+  <div class="row collapse">
+    <div class="small-12 medium-3 columns">
+      <%= f.submit 'Print Packing List', class: "button postfix search-button", action: 'print', name: nil %>
+      <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
+    </div>
+  </div>
+<% end %>
+
 <%= simple_form_for :print, url:  print_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
   <div class="row collapse">
     <div class="small-12 medium-3 columns">

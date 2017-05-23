@@ -13,6 +13,13 @@ class PackingSlipsController < ApplicationController
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
+  def print_list
+    authorize Route, :print?
+    generator = PackListGenerator.new(current_bakery, slip_date)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+
   private
 
   def shipments_for(date)

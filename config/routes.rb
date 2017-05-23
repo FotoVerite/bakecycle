@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
   resources :packing_slips, only: [:index] do
     get "print", on: :collection
+    get "print_list", on: :collection
   end
 
   get "print-recipes", to: "production_runs#print_recipes"
