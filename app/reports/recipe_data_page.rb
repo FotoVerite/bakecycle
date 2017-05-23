@@ -135,7 +135,7 @@ class RecipeDataPage
     [
       [
         "Total",
-        display_weight(recipe_run_data.products_total_dough_weight)
+        display_weight(recipe_run_data.products_total_weight)
       ]
     ]
   end
