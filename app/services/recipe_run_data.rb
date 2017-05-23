@@ -81,7 +81,7 @@ class RecipeRunData
   end
 
   def products_total_dough_weight
-    products.reduce(Unitwise(0, :kg)) { |sum, product| sum + product[:dough_weight] }
+    products.reduce(Unitwise(0, :kg)) { |sum, product| sum + product[:product_weight] }
   end
 
   def inclusion_for_product(product)
