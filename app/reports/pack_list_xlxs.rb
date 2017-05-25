@@ -26,23 +26,28 @@ class PackListXlxs
     @shipments.each do |shipment|
       client_name = shipment.client.name
       shipment.shipment_items.each do |i|
-        product_hash = hash[i.product_name].nil? ? hash[i.product_name] = [] : hash[i.product_name]
-        product_hash.push("#{client_name} #{i.product_quantity}")
+        if  hash[i.product_name].nil?
+          product_hash = hash[i.product_name] = {}
+          product_hash['product_type'] = i.product.attributes['product_type']
+          product_hash['name'] = i.product_name
+          product_hash['quantity'] = []
+        else
+          product_hash = hash[i.product_name]
+        end
+        product_hash['quantity'].push("#{client_name} #{i.product_quantity}")
       end
     end
-    hash
+    hash.sort_by {|k,v| [v['product_type'], v['name']]}
   end
 
   def add_rows(hash, sheet)
-    array = []
     # Set Product Type Row
-    hash.each do |key, product_values|
-      sheet.add_row [key], style: @header
-      product_values.each do |v|
-        sheet.add_row [v]
+    hash.each do |product_array|
+      sheet.add_row [product_array[0]], style: @header
+      product_array[1]['quantity'].each do |quantities|
+        sheet.add_row [quantities]
       end
     end
-    array
   end
 
   def create_output_string(p)

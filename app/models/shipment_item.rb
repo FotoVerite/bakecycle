@@ -21,6 +21,7 @@ class ShipmentItem < ActiveRecord::Base
   include Denormalization
   belongs_to :shipment
   belongs_to :production_run
+  belongs_to :product
 
   validates :product_quantity, presence: true, numericality: true
   validates :product_price, presence: true, numericality: true
