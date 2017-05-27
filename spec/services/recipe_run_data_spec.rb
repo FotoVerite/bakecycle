@@ -10,11 +10,11 @@ describe RecipeRunData do
     it "keeps a list of products and their info" do
       allow_any_instance_of(ProductRecipeCalc).to receive(:dough_percentage).and_return(0)
       product_info = {
+        dough_weight: Unitwise(0.001, :kg),
+        inclusion: false,
         product: product,
         quantity: 1,
-        weight: Unitwise(1, :g),
-        dough_weight: Unitwise(0, :kg),
-        inclusion: false
+        weight: Unitwise(0.001, :kg)
       }
       run_data.add_product(product, 1)
       expect(run_data.products).to include(product_info)
@@ -26,7 +26,7 @@ describe RecipeRunData do
         product: product,
         recipe: inclusion,
         inclusion_weight: Unitwise(0, :kg),
-        dough_weight: Unitwise(0, :kg),
+        dough_weight: Unitwise(0.001, :kg),
         product_weight: Unitwise(0.001, :kg)
       }
       run_data.add_product(product, 1)

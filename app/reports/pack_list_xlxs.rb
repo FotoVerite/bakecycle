@@ -19,32 +19,34 @@ class PackListXlxs
     create_output_string(p)
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 
   def create_hash_of_products
     hash = {}
     @shipments.each do |shipment|
       client_name = shipment.client.name
       shipment.shipment_items.each do |i|
-        if  hash[i.product_name].nil?
+        if hash[i.product_name].nil?
           product_hash = hash[i.product_name] = {}
-          product_hash['product_type'] = i.product.attributes['product_type']
-          product_hash['name'] = i.product_name
-          product_hash['quantity'] = []
+          product_hash["product_type"] = i.product.attributes["product_type"]
+          product_hash["name"] = i.product_name
+          product_hash["quantity"] = []
         else
           product_hash = hash[i.product_name]
         end
-        product_hash['quantity'].push("#{client_name} #{i.product_quantity}")
+        product_hash["quantity"].push("#{client_name} #{i.product_quantity}")
       end
     end
-    hash.sort_by {|k,v| [v['product_type'], v['name']]}
+    hash.sort_by { |_k, v| [v["product_type"], v["name"]] }
   end
+
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def add_rows(hash, sheet)
     # Set Product Type Row
     hash.each do |product_array|
       sheet.add_row [product_array[0]], style: @header
-      product_array[1]['quantity'].each do |quantities|
+      product_array[1]["quantity"].each do |quantities|
         sheet.add_row [quantities]
       end
     end

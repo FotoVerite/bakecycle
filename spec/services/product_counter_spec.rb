@@ -4,7 +4,7 @@ describe ProductCounter do
   let(:today) { Time.zone.today }
   let(:tomorrow) { Time.zone.tomorrow }
   let(:bakery) { create(:bakery) }
-  let(:client) {create(:client, bakery: bakery)}
+  let(:client) { create(:client, bakery: bakery) }
   let(:product_counter) { ProductCounter.new(bakery, today) }
 
   describe "#date" do

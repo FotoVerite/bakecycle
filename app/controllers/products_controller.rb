@@ -20,7 +20,7 @@ class ProductsController < ApplicationController
     @products = policy_scope(Product)
       .created_at_date(@date)
       .paginate(page: params[:page])
-   end
+  end
 
   def create
     @product = policy_scope(Product).build(product_params)

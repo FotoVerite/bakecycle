@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515201902) do
+ActiveRecord::Schema.define(version: 20170526065939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 20170515201902) do
     t.datetime "updated_at",                                   null: false
     t.string   "ein"
     t.string   "notes"
-    t.integer  "sequence_number"
+    t.integer  "sequence_number",                default: 1
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
@@ -164,9 +164,12 @@ ActiveRecord::Schema.define(version: 20170515201902) do
 
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
+  add_index "orders", ["client_id", "route_id", "order_type", "start_date", "end_date"], name: "index_orders_on_start_date_and_end_date", using: :btree
   add_index "orders", ["created_by_user_id"], name: "index_orders_on_created_by_user_id", using: :btree
+  add_index "orders", ["end_date"], name: "index_orders_on_end_date", using: :btree
   add_index "orders", ["last_updated_by_user_id"], name: "index_orders_on_last_updated_by_user_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
+  add_index "orders", ["start_date"], name: "index_orders_on_start_date", using: :btree
 
   create_table "plans", force: :cascade do |t|
     t.string   "name",         null: false

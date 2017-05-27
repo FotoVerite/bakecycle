@@ -26,8 +26,10 @@ class Recipe < ActiveRecord::Base
   has_many :parent_recipes, through: :parent_recipe_items, source: :recipe
   has_many :recipe_items, -> { where(removed: false) }, dependent: :destroy
   has_many :recipe_items_with_removes, dependent: :destroy, class_name: "RecipeItem"
-  has_many :child_recipes, -> { where('recipe_items.removed': false) }, through: :recipe_items, source: :inclusionable, source_type: "Recipe"
-  has_many :ingredients, -> { where('recipe_items.removed': false) }, through: :recipe_items, source: :inclusionable, source_type: "Ingredient"
+  has_many :child_recipes, -> { where('recipe_items.removed': false) },
+    through: :recipe_items, source: :inclusionable, source_type: "Recipe"
+  has_many :ingredients, -> { where('recipe_items.removed': false) },
+    through: :recipe_items, source: :inclusionable, source_type: "Ingredient"
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 

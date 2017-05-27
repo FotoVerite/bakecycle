@@ -1,5 +1,14 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:add_invoices, :edit, :future_invoices, :update, :destroy, :copy, :print, :papertrail]
+  before_action :set_order, only: [
+    :add_invoices,
+    :copy,
+    :destroy,
+    :edit,
+    :future_invoices,
+    :print,
+    :papertrail,
+    :update
+  ]
   decorates_assigned :orders, :order
   helper_method :search_form
 
