@@ -58,7 +58,7 @@ class RecipeDataPage
   end
 
   def header_info_table
-    table(header_info_data, column_widths: [60, 105], position: :right, cell_style: BasePdfReport::TABLE_STYLE) do
+    table(header_info_data, column_widths: [50, 105], position: :right, cell_style: BasePdfReport::TABLE_STYLE) do
       column(0).style(borders: [:top, :left, :bottom], align: :right)
       column(1).style(borders: [:top, :right, :bottom], align: :left)
     end

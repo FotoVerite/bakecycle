@@ -51,7 +51,7 @@ class RecipeRunData
   end
 
   def finished_date
-    date + recipe.total_lead_days.days
+    date + recipe.total_lead_days.days - 1
   end
 
   def parent_recipes
