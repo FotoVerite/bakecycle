@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   resources :shipments, path: "invoices", except: [:show] do
     get "invoice", on: :member
     get "invoice_iif", on: :member
+    get "invoice_csv", on: :member
     get "packing_slip", on: :member
     get "export_pdf", on: :collection
     get "export_csv", on: :collection

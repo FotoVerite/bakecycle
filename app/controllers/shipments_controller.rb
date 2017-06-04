@@ -1,6 +1,6 @@
 class ShipmentsController < ApplicationController
-  before_action :load_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif]
-  after_action :skip_policy_scope, only: [:export_csv, :export_iif, :export_pdf]
+  before_action :load_shipment, only: [:edit, :update, :destroy, :invoice, :packing_slip, :invoice_iif, :invoice_csv]
+  after_action :skip_policy_scope, only: [:export_csv, :export_iif, :export_pdf, :invoice_csv]
   decorates_assigned :shipments, :shipment
   helper_method :search_form
 
@@ -58,6 +58,12 @@ class ShipmentsController < ApplicationController
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     expires_now
     send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+  end
+
+  def invoice_csv
+    authorize @shipment, :show?
+    generator = InvoiceCsvGenerator.new(current_bakery, @shipment)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def export_csv

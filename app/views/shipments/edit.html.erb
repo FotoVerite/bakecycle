@@ -23,6 +23,11 @@
         <i class='fi-page-export'></i> Export to Quickbooks
       <% end %>
     </li>
+      <li>
+      <%= link_to invoice_csv_shipment_path(shipment), target: "_blank", class: "button small" do %>
+        <i class='fi-page-export'></i> Export to CSV
+      <% end %>
+    </li>
 </ul>
 
 <div class="row">

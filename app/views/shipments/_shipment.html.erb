@@ -24,5 +24,10 @@
         <i class="fi-page-export"></i>
       </span>
     <% end %>
+     <%= link_to invoice_csv_shipment_path(shipment), target: "_blank" do %>
+      <span class="table-action-icon icon-link-tooltip" aria-label="CSV">
+        <i class="fi-page-export"></i>
+      </span>
+    <% end %>
   </td>
 </tr>
