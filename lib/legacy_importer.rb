@@ -112,13 +112,13 @@ module LegacyImporter
   end
 
   def self.import_all
-    import_clients
-    import_ingredients
-    import_recipes
-    import_recipe_items
-    import_products
-    import_price_variants
-    import_routes
+    # import_clients
+    # import_ingredients
+    # import_recipes
+    # import_recipe_items
+    # import_products
+    # import_price_variants
+    # import_routes
     import_orders
   end
 
@@ -171,12 +171,12 @@ module LegacyImporter
     [
       ProductionRun,
       Shipment,
-      Order,
-      Client,
-      Route,
-      Product,
-      Recipe,
-      Ingredient
+      Order
+      # Client,
+      # Route,
+      # Product,
+      # Recipe,
+      # Ingredient
     ].each do |klass|
       klass.where(bakery: bakery).delete_all
     end
