@@ -66,7 +66,7 @@ class RecipeDataPage
 
   def header_info_data
     lead_days = ["Lead Days", recipe_run_data.total_lead_days]
-    mix = ["Mix", display_date(recipe_run_data.date)]
+    mix = ["Mix", display_date(recipe_run_data.mix_date)]
     bake = ["Bake", display_date(recipe_run_data.finished_date)]
     [lead_days, mix, bake]
   end

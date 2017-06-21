@@ -51,8 +51,13 @@ class RecipeRunData
   end
 
   def finished_date
-    date + recipe.total_lead_days.days - 1
+    date + recipe.total_lead_days.days
   end
+
+  def mix_date
+    date + 1.day
+  end
+
 
   def parent_recipes
     @parent_recipe_map.values
