@@ -9,9 +9,10 @@ class ProductionRunReport
     new(bakery, start_date, type)
   end
 
-  def initialize(bakery, start_date)
+  def initialize(bakery, start_date, type)
     @bakery = bakery
     @start_date = start_date.to_date
+    @type = type
   end
 
   def id
