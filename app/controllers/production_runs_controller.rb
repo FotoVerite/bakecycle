@@ -48,7 +48,7 @@ class ProductionRunsController < ApplicationController
   def print_weekly_daily_production_report
     authorize ProductionRun, :can_print?
     @date = date_query
-    generator = ProductionRunReport.new(current_bakery, date_query, params[:type])
+    generator = class ProductionRunTotalsGenerator.new(current_bakery, date_query, params[:type])
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
