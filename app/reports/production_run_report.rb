@@ -28,6 +28,10 @@ class ProductionRunReport
   end
 
   def generate
-    WeeklyProductTotalsXlxs.new(@bakery, @start_date).generate
+    if @type == 'weekly'
+      WeeklyProductionRunTotalsXlxs.new(@bakery, @date).generate
+    else
+      DailyProductionRunTotalsXlxs.new(@bakery, @date).generate
+    end
   end
 end
