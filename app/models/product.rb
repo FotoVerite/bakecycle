@@ -21,7 +21,7 @@
 #  batch_recipe    :boolean          default(FALSE)
 #
 
-class Product < ActiveRecord::Base
+class Product < ApplicationRecord
   extend AlphabeticalOrder
   include ResqueJobs
   has_paper_trail
@@ -49,7 +49,7 @@ class Product < ActiveRecord::Base
      other: 18
   }
 
-  enum unit: [:oz, :lb, :g, :kg]
+  enum unit: %i[oz lb g kg]
 
   validates :bakery, presence: true
   validates :name, presence: true, uniqueness: { scope: :bakery }
@@ -62,11 +62,11 @@ class Product < ActiveRecord::Base
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
-  after_commit :queue_touch_order_items, on: [:create, :update]
+  after_commit :queue_touch_order_items, on: %i[create update]
   after_touch :update_total_lead_days
   before_destroy :check_for_order_items
 
-  scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :created_at_date, ->(date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|
     where(updated_at: date.beginning_of_day..date.end_of_day)
   }

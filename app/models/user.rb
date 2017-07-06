@@ -33,8 +33,8 @@
 #  production_permission  :string           default("none"), not null
 #
 
-class User < ActiveRecord::Base
-  ACCESS_LEVELS = %w(none read manage).freeze
+class User < ApplicationRecord
+  ACCESS_LEVELS = %w[none read manage].freeze
   belongs_to :bakery
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

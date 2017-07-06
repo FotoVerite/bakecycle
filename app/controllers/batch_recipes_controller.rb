@@ -1,5 +1,5 @@
 class BatchRecipesController < ApplicationController
-  after_action :skip_policy_scope, only: [:index, :print, :export_csv]
+  after_action :skip_policy_scope, only: %i[index print export_csv]
 
   def index
     authorize ProductionRun, :can_print?

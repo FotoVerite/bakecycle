@@ -17,7 +17,7 @@
 #  product_total_lead_days :integer          not null
 #
 
-class ShipmentItem < ActiveRecord::Base
+class ShipmentItem < ApplicationRecord
   include Denormalization
   belongs_to :shipment
   belongs_to :production_run
@@ -30,8 +30,8 @@ class ShipmentItem < ActiveRecord::Base
   validates :product_product_type, presence: true
   validates :product_total_lead_days, presence: true
 
-  denormalize :product, [
-    :id, :name, :sku, :product_type, :total_lead_days
+  denormalize :product, %i[
+    id name sku product_type total_lead_days
   ]
 
   before_validation :set_product_quantity_and_price

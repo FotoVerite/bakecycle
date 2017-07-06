@@ -1,12 +1,12 @@
 class Address
   attr_reader :object, :address_type
 
-  ADDRESS_FIELDS = [
-    :street_1,
-    :street_2,
-    :city,
-    :state,
-    :zipcode
+  ADDRESS_FIELDS = %i[
+    street_1
+    street_2
+    city
+    state
+    zipcode
   ].freeze
 
   def initialize(object, address_type)

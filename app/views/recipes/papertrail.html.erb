@@ -1,8 +1,13 @@
 <% provide(:title, "Papertrail of Recipe ##{@recipe.id}") %>
 <h1>Papertrail of Recipe #<%= recipe.id %></h1>
+<% if @recipe.versions.last.whodunnit %>
 <p>Last edited by <%= User.find(@recipe.versions.last.whodunnit).name %> at <%= @recipe.updated_at.strftime("%Y-%m-%d %k:%M%p") %></p>
+<% end %>
 <% @recipe.versions.reverse.each do | version| %>
+  <% next if version.event == 'create' %>
+  <% if version.whodunnit %>
   changed by <%= User.find(version.whodunnit).name %> at <%= version.changeset['updated_at'][1].strftime("%Y-%m-%d %k:%M%p") %>
+  <% end %>
   <% version.changeset.except!('updated_at').each do |k, v| %>
     <% changed_from = (v[0].is_a?(String) && v[0].blank?) ? 'blank' : v[0] %>
    <p> <%= "#{k} from #{changed_from} to #{v[1]}" %></p>
@@ -15,7 +20,7 @@
     <hr />
   </h3>
   <% for version in item.versions.reverse %>
-    <% if version.changeset.has_key?(:recipe_id) %>
+    <% if version.changeset.has_key?(:recipe_id) && version.whodunnit %>
       <p>Created By: <%= User.find(version.whodunnit).name %>
         at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
       </p>
@@ -23,9 +28,11 @@
       <p>
       Removed By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
       </p>
-    <% else %>
+    <% else  %>
      <p>
+     <% if version.whodunnit %>
       Edited By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
+      <% end %>
          <% version.changeset.except!('updated_at').each do |k, v| %>
           <p> <%= "#{k} from #{v[0]} to #{v[1]}" %></p>
          <% end %>

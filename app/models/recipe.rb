@@ -16,7 +16,7 @@
 #  total_lead_days :integer          not null
 #
 
-class Recipe < ActiveRecord::Base
+class Recipe < ApplicationRecord
   extend AlphabeticalOrder
   include ResqueJobs
   has_paper_trail
@@ -33,8 +33,8 @@ class Recipe < ActiveRecord::Base
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
-  enum recipe_type: [:dough, :preferment, :inclusion]
-  enum mix_size_unit: [:oz, :lb, :g, :kg]
+  enum recipe_type: %i[dough preferment inclusion]
+  enum mix_size_unit: %i[oz lb g kg]
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
   validates :lead_days, presence: true
@@ -50,12 +50,12 @@ class Recipe < ActiveRecord::Base
   before_save :set_total_lead_days
   before_destroy :check_for_products
   before_destroy :check_for_parent_recipes
-  after_commit :queue_touch_parent_objects, on: [:create, :update]
+  after_commit :queue_touch_parent_objects, on: %i[create update]
   after_touch :update_total_lead_days
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }
   scope :inclusions, -> { where(recipe_type: Recipe.recipe_types[:inclusion]) }
-  scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :created_at_date, ->(date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|
     where(updated_at: date.beginning_of_day..date.end_of_day)
   }

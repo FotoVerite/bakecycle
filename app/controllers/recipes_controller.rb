@@ -1,5 +1,5 @@
 class RecipesController < ApplicationController
-  before_action :set_recipe, only: [:edit, :papertrail, :update, :destroy]
+  before_action :set_recipe, only: %i[edit papertrail update destroy]
   decorates_assigned :recipes, :recipe
 
   def index
@@ -76,7 +76,7 @@ class RecipesController < ApplicationController
   def recipe_params
     params.require(:recipe).permit(
       :name, :note, :mix_size, :mix_size_unit, :recipe_type, :lead_days,
-      recipe_items_attributes: [:id, :inclusionable_id_type, :bakers_percentage, :sort_id, :_destroy]
+      recipe_items_attributes: %i[id inclusionable_id_type bakers_percentage sort_id _destroy]
     )
   end
 

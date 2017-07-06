@@ -56,7 +56,7 @@ class ProductPolicy < ApplicationPolicy
     end
 
     def read_permission?
-      user.bakery && (admin? || %w(read manage).include?(user.product_permission))
+      user.bakery && (admin? || %w[read manage].include?(user.product_permission))
     end
   end
 end

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get "plans", to: "landing_pages#plans"
   get :dashboard, to: "dashboard#index"
 
-  resources :registrations, only: [:new, :create]
+  resources :registrations, only: %i[new create]
 
   resources :ingredients, except: [:show]
   resources :recipes, except: [:show] do
@@ -80,7 +80,7 @@ Rails.application.routes.draw do
     get "export_csv", on: :collection
   end
 
-  resources :production_runs, only: [:index, :edit, :update] do
+  resources :production_runs, only: %i[index edit update] do
     get "print", on: :member
     get "print_projection", on: :collection
     get "weekly_daily_production_report", on: :collection

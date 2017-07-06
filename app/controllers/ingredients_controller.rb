@@ -1,5 +1,5 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient, only: [:edit, :update, :destroy]
+  before_action :set_ingredient, only: %i[edit update destroy]
   decorates_assigned :ingredients, :ingredient
 
   def index

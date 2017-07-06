@@ -13,7 +13,7 @@
 #  updated_at        :datetime         not null
 #
 
-class FileExport < ActiveRecord::Base
+class FileExport < ApplicationRecord
   belongs_to :bakery
   has_attached_file :file,
     s3_headers: { content_disposition: "attachment" },

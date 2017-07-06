@@ -11,7 +11,7 @@
 #  updated_at     :datetime         not null
 #
 
-class FileAction < ActiveRecord::Base
+class FileAction < ApplicationRecord
   belongs_to :file_export
   belongs_to :user
   belongs_to :bakery

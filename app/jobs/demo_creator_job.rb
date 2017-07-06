@@ -1,4 +1,4 @@
-class DemoCreatorJob < ActiveJob::Base
+class DemoCreatorJob < ApplicationJob
   queue_as :demo_creation
 
   def perform(bakery)

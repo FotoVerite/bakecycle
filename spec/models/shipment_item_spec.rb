@@ -55,12 +55,12 @@ describe ShipmentItem do
       shipment_item = ShipmentItem.new
       shipment_item.product = product
 
-      fields = [
-        :id,
-        :name,
-        :sku,
-        :product_type,
-        :total_lead_days
+      fields = %i[
+        id
+        name
+        sku
+        product_type
+        total_lead_days
       ]
 
       fields.each do |field|

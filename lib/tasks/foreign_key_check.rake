@@ -13,8 +13,8 @@ namespace :immigrant do
     keys, warnings = Immigrant::KeyFinder.new.infer_keys
     warnings.values.each { |warning| $stderr.puts "WARNING: #{warning}" }
 
-    keys.select! do |key|
-      !ignore_keys.include?("from_table" => key.from_table, "to_table" => key.to_table)
+    keys.reject! do |key|
+      ignore_keys.include?("from_table" => key.from_table, "to_table" => key.to_table)
     end
 
     keys.each do |key|

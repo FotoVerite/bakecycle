@@ -4,6 +4,7 @@ ruby "2.3.1"
 gem "active_model_serializers", "~>0.9.3"
 gem "airbrake"
 gem "aws-sdk", "< 2.0"
+gem "axlsx", "2.0.1"
 gem "browserify-rails"
 gem "chronic"
 gem "coffee-rails", "~> 4.0.0"
@@ -19,6 +20,7 @@ gem "jquery-rails"
 gem "jquery-timepicker-rails"
 gem "jquery-ui-sass-rails"
 gem "memoist"
+gem "paper_trail"
 gem "paperclip", "~> 4.2"
 gem "pg"
 gem "prawn"
@@ -27,6 +29,7 @@ gem "pundit"
 gem "rails", "4.2.7.1"
 gem "resque", require: "resque/server"
 gem "riif"
+gem "rubyzip", "1.0.0"
 gem "sass-rails"
 gem "simple_form"
 gem "stripe"
@@ -35,9 +38,6 @@ gem "unicorn", require: false
 gem "unitwise", require: "unitwise"
 gem "will_paginate", "~> 3.0.6"
 gem "wizarddev-heroku"
-gem "paper_trail"
-gem "axlsx", "2.0.1"
-gem "rubyzip", "1.0.0"
 # legacy import
 gem "mysql2", require: false
 
@@ -79,8 +79,8 @@ group :test do
   gem "selenium-webdriver"
   gem "stripe-ruby-mock", "~> 2.1.1", require: false
   gem "test_after_commit"
-  gem "webmock", require: false
   gem "timecop"
+  gem "webmock", require: false
 end
 
 group :test, :development, :staging do
@@ -89,6 +89,6 @@ group :test, :development, :staging do
 end
 
 group :production, :staging do
-  gem "rails_12factor"
   gem "newrelic_rpm"
+  gem "rails_12factor"
 end

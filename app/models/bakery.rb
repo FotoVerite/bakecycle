@@ -25,7 +25,7 @@
 #  stripe_customer_id :string
 #
 
-class Bakery < ActiveRecord::Base
+class Bakery < ApplicationRecord
   has_many :ingredients
   has_many :clients
   has_many :recipes

@@ -19,10 +19,17 @@
         <!--NB: There is no easy way to get the User besides this. Joining would be preferable -->
         <td data-title="Type"><%= recipe.recipe_type %></td>
         <% if show_created_whodoneit %>
-          <td data-title="By"><%= User.find(recipe.versions.first.whodunnit).name %></td>
+          <td data-title="By">
+            <% if recipe.versions.first.whodunnit  %>
+              <%= User.find(recipe.versions.first.whodunnit).name %>
+            <% end %>
+          </td>
         <% end %>
         <% if show_updated_at_whodoneit %>
-          <td data-title="By"><%= User.find(recipe.versions.last.whodunnit).name %></td>
+          <td data-title="By">
+            <% if recipe.versions.last.whodunnit  %>
+             <%= User.find(recipe.versions.last.whodunnit).name %></td>
+            <% end %>
         <% end %>
         <% if policy(recipe).manage_permission? %>
           <td data-title="Action">

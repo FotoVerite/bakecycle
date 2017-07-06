@@ -12,8 +12,7 @@ class BasePdfReport < Prawn::Document
     setup
   end
 
-  def setup
-  end
+  def setup; end
 
   def stamp_or_create(name, &block)
     return stamp(name) if @stamps[name]

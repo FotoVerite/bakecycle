@@ -12,7 +12,7 @@
 #  removed    :integer          default(0)
 #
 
-class PriceVariant < ActiveRecord::Base
+class PriceVariant < ApplicationRecord
   has_paper_trail
 
   belongs_to :product
@@ -21,7 +21,7 @@ class PriceVariant < ActiveRecord::Base
   validates :price, presence: true
   validates :price, numericality: true, unless: "price.blank?"
   validates :quantity, presence: true, uniqueness: {
-    scope: [:product_id, :client_id],
+    scope: %i[product_id client_id],
     message: "quantity already exists"
   }
   validates :quantity, numericality: true, unless: "quantity.blank?"

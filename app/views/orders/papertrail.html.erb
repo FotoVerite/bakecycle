@@ -1,6 +1,6 @@
 <% provide(:title, "Papertrail of Order ##{order.id}") %>
 <h1>Papertrail of Order #<%= order.id %> - <%= link_to order.client_name, order.client, class: "underlined-link" %></h1>
-<p>Last edited by <%= @order.last_updated_by_user.name %> at <%= @order.updated_at.strftime("%Y-%m-%d %k:%M") %></p>
+<p>Last edited by <%= @order.last_updated_by_user.try(:name) %> at <%= @order.updated_at.strftime("%Y-%m-%d %k:%M") %></p>
 <% @order.all_order_items.order(:updated_at).each do |item| %>
   <h3>
     <%= item.product.name %>
@@ -8,9 +8,11 @@
   </h3>
   <% for version in item.versions.reverse %>
     <% if version.changeset.has_key?(:product_id) %>
+    <% if version.whodunnit %>
       <p>Created By: <%= User.find(version.whodunnit).name %>
         at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M") %>
       </p>
+      <% end %>
     <% elsif version.changeset.has_key?(:removed) %>
       <p>
       Removed By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M") %>

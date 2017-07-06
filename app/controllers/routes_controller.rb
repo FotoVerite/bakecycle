@@ -1,5 +1,5 @@
 class RoutesController < ApplicationController
-  before_action :set_route, only: [:edit, :update, :destroy]
+  before_action :set_route, only: %i[edit update destroy]
   before_action :error_if_remaining_route, only: :destroy
   decorates_assigned :routes, :route
 

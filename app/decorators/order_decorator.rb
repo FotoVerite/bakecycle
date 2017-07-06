@@ -37,6 +37,6 @@ class OrderDecorator < Draper::Decorator
   end
 
   def updated_at_whodunnit
-    object.last_updated_by_user.name
+    object.last_updated_by_user.try(:name)
   end
 end

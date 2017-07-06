@@ -1,4 +1,4 @@
-class StripeUserCreateJob < ActiveJob::Base
+class StripeUserCreateJob < ApplicationJob
   queue_as :payments
 
   def perform(user, token)

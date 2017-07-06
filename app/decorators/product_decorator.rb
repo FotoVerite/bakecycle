@@ -27,7 +27,7 @@ class ProductDecorator < Draper::Decorator
   end
 
   def sku_display
-    return "N/A" unless sku.present?
+    return "N/A" if sku.blank?
     sku
   end
 end

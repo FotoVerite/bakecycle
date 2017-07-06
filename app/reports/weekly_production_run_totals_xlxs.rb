@@ -44,9 +44,11 @@ class WeeklyProductionRunTotalsXlxs
     product_name = item.product.name
     total_quantity = item.total_quantity
     hash[product_name] = {} unless hash[product_name]
-    hash[product_name]["weight"] = format(
-      "%0.3f", item.product.weight_with_unit.to_kg.round(3)
-    ) + " kg" unless hash[product_name]["weight"]
+    unless hash[product_name]["weight"]
+      hash[product_name]["weight"] = format(
+        "%0.3f", item.product.weight_with_unit.to_kg.round(3)
+      ) + " kg"
+    end
     # days
     hash[product_name][day_name] = (total_quantity + hash[product_name][day_name].to_i)
     # product price
@@ -86,7 +88,7 @@ class WeeklyProductionRunTotalsXlxs
   def create_end_row(sheet, start)
     end_of = sheet.rows.last.index + 1
     total_row = [nil, nil]
-    %w(C D E F G H I J).each do |sum|
+    %w[C D E F G H I J].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
     end
     total_row

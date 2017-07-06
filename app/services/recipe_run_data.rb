@@ -58,7 +58,6 @@ class RecipeRunData
     date + 1.day
   end
 
-
   def parent_recipes
     @parent_recipe_map.values
   end

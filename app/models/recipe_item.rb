@@ -13,7 +13,7 @@
 #  removed            :integer          default(0)
 #
 
-class RecipeItem < ActiveRecord::Base
+class RecipeItem < ApplicationRecord
   has_paper_trail
   belongs_to :inclusionable, polymorphic: true
   belongs_to :recipe

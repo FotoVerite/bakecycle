@@ -1,4 +1,4 @@
-class ExporterJob < ActiveJob::Base
+class ExporterJob < ApplicationJob
   queue_as :file_exporter
 
   def self.create(user, bakery, generator)

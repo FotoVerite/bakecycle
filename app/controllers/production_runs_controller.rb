@@ -1,10 +1,10 @@
 class ProductionRunsController < ApplicationController
-  before_action :set_production_run, only: [:edit, :update, :print, :reset]
-  after_action :skip_policy_scope, only: [
-    :print_projection,
-    :print_recipes,
-    :print_weekly_daily_production_report,
-    :weekly_daily_production_report
+  before_action :set_production_run, only: %i[edit update print reset]
+  after_action :skip_policy_scope, only: %i[
+    print_projection
+    print_recipes
+    print_weekly_daily_production_report
+    weekly_daily_production_report
   ]
   decorates_assigned :production_runs, :production_run
 
@@ -48,7 +48,7 @@ class ProductionRunsController < ApplicationController
   def print_weekly_daily_production_report
     authorize ProductionRun, :can_print?
     @date = date_query
-    generator =  ProductionRunTotalsGenerator.new(current_bakery, date_query, params[:type])
+    generator = ProductionRunTotalsGenerator.new(current_bakery, date_query, params[:type])
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
@@ -76,7 +76,7 @@ class ProductionRunsController < ApplicationController
     params.require(:production_run).permit(
       :bakery, :end_date, :client_id, :route_id, :note, :order_type,
       run_items_attributes:
-      [:id, :product_id, :production_run_id, :order_quantity, :overbake_quantity, :total_quantity, :_destroy]
+      %i[id product_id production_run_id order_quantity overbake_quantity total_quantity _destroy]
     )
   end
 

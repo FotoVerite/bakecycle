@@ -19,7 +19,7 @@
 #  last_updated_by_user_id :integer
 #
 
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
   attr_accessor :confirm_override
   attr_accessor :kickoff_time
 
@@ -47,7 +47,7 @@ class Order < ActiveRecord::Base
   validates :client_id, presence: true
   validates :start_date, presence: true
   validate  :end_date_is_not_before_start_date
-  validates :order_type, presence: true, inclusion: %w(standing temporary)
+  validates :order_type, presence: true, inclusion: %w[standing temporary]
   validates :bakery, presence: true
   validates_with OverlappingOrdersValidator
 
@@ -66,7 +66,7 @@ class Order < ActiveRecord::Base
   after_touch :update_total_lead_days
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
-  scope :created_at_date, -> (date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :created_at_date, ->(date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|
     where(updated_at: date.beginning_of_day..date.end_of_day)
       .where("version_number > 0")

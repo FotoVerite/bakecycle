@@ -13,7 +13,7 @@
 #  legacy_id      :integer
 #
 
-class Route < ActiveRecord::Base
+class Route < ApplicationRecord
   extend AlphabeticalOrder
 
   belongs_to :bakery

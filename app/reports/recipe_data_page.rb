@@ -59,8 +59,8 @@ class RecipeDataPage
 
   def header_info_table
     table(header_info_data, column_widths: [50, 105], position: :right, cell_style: BasePdfReport::TABLE_STYLE) do
-      column(0).style(borders: [:top, :left, :bottom], align: :right)
-      column(1).style(borders: [:top, :right, :bottom], align: :left)
+      column(0).style(borders: %i[top left bottom], align: :right)
+      column(1).style(borders: %i[top right bottom], align: :left)
     end
   end
 
@@ -74,9 +74,9 @@ class RecipeDataPage
   def bowl_count
     table(bowl_data, cell_style: { height: 60, font_style: :bold }) do
       row(0).style(align: :right).valign = :center
-      column(0).style(borders: [:top, :left, :bottom], align: :right)
-      column(1).style(borders: [:top, :bottom], align: :center)
-      column(2).style(borders: [:top, :right, :bottom], align: :left)
+      column(0).style(borders: %i[top left bottom], align: :right)
+      column(1).style(borders: %i[top bottom], align: :center)
+      column(2).style(borders: %i[top right bottom], align: :left)
     end
   end
 

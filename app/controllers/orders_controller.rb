@@ -1,13 +1,13 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [
-    :add_invoices,
-    :copy,
-    :destroy,
-    :edit,
-    :future_invoices,
-    :print,
-    :papertrail,
-    :update
+  before_action :set_order, only: %i[
+    add_invoices
+    copy
+    destroy
+    edit
+    future_invoices
+    print
+    papertrail
+    update
   ]
   decorates_assigned :orders, :order
   helper_method :search_form
@@ -139,8 +139,8 @@ class OrdersController < ApplicationController
     params.require(:order).permit(
       :start_date, :end_date, :client_id, :route_id, :note, :order_type,
       order_items_attributes:
-        [:id, :product_id, :monday, :tuesday, :wednesday,
-         :thursday, :friday, :saturday, :sunday, :_destroy]
+        %i[id product_id monday tuesday wednesday
+           thursday friday saturday sunday _destroy]
     )
   end
 

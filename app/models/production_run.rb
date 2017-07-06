@@ -9,7 +9,7 @@
 #  bakery_id  :integer          not null
 #
 
-class ProductionRun < ActiveRecord::Base
+class ProductionRun < ApplicationRecord
   belongs_to :bakery
   has_many :shipment_items
   has_many :run_items, dependent: :destroy

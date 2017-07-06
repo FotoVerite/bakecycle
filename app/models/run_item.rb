@@ -12,7 +12,7 @@
 #  updated_at        :datetime         not null
 #
 
-class RunItem < ActiveRecord::Base
+class RunItem < ApplicationRecord
   extend OrderByProduct
 
   belongs_to :product

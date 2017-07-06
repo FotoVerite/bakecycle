@@ -33,5 +33,4 @@ class InvoiceCsvGenerator
   def bakery_file_name
     bakery.decorate.parameterized_name
   end
-
 end
