@@ -56,6 +56,7 @@ class PackingSlipPage
   end
 
   def shipment_items_table
+    return if shipment_items_rows.length == 1
     table(shipment_items_rows, column_widths: [300, 100, 57.3, 57.3, 57.3]) do
       row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       column(0).style(align: :left)
