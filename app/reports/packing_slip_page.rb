@@ -33,11 +33,11 @@ class PackingSlipPage
   end
 
   def addresses
-    grid([1.1, 0], [1.3, 3]).bounding_box do
+    grid([1.1, 0], [1.3, 4]).bounding_box do
       text "Shipped To:", size: 9
       client_address(:delivery)
     end
-    grid([1.1, 4], [1.3, 7]).bounding_box do
+    grid([1.1, 5], [1.3, 9]).bounding_box do
       text "Billed To:", size: 9
       client_address(:billing)
     end
@@ -66,13 +66,13 @@ class PackingSlipPage
   end
 
   def packing_slip_info
-    grid([1.1, 8], [1.3, 8]).bounding_box do
+    grid([1.1, 9.5], [1.3, 9.5]).bounding_box do
       font_size 9
       packing_slip_info_data.each do |row|
         text row[0], align: :right
       end
     end
-    grid([1.1, 9], [1.3, 11]).bounding_box do
+    grid([1.1, 10.4], [1.3, 11.5]).bounding_box do
       font_size 9
       packing_slip_info_data.each do |row|
         text (row[1]).to_s, align: :left

@@ -32,11 +32,11 @@ class InvoicePage
   end
 
   def addresses
-    grid([1.1, 0], [1.3, 3]).bounding_box do
+    grid([1.1, 0], [1.3, 4]).bounding_box do
       text "Shipped To:", size: 9
       client_address(:delivery)
     end
-    grid([1.1, 4], [1.3, 7]).bounding_box do
+    grid([1.1, 5], [1.3, 9]).bounding_box do
       text "Billed To:", size: 9
       client_address(:billing)
     end
