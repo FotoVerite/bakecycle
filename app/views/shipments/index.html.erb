@@ -27,6 +27,27 @@
   </ul>
 <% end %>
 
+<% if @double_invoices  %>
+ <div class="dublicate_invoices panel callout radius">
+    <h5 style='font-size:24px;'>These <%= pluralize(@double_invoices.count, 'invoices') %> are duplicates. Please fix as soon as possible.</h5>
+    <table class="responsive-table orders-missing-shipment-table">
+      <thead>
+        <tr>
+          <th scope="col">Invoice</th>
+          <th scope="col">Date</th>
+          <th scope="col">Client</th>
+          <th scope="col">Price</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @double_invoices.each do |shipment| %>
+        <%= render 'shipment', shipment: ShipmentDecorator.decorate(shipment) %>
+      <% end %>
+      </tbody>
+    </table>
+  </div><% end %>
+
 <table class="responsive-table">
   <thead>
     <tr>

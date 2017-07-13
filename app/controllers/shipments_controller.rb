@@ -7,6 +7,7 @@ class ShipmentsController < ApplicationController
   def index
     authorize Shipment
     @shipments = scope_with_search.paginate(page: params[:page])
+    @double_invoices = Shipment.where('date between ? and ? ',(Date.today -2.days), (Date.today + 3.days)).group_by{ |e| [e.date, e.client_id, e.route_id] }.select { |k, v| v.size > 1 }.values.flatten
   end
 
   def new
