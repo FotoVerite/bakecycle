@@ -6,6 +6,9 @@ class InvoicesIif
   end
 
   def generate
+    unless Riif::DSL::Trns::HEADER_COLUMNS.include?(:tosend)
+      Riif::DSL::Trns::HEADER_COLUMNS.push(:tosend)
+    end
     invoices(shipments).output
   end
 
@@ -35,6 +38,7 @@ class InvoicesIif
         memo "Wholesale"
         clear "Y"
         toprint "N"
+        tosend "Y"
         addr1 shipment.client_name
         addr2 shipment.client_delivery_address.full_array[0]
         addr3 shipment.client_delivery_address.full_array[1]
