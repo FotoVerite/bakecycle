@@ -90,11 +90,22 @@ class PackingSlipPage
 
   def shipment_items_rows
     header = ["Item Name", "Product Type", "Ordered", "Shipped", "Pack Check"]
-    rows = @shipment_items.map do |item|
-      item = item.decorate
-      [item.product_name_and_sku, item.product_type, item.product_quantity, item.product_quantity, nil]
-    end
+    rows = merge_shipment_items @shipment_items
     rows.unshift(header)
+  end
+
+   def merge_shipment_items(items)
+    hash = {}
+    items.each do |item|
+      item = item.decorate
+      if hash[item.product_name].nil?
+        hash[item.product_name] = [item.product_name_and_sku, item.product_type, item.product_quantity, item.product_quantity, nil]
+      else
+        hash[item.product_name][2] = hash[item.product_name][2] + item.product_quantity
+        hash[item.product_name][3] = hash[item.product_name][3] + item.product_quantity
+      end
+    end
+    return hash.values
   end
 
   def pieces_shipped

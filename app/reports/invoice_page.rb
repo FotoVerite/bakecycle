@@ -1,3 +1,5 @@
+include ActionView::Helpers::NumberHelper
+
 class InvoicePage
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
@@ -82,9 +84,30 @@ class InvoicePage
   def shipment_items_row
     header = ["Item Name", "Product Type", "Quantity", "Price Each", "Total"]
     sorted_order_items = @shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
-    [header] + sorted_order_items.map do |item|
-      item = item.decorate
-      [item.product_name, item.product_type, item.product_quantity, item.product_price, item.price]
+    items = merge_sorted_order_items_with_same_name_and_price(sorted_order_items)
+    [header] + items
+  end
+
+  def merge_sorted_order_items_with_same_name_and_price(items)
+    hash = {}
+    items.each do |item|
+      if hash[item.product_name].nil?
+        hash[item.product_name] = [item.product_name, item.product_type, item.product_quantity, item.product_price, item.object.price]
+      elsif hash[item.product_name][3] == item.product_price
+        hash[item.product_name][2] = hash[item.product_name][2] + item.product_quantity
+        hash[item.product_name][4] = hash[item.product_name][4] + item.object.price
+      else
+          hash[item.product_name + item.id.to_s] = [item.product_name, item.product_type, item.product_quantity, item.product_price, item.price]
+      end
+    end
+    hash.values.map do |array|
+        [
+          array[0],
+          array[1],
+          array[2],
+          array[3],
+          number_to_currency(array[4])
+        ]
     end
   end
 
