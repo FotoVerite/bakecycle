@@ -31,10 +31,12 @@ class PackListXlxs
           product_hash["product_type"] = i.product.attributes["product_type"]
           product_hash["name"] = i.product_name
           product_hash["quantity"] = []
+          product_hash["total"] = 0
         else
           product_hash = hash[i.product_name]
         end
         product_hash["quantity"].push("#{client_name} #{i.product_quantity}")
+        product_hash["total"] = (product_hash["total"].to_i + i.product_quantity)
       end
     end
     hash.sort_by { |_k, v| [v["product_type"], v["name"]] }
@@ -49,6 +51,7 @@ class PackListXlxs
       product_array[1]["quantity"].each do |quantities|
         sheet.add_row [quantities]
       end
+      sheet.add_row ["Total: " + product_array[1]['total'].to_s]
     end
   end
 
