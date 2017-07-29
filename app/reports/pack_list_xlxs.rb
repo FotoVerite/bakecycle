@@ -11,7 +11,7 @@ class PackListXlxs
     p = Axlsx::Package.new
     wb = p.workbook
     styles = wb.styles
-    @header = styles.add_style bg_color: "000099", sz: 16, b: true, alignment: { horizontal: :center }
+    @header = styles.add_style sz: 16, b: true, alignment: { horizontal: :center }
     wb.add_worksheet(name: "Data Sheet") do |sheet|
       sheet.add_row headers
       add_rows(hash, sheet)
