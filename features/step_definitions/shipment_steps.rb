@@ -59,19 +59,19 @@ When(/^I filter shipments by the client "(.*?)"$/) do |client_name|
 end
 
 Then(/^I should see shipments for the client "(.*?)"$/) do |client_name|
-  within ".responsive-table" do
+  within ".all-invoices" do
     expect(page).to have_content(client_name)
   end
 end
 
 Then(/^I should not see shipments for the client "(.*?)"$/) do |client_name|
-  within ".responsive-table" do
+  within ".all-invoices" do
     expect(page).to_not have_content(client_name)
   end
 end
 
 Then(/^I attempt to edit the first shipment on the page$/) do
-  within ".responsive-table tbody" do
+  within ".all-invoices tbody" do
     first("tr").click
   end
 end
@@ -95,7 +95,7 @@ When(/^I filter shipments by to and from dates for the past week$/) do
 end
 
 Then(/^I should see a list of shipments for only the past week$/) do
-  within ".responsive-table" do
+  within ".all-invoices" do
     today = Time.zone.today
     expect(page).to have_content(today.strftime("%Y-%m-%d"))
     expect(page).to have_content((today - 2.days).strftime("%Y-%m-%d"))
@@ -114,7 +114,7 @@ Then(/^I should see confirmation the shipment for "(.*?)" was deleted$/) do |shi
 end
 
 Then(/^the shipment for "(.*?)" should not be present$/) do |shipment|
-  within ".responsive-table" do
+  within ".all-invoices" do
     expect(page).to_not have_content(shipment)
   end
 end

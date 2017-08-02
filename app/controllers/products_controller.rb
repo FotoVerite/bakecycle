@@ -1,10 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[edit papertrail update destroy]
+  before_action :set_product, only: %i(edit papertrail update destroy)
   decorates_assigned :products, :product
 
   def index
     authorize Product
     @products = policy_scope(Product)
+      .where(removed: false)
       .order_by_name
       .paginate(page: params[:page])
   end
@@ -79,7 +80,7 @@ class ProductsController < ApplicationController
     params.require(:product).permit(
       :name, :product_type, :weight, :unit, :description, :over_bake,
       :motherdough_id, :inclusion_id, :base_price, :sku, :batch_recipe,
-      price_variants_attributes: %i[id client_id quantity price _destroy]
+      price_variants_attributes: %i(id client_id quantity price _destroy)
     )
   end
 

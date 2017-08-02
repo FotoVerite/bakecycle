@@ -10,6 +10,6 @@ class CreateRunItems < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :run_items, %i[production_run_id product_id]
+    add_index :run_items, %i(production_run_id product_id)
   end
 end

@@ -27,7 +27,7 @@ class OrderItem < ApplicationRecord
 
   before_validation :set_quantity_zero_if_blank
 
-  DAYS_OF_WEEK = %i[
+  DAYS_OF_WEEK = %i(
     monday
     tuesday
     wednesday
@@ -35,13 +35,13 @@ class OrderItem < ApplicationRecord
     friday
     saturday
     sunday
-  ].freeze
+  ).freeze
   validates :product, :product_id, presence: true
   validates(*DAYS_OF_WEEK, numericality: true)
 
   before_save :set_total_lead_days, if: :update_total_lead_days?
   after_touch :update_total_lead_days
-  after_commit :touch_order, on: %i[create update destroy]
+  after_commit :touch_order, on: %i(create update destroy)
 
   scope :order_by_product_type_and_name, -> { joins(:product).order("products.product_type asc, products.name asc") }
 

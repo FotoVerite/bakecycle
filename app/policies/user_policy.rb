@@ -36,16 +36,16 @@ class UserPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    attributes = %i[name email password password_confirmation]
+    attributes = %i(name email password password_confirmation)
     if manage_permission?
-      attributes += %i[
+      attributes += %i(
         user_permission
         product_permission
         bakery_permission
         client_permission
         shipping_permission
         production_permission
-      ]
+      )
     end
     attributes << :bakery_id if admin?
     attributes
@@ -66,7 +66,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def read_permission?
-    %w[read manage].include?(user.user_permission)
+    %w(read manage).include?(user.user_permission)
   end
 
   class Scope < Scope
@@ -78,7 +78,7 @@ class UserPolicy < ApplicationPolicy
     end
 
     def read_permission?
-      %w[read manage].include?(user.user_permission)
+      %w(read manage).include?(user.user_permission)
     end
   end
 end

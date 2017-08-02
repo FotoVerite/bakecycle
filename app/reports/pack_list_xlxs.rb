@@ -51,7 +51,7 @@ class PackListXlxs
       product_array[1]["quantity"].each do |quantities|
         sheet.add_row [quantities]
       end
-      sheet.add_row ["Total: " + product_array[1]['total'].to_s]
+      sheet.add_row ["Total: " + product_array[1]["total"].to_s]
     end
   end
 

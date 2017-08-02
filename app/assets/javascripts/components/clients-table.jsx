@@ -150,7 +150,7 @@ const ClientsTable = React.createClass({
   render() {
     return (<div>
       {this.search()}
-      <table className="responsive-table">
+      <table className="responsive-table clients-index">
         {this.header()}
         <tbody>
           {this.rows()}

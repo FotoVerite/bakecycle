@@ -9,10 +9,10 @@ module LegacyImporter
       @order_items = items_builder.items_for(bakery: bakery, data: data)
     end
 
-    FIELDS_MAP = %w[
+    FIELDS_MAP = %w(
       order_notes note
       order_type order_type
-    ].freeze
+    ).freeze
 
     def import!
       return SkippedOrder.new(attributes) if skip?

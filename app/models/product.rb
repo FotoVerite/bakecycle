@@ -49,7 +49,7 @@ class Product < ApplicationRecord
      other: 18
   }
 
-  enum unit: %i[oz lb g kg]
+  enum unit: %i(oz lb g kg)
 
   validates :bakery, presence: true
   validates :name, presence: true, uniqueness: { scope: :bakery }
@@ -62,7 +62,7 @@ class Product < ApplicationRecord
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
-  after_commit :queue_touch_order_items, on: %i[create update]
+  after_commit :queue_touch_order_items, on: %i(create update)
   after_touch :update_total_lead_days
   before_destroy :check_for_order_items
 
@@ -70,6 +70,8 @@ class Product < ApplicationRecord
   scope :updated_at_date, lambda { |date = Time.zone.today|
     where(updated_at: date.beginning_of_day..date.end_of_day)
   }
+
+  scope :available, -> { where(removed: false) }
 
   def strip_name
     self.name = name.strip if name
@@ -121,6 +123,12 @@ class Product < ApplicationRecord
     (inclusion_percentage * percent_weight)
   end
 
+  def destroy
+    return false unless check_for_order_items
+    self.removed = true
+    save
+  end
+
   private
 
   def order_items
@@ -128,7 +136,7 @@ class Product < ApplicationRecord
   end
 
   def check_for_order_items
-    return unless order_items.any?
+    return true unless order_items.any?
     errors.add(:base, I18n.t(:product_in_use))
     false
   end

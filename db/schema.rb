@@ -11,12 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526065939) do
+ActiveRecord::Schema.define(version: 20170802194719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
+
+  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "bakeries", force: :cascade do |t|
     t.string   "name"
@@ -164,12 +170,9 @@ ActiveRecord::Schema.define(version: 20170526065939) do
 
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
-  add_index "orders", ["client_id", "route_id", "order_type", "start_date", "end_date"], name: "index_orders_on_start_date_and_end_date", using: :btree
   add_index "orders", ["created_by_user_id"], name: "index_orders_on_created_by_user_id", using: :btree
-  add_index "orders", ["end_date"], name: "index_orders_on_end_date", using: :btree
   add_index "orders", ["last_updated_by_user_id"], name: "index_orders_on_last_updated_by_user_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
-  add_index "orders", ["start_date"], name: "index_orders_on_start_date", using: :btree
 
   create_table "plans", force: :cascade do |t|
     t.string   "name",         null: false
@@ -220,10 +223,12 @@ ActiveRecord::Schema.define(version: 20170526065939) do
     t.string   "legacy_id"
     t.integer  "total_lead_days",                 null: false
     t.boolean  "batch_recipe",    default: false
+    t.boolean  "removed",         default: false
   end
 
   add_index "products", ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "products", ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true, using: :btree
+  add_index "products", ["removed"], name: "index_products_on_removed", using: :btree
 
   create_table "recipe_items", force: :cascade do |t|
     t.integer  "recipe_id",                        null: false

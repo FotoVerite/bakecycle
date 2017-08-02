@@ -64,16 +64,16 @@ class Shipment < ApplicationRecord
   validates :route_id, presence: true
 
   # create route= and route_id= methods
-  denormalize :route, %i[id name departure_time]
+  denormalize :route, %i(id name departure_time)
 
   # create client= and client_id= methods
-  denormalize :client, %i[
+  denormalize :client, %i(
     id name official_company_name billing_term billing_term_days delivery_address_street_1
     delivery_address_street_2 delivery_address_city delivery_address_state
     delivery_address_zipcode billing_address_street_1 billing_address_street_2
     billing_address_city billing_address_state billing_address_zipcode
     primary_contact_name primary_contact_phone notes
-  ]
+  )
 
   delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
 

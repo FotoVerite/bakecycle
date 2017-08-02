@@ -97,17 +97,17 @@ class InvoicePage
         hash[item.product_name][2] = hash[item.product_name][2] + item.product_quantity
         hash[item.product_name][4] = hash[item.product_name][4] + item.object.price
       else
-          hash[item.product_name + item.id.to_s] = [item.product_name, item.product_type, item.product_quantity, item.product_price, item.price]
+        hash[item.product_name + item.id.to_s] = [item.product_name, item.product_type, item.product_quantity, item.product_price, item.price]
       end
     end
     hash.values.map do |array|
-        [
-          array[0],
-          array[1],
-          array[2],
-          array[3],
-          number_to_currency(array[4])
-        ]
+      [
+        array[0],
+        array[1],
+        array[2],
+        array[3],
+        number_to_currency(array[4])
+      ]
     end
   end
 
@@ -116,7 +116,7 @@ class InvoicePage
     table(totals_row, position: :right, column_widths: [80.5, 80.5]) do
       cells.borders = []
       column(0).style(align: :right)
-      column(1).borders = %i[top right bottom left]
+      column(1).borders = %i(top right bottom left)
       column(1).style(align: :center)
     end
   end

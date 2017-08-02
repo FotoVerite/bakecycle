@@ -94,7 +94,7 @@ class PackingSlipPage
     rows.unshift(header)
   end
 
-   def merge_shipment_items(items)
+  def merge_shipment_items(items)
     hash = {}
     items.each do |item|
       item = item.decorate
@@ -105,14 +105,14 @@ class PackingSlipPage
         hash[item.product_name][3] = hash[item.product_name][3] + item.product_quantity
       end
     end
-    return hash.values
+    hash.values
   end
 
   def pieces_shipped
     table(pieces_shipped_row, position: :right, column_widths: [400, 57.3, 57.3, 57.3]) do
       cells.borders = []
       column(0).style(align: :right, font_style: :bold)
-      column(1).borders = %i[top right bottom left]
+      column(1).borders = %i(top right bottom left)
       column(1).style(align: :center, font_style: :bold)
     end
   end

@@ -40,10 +40,10 @@ class BakeryPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    attributes = %i[
+    attributes = %i(
       name logo email phone_number address_street_1 address_street_2 address_city
       address_state address_zipcode kickoff_time quickbooks_account group_preferments
-    ]
+    )
     attributes << :plan_id if change_plan?
     attributes
   end
@@ -55,7 +55,7 @@ class BakeryPolicy < ApplicationPolicy
   private
 
   def read_permission?
-    %w[read manage].include?(user.bakery_permission)
+    %w(read manage).include?(user.bakery_permission)
   end
 
   class Scope < Scope
@@ -66,7 +66,7 @@ class BakeryPolicy < ApplicationPolicy
     end
 
     def read_permission?
-      %w[read manage].include?(user.bakery_permission)
+      %w(read manage).include?(user.bakery_permission)
     end
   end
 end

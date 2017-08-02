@@ -55,13 +55,13 @@ describe ShipmentItem do
       shipment_item = ShipmentItem.new
       shipment_item.product = product
 
-      fields = %i[
+      fields = %i(
         id
         name
         sku
         product_type
         total_lead_days
-      ]
+      )
 
       fields.each do |field|
         expect(shipment_item.send("product_#{field}".to_sym)).to eq(product.send(field))

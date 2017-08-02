@@ -129,13 +129,13 @@ describe Shipment do
         shipment = Shipment.new
         shipment.client = client
 
-        fields = %i[
+        fields = %i(
           id name official_company_name billing_term billing_term_days delivery_address_street_1
           delivery_address_street_2 delivery_address_city delivery_address_state
           delivery_address_zipcode billing_address_street_1 billing_address_street_2
           billing_address_city billing_address_state billing_address_zipcode
           primary_contact_name primary_contact_phone notes
-        ]
+        )
 
         fields.each do |field|
           expect(shipment.send("client_#{field}".to_sym)).to eq(client.send(field))
@@ -157,7 +157,7 @@ describe Shipment do
         shipment.client = client
         shipment.route = route
 
-        fields = %i[id name departure_time]
+        fields = %i(id name departure_time)
 
         fields.each do |field|
           expect(shipment.send("route_#{field}".to_sym)).to eq(route.send(field))

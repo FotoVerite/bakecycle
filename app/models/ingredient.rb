@@ -15,7 +15,7 @@
 class Ingredient < ApplicationRecord
   extend AlphabeticalOrder
 
-  INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
+  INGREDIENT_TYPES = %w(flour salt yeast sugar hydration eggs fats other).freeze
 
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
 

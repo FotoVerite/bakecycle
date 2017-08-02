@@ -5,14 +5,14 @@ describe LegacyImporter::FieldMapper do
   let(:mapper) { LegacyImporter::FieldMapper.new(fields_map) }
 
   let(:fields_map) do
-    %w[
+    %w(
       product_name name
       product_shortname sku
       product_description description
       product_weight_g weight
       product_extra over_bake
       product_type product_type
-    ]
+    )
   end
 
   describe ".translate" do

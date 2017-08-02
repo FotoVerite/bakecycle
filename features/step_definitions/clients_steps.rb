@@ -50,7 +50,7 @@ When(/^I fill out the client "(.*?)" with valid data$/) do |name|
 end
 
 Then(/^the client "(.*?)" should not be present$/) do |client_name|
-  within ".responsive-table" do
+  within ".clients-index" do
     expect(page).to_not have_content(client_name)
   end
 end
@@ -86,14 +86,14 @@ Then(/^I should see recent shipments information$/) do
 end
 
 Then(/^I should be on the shipment's index page with "(.*?)" shipments and none from "(.*?)"$/) do |name1, name2|
-  within ".responsive-table" do
+  within ".all-invoices" do
     expect(page).to have_content(name1)
     expect(page).to_not have_content(name2)
   end
 end
 
 Then(/^The client "(.*?)" should not be present$/) do |client|
-  within ".responsive-table" do
+  within ".clients-index" do
     expect(page).to_not have_content(client)
   end
 end
