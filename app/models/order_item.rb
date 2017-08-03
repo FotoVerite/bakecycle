@@ -54,45 +54,49 @@ class OrderItem < ApplicationRecord
   # their lead time date.
   # Orders will be active for a ship date to return a list of order items.
   def self.production_date(start_date)
-    sql = <<-SQL
-      order_items.id in(
-        WITH items_to_work AS (
-          SELECT
-            order_items.id item_id,
-            orders.id order_id,
-            orders.client_id client_id,
-            orders.route_id route_id,
-            (DATE :production_date + order_items.total_lead_days) ship_date
-          FROM order_items
-          INNER JOIN orders ON orders.id = order_items.order_id
-          WHERE
-            -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
-            DATE :production_date >= (orders.start_date - (SELECT COALESCE(max(total_lead_days), 1) FROM order_items))
-            AND (
-              DATE :production_date <= orders.end_date
-              OR orders.end_date IS NULL
-            )
-            -- find all order items that have active orders on the production_date + lead time
-            AND DATE :production_date >= (orders.start_date::date - order_items.total_lead_days)
-            AND (
-              DATE :production_date <= (orders.end_date::date - order_items.total_lead_days)
-              OR orders.end_date IS NULL
-            )
-        )
-
-        SELECT
-          item_id
-        FROM items_to_work
-        WHERE
-          -- reduce to order items that are active on their ship_date
-          -- this step is why this query is so slow
-          order_id in (
-            SELECT DISTINCT ON (client_id, route_id) id
+    sql = <<-SQL.strip_heredoc
+            order_items.id in(
+              WITH items_to_work AS (
+                SELECT
+                  orders.order_type order_type,
+                  order_items.id item_id,
+                  orders.id order_id,
+                  orders.client_id client_id,
+                  orders.route_id route_id,
+                  (DATE :production_date + order_items.total_lead_days) ship_date
+                FROM order_items
+                INNER JOIN orders ON orders.id = order_items.order_id
+                WHERE
+                  -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
+                  DATE :production_date >= (orders.start_date - (SELECT COALESCE(max(total_lead_days), 1) FROM order_items))
+                  AND (
+                    DATE :production_date <= orders.end_date
+                    OR orders.end_date IS NULL
+                  )
+                  -- find all order items that have active orders on the production_date + lead time
+                  AND DATE :production_date >= (orders.start_date::date - order_items.total_lead_days)
+                  AND (
+                    DATE :production_date <= (orders.end_date::date - order_items.total_lead_days)
+                    OR orders.end_date IS NULL
+                  )
+              )
+        SELECT item_id
+        FROM
+        items_to_work
+        where (
+          order_type = 'standing' AND
+          (
+            SELECT count(id)
             FROM orders
-            WHERE start_date <= ship_date and (end_date IS NULL OR end_date >= ship_date)
-            ORDER BY client_id, route_id, order_type DESC
-          )
+            WHERE orders.client_id = items_to_work.client_id
+            AND orders.route_id = items_to_work.route_id
+            AND start_date <= ship_date
+            AND (end_date IS NULL OR end_date >=ship_date)
+            AND orders.order_type='temporary'
+          ) = 0
       )
+          OR order_type != 'standing'
+         )
     SQL
     where(sql, production_date: start_date)
   end

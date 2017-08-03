@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802194719) do
+ActiveRecord::Schema.define(version: 20170803172922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,8 +171,12 @@ ActiveRecord::Schema.define(version: 20170802194719) do
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
   add_index "orders", ["created_by_user_id"], name: "index_orders_on_created_by_user_id", using: :btree
+  add_index "orders", ["end_date"], name: "index_orders_on_end_date", using: :btree
   add_index "orders", ["last_updated_by_user_id"], name: "index_orders_on_last_updated_by_user_id", using: :btree
   add_index "orders", ["legacy_id", "bakery_id"], name: "index_orders_on_legacy_id_and_bakery_id", unique: true, using: :btree
+  add_index "orders", ["order_type"], name: "index_orders_on_order_type", using: :btree
+  add_index "orders", ["start_date", "end_date"], name: "index_orders_on_start_date_and_end_date", using: :btree
+  add_index "orders", ["start_date"], name: "index_orders_on_start_date", using: :btree
 
   create_table "plans", force: :cascade do |t|
     t.string   "name",         null: false
@@ -340,6 +344,8 @@ ActiveRecord::Schema.define(version: 20170802194719) do
 
   add_index "shipments", ["bakery_id"], name: "index_shipments_on_bakery_id", using: :btree
   add_index "shipments", ["client_id", "route_id", "date"], name: "index_shipments_on_client_id_and_route_id_and_date", using: :btree
+  add_index "shipments", ["order_id", "date"], name: "index_shipments_on_order_id_and_date", using: :btree
+  add_index "shipments", ["order_id"], name: "index_shipments_on_order_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",     null: false
