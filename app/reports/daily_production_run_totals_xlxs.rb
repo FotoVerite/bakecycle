@@ -18,7 +18,7 @@ class DailyProductionRunTotalsXlxs
       add_rows(hash, sheet, total)
     end
     create_output_string(p)
-   end
+  end
 
   # rubocop:disable Metrics/AbcSize
 

@@ -92,12 +92,24 @@ class InvoicePage
     hash = {}
     items.each do |item|
       if hash[item.product_name].nil?
-        hash[item.product_name] = [item.product_name, item.product_type, item.product_quantity, item.product_price, item.object.price]
+        hash[item.product_name] = [
+          item.product_name,
+          item.product_type,
+          item.product_quantity,
+          item.product_price,
+          item.object.price
+        ]
       elsif hash[item.product_name][3] == item.product_price
         hash[item.product_name][2] = hash[item.product_name][2] + item.product_quantity
         hash[item.product_name][4] = hash[item.product_name][4] + item.object.price
       else
-        hash[item.product_name + item.id.to_s] = [item.product_name, item.product_type, item.product_quantity, item.product_price, item.price]
+        hash[item.product_name + item.id.to_s] = [
+          item.product_name,
+          item.product_type,
+          item.product_quantity,
+          item.product_price,
+          item.price
+        ]
       end
     end
     hash.values.map do |array|

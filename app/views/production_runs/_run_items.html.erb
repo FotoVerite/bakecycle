@@ -26,6 +26,6 @@
   </table>
 
   <% if policy(@production_run).update? %>
-    <%= link_to('Add Product', '', data:{ add: true }, class: "button") if f.object.persisted? %>
+    <%= link_to('Add Product', '', data:{ add: true }, class: "button") if f.object.persisted? || params[:action] == 'test_projection' %>
   <% end %>
 </div>

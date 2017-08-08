@@ -1,5 +1,5 @@
 class ProductionRunProjection
-  attr_reader :bakery, :start_date, :batch_end_date
+  attr_reader :bakery, :start_date, :batch_end_date, :order_items
 
   def initialize(bakery, start_date, end_date = nil)
     @bakery = bakery
@@ -8,13 +8,15 @@ class ProductionRunProjection
   end
 
   def order_items
-    @_order_items ||=
+    @order_items ||=
       if batch_end_date
         batched_order_items
       else
         order_items_for(start_date)
       end
   end
+
+  attr_writer :order_items
 
   def products_info
     @_products_info ||= groups.collect do |(_product, grouped_order_items)|

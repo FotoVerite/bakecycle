@@ -1,0 +1,11 @@
+<h1>Create A Test Production Run</h1>
+
+<%= simple_form_for @production_run, url: print_test_projection_production_runs_path, method: 'get', html: {target: '_blank'} do |f| %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
+
+  <%= render partial: "run_items", locals: {f: f} %>
+
+  <%= f.submit "Print", class: "button", name: nil %>
+
+<% end %>
