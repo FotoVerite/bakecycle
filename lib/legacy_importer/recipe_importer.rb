@@ -7,12 +7,12 @@ module LegacyImporter
       @data = legacy_recipe
     end
 
-    FIELDS_MAP = %w(
+    FIELDS_MAP = %w[
       recipe_name name
       recipe_instructions note
       recipe_type recipe_type
       recipe_mix_size mix_size
-    ).freeze
+    ].freeze
     # recipe_extra
     # recipe_active
     # recipe_print

@@ -48,11 +48,11 @@ class ProductRecipeCalc
   end
 
   def dough_percentage_zero?
-    dough_percentage == 0
+    dough_percentage.zero?
   end
 
   def inclusion_percentage_zero?
-    inclusion_percentage == 0
+    inclusion_percentage.zero?
   end
 
   def inclusion_percentage

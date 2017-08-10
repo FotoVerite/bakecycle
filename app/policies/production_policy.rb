@@ -42,7 +42,7 @@ class ProductionPolicy < ApplicationPolicy
   end
 
   def can_read?
-    %w(read manage).include?(user.production_permission)
+    %w[read manage].include?(user.production_permission)
   end
 
   class Scope < Scope
@@ -53,7 +53,7 @@ class ProductionPolicy < ApplicationPolicy
     end
 
     def read_permission?
-      %w(read manage).include?(user.production_permission)
+      %w[read manage].include?(user.production_permission)
     end
   end
 end

@@ -47,7 +47,7 @@ class Order < ApplicationRecord
   validates :client_id, presence: true
   validates :start_date, presence: true
   validate  :end_date_is_not_before_start_date
-  validates :order_type, presence: true, inclusion: %w(standing temporary)
+  validates :order_type, presence: true, inclusion: %w[standing temporary]
   validates :bakery, presence: true
   validates_with OverlappingOrdersValidator
 

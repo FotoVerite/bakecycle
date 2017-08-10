@@ -75,13 +75,13 @@ describe ProductCounter do
       am = create(:route, bakery: bakery)
       pm = create(:route, bakery: bakery)
       shipment = create(:shipment, date: today, shipment_item_count: 0, route: am, bakery: bakery)
-      shipment_2 = create(:shipment, date: today, shipment_item_count: 0, route: pm, bakery: bakery)
+      shipment2 = create(:shipment, date: today, shipment_item_count: 0, route: pm, bakery: bakery)
       bread = create(:product, product_type: :bread, bakery: bakery, over_bake: 25)
       cookie = create(:product, product_type: :cookie, bakery: bakery, over_bake: 25)
       create(:shipment_item, shipment: shipment, product: bread, product_quantity: 150, bakery: bakery)
       create(:shipment_item, shipment: shipment, product: cookie, product_quantity: 100, bakery: bakery)
-      create(:shipment_item, shipment: shipment_2, product: bread, product_quantity: 100, bakery: bakery)
-      create(:shipment_item, shipment: shipment_2, product: cookie, product_quantity: 100, bakery: bakery)
+      create(:shipment_item, shipment: shipment2, product: bread, product_quantity: 100, bakery: bakery)
+      create(:shipment_item, shipment: shipment2, product: cookie, product_quantity: 100, bakery: bakery)
       ProductionRunService.new(bakery, today - 1.day).run
       RunItem.where(product: cookie).last.update!(overbake_quantity: 17)
 

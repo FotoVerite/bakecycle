@@ -33,10 +33,10 @@ class Recipe < ApplicationRecord
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
-  enum recipe_type: %i(dough preferment inclusion)
-  enum mix_size_unit: %i(oz lb g kg)
+  enum recipe_type: %i[dough preferment inclusion]
+  enum mix_size_unit: %i[oz lb g kg]
 
-  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
+  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :lead_days, presence: true
   validates :mix_size, numericality: true, allow_nil: true
   validates :mix_size_unit, presence: true, unless: "mix_size.blank?"
@@ -50,7 +50,7 @@ class Recipe < ApplicationRecord
   before_save :set_total_lead_days
   before_destroy :check_for_products
   before_destroy :check_for_parent_recipes
-  after_commit :queue_touch_parent_objects, on: %i(create update)
+  after_commit :queue_touch_parent_objects, on: %i[create update]
   after_touch :update_total_lead_days
 
   scope :motherdoughs, -> { where(recipe_type: Recipe.recipe_types[:dough]) }

@@ -88,7 +88,7 @@ class WeeklyProductionRunTotalsXlxs
   def create_end_row(sheet, start)
     end_of = sheet.rows.last.index + 1
     total_row = [nil, nil]
-    %w(C D E F G H I J).each do |sum|
+    %w[C D E F G H I J].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
     end
     total_row

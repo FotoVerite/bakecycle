@@ -45,6 +45,7 @@ describe Product do
 
   it "has validations" do
     expect(product).to validate_presence_of(:name)
+    product.name = "a name"
     expect(product).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     expect(product).to validate_presence_of(:product_type)
     expect(product).to validate_presence_of(:base_price)

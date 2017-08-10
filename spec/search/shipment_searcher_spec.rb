@@ -24,20 +24,20 @@ describe ShipmentSearcher do
   end
 
   it "returns shipments after and including a date_from" do
-    shipment_1 = create(:shipment, date: today)
-    shipment_2 = create(:shipment, date: tomorrow)
+    shipment1 = create(:shipment, date: today)
+    shipment2 = create(:shipment, date: tomorrow)
     create(:shipment, date: yesterday)
 
     search = { date_from: today }
-    expect(searcher.search(search)).to contain_exactly(shipment_1, shipment_2)
+    expect(searcher.search(search)).to contain_exactly(shipment1, shipment2)
   end
 
   it "returns shipments before and include a date_to" do
-    shipment_1 = create(:shipment, date: today)
-    shipment_2 = create(:shipment, date: yesterday)
+    shipment1 = create(:shipment, date: today)
+    shipment2 = create(:shipment, date: yesterday)
 
     search = { date_to: today }
-    expect(searcher.search(search)).to contain_exactly(shipment_1, shipment_2)
+    expect(searcher.search(search)).to contain_exactly(shipment1, shipment2)
   end
 
   it "allows to search for date ranges" do

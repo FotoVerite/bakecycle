@@ -134,7 +134,7 @@ class InvoicePage
     table(totals_row, position: :right, column_widths: [80.5, 80.5]) do
       cells.borders = []
       column(0).style(align: :right)
-      column(1).borders = %i(top right bottom left)
+      column(1).borders = %i[top right bottom left]
       column(1).style(align: :center)
     end
   end

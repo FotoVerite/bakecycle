@@ -26,7 +26,7 @@ FactoryGirl.define do
     primary_contact_phone { Faker::PhoneNumber.cell_phone }
     primary_contact_email { Faker::Internet.email }
 
-    billing_term { %i(net_45 net_30 net_15 net_7 credit_card cod).sample }
+    billing_term { %i[net_45 net_30 net_15 net_7 credit_card cod].sample }
 
     delivery_fee_option :no_delivery_fee
 

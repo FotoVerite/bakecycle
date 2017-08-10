@@ -124,7 +124,7 @@ class PackingSlipPage
     table(pieces_shipped_row, position: :right, column_widths: [400, 57.3, 57.3, 57.3]) do
       cells.borders = []
       column(0).style(align: :right, font_style: :bold)
-      column(1).borders = %i(top right bottom left)
+      column(1).borders = %i[top right bottom left]
       column(1).style(align: :center, font_style: :bold)
     end
   end

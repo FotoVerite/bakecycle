@@ -4,7 +4,7 @@ namespace :bakecycle do
     bakery = Bakery.first
     exporter = DemoExporter.new(bakery)
     exporter.run
-    puts exporter.export.map { |k, v| "#{k}: #{v.count}" }
+    puts(exporter.export.map { |k, v| "#{k}: #{v.count}" })
     puts "Written to #{DemoExporter::DEMO_DATA_YAML}"
   end
 

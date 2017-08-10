@@ -47,7 +47,8 @@ describe User do
     expect(user).to validate_presence_of(:user_permission)
     expect(user).to validate_inclusion_of(:user_permission).in_array(User::ACCESS_LEVELS)
     expect(user).to validate_presence_of(:email)
-    expect(user).to validate_uniqueness_of(:email)
+    user.email = "test@example.com"
+    expect(user).to validate_uniqueness_of(:email).case_insensitive
   end
 
   describe ".sort_by_bakery_and_name" do

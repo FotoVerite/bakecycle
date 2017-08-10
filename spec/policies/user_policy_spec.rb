@@ -36,15 +36,15 @@ describe UserPolicy do
     end
 
     it "returns all users from all bakeries" do
-      bakery_1 = create(:bakery)
-      bakery_2 = create(:bakery)
+      bakery1 = create(:bakery)
+      bakery2 = create(:bakery)
 
       current_user = create(:user, :as_admin)
-      record_1 = create(:user, bakery: bakery_1)
-      record_2 = create(:user, bakery: bakery_2)
+      record1 = create(:user, bakery: bakery1)
+      record2 = create(:user, bakery: bakery2)
 
       policy = UserPolicy.new(current_user, record)
-      expect(policy.scope).to contain_exactly(record_2, current_user, record_1)
+      expect(policy.scope).to contain_exactly(record2, current_user, record1)
     end
 
     it "allows you to change the bakery" do

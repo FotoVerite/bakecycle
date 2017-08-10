@@ -33,17 +33,17 @@ describe ExporterJob do
     it "is idempotent" do
       export = FileExport.create!(bakery: bakery)
       ExporterJob.new.perform(user, export, generator)
-      export_2 = FileExport.find(export.id)
-      ExporterJob.new.perform(user, export_2, generator)
-      expect(export_2).to_not be_changed
-      expect(export).to eq(export_2)
+      export2 = FileExport.find(export.id)
+      ExporterJob.new.perform(user, export2, generator)
+      expect(export2).to_not be_changed
+      expect(export).to eq(export2)
     end
 
     it "creates a papertrail of the user viewing" do
       export = FileExport.create!(bakery: bakery)
       ExporterJob.new.perform(user, export, generator)
-      export_2 = FileExport.find(export.id)
-      ExporterJob.new.perform(user, export_2, generator)
+      export2 = FileExport.find(export.id)
+      ExporterJob.new.perform(user, export2, generator)
       file_action = FileAction.last
       expect(file_action).to_not be_nil
       expect(file_action.user).to eq(user)
