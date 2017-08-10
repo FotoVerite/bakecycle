@@ -49,8 +49,6 @@ class DailyProductionRunTotalsXlxs
     hash[product_name]["total_products"] = total_quantity + hash[product_name]["total_products"].to_i
   end
 
-  # rubocop:enable Metrics/AbcSize
-
   def add_rows(hash, sheet, total)
     # Set Product Type Row
     hash.each do |key, product_values|
@@ -65,6 +63,8 @@ class DailyProductionRunTotalsXlxs
     sheet.add_row [""]
     sheet.add_row ["", "", total]
   end
+
+  # rubocop:enable Metrics/AbcSize
 
   def create_product_rows(product_values, sheet)
     start = sheet.rows.last.index + 2
@@ -81,7 +81,7 @@ class DailyProductionRunTotalsXlxs
   def create_end_row(sheet, start)
     end_of = sheet.rows.last.index + 1
     total_row = [nil, nil]
-    %w(C).each do |sum|
+    %w[C].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
     end
     total_row

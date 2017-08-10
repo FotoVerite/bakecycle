@@ -12,7 +12,6 @@ notify:
     - url: http://wizarddev-statusbot.herokuapp.com/circle
 test:
   pre:
-    - bundle exec rake immigrant:my_check_keys
-    - bundle exec 'bundle-audit update && bundle-audit check'
+    - bundle exec 'bundle-audit update && bundle-audit check --ignore CVE-2017-5946'
     - bundle exec rubocop -D -c .rubocop.yml
     - bundle exec brakeman -z -w2

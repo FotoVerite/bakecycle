@@ -29,5 +29,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # rails has started complaining
-  config.assets.precompile += %w(test/stripe.js)
+  config.assets.precompile += %w[test/stripe.js]
 end

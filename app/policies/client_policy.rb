@@ -56,7 +56,7 @@ class ClientPolicy < ApplicationPolicy
     end
 
     def read_permission?
-      user.bakery && (admin? || %w(read manage).include?(user.client_permission))
+      user.bakery && (admin? || %w[read manage].include?(user.client_permission))
     end
   end
 end

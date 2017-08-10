@@ -22,7 +22,7 @@ class ShipmentCreator
   end
 
   def shipment_items_is_empty_and_has_no_fee?
-    shipment_items.empty? && delivery_fee == 0
+    shipment_items.empty? && delivery_fee.zero?
   end
 
   def create_shipment

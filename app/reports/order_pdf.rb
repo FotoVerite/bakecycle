@@ -60,7 +60,7 @@ class OrderPdf < BasePdfReport
   end
 
   def item_row(item)
-    return if item.total_quantity == 0
+    return if item.total_quantity.zero?
     item = item.decorate
     [
       item.product.name,

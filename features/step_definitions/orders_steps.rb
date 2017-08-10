@@ -90,8 +90,11 @@ When(/^I fill out the order item form with:$/) do |table|
     ".fields:last .sunday" => form["sunday"]
   )
   product_selector = all(".select .productId input").last
+  product_selector.click
   product_selector.set(form["product"])
-  send_return(product_selector)
+  within(".Select-menu") do
+    find(".Select-option").click
+  end
 end
 
 When(/^I fill out the temporary order item form with:$/) do |table|

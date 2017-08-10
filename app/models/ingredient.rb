@@ -15,13 +15,13 @@
 class Ingredient < ApplicationRecord
   extend AlphabeticalOrder
 
-  INGREDIENT_TYPES = %w(flour salt yeast sugar hydration eggs fats other).freeze
+  INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
 
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
 
   belongs_to :bakery
 
-  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery }
+  validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :description, length: { maximum: 500 }
   validates :ingredient_type,
             presence: true,

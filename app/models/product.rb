@@ -49,10 +49,10 @@ class Product < ApplicationRecord
      other: 18
   }
 
-  enum unit: %i(oz lb g kg)
+  enum unit: %i[oz lb g kg]
 
   validates :bakery, presence: true
-  validates :name, presence: true, uniqueness: { scope: :bakery }
+  validates :name, presence: true, uniqueness: { scope: :bakery_id }
   validates :product_type, presence: true
   validates :weight, presence: true, numericality: true
   validates :unit, presence: true
@@ -62,7 +62,7 @@ class Product < ApplicationRecord
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
-  after_commit :queue_touch_order_items, on: %i(create update)
+  after_commit :queue_touch_order_items, on: %i[create update]
   after_touch :update_total_lead_days
   before_destroy :check_for_order_items
 

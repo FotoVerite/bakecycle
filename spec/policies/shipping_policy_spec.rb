@@ -95,10 +95,10 @@ describe ShippingPolicy do
         bakery = create(:bakery)
         current_user = create(:user, bakery: bakery, shipping_permission: "read")
         record = create(:route, bakery: bakery)
-        record_2 = create(:route, bakery: bakery)
+        record2 = create(:route, bakery: bakery)
         create(:route)
         policy = ShippingPolicy.new(current_user, record)
-        expect(policy.scope).to contain_exactly(record, record_2)
+        expect(policy.scope).to contain_exactly(record, record2)
       end
     end
   end
@@ -121,10 +121,10 @@ describe ShippingPolicy do
 
     describe "scope" do
       it "returns all shipping routes" do
-        record_2 = create(:route, bakery: bakery)
+        record2 = create(:route, bakery: bakery)
         create(:route)
         policy = ShippingPolicy.new(current_user, record)
-        expect(policy.scope).to contain_exactly(record, record_2)
+        expect(policy.scope).to contain_exactly(record, record2)
       end
     end
   end

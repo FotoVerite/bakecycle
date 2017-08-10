@@ -8,7 +8,7 @@ module LegacyImporter
       @field_mapper = FieldMapper.new(FIELDS_MAP)
     end
 
-    FIELDS_MAP = %w(
+    FIELDS_MAP = %w[
       client_active active
       client_business_name official_company_name
       client_dba name
@@ -43,7 +43,7 @@ module LegacyImporter
       client_deliverynotes notes
       client_fax business_fax
       client_phone business_phone
-    ).freeze
+    ].freeze
 
     # Fields we have yet to import
     # client_ap_emailcc

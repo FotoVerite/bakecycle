@@ -96,10 +96,10 @@ shared_examples_for "product policy" do |model|
         bakery = create(:bakery)
         current_user = create(:user, bakery: bakery, product_permission: "read")
         record = create(model_name, bakery: bakery)
-        record_2 = create(model_name, bakery: bakery)
+        record2 = create(model_name, bakery: bakery)
         create(model_name)
         policy = ProductPolicy.new(current_user, record)
-        expect(policy.scope).to contain_exactly(record, record_2)
+        expect(policy.scope).to contain_exactly(record, record2)
       end
     end
   end
@@ -122,10 +122,10 @@ shared_examples_for "product policy" do |model|
 
     describe "scope" do
       it "returns all #{model}s" do
-        record_2 = create(model_name, bakery: bakery)
+        record2 = create(model_name, bakery: bakery)
         create(model_name)
         policy = ProductPolicy.new(current_user, record)
-        expect(policy.scope).to contain_exactly(record, record_2)
+        expect(policy.scope).to contain_exactly(record, record2)
       end
     end
   end

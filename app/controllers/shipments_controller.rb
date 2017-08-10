@@ -1,8 +1,10 @@
 class ShipmentsController < ApplicationController
-  before_action :load_shipment, only: %i(edit update destroy invoice packing_slip invoice_iif invoice_csv)
-  after_action :skip_policy_scope, only: %i(export_csv export_iif export_pdf invoice_csv)
+  before_action :load_shipment, only: %i[edit update destroy invoice packing_slip invoice_iif invoice_csv]
+  after_action :skip_policy_scope, only: %i[export_csv export_iif export_pdf invoice_csv]
   decorates_assigned :shipments, :shipment
   helper_method :search_form
+
+  # rubocop:disable Metrics/AbcSize
 
   def index
     authorize Shipment
@@ -15,6 +17,8 @@ class ShipmentsController < ApplicationController
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
   end
+
+  # rubocop:enable Metrics/AbcSize
 
   def new
     @shipment = policy_scope(Shipment).build
@@ -120,7 +124,7 @@ class ShipmentsController < ApplicationController
     params.require(:shipment).permit(
       :client_id, :route_id, :date, :payment_due_date, :delivery_fee, :note,
       shipment_items_attributes:
-      %i(id product_id product_quantity product_price _destroy)
+      %i[id product_id product_quantity product_price _destroy]
     )
   end
 end

@@ -7,11 +7,11 @@ module LegacyImporter
       @data = legacy_route
     end
 
-    FIELDS_MAP = %w(
+    FIELDS_MAP = %w[
       route_time departure_time
       route_name name
       route_notes notes
-    ).map(&:to_sym).each_slice(2)
+    ].map(&:to_sym).each_slice(2)
 
     def import!
       ObjectFinder.new(

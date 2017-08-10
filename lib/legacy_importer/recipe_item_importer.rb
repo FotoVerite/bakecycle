@@ -37,7 +37,7 @@ module LegacyImporter
     end
 
     def skip?
-      data[:recipeamt_bakerspct] == 0
+      data[:recipeamt_bakerspct].zero?
     end
 
     def recipe

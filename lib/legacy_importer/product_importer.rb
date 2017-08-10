@@ -10,13 +10,13 @@ module LegacyImporter
       @field_mapper = FieldMapper.new(FIELDS_MAP)
     end
 
-    FIELDS_MAP = %w(
+    FIELDS_MAP = %w[
       product_name name
       product_description description
       product_weight_g weight
       product_extra over_bake
       product_type product_type
-    ).freeze
+    ].freeze
     # product_shortname     sku
 
     PRODUCT_TYPE_MAP = {
@@ -67,7 +67,7 @@ module LegacyImporter
       return attrs[:weight] unless inclusion && motherdough
       inclusion_percent = inclusion.total_bakers_percentage
       motherdough_percent = motherdough.total_bakers_percentage
-      return attrs[:weight] if motherdough_percent == 0
+      return attrs[:weight] if motherdough_percent.zero?
       (attrs[:weight] / motherdough_percent * (motherdough_percent + inclusion_percent)).round(3)
     end
   end

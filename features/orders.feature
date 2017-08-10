@@ -13,7 +13,7 @@ Feature: Orders
     Then I should see the callout "This order is missing"
 
 
-  @javascript @firefox
+  @javascript
   Scenario: As a user with full access to orders
     Given I am logged in as an user with client "manage" access with a bakery called "biencuit"
     And There are "biencuit" bakery clients named "andysdecaf" and "mandos"

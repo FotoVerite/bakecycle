@@ -30,9 +30,9 @@ class ShipmentItem < ApplicationRecord
   validates :product_product_type, presence: true
   validates :product_total_lead_days, presence: true
 
-  denormalize :product, %i(
+  denormalize :product, %i[
     id name sku product_type total_lead_days
-  )
+  ]
 
   before_validation :set_product_quantity_and_price
   before_save :set_production_start

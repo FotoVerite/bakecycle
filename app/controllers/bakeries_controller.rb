@@ -1,5 +1,5 @@
 class BakeriesController < ApplicationController
-  before_action :set_bakery, only: %i(edit update destroy)
+  before_action :set_bakery, only: %i[edit update destroy]
   decorates_assigned :bakeries, :bakery
 
   def index

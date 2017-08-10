@@ -48,7 +48,7 @@ class ShippingPolicy < ApplicationPolicy
     end
 
     def read_permission?
-      user.bakery && (admin? || %w(read manage).include?(user.shipping_permission))
+      user.bakery && (admin? || %w[read manage].include?(user.shipping_permission))
     end
   end
 end

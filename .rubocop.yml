@@ -26,19 +26,19 @@ Style/BlockDelimiters:
 Style/Documentation:
   Enabled: false
 
-Style/IndentHash:
+Layout/IndentHash:
   Enabled: false
 
 Style/NumericLiterals:
   Enabled: false
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
 Style/SignalException:
   Enabled: false
 
-Style/SpaceBeforeFirstArg:
+Layout/SpaceBeforeFirstArg:
   Enabled: false
 
 Style/StringLiterals:
@@ -50,14 +50,41 @@ Style/StringLiterals:
 Style/SingleLineBlockParams:
   Enabled: false
 
-Style/AlignParameters:
+Layout/AlignParameters:
   Enabled: false
 
-Style/FirstParameterIndentation:
+Layout/FirstParameterIndentation:
   Enabled: false
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
 Style/ConditionalAssignment:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - 'lib/**/*'
+    - 'features/**/*'
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/NotNullColumn:
+  Enabled: false
+
+Style/MethodMissing:
+  Enabled: false
+
+Rails/FilePath:
+  Exclude:
+    - "spec/**/*"
+    - "features/**/*"
+    - "lib/tasks/*.rake"
+
+Rails/OutputSafety:
   Enabled: false

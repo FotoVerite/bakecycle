@@ -40,7 +40,7 @@ class DailyTotalPdf < BasePdfReport
     @recipes.product_types.each do |type|
       move_down 20
       text invert_product_type(type).titleize, size: 20
-      table(information_data(type), column_widths: column_width_sizes, header: true, row_colors: %w(FFFFFF E3E3E3)) do
+      table(information_data(type), column_widths: column_width_sizes, header: true, row_colors: %w[FFFFFF E3E3E3]) do
         row(0).style(background_color: HEADER_ROW_COLOR, size: 10)
         row(0..-1).column(1..-1).style(align: :center)
       end
@@ -53,7 +53,7 @@ class DailyTotalPdf < BasePdfReport
     array = []
     columns = information_header[0].count
     (0...columns).each do |x|
-      next array << item_name_column_width if x == 0
+      next array << item_name_column_width if x.zero?
       array << (bounds.width - item_name_column_width) / (columns - 1)
     end
     array
@@ -66,7 +66,7 @@ class DailyTotalPdf < BasePdfReport
   end
 
   def information_header
-    data = [%w(Item Total Overbake)]
+    data = [%w[Item Total Overbake]]
     if @show_routes
       @recipes.routes.each do |route|
         data[0] << route.name.titleize

@@ -88,6 +88,9 @@ class InvoicePage
     [header] + items
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
+
   def merge_sorted_order_items_with_same_name_and_price(items)
     hash = {}
     items.each do |item|
@@ -123,12 +126,15 @@ class InvoicePage
     end
   end
 
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
+
   def totals
     move_down 5
     table(totals_row, position: :right, column_widths: [80.5, 80.5]) do
       cells.borders = []
       column(0).style(align: :right)
-      column(1).borders = %i(top right bottom left)
+      column(1).borders = %i[top right bottom left]
       column(1).style(align: :center)
     end
   end
