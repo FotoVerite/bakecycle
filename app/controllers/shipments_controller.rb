@@ -4,6 +4,8 @@ class ShipmentsController < ApplicationController
   decorates_assigned :shipments, :shipment
   helper_method :search_form
 
+  # rubocop:disable Metrics/AbcSize
+
   def index
     authorize Shipment
     @shipments = scope_with_search.paginate(page: params[:page])
@@ -15,6 +17,8 @@ class ShipmentsController < ApplicationController
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
   end
+
+  # rubocop:enable Metrics/AbcSize
 
   def new
     @shipment = policy_scope(Shipment).build

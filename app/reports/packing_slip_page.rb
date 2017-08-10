@@ -94,12 +94,21 @@ class PackingSlipPage
     rows.unshift(header)
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
+
   def merge_shipment_items(items)
     hash = {}
     items.each do |item|
       item = item.decorate
       if hash[item.product_name].nil?
-        hash[item.product_name] = [item.product_name_and_sku, item.product_type, item.product_quantity, item.product_quantity, nil]
+        hash[item.product_name] = [
+          item.product_name_and_sku,
+          item.product_type,
+          item.product_quantity,
+          item.product_quantity,
+          nil
+        ]
       else
         hash[item.product_name][2] = hash[item.product_name][2] + item.product_quantity
         hash[item.product_name][3] = hash[item.product_name][3] + item.product_quantity
@@ -107,6 +116,9 @@ class PackingSlipPage
     end
     hash.values
   end
+
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def pieces_shipped
     table(pieces_shipped_row, position: :right, column_widths: [400, 57.3, 57.3, 57.3]) do
