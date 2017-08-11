@@ -85,20 +85,19 @@ class OrdersController < ApplicationController
 
   def future_invoices
     authorize @order, :edit?
-    if !@order.shipments.empty?
-      @date = Chronic.parse @order.shipments.last.date + 1.day
-    else
-      @date = Chronic.parse Time.zone.today + 1.day
-    end
+    @date = get_date
+    Chronic.parse @date
   end
 
   def add_invoices
     authorize @order, :edit?
+
     if params[:date]
-      dates = (@order.shipments.last.date + 1.day)..Date.parse(params[:date])
+      dates = get_date..Date.parse(params[:date])
     else
       dates = @order.missing_shipment_dates
     end
+
     dates.each do |ship_date|
       ShipmentCreator.new(@order, ship_date).create!
     end
@@ -150,5 +149,13 @@ class OrdersController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date] || params[:id]) || Time.zone.today
+  end
+
+  def get_date
+    if !@order.shipments.empty?
+      @order.shipments.last.date + 1.day
+    else
+      Time.zone.today + 1.day
+    end
   end
 end
