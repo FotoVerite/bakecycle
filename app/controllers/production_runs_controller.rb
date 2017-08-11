@@ -3,6 +3,7 @@ class ProductionRunsController < ApplicationController
   after_action :skip_policy_scope, only: %i[
     print_projection
     print_recipes
+    print_test_projection
     print_weekly_daily_production_report
     weekly_daily_production_report
   ]
@@ -63,6 +64,20 @@ class ProductionRunsController < ApplicationController
   def print_projection
     authorize ProductionRun, :can_print?
     generator = ProjectionGenerator.new(current_bakery, date_query)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+  def test_projection
+    authorize ProductionRun, :can_print?
+    @production_run = policy_scope(ProductionRun).build
+  end
+
+  def print_test_projection
+    authorize ProductionRun, :can_print?
+    order_items = params[:production_run][:run_items_attributes].map do |o|
+      "#{o[1]['product_id']}:#{o[1]['overbake_quantity']}"
+    end
+    generator = TestProjectionGenerator.new(current_bakery, Time.zone.today, order_items)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
