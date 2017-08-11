@@ -88,3 +88,6 @@ Rails/FilePath:
 
 Rails/OutputSafety:
   Enabled: false
+
+Style/AccessorMethodName:
+  Enabled: false
