@@ -85,7 +85,11 @@ class OrdersController < ApplicationController
 
   def future_invoices
     authorize @order, :edit?
-    @date = Chronic.parse @order.shipments.last.date + 1.day
+    if @order.shipments
+      @date = Chronic.parse @order.shipments.last.date + 1.day
+    else
+      @date = Chronic.parse Time.zone.today + 1.day
+    end
   end
 
   def add_invoices
