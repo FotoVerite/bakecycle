@@ -34,6 +34,7 @@
 #  client_notes                     :string
 #  order_id                         :integer
 #  sequence_number                  :integer
+#  alert                            :boolean          default(FALSE)
 #
 
 FactoryGirl.define do

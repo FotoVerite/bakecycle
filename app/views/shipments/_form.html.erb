@@ -25,6 +25,11 @@
         <%= f.label :auto_generated %>
         <input disabled="true" type="text" value="<%= shipment.auto_generated? %>" />
       </div>
+      <div class="small-12 medium-4 columns">
+        <br />
+        <%= f.check_box(:alert) %>
+        <%= f.label :alert, "Active"%>
+      </div>
     </div>
 
     <div class="row">

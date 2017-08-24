@@ -19,6 +19,7 @@
 #  legacy_id       :string
 #  total_lead_days :integer          not null
 #  batch_recipe    :boolean          default(FALSE)
+#  removed         :boolean          default(FALSE)
 #
 
 class ProductSerializer < ActiveModel::Serializer

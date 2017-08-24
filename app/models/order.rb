@@ -17,6 +17,7 @@
 #  version_number          :integer          default(0)
 #  created_by_user_id      :integer
 #  last_updated_by_user_id :integer
+#  alert                   :boolean          default(FALSE)
 #
 
 class Order < ApplicationRecord

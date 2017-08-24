@@ -33,7 +33,8 @@
 #  route_departure_time             :time             not null
 #  client_notes                     :string
 #  order_id                         :integer
-#  sequence_number                 :integer
+#  sequence_number                  :integer
+#  alert                            :boolean          default(FALSE)
 #
 
 class Shipment < ApplicationRecord
