@@ -8,6 +8,7 @@ import {
   BCRadio,
   BCSelect,
   BCTextarea,
+  BCCheckbox,
 } from '../bakecycle-inputs';
 
 const OrderForm = React.createClass({
@@ -127,6 +128,17 @@ const OrderForm = React.createClass({
             <p className="help-text-order-type">
               Standing orders repeat every week, temporary orders override standing orders for a specific date
             </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="small-12 columns">
+            <BCCheckbox
+              value={order.alert}
+              field="alert"
+              name="order[alert]"
+              label="Alert"
+              onChange={updateOrder}
+            />
           </div>
         </div>
         <div className="row">

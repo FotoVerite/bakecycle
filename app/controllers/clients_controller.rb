@@ -57,6 +57,7 @@ class ClientsController < ApplicationController
 
   def client_params
     params.require(:client).permit(
+      :alert,
       :name, :official_company_name, :ein, :business_phone, :business_fax,
       :active, :delivery_address_street_1, :delivery_address_street_2,
       :delivery_address_city, :delivery_address_state, :delivery_address_zipcode,

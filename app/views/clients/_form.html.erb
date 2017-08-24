@@ -50,6 +50,13 @@
         <%= f.input :notes, label: false, as: :text %>
       </div>
     </div>
+    <div class="row">
+      <div class="small-12 medium-4 columns">
+        <%= f.check_box(:alert) %>
+        <%= f.label :alert, "Active"%>
+      </div>
+    </div>
+
   </fieldset>
 
   <fieldset>
@@ -184,6 +191,7 @@
       <div class="small-12 large-4 columns">
         <%= f.input :secondary_contact_email %>
       </div>
+
     </div>
   </fieldset>
 

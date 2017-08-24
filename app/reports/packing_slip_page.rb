@@ -4,6 +4,7 @@ class PackingSlipPage
     @bakery = bakery
     @pdf = pdf
     @shipment_items = shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
+    @alert = shipment.order.alert || shipment.order.client.alert
   end
 
   def render
@@ -30,6 +31,13 @@ class PackingSlipPage
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
     grid([0, 9], [0, 11]).bounding_box { text "Packing Slip", size: 20 }
+    return unless @alert
+
+    # Add alert star
+    grid([0, 11.3], [0, 11.3]).bounding_box {
+      image Rails.root.join("app", "assets", "images", "icons", "star.png"),
+      fit: [20, 20]
+    }
   end
 
   def addresses

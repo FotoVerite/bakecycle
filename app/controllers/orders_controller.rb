@@ -140,6 +140,7 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(
+      :alert,
       :start_date, :end_date, :client_id, :route_id, :note, :order_type,
       order_items_attributes:
         %i[id product_id monday tuesday wednesday
