@@ -124,9 +124,9 @@ class Shipment < ApplicationRecord
 
   def invoice_number
     if client.try(:legacy_id)
-      "#{sequence_number}-#{format('%03d', route.legacy_id)}-#{client.legacy_id}"
+      "#{sequence_number}-#{format('%05d', client.legacy_id)}"
     else
-      "#{sequence_number}-#{format('%03d', route_id)}-#{client_id}"
+      "#{sequence_number}-#{format('%05d', client_id)}"
     end
   end
 

@@ -1,4 +1,12 @@
 // customization
+.chosen-single {
+  height:40px !important;
+  span {
+    line-height: 40px;
+    margin-left: 5px;
+  }
+}
+
 .chosen-container .chosen-results li {
   line-height: inherit;
 }
