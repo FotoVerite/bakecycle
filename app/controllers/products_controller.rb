@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[edit papertrail update destroy]
+  before_action :set_product, only: %i[costing edit papertrail update destroy]
   decorates_assigned :products, :product
 
   def index
@@ -68,6 +68,11 @@ class ProductsController < ApplicationController
 
   def papertrail
     authorize @product, :index?
+  end
+
+  def costing
+    authorize @product, :index?
+    @costing = CostingData.new(@product)
   end
 
   private

@@ -15,6 +15,8 @@
 class Ingredient < ApplicationRecord
   extend AlphabeticalOrder
 
+  attr_accessor :dirty
+
   INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
 
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
@@ -36,6 +38,10 @@ class Ingredient < ApplicationRecord
 
   def total_lead_days
     0
+  end
+
+  def cost_per_gram
+    cost / 1000
   end
 
   private

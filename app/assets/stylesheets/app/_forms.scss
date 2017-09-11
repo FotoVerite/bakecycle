@@ -204,6 +204,29 @@ select.inline {
   }
 }
 
+.costing-ingredient-name,
+.ingredient-vendor-selection,
+.ingredient-cost-input,
+.ingredient-current-amount-lb,
+.ingredient-current-amount-grams,
+.ingredient-current-cost-per-gram {
+  @media #{$large-up} {
+    display: inline-block;
+    padding-right: 10px;
+
+    input {
+      padding: 8px 1px;
+      text-align: center;
+    }
+  }
+}
+
+.costing-ingredient-name, .ingredient-vendor-selection, .ingredient-cost-input, .ingredient-current-amount-lb, .ingredient-current-amount-grams, .ingredient-current-cost-per-gram {
+  @media #{$large-up} {
+    width: 15%;
+  }
+}
+
 .form-icon-holder {
   border: solid 2px gainsboro;
   padding: 7px;

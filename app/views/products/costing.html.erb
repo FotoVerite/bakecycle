@@ -1,0 +1,17 @@
+<h1><%= @product.name %></h1>
+WEIGHT: <%= @product.weight %><br />
+COST: <%= number_to_currency(@product.base_price) %> <br/>
+RECIPE COST: <%= number_with_precision @costing.total_items_cost / @product.base_price,   precision: 4%>% <br /> 
+<%= @cost %>
+<% @costing.recipes_collection.each do |recipe_costing| %>
+	<%= recipe_costing.recipe.name %><br />
+	<% recipe_costing.recipe_items.each do |item| %>
+		<%= item[:inclusionable].name %>
+		<%= number_with_precision item[:weight].to_f,  precision: 4 %>
+		<%= number_with_precision(item[:cost], precision: 4) %><br/>
+	<% end %>
+	<br />
+	<%= recipe_costing.total_items_weight %><br/>
+	<%= recipe_costing.total_items_cost %>
+	<hr />
+<%  end %>

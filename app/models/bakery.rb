@@ -49,6 +49,12 @@ class Bakery < ApplicationRecord
   has_attached_file :logo, styles: { invoice: ["1800x200>", :png], thumb: ["300x200>", :png] }
   validates_attachment :logo, content_type: { content_type: %r{\Aimage/(jpeg|png|tiff|bmp)$} }
 
+  accepts_nested_attributes_for(
+    :ingredients,
+    allow_destroy: false,
+    reject_if: proc { |attributes| attributes["dirty"] == false }
+  )
+
   def logo_local_file(style = logo.default_style)
     return if logo.path(style).nil?
     return logo.path(style) if logo.options[:storage] == :filesystem

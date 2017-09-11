@@ -94,6 +94,13 @@
               </li>
             <% end %>
 
+
+            <% if policy(Bakery).index? %>
+              <li class="<%= active_nav?(:bakeries) %>">
+                <%= link_to('Costing', costing_path) %>
+              </li>
+            <% end %>
+
             <%if current_bakery && policy(current_bakery).edit? %>
               <li class="<%= active_nav?(:my_bakery) %>">
                 <%= link_to('My Bakery', my_bakeries_path) %>

@@ -21,6 +21,7 @@ const BCSelect =  React.createClass({
       includeBlank,
       inline,
       value,
+      multi,
       name,
       options,
       onChange,
@@ -41,6 +42,7 @@ const BCSelect =  React.createClass({
           value={value || ''}
           disabled={disabled}
           simpleValue
+          multi={multi || false}
         />
         {error ? <small className="error">{error}</small> : ''}
       </div>
