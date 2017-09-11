@@ -74,10 +74,11 @@
   }
 
   a {
-    color: $bc-mediumgrey;
+    color: $bc-scorpion;
     font-weight: 300;
     line-height: 37px;
     text-transform: none;
+    font-weight: 600;
 
     &:hover,
     &:focus {
