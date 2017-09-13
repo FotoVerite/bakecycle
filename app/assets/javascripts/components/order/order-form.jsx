@@ -136,7 +136,7 @@ const OrderForm = React.createClass({
               value={order.alert}
               field="alert"
               name="order[alert]"
-              label="Alert"
+              label="VIP"
               onChange={updateOrder}
             />
           </div>
