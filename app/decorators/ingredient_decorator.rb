@@ -9,7 +9,6 @@ class IngredientDecorator < Draper::Decorator
     h.item_finder.products.order(:name)
   end
 
-
   def ingredient_type
     object.ingredient_type.humanize
   end

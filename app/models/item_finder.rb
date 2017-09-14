@@ -48,5 +48,4 @@ class ItemFinder
   def vendors
     Pundit.policy_scope!(user, Vendor)
   end
-  
 end

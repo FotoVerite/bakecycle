@@ -7,11 +7,7 @@ class CostingRecipeData
     @product_calculations = calculator.product_info
     @weight = calculator.product_weight
     @motherdough = CostingCalc.new(product.motherdough, calculator.dough_weight)
-    if product.inclusion
-      @inclusion = CostingCalc.new(product.inclusion, calculator.inclusion_weight)
-    end
+    @inclusion = CostingCalc.new(product.inclusion, calculator.inclusion_weight) if product.inclusion
     @total_cost = @motherdough.total_cost + inclusion.try(:total_cost).to_f
   end
-
-
 end

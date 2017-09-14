@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     get "costing", on: :member
   end
 
-  resource :costing, only: [:show, :update], controller: 'costing'
+  resource :costing, only: %i[show update], controller: "costing"
 
   resources :routes, except: [:show]
   resources :clients

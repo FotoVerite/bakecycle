@@ -32,7 +32,7 @@ class ProductRecipeCalc
     ((100 - inclusion_percentage) / 100) * product_weight
   end
 
-   def inclusion_weight
+  def inclusion_weight
     ((inclusion_percentage / 100) * product_weight)
   end
 
@@ -41,7 +41,6 @@ class ProductRecipeCalc
   end
 
   private
-
 
   def percent_weight
     return product_weight if dough_percentage_zero? && inclusion_percentage_zero?

@@ -1,7 +1,4 @@
 import * as types from '../constants/action-types';
-import mapValues from 'lodash.mapvalues';
-import isFinite from 'lodash.isfinite';
-import moment from 'moment';
 
 export function updateIngredient(ingredient, data) {
   data.dirty = true;
@@ -13,13 +10,13 @@ export function updateIngredient(ingredient, data) {
 }
 
 export function filterIngredients(data) {
-  if(data.filter == null) {
+  if(data.filter == [null] || data.filter == null) {
     return {
-    type: types.FILTER_INGREDIENTS,
-    data: {
-      filter: []
+      type: types.FILTER_INGREDIENTS,
+      data: {
+        filter: []
       }
-    }
+    };
   }
   return {
     type: types.FILTER_INGREDIENTS,
@@ -30,10 +27,3 @@ export function filterIngredients(data) {
 }
 
 
-export function toggleDestroy(data) {
-  if (data.id) {
-    return updateOrderItem(data, { destroy: !data.destroy});
-  } else {
-    return removeOrderItem(data);
-  }
-}

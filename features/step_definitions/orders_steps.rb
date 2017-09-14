@@ -108,12 +108,12 @@ When(/^I fill out the temporary order item form with:$/) do |table|
 end
 
 When(/^I delete the "(.*?)" order item$/) do |product_name|
-  form = find(:xpath, "//span[text()='#{product_name}']/../../../../../..")
+  form = find(:xpath, "//span[text()='#{product_name}']/../../../../../../..")
   form.find("a", text: "X").click
 end
 
 When(/^I edit the order item "(.*?)" "(.*?)" quantity with "(.*?)"$/) do |name, day, quantity|
-  form = find(:xpath, "//span[text()='#{name}']/../../../../../..")
+  form = find(:xpath, "//span[text()='#{name}']/../../../../../../..")
   form.find_field(day).set(quantity)
 end
 

@@ -26,8 +26,6 @@ class WeeklyProductionRunTotalsXlxs
     create_output_string(p)
   end
 
-  # rubocop:disable Metrics/AbcSize
-
   def create_hash_of_products
     hash = {}
     @runs.each do |r|

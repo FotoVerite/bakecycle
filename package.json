@@ -44,7 +44,9 @@
     "react-redux": "^4.4.5",
     "react-select": "^1.0.0-beta13",
     "redux": "^3.5.2",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "create-react-class": "^15.6.0",
+    "prop-types": "^15.5.10"
   },
   "devDependencies": {
     "babel-register": "^6.9.0",
