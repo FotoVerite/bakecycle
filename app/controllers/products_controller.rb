@@ -72,7 +72,7 @@ class ProductsController < ApplicationController
 
   def costing
     authorize @product, :index?
-    @costing = CostingData.new(@product)
+    @costing = CostingRecipeData.new(@product, 1)
   end
 
   private

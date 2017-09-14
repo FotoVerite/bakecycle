@@ -1,17 +1,42 @@
 <h1><%= @product.name %></h1>
 WEIGHT: <%= @product.weight %><br />
 COST: <%= number_to_currency(@product.base_price) %> <br/>
-RECIPE COST: <%= number_with_precision @costing.total_items_cost / @product.base_price,   precision: 4%>% <br /> 
-<%= @cost %>
-<% @costing.recipes_collection.each do |recipe_costing| %>
-	<%= recipe_costing.recipe.name %><br />
-	<% recipe_costing.recipe_items.each do |item| %>
-		<%= item[:inclusionable].name %>
-		<%= number_with_precision item[:weight].to_f,  precision: 4 %>
-		<%= number_with_precision(item[:cost], precision: 4) %><br/>
+RECIPE COST: <%= number_with_precision((@costing.total_cost/@product.base_price),   precision: 4) %>% <br /> 
+<h2><%= @product.motherdough.name %></h2>
+<table>
+<% @costing.motherdough.items.each do |item| %>
+	<tr>
+		<th>Name</th>
+		<th>Weight</th>
+		<th>Cost</th>
+	</tr>
+	<tr>
+		<td><%= item[:name] %></td>
+		<td><%= number_with_precision item[:weight].to_f,  precision: 4 %></td>
+		<td>$<%= number_with_precision(item[:cost], precision: 4) %></td>
+	<tr>
+<% end %>
+	<tr>
+		<td>Total</td>
+		<td><%= number_with_precision @costing.motherdough.weight.to_f,  precision: 4 %></td>
+		<td><%= number_with_precision @costing.motherdough.total_cost,  precision: 4 %></td>
+	</tr>
+</table>
+<br />
+<% if @costing.inclusion %>
+	<h2><%= @product.inclusion.name %></h2>
+	<table>
+	<% @costing.inclusion.items.each do |item| %>
+		<tr>
+			<th>Name</th>
+			<th>Weight</th>
+			<th>Cost</th>
+		</tr>
+		<tr>
+			<td><%= item[:name] %></td>
+			<td><%= number_with_precision item[:weight].to_f,  precision: 4 %></td>
+			<td>$<%= number_with_precision(item[:cost], precision: 4) %></td>
+		<tr>
 	<% end %>
-	<br />
-	<%= recipe_costing.total_items_weight %><br/>
-	<%= recipe_costing.total_items_cost %>
-	<hr />
-<%  end %>
+	</table>
+<% end %>

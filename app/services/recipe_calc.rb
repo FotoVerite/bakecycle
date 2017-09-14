@@ -12,7 +12,6 @@ class RecipeCalc
         parent_recipe: recipe,
         inclusionable: item.inclusionable,
         weight: weight_for(item),
-        cost: item.inclusionable.cost_per_gram * weight_for(item).to_f, 
         bakers_percentage: item.bakers_percentage,
         inclusionable_type: item.inclusionable_type,
         sort_id: item.sort_id
