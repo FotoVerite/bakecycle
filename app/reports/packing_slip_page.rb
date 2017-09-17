@@ -4,7 +4,7 @@ class PackingSlipPage
     @bakery = bakery
     @pdf = pdf
     @shipment_items = shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
-    @alert = shipment.alert || shipment.order.alert || shipment.order.client.alert
+    @vip = shipment.alert || shipment.order.alert || shipment.order.client.alert
   end
 
   def render
@@ -24,14 +24,19 @@ class PackingSlipPage
   end
 
   def packing_slip_header_stamp
-    stamp_or_create("packing slip header") { packing_slip_header }
+    # create a stamp/memoized copy for the header that has the star or not. 
+    if @vip
+      stamp_or_create("packing slip header vip") { packing_slip_header }
+    else
+      stamp_or_create("packing slip header") { packing_slip_header }
+    end
   end
 
   def packing_slip_header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
     grid([0, 9], [0, 11]).bounding_box { text "Packing Slip", size: 20 }
-    return unless @alert
+    return unless @vip
 
     # Add alert star
     grid([0, 11.3], [0, 11.3]).bounding_box {
