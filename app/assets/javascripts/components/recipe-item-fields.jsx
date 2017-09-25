@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import { BCInput, BCSelect } from './bakecycle-inputs';
 
 export default function RecipeItemFields({

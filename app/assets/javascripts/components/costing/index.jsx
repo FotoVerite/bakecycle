@@ -1,9 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { Provider } from 'react-redux';
 import createIngredientStore from '../../stores/ingredients';
 import CostingForm from './costing-form';
 
-const CostingFormProvider = React.createClass({
+const CostingFormProvider = createReactClass({
   propTypes: {
     ingredients: PropTypes.array.isRequired,
     availableVendors: PropTypes.array.isRequired,

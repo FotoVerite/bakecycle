@@ -1,16 +1,17 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import uniqueId from 'lodash.uniqueid';
 import { BCInput, BCSearchableSelect } from '../bakecycle-inputs';
 
 export default function OrderItemFields({
-    model,
-    availableProducts,
-    temporaryOrder,
-    startDate,
-    onChange,
-    addOrderItem,
-    toggleDestroy,
-  }) {
+  model,
+  availableProducts,
+  temporaryOrder,
+  startDate,
+  onChange,
+  addOrderItem,
+  toggleDestroy,
+}) {
 
   function onDestroy(e) {
     e.preventDefault();
@@ -133,7 +134,7 @@ export default function OrderItemFields({
                 <span className="secondary radius label">Undo</span>
                 :
                 <span className="alert radius label">X</span>
-               }
+              }
             </a>
           </div>
           <div className="order-item-action-button">

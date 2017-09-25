@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
+
 import RecipeItemFields from './recipe-item-fields';
 
-const { PropTypes } = React;
-
-const RecipeItemsForm = React.createClass({
+const RecipeItemsForm = createReactClass({
 
   propTypes: {
     recipeItems: PropTypes.object,
@@ -88,7 +89,7 @@ const RecipeItemsForm = React.createClass({
             <label className="show-for-medium-up">Ingredient</label>
           </div>
           <div className="small-12 medium-2 columns">
-            <label className="show-for-medium-up">Baker's %</label>
+            <label className="show-for-medium-up">Baker&#39;s %</label>
           </div>
           <div className="small-12 medium-2 columns">
             <label className="show-for-medium-up">Type</label>

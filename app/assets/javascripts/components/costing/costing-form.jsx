@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
 import * as ingredientActions from '../../actions/ingredients';
+import CostingItemFields from './costing-item-fields';
 import filter from 'lodash.filter';
 import includes from 'lodash.includes';
 import pluck from 'lodash.pluck';
@@ -10,8 +11,6 @@ import uniq from 'lodash.uniq';
 import sortby from 'lodash.sortby';
 
 import {
-  BCInput,
-  BCSelect,
   BCSearchableSelect
 } from '../bakecycle-inputs';
 
@@ -29,8 +28,6 @@ const CostingForm = createReactClass({
     const { errors } = this.props.ingredients;
     return errors[field] && errors[field][0];
   },
-
-
 
   fields() {
 
@@ -62,100 +59,18 @@ const CostingForm = createReactClass({
         <div key={key}>
           <hr />
           <h2>{key}</h2>
-          {self.ingredientFields(ingredientsSortedByType[key], vendorOptions, weightUnitOptions)}
+          {ingredientsSortedByType[key].map(model =>
+            <CostingItemFields
+              vendorOptions={vendorOptions}
+              key={`${key}-${model.id}`}
+              model={model}
+              onChange={self.props.updateIngredient.bind(null, model)}
+              weightUnitOptions={weightUnitOptions}
+            />)}
         </div>
       );
     });
 
-  },
-
-  ingredientFields(ingredients, vendorOptions, weightUnitOptions) {
-    var self = this;
-    return ingredients.map(model => {
-
-      var conversionToGrams; 
-      if(model.current_amount == 0.0){
-        conversionToGrams = 0.0;
-      }
-      else {
-        conversionToGrams = Math.round(model.current_amount * model.conversion);
-      }
-      return (<div className={'row ingredient ' + model.hidden} key={model.id}>
-        <div className="small-12 columns">
-          <span className="costing-ingredient-name">
-            <h3>{model.name}</h3>
-          </span>
-          <input type="hidden" value={model.dirty} name={`bakery[ingredients_attributes][${model.id}][dirty]`} />
-          <input type="hidden" value={model.id} name={`bakery[ingredients_attributes][${model.id}][id]`} />
-          <div className="ingredient-vendor-selection">
-            <BCSelect
-              value={model.vendor_id}
-              field="vendor_id"
-              name={`bakery[ingredients_attributes][${model.id}][vendor_id]`}
-              options={vendorOptions}
-              label="Vendor"
-              labelClass="hide-for-large-up"
-              includeBlank="--None--"
-              onChange={self.props.updateIngredient.bind(null, model)}
-            />
-          </div>
-          <div className="ingredient-cost-input" key={`${model.id}-cost`}>
-            <BCInput
-              value={model.cost}
-              field="cost"
-              name={`bakery[ingredients_attributes][${model.id}][cost]`}
-              label="Cost Per Unit"
-              labelClass="hide-for-large-up"
-              autoComplete="off"
-              type="number"
-              step="0.01"
-              onChange={self.props.updateIngredient.bind(null, model)}
-            />
-          </div>
-          <div className="ingredient-weight-units" key={`${model.id}-current_amount_lb`}>
-            <label className="ide-for-large-up">{model.weight_unit == 'grams' ?  '' : `${model.weight_unit} to grams`}</label>
-            <input disabled="true" type="text" value={conversionToGrams} />
-          </div>
-          <div className="ingredient-current-amount-grams" key={`${model.id}-current_amount_grams`}>
-            <BCSelect
-              value={model.weight_unit}
-              field="weight_unit"
-              name={`bakery[ingredients_attributes][${model.id}][weight_unit]`}
-              options={weightUnitOptions}
-              label="Amount in"
-              onChange={self.props.updateIngredient.bind(null, model)}
-            />
-            <BCInput
-              value={model.current_amount}
-              type="number"
-              step="0.01"
-              field="current_amount"
-              name={`bakery[ingredients_attributes][${model.id}][current_amount]`}
-              labelClass=""
-              autoComplete="off"
-              onChange={self.props.updateIngredient.bind(null, model)}
-            />
-          </div>
-          <div className="ingredient-conversion" key={`${model.id}-conversion`}>
-            <BCInput
-              value={model.conversion}
-              field="conversion"
-              type="number"
-              step="0.01"
-              name={`bakery[ingredients_attributes][${model.id}][conversion]`}
-              labelClass="hide-for-large-up"
-              label="Conversion"
-              autoComplete="off"
-              onChange={self.props.updateIngredient.bind(null, model)}
-            />
-          </div>
-          <div className="ingredient-current-cost-per-gram " key={`${model.id}-current_cost_per_gram`}>
-            <label className="hide-for-large-up">Current Cost Per Gram</label>
-            <input disabled="true" type="text" value={ (model.cost / model.conversion) } />
-          </div>
-        </div>
-      </div>);
-    });
   },
 
   render() {
