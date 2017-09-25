@@ -54,6 +54,6 @@ class IngredientsController < ApplicationController
   end
 
   def ingredient_params
-    params.require(:ingredient).permit(:name, :ingredient_type, :description)
+    params.require(:ingredient).permit(:conversion, :name, :ingredient_type, :description, :weight_unit)
   end
 end

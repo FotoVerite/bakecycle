@@ -1,0 +1,2 @@
+class CostOverTime < ApplicationRecord
+end

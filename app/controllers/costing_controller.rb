@@ -19,7 +19,7 @@ class CostingController < ApplicationController
   def ingredient_params
     params.require(:bakery).permit(
       ingredients_attributes:
-          %i[id cost current_amount vendor_id dirty]
+          %i[id conversion cost current_amount vendor_id dirty weight_unit]
     )
   end
 end

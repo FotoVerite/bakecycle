@@ -18,8 +18,13 @@ class CostingForm
 
   def serializable_hash
     hash = CostingFormSerializer.new(self).serializable_hash
-    hash[:ingredients].map { |i| i["dirty"] = false }
+    hash[:ingredients].map do |i|
+      i["dirty"] = false
+      i["weight_unit"] = "grams" unless i["weight_unit"]
+      i["conversion"] = 1 if i["conversion"].zero?
+    end
     hash[:filter] = []
+    hash[:weightUnitOptions] = Ingredient::WEIGHT_UNITS
     hash
   end
 end

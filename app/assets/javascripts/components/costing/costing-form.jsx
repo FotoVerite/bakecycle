@@ -21,7 +21,8 @@ const CostingForm = createReactClass({
     availableVendors: PropTypes.array,
     updateIngredient: PropTypes.func.isRequired,
     filterIngredients: PropTypes.func.isRequired,
-    filter: PropTypes.array.isRequired
+    filter: PropTypes.array.isRequired,
+    weightUnitOptions: PropTypes.array.isRequired
   },
 
   errorFor(field) {
@@ -51,34 +52,38 @@ const CostingForm = createReactClass({
       <option key={`vendor-${vendor.id}`} value={vendor.id}>{vendor.name}</option>
     ));
 
+    var weightUnitOptions = this.props.weightUnitOptions.map(option => (
+      <option key={`weight-unit-${option}`} value={option}>{option}</option>
+    ));
+
     var self = this;
     return Object.keys(ingredientsSortedByType).map(function(key){
       return (
         <div key={key}>
           <hr />
           <h2>{key}</h2>
-          {self.ingredientFields(ingredientsSortedByType[key], vendorOptions)}
+          {self.ingredientFields(ingredientsSortedByType[key], vendorOptions, weightUnitOptions)}
         </div>
       );
     });
 
   },
 
-  ingredientFields(ingredients, vendorOptions) {
+  ingredientFields(ingredients, vendorOptions, weightUnitOptions) {
     var self = this;
     return ingredients.map(model => {
 
-      var lb; 
+      var conversionToGrams; 
       if(model.current_amount == 0.0){
-        lb = 0.0;
+        conversionToGrams = 0.0;
       }
       else {
-        lb = Math.round(model.current_amount / 453.5);
+        conversionToGrams = Math.round(model.current_amount * model.conversion);
       }
       return (<div className={'row ingredient ' + model.hidden} key={model.id}>
         <div className="small-12 columns">
           <span className="costing-ingredient-name">
-            {model.name}
+            <h3>{model.name}</h3>
           </span>
           <input type="hidden" value={model.dirty} name={`bakery[ingredients_attributes][${model.id}][dirty]`} />
           <input type="hidden" value={model.id} name={`bakery[ingredients_attributes][${model.id}][id]`} />
@@ -99,30 +104,48 @@ const CostingForm = createReactClass({
               value={model.cost}
               field="cost"
               name={`bakery[ingredients_attributes][${model.id}][cost]`}
-              label="cost"
+              label="Cost Per Unit"
               labelClass="hide-for-large-up"
               autoComplete="off"
               onChange={self.props.updateIngredient.bind(null, model)}
             />
           </div>
-          <div className="ingredient-current-amount-lb" key={`${model.id}-current_amount_lb`}>
-            <label className="ide-for-large-up">Amount in LB</label>
-            <input disabled="true" type="text" value={lb} />
+          <div className="ingredient-weight-units" key={`${model.id}-current_amount_lb`}>
+            <label className="ide-for-large-up">{model.weight_unit == 'grams' ?  '' : `${model.weight_unit} to grams`}</label>
+            <input disabled="true" type="text" value={conversionToGrams} />
           </div>
           <div className="ingredient-current-amount-grams" key={`${model.id}-current_amount_grams`}>
+            <BCSelect
+              value={model.weight_unit}
+              field="weight_unit"
+              name={`bakery[ingredients_attributes][${model.id}][weight_unit]`}
+              options={weightUnitOptions}
+              label="Amount in"
+              onChange={self.props.updateIngredient.bind(null, model)}
+            />
             <BCInput
               value={model.current_amount}
               field="current_amount"
               name={`bakery[ingredients_attributes][${model.id}][current_amount]`}
-              label="Amount in Grams"
+              labelClass=""
+              autoComplete="off"
+              onChange={self.props.updateIngredient.bind(null, model)}
+            />
+          </div>
+          <div className="ingredient-conversion" key={`${model.id}-conversion`}>
+            <BCInput
+              value={model.conversion}
+              field="conversion"
+              name={`bakery[ingredients_attributes][${model.id}][conversion]`}
               labelClass="hide-for-large-up"
+              label="Conversion"
               autoComplete="off"
               onChange={self.props.updateIngredient.bind(null, model)}
             />
           </div>
           <div className="ingredient-current-cost-per-gram " key={`${model.id}-current_cost_per_gram`}>
             <label className="hide-for-large-up">Current Cost Per Gram</label>
-            <input disabled="true" type="text" value={ (model.cost / 1000) } />
+            <input disabled="true" type="text" value={ (model.cost / model.conversion) } />
           </div>
         </div>
       </div>);
@@ -161,13 +184,16 @@ const CostingForm = createReactClass({
               <label>Vendor</label>
             </div>
             <div className="ingredient-cost-input">
-              <label>Cost Per KG</label>
-            </div>
-            <div className="ingredient-current-amount-lb">
-              <label>LB</label>
+              <label>Cost Per Unit</label>
             </div>
             <div className="ingredient-current-amount-grams">
-              <label>Grams</label>
+              <label>Conversion To Grams</label>
+            </div>
+            <div className="ingredient-weight-units">
+              <label>Bought By Units</label>
+            </div>
+            <div className="ingredient-conversion">
+              <label>Conversion</label>
             </div>
             <div className="ingredient-current-cost-per-gram">
               <label>Cost/Gram</label>
@@ -186,7 +212,8 @@ const stateToProps = function(state) {
   return { 
     ingredients: state.ingredients,
     availableVendors: state.availableVendors ,
-    filter: state.filter
+    filter: state.filter,
+    weightUnitOptions: state.weightUnitOptions
   };
 };
 

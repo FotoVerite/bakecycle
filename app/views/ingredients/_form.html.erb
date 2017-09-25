@@ -23,6 +23,16 @@
         <%= f.input :description, as: :text%>
       </div>
     </div>
+
+    <div class="row">
+       <div class="small-6 columns">
+        <%= f.label :weight_unit, "Bought In" %>
+        <%= f.select :weight_unit, Ingredient::WEIGHT_UNITS %>
+      </div>
+      <div class="small-6 columns">
+        <%= f.input :conversion, label: "Conversion to Grams" %>
+      </div>
+    </div>
   </fieldset>
 
   <div class="row">

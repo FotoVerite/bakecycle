@@ -7,7 +7,8 @@ const CostingFormProvider = React.createClass({
   propTypes: {
     ingredients: PropTypes.array.isRequired,
     availableVendors: PropTypes.array.isRequired,
-    filter: PropTypes.array.isRequired
+    filter: PropTypes.array.isRequired,
+    weightUnitOptions: PropTypes.array.isRequired
   },
 
   componentWillMount() {
