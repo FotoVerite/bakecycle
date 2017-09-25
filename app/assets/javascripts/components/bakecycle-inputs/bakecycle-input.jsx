@@ -21,6 +21,7 @@ const BCInput = React.createClass({
       value,
       name,
       placeholder,
+      step,
       type,
     } = this.props;
 
@@ -39,6 +40,7 @@ const BCInput = React.createClass({
           value={value}
           disabled={disabled}
           autoComplete={autoComplete}
+          step={step}
         />
         {error ? <small className="error">{error}</small> : ''}
       </div>

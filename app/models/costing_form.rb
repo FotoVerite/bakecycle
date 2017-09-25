@@ -21,7 +21,7 @@ class CostingForm
     hash[:ingredients].map do |i|
       i["dirty"] = false
       i["weight_unit"] = "grams" unless i["weight_unit"]
-      i["conversion"] = 1 if i["conversion"].zero?
+      i["conversion"] = 1.00 if i["conversion"].zero?
     end
     hash[:filter] = []
     hash[:weightUnitOptions] = Ingredient::WEIGHT_UNITS

@@ -17,12 +17,12 @@ import {
 
 const CostingForm = createReactClass({
   propTypes: {
-    ingredients: PropTypes.array.isRequired,
+    ingredients: PropTypes.array,
     availableVendors: PropTypes.array,
-    updateIngredient: PropTypes.func.isRequired,
-    filterIngredients: PropTypes.func.isRequired,
-    filter: PropTypes.array.isRequired,
-    weightUnitOptions: PropTypes.array.isRequired
+    updateIngredient: PropTypes.func,
+    filterIngredients: PropTypes.func,
+    filter: PropTypes.array,
+    weightUnitOptions: PropTypes.array
   },
 
   errorFor(field) {
@@ -107,6 +107,8 @@ const CostingForm = createReactClass({
               label="Cost Per Unit"
               labelClass="hide-for-large-up"
               autoComplete="off"
+              type="number"
+              step="0.01"
               onChange={self.props.updateIngredient.bind(null, model)}
             />
           </div>
@@ -125,6 +127,8 @@ const CostingForm = createReactClass({
             />
             <BCInput
               value={model.current_amount}
+              type="number"
+              step="0.01"
               field="current_amount"
               name={`bakery[ingredients_attributes][${model.id}][current_amount]`}
               labelClass=""
@@ -136,6 +140,8 @@ const CostingForm = createReactClass({
             <BCInput
               value={model.conversion}
               field="conversion"
+              type="number"
+              step="0.01"
               name={`bakery[ingredients_attributes][${model.id}][conversion]`}
               labelClass="hide-for-large-up"
               label="Conversion"
