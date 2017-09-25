@@ -30,7 +30,7 @@ class Order < ApplicationRecord
   belongs_to :created_by_user, class_name: "User"
   belongs_to :last_updated_by_user, class_name: "User"
 
-  has_many :order_items, -> { where(removed: false) }, dependent: :destroy
+  has_many :order_items, -> { where(removed: false).includes('product').order('products.name ASC') }, dependent: :destroy
   has_many :all_order_items, dependent: :destroy, class_name: "OrderItem"
 
   has_many :products, through: :order_items
