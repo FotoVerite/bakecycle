@@ -24,7 +24,7 @@ class PackingSlipPage
   end
 
   def packing_slip_header_stamp
-    # create a stamp/memoized copy for the header that has the star or not. 
+    # create a stamp/memoized copy for the header that has the star or not.
     if @vip
       stamp_or_create("packing slip header vip") { packing_slip_header }
     else

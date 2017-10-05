@@ -30,10 +30,17 @@ class Order < ApplicationRecord
   belongs_to :created_by_user, class_name: "User"
   belongs_to :last_updated_by_user, class_name: "User"
 
-  has_many :order_items, -> { where(removed: false).includes('product').order('products.name ASC') }, dependent: :destroy
+  has_many :products, through: :order_items
+
+  has_many :order_items, lambda {
+    where(removed: false)
+      .joins(:product)
+      .includes(:product)
+      .order("products.name ASC")
+  },
+    dependent: :destroy
   has_many :all_order_items, dependent: :destroy, class_name: "OrderItem"
 
-  has_many :products, through: :order_items
   has_many :shipments
 
   accepts_nested_attributes_for(
@@ -184,6 +191,14 @@ class Order < ApplicationRecord
   def daily_subtotal(date)
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
+    end
+  end
+
+  def still_in_use
+    if temporary?
+      start_date >= Time.zone.today
+    elsif standing?
+      end_date.blank? || end_date >= Time.zone.today
     end
   end
 end
