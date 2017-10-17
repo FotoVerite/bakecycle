@@ -18,28 +18,13 @@ class InvoicesIif
     counter = LineCounter.new
     Riif::IIF.new do |riif|
       shipments.includes(:shipment_items).find_each do |shipment|
-        invoice_data(riif, shipment.decorate, merge_items(shipment.shipment_items), counter)
+        invoice_data(riif, shipment.decorate, counter)
       end
     end
   end
 
-  def merge_items(items)
-    hash = {}
-    items.each do |item|
-      item = item.decorate
-      if hash[item.product_name].nil?
-        hash[item.product_name] = item
-      elsif hash[item.product_name].product_price == item.product_price
-        hash[item.product_name].product_quantity = hash[item.product_name].product_quantity + item.product_quantity
-      else
-        hash[item.product_name + item.id.to_s] = item
-      end
-    end
-    hash
-  end
-
-  # rubocop:disable Metrics/MethodLength
-  def invoice_data(riif, shipment, shipment_items, row_counter)
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def invoice_data(riif, shipment, row_counter)
     riif.trns do
       row do
         trnsid row_counter.next
@@ -70,7 +55,7 @@ class InvoicesIif
         invmemo
       end
 
-      shipment_items.each do |_key, item|
+      shipment.shipment_items.each do |item|
         spl do
           row do
             splid row_counter.next
@@ -113,7 +98,6 @@ class InvoicesIif
       end
     end
   end
-
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   class LineCounter
