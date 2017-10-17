@@ -106,7 +106,6 @@ class Order < ApplicationRecord
     missing_shipment_dates.empty?
   end
 
-  # rubocop:disable Metrics/AbcSize
   def missing_shipment_dates(for_date_time = Time.zone.now)
     last_date = for_date_time + total_lead_days.days
     dates = []

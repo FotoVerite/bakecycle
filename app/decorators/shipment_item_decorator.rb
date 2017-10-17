@@ -18,7 +18,11 @@ class ShipmentItemDecorator < Draper::Decorator
   end
 
   def price_for_iif
-    "-#{object.price}"
+    if object.price > 0
+      "-#{object.price}"
+    else
+      object.price.to_s
+    end
   end
 
   def product_price_for_iif
@@ -26,7 +30,11 @@ class ShipmentItemDecorator < Draper::Decorator
   end
 
   def product_quantity_for_iif
-    "-#{object.product_quantity}"
+    if object.product_quantity > 0
+      "-#{object.product_quantity}"
+    else
+      object.product_quantity.to_s
+    end
   end
 
   def product_name_and_sku

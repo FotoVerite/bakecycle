@@ -89,7 +89,6 @@ class InvoicePage
   end
 
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
 
   def merge_sorted_order_items_with_same_name_and_price(items)
     hash = {}

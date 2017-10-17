@@ -20,8 +20,6 @@ class DailyProductionRunTotalsXlxs
     create_output_string(p)
   end
 
-  # rubocop:disable Metrics/AbcSize
-
   def create_hash_of_products
     hash = {}
     total = 0

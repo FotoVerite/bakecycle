@@ -108,7 +108,6 @@ class PackingSlipPage
   end
 
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
 
   def merge_shipment_items(items)
     hash = {}
