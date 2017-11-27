@@ -23,7 +23,7 @@ class InvoicesIif
     end
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def invoice_data(riif, shipment, row_counter)
     riif.trns do
       row do

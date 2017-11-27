@@ -6,6 +6,8 @@ class ProductionRunsController < ApplicationController
     print_test_projection
     print_weekly_daily_production_report
     weekly_daily_production_report
+    date_span_production_report
+    print_date_span_production_report
   ]
   decorates_assigned :production_runs, :production_run
 
@@ -53,6 +55,20 @@ class ProductionRunsController < ApplicationController
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
+  def date_span_production_report
+    authorize ProductionRun, :can_print?
+    @start_date = start_date
+    @end_date = end_date
+  end
+
+  def print_date_span_production_report
+    authorize ProductionRun, :can_print?
+    @start_date = start_date
+    @end_date = end_date
+    generator = DateSpanProductionRunTotalsGenerator.new(current_bakery, start_date, end_date)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
   def print_recipes
     authorize ProductionRun, :can_print?
     active_nav(:print_recipes)
@@ -97,6 +113,14 @@ class ProductionRunsController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date]) || Time.zone.today
+  end
+
+  def start_date
+    Chronic.parse(params[:start_date]) || Time.zone.today.beginning_of_year
+  end
+
+  def end_date
+    Chronic.parse(params[:end_date]) || Time.zone.today
   end
 
   def production_run_for_date(date)

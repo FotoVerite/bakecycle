@@ -21,7 +21,7 @@ class ShipmentItemDecorator < Draper::Decorator
     if object.price > 0
       "-#{object.price}"
     else
-      "#{object.price.abs}"
+      object.price.abs.to_s
     end
   end
 

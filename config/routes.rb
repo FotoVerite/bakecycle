@@ -87,6 +87,8 @@ Rails.application.routes.draw do
     get "print_test_projection", on: :collection
     get "weekly_daily_production_report", on: :collection
     get "print_weekly_daily_production_report", on: :collection
+    get "date_span_production_report", on: :collection
+    get "print_date_span_production_report", on: :collection
     put "reset", on: :member
     put "add", on: :member
 
