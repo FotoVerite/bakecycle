@@ -41,6 +41,7 @@
 #  notes                          :string
 #  sequence_number                :integer          default(1)
 #  alert                          :boolean          default(FALSE)
+#  print_invoice                  :boolean          default(TRUE)
 #
 
 class ClientSerializer < ActiveModel::Serializer

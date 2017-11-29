@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170824192733) do
+ActiveRecord::Schema.define(version: 20171129000856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,11 +82,22 @@ ActiveRecord::Schema.define(version: 20170824192733) do
     t.string   "notes"
     t.integer  "sequence_number",                default: 1
     t.boolean  "alert",                          default: false
+    t.boolean  "print_invoice",                  default: true
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
   add_index "clients", ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
+
+  create_table "cost_over_times", force: :cascade do |t|
+    t.integer  "ingredient_id"
+    t.string   "weight_unit"
+    t.decimal  "conversion"
+    t.decimal  "cost_per_unit"
+    t.decimal  "cost_per_gram"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "file_actions", force: :cascade do |t|
     t.integer  "user_id"
@@ -166,6 +177,7 @@ ActiveRecord::Schema.define(version: 20170824192733) do
 
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
+  add_index "orders", ["client_id", "route_id", "start_date", "end_date", "order_type"], name: "orders_idx_nulls_start", using: :btree
   add_index "orders", ["created_by_user_id"], name: "index_orders_on_created_by_user_id", using: :btree
   add_index "orders", ["end_date"], name: "index_orders_on_end_date", using: :btree
   add_index "orders", ["last_updated_by_user_id"], name: "index_orders_on_last_updated_by_user_id", using: :btree
@@ -379,6 +391,13 @@ ActiveRecord::Schema.define(version: 20170824192733) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "vendors", force: :cascade do |t|
+    t.integer  "bakery_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
