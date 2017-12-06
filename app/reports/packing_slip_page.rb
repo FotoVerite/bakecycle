@@ -4,7 +4,7 @@ class PackingSlipPage
     @bakery = bakery
     @pdf = pdf
     @shipment_items = shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
-    @vip = shipment.alert || shipment.order.alert || shipment.order.client.alert
+    @vip = shipment.alert || shipment.try(:order).try(:alert) || shipment.try(:order).try(:client).try(:alert)
   end
 
   def render
