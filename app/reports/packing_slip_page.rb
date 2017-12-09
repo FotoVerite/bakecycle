@@ -150,7 +150,7 @@ class PackingSlipPage
   end
 
   def shipment_or_order_or_client_notes_present?
-    @shipment.client_notes.present? || @shipment.order.note || @shipment.note.present?
+    @shipment.client_notes.present? || @shipment.order.try(:note) || @shipment.note.present?
   end
 
   def notes
@@ -160,7 +160,7 @@ class PackingSlipPage
   def notes_data
     text "Notes", style: :bold
     text @shipment.client_notes if @shipment.client_notes.present?
-    text @shipment.order.note if @shipment.order.note
+    text @shipment.order.note if @shipment.try(:order).try(:note)
     text @shipment.note if @shipment.note.present?
     move_down 15
   end
