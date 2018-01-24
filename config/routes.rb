@@ -28,7 +28,11 @@ Rails.application.routes.draw do
     get "papertrail", on: :member
   end
   resources :routes, except: [:show]
+
+  get "year-total", to: "clients#print_year_total"
+
   resources :clients
+
   resources :orders, except: [:show] do
     get "created_at", on: :collection
     get "updated_at", on: :collection

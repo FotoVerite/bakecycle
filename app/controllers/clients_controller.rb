@@ -1,5 +1,6 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
+  before_action :skip_policy_scope, only: %i[print_year_total]
   decorates_assigned :clients, :client
 
   def index
@@ -47,6 +48,16 @@ class ClientsController < ApplicationController
     @client.destroy!
     flash[:notice] = "You have deleted #{@client.name}"
     redirect_to clients_path
+  end
+
+  def year_total
+    authorize Route, :print?
+  end
+
+  def print_year_total
+    authorize Route, :print?
+    generator = YearTotalGenerator.new(current_bakery, 2017)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   private
