@@ -1,12 +1,12 @@
-class DailyProductionRunTotalsXlxs
-  def initialize(bakery, date)
+class DateSpanProductionRunTotalsXlxs
+  def initialize(bakery, start_date, end_date)
     @bakery = bakery
-    @date = date
-    @runs = ProductionRun.where(bakery: bakery, date: date)
+    date_range = (start_date..end_date)
+    @runs = ProductionRun.where(bakery: bakery, date: date_range)
   end
 
   def generate
-    hash, total = create_hash_of_products
+    hash = create_hash_of_products
     headers = ["Weight", "Product Name"]
     headers.push("Total")
     p = Axlsx::Package.new
@@ -15,26 +15,23 @@ class DailyProductionRunTotalsXlxs
     @header = styles.add_style bg_color: "DD", sz: 16, b: true, alignment: { horizontal: :center }
     wb.add_worksheet(name: "Data Sheet") do |sheet|
       sheet.add_row headers
-      add_rows(hash, sheet, total)
+      add_rows(hash, sheet)
     end
     create_output_string(p)
   end
 
   def create_hash_of_products
     hash = {}
-    total = 0
     @runs.each do |r|
       r.run_items.each do |i|
-        day_name = r.date.strftime("%A")
         product_hash = hash[i.product_type].nil? ? hash[i.product_type] = {} : hash[i.product_type]
-        hash_product_info(product_hash, i, day_name)
-        total += i.total_quantity
+        hash_product_info(product_hash, i)
       end
     end
-    [hash, total]
+    hash
   end
 
-  def hash_product_info(hash, item, _day_name)
+  def hash_product_info(hash, item)
     product_name = item.product.name
     total_quantity = item.total_quantity
     hash[product_name] = {} unless hash[product_name]
@@ -47,22 +44,20 @@ class DailyProductionRunTotalsXlxs
     hash[product_name]["total_products"] = total_quantity + hash[product_name]["total_products"].to_i
   end
 
-  def add_rows(hash, sheet, total)
+  # rubocop:enable Metrics/AbcSize
+
+  def add_rows(hash, sheet)
+    array = []
     # Set Product Type Row
     hash.each do |key, product_values|
       sheet.add_row [key], style: @header
-      sheet.merge_cells("A#{sheet.rows.last.index + 1}:C#{sheet.rows.last.index + 1}")
+      sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
       sheet.add_row [""]
       create_product_rows(product_values, sheet)
       sheet.add_row [""]
     end
-    sheet.add_row ["Total"], style: @header
-    sheet.merge_cells("A#{sheet.rows.last.index + 1}:C#{sheet.rows.last.index + 1}")
-    sheet.add_row [""]
-    sheet.add_row ["", "", total]
+    array
   end
-
-  # rubocop:enable Metrics/AbcSize
 
   def create_product_rows(product_values, sheet)
     start = sheet.rows.last.index + 2
@@ -79,7 +74,7 @@ class DailyProductionRunTotalsXlxs
   def create_end_row(sheet, start)
     end_of = sheet.rows.last.index + 1
     total_row = [nil, nil]
-    %w[C].each do |sum|
+    %w[C D E F G H I J].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
     end
     total_row

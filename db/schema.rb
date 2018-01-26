@@ -11,18 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803172922) do
+ActiveRecord::Schema.define(version: 20171129000856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
-
-  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
-    t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "bakeries", force: :cascade do |t|
     t.string   "name"
@@ -54,7 +48,7 @@ ActiveRecord::Schema.define(version: 20170803172922) do
     t.string   "official_company_name"
     t.string   "business_phone"
     t.string   "business_fax"
-    t.boolean  "active",                                       null: false
+    t.boolean  "active",                                         null: false
     t.string   "delivery_address_street_1"
     t.string   "delivery_address_street_2"
     t.string   "delivery_address_city"
@@ -76,22 +70,34 @@ ActiveRecord::Schema.define(version: 20170803172922) do
     t.string   "secondary_contact_email"
     t.float    "latitude"
     t.float    "longitude"
-    t.integer  "billing_term",                                 null: false
-    t.integer  "bakery_id",                                    null: false
-    t.decimal  "delivery_minimum",               default: 0.0, null: false
-    t.decimal  "delivery_fee",                   default: 0.0, null: false
+    t.integer  "billing_term",                                   null: false
+    t.integer  "bakery_id",                                      null: false
+    t.decimal  "delivery_minimum",               default: 0.0,   null: false
+    t.decimal  "delivery_fee",                   default: 0.0,   null: false
     t.string   "legacy_id"
-    t.integer  "delivery_fee_option",                          null: false
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.integer  "delivery_fee_option",                            null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "ein"
     t.string   "notes"
     t.integer  "sequence_number",                default: 1
+    t.boolean  "alert",                          default: false
+    t.boolean  "print_invoice",                  default: true
   end
 
   add_index "clients", ["active"], name: "index_clients_on_active", using: :btree
   add_index "clients", ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
+
+  create_table "cost_over_times", force: :cascade do |t|
+    t.integer  "ingredient_id"
+    t.string   "weight_unit"
+    t.decimal  "conversion"
+    t.decimal  "cost_per_unit"
+    t.decimal  "cost_per_gram"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "file_actions", force: :cascade do |t|
     t.integer  "user_id"
@@ -152,24 +158,26 @@ ActiveRecord::Schema.define(version: 20170803172922) do
   add_index "order_items", ["total_lead_days"], name: "index_order_items_on_total_lead_days", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "client_id",                            null: false
+    t.integer  "client_id",                               null: false
     t.integer  "route_id"
-    t.date     "start_date",                           null: false
+    t.date     "start_date",                              null: false
     t.date     "end_date"
-    t.text     "note",                    default: "", null: false
-    t.string   "order_type",                           null: false
-    t.integer  "bakery_id",                            null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.text     "note",                    default: "",    null: false
+    t.string   "order_type",                              null: false
+    t.integer  "bakery_id",                               null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "legacy_id"
-    t.integer  "total_lead_days",                      null: false
+    t.integer  "total_lead_days",                         null: false
     t.integer  "version_number",          default: 0
     t.integer  "created_by_user_id"
     t.integer  "last_updated_by_user_id"
+    t.boolean  "alert",                   default: false
   end
 
   add_index "orders", ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date", using: :btree
   add_index "orders", ["bakery_id"], name: "index_orders_on_bakery_id", using: :btree
+  add_index "orders", ["client_id", "route_id", "start_date", "end_date", "order_type"], name: "orders_idx_nulls_start", using: :btree
   add_index "orders", ["created_by_user_id"], name: "index_orders_on_created_by_user_id", using: :btree
   add_index "orders", ["end_date"], name: "index_orders_on_end_date", using: :btree
   add_index "orders", ["last_updated_by_user_id"], name: "index_orders_on_last_updated_by_user_id", using: :btree
@@ -340,6 +348,7 @@ ActiveRecord::Schema.define(version: 20170803172922) do
     t.string   "client_notes"
     t.integer  "order_id"
     t.integer  "sequence_number"
+    t.boolean  "alert",                            default: false
   end
 
   add_index "shipments", ["bakery_id"], name: "index_shipments_on_bakery_id", using: :btree
@@ -382,6 +391,13 @@ ActiveRecord::Schema.define(version: 20170803172922) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "vendors", force: :cascade do |t|
+    t.integer  "bakery_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false

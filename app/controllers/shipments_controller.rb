@@ -4,8 +4,6 @@ class ShipmentsController < ApplicationController
   decorates_assigned :shipments, :shipment
   helper_method :search_form
 
-  # rubocop:disable Metrics/AbcSize
-
   def index
     authorize Shipment
     @shipments = scope_with_search.paginate(page: params[:page])
@@ -122,6 +120,7 @@ class ShipmentsController < ApplicationController
 
   def shipment_params
     params.require(:shipment).permit(
+      :alert,
       :client_id, :route_id, :date, :payment_due_date, :delivery_fee, :note,
       shipment_items_attributes:
       %i[id product_id product_quantity product_price _destroy]

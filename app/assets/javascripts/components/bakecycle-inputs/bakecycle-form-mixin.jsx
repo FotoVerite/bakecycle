@@ -6,6 +6,7 @@ export default {
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
+    checked: PropTypes.bool, 
     error: PropTypes.string,
     inline: PropTypes.bool,
     label: PropTypes.string,

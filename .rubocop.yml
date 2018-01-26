@@ -14,6 +14,7 @@ Metrics/MethodLength:
   Max: 15
 
 Metrics/AbcSize:
+  Enabled: false
   Max: 18
 
 Metrics/ClassLength:
@@ -87,4 +88,7 @@ Rails/FilePath:
     - "lib/tasks/*.rake"
 
 Rails/OutputSafety:
+  Enabled: false
+
+Style/AccessorMethodName:
   Enabled: false

@@ -4,6 +4,7 @@ class PackingSlipPage
     @bakery = bakery
     @pdf = pdf
     @shipment_items = shipment.shipment_items.sort_by { |item| [item.product_product_type, item.product_name] }
+    @vip = shipment.alert || shipment.try(:order).try(:alert) || shipment.try(:order).try(:client).try(:alert)
   end
 
   def render
@@ -23,13 +24,25 @@ class PackingSlipPage
   end
 
   def packing_slip_header_stamp
-    stamp_or_create("packing slip header") { packing_slip_header }
+    # create a stamp/memoized copy for the header that has the star or not.
+    if @vip
+      stamp_or_create("packing slip header vip") { packing_slip_header }
+    else
+      stamp_or_create("packing slip header") { packing_slip_header }
+    end
   end
 
   def packing_slip_header
     bounding_box([0, cursor], width: 260, height: 60) { bakery_logo_display(@bakery) }
     grid([0, 5.5], [0, 8]).bounding_box { bakery_info(@bakery) }
     grid([0, 9], [0, 11]).bounding_box { text "Packing Slip", size: 20 }
+    return unless @vip
+
+    # Add alert star
+    grid([0, 11.3], [0, 11.3]).bounding_box {
+      image Rails.root.join("app", "assets", "images", "icons", "star.png"),
+      fit: [20, 20]
+    }
   end
 
   def addresses
@@ -95,7 +108,6 @@ class PackingSlipPage
   end
 
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
 
   def merge_shipment_items(items)
     hash = {}
@@ -137,17 +149,18 @@ class PackingSlipPage
     ]
   end
 
-  def shipment_or_client_notes_present?
-    @shipment.client_notes.present? || @shipment.note.present?
+  def shipment_or_order_or_client_notes_present?
+    @shipment.client_notes.present? || @shipment.order.try(:note) || @shipment.note.present?
   end
 
   def notes
-    notes_data if shipment_or_client_notes_present?
+    notes_data if shipment_or_order_or_client_notes_present?
   end
 
   def notes_data
     text "Notes", style: :bold
     text @shipment.client_notes if @shipment.client_notes.present?
+    text @shipment.order.note if @shipment.try(:order).try(:note)
     text @shipment.note if @shipment.note.present?
     move_down 15
   end

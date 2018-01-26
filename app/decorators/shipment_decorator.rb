@@ -19,6 +19,16 @@ class ShipmentDecorator < Draper::Decorator
     h.item_finder.products.order(:name)
   end
 
+  def product_prices
+    hash = {}
+    if client
+      h.item_finder.products.each { |p| hash[p.id] =  p.price(1, client) }
+    else
+      h.item_finder.products.each { |p| hash[p.id] =  p.base_price }
+    end
+    hash.to_json
+  end
+
   def auto_generated?
     auto_generated ? "Yes" : "No"
   end

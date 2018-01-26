@@ -19,7 +19,7 @@ class PackListXlxs
     create_output_string(p)
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength
 
   def create_hash_of_products
     hash = {}

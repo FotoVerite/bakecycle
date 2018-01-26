@@ -32,6 +32,11 @@
       var id = getNextId();
       var newRow = template.replace(/\$\{ID\}/g, id);
       container.append(newRow);
+      $('.js-chosen-add').each(function(index, el) {
+        var options = $(el).data('chosen_options') || {};
+        options.width = options.width || '100%';
+        $(el).chosen();
+      });
     }
 
     controller.find('[data-add]').on('click', add);

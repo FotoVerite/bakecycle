@@ -1,5 +1,6 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
+  before_action :skip_policy_scope, only: %i[print_year_total]
   decorates_assigned :clients, :client
 
   def index
@@ -49,6 +50,16 @@ class ClientsController < ApplicationController
     redirect_to clients_path
   end
 
+  def year_total
+    authorize Route, :print?
+  end
+
+  def print_year_total
+    authorize Route, :print?
+    generator = YearTotalGenerator.new(current_bakery, 2017)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
   private
 
   def set_client
@@ -57,6 +68,7 @@ class ClientsController < ApplicationController
 
   def client_params
     params.require(:client).permit(
+      :alert,
       :name, :official_company_name, :ein, :business_phone, :business_fax,
       :active, :delivery_address_street_1, :delivery_address_street_2,
       :delivery_address_city, :delivery_address_state, :delivery_address_zipcode,
@@ -65,7 +77,7 @@ class ClientsController < ApplicationController
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
       :secondary_contact_phone, :secondary_contact_email, :billing_term, :delivery_fee_option,
-      :delivery_fee, :delivery_minimum, :notes
+      :delivery_fee, :delivery_minimum, :notes, :print_invoice
     )
   end
 end

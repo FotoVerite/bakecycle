@@ -1,8 +1,9 @@
 <div class="fields">
   <div class="row collapse">
     <div class="small-12 large-4 columns">
-      <%= f.label :product_id, "Product", class: "hide-for-large-up" %>
-      <%= f.input :product_id, collection: shipment.available_products, label: false, input_html: { id: "shipment_shipment_items_attributes_${ID}_product_id", name: "shipment[shipment_items_attributes][${ID}][product_id]" }, include_blank: "--None--", as: :select%>
+
+      <%= f.input :product_id , collection: shipment.available_products, as: :select, label: false, required: false, input_html: {id: "shipment_shipment_items_attributes_${ID}_product_id", name: "shipment[shipment_items_attributes][${ID}][product_id]",  multiple: false, class: 'js-chosen-add', data: { placeholder: 'Select Products', attr_id: "${ID}" } } %>
+
     </div>
 
     <div class="small-12 large-2 columns">

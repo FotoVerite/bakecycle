@@ -11,3 +11,14 @@
   </div>
   <%= link_to 'Add Product', '', data: { add: true }, class: "button" %>
 </div>
+
+<%= content_for :js do %>
+<script>
+  $(document).ready(function() {
+    var prices = <%= raw shipment.product_prices %>
+   $('body').on('change', '.js-chosen-add', function() {
+    $('#shipment_shipment_items_attributes_' + $(this).data('attr-id') + '_product_price').val(prices[$(this).val()])
+   })
+  })
+</script>
+<% end %>

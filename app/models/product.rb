@@ -19,6 +19,7 @@
 #  legacy_id       :string
 #  total_lead_days :integer          not null
 #  batch_recipe    :boolean          default(FALSE)
+#  removed         :boolean          default(FALSE)
 #
 
 class Product < ApplicationRecord
@@ -137,6 +138,8 @@ class Product < ApplicationRecord
 
   def check_for_order_items
     return true unless order_items.any?
+    # see if any orders are still active
+    return true unless order_items.map(&:order).uniq.map(&:still_in_use).uniq.include?(true)
     errors.add(:base, I18n.t(:product_in_use))
     false
   end

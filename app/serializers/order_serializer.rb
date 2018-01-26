@@ -17,10 +17,11 @@
 #  version_number          :integer          default(0)
 #  created_by_user_id      :integer
 #  last_updated_by_user_id :integer
+#  alert                   :boolean          default(FALSE)
 #
 
 class OrderSerializer < ActiveModel::Serializer
-  attributes :id, :start_date, :end_date, :start_date, :order_type,
+  attributes :alert, :id, :start_date, :end_date, :start_date, :order_type,
     :errors, :client_id, :route_id, :total_lead_days, :note
   has_many :order_items
 end

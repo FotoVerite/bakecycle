@@ -39,7 +39,9 @@
 #  updated_at                     :datetime         not null
 #  ein                            :string
 #  notes                          :string
-#  sequence_number                :integer          default(5000)
+#  sequence_number                :integer          default(1)
+#  alert                          :boolean          default(FALSE)
+#  print_invoice                  :boolean          default(TRUE)
 #
 
 class Client < ApplicationRecord
