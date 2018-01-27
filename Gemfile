@@ -37,7 +37,6 @@ gem "uglifier", ">= 1.3.0"
 gem "unicorn", require: false
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate", "~> 3.0.6"
-gem "wizarddev-heroku"
 # legacy import
 gem "mysql2", require: false
 
@@ -51,6 +50,12 @@ group :development do
   gem "spring"
   gem "spring-commands-rspec"
   gem "web-console", "~> 2.0"
+  gem "capistrano"
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano3-puma',   require: false
+  gem "capistrano-resque", "~> 0.2.2", require: false
+  gem 'capistrano-npm'
 end
 
 group :test, :development do
@@ -89,6 +94,7 @@ group :test, :development, :staging do
 end
 
 group :production, :staging do
+  gem "puma"
   gem "newrelic_rpm"
   gem "rails_12factor"
 end
