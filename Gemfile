@@ -37,8 +37,6 @@ gem "uglifier", ">= 1.3.0"
 gem "unicorn", require: false
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate", "~> 3.0.6"
-# legacy import
-gem "mysql2", require: false
 
 group :development do
   gem "better_errors"
