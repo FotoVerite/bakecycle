@@ -378,7 +378,7 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    redis (4.0.1)
+    redis (3.3.5)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)
     request_store (1.4.0)
@@ -581,6 +581,7 @@ DEPENDENCIES
   rack-livereload
   rails (= 4.2.10)
   rails-erd
+  redis (= 3.3.5)
   resque
   riif
   rspec-activejob
