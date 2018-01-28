@@ -7,7 +7,7 @@ gem "aws-sdk", "< 2.0"
 gem "axlsx", "2.0.1"
 gem "browserify-rails"
 gem "chronic"
-gem "coffee-rails", "~> 4.0.0"
+gem "coffee-rails"
 gem "devise"
 gem "devise-async", git: "https://github.com/klacointe/devise-async.git", branch: "devise4"
 gem "devise_invitable"
@@ -26,18 +26,18 @@ gem "pg", "~> 0.21.0"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "4.2.10"
-gem "resque", require: "resque/server"
+gem "rails", "5.1.4"
 gem "redis", "3.3.5"
+gem "resque", require: "resque/server"
 gem "riif"
 gem "rubyzip", "1.0.0"
 gem "sass-rails"
 gem "simple_form"
 gem "stripe"
-gem "uglifier", ">= 1.3.0"
+gem "uglifier"
 gem "unicorn", require: false
 gem "unitwise", "~>2.0.0", require: "unitwise"
-gem "will_paginate", "~> 3.0.6"
+gem "will_paginate"
 
 group :development do
   gem "better_errors"
@@ -50,7 +50,6 @@ group :development do
   gem "capistrano3-puma", require: false
   gem "foreman", require: false
   gem "letter_opener"
-  gem "quiet_assets"
   gem "rails-erd", require: false
   gem "spring"
   gem "spring-commands-rspec"
@@ -82,7 +81,6 @@ group :test do
   gem "rspec-activejob"
   gem "selenium-webdriver"
   gem "stripe-ruby-mock", "~> 2.1.1", require: false
-  gem "test_after_commit"
   gem "timecop"
   gem "webmock", require: false
 end

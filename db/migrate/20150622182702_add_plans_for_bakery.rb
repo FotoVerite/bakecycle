@@ -9,18 +9,18 @@ class AddPlansForBakery < ActiveRecord::Migration
 
     add_index :plans, :name, unique: true
 
-    Plan.connection.execute <<-eos
+    Plan.connection.execute <<-EOS
       INSERT INTO plans (name, display_name)
       VALUES ('beta_large', 'Large Bakery')
-    eos
+    EOS
 
     add_column :bakeries, :plan_id, :integer
 
-    Bakery.connection.execute <<-eos
+    Bakery.connection.execute <<-SQL
       UPDATE bakeries
       SET plan_id = 1
       WHERE plan_id IS NULL
-    eos
+    SQL
 
     change_column :bakeries, :plan_id, :integer, null: false
     add_foreign_key "bakeries", "plans"

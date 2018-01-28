@@ -43,6 +43,6 @@ class Ingredient < ApplicationRecord
   def check_for_recipes
     return unless recipe_items.any?
     errors.add(:base, I18n.t(:ingredient_in_use))
-    false
+    throw(:abort)
   end
 end

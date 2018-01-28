@@ -32,7 +32,7 @@ module ApplicationHelper
 
   # rubocop:disable Metrics/MethodLength
   def react_component(name, props)
-    html = <<-eos
+    html = <<-SCRIPT
     <script>
     (function(){
       var name = #{name.to_json};
@@ -48,7 +48,7 @@ module ApplicationHelper
       window.reactComponents.push([name, props, node]);
     })();
     </script>
-    eos
+    SCRIPT
     html.html_safe
   end
   # rubocop:enable Metrics/MethodLength

@@ -33,6 +33,7 @@ Feature: Bakery
     Then I should see confirmation the bakery was deleted
     And the bakery "Wonder" should not be present
 
+  @javascript
   Scenario: As a User, with manage access to my bakery
     Given I am logged in as a user with bakery "manage" access with a bakery called "biencuit"
     When I visit my bakery
@@ -40,7 +41,7 @@ Feature: Bakery
     And "Delete" link should not be present
 
     When I change the bakery name to "Cheeky's"
-    And I click on "Update"
+    And I click on button "Update"
     Then I should see that the bakery name is "Cheeky's"
 
   Scenario: As a User, with read access to my bakery

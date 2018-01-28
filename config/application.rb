@@ -22,8 +22,6 @@ module Bakecycle
     # config.i18n.default_locale = :de
 
     # new 4.2+ behavior
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.serve_static_files = true
 
     # Browserify

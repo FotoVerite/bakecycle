@@ -125,13 +125,13 @@ class Recipe < ApplicationRecord
   def check_for_products
     return unless products.any?
     errors.add(:base, I18n.t(:recipe_in_use_products))
-    false
+    throw(:abort)
   end
 
   def check_for_parent_recipes
     return unless parent_recipes.any?
     errors.add(:base, I18n.t(:recipe_in_use_recipies))
-    false
+    throw(:abort)
   end
 
   def motherdough?

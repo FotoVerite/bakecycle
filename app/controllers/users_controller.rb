@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   end
 
   def myaccount
-    @user = policy_scope(User).find(current_user)
+    @user = policy_scope(User).find(current_user.id)
     active_nav(:my_user)
     authorize @user, :edit?
     render "edit"

@@ -26,15 +26,15 @@
 #
 
 class Bakery < ApplicationRecord
-  has_many :ingredients
-  has_many :clients
-  has_many :recipes
-  has_many :orders
-  has_many :products
-  has_many :routes
-  has_many :shipments
-  has_many :users
-  has_many :production_runs
+  has_many :ingredients, dependent: :destroy
+  has_many :clients, dependent: :destroy
+  has_many :recipes, dependent: :destroy
+  has_many :orders, dependent: :destroy
+  has_many :products, dependent: :destroy
+  has_many :routes, dependent: :destroy
+  has_many :shipments, dependent: :destroy
+  has_many :users, dependent: :destroy
+  has_many :production_runs, dependent: :destroy
 
   has_many :shipment_items, through: :shipments
   has_many :order_items, through: :orders
