@@ -33,7 +33,7 @@ describe RecipeRunData do
       expect(run_data.inclusions).to include(inclusion_info)
     end
 
-    it 'ignores inclusions with products that don\'t have them' do
+    it "ignores inclusions with products that don't have them" do
       run_data.add_product(product, 1)
       expect(run_data.inclusions).to be_empty
     end

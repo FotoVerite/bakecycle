@@ -8,8 +8,8 @@ gem "axlsx", "2.0.1"
 gem "browserify-rails"
 gem "chronic"
 gem "coffee-rails", "~> 4.0.0"
-gem "devise", "~> 3.5.6"
-gem "devise-async"
+gem "devise"
+gem "devise-async", git: "https://github.com/klacointe/devise-async.git", branch: "devise4"
 gem "devise_invitable"
 gem "draper"
 gem "foundation-icons-sass-rails"
@@ -22,11 +22,11 @@ gem "jquery-ui-sass-rails"
 gem "memoist"
 gem "paper_trail"
 gem "paperclip", "~> 4.2"
-gem "pg"
+gem "pg", "~> 0.21.0"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "4.2.7.1"
+gem "rails", "4.2.10"
 gem "resque", require: "resque/server"
 gem "riif"
 gem "rubyzip", "1.0.0"
@@ -41,6 +41,12 @@ gem "will_paginate", "~> 3.0.6"
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
+  gem "capistrano"
+  gem "capistrano-bundler", require: false
+  gem "capistrano-npm"
+  gem "capistrano-rails", require: false
+  gem "capistrano-resque", "~> 0.2.2", require: false
+  gem "capistrano3-puma", require: false
   gem "foreman", require: false
   gem "letter_opener"
   gem "quiet_assets"
@@ -48,12 +54,6 @@ group :development do
   gem "spring"
   gem "spring-commands-rspec"
   gem "web-console", "~> 2.0"
-  gem "capistrano"
-  gem 'capistrano-rails',   require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano3-puma',   require: false
-  gem "capistrano-resque", "~> 0.2.2", require: false
-  gem 'capistrano-npm'
 end
 
 group :test, :development do
@@ -92,7 +92,7 @@ group :test, :development, :staging do
 end
 
 group :production, :staging do
-  gem "puma"
   gem "newrelic_rpm"
+  gem "puma"
   gem "rails_12factor"
 end

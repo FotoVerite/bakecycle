@@ -6,9 +6,7 @@ class InvoicesIif
   end
 
   def generate
-    unless Riif::DSL::Trns::HEADER_COLUMNS.include?(:tosend)
-      Riif::DSL::Trns::HEADER_COLUMNS.push(:tosend)
-    end
+    Riif::DSL::Trns::HEADER_COLUMNS.push(:tosend) unless Riif::DSL::Trns::HEADER_COLUMNS.include?(:tosend)
     invoices(shipments).output
   end
 

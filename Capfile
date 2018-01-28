@@ -13,10 +13,10 @@ require "capistrano/deploy"
 # install_plugin Capistrano::SCM::Svn
 # or
 require "capistrano/scm/git"
-require 'capistrano/rails'
-require 'capistrano/bundler'
-require 'capistrano/puma'
-require 'capistrano/npm'
+require "capistrano/rails"
+require "capistrano/bundler"
+require "capistrano/puma"
+require "capistrano/npm"
 require "capistrano-resque"
 install_plugin Capistrano::SCM::Git
 

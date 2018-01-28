@@ -14,7 +14,7 @@ module Users
     private
 
     def configure_permitted_parameters
-      devise_parameter_sanitizer.for(:invite) do |u|
+      devise_parameter_sanitizer.permit(:invite) do |u|
         u.permit(:password, :password_confirmation)
       end
     end

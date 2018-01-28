@@ -11,7 +11,7 @@ namespace :immigrant do
     end
 
     keys, warnings = Immigrant::KeyFinder.new.infer_keys
-    warnings.values.each { |warning| $stderr.puts "WARNING: #{warning}" }
+    warnings.values.each { |warning| warn "WARNING: #{warning}" }
 
     keys.reject! do |key|
       ignore_keys.include?("from_table" => key.from_table, "to_table" => key.to_table)
@@ -20,7 +20,7 @@ namespace :immigrant do
     keys.each do |key|
       column = key.options[:column]
       pk = key.options[:primary_key]
-      $stderr.puts "Missing foreign key relationship on '#{key.from_table}.#{column}' to '#{key.to_table}.#{pk}'"
+      warn "Missing foreign key relationship on '#{key.from_table}.#{column}' to '#{key.to_table}.#{pk}'"
     end
 
     if keys.present?
