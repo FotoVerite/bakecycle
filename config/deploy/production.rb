@@ -1,6 +1,6 @@
 set :deploy_to, "/var/www/bakecycle_production"
 set :user, "deploy"
-set :branch, "linode"
+set :branch, "rails5"
 set :ssh_options, forward_agent: true, port: 21500
 set :workers, "*" => 2
 set :resque_environment_task, true
