@@ -13,7 +13,12 @@ set :format, :pretty
 set :pty, true
 
 set :linked_files, %w[config/database.yml config/.envrc]
-set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets vendor/bundle public/images public/system public/pdfs node_modules]
+set :linked_dirs, %w[
+  log tmp/pids tmp/cache
+  tmp/sockets vendor/bundle
+  public/images public/system
+  public/pdfs node_modules
+]
 set :bundle_binstubs, nil
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 set :keep_releases, 5

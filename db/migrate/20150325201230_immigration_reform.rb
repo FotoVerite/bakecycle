@@ -20,3 +20,4 @@ class ImmigrationReform < ActiveRecord::Migration
     add_foreign_key "users", "bakeries", name: "users_bakery_id_fk"
   end
 end
+# rubocop:enable Metrics/MethodLength

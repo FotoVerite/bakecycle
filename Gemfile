@@ -35,7 +35,6 @@ gem "sass-rails"
 gem "simple_form"
 gem "stripe"
 gem "uglifier"
-gem "unicorn", require: false
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate"
 

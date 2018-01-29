@@ -9,10 +9,10 @@ class AddPlansForBakery < ActiveRecord::Migration
 
     add_index :plans, :name, unique: true
 
-    Plan.connection.execute <<-EOS
+    Plan.connection.execute <<-SQL
       INSERT INTO plans (name, display_name)
       VALUES ('beta_large', 'Large Bakery')
-    EOS
+    SQL
 
     add_column :bakeries, :plan_id, :integer
 
@@ -26,3 +26,4 @@ class AddPlansForBakery < ActiveRecord::Migration
     add_foreign_key "bakeries", "plans"
   end
 end
+# rubocop:enable Metrics/MethodLength

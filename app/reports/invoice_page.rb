@@ -1,6 +1,6 @@
-include ActionView::Helpers::NumberHelper
-
 class InvoicePage
+  include ActionView::Helpers::NumberHelper
+
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
     @bakery = bakery

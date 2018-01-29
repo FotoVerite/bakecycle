@@ -17,7 +17,7 @@ class Ingredient < ApplicationRecord
 
   INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
 
-  has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
+  has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem", dependent: :destroy, inverse_of: :inclusionable
 
   belongs_to :bakery
 
@@ -28,7 +28,7 @@ class Ingredient < ApplicationRecord
             inclusion: { in: INGREDIENT_TYPES }
   validates :bakery, presence: true
 
-  before_destroy :check_for_recipes
+  before_destroy :check_for_recipes, prepend: true
 
   def self.policy_class
     ProductPolicy
