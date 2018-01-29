@@ -191,6 +191,8 @@ select.inline {
 }
 
 .order-item-day-input {
+  width: 14.2%;
+  display: inline-block;
   @media #{$large-up} {
     width: 4%;
   }
@@ -198,9 +200,20 @@ select.inline {
 
 .order-item-action-button {
   text-align: center;
+  display:block;
+  width:100%;
+  span {
+    padding:10px 0px;
+    margin-bottom: 5px;
+    width:100%;
+  }
   @media #{$large-up} {
     display: inline-block;
-    width: 4%;
+    width: 3%;
+    margin:0px 5px;
+    span {
+
+    }
   }
 }
 
