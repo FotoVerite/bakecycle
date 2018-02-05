@@ -36,6 +36,11 @@
 class User < ApplicationRecord
   ACCESS_LEVELS = %w[none read manage].freeze
   belongs_to :bakery
+  has_many :created_orders, class_name: "Order", foreign_key: :created_by_user_id,
+                            inverse_of: :created_by_user, dependent: :nullify
+  has_many :orders_last_updated_by, class_name: "Order", foreign_key: :last_updated_by_user_id,
+                                    inverse_of: :last_updated_by_user, dependent: :nullify
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :async, :database_authenticatable, :invitable, :recoverable, :rememberable,

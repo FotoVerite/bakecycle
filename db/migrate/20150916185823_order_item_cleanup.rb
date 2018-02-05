@@ -48,3 +48,4 @@ class OrderItemCleanup < ActiveRecord::Migration
     change_column_null :users, :updated_at, false
   end
 end
+# rubocop:enable Metrics/MethodLength

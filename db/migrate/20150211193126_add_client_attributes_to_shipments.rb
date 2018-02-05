@@ -19,3 +19,4 @@ class AddClientAttributesToShipments < ActiveRecord::Migration
     end
   end
 end
+# rubocop:enable Metrics/MethodLength

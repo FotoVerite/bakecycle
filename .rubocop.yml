@@ -82,10 +82,18 @@ Metrics/BlockLength:
 Rails/SkipsModelValidations:
   Enabled: false
 
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - "db/migrate/2014*"
+    - "db/migrate/2015*"
+
 Rails/NotNullColumn:
   Enabled: false
 
 Style/MethodMissing:
+  Enabled: false
+
+Style/FormatStringToken:
   Enabled: false
 
 Rails/FilePath:
@@ -97,5 +105,5 @@ Rails/FilePath:
 Rails/OutputSafety:
   Enabled: false
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false

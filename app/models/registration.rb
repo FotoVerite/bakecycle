@@ -2,8 +2,9 @@ class Registration
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :first_name, :last_name, :bakery_name, :email, :password, :bakery, :user,
+  attr_accessor :first_name, :last_name, :bakery_name, :email, :password,
                 :plan, :id, :card_number, :stripe_token
+  attr_writer   :bakery, :user
   attr_reader :card_zipcode, :card_code, :card_month, :card_year, :card_token
 
   validates :first_name, presence: true

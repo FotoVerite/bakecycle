@@ -25,7 +25,7 @@ class ExporterJob < ApplicationJob
     file_export.save!
     FileAction.create(user: user, bakery: user.bakery, file_export_id: file_export.id, action: "created")
   # This is a simple catch to deal with any issues arising from the PDF Generation
-  rescue => e
+  rescue StandardError => e
     pdf = ErrorReport.new(e).render
     file = FakeFileIO.new(generator.filename + "-error.pdf", pdf)
     file_export.file_content_type = "application/pdf"

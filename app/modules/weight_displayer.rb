@@ -24,4 +24,6 @@ module WeightDisplayer
       }
     end
   end
+
+  # rubocop:enable Metrics/MethodLength
 end

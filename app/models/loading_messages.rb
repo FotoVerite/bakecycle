@@ -16,9 +16,9 @@ class LoadingMessages
     "Get ready to roll",
     "Let them heat cake",
     "This should pan out nicely",
-    'I can\'t believe it\'s not batter',
-    'Generating reports, honest! We\'re not loafing around',
-    'Hope you\'re having a challah good day!',
+    "I can't believe it's not batter",
+    "Generating reports, honest! We're not loafing around",
+    "Hope you're having a challah good day!",
     "I hate to brioche the subject but this report is pretty big!",
     "Your report is almost ready to dough!"
   ].freeze

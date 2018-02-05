@@ -10,7 +10,7 @@
 #
 
 class Plan < ApplicationRecord
-  has_many :bakeries
+  has_many :bakeries, dependent: :nullify
   validates :name, :display_name, presence: true, uniqueness: true
 
   def self.for_display

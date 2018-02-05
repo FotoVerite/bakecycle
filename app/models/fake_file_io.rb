@@ -1,4 +1,4 @@
-class FakeFileIO < StringIO
+class FakeFileI < StringIO
   attr_reader :original_filename
   attr_reader :path
 

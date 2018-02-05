@@ -1,0 +1,33 @@
+<% provide(:title, "Vendors") %>
+
+<h1>Vendors</h1>
+<% if policy(Product).new? %>
+  <p><%= link_to 'Add New Vendor', new_vendor_path, class: "button"%></p>
+<% end %>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <% if policy(Product).manage_permission? %>
+        <th scope="col">Action</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @vendors.each do |vendor| %>
+      <tr class="js-clickable-row" href="<%= edit_vendor_path(vendor) %>">
+        <th scope="row"><%= link_to vendor.name, edit_vendor_path(vendor) %></th>
+        <% if policy(vendor).edit? %>
+          <td data-title="Action">
+             <%= link_to pricing_vendor_path(vendor) do %>
+              <span class="table-action-icon icon-link-tooltip" aria-label="Price Ingredients"><i class="fi-page-edit"></i></span>
+            <% end %>
+            <%= link_to edit_vendor_path(vendor) do %>
+              <span class="table-action-icon icon-link-tooltip" aria-label="Edit Vendor"><i class="fi-page-edit"></i></span>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

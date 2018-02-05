@@ -28,6 +28,5 @@ export var passthrough = (state = {}) => {
 export default combineReducers({
   ingredients,
   filter,
-  availableVendors: passthrough,
   weightUnitOptions: passthrough
 });

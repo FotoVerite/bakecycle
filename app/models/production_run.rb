@@ -11,7 +11,7 @@
 
 class ProductionRun < ApplicationRecord
   belongs_to :bakery
-  has_many :shipment_items
+  has_many :shipment_items, dependent: :nullify
   has_many :run_items, dependent: :destroy
 
   accepts_nested_attributes_for(

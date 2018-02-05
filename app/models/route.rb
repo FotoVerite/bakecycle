@@ -17,14 +17,14 @@ class Route < ApplicationRecord
   extend AlphabeticalOrder
 
   belongs_to :bakery
-  has_many :orders
+  has_many :orders, dependent: :nullify
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :departure_time, presence: true
   validates :active, inclusion: [true, false]
   validates :bakery, presence: true
 
-  before_destroy :check_for_orders
+  before_destroy :check_for_orders, prepend: true
 
   def self.policy_class
     ShippingPolicy

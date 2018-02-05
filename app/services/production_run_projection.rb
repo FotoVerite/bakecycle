@@ -1,5 +1,5 @@
 class ProductionRunProjection
-  attr_reader :bakery, :start_date, :batch_end_date, :order_items
+  attr_reader :bakery, :start_date, :batch_end_date
 
   def initialize(bakery, start_date, end_date = nil)
     @bakery = bakery

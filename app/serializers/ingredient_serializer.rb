@@ -11,10 +11,9 @@
 #  legacy_id       :string
 #  ingredient_type :string           default("other"), not null
 #  vendor_id       :integer
-#  cost            :decimal(, )      default(0.0), not null
 #  current_amount  :decimal(, )      default(0.0), not null
-#  weight_unit     :string
-#  conversion      :decimal(, )      default(0.0)
+#  weight_unit     :string           default("grams")
+#  conversion      :decimal(, )      default(1.0)
 #
 
 class IngredientSerializer < ActiveModel::Serializer

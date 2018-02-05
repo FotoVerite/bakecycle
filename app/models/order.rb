@@ -27,8 +27,8 @@ class Order < ApplicationRecord
   belongs_to :client
   belongs_to :route
   belongs_to :bakery
-  belongs_to :created_by_user, class_name: "User"
-  belongs_to :last_updated_by_user, class_name: "User"
+  belongs_to :created_by_user, class_name: "User", inverse_of: :created_orders
+  belongs_to :last_updated_by_user, class_name: "User", inverse_of: :orders_last_updated_by
 
   has_many :products, through: :order_items
 
@@ -38,10 +38,11 @@ class Order < ApplicationRecord
       .includes(:product)
       .order("products.name ASC")
   },
-    dependent: :destroy
-  has_many :all_order_items, dependent: :destroy, class_name: "OrderItem"
+    dependent: :destroy,
+    inverse_of: :order
+  has_many :all_order_items, dependent: :destroy, class_name: "OrderItem", inverse_of: :order
 
-  has_many :shipments
+  has_many :shipments, dependent: :nullify
 
   accepts_nested_attributes_for(
     :order_items,

@@ -1,0 +1,13 @@
+<%= simple_form_for @vendor do |f| %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
+
+  <fieldset>
+    <legend>Vendor Information</legend>
+    <div class="row">
+      <div class="small-12 medium-6 columns">
+        <%= f.input :name, as: :string %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>

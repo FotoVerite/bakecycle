@@ -32,3 +32,4 @@ class CreateClients < ActiveRecord::Migration
     add_index :clients, :active
   end
 end
+# rubocop:enable Metrics/MethodLength

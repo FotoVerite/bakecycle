@@ -179,7 +179,7 @@ describe Shipment do
     end
 
     describe "#route_id=" do
-      it 'does nothing the route did\'t change' do
+      it "does nothing the route did't change" do
         shipment = build_stubbed(:shipment)
         route_id = shipment.route_id
         expect(Route).to_not receive(:find_by)

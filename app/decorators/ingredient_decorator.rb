@@ -12,4 +12,5 @@ class IngredientDecorator < Draper::Decorator
   def ingredient_type
     object.ingredient_type.humanize
   end
+
 end

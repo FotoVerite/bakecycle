@@ -28,3 +28,4 @@ class DeviseCreateUsers < ActiveRecord::Migration
     add_index :users, :reset_password_token, unique: true
   end
 end
+# rubocop:enable Metrics/MethodLength

@@ -36,7 +36,7 @@ class YearTotalXlxs
 
   def add_rows(hash, sheet)
     # Set Product Type Row
-    hash.each do |_key, client_array|
+    hash.each_value do |client_array|
       sheet.add_row client_array
     end
     sheet.add_row []

@@ -11,21 +11,20 @@
 #  legacy_id       :string
 #  ingredient_type :string           default("other"), not null
 #  vendor_id       :integer
-#  cost            :decimal(, )      default(0.0), not null
 #  current_amount  :decimal(, )      default(0.0), not null
-#  weight_unit     :string
-#  conversion      :decimal(, )      default(0.0)
+#  weight_unit     :string           default("grams")
+#  conversion      :decimal(, )      default(1.0)
 #
 
 class Ingredient < ApplicationRecord
   extend AlphabeticalOrder
 
-  attr_accessor :dirty
+  attr_accessor :dirty, :cost, :cost_over_time_vendor_id
 
   INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
 
-  has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
-  has_many :cost_over_times
+  has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem", dependent: :destroy, inverse_of: :inclusionable
+  has_many :ingredient_prices_over_time, -> {order("created_at DESC")}
 
   belongs_to :bakery
 
@@ -36,8 +35,7 @@ class Ingredient < ApplicationRecord
             inclusion: { in: INGREDIENT_TYPES }
   validates :bakery, presence: true
 
-  before_destroy :check_for_recipes
-  after_save :record_costing_change
+  before_destroy :check_for_recipes, prepend: true
 
   WEIGHT_UNITS = [
     "gallons",
@@ -57,12 +55,19 @@ class Ingredient < ApplicationRecord
     0
   end
 
+  def cost_by_vendor(vendor)
+    ingredient_prices_over_time.where(vendor_id: vendor.id).first || 0
+  end
+
+
   private
 
   def record_costing_change
-    return unless cost_changed?
+    return unless dirty?
     cost_per_gram = cost / conversion
-    cost_over_times.create(
+    ingredient_prices_over_time.create(
+      vendor_id: cost_over_time_vendor_id,
+      bakery_id: bakery_id,
       cost_per_unit: cost,
       weight_unit: weight_unit,
       conversion: conversion,
@@ -70,9 +75,13 @@ class Ingredient < ApplicationRecord
     )
   end
 
+  def cost
+    0
+  end
+
   def check_for_recipes
     return unless recipe_items.any?
     errors.add(:base, I18n.t(:ingredient_in_use))
-    false
+    throw(:abort)
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171129000856) do
+ActiveRecord::Schema.define(version: 20180205040655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,13 @@ ActiveRecord::Schema.define(version: 20171129000856) do
   end
 
   add_index "bakeries", ["name"], name: "index_bakeries_on_name", unique: true, using: :btree
+
+  create_table "bakery_assignments", force: :cascade do |t|
+    t.integer  "bakery_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "clients", force: :cascade do |t|
     t.string   "name"
@@ -89,16 +96,6 @@ ActiveRecord::Schema.define(version: 20171129000856) do
   add_index "clients", ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true, using: :btree
   add_index "clients", ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true, using: :btree
 
-  create_table "cost_over_times", force: :cascade do |t|
-    t.integer  "ingredient_id"
-    t.string   "weight_unit"
-    t.decimal  "conversion"
-    t.decimal  "cost_per_unit"
-    t.decimal  "cost_per_gram"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
   create_table "file_actions", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "bakery_id"
@@ -125,6 +122,18 @@ ActiveRecord::Schema.define(version: 20171129000856) do
 
   add_index "file_exports", ["bakery_id"], name: "index_file_exports_on_bakery_id", using: :btree
 
+  create_table "ingredient_prices_over_times", force: :cascade do |t|
+    t.integer  "ingredient_id"
+    t.integer  "vendor_id"
+    t.integer  "bakery_id"
+    t.string   "weight_unit"
+    t.decimal  "conversion"
+    t.decimal  "cost_per_unit"
+    t.decimal  "cost_per_gram"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "ingredients", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -134,9 +143,8 @@ ActiveRecord::Schema.define(version: 20171129000856) do
     t.string   "legacy_id"
     t.string   "ingredient_type", default: "other", null: false
     t.integer  "vendor_id"
-    t.decimal  "cost",            default: 0.0,     null: false
     t.decimal  "current_amount",  default: 0.0,     null: false
-    t.string   "weight_unit"
+    t.string   "weight_unit",     default: "grams"
     t.decimal  "conversion",      default: 1.0
   end
 

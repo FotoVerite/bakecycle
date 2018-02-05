@@ -1,0 +1,3 @@
+<%= form_tag update_pricing_vendor_path(@vendor), method: 'patch' do %>
+  <%= react_component('VendorPricingFormProvider', VendorPricingForm.new(ingredients: @ingredients, user: current_user, vendor: @vendor).serializable_hash) %>
+<% end %>

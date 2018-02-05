@@ -50,7 +50,7 @@ class Client < ApplicationRecord
   belongs_to :bakery
   has_many :orders, dependent: :destroy
   has_many :price_variants, dependent: :destroy
-  has_many :shipments
+  has_many :shipments, dependent: :destroy
 
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
   enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee]
