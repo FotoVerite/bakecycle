@@ -46,7 +46,7 @@ group :development do
   gem "capistrano-npm"
   gem "capistrano-rails", require: false
   gem "capistrano-resque", "~> 0.2.2", require: false
-  gem "capistrano3-puma", require: false
+  gem "capistrano3-puma"
   gem "foreman", require: false
   gem "letter_opener"
   gem "rails-erd", require: false

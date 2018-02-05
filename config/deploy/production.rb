@@ -4,6 +4,10 @@ set :branch, "rails5"
 set :ssh_options, forward_agent: true, port: 21500
 set :workers, "*" => 2
 set :resque_environment_task, true
+set :puma_conf, "#{current_path}/config/puma.rb"
+set :puma_state, "#{shared_path}/pids/puma.state"
+set :puma_pid, "#{shared_path}/pids/puma.pid"
+set :puma_bind, "unix://#{shared_path}/sockets/puma.sock"    #accept array for multi-bind
 
 # Simple Role Syntax
 # ==================

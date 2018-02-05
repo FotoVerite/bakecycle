@@ -18,6 +18,7 @@ require "capistrano/bundler"
 require "capistrano/puma"
 require "capistrano/npm"
 require "capistrano-resque"
+install_plugin Capistrano::Puma  # Default puma tasks
 install_plugin Capistrano::SCM::Git
 
 # Include tasks from other gems included in your Gemfile
