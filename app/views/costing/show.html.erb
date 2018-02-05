@@ -1,0 +1,3 @@
+<%= form_tag costing_path, method: 'patch' do %>
+  <%= react_component('CostingFormProvider', CostingForm.new(ingredients: @ingredients, user: current_user).serializable_hash) %>
+<% end %>

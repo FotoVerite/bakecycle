@@ -14,8 +14,15 @@ Metrics/MethodLength:
   Max: 15
 
 Metrics/AbcSize:
-  Enabled: false
-  Max: 18
+  Max: 25
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - 'lib/**/*'
+    - 'features/**/*'
+    - 'db/migrate/**/*'
 
 Metrics/ClassLength:
   Max: 150

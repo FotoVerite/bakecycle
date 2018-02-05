@@ -44,4 +44,8 @@ class ItemFinder
   def users
     Pundit.policy_scope!(user, User)
   end
+
+  def vendors
+    Pundit.policy_scope!(user, Vendor)
+  end
 end

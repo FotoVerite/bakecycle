@@ -1,18 +1,19 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import differenceBy from 'lodash.differenceby';
 import OrderItemFields from './order-item-fields';
 import * as orderActions from '../../actions/order';
 
 const OrderItemsForm = ({
-    addOrderItem,
-    availableProducts,
-    orderItems,
-    orderType,
-    startDate,
-    toggleDestroy,
-    updateOrderItem,
-  }) => {
+  addOrderItem,
+  availableProducts,
+  orderItems,
+  orderType,
+  startDate,
+  toggleDestroy,
+  updateOrderItem,
+}) => {
 
   const usedProducts = orderItems.map(item => item.productId);
 

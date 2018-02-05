@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import { BCInput, BCSelect } from './bakecycle-inputs';
 
 export default function RecipeItemFields({
@@ -33,11 +35,11 @@ export default function RecipeItemFields({
   var disabledClass = destroy ? 'disabled' : '';
 
   return (<div
-      data-id={model.cid}
-      draggable="true"
-      onDragEnd={dragEnd}
-      onDragStart={dragStart}
-      className={`fields ${disabledClass}`} >
+    data-id={model.cid}
+    draggable="true"
+    onDragEnd={dragEnd}
+    onDragStart={dragStart}
+    className={`fields ${disabledClass}`} >
     <input type="hidden" name={`${namePrefix}[id]`} value={id} />
     <input type="hidden" name={`${namePrefix}[sort_id]`} value={sortId} />
     <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />

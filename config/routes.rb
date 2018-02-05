@@ -26,7 +26,11 @@ Rails.application.routes.draw do
     get "created_at", on: :collection
     get "updated_at", on: :collection
     get "papertrail", on: :member
+    get "costing", on: :member
   end
+
+  resource :costing, only: %i[show update], controller: "costing"
+
   resources :routes, except: [:show]
 
   get "year-total", to: "clients#print_year_total"

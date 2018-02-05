@@ -1,3 +1,4 @@
+import createReactClass from 'create-react-class';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import React from 'react';
@@ -11,7 +12,7 @@ moment.updateLocale('en', {
   }
 });
 
-const BCDate = React.createClass({
+const BCDate = createReactClass({
   mixins: [formMixin],
 
   propTypes: {

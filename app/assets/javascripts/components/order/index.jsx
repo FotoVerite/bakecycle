@@ -1,9 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { Provider } from 'react-redux';
 import createOrderStore from '../../stores/order';
 import OrderForm from './order-form';
 
-const OrderFormProvider = React.createClass({
+const OrderFormProvider = createReactClass({
   propTypes: {
     order: PropTypes.object.isRequired,
     availableClients: PropTypes.array.isRequired,

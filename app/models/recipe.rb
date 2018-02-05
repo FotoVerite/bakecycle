@@ -120,6 +120,10 @@ class Recipe < ApplicationRecord
     Unitwise(mix_size, mix_size_unit)
   end
 
+  def cost_per_gram
+    0
+  end
+
   private
 
   def check_for_products

@@ -133,6 +133,11 @@ ActiveRecord::Schema.define(version: 20171129000856) do
     t.integer  "bakery_id",                         null: false
     t.string   "legacy_id"
     t.string   "ingredient_type", default: "other", null: false
+    t.integer  "vendor_id"
+    t.decimal  "cost",            default: 0.0,     null: false
+    t.decimal  "current_amount",  default: 0.0,     null: false
+    t.string   "weight_unit"
+    t.decimal  "conversion",      default: 1.0
   end
 
   add_index "ingredients", ["legacy_id", "bakery_id"], name: "index_ingredients_on_legacy_id_and_bakery_id", unique: true, using: :btree

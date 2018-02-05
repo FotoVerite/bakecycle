@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as orderActions from '../../actions/order';
 import OrderItemsForm from './order-items-form';
@@ -11,7 +13,7 @@ import {
   BCCheckbox,
 } from '../bakecycle-inputs';
 
-const OrderForm = React.createClass({
+const OrderForm = createReactClass({
   propTypes: {
     order: PropTypes.object.isRequired,
     availableClients: PropTypes.array.isRequired,
@@ -75,10 +77,10 @@ const OrderForm = React.createClass({
     const prevOrder = prevProps.order;
     const order = this.props.order;
     if (
-        prevOrder.totalLeadDays !== order.totalLeadDays ||
+      prevOrder.totalLeadDays !== order.totalLeadDays ||
         prevOrder.startDate !== order.startDate ||
         prevOrder.endDate !== order.endDate
-      )
+    )
     {
       this.props.validateOrderStartDate(order);
     }
@@ -112,7 +114,7 @@ const OrderForm = React.createClass({
     return (<div>
       <fieldset>
         <legend>Order Information</legend>
-          {this.showClients()}
+        {this.showClients()}
         <div className="row">
           <div className="small-12 columns end">
             <BCRadio
@@ -199,8 +201,8 @@ const stateToProps = function(state) {
     totalLeadDays: calculateTotalLeadDays(state.availableProducts, state.orderItems)
   };
   return {order:  Object.assign({}, state.order, totalLeadDays),
-  availableClients: state.availableClients,
-  availableRoutes: state.availableRoutes,
+    availableClients: state.availableClients,
+    availableRoutes: state.availableRoutes,
   };
 };
 

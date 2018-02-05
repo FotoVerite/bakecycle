@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function Marker({$hover, title, onClick, children}){
   const className = $hover ? 'map-marker hover' : 'map-marker';

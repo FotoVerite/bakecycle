@@ -1,8 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
-const BCInput = React.createClass({
+const BCInput = createReactClass({
   mixins: [formMixin],
 
   propTypes: {
@@ -21,6 +23,7 @@ const BCInput = React.createClass({
       value,
       name,
       placeholder,
+      step,
       type,
     } = this.props;
 
@@ -39,6 +42,7 @@ const BCInput = React.createClass({
           value={value}
           disabled={disabled}
           autoComplete={autoComplete}
+          step={step}
         />
         {error ? <small className="error">{error}</small> : ''}
       </div>
