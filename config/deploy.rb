@@ -22,3 +22,5 @@ set :linked_dirs, %w[
 set :bundle_binstubs, nil
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 set :keep_releases, 5
+
+after "deploy:restart", "resque:restart"

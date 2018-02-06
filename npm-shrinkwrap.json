@@ -4,6 +4,15 @@
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
+    "JSONStream": {
+      "version": "1.1.2",
+      "resolved": "https://registry.npmjs.org/JSONStream/-/JSONStream-1.1.2.tgz",
+      "integrity": "sha1-fAGBZhPX5f5B6RPts7fzWf3b+/g=",
+      "requires": {
+        "jsonparse": "1.2.0",
+        "through": "2.3.8"
+      }
+    },
     "acorn": {
       "version": "3.2.0",
       "resolved": "https://registry.npmjs.org/acorn/-/acorn-3.2.0.tgz",
@@ -819,9 +828,9 @@
       "resolved": "https://registry.npmjs.org/browser-pack/-/browser-pack-6.0.1.tgz",
       "integrity": "sha1-d5iHx5LqofZKRqIsjxBRzc2WdV8=",
       "requires": {
+        "JSONStream": "1.1.2",
         "combine-source-map": "0.7.2",
         "defined": "1.0.0",
-        "JSONStream": "1.1.2",
         "through2": "2.0.1",
         "umd": "3.0.1"
       }
@@ -873,6 +882,7 @@
       "resolved": "https://registry.npmjs.org/browserify/-/browserify-13.0.1.tgz",
       "integrity": "sha1-03F5y7IiF57Pcw7H5iXpmGd5AtQ=",
       "requires": {
+        "JSONStream": "1.1.2",
         "assert": "1.3.0",
         "browser-pack": "6.0.1",
         "browser-resolve": "1.11.2",
@@ -893,7 +903,6 @@
         "https-browserify": "0.0.1",
         "inherits": "2.0.1",
         "insert-module-globals": "7.0.1",
-        "JSONStream": "1.1.2",
         "labeled-stream-splicer": "2.0.0",
         "module-deps": "4.0.7",
         "os-browserify": "0.1.2",
@@ -1092,8 +1101,8 @@
       "resolved": "https://registry.npmjs.org/browserify-incremental/-/browserify-incremental-3.1.1.tgz",
       "integrity": "sha1-BxPLdYckemMqnwjPG9FpuHi2Koo=",
       "requires": {
-        "browserify-cache-api": "3.0.0",
         "JSONStream": "0.10.0",
+        "browserify-cache-api": "3.0.0",
         "through2": "2.0.1",
         "xtend": "4.0.1"
       },
@@ -2168,10 +2177,10 @@
       "resolved": "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.1.tgz",
       "integrity": "sha1-wDv04BywhtW15azorQr+eInWOMM=",
       "requires": {
+        "JSONStream": "1.1.2",
         "combine-source-map": "0.7.2",
         "concat-stream": "1.5.1",
         "is-buffer": "1.1.3",
-        "JSONStream": "1.1.2",
         "lexical-scope": "1.2.0",
         "process": "0.11.5",
         "through2": "2.0.1",
@@ -2345,15 +2354,6 @@
       "resolved": "https://registry.npmjs.org/jsonpointer/-/jsonpointer-2.0.0.tgz",
       "integrity": "sha1-OvHdIP6FRjkQ1GmjheMwF9KgMNk=",
       "dev": true
-    },
-    "JSONStream": {
-      "version": "1.1.2",
-      "resolved": "https://registry.npmjs.org/JSONStream/-/JSONStream-1.1.2.tgz",
-      "integrity": "sha1-fAGBZhPX5f5B6RPts7fzWf3b+/g=",
-      "requires": {
-        "jsonparse": "1.2.0",
-        "through": "2.3.8"
-      }
     },
     "jstransform": {
       "version": "10.1.0",
@@ -2802,13 +2802,13 @@
       "resolved": "https://registry.npmjs.org/module-deps/-/module-deps-4.0.7.tgz",
       "integrity": "sha1-7f6zk3vnNZvBSmZywi7xJIh/btI=",
       "requires": {
+        "JSONStream": "1.1.2",
         "browser-resolve": "1.11.2",
         "concat-stream": "1.5.1",
         "defined": "1.0.0",
         "detective": "4.3.1",
         "duplexer2": "0.1.4",
         "inherits": "2.0.1",
-        "JSONStream": "1.1.2",
         "parents": "1.0.1",
         "readable-stream": "2.0.6",
         "resolve": "1.1.7",
@@ -3489,11 +3489,6 @@
         "readable-stream": "2.0.6"
       }
     },
-    "string_decoder": {
-      "version": "0.10.31",
-      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz",
-      "integrity": "sha1-YuIDvEF2bGwoyfyEMB2rHFMQ+pQ="
-    },
     "string-width": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/string-width/-/string-width-1.0.1.tgz",
@@ -3504,6 +3499,11 @@
         "is-fullwidth-code-point": "1.0.0",
         "strip-ansi": "3.0.1"
       }
+    },
+    "string_decoder": {
+      "version": "0.10.31",
+      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz",
+      "integrity": "sha1-YuIDvEF2bGwoyfyEMB2rHFMQ+pQ="
     },
     "strip-ansi": {
       "version": "3.0.1",

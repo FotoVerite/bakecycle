@@ -8,6 +8,7 @@ const ClientMap = React.createClass({
     longitude: PropTypes.number.isRequired,
     latitude: PropTypes.number.isRequired,
     deliveryAddressFull: PropTypes.string.isRequired,
+    apiKey: PropTypes.string.isRequired
   },
 
   componentDidMount() {
@@ -39,6 +40,7 @@ const ClientMap = React.createClass({
     const center = [this.props.latitude, this.props.longitude];
     return (<div className="map-container">
       <GoogleMap
+        apiKey={this.props.apiKey}
         ref="gmap"
         center={center}
         zoom={15}
