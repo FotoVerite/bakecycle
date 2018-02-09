@@ -13,7 +13,7 @@
 #  updated_at        :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :file_export do
     bakery
     trait :with_file do

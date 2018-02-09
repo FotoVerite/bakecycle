@@ -23,12 +23,11 @@ class Ingredient < ApplicationRecord
 
   INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
 
-<<<<<<< Updated upstream
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem", dependent: :destroy, inverse_of: :inclusionable
+<<<<<<< HEAD
+  has_many :ingredient_prices_over_time, -> {order("created_at DESC")}
 =======
-  has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem"
-  has_many :ingredient_prices_over_time
->>>>>>> Stashed changes
+>>>>>>> rails5
 
   belongs_to :bakery
 
@@ -40,6 +39,7 @@ class Ingredient < ApplicationRecord
   validates :bakery, presence: true
 
   before_destroy :check_for_recipes, prepend: true
+<<<<<<< HEAD
 
   WEIGHT_UNITS = [
     "gallons",
@@ -50,6 +50,8 @@ class Ingredient < ApplicationRecord
     "tea spoons",
     "units"
   ].freeze
+=======
+>>>>>>> rails5
 
   def self.policy_class
     ProductPolicy
@@ -58,6 +60,11 @@ class Ingredient < ApplicationRecord
   def total_lead_days
     0
   end
+
+  def cost_by_vendor(vendor)
+    ingredient_prices_over_time.where(vendor_id: vendor.id).first || 0
+  end
+
 
   private
 
@@ -76,10 +83,6 @@ class Ingredient < ApplicationRecord
 
   def cost
     0
-  end
-
-  def cost_by_vendor(vendor)
-    ingredient_prices_over_time.where(vendor_id: vendor.id).order("created_at DESC").first || 0
   end
 
   def check_for_recipes

@@ -14,5 +14,7 @@
 #  updated_at    :datetime         not null
 #
 
-class IngredientPricesOverTime < ActiveRecord::Base
+class IngredientPricesOverTime < ApplicationRecord
+  belongs_to :ingredient
+  belongs_to :vendor
 end

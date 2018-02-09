@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/MethodLength
 class AddPlansForBakery < ActiveRecord::Migration
   def change
     create_table :plans do |t|

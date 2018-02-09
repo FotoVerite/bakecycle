@@ -1,7 +1,5 @@
 module WeightDisplayer
   SIG_FIGS = 3
-
-  # rubocop:disable Metrics/MethodLength
   def display_weight(weight, display_weight_in_kg = true)
     weight_in_kgs = Unitwise(weight, :kg)
     if display_weight_in_kg

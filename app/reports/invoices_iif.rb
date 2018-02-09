@@ -21,7 +21,6 @@ class InvoicesIif
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
   def invoice_data(riif, shipment, row_counter)
     riif.trns do
       row do

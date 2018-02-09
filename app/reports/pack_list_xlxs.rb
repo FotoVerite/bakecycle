@@ -19,8 +19,6 @@ class PackListXlxs
     create_output_string(p)
   end
 
-  # rubocop:disable Metrics/MethodLength
-
   def create_hash_of_products
     hash = {}
     @shipments.each do |shipment|

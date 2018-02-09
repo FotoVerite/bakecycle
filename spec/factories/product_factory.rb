@@ -22,7 +22,7 @@
 #  removed         :boolean          default(FALSE)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :product do
     name { generate(:product_name) }
     product_type { Product.product_types.keys.sample }

@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/MethodLength
 class ImmigrationReform < ActiveRecord::Migration
   def change
     add_foreign_key "clients", "bakeries", name: "clients_bakery_id_fk"

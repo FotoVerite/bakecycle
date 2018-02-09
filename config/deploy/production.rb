@@ -15,3 +15,5 @@ role :web, %w[deploy@172.104.31.237]
 role :db,  %w[deploy@172.104.31.237]
 role :resque_worker, %w[deploy@172.104.31.237]
 role :resque_scheduler, %w[deploy@172.104.31.237]
+
+after "deploy:restart", "resque:restart"

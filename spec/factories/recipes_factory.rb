@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :recipe do
     name { generate(:recipe_name) }
     recipe_type { Recipe.recipe_types.keys.sample }

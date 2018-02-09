@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :run_item do
     transient do
       bakery { |t| t.association(:bakery) }

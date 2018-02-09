@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :registration do
     sequence(:first_name) { Faker::Name.name }
     sequence(:last_name) { Faker::Name.name }

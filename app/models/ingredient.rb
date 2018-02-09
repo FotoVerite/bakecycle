@@ -24,7 +24,7 @@ class Ingredient < ApplicationRecord
   INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
 
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem", dependent: :destroy, inverse_of: :inclusionable
-  has_many :ingredient_prices_over_time, -> {order("created_at DESC")}
+  has_many :ingredient_prices_over_time, -> { order("created_at DESC") }, dependent: :destroy, inverse_of: :ingredient
 
   belongs_to :bakery
 
@@ -56,9 +56,8 @@ class Ingredient < ApplicationRecord
   end
 
   def cost_by_vendor(vendor)
-    ingredient_prices_over_time.where(vendor_id: vendor.id).first || 0
+    ingredient_prices_over_time.find_by(vendor_id: vendor.id) || 0
   end
-
 
   private
 
@@ -73,10 +72,6 @@ class Ingredient < ApplicationRecord
       conversion: conversion,
       cost_per_gram: cost_per_gram
     )
-  end
-
-  def cost
-    0
   end
 
   def check_for_recipes

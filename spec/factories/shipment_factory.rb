@@ -37,7 +37,7 @@
 #  alert                            :boolean          default(FALSE)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :shipment do
     date  { Time.zone.today + Faker::Number.number(1).to_i.days }
     bakery

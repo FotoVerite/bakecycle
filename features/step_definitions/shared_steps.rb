@@ -3,7 +3,7 @@ Given(/^I am a visitor$/) do
 end
 
 Given(/^There exists a user$/) do
-  @user = FactoryGirl.create(:user)
+  @user = FactoryBot.create(:user)
 end
 
 When(/^I logout$/) do

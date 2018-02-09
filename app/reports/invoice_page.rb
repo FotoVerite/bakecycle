@@ -88,8 +88,6 @@ class InvoicePage
     [header] + items
   end
 
-  # rubocop:disable Metrics/MethodLength
-
   def merge_sorted_order_items_with_same_name_and_price(items)
     hash = {}
     items.each do |item|

@@ -14,8 +14,7 @@
 #  updated_at    :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :ingredient_prices_over_time do
-    
   end
 end

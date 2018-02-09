@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 ruby "2.5.0"
-gem "active_model_serializers", '~> 0.10.0'
+gem "active_model_serializers", "~> 0.9.3"
 gem "airbrake"
 gem "aws-sdk", "< 2.0"
 gem "axlsx", "2.0.1"
@@ -46,7 +46,7 @@ group :development do
   gem "capistrano-npm"
   gem "capistrano-rails", require: false
   gem "capistrano-resque", "~> 0.2.2", require: false
-  gem "capistrano3-puma", require: false
+  gem "capistrano3-puma"
   gem "foreman", require: false
   gem "letter_opener"
   gem "rails-erd", require: false
@@ -85,7 +85,7 @@ group :test do
 end
 
 group :test, :development, :staging do
-  gem "factory_girl_rails"
+  gem "factory_bot_rails"
   gem "faker"
 end
 

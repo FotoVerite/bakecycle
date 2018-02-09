@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_bakery
   helper_method :item_finder
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :exception,  prepend: true
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
 

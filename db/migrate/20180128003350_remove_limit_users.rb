@@ -1,4 +1,4 @@
-class RemoveLimitUsers < ActiveRecord::Migration
+class RemoveLimitUsers < ActiveRecord::Migration[5.1]
   def up
     change_column :users, :invitation_token, :string, limit: nil
   end

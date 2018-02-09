@@ -30,7 +30,6 @@ module ApplicationHelper
     render "loading_indicator"
   end
 
-  # rubocop:disable Metrics/MethodLength
   def react_component(name, props)
     html = <<-SCRIPT
     <script>

@@ -1,5 +1,4 @@
 # fill forms faster with jQuery
-# rubocop:disable Metrics/MethodLength
 def jquery_fill(fields_hash)
   page.execute_script "
   (function(){

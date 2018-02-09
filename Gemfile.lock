@@ -32,11 +32,9 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_model_serializers (0.10.7)
-      actionpack (>= 4.1, < 6)
-      activemodel (>= 4.1, < 6)
-      case_transform (>= 0.2)
-      jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
+    active_model_serializers (0.9.7)
+      activemodel (>= 3.2)
+      concurrent-ruby (~> 1.0)
     activejob (5.1.4)
       activesupport (= 5.1.4)
       globalid (>= 0.3.6)
@@ -59,7 +57,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     airbrake (7.2.0)
       airbrake-ruby (~> 2.5)
-    airbrake-ruby (2.8.1)
+    airbrake-ruby (2.8.0)
     airbrussh (1.3.0)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (8.0.0)
@@ -131,8 +129,6 @@ GEM
     capybara-webkit (1.14.0)
       capybara (>= 2.3.0, < 2.14.0)
       json
-    case_transform (0.2)
-      activesupport
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
@@ -203,10 +199,10 @@ GEM
       tzinfo
     eventmachine (1.2.5)
     execjs (2.7.0)
-    factory_girl (4.9.0)
+    factory_bot (4.8.2)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
+    factory_bot_rails (4.8.2)
+      factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
     faker (1.8.7)
       i18n (>= 0.7)
@@ -277,7 +273,6 @@ GEM
       jquery-ui-rails (= 4.0.3)
       railties (>= 3.1.0)
     json (1.8.6)
-    jsonapi-renderer (0.2.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.6.0)
@@ -311,9 +306,9 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
     netrc (0.11.0)
-    newrelic_rpm (4.8.0.341)
+    newrelic_rpm (4.7.1.340)
     nio4r (2.2.0)
-    nokogiri (1.8.2)
+    nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
@@ -347,7 +342,7 @@ GEM
     puma (3.11.2)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
-    rack (2.0.4)
+    rack (2.0.3)
     rack-livereload (0.3.16)
       rack
     rack-protection (2.0.0)
@@ -430,7 +425,7 @@ GEM
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
-    rspec-support (3.7.1)
+    rspec-support (3.7.0)
     rubocop (0.52.1)
       parallel (~> 1.10)
       parser (>= 2.4.0.2, < 3.0)
@@ -478,7 +473,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sshkit (1.16.0)
+    sshkit (1.15.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stripe (1.20.1)
@@ -494,7 +489,7 @@ GEM
     tilt (2.0.8)
     timecop (0.9.1)
     ttfunk (1.5.1)
-    tzinfo (1.2.5)
+    tzinfo (1.2.4)
       thread_safe (~> 0.1)
     uglifier (4.1.5)
       execjs (>= 0.3.0, < 3)
@@ -532,7 +527,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.10.0)
+  active_model_serializers (~> 0.9.3)
   airbrake
   aws-sdk (< 2.0)
   axlsx (= 2.0.1)
@@ -559,7 +554,7 @@ DEPENDENCIES
   devise-async!
   devise_invitable
   draper
-  factory_girl_rails
+  factory_bot_rails
   faker
   foreman
   foundation-icons-sass-rails

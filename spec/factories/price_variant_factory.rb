@@ -12,7 +12,7 @@
 #  removed    :integer          default(0)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :price_variant do
     product
     price { Faker::Number.decimal(2) }
