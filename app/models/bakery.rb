@@ -51,8 +51,7 @@ class Bakery < ApplicationRecord
 
   accepts_nested_attributes_for(
     :ingredients,
-    allow_destroy: false,
-    reject_if: proc { |attributes| attributes["dirty"] == false }
+    allow_destroy: false
   )
 
   def logo_local_file(style = logo.default_style)

@@ -252,13 +252,15 @@ select.inline {
 
 .ingredient-current-amount-grams {
   label {
-    margin-top:10px;
-    margin-right:5px;
-    float:left;
+    @media #{$large-up} { 
+      margin-left: 15px;
+    }
+    display: inline-block;
+    margin-right:15px;
   }
   select {
-    width:100px;
-    float:left;
+    display: inline-block;
+    width:150px;
   }
 }
 

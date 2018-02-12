@@ -29,8 +29,14 @@ class VendorsController < ApplicationController
 
   def update_pricing
     authorize @vendor, :edit?
-    @vendor.bakery.update(ingredient_params)
-    redirect_to vendor_pricing_path(@vendor)
+    updated_ingredients = ingredient_params
+    scrubbed_keys = []
+    updated_ingredients["ingredients_attributes"].each do |k, v|
+      scrubbed_keys.push(k) if v["dirty"] != "true"
+    end
+    updated_ingredients["ingredients_attributes"] = updated_ingredients["ingredients_attributes"].except(*scrubbed_keys)
+    @vendor.bakery.update(updated_ingredients)
+    redirect_to pricing_vendor_path(@vendor)
   end
 
   def edit
@@ -72,7 +78,7 @@ class VendorsController < ApplicationController
   def ingredient_params
     params.require(:bakery).permit(
          ingredients_attributes:
-             %i[id conversion cost current_amount cost_over_time_vendor_id dirty weight_unit]
+             %i[id conversion cost current_amount cost_over_time_vendor_id dirty weight_unit updated_at]
     )
   end
 end

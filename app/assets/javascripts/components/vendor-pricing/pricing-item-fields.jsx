@@ -11,14 +11,6 @@ export default function PricingItemFields({
   weightUnitOptions,
 }) {
 
-  var conversionToGrams; 
-
-  if(model.current_amount == 0.0){
-    conversionToGrams = 0.0;
-  }
-  else {
-    conversionToGrams = Math.round(model.current_amount * model.conversion);
-  }
 
   return (
     <div className={'row ingredient ' + model.hidden} key={model.id}>
@@ -28,6 +20,9 @@ export default function PricingItemFields({
         </span>
         <input type="hidden" value={model.dirty} name={`bakery[ingredients_attributes][${model.id}][dirty]`} />
         <input type="hidden" value={model.id} name={`bakery[ingredients_attributes][${model.id}][id]`} />
+        <input type="hidden" value={model.cost_over_time_vendor_id} name={`bakery[ingredients_attributes][${model.id}][cost_over_time_vendor_id]`} />
+        <input type="hidden" value={new Date().toUTCString()} name={`bakery[ingredients_attributes][${model.id}][updated_at]`} />
+
         <div className="ingredient-cost-input" key={`${model.id}-cost`}>
           <BCInput
             value={model.cost}
@@ -41,10 +36,6 @@ export default function PricingItemFields({
             onChange={onChange}
           />
         </div>
-        <div className="ingredient-weight-units" key={`${model.id}-current_amount_lb`}>
-          <label className="ide-for-large-up">{model.weight_unit == 'grams' ?  '' : `${model.weight_unit} to grams`}</label>
-          <input disabled="true" type="text" value={conversionToGrams} />
-        </div>
         <div className="ingredient-current-amount-grams" key={`${model.id}-current_amount_grams`}>
           <BCSelect
             value={model.weight_unit}
@@ -52,16 +43,6 @@ export default function PricingItemFields({
             name={`bakery[ingredients_attributes][${model.id}][weight_unit]`}
             options={weightUnitOptions}
             label="Amount in"
-            onChange={onChange}
-          />
-          <BCInput
-            value={model.current_amount}
-            type="number"
-            step="0.01"
-            field="current_amount"
-            name={`bakery[ingredients_attributes][${model.id}][current_amount]`}
-            labelClass=""
-            autoComplete="off"
             onChange={onChange}
           />
         </div>

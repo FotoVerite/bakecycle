@@ -35,6 +35,7 @@ class Ingredient < ApplicationRecord
             inclusion: { in: INGREDIENT_TYPES }
   validates :bakery, presence: true
 
+  after_validation :record_costing_change
   before_destroy :check_for_recipes, prepend: true
 
   WEIGHT_UNITS = [
@@ -56,21 +57,21 @@ class Ingredient < ApplicationRecord
   end
 
   def cost_by_vendor(vendor)
-    ingredient_prices_over_time.find_by(vendor_id: vendor.id) || 0
+    ingredient_prices_over_time.find_by(vendor_id: vendor.id).try(:cost_per_unit) || 0
   end
 
   private
 
   def record_costing_change
-    return unless dirty?
-    cost_per_gram = cost / conversion
+    # We are tricking rails to run validation but setting updated_at in the form.
+    return unless dirty == "true"
     ingredient_prices_over_time.create(
       vendor_id: cost_over_time_vendor_id,
       bakery_id: bakery_id,
       cost_per_unit: cost,
       weight_unit: weight_unit,
       conversion: conversion,
-      cost_per_gram: cost_per_gram
+      cost_per_gram: cost.to_f / conversion.to_f
     )
   end
 

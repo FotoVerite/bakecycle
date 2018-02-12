@@ -98,9 +98,6 @@ const VendorPricingForm = createReactClass({
             <div className="ingredient-cost-input">
               <label>Cost Per Unit</label>
             </div>
-            <div className="ingredient-current-amount-grams">
-              <label>Conversion To Grams</label>
-            </div>
             <div className="ingredient-weight-units">
               <label>Bought By Units</label>
             </div>
