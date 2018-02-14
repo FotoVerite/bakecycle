@@ -35,5 +35,4 @@ namespace :app do
   end
 end
 
-
-after 'deploy:restart', 'app:restart'
+after "deploy:restart", "app:restart"

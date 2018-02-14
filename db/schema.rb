@@ -41,6 +41,13 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.index ["name"], name: "index_bakeries_on_name", unique: true
   end
 
+  create_table "bakery_assignments", id: :serial, force: :cascade do |t|
+    t.integer "bakery_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "clients", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "official_company_name"
@@ -110,19 +117,16 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.index ["bakery_id"], name: "index_file_exports_on_bakery_id"
   end
 
-  create_table "ingredient_prices_over_times", force: :cascade do |t|
-    t.bigint "ingredient_id"
-    t.bigint "vendor_id"
-    t.bigint "bakery_id"
+  create_table "ingredient_prices_over_times", id: :serial, force: :cascade do |t|
+    t.integer "ingredient_id"
+    t.integer "vendor_id"
+    t.integer "bakery_id"
     t.string "weight_unit"
     t.decimal "conversion"
     t.decimal "cost_per_unit"
     t.decimal "cost_per_gram"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bakery_id"], name: "index_ingredient_prices_over_times_on_bakery_id"
-    t.index ["ingredient_id"], name: "index_ingredient_prices_over_times_on_ingredient_id"
-    t.index ["vendor_id"], name: "index_ingredient_prices_over_times_on_vendor_id"
   end
 
   create_table "ingredients", id: :serial, force: :cascade do |t|
@@ -135,7 +139,7 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.string "ingredient_type", default: "other", null: false
     t.integer "vendor_id"
     t.decimal "current_amount", default: "0.0", null: false
-    t.string "weight_unit"
+    t.string "weight_unit", default: "grams"
     t.decimal "conversion", default: "1.0"
     t.index ["legacy_id", "bakery_id"], name: "index_ingredients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_ingredients_on_name_and_bakery_id", unique: true

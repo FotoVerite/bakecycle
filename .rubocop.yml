@@ -43,7 +43,16 @@ Style/NumericLiterals:
 
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
-
+Style/GuardClause:
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - 'lib/**/*'
+    - 'features/**/*'
+    - 'db/migrate/**/*'
+    
 Style/SignalException:
   Enabled: false
 

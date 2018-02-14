@@ -21,7 +21,7 @@ Rails.application.configure do
 
   # Set static assets cache expiration to a year
   config.static_cache_control = "public, max-age=31536000"
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true

@@ -1,4 +1,4 @@
-class AddCostCurrentAmountAndVendorIdToIngredients < ActiveRecord::Migration
+class AddCostCurrentAmountAndVendorIdToIngredients < ActiveRecord::Migration[5.1]
   def change
     add_column :ingredients, :vendor_id, :integer
     add_column :ingredients, :cost, :decimal, default: 0.0, null: false
