@@ -7,7 +7,7 @@ class VendorsController < ApplicationController
   end
 
   def new
-    @vendor = policy_scope(Vendor)
+    @vendor = policy_scope(Vendor).build
     authorize @vendor
   end
 
@@ -16,9 +16,9 @@ class VendorsController < ApplicationController
     authorize @vendor
     if @vendor.save
       flash[:notice] = "You have created #{@vendor.name}."
-      redirect_to edit_vendor_path(@vendor)
+      redirect_to vendors_path
     else
-      render "new"
+      render :new
     end
   end
 
@@ -47,7 +47,7 @@ class VendorsController < ApplicationController
     authorize @vendor
     if @vendor.update(vendor_params)
       flash[:notice] = "You have updated #{@vendor.name}."
-      redirect_to edit_vendor_path(@vendor)
+      redirect_to vendors_path(@vendor)
     else
       render "edit"
     end
@@ -71,7 +71,7 @@ class VendorsController < ApplicationController
 
   def vendor_params
     params.require(:vendor).permit(
-      :conversion
+      :name
     )
   end
 

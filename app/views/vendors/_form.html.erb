@@ -10,4 +10,20 @@
       </div>
     </div>
   </fieldset>
+   <div class="row">
+    <div class="small-12 columns">
+      <% if @vendor.new_record? && policy(@vendor).create? %>
+        <%= f.submit "Create", class: "button", name: nil %>
+      <% end %>
+
+      <% if @vendor.persisted? && policy(@vendor).update?%>
+        <%= f.submit "Update", class: "button", name: nil %>
+      <% end %>
+
+      <% if @vendor.persisted? && policy(@vendor).destroy? %>
+        <%= link_to 'Delete', vendor_path(@vendor), class: "button alert",
+                    method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
 <% end %>
