@@ -24,15 +24,16 @@ set :bundle_binstubs, nil
 set :keep_releases, 5
 
 namespace :app do
-  desc "Restart Puma"
+  desc "Restart Puma and resque"
   task :restart do
     on roles(:web) do |_host|
       within release_path do
         execute :sudo, :systemctl, :restart, "puma.service"
+        execute :sudo, :systemctl, :restart, "resque.service"
       end
     end
   end
 end
 
-after "deploy:restart", "app:restart"
-after "deploy:restart", "resque:restart"
+
+after 'deploy:restart', 'app:restart'
