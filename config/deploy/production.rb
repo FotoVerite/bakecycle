@@ -2,8 +2,6 @@ set :deploy_to, "/var/www/bakecycle_production"
 set :user, "deploy"
 set :branch, "costing2"
 set :ssh_options, forward_agent: true, port: 21500
-set :workers, "*" => 2
-set :resque_environment_task, true
 
 # Simple Role Syntax
 # ==================
@@ -13,7 +11,3 @@ set :resque_environment_task, true
 role :app, %w[deploy@172.104.31.237]
 role :web, %w[deploy@172.104.31.237]
 role :db,  %w[deploy@172.104.31.237]
-role :resque_worker, %w[deploy@172.104.31.237]
-role :resque_scheduler, %w[deploy@172.104.31.237]
-
-after "deploy:restart", "resque:restart"

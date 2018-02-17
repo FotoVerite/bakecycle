@@ -4,8 +4,8 @@ workers 1
 # Min and Max threads per worker
 threads 1, 6
 
-app_dir = "/var/www/bakecycle_production/current/"
-shared_dir = "/var/www/bakecycle_production/shared"
+app_dir = File.expand_path("../..", __FILE__)
+shared_dir = "#{app_dir}/shared"
 
 # Default to production
 rails_env = ENV["RAILS_ENV"] || "production"

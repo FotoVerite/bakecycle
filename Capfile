@@ -16,7 +16,6 @@ require "capistrano/scm/git"
 require "capistrano/rails"
 require "capistrano/bundler"
 require "capistrano/npm"
-require "capistrano-resque"
 install_plugin Capistrano::SCM::Git
 
 # Include tasks from other gems included in your Gemfile
