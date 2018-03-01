@@ -1,0 +1,2 @@
+class ShipmentGraphDatum < ApplicationRecord
+end

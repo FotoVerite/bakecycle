@@ -1,0 +1,2 @@
+class ProductGraphDatum < ApplicationRecord
+end

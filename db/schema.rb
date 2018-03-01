@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180205040655) do
+ActiveRecord::Schema.define(version: 20180228141539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.boolean "group_preferments", default: true
     t.integer "plan_id", null: false
     t.string "stripe_customer_id"
+    t.json "graph_data"
     t.index ["name"], name: "index_bakeries_on_name", unique: true
   end
 
@@ -211,6 +212,19 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.index ["quantity", "product_id", "client_id"], name: "index_price_variants_on_quantity_and_product_id_and_client_id", unique: true
   end
 
+  create_table "product_graph_data", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "bakery_id"
+    t.date "date"
+    t.integer "shipment_count"
+    t.integer "shipped"
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bakery_id"], name: "index_product_graph_data_on_bakery_id"
+    t.index ["product_id"], name: "index_product_graph_data_on_product_id"
+  end
+
   create_table "production_runs", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -238,6 +252,7 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.integer "total_lead_days", null: false
     t.boolean "batch_recipe", default: false
     t.boolean "removed", default: false
+    t.json "graph_data"
     t.index ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true
     t.index ["removed"], name: "index_products_on_removed"
@@ -293,6 +308,15 @@ ActiveRecord::Schema.define(version: 20180205040655) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["production_run_id", "product_id"], name: "index_run_items_on_production_run_id_and_product_id", unique: true
+  end
+
+  create_table "shipment_graph_data", force: :cascade do |t|
+    t.bigint "bakery_id"
+    t.integer "product_count"
+    t.decimal "amount", default: "0.0", null: false
+    t.date "date"
+    t.index ["bakery_id"], name: "index_shipment_graph_data_on_bakery_id"
+    t.index ["date"], name: "index_shipment_graph_data_on_date"
   end
 
   create_table "shipment_items", id: :serial, force: :cascade do |t|
