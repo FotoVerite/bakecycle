@@ -33,12 +33,12 @@ namespace :product_graph_data do
   task digest_last_week: :environment do
     Bakery.all.where(id: [1, 17]).each do |bakery|
       bakery.products.each do |product|
+        hash = product.graph_data
         next if product.shipment_items.empty?
         items = product.shipment_items.joins(:shipment).order("shipments.date ASC")
         ((Time.zone.today - 1.week)...Time.zone.today).each do |date|
           next if product.graph_data["dates"].nil?
           date_shipments = items.where("shipments.date" => date)
-          hash = product.graph_data
           i = hash["dates"].index date.strftime("%Y-%m-%d")
           i ||= hash["dates"].count
           hash["amounts"][i] = 0
