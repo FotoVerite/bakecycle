@@ -32,7 +32,6 @@ namespace :product_graph_data do
 
   task digest_last_week: :environment do
     Bakery.where(id([1, 17])).all.each do |bakery|
-      hash = { dates: [], amounts: [], shipped: [], shipments_count: [] }
       bakery.products.each do |product|
         next if product.shipment_items.empty?
         items = product.shipment_items.joins(:shipment).order("shipments.date ASC")

@@ -16,56 +16,57 @@
 <%=  debug @price_sold_hash %>
 <%= content_for :js do %>
  <script>
-  PROFITS = document.getElementById('gross-profits');
-  SHIPMENTS = document.getElementById('shipments');
+  <% if  current_bakery.try(:graph_data) %>
+    PROFITS = document.getElementById('gross-profits');
+    SHIPMENTS = document.getElementById('shipments');
 
 
-var profit = {
-  type: "scatter",
-  mode: "lines",
-  x: <%= raw current_bakery.graph_data['dates'] %>,
-  y: <%= raw current_bakery.graph_data['amounts'] %>,
-  line: {color: '#17BECF'}
-}
+    var profit = {
+      type: "scatter",
+      mode: "lines",
+      x: <%= raw current_bakery.graph_data['dates'] %>,
+      y: <%= raw current_bakery.graph_data['amounts'] %>,
+      line: {color: '#17BECF'}
+    }
 
-var data = [profit];
+    var data = [profit];
 
-var layout = {
-  title: 'Gross Profit Per Day',
-  yaxis: {
-    tickformat: ',',
-    tickprefix: '$',
-    type: 'currency'
-  },
-  xaxis: {
-    range: ['<%= Date.today.beginning_of_year %>', '<%= Date.today %>'],
-    type: 'date'
-  }
-};
+    var layout = {
+      title: 'Gross Profit Per Day',
+      yaxis: {
+        tickformat: ',',
+        tickprefix: '$',
+        type: 'currency'
+      },
+      xaxis: {
+        range: ['<%= Date.today.beginning_of_year %>', '<%= Date.today %>'],
+        type: 'date'
+      }
+    };
 
-var shipment = {
-  type: "scatter",
-  mode: "lines",
-  x: <%= raw current_bakery.graph_data['dates'] %>,
-  y: <%= raw current_bakery.graph_data['product_counts'] %>,
-  line: {color: '#17BECF'}
-}
+    var shipment = {
+      type: "scatter",
+      mode: "lines",
+      x: <%= raw current_bakery.graph_data['dates'] %>,
+      y: <%= raw current_bakery.graph_data['product_counts'] %>,
+      line: {color: '#17BECF'}
+    }
 
-var shipment_data = [shipment];
+    var shipment_data = [shipment];
 
-var shipment_layout = {
-  title: 'Total Shipments Per Day',
-  yaxis: {
-    tickformat: ','
-  },
-  xaxis: {
-    range: ['<%= Date.today.beginning_of_year %>', '<%= Date.today %>'],
-    type: 'date'
-  }
-};
+    var shipment_layout = {
+      title: 'Total Shipments Per Day',
+      yaxis: {
+        tickformat: ','
+      },
+      xaxis: {
+        range: ['<%= Date.today.beginning_of_year %>', '<%= Date.today %>'],
+        type: 'date'
+      }
+    };
 
-Plotly.newPlot(PROFITS, data, layout,  {displaylogo: false});
-Plotly.newPlot(SHIPMENTS, shipment_data, shipment_layout,  {displaylogo: false});
-
+    Plotly.newPlot(PROFITS, data, layout,  {displaylogo: false});
+    Plotly.newPlot(SHIPMENTS, shipment_data, shipment_layout,  {displaylogo: false});
+  <% end %>
  </script>
 <% end %>
