@@ -31,7 +31,7 @@ namespace :product_graph_data do
   end
 
   task digest_last_week: :environment do
-    Bakery.where(id([1, 17])).all.each do |bakery|
+    Bakery.all.where(id: [1, 17]).each do |bakery|
       bakery.products.each do |product|
         next if product.shipment_items.empty?
         items = product.shipment_items.joins(:shipment).order("shipments.date ASC")
