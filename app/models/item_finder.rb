@@ -14,7 +14,7 @@ class ItemFinder
   end
 
   def products
-    Pundit.policy_scope!(user, Product)
+    Pundit.policy_scope!(user, Product).where(removed: false)
   end
 
   def ingredients
