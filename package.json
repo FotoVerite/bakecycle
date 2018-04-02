@@ -26,6 +26,7 @@
     "browserify-incremental": "^3.1.1",
     "classlist-polyfill": "^1.0.2",
     "core-js": "^2.4.0",
+    "create-react-class": "^15.6.0",
     "google-map-react": "^0.4.1",
     "lodash.differenceby": "^4.6.0",
     "lodash.filter": "^4.6.0",
@@ -38,15 +39,15 @@
     "lodash.uniqueid": "^4.0.0",
     "lodash.without": "^4.2.0",
     "moment": "^2.11.2",
+    "npm": "^5.8.0",
+    "prop-types": "^15.5.10",
     "react": "^0.14.7",
     "react-datepicker": "^0.23.2",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.5",
     "react-select": "^1.0.0-beta13",
     "redux": "^3.5.2",
-    "underscore": "^1.8.3",
-    "create-react-class": "^15.6.0",
-    "prop-types": "^15.5.10"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-register": "^6.9.0",

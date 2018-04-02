@@ -24,4 +24,3 @@ def jquery_fill(fields_hash)
   })();
   "
 end
-# rubocop:enable Metrics/MethodLength

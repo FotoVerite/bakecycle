@@ -1,0 +1,95 @@
+<%= content_for :head do %>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<% end %>
+
+<% @ingredients.each do | i| %>
+  <h2><%= i.name %></h2>
+  <div id="ingredient-<%= i.id %>"></div>
+  <%= form_for i.todays_buy_order || i.buy_orders.build do |f| %>
+  <fieldset class="large-6 cell">
+    <legend>Choose Buying Option for Today</legend>
+    <%= f.hidden_field(:ingredient_id, value: i.id)%>
+    <% over_time =  i.ingredient_prices_over_time.last_two_weeks %>
+    <% over_time.all.group_by(&:vendor_id).each_with_index do |vendor, index| %>
+      <% vendor_object = vendor[1].first.vendor %>
+      <%= f.radio_button(:vendor_id, vendor_object.id, class: 'fire-js', id: "vendor_option_#{vendor_object.id}_#{i.id}") %>
+      <%= f.label("vendor_id_#{vendor_object.id}", vendor_object.name  +  " " + number_to_currency(vendor[1].first.cost_per_unit), for: "vendor_option_#{vendor_object.id}_#{i.id}") %>
+    <% end %>
+    <%= f.label :amount, (over_time.first.weight_unit || "Grams"), for: "amount_option_#{i.id}" %>
+    <%= f.number_field(:amount, class: 'fire-js', step: "0.01", id: "amount_option_#{i.id}") %>
+  </fieldset>
+  <% end %>
+<% end %>
+
+<%= content_for :js do %>
+ <script>
+  var array = []
+  <% @ingredients.each do |i| %>
+    <% over_time =  i.ingredient_prices_over_time.last_two_weeks %>
+    array = []
+    <% over_time.all.group_by(&:vendor_id).each_with_index do |vendor, index| %>
+    <%= Rails.logger.error vendor[1] %>
+      array.push({
+        type: "scatter",
+        mode: "lines",
+        x: <%= raw vendor[1].map(&:created_at).map {|d| d.to_date}.to_json %>,
+        y: <%= raw vendor[1].map { |cost| sprintf('%.2f', cost.cost_per_unit)}.to_json %>,
+        name: <%= raw vendor[1].first.vendor.name.to_json %>
+      })
+    <% end %>
+
+
+    Plotly.newPlot(
+      document.getElementById('ingredient-<%= i.id %>'), 
+      array, 
+      {
+        title: 'Price Per Unit',
+        yaxis: {
+          tickformat: ',',
+          tickprefix: '$',
+          type: 'currency'
+        },
+        xaxis: {
+          range: ['<%= Date.today - 2.weeks %>', '<%= Date.today %>'],
+          type: 'date'
+        }
+      },  
+      {displaylogo: false}
+    );
+  <% end %>
+ </script>
+
+ <script>
+  $( document ).ready(function(){
+   $('.fire-js').change(function(){
+    var form = $(this).closest('form');
+    if(form.find('input[type=number]').val() > 0 && form.find('input[type=radio]:checked').length === 1) {
+      var type = form.children('input[name=_method]').val() || 'POST';
+      var data = form.serialize();
+      $.ajax({
+        url: form.attr('action'),
+        type: type,
+        dataType: "json",
+        data: data,
+        success: function(response){
+          if(response.action == 'create'){
+            form.attr('action', '/buy_orders/' + response.id);
+            form.append($('<input type="hidden" name=_method value="PATCH">'));
+          }
+          else{
+            glow(form);
+          }
+        }
+      });
+    }
+  });
+
+   function glow(node) {
+    $(node).removeClass("demo");
+    setTimeout(function() {
+        $(node).addClass("demo");
+    }, 1);
+  };
+ });
+ </script>
+<% end %>

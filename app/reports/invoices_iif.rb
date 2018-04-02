@@ -95,7 +95,7 @@ class InvoicesIif
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable
 
   class LineCounter
     def initialize

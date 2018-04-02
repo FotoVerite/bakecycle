@@ -34,7 +34,11 @@ Rails.application.routes.draw do
     get "costing", on: :member
   end
 
-  resource :costing, only: %i[show update], controller: "costing"
+  resources :buy_orders, only: %i[create update index]
+
+  resource :costing, only: %i[create update show update], controller: "costing" do
+    get "buying_orders", on: :collection
+  end
 
   resources :routes, except: [:show]
 

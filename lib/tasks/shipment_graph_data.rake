@@ -19,7 +19,7 @@ namespace :shipment_graph_data do
           product_count: hash[:product_counts][i]
         )
       end
-      bakery.update_attributes(graph_data: hash)
+      bakery.update(graph_data: hash)
     end
   end
 
@@ -41,7 +41,7 @@ namespace :shipment_graph_data do
         hash["product_counts"][i] += date_shipments.sum(&:total_quantity)
         datum = ShipmentGraphDatum.where(bakery_id: bakery.id, date: date).first
         if datum
-          datum.update_attributes(
+          datum.update(
             amount: hash["amounts"][i],
             product_count: hash["product_counts"][i]
           )
@@ -54,7 +54,7 @@ namespace :shipment_graph_data do
           )
         end
       end
-      bakery.update_attributes(graph_data: hash)
+      bakery.update(graph_data: hash)
     end
   end
 end

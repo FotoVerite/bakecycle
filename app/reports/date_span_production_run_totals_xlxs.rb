@@ -44,8 +44,6 @@ class DateSpanProductionRunTotalsXlxs
     hash[product_name]["total_products"] = total_quantity + hash[product_name]["total_products"].to_i
   end
 
-  # rubocop:enable Metrics/AbcSize
-
   def add_rows(hash, sheet)
     array = []
     # Set Product Type Row
@@ -80,10 +78,10 @@ class DateSpanProductionRunTotalsXlxs
     total_row
   end
 
-  def create_output_string(p)
+  def create_output_string(page)
     outstrio = StringIO.new
-    p.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(p.to_stream.read)
+    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
+    outstrio.write(page.to_stream.read)
     outstrio.string
   end
 end

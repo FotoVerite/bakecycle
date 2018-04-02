@@ -25,7 +25,7 @@ describe RecipeCalc do
           parent_recipe: recipe,
           inclusionable: ingredient,
           weight: Unitwise(10, :kg),
-          bakers_percentage: BigDecimal.new(100),
+          bakers_percentage: BigDecimal(100),
           inclusionable_type: "Ingredient",
           sort_id: 1
         },
@@ -33,7 +33,7 @@ describe RecipeCalc do
           parent_recipe: recipe,
           inclusionable: included_recipe,
           weight: Unitwise(5, :kg),
-          bakers_percentage: BigDecimal.new(50),
+          bakers_percentage: BigDecimal(50),
           inclusionable_type: "Recipe",
           sort_id: 2
         }

@@ -50,7 +50,7 @@ namespace :product_graph_data do
           hash["shipments_count"][i] += date_shipments.size
           datum = ProductGraphDatum.where(product_id: product.id, date: date).first
           if datum
-            datum.update_attributes(
+            datum.update(
               amount: hash["amounts"][i],
               shipped: hash["shipped"][i],
               shipment_count: hash["shipments_count"][i]
@@ -66,7 +66,7 @@ namespace :product_graph_data do
             )
           end
         end
-        product.update_attributes(graph_data: hash)
+        product.update(graph_data: hash)
       end
     end
   end

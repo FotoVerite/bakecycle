@@ -50,5 +50,4 @@ module ApplicationHelper
     SCRIPT
     html.html_safe
   end
-  # rubocop:enable Metrics/MethodLength
 end

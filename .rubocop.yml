@@ -117,3 +117,6 @@ Rails/OutputSafety:
 
 Naming/AccessorMethodName:
   Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false

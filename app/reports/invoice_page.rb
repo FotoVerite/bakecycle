@@ -123,9 +123,6 @@ class InvoicePage
     end
   end
 
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
-
   def totals
     move_down 5
     table(totals_row, position: :right, column_widths: [80.5, 80.5]) do

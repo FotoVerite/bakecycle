@@ -160,9 +160,9 @@ class DemoExporter
       end
     end
 
-    def reindex_fk(id_map, table, fk)
+    def reindex_fk(id_map, table, fkey)
       data[table].each_value do |attr_hash|
-        attr_hash[fk] = id_map[attr_hash[fk]]
+        attr_hash[fkey] = id_map[attr_hash[fkey]]
       end
     end
 

@@ -33,15 +33,15 @@ class PackListXlxs
         else
           product_hash = hash[i.product_name]
         end
-        product_hash["quantity"]["#{client_name}"] = 0  if product_hash["quantity"]["#{client_name}"].nil?
-        product_hash["quantity"]["#{client_name}"] += i.product_quantity
+        product_hash["quantity"][client_name.to_s] = 0 if product_hash["quantity"][client_name.to_s].nil?
+        product_hash["quantity"][client_name.to_s] += i.product_quantity
         product_hash["total"] = (product_hash["total"].to_i + i.product_quantity)
       end
     end
     hash.sort_by { |_k, v| [v["product_type"], v["name"]] }
   end
 
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable
 
   def add_rows(hash, sheet)
     # Set Product Type Row
@@ -54,10 +54,10 @@ class PackListXlxs
     end
   end
 
-  def create_output_string(p)
+  def create_output_string(page)
     outstrio = StringIO.new
-    p.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(p.to_stream.read)
+    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
+    outstrio.write(page.to_stream.read)
     outstrio.string
   end
 end

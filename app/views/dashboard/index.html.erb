@@ -13,7 +13,6 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <% end %>
 
-<%=  debug @price_sold_hash %>
 <%= content_for :js do %>
  <script>
   <% if  current_bakery.try(:graph_data) %>

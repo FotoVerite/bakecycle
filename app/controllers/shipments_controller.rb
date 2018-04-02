@@ -17,8 +17,6 @@ class ShipmentsController < ApplicationController
       .select { |_k, v| v.size > 1 }.values.flatten
   end
 
-  # rubocop:enable Metrics/AbcSize
-
   def new
     @shipment = policy_scope(Shipment).build
     authorize @shipment

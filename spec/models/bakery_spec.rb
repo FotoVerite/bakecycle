@@ -23,6 +23,7 @@
 #  group_preferments  :boolean          default(TRUE)
 #  plan_id            :integer          not null
 #  stripe_customer_id :string
+#  graph_data         :json
 #
 
 require "rails_helper"

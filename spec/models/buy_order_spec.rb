@@ -1,17 +1,18 @@
 # == Schema Information
 #
-# Table name: shipment_graph_data
+# Table name: buy_orders
 #
 #  id            :integer          not null, primary key
+#  vendor_id     :integer
+#  ingredient_id :integer
 #  bakery_id     :integer
-#  product_count :integer
 #  amount        :decimal(, )      default(0.0), not null
-#  date          :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
 
-FactoryBot.define do
-  factory :shipment_graph_datum do
-  end
+require "rails_helper"
+
+RSpec.describe BuyOrder, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

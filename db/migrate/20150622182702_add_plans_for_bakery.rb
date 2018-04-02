@@ -25,4 +25,3 @@ class AddPlansForBakery < ActiveRecord::Migration
     add_foreign_key "bakeries", "plans"
   end
 end
-# rubocop:enable Metrics/MethodLength

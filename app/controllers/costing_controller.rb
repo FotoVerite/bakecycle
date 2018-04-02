@@ -14,6 +14,12 @@ class CostingController < ApplicationController
     redirect_to costing_path
   end
 
+  def buying_orders
+    @bakery = policy_scope(Bakery).find(current_user.bakery.id)
+    authorize @bakery, :show?
+    @ingredients = @bakery.ingredients
+  end
+
   private
 
   def ingredient_params

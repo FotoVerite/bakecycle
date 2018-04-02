@@ -20,6 +20,7 @@
 #  total_lead_days :integer          not null
 #  batch_recipe    :boolean          default(FALSE)
 #  removed         :boolean          default(FALSE)
+#  graph_data      :json
 #
 
 require "rails_helper"

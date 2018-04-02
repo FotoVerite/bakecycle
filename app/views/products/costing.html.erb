@@ -1,15 +1,16 @@
 <h1><%= @product.name %></h1>
 WEIGHT: <%= @product.weight %><br />
-COST: <%= number_to_currency(@product.base_price) %> <br/>
-RECIPE COST: <%= number_with_precision((@costing.total_cost/@product.base_price),   precision: 4) %>% <br /> 
+BASE PRICE: <%= number_to_currency(@product.base_price) %> <br/>
+COST OF INGREDIENTS:  <%= number_to_currency(@costing.total_cost) %> <br />
+RECIPE MARGIN: <%= number_with_precision((@costing.total_cost/@product.base_price),   precision: 4) %>% <br /> 
 <h2><%= @product.motherdough.name %></h2>
 <table>
-<% @costing.motherdough.items.each do |item| %>
 	<tr>
 		<th>Name</th>
 		<th>Weight</th>
 		<th>Cost</th>
 	</tr>
+<% @costing.motherdough.items.each do |item| %>
 	<tr>
 		<td><%= item[:name] %></td>
 		<td><%= number_with_precision item[:weight].to_f,  precision: 4 %></td>
@@ -19,7 +20,7 @@ RECIPE COST: <%= number_with_precision((@costing.total_cost/@product.base_price)
 	<tr>
 		<td>Total</td>
 		<td><%= number_with_precision @costing.motherdough.weight.to_f,  precision: 4 %></td>
-		<td><%= number_with_precision @costing.motherdough.total_cost,  precision: 4 %></td>
+		<td><%= number_to_currency @costing.motherdough.total_cost %></td>
 	</tr>
 </table>
 <br />

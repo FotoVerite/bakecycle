@@ -127,9 +127,6 @@ class PackingSlipPage
     hash.values
   end
 
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
-
   def pieces_shipped
     table(pieces_shipped_row, position: :right, column_widths: [400, 57.3, 57.3, 57.3]) do
       cells.borders = []

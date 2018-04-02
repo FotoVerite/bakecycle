@@ -99,7 +99,6 @@ class OrderItem < ApplicationRecord
     SQL
     where(sql, production_date: start_date)
   end
-  # rubocop:enable Metrics/MethodLength
 
   def update_total_lead_days?
     new_record? || product_id_changed?
