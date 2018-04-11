@@ -29,7 +29,7 @@ class Ingredient < ApplicationRecord
                                where("created_at between ? and ?",
                                 Time.zone.today.beginning_of_day,
                                 Time.zone.today.end_of_day)
-                             }, class_name: "BuyOrder", inverse_of: :ingredients
+                             }, class_name: "BuyOrder", inverse_of: :ingredient
 
   belongs_to :bakery
 

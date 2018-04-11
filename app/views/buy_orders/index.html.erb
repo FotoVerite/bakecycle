@@ -61,6 +61,10 @@
 
  <script>
   $( document ).ready(function(){
+
+    $('form').submit(function() {
+      return false;
+    })
    $('.fire-js').change(function(){
     var form = $(this).closest('form');
     if(form.find('input[type=number]').val() > 0 && form.find('input[type=radio]:checked').length === 1) {
@@ -75,6 +79,8 @@
           if(response.action == 'create'){
             form.attr('action', '/buy_orders/' + response.id);
             form.append($('<input type="hidden" name=_method value="PATCH">'));
+            glow(form);
+
           }
           else{
             glow(form);

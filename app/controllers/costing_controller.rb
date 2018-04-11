@@ -3,21 +3,15 @@ class CostingController < ApplicationController
 
   def show
     @bakery = policy_scope(Bakery).find(current_user.bakery.id)
-    authorize @bakery
+    authorize Ingredient
     @ingredients = @bakery.ingredients
   end
 
   def update
     @bakery = policy_scope(Bakery).find(current_user.bakery.id)
-    authorize @bakery
+    authorize Ingredient
     @bakery.update(ingredient_params)
     redirect_to costing_path
-  end
-
-  def buying_orders
-    @bakery = policy_scope(Bakery).find(current_user.bakery.id)
-    authorize @bakery, :show?
-    @ingredients = @bakery.ingredients
   end
 
   private
