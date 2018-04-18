@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   resources :products, except: [:show] do
     get "created_at", on: :collection
     get "updated_at", on: :collection
+    get "weekly_daily_report", on: :collection
+    get "print_weekly_daily_report", on: :collection
     get "papertrail", on: :member
     get "costing", on: :member
   end

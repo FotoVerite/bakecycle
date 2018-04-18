@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit papertrail update destroy]
+  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report]
   decorates_assigned :products, :product
 
   def index
@@ -73,6 +74,18 @@ class ProductsController < ApplicationController
   def costing
     authorize @product, :index?
     @costing = CostingRecipeData.new(@product, 1)
+  end
+
+  def weekly_daily_report
+    authorize Product, :index?
+    @date = date_query
+  end
+
+  def print_weekly_daily_report
+    authorize Product, :index?
+    @date = date_query
+    generator = ProductTotalsGenerator.new(current_bakery, date_query, params[:type])
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   private
