@@ -55,7 +55,7 @@ class OrderPdf < BasePdfReport
   end
 
   def order_items_rows(order_items)
-    header = ["Product", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    header = %w[Product Mon Tue Wed Thu Fri Sat Sun]
     [header] + order_items.map { |item| item_row(item) }.compact
   end
 
@@ -64,8 +64,8 @@ class OrderPdf < BasePdfReport
     item = item.decorate
     [
       item.product.name,
-      #item.product_price_and_quantity,
-      #item.total_quantity_price_currency,
+      # item.product_price_and_quantity,
+      # item.total_quantity_price_currency,
       item.monday,
       item.tuesday,
       item.wednesday,

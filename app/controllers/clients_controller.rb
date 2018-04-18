@@ -1,6 +1,6 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
-  before_action :skip_policy_scope, only: %i[print_year_total]
+  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report print_year_total]
   decorates_assigned :clients, :client
 
   def index
@@ -60,7 +60,23 @@ class ClientsController < ApplicationController
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
+  def weekly_daily_report
+    authorize Client, :index?
+    @date = date_query
+  end
+
+  def print_weekly_daily_report
+    authorize Client, :index?
+    @date = date_query
+    generator = ClientTotalsGenerator.new(current_bakery, date_query, params[:type])
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
   private
+
+  def date_query
+    Chronic.parse(params[:date]) || Time.zone.today
+  end
 
   def set_client
     @client = policy_scope(Client).find(params[:id])

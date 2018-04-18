@@ -18,6 +18,8 @@
 #
 
 class ShipmentItem < ApplicationRecord
+  attr_accessor :date
+
   include Denormalization
   belongs_to :shipment
   belongs_to :production_run

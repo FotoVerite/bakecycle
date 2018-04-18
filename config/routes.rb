@@ -44,7 +44,10 @@ Rails.application.routes.draw do
 
   get "year-total", to: "clients#print_year_total"
 
-  resources :clients
+  resources :clients do
+    get "weekly_daily_report", on: :collection
+    get "print_weekly_daily_report", on: :collection
+  end
 
   resources :orders, except: [:show] do
     get "created_at", on: :collection
