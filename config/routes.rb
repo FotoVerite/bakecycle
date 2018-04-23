@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :ingredients, except: [:show]
   resources :vendors, except: [:show] do
     get :pricing, on: :member
+    get :print_pricing, on: :collection
     patch :update_pricing, on: :member
   end
 
@@ -60,8 +61,12 @@ Rails.application.routes.draw do
     get :future_invoices, on: :member
     put :add_invoices, on: :member
   end
+
   resources :users, except: [:show] do
     get "myaccount", on: :collection, as: "my"
+  end
+
+  resources :reports, only: [:index] do
   end
 
   resources :file_actions, only: [:index]

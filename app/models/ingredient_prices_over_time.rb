@@ -15,6 +15,8 @@
 #
 
 class IngredientPricesOverTime < ApplicationRecord
+  attr_accessor :lowest_cost
+
   belongs_to :ingredient
   belongs_to :vendor
 
@@ -28,7 +30,8 @@ class IngredientPricesOverTime < ApplicationRecord
   end
 
   def check_if_information_is_new
-    last_point = IngredientPricesOverTime.order("created_at DESC").find_by(vendor_id: vendor_id)
+    last_point = IngredientPricesOverTime.order("created_at DESC")
+      .find_by(vendor_id: vendor_id, ingredient_id: ingredient_id)
     return if last_point.blank?
     if last_point.created_at.to_date == Time.zone.today
       last_point.update(cost_per_unit: cost_per_unit, conversion: conversion, weight_unit: weight_unit)

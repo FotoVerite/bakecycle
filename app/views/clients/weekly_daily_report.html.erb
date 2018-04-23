@@ -1,6 +1,7 @@
 <% provide(:title, "Generate Weekly/Daily Client Reports") %>
 
-<h1>Generate Weekly/Daily  lient Report</h1>
+<h1>Generate Weekly/Daily Client Report</h1>
+<%= link_to "Back to Reports", reports_path, class: "button small" %>
 
 <%= simple_form_for "", url: print_weekly_daily_report_clients_path, method: :get, :html => {:target => '_blank'}  do |f| %>
   <div class="row collapse">

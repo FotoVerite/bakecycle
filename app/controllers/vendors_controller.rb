@@ -1,5 +1,6 @@
 class VendorsController < ApplicationController
   before_action :set_vendor, only: %i[edit pricing update update_pricing destroy]
+  before_action :skip_policy_scope, only: %i[print_pricing]
 
   def index
     authorize Vendor
@@ -25,6 +26,12 @@ class VendorsController < ApplicationController
   def pricing
     authorize @vendor, :show?
     @ingredients = @vendor.ingredients
+  end
+
+  def print_pricing
+    authorize Vendor, :index?
+    generator = IngredientsPricingGenerator.new(current_bakery)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
   def update_pricing

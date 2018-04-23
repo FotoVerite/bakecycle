@@ -15,7 +15,7 @@
       <%= f.radio_button(:vendor_id, vendor_object.id, class: 'fire-js', id: "vendor_option_#{vendor_object.id}_#{i.id}") %>
       <%= f.label("vendor_id_#{vendor_object.id}", vendor_object.name  +  " " + number_to_currency(vendor[1].first.cost_per_unit), for: "vendor_option_#{vendor_object.id}_#{i.id}") %>
     <% end %>
-    <%= f.label :amount, (over_time.first.weight_unit || "Grams"), for: "amount_option_#{i.id}" %>
+    <%= f.label :amount, (over_time.first && over_time.first.weight_unit || "Grams"), for: "amount_option_#{i.id}" %>
     <%= f.number_field(:amount, class: 'fire-js', step: "0.01", id: "amount_option_#{i.id}") %>
   </fieldset>
   <% end %>

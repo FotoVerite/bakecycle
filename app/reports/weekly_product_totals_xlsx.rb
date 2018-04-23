@@ -57,7 +57,7 @@ class WeeklyProductTotalsXlsx
       end
     end
     hash
- end
+  end
 
   def hash_product_info(hash, item, client_name, day_name)
     product_name = item.product.name

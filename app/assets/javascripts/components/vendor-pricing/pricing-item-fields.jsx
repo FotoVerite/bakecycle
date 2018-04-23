@@ -32,7 +32,7 @@ export default function PricingItemFields({
             labelClass="hide-for-large-up"
             autoComplete="off"
             type="number"
-            step="0.01"
+            step="0.001"
             onChange={onChange}
           />
         </div>
@@ -51,7 +51,6 @@ export default function PricingItemFields({
             value={model.conversion}
             field="conversion"
             type="number"
-            step="0.01"
             name={`bakery[ingredients_attributes][${model.id}][conversion]`}
             labelClass="hide-for-large-up"
             label="Conversion"
