@@ -20,7 +20,21 @@ class Ingredient < ApplicationRecord
 
   attr_accessor :dirty, :cost, :cost_over_time_vendor_id
 
-  INGREDIENT_TYPES = %w[flour salt yeast sugar hydration eggs fats other].freeze
+  INGREDIENT_TYPES = %w[
+    flour
+    salt
+    yeast
+    sugar
+    hydration
+    eggs
+    fats
+    fruits\ and\ vegetables
+    spices
+    meat
+    dairy
+    nuts
+    other
+  ].freeze
 
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem", dependent: :destroy, inverse_of: :inclusionable
   has_many :ingredient_prices_over_time, -> { order("created_at DESC") }, dependent: :destroy, inverse_of: :ingredient
@@ -45,6 +59,7 @@ class Ingredient < ApplicationRecord
 
   WEIGHT_UNITS = [
     "gallons",
+    "liters",
     "grams",
     "kilograms",
     "pounds",
