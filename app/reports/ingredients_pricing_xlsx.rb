@@ -26,7 +26,7 @@ class IngredientsPricingXlsx
         vendor_array.each do |price|
           price.lowest_cost = true if price.try(:id) == lowest_cost_id
         end
-        row += vendor_array.map(&:cost_per_unit)
+        row += vendor_array.map {|v| v.try(:cost_per_unit)}
 
         sheet.add_row row, style: [nil] + vendor_array.map { |price| price.try(:lowest_cost) ? @bold : nil }
       end
