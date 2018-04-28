@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411152538) do
+ActiveRecord::Schema.define(version: 20180428231523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 20180411152538) do
     t.integer "sequence_number", default: 1
     t.boolean "alert", default: false
     t.boolean "print_invoice", default: true
+    t.boolean "temp_vip", default: false
     t.index ["active"], name: "index_clients_on_active"
     t.index ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true

@@ -52,12 +52,17 @@
 <fieldset>
   <legend>Delivery Notes</legend>
   <div class="row">
-    <div class="small-12 columns">
+    <div class="small-12 medium-4 columns">
       <p><%= client.notes %></p>
     </div>
-  </div>
-  <div class="small-12 medium-4 columns">
-    Alert: <%= client.alert? ? "Yes" : "No" %>
+    
+    <div class="small-12 medium-4 columns">
+      Vip: <%= client.alert? ? "Yes" : "No" %>
+    </div>
+
+    <div class="small-12 medium-4 columns">
+      Temp Vip: <%= client.alert? ? "Yes" : "No" %>
+    </div>
   </div>
 </fieldset>
 
