@@ -57,9 +57,13 @@
         </li>
         <% end %>
     </ul>
-      <%= link_to 'Add these items', reset_production_run_path(@production_run),
+      <% if @production_run %>
+        <%= link_to 'Add these items', reset_production_run_path(@production_run),
     class: "button alert",
     method: :put,
     data: { confirm: "Overbakes will be recaculated from the new totals. Continue?" } %>
+    <% else %>
+      Production Run not kickedoff yet. 
+    <% end %>
   </div>
 <% end %>

@@ -13,6 +13,7 @@ class ProductionChecklistsController < ApplicationController
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
+      @production_run = ProductionRun.for_date(Time.zone.today)
       @missing_items = current_bakery.shipment_items.where(production_start: Time.zone.today, production_run_id: nil) 
     end
 
