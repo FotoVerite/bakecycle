@@ -1,0 +1,65 @@
+<h1>Checklist For Production</h1>
+
+<% unless @missing_shipments.empty? %>
+  <div class="overridable-orders panel callout radius">
+    <h5>These <%= pluralize(@missing_shipments.count, 'order') %> are missing invoices.</h5>
+    <table class="responsive-table orders-missing-shipment-table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col">Client</th>
+          <th scope="col">Type</th>
+          <th scope="col">Route</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @missing_shipments.each do |order| %>
+        <%= render 'orders/order_target_blank', order: OrderDecorator.decorate(order) %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+
+<% if !@double_invoices.empty?  %>
+ <div class="dublicate_invoices panel callout radius">
+    <h5 style='font-size:24px;'>These <%= pluralize(@double_invoices.count, 'invoices') %> are duplicates. Please fix as soon as possible.</h5>
+    <table class="responsive-table orders-missing-shipment-table">
+      <thead>
+        <tr>
+          <th scope="col">Invoice</th>
+          <th scope="col">Date</th>
+          <th scope="col">Client</th>
+          <th scope="col">Price</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @double_invoices.each do |shipment| %>
+        <%= render 'shipment', shipment: ShipmentDecorator.decorate(shipment) %>
+      <% end %>
+      </tbody>
+    </table>
+  </div><% end %>
+
+
+<% unless @missing_items.nil? || @missing_items.try(:empty?) %>
+  <div class="overridable-orders panel callout radius">
+    <% grouped_items = @missing_items.group_by(&:product_name) %>
+    <h5><%= pluralize(grouped_items.size, 'product') %> missing from this run</h5>
+    <ul><% grouped_items.each do |product,group|  %>
+        <li>
+          <%= pluralize(group.sum(&:product_quantity), product) %>
+        </li>
+        <% end %>
+    </ul>
+      <%= link_to 'Add these items', reset_production_run_path(@production_run),
+    class: "button alert",
+    method: :put,
+    data: { confirm: "Overbakes will be recaculated from the new totals. Continue?" } %>
+  </div>
+<% end %>

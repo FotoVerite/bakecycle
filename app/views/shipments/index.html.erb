@@ -28,7 +28,7 @@
   </ul>
 <% end %>
 
-<% if @double_invoices  %>
+<% if !@double_invoices.empty?  %>
  <div class="dublicate_invoices panel callout radius">
     <h5 style='font-size:24px;'>These <%= pluralize(@double_invoices.count, 'invoices') %> are duplicates. Please fix as soon as possible.</h5>
     <table class="responsive-table orders-missing-shipment-table">

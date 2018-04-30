@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get "plans", to: "landing_pages#plans"
   get :dashboard, to: "dashboard#index"
 
+  resource :production_checklist, only: [:show]
   resources :registrations, only: %i[new create]
 
   resources :ingredients, except: [:show]
