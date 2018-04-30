@@ -47,7 +47,7 @@
   </div><% end %>
 
 
-<% unless @missing_items.nil? || @missing_items.try(:empty?) && Time.zone.now > Time.zone.now.change(hour: 14, min: 0) %>
+<% unless @missing_items.nil? || @missing_items.try(:empty?) %>
   <div class="overridable-orders panel callout radius">
     <% grouped_items = @missing_items.group_by(&:product_name) %>
     <h5><%= pluralize(grouped_items.size, 'product') %> missing from this run</h5>
