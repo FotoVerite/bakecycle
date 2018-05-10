@@ -1,3 +1,4 @@
+<h1><%= @vendor.name %> Ingredient Pricing</h1>
 <%= form_tag update_pricing_vendor_path(@vendor), method: 'patch' do %>
   <%= react_component('VendorPricingFormProvider', VendorPricingForm.new(ingredients: @ingredients, vendor: @vendor).serializable_hash) %>
 <% end %>
