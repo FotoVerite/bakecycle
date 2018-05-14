@@ -8,15 +8,14 @@ class ShipmentsController < ApplicationController
     authorize Shipment
     @shipments = scope_with_search.paginate(page: params[:page])
     @double_invoices = Shipment.where(
-      "date between ? and ? ",
+      "bakery_id = ? AND date between ? and ? ",
+      current_bakery,
       (Time.zone.today - 2.days),
       (Time.zone.today + 3.days)
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
   end
-
-  # rubocop:enable Metrics/AbcSize
 
   def new
     @shipment = policy_scope(Shipment).build

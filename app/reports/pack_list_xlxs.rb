@@ -19,8 +19,6 @@ class PackListXlxs
     create_output_string(p)
   end
 
-  # rubocop:disable Metrics/MethodLength
-
   def create_hash_of_products
     hash = {}
     @shipments.each do |shipment|
@@ -30,35 +28,36 @@ class PackListXlxs
           product_hash = hash[i.product_name] = {}
           product_hash["product_type"] = i.product.attributes["product_type"]
           product_hash["name"] = i.product_name
-          product_hash["quantity"] = []
+          product_hash["quantity"] = {}
           product_hash["total"] = 0
         else
           product_hash = hash[i.product_name]
         end
-        product_hash["quantity"].push("#{client_name} #{i.product_quantity}")
+        product_hash["quantity"][client_name.to_s] = 0 if product_hash["quantity"][client_name.to_s].nil?
+        product_hash["quantity"][client_name.to_s] += i.product_quantity
         product_hash["total"] = (product_hash["total"].to_i + i.product_quantity)
       end
     end
     hash.sort_by { |_k, v| [v["product_type"], v["name"]] }
   end
 
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable
 
   def add_rows(hash, sheet)
     # Set Product Type Row
     hash.each do |product_array|
       sheet.add_row [product_array[0]], style: @header
-      product_array[1]["quantity"].each do |quantities|
-        sheet.add_row [quantities]
+      product_array[1]["quantity"].each do |client_name, quantity|
+        sheet.add_row ["#{client_name} #{quantity}"]
       end
       sheet.add_row ["Total: " + product_array[1]["total"].to_s]
     end
   end
 
-  def create_output_string(p)
+  def create_output_string(page)
     outstrio = StringIO.new
-    p.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(p.to_stream.read)
+    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
+    outstrio.write(page.to_stream.read)
     outstrio.string
   end
 end

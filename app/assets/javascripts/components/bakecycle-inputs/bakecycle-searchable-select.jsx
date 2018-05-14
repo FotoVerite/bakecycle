@@ -1,16 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import ReactSelect from 'react-select';
 import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
-const BCSelect =  React.createClass({
+const BCSelect =  createReactClass({
   displayName: 'BCSelect',
   mixins: [formMixin],
 
   propTypes: {
     ...formMixin.mixinPropTypes,
-    options: React.PropTypes.array.isRequired,
-    includeBlank: React.PropTypes.string,
+    options: PropTypes.array.isRequired,
+    includeBlank: PropTypes.string,
   },
 
   render() {
@@ -21,6 +23,7 @@ const BCSelect =  React.createClass({
       includeBlank,
       inline,
       value,
+      multi,
       name,
       options,
       onChange,
@@ -41,6 +44,7 @@ const BCSelect =  React.createClass({
           value={value || ''}
           disabled={disabled}
           simpleValue
+          multi={multi || false}
         />
         {error ? <small className="error">{error}</small> : ''}
       </div>

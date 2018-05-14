@@ -90,7 +90,7 @@ class ProductionRunsController < ApplicationController
 
   def print_test_projection
     authorize ProductionRun, :can_print?
-    order_items = params[:production_run][:run_items_attributes].map do |o|
+    order_items = params[:production_run][:run_items_attributes].permit!.to_h.map do |o|
       "#{o[1]['product_id']}:#{o[1]['overbake_quantity']}"
     end
     generator = TestProjectionGenerator.new(current_bakery, Time.zone.today, order_items)

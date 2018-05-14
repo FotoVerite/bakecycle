@@ -22,10 +22,21 @@ class Recipe < ApplicationRecord
   has_paper_trail
 
   belongs_to :bakery
-  has_many :parent_recipe_items, class_name: "RecipeItem", as: :inclusionable
-  has_many :parent_recipes, through: :parent_recipe_items, source: :recipe
+
+  has_many :motherdough_products, class_name: "Product", foreign_key: :motherdough_id,
+                                  dependent: :nullify, inverse_of: :motherdough
+  has_many :inclusion_products, class_name: "Product", foreign_key: :inclusion_id,
+                                dependent: :nullify, inverse_of: :inclusion
+
+  has_many :parent_recipe_items, class_name: "RecipeItem", as: :inclusionable, inverse_of: :recipe, dependent: :destroy
+  has_many :parent_recipes, through: :parent_recipe_items, source: :recipe, dependent: :nullify
+
+  # rubocop:disable  Rails/InverseOf
   has_many :recipe_items, -> { where(removed: false) }, dependent: :destroy
-  has_many :recipe_items_with_removes, dependent: :destroy, class_name: "RecipeItem"
+  # rubocop:enable  Rails/InverseOf
+  has_many :recipe_items_with_removes, dependent: :destroy,
+                                       class_name: "RecipeItem", inverse_of: :recipe
+
   has_many :child_recipes, -> { where('recipe_items.removed': false) },
     through: :recipe_items, source: :inclusionable, source_type: "Recipe"
   has_many :ingredients, -> { where('recipe_items.removed': false) },
@@ -48,8 +59,8 @@ class Recipe < ApplicationRecord
 
   before_save :set_recipe_lead_days
   before_save :set_total_lead_days
-  before_destroy :check_for_products
-  before_destroy :check_for_parent_recipes
+  before_destroy :check_for_products, prepend: true
+  before_destroy :check_for_parent_recipes, prepend: true
   after_commit :queue_touch_parent_objects, on: %i[create update]
   after_touch :update_total_lead_days
 
@@ -120,18 +131,22 @@ class Recipe < ApplicationRecord
     Unitwise(mix_size, mix_size_unit)
   end
 
+  def cost_per_gram
+    0
+  end
+
   private
 
   def check_for_products
     return unless products.any?
     errors.add(:base, I18n.t(:recipe_in_use_products))
-    false
+    throw(:abort)
   end
 
   def check_for_parent_recipes
     return unless parent_recipes.any?
     errors.add(:base, I18n.t(:recipe_in_use_recipies))
-    false
+    throw(:abort)
   end
 
   def motherdough?

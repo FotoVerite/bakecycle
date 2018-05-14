@@ -14,6 +14,7 @@ import ReactDOM from 'react-dom';
 import ClientMap from './components/client-map';
 import ClientsTable from './components/clients-table';
 import FileExportRefresher from './components/file-export-refresher';
+import VendorPricingFormProvider from './components/vendor-pricing';
 import OrderFormProvider from './components/order';
 import ProductPriceForm from './components/product-price-form';
 import RecipeForm from './components/recipe-form';
@@ -25,6 +26,7 @@ const bcComponents = window.bcComponents =  {
   ClientMap,
   ClientsTable,
   FileExportRefresher,
+  VendorPricingFormProvider,
   OrderFormProvider,
   ProductPriceForm,
   RecipeForm,

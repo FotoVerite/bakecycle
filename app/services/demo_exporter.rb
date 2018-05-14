@@ -154,15 +154,15 @@ class DemoExporter
     end
 
     def reindex_inclusionables(type, id_map)
-      data[:recipe_items].values.each do |attr_hash|
+      data[:recipe_items].each_value do |attr_hash|
         next unless attr_hash[:inclusionable_type] == type
         attr_hash[:inclusionable_id] = id_map[attr_hash[:inclusionable_id]]
       end
     end
 
-    def reindex_fk(id_map, table, fk)
-      data[table].values.each do |attr_hash|
-        attr_hash[fk] = id_map[attr_hash[fk]]
+    def reindex_fk(id_map, table, fkey)
+      data[table].each_value do |attr_hash|
+        attr_hash[fkey] = id_map[attr_hash[fkey]]
       end
     end
 

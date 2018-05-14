@@ -62,8 +62,6 @@ class DailyProductionRunTotalsXlxs
     sheet.add_row ["", "", total]
   end
 
-  # rubocop:enable Metrics/AbcSize
-
   def create_product_rows(product_values, sheet)
     start = sheet.rows.last.index + 2
     product_values.each do |key, value|
@@ -85,10 +83,10 @@ class DailyProductionRunTotalsXlxs
     total_row
   end
 
-  def create_output_string(p)
+  def create_output_string(page)
     outstrio = StringIO.new
-    p.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(p.to_stream.read)
+    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
+    outstrio.write(page.to_stream.read)
     outstrio.string
   end
 end

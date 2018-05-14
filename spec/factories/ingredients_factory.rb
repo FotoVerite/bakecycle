@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :ingredient do
     name { generate(:ingredient_name) }
     description { Faker::Lorem.sentence(1) }

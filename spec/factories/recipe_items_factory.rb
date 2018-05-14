@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :recipe_item, aliases: [:recipe_item_ingredient] do
     transient do
       bakery { |t| t.association(:bakery) }

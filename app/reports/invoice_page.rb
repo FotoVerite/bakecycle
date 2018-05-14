@@ -1,6 +1,6 @@
-include ActionView::Helpers::NumberHelper
-
 class InvoicePage
+  include ActionView::Helpers::NumberHelper
+
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
     @bakery = bakery
@@ -88,8 +88,6 @@ class InvoicePage
     [header] + items
   end
 
-  # rubocop:disable Metrics/MethodLength
-
   def merge_sorted_order_items_with_same_name_and_price(items)
     hash = {}
     items.each do |item|
@@ -124,9 +122,6 @@ class InvoicePage
       ]
     end
   end
-
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
 
   def totals
     move_down 5

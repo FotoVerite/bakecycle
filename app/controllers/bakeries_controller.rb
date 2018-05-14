@@ -50,7 +50,7 @@ class BakeriesController < ApplicationController
 
   def mybakery
     active_nav(:my_bakery)
-    @bakery = policy_scope(Bakery).find(current_bakery)
+    @bakery = policy_scope(Bakery).find(current_bakery.id)
     authorize @bakery, :edit?
     render "edit"
   end

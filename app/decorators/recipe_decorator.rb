@@ -23,7 +23,7 @@ class RecipeDecorator < Draper::Decorator
   end
 
   def serializable_hash
-    RecipeSerializer.new(object).serializable_hash
+    RecipeSerializer.new(object).as_json
   end
 
   private

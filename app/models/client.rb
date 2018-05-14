@@ -50,7 +50,7 @@ class Client < ApplicationRecord
   belongs_to :bakery
   has_many :orders, dependent: :destroy
   has_many :price_variants, dependent: :destroy
-  has_many :shipments
+  has_many :shipments, dependent: :destroy
 
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
   enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee]
@@ -65,11 +65,14 @@ class Client < ApplicationRecord
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :primary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
+  validate :check_if_both_vip_and_vip_temp
 
   geocoded_by :delivery_address_full
   after_validation :geocode, if: :needs_geocode?
 
   scope :active, -> { where(active: true) }
+  scope :vips, -> { where(alert: true) }
+  scope :temp_vips, -> { where(temp_vip: true) }
 
   def self.billing_terms_select
     billing_terms.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
@@ -104,5 +107,11 @@ class Client < ApplicationRecord
     new_and_blank = new_record? && latitude.blank? && longitude.blank?
     persisted_and_changed = persisted? && delivery_address.changed?
     new_and_blank || persisted_and_changed
+  end
+
+  def check_if_both_vip_and_vip_temp
+    return true unless alert && temp_vip
+    errors.add(:base, "Client cannot be a VIP and a Temp VIP at the same time. ")
+    false
   end
 end

@@ -20,6 +20,7 @@
 #  total_lead_days :integer          not null
 #  batch_recipe    :boolean          default(FALSE)
 #  removed         :boolean          default(FALSE)
+#  graph_data      :json
 #
 
 require "rails_helper"
@@ -130,8 +131,8 @@ describe Product do
 
   describe "after touch" do
     it "updates its total lead days based on the motherdough" do
-      dough = FactoryGirl.create(:recipe_motherdough)
-      product = FactoryGirl.create(:product, motherdough: dough)
+      dough = FactoryBot.create(:recipe_motherdough)
+      product = FactoryBot.create(:product, motherdough: dough)
 
       expect(Resque).to receive(:enqueue).at_least(:once).and_call_original
       dough.update(lead_days: 9)

@@ -1,13 +1,16 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import GoogleMap from 'google-map-react';
 import Marker from './client-marker';
 
-const ClientMap = React.createClass({
+const ClientMap = createReactClass({
   propTypes: {
     name: PropTypes.string.isRequired,
     longitude: PropTypes.number.isRequired,
     latitude: PropTypes.number.isRequired,
     deliveryAddressFull: PropTypes.string.isRequired,
+    apiKey: PropTypes.string.isRequired
   },
 
   componentDidMount() {
@@ -39,6 +42,7 @@ const ClientMap = React.createClass({
     const center = [this.props.latitude, this.props.longitude];
     return (<div className="map-container">
       <GoogleMap
+        apiKey={this.props.apiKey}
         ref="gmap"
         center={center}
         zoom={15}

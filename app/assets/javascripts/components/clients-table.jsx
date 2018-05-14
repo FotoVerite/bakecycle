@@ -1,4 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
+
 import _ from 'underscore';
 
 function filterClients(collection, filter) {
@@ -31,7 +34,7 @@ function filterClients(collection, filter) {
   return _.filter(collection, matchAll);
 }
 
-const ClientsTable = React.createClass({
+const ClientsTable = createReactClass({
   propTypes: {
     data: PropTypes.object.isRequired,
   },
@@ -88,7 +91,7 @@ const ClientsTable = React.createClass({
               value={this.state.search.name}
               onChange={this.searchName}
               onKeyDown={this.chooseName}
-              />
+            />
           </div>
         </div>
         <div className="small-12 medium-1 end columns">

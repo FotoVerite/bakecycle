@@ -32,21 +32,21 @@ class YearTotalXlxs
     hash
   end
 
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable
 
   def add_rows(hash, sheet)
     # Set Product Type Row
-    hash.each do |_key, client_array|
+    hash.each_value do |client_array|
       sheet.add_row client_array
     end
     sheet.add_row []
     sheet.add_row ["Total: " + @total.to_s]
   end
 
-  def create_output_string(p)
+  def create_output_string(page)
     outstrio = StringIO.new
-    p.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(p.to_stream.read)
+    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
+    outstrio.write(page.to_stream.read)
     outstrio.string
   end
 end

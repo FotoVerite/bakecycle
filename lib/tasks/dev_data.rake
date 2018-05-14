@@ -24,13 +24,13 @@ namespace :db do
 
     Rake::Task["bakecycle:create_plans"].invoke
     beta_large = Plan.find_by!(name: "beta_large")
-    biencuit = FactoryGirl.create(:bakery, :with_logo, name: "Bien Cuit", plan: beta_large)
-    grumpy = FactoryGirl.create(:bakery, name: "Grumpy", plan: beta_large)
+    biencuit = FactoryBot.create(:bakery, :with_logo, name: "Bien Cuit", plan: beta_large)
+    grumpy = FactoryBot.create(:bakery, name: "Grumpy", plan: beta_large)
 
-    FactoryGirl.create(:user, :as_admin, email: "admin@example.com", bakery: nil)
-    FactoryGirl.create(:user, email: "user@example.com", bakery: biencuit)
-    FactoryGirl.create(:user, email: "user@biencuit.com", bakery: biencuit)
-    FactoryGirl.create(:user, email: "user@grumpy.com", bakery: grumpy)
+    FactoryBot.create(:user, :as_admin, email: "admin@example.com", bakery: nil)
+    FactoryBot.create(:user, email: "user@example.com", bakery: biencuit)
+    FactoryBot.create(:user, email: "user@biencuit.com", bakery: biencuit)
+    FactoryBot.create(:user, email: "user@grumpy.com", bakery: grumpy)
     DemoCreator.new(biencuit).run
     DemoCreator.new(grumpy).run
     puts "Dev Data Loaded"

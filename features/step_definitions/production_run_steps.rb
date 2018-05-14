@@ -130,6 +130,6 @@ end
 
 Given(/^I have "(.*?)" production permission$/) do |access|
   bakery = Bakery.find_by(name: "biencuit")
-  user = FactoryGirl.create(:user, bakery: bakery, production_permission: access)
+  user = FactoryBot.create(:user, bakery: bakery, production_permission: access)
   login_as user, scope: :user
 end

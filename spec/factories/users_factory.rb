@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     sequence(:name) { |n| "#{Faker::Name.name} #{n}" }
     sequence(:email) { |n| "#{n}#{Faker::Internet.email}" }

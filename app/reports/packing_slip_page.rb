@@ -107,8 +107,6 @@ class PackingSlipPage
     rows.unshift(header)
   end
 
-  # rubocop:disable Metrics/MethodLength
-
   def merge_shipment_items(items)
     hash = {}
     items.each do |item|
@@ -128,9 +126,6 @@ class PackingSlipPage
     end
     hash.values
   end
-
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
 
   def pieces_shipped
     table(pieces_shipped_row, position: :right, column_widths: [400, 57.3, 57.3, 57.3]) do

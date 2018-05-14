@@ -1,15 +1,15 @@
 source "https://rubygems.org"
 
-ruby "2.3.1"
-gem "active_model_serializers", "~>0.9.3"
+ruby "2.5.0"
+gem "active_model_serializers", "~> 0.9.3"
 gem "airbrake"
 gem "aws-sdk", "< 2.0"
 gem "axlsx", "2.0.1"
 gem "browserify-rails"
 gem "chronic"
-gem "coffee-rails", "~> 4.0.0"
-gem "devise", "~> 3.5.6"
-gem "devise-async"
+gem "coffee-rails"
+gem "devise"
+gem "devise-async", git: "https://github.com/klacointe/devise-async.git", branch: "devise4"
 gem "devise_invitable"
 gem "draper"
 gem "foundation-icons-sass-rails"
@@ -22,31 +22,33 @@ gem "jquery-ui-sass-rails"
 gem "memoist"
 gem "paper_trail"
 gem "paperclip", "~> 4.2"
-gem "pg"
+gem "pg", "~> 0.21.0"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "4.2.7.1"
+gem "rails", "5.1.4"
+gem "redis", "3.3.5"
 gem "resque", require: "resque/server"
 gem "riif"
 gem "rubyzip", "1.0.0"
 gem "sass-rails"
 gem "simple_form"
 gem "stripe"
-gem "uglifier", ">= 1.3.0"
-gem "unicorn", require: false
+gem "uglifier"
 gem "unitwise", "~>2.0.0", require: "unitwise"
-gem "will_paginate", "~> 3.0.6"
-gem "wizarddev-heroku"
-# legacy import
-gem "mysql2", require: false
+gem "will_paginate"
 
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
+  gem "capistrano"
+  gem "capistrano-bundler", require: false
+  gem "capistrano-npm"
+  gem "capistrano-rails", require: false
+  gem "capistrano-resque", "~> 0.2.2", require: false
+  gem "capistrano3-puma"
   gem "foreman", require: false
   gem "letter_opener"
-  gem "quiet_assets"
   gem "rails-erd", require: false
   gem "spring"
   gem "spring-commands-rspec"
@@ -78,17 +80,16 @@ group :test do
   gem "rspec-activejob"
   gem "selenium-webdriver"
   gem "stripe-ruby-mock", "~> 2.1.1", require: false
-  gem "test_after_commit"
   gem "timecop"
   gem "webmock", require: false
 end
 
 group :test, :development, :staging do
-  gem "factory_girl_rails"
+  gem "factory_bot_rails"
   gem "faker"
 end
 
 group :production, :staging do
   gem "newrelic_rpm"
-  gem "rails_12factor"
+  gem "puma"
 end

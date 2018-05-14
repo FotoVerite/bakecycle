@@ -1,8 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 import PricesStore from '../stores/prices-store';
 import PriceFields from './product-price-fields';
 
-const ProductPriceForm = React.createClass({
+const ProductPriceForm = createReactClass({
   propTypes: {
     product: PropTypes.object.isRequired,
     clients: PropTypes.array.isRequired,

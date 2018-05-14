@@ -20,9 +20,10 @@
 #  total_lead_days :integer          not null
 #  batch_recipe    :boolean          default(FALSE)
 #  removed         :boolean          default(FALSE)
+#  graph_data      :json
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :product do
     name { generate(:product_name) }
     product_type { Product.product_types.keys.sample }

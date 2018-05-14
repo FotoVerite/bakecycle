@@ -47,7 +47,7 @@ class OrderPdf < BasePdfReport
   def items_table(group)
     move_down 20
     text group[0].capitalize.to_s, style: :bold, size: 15
-    table(order_items_rows(group[1]), column_widths: [200, 70, 70, 33, 33, 33, 33, 33, 33, 33]) do
+    table(order_items_rows(group[1]), column_widths: [340, 33, 33, 33, 33, 33, 33, 33]) do
       row(0).style(background_color: HEADER_ROW_COLOR)
       column(0).style(align: :left)
       column(1..9).style(align: :center)
@@ -55,7 +55,7 @@ class OrderPdf < BasePdfReport
   end
 
   def order_items_rows(order_items)
-    header = ["Product", "Unit Price", "Order Price", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    header = %w[Product Mon Tue Wed Thu Fri Sat Sun]
     [header] + order_items.map { |item| item_row(item) }.compact
   end
 
@@ -64,8 +64,8 @@ class OrderPdf < BasePdfReport
     item = item.decorate
     [
       item.product.name,
-      item.product_price_and_quantity,
-      item.total_quantity_price_currency,
+      # item.product_price_and_quantity,
+      # item.total_quantity_price_currency,
       item.monday,
       item.tuesday,
       item.wednesday,

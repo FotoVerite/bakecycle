@@ -12,10 +12,18 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 15
+  Enabled: false
 
 Metrics/AbcSize:
-  Enabled: false
-  Max: 18
+  Max: 25
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - 'lib/**/*'
+    - 'features/**/*'
+    - 'db/migrate/**/*'
 
 Metrics/ClassLength:
   Max: 150
@@ -35,7 +43,16 @@ Style/NumericLiterals:
 
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
-
+Style/GuardClause:
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - 'lib/**/*'
+    - 'features/**/*'
+    - 'db/migrate/**/*'
+    
 Style/SignalException:
   Enabled: false
 
@@ -75,10 +92,18 @@ Metrics/BlockLength:
 Rails/SkipsModelValidations:
   Enabled: false
 
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - "db/migrate/2014*"
+    - "db/migrate/2015*"
+
 Rails/NotNullColumn:
   Enabled: false
 
 Style/MethodMissing:
+  Enabled: false
+
+Style/FormatStringToken:
   Enabled: false
 
 Rails/FilePath:
@@ -90,5 +115,8 @@ Rails/FilePath:
 Rails/OutputSafety:
   Enabled: false
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
   Enabled: false

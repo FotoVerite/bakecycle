@@ -20,7 +20,7 @@ class BatchRecipesController < ApplicationController
     respond_to do |format|
       format.csv {
         response.headers["Content-Disposition"] = 'attachment; filename="' + filename + '"'
-        render text: BatchRecipesCsv.new(projection).to_csv
+        render plain: BatchRecipesCsv.new(projection).to_csv
       }
     end
   end

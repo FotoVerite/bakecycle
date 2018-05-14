@@ -1,8 +1,9 @@
 import React from 'react';
+import createReactClass from 'create-react-class';
 import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
-const BCTextArea = React.createClass({
+const BCTextArea = createReactClass({
   displayName: 'BCTextArea',
   mixins: [formMixin],
 

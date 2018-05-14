@@ -3,7 +3,7 @@ Given(/^I am a visitor$/) do
 end
 
 Given(/^There exists a user$/) do
-  @user = FactoryGirl.create(:user)
+  @user = FactoryBot.create(:user)
 end
 
 When(/^I logout$/) do
@@ -22,6 +22,10 @@ end
 
 When(/^I click on "(.*?)"$/) do |linkable_text|
   click_on(linkable_text, match: :first)
+end
+
+When(/^I click on button "(.*?)"$/) do |_linkable_text|
+  click_button("Update")
 end
 
 When(/^I click on the "(.*?)" link$/) do |name|

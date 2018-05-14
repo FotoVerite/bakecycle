@@ -10,6 +10,9 @@
 #  bakery_id       :integer          not null
 #  legacy_id       :string
 #  ingredient_type :string           default("other"), not null
+#  vendor_id       :integer
+#  current_amount  :decimal(, )      default(0.0), not null
+#  cost_per_gram   :decimal(, )
 #
 
 require "rails_helper"

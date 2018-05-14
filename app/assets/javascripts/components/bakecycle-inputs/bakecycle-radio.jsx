@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import uniqueId from 'lodash.uniqueid';
 import formMixin from './bakecycle-form-mixin';
 
-const BCRadio = React.createClass({
+const BCRadio = createReactClass({
   mixins: [formMixin],
 
   propTypes: {
     ...formMixin.mixinPropTypes,
-    options: React.PropTypes.array.isRequired,
+    options: PropTypes.array.isRequired,
   },
 
   makeRadio(option) {

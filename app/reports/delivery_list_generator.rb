@@ -2,32 +2,39 @@ class DeliveryListGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
-    bakery_id, date_string = global_id.split("_")
+    bakery_id, date_string, type = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     date = Date.iso8601(date_string)
-    new(bakery, date)
+    new(bakery, date, type)
   end
 
-  def initialize(bakery, date)
+  def initialize(bakery, date, type)
     @bakery = bakery
-    @date = date.to_date
+    @date = date
+    @type = type
   end
 
   def id
-    "#{@bakery.id}_#{@date.iso8601}"
+    "#{@bakery.id}_#{@date.iso8601}_#{@type}"
   end
 
   def filename
-    "delivery_list_#{@date}.pdf"
+    "delivery_list_#{@date}.#{@type}"
+  end
+
+  def content_type
+    if @type == "pdf"
+      "application/pdf"
+    else
+      "application/xlsx"
+    end
   end
 
   def generate
-    pdf.render
-  end
-
-  private
-
-  def pdf
-    DeliveryListPdf.new(@bakery, @date)
+    if @type == "pdf"
+      DeliveryListPdf.new(@bakery, @date).render
+    else
+      DeliveryListXlsx.new(@bakery, @date).generate
+    end
   end
 end

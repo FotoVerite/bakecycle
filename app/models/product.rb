@@ -20,21 +20,24 @@
 #  total_lead_days :integer          not null
 #  batch_recipe    :boolean          default(FALSE)
 #  removed         :boolean          default(FALSE)
+#  graph_data      :json
 #
 
 class Product < ApplicationRecord
   extend AlphabeticalOrder
   include ResqueJobs
-  has_paper_trail
+  has_paper_trail ignore: [:graph_data]
 
-  belongs_to :inclusion, class_name: "Recipe"
-  belongs_to :motherdough, class_name: "Recipe"
+  belongs_to :inclusion, class_name: "Recipe", inverse_of: :motherdough_products
+  belongs_to :motherdough, class_name: "Recipe", inverse_of: :inclusion_products
   belongs_to :bakery
 
-  has_many :run_items
+  has_many :shipment_items, dependent: :nullify
 
-  has_many :price_variants, -> { where(removed: false) }, dependent: :destroy
-  has_many :price_variants_with_removes, dependent: :destroy, class_name: "PriceVariant"
+  has_many :run_items, dependent: :nullify
+
+  has_many :price_variants, -> { where(removed: false) }, dependent: :destroy, inverse_of: :product
+  has_many :price_variants_with_removes, dependent: :destroy, class_name: "PriceVariant", inverse_of: :product
 
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
 
@@ -65,7 +68,7 @@ class Product < ApplicationRecord
   before_save :set_total_lead_days, if: :update_total_lead_days?
   after_commit :queue_touch_order_items, on: %i[create update]
   after_touch :update_total_lead_days
-  before_destroy :check_for_order_items
+  before_destroy :check_for_order_items, prepend: true
 
   scope :created_at_date, ->(date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|

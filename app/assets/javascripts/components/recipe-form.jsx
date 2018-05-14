@@ -1,11 +1,14 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
+
 import { Model as RecipeStore } from 'backbone';
 
 import { BCInput, BCTextarea, BCSelect } from './bakecycle-inputs';
 import RecipeItemsForm from './recipe-items-form';
 import RecipeItemStore from '../stores/recipe-item-store';
 
-const RecipeForm = React.createClass({
+const RecipeForm = createReactClass({
   propTypes: {
     errors: PropTypes.object.isRequired,
     recipeItems: PropTypes.array.isRequired

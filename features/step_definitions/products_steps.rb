@@ -67,7 +67,7 @@ Then(/^The product "(.*?)" should not be present$/) do |product|
 end
 
 Given(/^"(.*?)" is a client of "(.*?)"$/) do |client, bakery|
-  client = FactoryGirl.create(:client, name: client)
+  client = FactoryBot.create(:client, name: client)
   bakery = Bakery.find_by(name: bakery)
   bakery.clients << client
   bakery.save

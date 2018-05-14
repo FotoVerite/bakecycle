@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :route do
     name { generate(:route_name) }
     departure_time { Faker::Time.forward(23, :morning) }

@@ -49,7 +49,6 @@ class OrderItem < ApplicationRecord
     order_by_product_type_and_name.group_by { |order_item| order_item.product.product_type }
   end
 
-  # rubocop:disable Metrics/MethodLength
   # Returns order items that need to start production for a date using
   # their lead time date.
   # Orders will be active for a ship date to return a list of order items.
@@ -100,7 +99,6 @@ class OrderItem < ApplicationRecord
     SQL
     where(sql, production_date: start_date)
   end
-  # rubocop:enable Metrics/MethodLength
 
   def update_total_lead_days?
     new_record? || product_id_changed?

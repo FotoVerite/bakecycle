@@ -5,9 +5,7 @@ end
 When(/^I fill out the user with a bakery selection form with:$/) do |table|
   fill_in "user_email", with: table.hashes[0]["email"]
   fill_in "user_name", with: table.hashes[0]["name"]
-  if table.hashes[0]["bakery"]
-    select table.hashes[0]["bakery"], from: "user_bakery_id"
-  end
+  select table.hashes[0]["bakery"], from: "user_bakery_id" if table.hashes[0]["bakery"]
   if table.hashes[0]["password"].present?
     fill_in "user_password", with: table.hashes[0]["password"]
     fill_in "user_password_confirmation", with: table.hashes[0]["password_confirmation"]

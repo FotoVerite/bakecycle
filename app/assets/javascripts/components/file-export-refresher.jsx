@@ -1,7 +1,9 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { Model as FileExportStore } from 'backbone';
 
-const FileExportRefresher = React.createClass({
+const FileExportRefresher = createReactClass({
   propTypes: {
     links: PropTypes.object.isRequired,
     loadingMessage: PropTypes.string.isRequired,
@@ -74,7 +76,7 @@ const FileExportRefresher = React.createClass({
         <h1>The report is ready!</h1>
         <p>
           It should begine downloading in a moment.
-          If it doesn't you can <a href={this.state.links.file} className="underlined-link">click here</a> to download it now.
+          If it doesn&#39;t you can <a href={this.state.links.file} className="underlined-link">click here</a> to download it now.
         </p>
       </div>
     );

@@ -33,8 +33,8 @@
                 <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to("Print Batch Recipes", batch_recipes_path) %></li>
                 <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
                 <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
-                <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Weekly/Daily Report", weekly_daily_production_report_production_runs_path) %></li>
-                <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Date Span Production Report", date_span_production_report_production_runs_path) %></li>
+                <li class="<%= active_nav?(:reports) %>"><%= link_to("Reports", reports_path) %></li>
+                <li class="<%= active_nav?(:production_checklists) %>"><%= link_to("Checklist", production_checklist_path) %></li>
               </ul>
             </li>
 
@@ -67,6 +67,12 @@
                 <li class="<%= active_nav?(:products) %>">
                   <%= link_to("Products", products_path) %>
                 </li>
+                <li class="<%= active_nav?(:vendors) %>">
+                  <%= link_to("Vendors", vendors_path) %>
+                </li>
+                 <li class="<%= active_nav?(:buy_orders) %>">
+                  <%= link_to("Buy Orders", buy_orders_path) %>
+                </li>
               </ul>
             </li>
           <% end %>
@@ -94,6 +100,7 @@
                 <%= link_to('Bakeries', bakeries_path) %>
               </li>
             <% end %>
+
 
             <%if current_bakery && policy(current_bakery).edit? %>
               <li class="<%= active_nav?(:my_bakery) %>">

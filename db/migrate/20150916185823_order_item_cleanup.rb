@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/MethodLength
 class OrderItemCleanup < ActiveRecord::Migration
   def change
     change_column_null :order_items, :monday, false

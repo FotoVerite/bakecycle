@@ -13,9 +13,16 @@ Rails.application.routes.draw do
   get "plans", to: "landing_pages#plans"
   get :dashboard, to: "dashboard#index"
 
+  resource :production_checklist, only: [:show]
   resources :registrations, only: %i[new create]
 
   resources :ingredients, except: [:show]
+  resources :vendors, except: [:show] do
+    get :pricing, on: :member
+    get :print_pricing, on: :collection
+    patch :update_pricing, on: :member
+  end
+
   resources :recipes, except: [:show] do
     get "created_at", on: :collection
     get "updated_at", on: :collection
@@ -25,13 +32,27 @@ Rails.application.routes.draw do
   resources :products, except: [:show] do
     get "created_at", on: :collection
     get "updated_at", on: :collection
+    get "weekly_daily_report", on: :collection
+    get "print_weekly_daily_report", on: :collection
     get "papertrail", on: :member
+    get "costing", on: :member
   end
+
+  resources :buy_orders, only: %i[create update index]
+
+  resource :costing, only: %i[create update show update], controller: "costing" do
+    get "buying_orders", on: :collection
+  end
+
   resources :routes, except: [:show]
 
   get "year-total", to: "clients#print_year_total"
 
-  resources :clients
+  resources :clients do
+    get "weekly_daily_report", on: :collection
+    get "print_weekly_daily_report", on: :collection
+    get "print_vip_list", on: :collection
+  end
 
   resources :orders, except: [:show] do
     get "created_at", on: :collection
@@ -42,8 +63,12 @@ Rails.application.routes.draw do
     get :future_invoices, on: :member
     put :add_invoices, on: :member
   end
+
   resources :users, except: [:show] do
     get "myaccount", on: :collection, as: "my"
+  end
+
+  resources :reports, only: [:index] do
   end
 
   resources :file_actions, only: [:index]

@@ -23,18 +23,20 @@
 #  group_preferments  :boolean          default(TRUE)
 #  plan_id            :integer          not null
 #  stripe_customer_id :string
+#  graph_data         :json
 #
 
 class Bakery < ApplicationRecord
-  has_many :ingredients
-  has_many :clients
-  has_many :recipes
-  has_many :orders
-  has_many :products
-  has_many :routes
-  has_many :shipments
-  has_many :users
-  has_many :production_runs
+  has_many :ingredients, dependent: :destroy
+  has_many :clients, dependent: :destroy
+  has_many :recipes, dependent: :destroy
+  has_many :orders, dependent: :destroy
+  has_many :products, dependent: :destroy
+  has_many :routes, dependent: :destroy
+  has_many :shipments, dependent: :destroy
+  has_many :users, dependent: :destroy
+  has_many :production_runs, dependent: :destroy
+  has_many :vendors, dependent: :destroy
 
   has_many :shipment_items, through: :shipments
   has_many :order_items, through: :orders
@@ -48,6 +50,11 @@ class Bakery < ApplicationRecord
   validates :quickbooks_account, presence: true
   has_attached_file :logo, styles: { invoice: ["1800x200>", :png], thumb: ["300x200>", :png] }
   validates_attachment :logo, content_type: { content_type: %r{\Aimage/(jpeg|png|tiff|bmp)$} }
+
+  accepts_nested_attributes_for(
+    :ingredients,
+    allow_destroy: false
+  )
 
   def logo_local_file(style = logo.default_style)
     return if logo.path(style).nil?

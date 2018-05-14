@@ -6,9 +6,7 @@ class InvoicesIif
   end
 
   def generate
-    unless Riif::DSL::Trns::HEADER_COLUMNS.include?(:tosend)
-      Riif::DSL::Trns::HEADER_COLUMNS.push(:tosend)
-    end
+    Riif::DSL::Trns::HEADER_COLUMNS.push(:tosend) unless Riif::DSL::Trns::HEADER_COLUMNS.include?(:tosend)
     invoices(shipments).output
   end
 
@@ -23,7 +21,6 @@ class InvoicesIif
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
   def invoice_data(riif, shipment, row_counter)
     riif.trns do
       row do
@@ -98,7 +95,7 @@ class InvoicesIif
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable
 
   class LineCounter
     def initialize
