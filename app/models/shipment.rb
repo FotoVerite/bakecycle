@@ -56,6 +56,7 @@ class Shipment < ApplicationRecord
   before_validation :set_payment_due_date
   before_create :set_sequence_number
   after_create :increment_client_sequence
+  before_update :check_delivery_fee?
 
   validates :date, presence: true
   validates :bakery, presence: true
@@ -146,5 +147,34 @@ class Shipment < ApplicationRecord
   def increment_client_sequence
     client.increment(:sequence_number)
     client.save
+  end
+
+  def check_delivery_fee?
+    return self.delivery_fee = 0 unless charge_daily_fee? || charge_weekly_fee?
+    self.delivery_fee = order.client_delivery_fee
+  end
+
+  def charge_daily_fee?
+    return false if order.blank?
+    return false unless order.client_daily_delivery_fee?
+    return false if shipment_items.empty?
+    shipment_items_subtotal < order.client_delivery_minimum
+  end
+
+  def charge_weekly_fee?
+    return false unless order
+    order.client_weekly_delivery_fee? && date.sunday? && weekly_subtotal_too_low?
+  end
+
+  def weekly_subtotal_too_low?
+    (weekly_subtotal + shipment_items_subtotal) < order.client_delivery_minimum
+  end
+
+  def weekly_subtotal
+    Shipment.weekly_subtotal(order.client_id, date)
+  end
+
+  def shipment_items_subtotal
+    shipment_items.sum(&:price)
   end
 end

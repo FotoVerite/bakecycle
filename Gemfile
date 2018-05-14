@@ -89,7 +89,7 @@ group :test, :development, :staging do
   gem "faker"
 end
 
-group :production, :staging do
+group :production, :staging, :test do
   gem "newrelic_rpm"
   gem "puma"
 end

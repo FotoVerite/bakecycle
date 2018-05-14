@@ -73,6 +73,29 @@ describe Shipment do
       expect(shipment.subtotal).to eq(10.0)
       expect(shipment.price).to eq(15.0)
     end
+
+    it "removes daily delivery fee if minumum is updated to needed" do
+      client = FactoryBot.create(
+        :client,
+        :with_delivery_fee,
+        delivery_minimum: 11,
+        delivery_fee: 5,
+        shipments: [],
+        delivery_fee_option:
+        :daily_delivery_fee
+      )
+      order = FactoryBot.create(:order, client: client)
+      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0, shipment: nil)
+      shipment.delivery_fee = 5
+      shipment.client = client
+      shipment.order = order
+      shipment.save!
+      expect(shipment.subtotal).to eq(10.0)
+      expect(shipment.price).to eq(15.0)
+      shipment.shipment_items.first.update(product_quantity: 6)
+      expect(shipment.subtotal).to eq(11.0)
+      expect(shipment.price).to eq(16.0)
+    end
   end
 
   describe ".search" do

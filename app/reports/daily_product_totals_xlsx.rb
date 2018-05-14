@@ -84,8 +84,8 @@ class DailyProductTotalsXlsx
       row = [value["weight"]]
       row.push(key)
       sheet.add_row row
-      value[:clients].each do |client, value|
-        sheet.add_row ["", client, value]
+      value[:clients].each do |client, client_values|
+        sheet.add_row ["", client, client_values]
       end
       sheet.add_row(["", "", value["total_products"] || 0])
     end

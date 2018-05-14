@@ -1,6 +1,7 @@
 class ProductionChecklistsController < ApplicationController
   before_action :skip_authorization, :skip_policy_scope
 
+  # rubocop:disable Metrics/AbcSize
   def show
     @missing_shipments = policy_scope(Order).production_date(Time.zone.today)
       .reject(&:no_outstanding_shipments?)
@@ -15,4 +16,6 @@ class ProductionChecklistsController < ApplicationController
     @production_run = current_bakery.production_runs.find_by(date: Time.zone.today)
     @missing_items = current_bakery.shipment_items.where(production_start: Time.zone.today, production_run_id: nil)
   end
+
+  # rubocop:enable Metrics/AbcSize
 end

@@ -29,6 +29,8 @@ class IngredientPricesOverTime < ApplicationRecord
     ingredient.update(conversion: conversion, weight_unit: weight_unit)
   end
 
+  # rubocop:disable Metrics/AbcSize
+
   def check_if_information_is_new
     last_point = IngredientPricesOverTime.order("created_at DESC")
       .find_by(vendor_id: vendor_id, ingredient_id: ingredient_id)
@@ -41,4 +43,6 @@ class IngredientPricesOverTime < ApplicationRecord
         last_point.conversion == conversion &&
         last_point.weight_unit == weight_unit
   end
+
+  # rubocop:enable Metrics/AbcSize
 end

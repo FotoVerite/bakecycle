@@ -97,12 +97,12 @@ class WeeklyProductTotalsXlsx
       sheet.add_row [key], style: @product_style
       sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
       sheet.add_row(["", "", "", "", "", "", "", "", "", "", ""])
-      value[:clients].each do |client, value|
+      value[:clients].each do |client, client_values|
         client_row = ["", client]
         @weekday_order.each do |day|
-          client_row.push(value[day] || 0)
+          client_row.push(client_values[day] || 0)
         end
-        client_row.push(value[:total])
+        client_row.push(client_values[:total])
         sheet.add_row client_row
       end
       sheet.add_row(["", "", "", "", "", "", "", "", "", value[:total_products] || 0])

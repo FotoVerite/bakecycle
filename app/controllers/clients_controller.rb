@@ -1,6 +1,11 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
-  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report print_year_total print_vip_list]
+  before_action :skip_policy_scope, only: %i[
+    weekly_daily_report
+    print_weekly_daily_report
+    print_year_total
+    print_vip_list
+  ]
   decorates_assigned :clients, :client
 
   def index
