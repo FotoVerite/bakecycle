@@ -54,6 +54,10 @@ Then(/^there should only be one price$/) do
   all(".price").count == 1
 end
 
+Then(/^I check inactive$/) do
+  find("#product_inactive").click
+end
+
 Then(/^I should see confirmation that the product "(.*?)" was deleted$/) do |product|
   within ".alert-box" do
     expect(page).to have_content("You have deleted #{product}")

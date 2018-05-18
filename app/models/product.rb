@@ -63,6 +63,7 @@ class Product < ApplicationRecord
   validates :over_bake, presence: true, numericality: true
   validates :base_price, presence: true, numericality: true
   validates :description, length: { maximum: 500 }
+  validate :check_for_order_items
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
@@ -75,7 +76,7 @@ class Product < ApplicationRecord
     where(updated_at: date.beginning_of_day..date.end_of_day)
   }
 
-  scope :available, -> { where(removed: false) }
+  scope :available, -> { where(removed: false, inactive: false) }
 
   def strip_name
     self.name = name.strip if name
@@ -128,6 +129,10 @@ class Product < ApplicationRecord
   end
 
   def destroy
+    unless inactive
+      errors.add(:base, "product must first be set to inactive!")
+      return false
+    end
     return false unless check_for_order_items
     self.removed = true
     save
@@ -140,6 +145,7 @@ class Product < ApplicationRecord
   end
 
   def check_for_order_items
+    return true unless inactive
     return true unless order_items.any?
     # see if any orders are still active
     return true unless order_items.map(&:order).uniq.map(&:still_in_use).uniq.include?(true)

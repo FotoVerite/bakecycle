@@ -98,6 +98,7 @@ class ProductsController < ApplicationController
     params.require(:product).permit(
       :name, :product_type, :weight, :unit, :description, :over_bake,
       :motherdough_id, :inclusion_id, :base_price, :sku, :batch_recipe,
+      :inactive,
       price_variants_attributes: %i[id client_id quantity price _destroy]
     )
   end

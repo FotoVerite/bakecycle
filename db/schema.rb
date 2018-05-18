@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180428231523) do
+ActiveRecord::Schema.define(version: 20180518182317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 20180428231523) do
     t.decimal "conversion"
     t.string "weight_unit"
     t.decimal "cost_per_gram"
+    t.boolean "inactive", default: false
     t.index ["legacy_id", "bakery_id"], name: "index_ingredients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_ingredients_on_name_and_bakery_id", unique: true
   end
@@ -270,6 +271,7 @@ ActiveRecord::Schema.define(version: 20180428231523) do
     t.boolean "batch_recipe", default: false
     t.boolean "removed", default: false
     t.json "graph_data"
+    t.boolean "inactive", default: false
     t.index ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true
     t.index ["removed"], name: "index_products_on_removed"

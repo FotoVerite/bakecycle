@@ -37,6 +37,7 @@ Feature: Products
     Then "You have updated sugar cookie" should be present
     And I click on the last price's remove button
     And I edit the remaining price to "12.00"
+    And I check inactive
     And I click on "Update"
     Then "You have updated sugar cookie" should be present
     And there should only be one price

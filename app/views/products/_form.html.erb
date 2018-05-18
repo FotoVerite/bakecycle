@@ -5,6 +5,11 @@
   <fieldset>
     <legend>Product Information</legend>
     <div class="row">
+      <div class="small-12 columns">
+        <%=  f.input_field :inactive, as: :boolean, inline_label: 'Inactive?', input_html: { id: 'inactive' } %>
+      </div>
+    </div>
+    <div class="row">
       <div class="small-12 medium-4 columns">
         <%= f.input :name, as: :string %>
       </div>

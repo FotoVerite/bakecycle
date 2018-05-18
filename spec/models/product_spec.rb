@@ -58,12 +58,26 @@ describe Product do
 
   describe "#destroy" do
     it "wont destroy if it's used in an order" do
+      # TODO: make this state impossible to get into.
       bakery = create(:bakery)
-      product = create(:product, bakery: bakery)
+      product = create(:product, bakery: bakery, inactive: true)
       order = create(:order, bakery: bakery)
       order.order_items.first.update!(product: product)
       expect(product.destroy).to eq(false)
       expect(product.errors.to_a).to eq(["This product is still used in orders"])
+    end
+
+    it "wont destroy if it's listed as active" do
+      bakery = create(:bakery)
+      product = create(:product, bakery: bakery, inactive: false)
+      expect(product.destroy).to eq(false)
+      expect(product.errors.to_a).to eq(["product must first be set to inactive!"])
+    end
+
+    it "destroy if it's listed as inactive and has no orders" do
+      bakery = create(:bakery)
+      product = create(:product, bakery: bakery, inactive: true)
+      expect(product.destroy).to eq(true)
     end
   end
 
