@@ -3,6 +3,7 @@
 <h1>Editing Product: <%= @product.name %></h1>
 
 <%= link_to 'Back', products_path, class: "button small" %>
+<%= link_to 'View Products Orders', orders_product_path(@product), class: "button small" %>
 
   <div id="gross-profits"></div><br />
   <div id="shipped"></div>

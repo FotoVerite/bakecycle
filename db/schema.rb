@@ -156,8 +156,8 @@ ActiveRecord::Schema.define(version: 20180518182317) do
     t.string "ingredient_type", default: "other", null: false
     t.integer "vendor_id"
     t.decimal "current_amount", default: "0.0", null: false
-    t.decimal "conversion"
-    t.string "weight_unit"
+    t.string "weight_unit", default: "grams"
+    t.decimal "conversion", default: "1.0"
     t.decimal "cost_per_gram"
     t.boolean "inactive", default: false
     t.index ["legacy_id", "bakery_id"], name: "index_ingredients_on_legacy_id_and_bakery_id", unique: true

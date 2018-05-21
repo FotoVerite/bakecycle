@@ -15,7 +15,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "order", collection: OrderDecorator.decorate_collection(orders), locals: {
+    <%= render partial: "orders/order", collection: OrderDecorator.decorate_collection(orders), locals: {
         missing_shipment_ids: missing_shipment_ids,
         show_created_whodoneit: show_created_whodoneit,
         show_updated_at_whodoneit: show_updated_at_whodoneit
@@ -24,4 +24,4 @@
   </tbody>
 </table>
 
-<%= will_paginate @orders %>
+<%= will_paginate @orders if @orders.respond_to?(:total_pages) %>

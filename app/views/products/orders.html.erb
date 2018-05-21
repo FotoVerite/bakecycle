@@ -1,0 +1,13 @@
+<h1>Orders for <%= @product.name %></h1>
+<%= link_to 'Back', products_path, class: "button small" %>
+
+<% @orders.each do |order| %>
+<% end %>
+
+<%= render partial: "orders/order_table", locals: {
+    orders: @orders,
+    missing_shipment_ids: [],
+    show_created_whodoneit: false,
+    show_updated_at_whodoneit: false
+  }
+%>

@@ -138,6 +138,10 @@ class Product < ApplicationRecord
     save
   end
 
+  def orders_in_use
+    order_items.map(&:order).uniq.select(&:still_in_use)
+  end
+
   private
 
   def order_items
