@@ -33,6 +33,7 @@ class Ingredient < ApplicationRecord
     meat
     dairy
     nuts
+    chocolate
     other
   ].freeze
 
