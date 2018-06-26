@@ -22,6 +22,7 @@ class IngredientPricesOverTime < ApplicationRecord
 
   before_create :check_if_information_is_new
   after_create :updated_ingredient
+  validates :cost_per_unit, :cost_per_gram,  :numericality => true 
 
   scope :last_two_weeks, -> { where("created_at >= ?", Time.zone.today - 2.weeks) }
 
