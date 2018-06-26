@@ -89,6 +89,6 @@ class VendorsController < ApplicationController
     params.require(:bakery).permit(
          ingredients_attributes:
              %i[id conversion cost current_amount cost_over_time_vendor_id dirty weight_unit updated_at]
-    )
+       )
   end
 end

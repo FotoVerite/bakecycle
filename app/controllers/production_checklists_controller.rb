@@ -10,7 +10,7 @@ class ProductionChecklistsController < ApplicationController
     current_bakery,
     (Time.zone.today - 2.days),
     (Time.zone.today + 3.days)
-    )
+  )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
     @production_run = current_bakery.production_runs.find_by(date: Time.zone.today)
