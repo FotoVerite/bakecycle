@@ -59,13 +59,14 @@ class Ingredient < ApplicationRecord
   before_destroy :check_for_recipes, prepend: true
 
   WEIGHT_UNITS = [
-    "gallons",
+    "pint",
     "liters",
+    "gallons",
+    "quart",
     "grams",
     "kilograms",
     "pounds",
-    "table spoons",
-    "tea spoons",
+    "case",
     "units"
   ].freeze
 

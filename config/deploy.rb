@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.10.1"
+lock "~> 3.11.0"
 
 set :application, "bakecycle"
 set :repo_url, "git@github.com:wizarddevelopment/bakecycle.git"
