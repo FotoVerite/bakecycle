@@ -107,6 +107,9 @@ const VendorPricingForm = createReactClass({
             <div className="ingredient-current-cost-per-gram">
               <label>Cost/Gram</label>
             </div>
+            <div className="ingredient-last-updated-at">
+              <label>Updated At</label>
+            </div>
           </div>
         </div>
         {this.fields()}

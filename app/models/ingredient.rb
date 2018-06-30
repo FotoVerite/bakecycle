@@ -82,6 +82,10 @@ class Ingredient < ApplicationRecord
     ingredient_prices_over_time.find_by(vendor_id: vendor.id).try(:cost_per_unit) || 0
   end
 
+  def pricing_updated_last_at(vendor)
+    ingredient_prices_over_time.find_by(vendor_id: vendor.id).try(:updated_at) || nil
+  end
+
   private
 
   def record_costing_change

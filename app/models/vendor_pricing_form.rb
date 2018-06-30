@@ -20,7 +20,8 @@ class VendorPricingForm
         dirty: false,
         weight_unit: (i.weight_unit || "grams"),
         conversion: i.conversion,
-        cost_over_time_vendor_id: @vendor.id
+        cost_over_time_vendor_id: @vendor.id,
+        updated_at: i.pricing_updated_last_at(@vendor)
       )
     end
     hash[:filter] = []

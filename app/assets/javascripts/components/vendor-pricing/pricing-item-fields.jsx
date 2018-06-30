@@ -4,6 +4,7 @@ import {
   BCInput,
   BCSelect
 } from '../bakecycle-inputs';
+import moment from 'moment';
 
 export default function PricingItemFields({
   model,
@@ -61,6 +62,10 @@ export default function PricingItemFields({
         <div className="ingredient-current-cost-per-gram " key={`${model.id}-current_cost_per_gram`}>
           <label className="hide-for-large-up">Current Cost Per Gram</label>
           <input disabled="true" type="text" value={ (model.cost / model.conversion) } />
+        </div>
+        <div className="ingredient-last-updated-at " key={`${model.id}-ingredient-last-updated-at`}>
+          <label className="hide-for-large-up"></label>
+          <input disabled="true" type="text" value={ model.updated_at ? moment(model.updated_at).format("MMM Do YY") : "NA" } />
         </div>
       </div>
     </div>);

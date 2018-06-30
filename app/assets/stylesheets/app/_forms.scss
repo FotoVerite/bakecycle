@@ -223,7 +223,8 @@ select.inline {
 .ingredient-weight-units,
 .ingredient-current-amount-grams,
 .ingredient-current-cost-per-gram,
-.ingredient-conversion {
+.ingredient-conversion,
+.ingredient-last-updated-at {
   @media #{$large-up} {
     display: inline-block;
     padding-right: 10px;
@@ -235,7 +236,14 @@ select.inline {
   }
 }
 
-.costing-ingredient-name, .ingredient-vendor-selection, .ingredient-cost-input, .ingredient-weight-units, .ingredient-current-amount-grams, .ingredient-current-cost-per-gram, .ingredient-conversion {
+.costing-ingredient-name, 
+.ingredient-vendor-selection, 
+.ingredient-cost-input, 
+.ingredient-weight-units, 
+.ingredient-current-amount-grams, 
+.ingredient-current-cost-per-gram, 
+.ingredient-conversion,
+.ingredient-last-updated-at {
   @media #{$large-up} {
     width: 14%;
   }
