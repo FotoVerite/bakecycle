@@ -12,6 +12,43 @@ export default function PricingItemFields({
   weightUnitOptions,
 }) {
 
+  function roundTo(n, digits) {
+    var negative = false;
+    if (digits === undefined) {
+      digits = 0;
+    }
+    if( n < 0) {
+      negative = true;
+      n = n * -1;
+    }
+    var multiplicator = Math.pow(10, digits);
+    n = parseFloat((n * multiplicator).toFixed(11));
+    n = (Math.round(n) / multiplicator).toFixed(digits);
+    if( negative ) {    
+      n = (n * -1).toFixed(digits);
+    }
+    return n;
+  }
+
+  function DisplayOriginalConversion(unit, amount) {
+    switch(unit) {
+      case 'pounds':
+        return `453.592 * ${amount}`;
+        break;
+      default:
+        return null;
+    }
+  }
+
+  function convertTo(unit, amount) {
+    switch(unit) {
+      case 'pounds':
+        return amount / 453.592;
+        break;
+      default:
+        return null;
+    }
+  }
 
   return (
     <div className={'row ingredient ' + model.hidden} key={model.id}>
@@ -33,7 +70,7 @@ export default function PricingItemFields({
             labelClass="hide-for-large-up"
             autoComplete="off"
             type="number"
-            step="0.001"
+            step="0.01"
             onChange={onChange}
           />
         </div>
@@ -56,16 +93,17 @@ export default function PricingItemFields({
             labelClass="hide-for-large-up"
             label="Conversion"
             autoComplete="off"
+            step="0.001"
             onChange={onChange}
           />
         </div>
         <div className="ingredient-current-cost-per-gram " key={`${model.id}-current_cost_per_gram`}>
           <label className="hide-for-large-up">Current Cost Per Gram</label>
-          <input disabled="true" type="text" value={ (model.cost / model.conversion) } />
+          <input disabled="true" type="text" value={ roundTo((model.cost / model.conversion), 4) } />
         </div>
         <div className="ingredient-last-updated-at " key={`${model.id}-ingredient-last-updated-at`}>
-          <label className="hide-for-large-up"></label>
-          <input disabled="true" type="text" value={ model.updated_at ? moment(model.updated_at).format("MMM Do YY") : "NA" } />
+          <label className="hide-for-large-up">Updated At</label>
+          <input disabled="true" type="text" value={ model.updated_at ? moment(model.updated_at).format('MMM Do, YY') : 'NA' } />
         </div>
       </div>
     </div>);
