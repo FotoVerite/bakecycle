@@ -58,16 +58,16 @@ class Ingredient < ApplicationRecord
   after_validation :record_costing_change
   before_destroy :check_for_recipes, prepend: true
 
-  WEIGHT_UNITS = [
-    "pint",
-    "liters",
-    "gallons",
-    "quart",
-    "grams",
-    "kilograms",
-    "pounds",
-    "case",
-    "units"
+  WEIGHT_UNITS = %w[
+    pint
+    liters
+    gallons
+    quart
+    grams
+    kilograms
+    pounds
+    case
+    units
   ].freeze
 
   def self.policy_class

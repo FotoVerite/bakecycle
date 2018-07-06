@@ -30,25 +30,16 @@ export default function PricingItemFields({
     return n;
   }
 
-  function DisplayOriginalConversion(unit, amount) {
-    switch(unit) {
-      case 'pounds':
-        return `453.592 * ${amount}`;
-        break;
-      default:
-        return null;
-    }
-  }
 
-  function convertTo(unit, amount) {
-    switch(unit) {
-      case 'pounds':
-        return amount / 453.592;
-        break;
-      default:
-        return null;
-    }
-  }
+  // function convertTo(unit, amount) {
+  //   switch(unit) {
+  //     case 'pounds':
+  //       return amount / 453.592;
+  //       break;
+  //     default:
+  //       return null;
+  //   }
+  // }
 
   return (
     <div className={'row ingredient ' + model.hidden} key={model.id}>

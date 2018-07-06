@@ -19,8 +19,10 @@ Rails.application.routes.draw do
   resources :ingredients, except: [:show]
   resources :vendors, except: [:show] do
     get :pricing, on: :member
+    get :buy_orders, on: :member
     get :print_pricing, on: :collection
     patch :update_pricing, on: :member
+    patch :update_buy_orders, on: :member
   end
 
   resources :recipes, except: [:show] do

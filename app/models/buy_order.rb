@@ -14,6 +14,7 @@
 class BuyOrder < ApplicationRecord
   belongs_to :bakery
   belongs_to :ingredient
+  belongs_to :vendor
   after_save :update_ingredient_cost
 
   def self.policy_class
@@ -23,6 +24,7 @@ class BuyOrder < ApplicationRecord
   def update_ingredient_cost
     last_point = IngredientPricesOverTime.order("created_at DESC")
       .find_by(ingredient_id: ingredient_id, vendor_id: vendor_id)
+    return unless last_point
     ingredient.update(cost_per_gram: last_point.cost_per_gram)
   end
 end

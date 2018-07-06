@@ -1,5 +1,5 @@
 class VendorsController < ApplicationController
-  before_action :set_vendor, only: %i[edit pricing update update_pricing destroy]
+  before_action :set_vendor, only: %i[buy_orders edit pricing update update_buy_orders update_pricing destroy]
   before_action :skip_policy_scope, only: %i[print_pricing]
 
   def index
@@ -26,6 +26,17 @@ class VendorsController < ApplicationController
   def pricing
     authorize @vendor, :show?
     @ingredients = @vendor.ingredients
+  end
+
+  def buy_orders
+    authorize @vendor, :edit?
+    @ingredients = @vendor.ingredients
+  end
+
+  def update_buy_orders
+    authorize @vendor, :edit?
+    @vendor.update(vendor_params)
+    redirect_to buy_orders_vendor_path(@vendor)
   end
 
   def print_pricing
@@ -81,7 +92,12 @@ class VendorsController < ApplicationController
       :contact,
       :email,
       :name,
-      :phone
+      :phone,
+      buy_orders_attributes: %i[
+        id
+        amount
+        ingredient_id
+      ]
     )
   end
 
