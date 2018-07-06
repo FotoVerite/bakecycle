@@ -1,6 +1,6 @@
 <h1>Buy Orders for <%= @vendor.name %></h1>
 <%= form_for @vendor, url: update_buy_orders_vendor_path(@vendor) do |f| %>
-  <%= index = 0 %>
+  <% index = 0 %>
   <% @ingredients.each do | i| %>
     <% over_time = i.ingredient_prices_over_time.find_by(vendor_id: @vendor.id) %>
     <% next unless over_time.present? %>
