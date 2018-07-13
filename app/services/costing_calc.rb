@@ -13,11 +13,11 @@ class CostingCalc
       hash = {
        name: item.inclusionable.name,
        weight: weight_for(item),
-       cost: item.inclusionable.cost_per_gram * weight_for(item).to_f,
+       cost: (item.inclusionable.cost_per_gram || 0) * weight_for(item).to_f,
        type: item.inclusionable_type,
        sort_id: item.sort_id
      }
-      @total_cost += item.inclusionable.cost_per_gram * weight_for(item).to_f
+      @total_cost += (item.inclusionable.cost_per_gram || 0) * weight_for(item).to_f
       add_internal_ingredients(item, hash)
       hash
     end

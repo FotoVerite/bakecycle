@@ -65,6 +65,8 @@ Rails.application.routes.draw do
     get "print", on: :member
     get :future_invoices, on: :member
     put :add_invoices, on: :member
+    get "grocery_list", on: :collection
+    get "print_grocery_list", on: :collection
   end
 
   resources :users, except: [:show] do

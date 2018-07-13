@@ -9,6 +9,7 @@ class OrdersController < ApplicationController
     papertrail
     update
   ]
+  before_action :skip_policy_scope, only: %i[grocery_list print_grocery_list]
   decorates_assigned :orders, :order
   helper_method :search_form
 
@@ -117,6 +118,18 @@ class OrdersController < ApplicationController
   def print
     authorize @order, :show?
     generator = OrderGenerator.new(@order)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+  def grocery_list
+    authorize Order, :index?
+    @date = date_query
+  end
+
+  def print_grocery_list
+    authorize Order, :index?
+    @date = date_query
+    generator = GroceryListGenerator.new(current_bakery, date_query)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
