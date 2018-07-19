@@ -59,6 +59,7 @@ const VendorPricingForm = createReactClass({
               key={`${key}-${model.id}`}
               model={model}
               onChange={self.props.updateIngredient.bind(null, model)}
+              onBlur={self.props.updateIngredient.bind(null, model)}
               weightUnitOptions={weightUnitOptions}
             />)}
         </div>

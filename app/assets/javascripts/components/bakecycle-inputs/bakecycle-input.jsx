@@ -37,6 +37,7 @@ const BCInput = createReactClass({
           className={`${type || 'text'} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
           onChange={this.onChange}
+          onBlur={this.onBlur}
           type={type || 'text'}
           placeholder={placeholder}
           value={value}

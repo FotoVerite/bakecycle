@@ -63,6 +63,7 @@ export default function PricingItemFields({
             type="number"
             step="0.01"
             onChange={onChange}
+            onBlur={onChange.bind(null, {cost: roundTo(model.cost, 2)})}
           />
         </div>
         <div className="ingredient-current-amount-grams" key={`${model.id}-current_amount_grams`}>
@@ -86,6 +87,7 @@ export default function PricingItemFields({
             autoComplete="off"
             step="0.001"
             onChange={onChange}
+            onBlur={onChange.bind(null, {conversion: roundTo(model.conversion, 3)})}
           />
         </div>
         <div className="ingredient-current-cost-per-gram " key={`${model.id}-current_cost_per_gram`}>
@@ -104,5 +106,6 @@ PricingItemFields.propTypes = {
   model: PropTypes.object,
   key: PropTypes.string,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   weightUnitOptions: PropTypes.array
 };

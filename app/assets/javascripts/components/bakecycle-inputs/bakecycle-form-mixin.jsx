@@ -6,6 +6,7 @@ export default {
     field: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func,
     disabled: PropTypes.bool,
     checked: PropTypes.bool, 
     error: PropTypes.string,
@@ -25,6 +26,15 @@ export default {
     const data = {};
     data[this.props.field] = event.target.value;
     this.props.onChange(data);
+  },
+
+  onBlur(event) {
+    if(this.props.onBlur == undefined){
+      return;
+    }
+    const data = {};
+    data[this.props.field] = event.target.value;
+    this.props.onBlur(data);
   },
 
   labelClass() {
