@@ -42,13 +42,6 @@ ActiveRecord::Schema.define(version: 20180518182317) do
     t.index ["name"], name: "index_bakeries_on_name", unique: true
   end
 
-  create_table "bakery_assignments", id: :serial, force: :cascade do |t|
-    t.integer "bakery_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "buy_orders", force: :cascade do |t|
     t.bigint "vendor_id"
     t.bigint "ingredient_id"
