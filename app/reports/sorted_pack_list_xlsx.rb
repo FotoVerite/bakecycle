@@ -29,13 +29,10 @@ class SortedPackListXlsx
           product_hash = hash[i.product_name] = {}
           product_hash["product_type"] = i.product.attributes["product_type"]
           product_hash["name"] = i.product_name
-          product_hash["quantity"] = {}
           product_hash["total"] = 0
         else
           product_hash = hash[i.product_name]
         end
-        product_hash["quantity"][client_name.to_s] = 0 if product_hash["quantity"][client_name.to_s].nil?
-        product_hash["quantity"][client_name.to_s] += i.product_quantity
         product_hash["total"] = (product_hash["total"].to_i + i.product_quantity)
       end
     end
@@ -48,9 +45,6 @@ class SortedPackListXlsx
     # Set Product Type Row
     hash.each do |product_array|
       sheet.add_row [product_array[0]], style: @header
-      product_array[1]["quantity"].each do |client_name, quantity|
-        sheet.add_row ["#{client_name} #{quantity}"]
-      end
       sheet.add_row ["Total: " + product_array[1]["total"].to_s]
     end
   end
