@@ -9,7 +9,8 @@ class SortedPackListXlsx
     p = Axlsx::Package.new
     wb = p.workbook
     styles = wb.styles
-    @header = styles.add_style sz: 16, b: true, alignment: { horizontal: :center }
+    @header = styles.add_style sz: 16, b: true, alignment: { horizontal: :left }
+    @rows = styles.add_style sz: 14, b: false, alignment: { horizontal: :left }
     @grouped_shipments.each do |shipments|
       wb.add_worksheet(name: "#{@date} #{shipments[0]}") do |sheet|
         hash = create_hash_of_products(shipments[1])
@@ -45,7 +46,8 @@ class SortedPackListXlsx
     # Set Product Type Row
     hash.each do |product_array|
       sheet.add_row [product_array[0]], style: @header
-      sheet.add_row ["Total: " + product_array[1]["total"].to_s]
+      sheet.add_row ["Total: " + product_array[1]["total"].to_s], style: @rows
+      sheet.add_row []
     end
   end
 
