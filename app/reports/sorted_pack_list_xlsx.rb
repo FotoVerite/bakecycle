@@ -12,7 +12,7 @@ class SortedPackListXlsx
     @header = styles.add_style sz: 15, b: true, alignment: { horizontal: :left }
     @rows = styles.add_style sz: 14, b: false, alignment: { horizontal: :left }
     @grouped_shipments.each do |shipments|
-      wb.add_worksheet(name: "#{@date} #{shipments[0]}") do |sheet|
+      wb.add_worksheet(name: "#{@date} #{shipments[0]}".truncate(30, omission: '')) do |sheet|
         hash = create_hash_of_products(shipments[1])
         sheet.add_row ["Pack List - #{@date} #{shipments[0]}"]
         sheet.add_row []
