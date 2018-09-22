@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     get "papertrail", on: :member
   end
 
-  resources :products, except: [:show] do
+  resources :products do
     get "created_at", on: :collection
     get "updated_at", on: :collection
     get "weekly_daily_report", on: :collection

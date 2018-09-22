@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[costing edit orders papertrail update destroy]
+  before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
   before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report]
   decorates_assigned :products, :product
 
@@ -33,6 +33,10 @@ class ProductsController < ApplicationController
     else
       render "new"
     end
+  end
+
+  def show
+    authorize @product
   end
 
   def edit

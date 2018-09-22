@@ -19,6 +19,9 @@
         <td data-title="SKU"><%= product.sku_display %></td>
         <% if policy(product).manage_permission? %>
           <td data-title="Action">
+            <%= link_to product_path(product) do %>
+              <span class="table-action-icon icon-link-tooltip" aria-label="View Product"><i class="fi-eye"></i></span>
+            <% end %>
             <%= link_to edit_product_path(product) do %>
               <span class="table-action-icon icon-link-tooltip" aria-label="Edit Product">
                 <i class="fi-page-edit large"></i>
@@ -26,9 +29,6 @@
             <% end %>
             <%= link_to papertrail_product_path(product) do %>
               <span class="table-action-icon icon-link-tooltip" aria-label="Papertrail"><i class="fi-eye"></i></span>
-            <% end %>
-            <%= link_to orders_product_path(product) do %>
-              <span class="table-action-icon icon-link-tooltip" aria-label="Orders"><i class="fi-eye"></i></span>
             <% end %>
           </td>
         <% end %>
