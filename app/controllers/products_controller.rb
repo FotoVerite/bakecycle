@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
-  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report]
+  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report, pricing_report]
   decorates_assigned :products, :product
 
   def index
@@ -97,6 +97,12 @@ class ProductsController < ApplicationController
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
+  def pricing_report
+    authorize Product, :index?
+    generator = ProductPricingGenerator.new(current_bakery)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
   private
 
   def set_product
@@ -105,7 +111,7 @@ class ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(
-      :name, :product_type, :weight, :unit, :description, :over_bake,
+      :cog, :name, :product_type, :weight, :unit, :description, :over_bake,
       :motherdough_id, :inclusion_id, :base_price, :sku, :batch_recipe,
       :inactive,
       price_variants_attributes: %i[id client_id quantity price _destroy]

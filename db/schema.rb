@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180518182317) do
+ActiveRecord::Schema.define(version: 20181023181943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,24 @@ ActiveRecord::Schema.define(version: 20180518182317) do
     t.index ["name"], name: "index_bakeries_on_name", unique: true
   end
 
+  create_table "bakery_assignments", id: :serial, force: :cascade do |t|
+    t.integer "bakery_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "brands", force: :cascade do |t|
+    t.bigint "ingredient_id"
+    t.bigint "bakery_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "#<ActiveRecord::ConnectionAdapters::PostgreSQL::TableDefinition"
+    t.index ["bakery_id"], name: "index_brands_on_bakery_id"
+    t.index ["ingredient_id"], name: "index_brands_on_ingredient_id"
+  end
+
   create_table "buy_orders", force: :cascade do |t|
     t.bigint "vendor_id"
     t.bigint "ingredient_id"
@@ -52,6 +70,14 @@ ActiveRecord::Schema.define(version: 20180518182317) do
     t.index ["bakery_id"], name: "index_buy_orders_on_bakery_id"
     t.index ["ingredient_id"], name: "index_buy_orders_on_ingredient_id"
     t.index ["vendor_id"], name: "index_buy_orders_on_vendor_id"
+  end
+
+  create_table "client_organizations", force: :cascade do |t|
+    t.string "name"
+    t.bigint "bakery_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bakery_id"], name: "index_client_organizations_on_bakery_id"
   end
 
   create_table "clients", id: :serial, force: :cascade do |t|
@@ -95,7 +121,9 @@ ActiveRecord::Schema.define(version: 20180518182317) do
     t.boolean "alert", default: false
     t.boolean "print_invoice", default: true
     t.boolean "temp_vip", default: false
+    t.integer "client_organization"
     t.index ["active"], name: "index_clients_on_active"
+    t.index ["client_organization"], name: "index_clients_on_client_organization"
     t.index ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true
   end
@@ -265,6 +293,7 @@ ActiveRecord::Schema.define(version: 20180518182317) do
     t.boolean "removed", default: false
     t.json "graph_data"
     t.boolean "inactive", default: false
+    t.decimal "cog"
     t.index ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true
     t.index ["removed"], name: "index_products_on_removed"

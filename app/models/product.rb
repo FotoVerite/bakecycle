@@ -77,7 +77,8 @@ class Product < ApplicationRecord
   }
 
   scope :available, -> { where(removed: false, inactive: false) }
-
+  scope :active, -> { where(active: true) }
+  
   def strip_name
     self.name = name.strip if name
   end
