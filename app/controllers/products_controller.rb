@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
-  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report, pricing_report]
+  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report pricing_report]
   decorates_assigned :products, :product
 
   def index
