@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181023181943) do
+ActiveRecord::Schema.define(version: 20181025054307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,9 +121,8 @@ ActiveRecord::Schema.define(version: 20181023181943) do
     t.boolean "alert", default: false
     t.boolean "print_invoice", default: true
     t.boolean "temp_vip", default: false
-    t.integer "client_organization"
+    t.string "wholesale_manager"
     t.index ["active"], name: "index_clients_on_active"
-    t.index ["client_organization"], name: "index_clients_on_client_organization"
     t.index ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true
   end

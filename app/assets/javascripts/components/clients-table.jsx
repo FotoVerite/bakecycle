@@ -94,7 +94,7 @@ const ClientsTable = createReactClass({
             />
           </div>
         </div>
-        <div className="small-12 medium-1 end columns">
+        <div className="small-12 medium-1 columns">
           <div className="input string optional">
             <label className="string optional">Active?</label>
             <select value={this.state.search.active} onChange={this.searchActive}>
@@ -102,6 +102,20 @@ const ClientsTable = createReactClass({
               <option value="false">No</option>
               <option value="any">Any</option>
             </select>
+          </div>
+        </div>
+         <div className="small-12 medium-4 end columns">
+          <div className="input string optional">
+            <label className="string optional">&nbsp;</label>
+            <a 
+          className='button small'
+          target='_blank' 
+          style={{
+            marginLeft:20,
+            paddingTop: 10,
+            paddingBottom: 10
+          }}
+          href={`/clients/print_client_list?type=${this.state.search.active}`}>Export Client List</a>
           </div>
         </div>
       </div>

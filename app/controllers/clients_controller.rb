@@ -5,6 +5,7 @@ class ClientsController < ApplicationController
     print_weekly_daily_report
     print_year_total
     print_vip_list
+    print_client_list
   ]
   decorates_assigned :clients, :client
 
@@ -70,6 +71,12 @@ class ClientsController < ApplicationController
     @date = date_query
   end
 
+  def print_client_list
+    authorize Client, :index?
+    generator = ClientListGenerator.new(current_bakery, params[:type])
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
   def print_weekly_daily_report
     authorize Client, :index?
     @date = date_query
@@ -105,7 +112,7 @@ class ClientsController < ApplicationController
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
       :secondary_contact_phone, :secondary_contact_email, :billing_term, :delivery_fee_option,
-      :delivery_fee, :delivery_minimum, :notes, :print_invoice, :temp_vip
+      :delivery_fee, :delivery_minimum, :notes, :print_invoice, :temp_vip, :wholesale_manager
     )
   end
 end

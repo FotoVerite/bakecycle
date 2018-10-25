@@ -56,6 +56,8 @@ Rails.application.routes.draw do
     get "weekly_daily_report", on: :collection
     get "print_weekly_daily_report", on: :collection
     get "print_vip_list", on: :collection
+    get "print_client_list", on: :collection
+
   end
 
   resources :orders, except: [:show] do

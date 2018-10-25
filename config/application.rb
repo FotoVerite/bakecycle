@@ -22,7 +22,10 @@ module Bakecycle
     # config.i18n.default_locale = :de
 
     # new 4.2+ behavior
-    config.autoload_paths += ["#{config.root}/app/reports/product_reports"]
+    config.autoload_paths += [
+      "#{config.root}/app/reports/product_reports",
+      "#{config.root}/app/reports/client_reports"
+    ]
     config.serve_static_files = true
 
     # Browserify
