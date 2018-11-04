@@ -22,6 +22,7 @@ class InvoicesCsv
       "Client Name",
       "Client ID",
       "Invoice Date",
+      "Route",
       "Invoice Subtotal",
       "Invoice fees",
       "Invoice total"
@@ -34,6 +35,7 @@ class InvoicesCsv
       invoice.client_name,
       invoice.client_id,
       invoice.date,
+      invoice.route_name,
       invoice.subtotal,
       invoice.delivery_fee,
       invoice.price
