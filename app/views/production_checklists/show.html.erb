@@ -40,7 +40,7 @@
       </thead>
       <tbody>
       <% @double_invoices.each do |shipment| %>
-        <%= render 'shipment', shipment: ShipmentDecorator.decorate(shipment) %>
+        <%= render 'shipments/shipment', shipment: ShipmentDecorator.decorate(shipment) %>
       <% end %>
       </tbody>
     </table>

@@ -11,7 +11,7 @@ class ShipmentsController < ApplicationController
       "bakery_id = ? AND date between ? and ? ",
       current_bakery,
       (Time.zone.today - 2.days),
-      (Time.zone.today + 3.days)
+      (Time.zone.today + 7.days)
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
