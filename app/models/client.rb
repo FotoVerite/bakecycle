@@ -55,6 +55,15 @@ class Client < ApplicationRecord
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
   enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee]
 
+  enum channel_options: {
+      Restaurant: 'Restaurant', 
+      Hotel: 'Hotel', 
+      Grocery: 'Grocery',
+      FoodService: 'FoodService',
+      Distro: 'Distro',
+      Coffee: 'Coffee'
+    }
+
   validates :accounts_payable_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :active, inclusion: [true, false]
   validates :bakery, presence: true

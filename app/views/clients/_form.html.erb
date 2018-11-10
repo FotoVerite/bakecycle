@@ -19,15 +19,29 @@
 
     <div class="row">
 
-      <div class="small-12 medium-3 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :business_phone %>
       </div>
 
-      <div class="small-12 medium-3 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :business_fax %>
       </div>
-      <div class="small-12 medium-3 columns">
+      <div class="small-12 medium-4 columns">
         <%= f.input :billing_term, collection: Client.billing_terms_select, as: :select, include_blank: "Select One" %>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="small-12 medium-4 columns">
+        <%= f.input :group %>
+      </div>
+
+      <div class="small-12 medium-4 columns">
+        <%= f.input :channel, collection: Client.channel_options, as: :select, include_blank: "Select One" %>
+      </div>
+
+      <div>
       </div>
     </div>
 

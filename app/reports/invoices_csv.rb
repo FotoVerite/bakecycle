@@ -20,6 +20,8 @@ class InvoicesCsv
     [
       "Invoice Number",
       "Client Name",
+      "Client Group",
+      "Client Channel",
       "Client ID",
       "Invoice Date",
       "Route",
@@ -33,6 +35,8 @@ class InvoicesCsv
     [
       invoice.invoice_number,
       invoice.client_name,
+      invoice.client.group,
+      invoice.client.channel,
       invoice.client_id,
       invoice.date,
       invoice.route_name,

@@ -12,7 +12,17 @@ class ClientListXlsx
     styles = wb.styles
     @header = styles.add_style bg_color: "DD", sz: 16, b: true, alignment: { horizontal: :left }
     wb.add_worksheet(name: "Client List for #{@date}") do |sheet|
-      sheet.add_row(['Client Name', 'Active', 'Delivery Address', 'Business Phone', 'Primary Contact Name', 'Primary Contact Phone' ,'Primary Contact Email'], header: @header)
+      sheet.add_row(
+        [
+          'Client Name', 
+          'Active', 
+          'Delivery Address', 
+          'Business Phone', 
+          'Primary Contact Name', 
+          'Primary Contact Phone' ,
+          'Primary Contact Email',
+          'Group', 
+          'Channel'], header: @header)
       add_rows(@clients, sheet)
     end
     create_output_string(p)
@@ -28,7 +38,9 @@ class ClientListXlsx
         p.business_phone, 
         p.primary_contact_name,
         p.primary_contact_phone, 
-        p.primary_contact_email
+        p.primary_contact_email,
+        p.group,
+        p.channel
       ]
     end
   end

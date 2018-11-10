@@ -103,16 +103,21 @@ class ClientsController < ApplicationController
 
   def client_params
     params.require(:client).permit(
+      :active,
       :alert,
-      :name, :official_company_name, :ein, :business_phone, :business_fax,
-      :active, :delivery_address_street_1, :delivery_address_street_2,
+      :billing_term,
+      :group, 
+      :channel,
+      :delivery_fee, :delivery_minimum,
+      :delivery_address_street_1, :delivery_address_street_2,
       :delivery_address_city, :delivery_address_state, :delivery_address_zipcode,
+      :name, :official_company_name, :ein, :business_phone, :business_fax,
       :billing_address_street_1, :billing_address_street_2, :billing_address_city,
       :billing_address_state, :billing_address_zipcode, :accounts_payable_contact_name,
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
-      :secondary_contact_phone, :secondary_contact_email, :billing_term, :delivery_fee_option,
-      :delivery_fee, :delivery_minimum, :notes, :print_invoice, :temp_vip, :wholesale_manager
+      :secondary_contact_phone, :secondary_contact_email, :delivery_fee_option,
+      :notes, :print_invoice, :temp_vip, :wholesale_manager
     )
   end
 end
