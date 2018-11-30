@@ -42,6 +42,10 @@
 #  sequence_number                :integer          default(1)
 #  alert                          :boolean          default(FALSE)
 #  print_invoice                  :boolean          default(TRUE)
+#  temp_vip                       :boolean          default(FALSE)
+#  wholesale_manager              :string
+#  group                          :string
+#  channel                        :string
 #
 
 class ClientSerializer < ActiveModel::Serializer

@@ -104,12 +104,12 @@ const ClientsTable = createReactClass({
             </select>
           </div>
         </div>
-         <div className="small-12 medium-4 end columns">
+        <div className="small-12 medium-4 end columns">
           <div className="input string optional">
             <label className="string optional">&nbsp;</label>
             <a 
-          className='button small'
-          target='_blank' 
+          className="button small"
+          target="_blank"
           style={{
             marginLeft:20,
             paddingTop: 10,

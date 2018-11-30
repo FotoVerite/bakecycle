@@ -7,6 +7,7 @@ import OrderItemsForm from './order-items-form';
 import includes from 'lodash.includes';
 import {
   BCDate,
+  BCInput, 
   BCRadio,
   BCSelect,
   BCTextarea,
@@ -132,16 +133,19 @@ const OrderForm = createReactClass({
             </p>
           </div>
         </div>
+        
         <div className="row">
-          <div className="small-12 columns">
-            <BCCheckbox
-              value={order.alert}
-              field="alert"
-              name="order[alert]"
-              label="VIP"
+
+          <div className="small-12 medium-4 columns">
+            <BCInput
+              value={order.discount}
+              field="discount"
+              name="order[discount]"
+              label="Discount"
               onChange={updateOrder}
             />
           </div>
+
         </div>
         <div className="row">
           <div className="small-12 medium-4 columns">
@@ -180,6 +184,20 @@ const OrderForm = createReactClass({
               onChange={updateOrder}
             />
           </div>
+        </div>
+        <div className="row">
+
+
+          <div className="small-12 columns">
+            <BCCheckbox
+              value={order.alert}
+              field="alert"
+              name="order[alert]"
+              label="VIP"
+              onChange={updateOrder}
+            />
+          </div>
+
         </div>
         {this.showLeadDays()}
       </fieldset>

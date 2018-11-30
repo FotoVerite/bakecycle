@@ -64,6 +64,7 @@ class Shipment < ApplicationRecord
   validates :delivery_fee, presence: true, numericality: true
   validates :client_id, presence: true
   validates :route_id, presence: true
+  validates :discount, inclusion: 0..100, allow_nil: true
 
   # create route= and route_id= methods
   denormalize :route, %i[id name departure_time]
@@ -112,7 +113,9 @@ class Shipment < ApplicationRecord
   end
 
   def subtotal
-    shipment_items.map(&:price).sum
+    subtotal = shipment_items.map(&:price).sum
+    subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
+    subtotal
   end
 
   def price

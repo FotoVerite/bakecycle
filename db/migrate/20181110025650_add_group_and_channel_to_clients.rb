@@ -4,4 +4,3 @@ class AddGroupAndChannelToClients < ActiveRecord::Migration[5.1]
     add_column :clients, :channel, :string
   end
 end
-

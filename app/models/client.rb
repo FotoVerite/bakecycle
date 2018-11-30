@@ -42,6 +42,10 @@
 #  sequence_number                :integer          default(1)
 #  alert                          :boolean          default(FALSE)
 #  print_invoice                  :boolean          default(TRUE)
+#  temp_vip                       :boolean          default(FALSE)
+#  wholesale_manager              :string
+#  group                          :string
+#  channel                        :string
 #
 
 class Client < ApplicationRecord
@@ -56,12 +60,12 @@ class Client < ApplicationRecord
   enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee]
 
   enum channel_options: {
-      Restaurant: 'Restaurant', 
-      Hotel: 'Hotel', 
-      Grocery: 'Grocery',
-      FoodService: 'FoodService',
-      Distro: 'Distro',
-      Coffee: 'Coffee'
+      Restaurant: "Restaurant",
+      Hotel: "Hotel",
+      Grocery: "Grocery",
+      FoodService: "FoodService",
+      Distro: "Distro",
+      Coffee: "Coffee"
     }
 
   validates :accounts_payable_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true

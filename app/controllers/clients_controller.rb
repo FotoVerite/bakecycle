@@ -106,7 +106,7 @@ class ClientsController < ApplicationController
       :active,
       :alert,
       :billing_term,
-      :group, 
+      :group,
       :channel,
       :delivery_fee, :delivery_minimum,
       :delivery_address_street_1, :delivery_address_street_2,

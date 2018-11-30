@@ -12,7 +12,7 @@ class SortedDeliveryListXlsx
     @header = styles.add_style bg_color: "DD", sz: 16, b: true, alignment: { horizontal: :center }
     @client_style = styles.add_style bg_color: "0000FF", fg_color: "FF", sz: 24, alignment: { horizontal: :center }
     @grouped_shipments.each do |shipments_array|
-      wb.add_worksheet(name: "#{shipments_array[0]}") do |sheet|
+      wb.add_worksheet(name: (shipments_array[0]).to_s) do |sheet|
         add_rows(shipments_array[1], sheet)
       end
     end

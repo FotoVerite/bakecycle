@@ -58,6 +58,8 @@ class Order < ApplicationRecord
   validate  :end_date_is_not_before_start_date
   validates :order_type, presence: true, inclusion: %w[standing temporary]
   validates :bakery, presence: true
+  validates :discount, inclusion: 0..100, allow_nil: true
+
   validates_with OverlappingOrdersValidator
 
   delegate(

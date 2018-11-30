@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     get "updated_at", on: :collection
     get "weekly_daily_report", on: :collection
     get "print_weekly_daily_report", on: :collection
-    get 'pricing_report', on: :collection
+    get "pricing_report", on: :collection
     get "orders", on: :member
     get "papertrail", on: :member
     get "costing", on: :member
@@ -57,7 +57,6 @@ Rails.application.routes.draw do
     get "print_weekly_daily_report", on: :collection
     get "print_vip_list", on: :collection
     get "print_client_list", on: :collection
-
   end
 
   resources :orders, except: [:show] do

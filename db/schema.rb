@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181110025650) do
+ActiveRecord::Schema.define(version: 20181130034039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 20181110025650) do
     t.integer "created_by_user_id"
     t.integer "last_updated_by_user_id"
     t.boolean "alert", default: false
+    t.decimal "discount"
     t.index ["bakery_id", "start_date", "end_date"], name: "index_orders_on_bakery_id_and_start_date_and_end_date"
     t.index ["bakery_id"], name: "index_orders_on_bakery_id"
     t.index ["client_id", "route_id", "start_date", "end_date", "order_type"], name: "orders_idx_nulls_start"
@@ -413,6 +414,7 @@ ActiveRecord::Schema.define(version: 20181110025650) do
     t.integer "order_id"
     t.integer "sequence_number"
     t.boolean "alert", default: false
+    t.decimal "discount"
     t.index ["bakery_id"], name: "index_shipments_on_bakery_id"
     t.index ["client_id", "route_id", "date"], name: "index_shipments_on_client_id_and_route_id_and_date"
     t.index ["order_id", "date"], name: "index_shipments_on_order_id_and_date"

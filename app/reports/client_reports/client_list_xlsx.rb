@@ -3,7 +3,7 @@ class ClientListXlsx
     @bakery = bakery
     @date = date
     @clients = @bakery.clients.order_by_name
-    @clients = @clients.where(active: type) unless type == 'any'
+    @clients = @clients.where(active: type) unless type == "any"
   end
 
   def generate
@@ -14,15 +14,17 @@ class ClientListXlsx
     wb.add_worksheet(name: "Client List for #{@date}") do |sheet|
       sheet.add_row(
         [
-          'Client Name', 
-          'Active', 
-          'Delivery Address', 
-          'Business Phone', 
-          'Primary Contact Name', 
-          'Primary Contact Phone' ,
-          'Primary Contact Email',
-          'Group', 
-          'Channel'], header: @header)
+          "Client Name",
+          "Active",
+          "Delivery Address",
+          "Business Phone",
+          "Primary Contact Name",
+          "Primary Contact Phone",
+          "Primary Contact Email",
+          "Group",
+          "Channel"
+        ], header: @header
+      )
       add_rows(@clients, sheet)
     end
     create_output_string(p)
@@ -34,10 +36,10 @@ class ClientListXlsx
       sheet.add_row [
         p.name,
         (p.active ? "Yes" : "No"),
-        p.delivery_address.full, 
-        p.business_phone, 
+        p.delivery_address.full,
+        p.business_phone,
         p.primary_contact_name,
-        p.primary_contact_phone, 
+        p.primary_contact_phone,
         p.primary_contact_email,
         p.group,
         p.channel

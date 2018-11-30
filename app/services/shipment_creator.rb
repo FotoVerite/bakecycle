@@ -43,6 +43,7 @@ class ShipmentCreator
       route_id: order.route_id,
       date: ship_date,
       auto_generated: true,
+      discount: order.discount,
       order_id: order.id
     }
   end
