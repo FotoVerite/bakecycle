@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130034039) do
+ActiveRecord::Schema.define(version: 20181213030250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -415,6 +415,7 @@ ActiveRecord::Schema.define(version: 20181130034039) do
     t.integer "sequence_number"
     t.boolean "alert", default: false
     t.decimal "discount"
+    t.decimal "cached_price"
     t.index ["bakery_id"], name: "index_shipments_on_bakery_id"
     t.index ["client_id", "route_id", "date"], name: "index_shipments_on_client_id_and_route_id_and_date"
     t.index ["order_id", "date"], name: "index_shipments_on_order_id_and_date"
