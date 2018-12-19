@@ -56,8 +56,8 @@ class Shipment < ApplicationRecord
   before_validation :set_payment_due_date
   before_create :set_sequence_number
   after_create :increment_client_sequence
-  #before_update :check_delivery_fee?
-  before_save :cache_price
+  before_update :check_delivery_fee?
+  before_update :cache_price
 
   validates :date, presence: true
   validates :bakery, presence: true
