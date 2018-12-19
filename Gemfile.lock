@@ -71,6 +71,9 @@ GEM
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
       rubyzip (~> 1.0.0)
+    axlsx_rails (0.5.2)
+      actionpack (>= 3.1)
+      axlsx (>= 2.0.1)
     backports (3.11.3)
     bcrypt (3.1.12)
     better_errors (2.4.0)
@@ -539,6 +542,7 @@ DEPENDENCIES
   airbrake
   aws-sdk (< 2.0)
   axlsx (= 2.0.1)
+  axlsx_rails
   better_errors
   binding_of_caller
   brakeman

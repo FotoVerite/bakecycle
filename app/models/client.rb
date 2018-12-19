@@ -126,6 +126,16 @@ class Client < ApplicationRecord
     months_hash
   end
 
+  def average_sale_by_week
+    weeks = shipments.where(:created_at => ((Time.now.beginning_of_week - 51.weeks)..Time.now.beginning_of_week))
+    .group(["EXTRACT(week FROM created_at)"]) 
+    .order("EXTRACT(week FROM created_at)")
+    .sum(:cached_price)
+    weeks = Hash[(1..51).map { |week| [ week.to_f, 0 ] }].merge(weeks)
+    weeks = weeks.values.in_groups_of(4,false).map {|x| x.reduce(:+)}
+    weeks.inject{ |sum, el| sum + el }.to_f / weeks.size
+  end
+
   private
 
   def needs_geocode?

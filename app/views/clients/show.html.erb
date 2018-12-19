@@ -251,4 +251,8 @@
       <%= link_to 'View All Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
     <% end %>
   </div>
+
+  <div class="row" style='text-align:right;'>
+    Four Week Average: <%= number_to_currency @client.average_sale_by_week %>
+  </div>
 </fieldset>

@@ -4,6 +4,7 @@ ruby "2.5.0"
 gem "active_model_serializers", "~> 0.9.3"
 gem "airbrake"
 gem "aws-sdk", "< 2.0"
+gem 'axlsx_rails'
 gem "axlsx", "2.0.1"
 gem "browserify-rails"
 gem "chronic"
