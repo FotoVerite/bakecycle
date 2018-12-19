@@ -134,7 +134,7 @@ const OrderForm = createReactClass({
           </div>
         </div>
         
-        <div className="row">
+        {/*<div className="row">
 
           <div className="small-12 medium-4 columns">
             <BCInput
@@ -146,7 +146,7 @@ const OrderForm = createReactClass({
             />
           </div>
 
-        </div>
+        </div>*/}
         <div className="row">
           <div className="small-12 medium-4 columns">
             <BCDate

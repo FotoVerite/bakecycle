@@ -114,6 +114,18 @@ class Client < ApplicationRecord
     self.class.billing_terms[billing_term]
   end
 
+  def average_sale_by_month
+    months_hash = {}
+    h = shipments
+      .where(:created_at => (Time.now.beginning_of_year.all_year))
+      .group(["EXTRACT(month FROM created_at)"]) 
+      .order("EXTRACT(month FROM created_at)")
+      .sum(:cached_price)
+    months = Hash[(1..12).map { |month| [ month.to_f, 0 ] }].merge(h)
+    months.map {|k, v| months_hash["#{Time.now.year}-" + k.to_i.to_s] = v.to_f } 
+    months_hash
+  end
+
   private
 
   def needs_geocode?

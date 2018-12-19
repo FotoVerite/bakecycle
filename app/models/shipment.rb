@@ -56,7 +56,8 @@ class Shipment < ApplicationRecord
   before_validation :set_payment_due_date
   before_create :set_sequence_number
   after_create :increment_client_sequence
-  before_update :check_delivery_fee?
+  #before_update :check_delivery_fee?
+  before_save :cache_price
 
   validates :date, presence: true
   validates :bakery, presence: true
@@ -114,12 +115,16 @@ class Shipment < ApplicationRecord
 
   def subtotal
     subtotal = shipment_items.map(&:price).sum
-    subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
+    #subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
     subtotal
   end
 
   def price
     subtotal + delivery_fee
+  end
+
+  def cache_price
+    self.cached_price = price
   end
 
   def total_quantity
