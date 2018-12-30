@@ -6,6 +6,7 @@ class ClientsController < ApplicationController
     print_year_total
     print_vip_list
     print_client_list
+    products_per_client_per_week
   ]
   decorates_assigned :clients, :client
 
@@ -88,6 +89,12 @@ class ClientsController < ApplicationController
     authorize Client, :index?
     @date = date_query
     generator = VipListGenerator.new(current_bakery)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+  def products_per_client_per_week
+    authorize Client, :index?
+    generator = ClientsPerProductForWeekGenerator.new(current_bakery)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 

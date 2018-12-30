@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
   resources :clients do
     get "weekly_daily_report", on: :collection
+    get "products_per_client_per_week", on: :collection
     get "print_weekly_daily_report", on: :collection
     get "print_vip_list", on: :collection
     get "print_client_list", on: :collection
@@ -90,6 +91,7 @@ Rails.application.routes.draw do
     get "export_pdf", on: :collection
     get "export_csv", on: :collection
     get "export_iif", on: :collection
+    get "product_invoiced_for_year", on: :collection
   end
 
   resources :bakeries, except: [:show] do

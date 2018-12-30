@@ -55,7 +55,7 @@
         </div>
       </div>
     <% end %>
-     <%= link_to print_vip_list_clients_path, target: "_blank" do %>
+    <%= link_to print_vip_list_clients_path, target: "_blank" do %>
       <div class="large-4 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
@@ -73,7 +73,7 @@
       <h2>Products</h2>
     </div>
     <%= link_to weekly_daily_report_products_path do %>
-      <div class="large-4 medium-6 small-12 columns">
+      <div class="large-2 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
             Daily/Weekly Totals
@@ -84,7 +84,7 @@
       </div>
     <% end %>
     <%= link_to print_pricing_vendors_path, target: "_blank" do %>
-      <div class="large-4 medium-6 small-12 columns">
+      <div class="large-2 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
            Ingredient Pricing
@@ -95,10 +95,22 @@
       </div>
     <% end %>
      <%= link_to pricing_report_products_path, target: "_blank" do %>
-      <div class="large-4 medium-6 small-12 columns">
+      <div class="large-2 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
             Product Pricing
+          </div>
+          <i class="fi-page-export right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    <% end %>
+
+    <%= link_to products_per_client_per_week_clients_path, target: "_blank" do %>
+      <div class="large-2 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+           Clients Per Product
           </div>
           <i class="fi-page-export right"></i>
           <div class="clearfix"></div>
