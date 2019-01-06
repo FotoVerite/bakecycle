@@ -1,6 +1,10 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
-  before_action :skip_policy_scope, only: %i[weekly_daily_report print_weekly_daily_report pricing_report]
+  before_action :skip_policy_scope, only: %i[
+    weekly_daily_report print_weekly_daily_report 
+    pricing_report 
+    products_per_client_per_week
+    print_products_per_client_per_week ]
   decorates_assigned :products, :product
 
   def index
@@ -100,6 +104,18 @@ class ProductsController < ApplicationController
   def pricing_report
     authorize Product, :index?
     generator = ProductPricingGenerator.new(current_bakery)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+  def products_per_client_per_week
+    authorize Product, :index?
+    @date = date_query
+  end
+
+
+  def print_products_per_client_per_week
+    authorize Product, :index?
+    generator = ClientsPerProductForWeekGenerator.new(current_bakery, date_query)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 

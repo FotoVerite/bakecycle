@@ -2,18 +2,19 @@ class ClientsPerProductForWeekGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
-    bakery_id, throwAway = global_id.split("_")
+    bakery_id, date_string, throw_away = global_id.split("_")
+    date = Date.iso8601(date_string)
     bakery = Bakery.find(bakery_id)
-    new(bakery)
+    new(bakery, date)
   end
 
-  def initialize(bakery)
+  def initialize(bakery, date)
     @bakery = bakery
-    @date = Time.zone.today
+    @date = date.to_date
   end
 
   def id
-    "#{@bakery.id}_#{@date.iso8601}#ClientsPerProductForWeek"
+    "#{@bakery.id}_#{@date.iso8601}_ClientsPerProductForWeek"
   end
 
   def filename
