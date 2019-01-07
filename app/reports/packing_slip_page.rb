@@ -154,7 +154,7 @@ class PackingSlipPage
 
   def notes_data
     text "Notes", style: :bold
-    text @shipment.client_notes if @shipment.client_notes.present?
+    text @shipment.client_notes.encode("Windows-1252") if @shipment.client_notes.present?
     text @shipment.order.note if @shipment.try(:order).try(:note)
     text @shipment.note if @shipment.note.present?
     move_down 15
