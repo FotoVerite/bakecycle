@@ -1,6 +1,6 @@
 class ShipmentsController < ApplicationController
   before_action :load_shipment, only: %i[edit update destroy invoice packing_slip invoice_iif invoice_csv]
-  after_action :skip_policy_scope, only: %i[export_csv export_iif export_pdf invoice_csv]
+  after_action :skip_policy_scope, only: %i[detailed_invoice_report print_detailed_invoice_report export_csv export_iif export_pdf invoice_csv]
   decorates_assigned :shipments, :shipment
   helper_method :search_form
 
@@ -15,6 +15,23 @@ class ShipmentsController < ApplicationController
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
+  end
+
+
+  def product_invoiced_for_year
+    authorize Shipment, :index?
+    @clients = policy_scope(Client).select {|x| x.price_variants.empty?}
+    @shipments = Shipment.where(
+      "bakery_id = ? AND client_id in(?) AND date between ? and ? ",
+      current_bakery,
+      @clients,
+      (Time.zone.today.beginning_of_year),
+      (Time.zone.today.end_of_year)
+    )
+    respond_to do |format|
+      format.html
+      format.xlsx {render xlsx: 'product_invoiced_for_year', filename: "yearly_production_total.xlsx"}
+    end
   end
 
   def new
@@ -57,6 +74,18 @@ class ShipmentsController < ApplicationController
   def invoice
     authorize @shipment, :show?
     generator = InvoicePdfGenerator.new(current_bakery, @shipment)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+  def detailed_invoice_report
+    authorize Shipment, :index?
+    @date = date_query
+  end
+
+  def print_detailed_invoice_report
+    authorize Shipment, :index?
+    @date = date_query
+    generator = DetailedInvoiceReportGenerator.new(current_bakery, date_query)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
@@ -127,4 +156,9 @@ class ShipmentsController < ApplicationController
       %i[id product_id product_quantity product_price _destroy]
     )
   end
+
+  def date_query
+    Chronic.parse(params[:date] || Time.zone.today)
+  end
+
 end

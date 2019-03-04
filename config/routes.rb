@@ -93,6 +93,8 @@ Rails.application.routes.draw do
     get "export_csv", on: :collection
     get "export_iif", on: :collection
     get "product_invoiced_for_year", on: :collection
+    get "detailed_invoice_report", on: :collection
+    get "print_detailed_invoice_report", on: :collection
   end
 
   resources :bakeries, except: [:show] do
