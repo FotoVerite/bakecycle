@@ -79,13 +79,15 @@ class ShipmentsController < ApplicationController
 
   def detailed_invoice_report
     authorize Shipment, :index?
-    @date = date_query
+    @start_date = start_date
+    @end_date = end_date
   end
 
   def print_detailed_invoice_report
     authorize Shipment, :index?
-    @date = date_query
-    generator = DetailedInvoiceReportGenerator.new(current_bakery, date_query)
+    @start_date = start_date
+    @end_date = end_date
+    generator = DetailedInvoiceReportGenerator.new(current_bakery, start_date, end_date)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
@@ -159,6 +161,14 @@ class ShipmentsController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date] || Time.zone.today)
+  end
+
+  def start_date
+    Chronic.parse(params[:start_date]) || Time.zone.today
+  end
+
+  def end_date
+    Chronic.parse(params[:end_date]) || Time.zone.today + 1.days
   end
 
 end

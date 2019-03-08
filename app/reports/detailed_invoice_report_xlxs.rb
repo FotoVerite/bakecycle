@@ -1,8 +1,7 @@
 class DetailedInvoiceReportXlxs
-  def initialize(bakery, date)
+  def initialize(bakery, start_date, end_date)
     @bakery = bakery
-    @date = date
-    @shipments = Shipment.where(bakery: bakery, date: date) || []
+    @shipments = Shipment.where(bakery: bakery, :date => start_date..end_date) || []
   end
 
   def generate

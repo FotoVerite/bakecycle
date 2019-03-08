@@ -6,7 +6,10 @@
 <%= simple_form_for "", url: print_detailed_invoice_report_shipments_path, method: :get, :html => {:target => '_blank'}  do |f| %>
   <div class="row collapse">
     <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+      <%= f.input :start_date, input_html: { value: @start_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :start_date}, required: false %>
+    </div>
+    <div class="small-12 medium-3 columns end">
+      <%= f.input :end_date, input_html: { value: @end_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :end_date}, required: false %>
     </div>
   </div>
 <%= button_tag "<i class='fi-page-export-pdf'></i> Print Report".html_safe, name: 'type', value: 'daily' %>
