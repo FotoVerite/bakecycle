@@ -7,7 +7,6 @@ import OrderItemsForm from './order-items-form';
 import includes from 'lodash.includes';
 import {
   BCDate,
-  BCInput, 
   BCRadio,
   BCSelect,
   BCTextarea,
