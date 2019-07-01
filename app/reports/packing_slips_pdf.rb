@@ -9,6 +9,7 @@ class PackingSlipsPdf < BasePdfReport
   def setup
     @shipments.each do |shipment|
       render_packing_slip(shipment)
+      render_packing_slip(shipment)
       render_invoice(shipment)
     end
     timestamp
