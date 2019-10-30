@@ -58,7 +58,7 @@ class Recipe < ApplicationRecord
   validate :inclusionable_a_recipe?, unless: :motherdough?
 
   before_save :set_recipe_lead_days
-  before_save :set_total_lead_days
+  before_save :set_total_lead_days, :update_product_total_lead_days
   before_destroy :check_for_products, prepend: true
   before_destroy :check_for_parent_recipes, prepend: true
   after_commit :queue_touch_parent_objects, on: %i[create update]
@@ -87,6 +87,18 @@ class Recipe < ApplicationRecord
     update_columns(total_lead_days: calculate_total_lead_days)
     queue_touch_parent_objects
   end
+
+   def update_product_total_lead_days
+    motherdough_products.each do |product|
+      product.total_lead_days = product.set_total_lead_days
+      product.save
+    end
+    inclusion_products.each do |product|
+      product.total_lead_days = product.set_total_lead_days
+      product.save
+    end
+  end
+
 
   def set_total_lead_days
     self.total_lead_days = calculate_total_lead_days
