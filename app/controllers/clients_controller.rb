@@ -1,11 +1,13 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
   before_action :skip_policy_scope, only: %i[
-    weekly_daily_report
+    print_client_list
+    print_total_report
+    print_vip_list
     print_weekly_daily_report
     print_year_total
-    print_vip_list
-    print_client_list
+    total_report
+    weekly_daily_report
   ]
   decorates_assigned :clients, :client
 
@@ -60,9 +62,17 @@ class ClientsController < ApplicationController
     authorize Route, :print?
   end
 
-  def print_year_total
+  def total_report
     authorize Route, :print?
-    generator = YearTotalGenerator.new(current_bakery, 2017)
+    @start_date = start_date
+    @end_date = end_date
+  end
+
+  def print_total_report
+    authorize Route, :print?
+    @start_date = start_date
+    @end_date = end_date
+    generator = TotalGenerator.new(current_bakery, start_date, end_date)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
@@ -95,6 +105,14 @@ class ClientsController < ApplicationController
 
   def date_query
     Chronic.parse(params[:date]) || Time.zone.today
+  end
+
+  def start_date
+    Chronic.parse(params[:start_date]) || Time.zone.today
+  end
+
+  def end_date
+    Chronic.parse(params[:end_date]) || Time.zone.today + 1.days
   end
 
   def set_client

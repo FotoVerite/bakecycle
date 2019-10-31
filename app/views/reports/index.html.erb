@@ -1,6 +1,5 @@
 <h1>Reports</h1>
 <div class="dashboard">
-
   <div class="row">
     <div class="small-12 columns">
       <h2>Product Runs</h2>
@@ -39,7 +38,6 @@
       </div>
     <% end %>
   </div>
-
   <div class="row">
     <div class="small-12 columns">
       <h2>Clients</h2>
@@ -59,7 +57,18 @@
       <div class="large-4 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
-           Vip List
+            Vip List
+          </div>
+          <i class="fi-page-export right"></i>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    <% end %>
+    <%= link_to total_report_clients_path, target: "_blank" do %>
+      <div class="large-4 medium-6 small-12 columns">
+        <div class="stats border">
+          <div class="left">
+            Totals
           </div>
           <i class="fi-page-export right"></i>
           <div class="clearfix"></div>
@@ -67,7 +76,6 @@
       </div>
     <% end %>
   </div>
-
   <div class="row">
     <div class="small-12 columns">
       <h2>Products</h2>
@@ -87,14 +95,14 @@
       <div class="large-2 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
-           Ingredient Pricing
+            Ingredient Pricing
           </div>
           <i class="fi-page-export right"></i>
           <div class="clearfix"></div>
         </div>
       </div>
     <% end %>
-     <%= link_to pricing_report_products_path, target: "_blank" do %>
+    <%= link_to pricing_report_products_path, target: "_blank" do %>
       <div class="large-2 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
@@ -105,12 +113,11 @@
         </div>
       </div>
     <% end %>
-
     <%= link_to products_per_client_per_week_products_path do %>
       <div class="large-2 medium-6 small-12 columns">
         <div class="stats border">
           <div class="left">
-           Clients Per Product
+            Clients Per Product
           </div>
           <i class="fi-page-export right"></i>
           <div class="clearfix"></div>
@@ -118,8 +125,6 @@
       </div>
     <% end %>
   </div>
-
-
   <div class="row">
     <div class="small-12 columns">
       <h2>Shipments</h2>
