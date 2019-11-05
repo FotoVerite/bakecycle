@@ -58,17 +58,17 @@ class RecipeDataPage
   end
 
   def header_info_table
-    table(header_info_data, column_widths: [50, 105], position: :right, cell_style: BasePdfReport::TABLE_STYLE) do
+    table(header_info_data, column_widths: [40, 105], position: :right, cell_style: BasePdfReport::TABLE_STYLE) do
       column(0).style(borders: %i[top left bottom], align: :right)
-      column(1).style(borders: %i[top right bottom], align: :left)
+      column(1).style(borders: %i[top right bottom], align: :right)
     end
   end
 
   def header_info_data
-    lead_days = ["Lead Days", recipe_run_data.total_lead_days]
+    #lead_days = ["Lead Days", recipe_run_data.total_lead_days]
     mix = ["Mix", display_date(recipe_run_data.mix_date)]
-    bake = ["Bake", display_date(recipe_run_data.finished_date)]
-    [lead_days, mix, bake]
+    deliver = ["Deliver", display_date(recipe_run_data.finished_date)]
+    [mix, deliver]
   end
 
   def bowl_count
