@@ -75,13 +75,12 @@ end
 group :test do
   gem "capybara-email"
   gem "capybara-screenshot"
-  gem "capybara-webkit"
+  gem 'selenium-webdriver'
   gem "database_cleaner"
   gem "launchy"
   gem "rspec-activejob"
-  gem "selenium-webdriver"
-  gem "stripe-ruby-mock", "~> 2.1.1", require: false
   gem "timecop"
+  gem 'stripe-ruby-mock', :require => 'stripe_mock'
   gem "webmock", require: false
 end
 
