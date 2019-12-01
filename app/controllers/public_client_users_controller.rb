@@ -12,7 +12,7 @@ class PublicClientUsersController < ApplicationController
   def create
     authorize PublicClientUser
     @user = policy_scope(PublicClientUser).new(user_params)
-    if @user.publish_user
+    if @user.valid? && @user.publish_user
       redirect_to public_client_users_path
     else
       render :new

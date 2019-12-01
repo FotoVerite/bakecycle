@@ -13,6 +13,7 @@ class PublicClientUser < ApplicationRecord
       exp: Time.now.to_i + 25.years,
       iat: Time.now.to_i,
       iss: ENV["JWT_ISSUER"],
+      client_id: client_id,
     }
     JWT.encode payload, ENV["JWT_SECRET"], "HS256"
   end
@@ -20,6 +21,7 @@ class PublicClientUser < ApplicationRecord
   def publish_user
     token = SecureRandom.hex(10)
     attributes = {
+      client_name: client.name,
       email: email,
       first_name: first_name,
       jwt_token: jwt_token,
