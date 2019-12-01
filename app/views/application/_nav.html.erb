@@ -89,6 +89,12 @@
               </li>
             <% end %>
 
+            <% if policy(PublicClientUser).index? %>
+              <li class="<%= active_nav?(:public_client_users) %>">
+                <%= link_to("Public Client Users", public_client_users_path) %>
+              </li>
+            <% end %>
+
             <% if policy(current_user).edit? %>
               <li class="<%= active_nav?(:my_account) %>">
                 <%= link_to('My Account', my_users_path) %>

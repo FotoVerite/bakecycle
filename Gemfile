@@ -38,6 +38,9 @@ gem "stripe"
 gem "uglifier"
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate"
+gem 'rest-client'
+gem 'dotenv-rails'
+gem 'jwt'
 
 group :development do
   gem "better_errors"

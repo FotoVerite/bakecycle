@@ -118,6 +118,8 @@ Rails.application.routes.draw do
     get "print_sorted_list", on: :collection
   end
 
+  resources :public_client_users, only: [:index, :new, :create]
+
   get "print-recipes", to: "production_runs#print_recipes"
 
   resources :batch_recipes, only: [:index] do

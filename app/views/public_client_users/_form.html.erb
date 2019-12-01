@@ -1,0 +1,51 @@
+<%= simple_form_for @user do |f| %>
+
+  <%= render partial: "shared/error_messages", locals: {f: f} %>
+
+  <fieldset>
+  <legend>User Information</legend>
+    <div class="row">
+      <div class="large-6 small-12 columns">
+        <%= f.input :first_name, as: :string, required: true %>
+      </div>
+       <div class="large-6 small-12 columns">
+        <%= f.input :last_name, as: :string, required: true %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-6 small-12 columns">
+        <%= f.input :email, as: :email, required: true %>
+      </div>
+      <div class="large-6 small-12 columns">
+        <%= f.input :email_confirmation, as: :email, required: true %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-6 small-12 columns">
+        <% if current_user.admin? %>
+          <%= f.input(
+            :client_id,
+            collection: Bakery.find(1).clients,
+            label_method: :name,
+            value_method: :id,
+            include_blank: 'None',
+            as: :select
+          ) %>
+        <% end %>
+      </div>
+    </div>
+  </fieldset>
+
+
+  <div class="row">
+    <div class="small-12 columns">
+      <%= f.submit (@user.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+      <% unless @user.new_record? %>
+        <%= link_to 'Delete', user_path(@user), class: "button alert",
+                                  method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

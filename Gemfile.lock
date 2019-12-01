@@ -183,8 +183,12 @@ GEM
       actionmailer (>= 4.1.0)
       devise (>= 4.0.0)
     diff-lcs (1.3)
-    domain_name (0.5.20180417)
+    domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     draper (3.0.1)
       actionpack (~> 5.0)
       activemodel (~> 5.0)
@@ -277,6 +281,7 @@ GEM
       jquery-ui-rails (= 4.0.3)
       railties (>= 3.1.0)
     json (1.8.6)
+    jwt (2.2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.6.0)
@@ -503,7 +508,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.5)
+    unf_ext (0.0.7.6)
     unicode-display_width (1.4.0)
     uniform_notifier (1.11.0)
     unitwise (2.0.0)
@@ -561,6 +566,7 @@ DEPENDENCIES
   devise
   devise-async!
   devise_invitable
+  dotenv-rails
   draper
   factory_bot_rails
   faker
@@ -576,6 +582,7 @@ DEPENDENCIES
   jquery-rails
   jquery-timepicker-rails
   jquery-ui-sass-rails
+  jwt
   launchy
   letter_opener
   memoist
@@ -593,6 +600,7 @@ DEPENDENCIES
   rails-erd
   redis (= 3.3.5)
   resque
+  rest-client
   riif
   rspec-activejob
   rspec-rails
