@@ -27,7 +27,7 @@ gem "pg", "~> 0.21.0"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "5.1.4"
+gem "rails", "5.1.7"
 gem "redis", "3.3.5"
 gem "resque", require: "resque/server"
 gem "riif"
@@ -62,9 +62,7 @@ end
 group :test, :development do
   gem "brakeman", require: false
   gem "bullet"
-  gem "bundler-audit", require: false
   gem "cucumber-rails", require: false
-  gem "guard-bundler"
   gem "guard-livereload"
   gem "guard-rails"
   gem "immigrant"

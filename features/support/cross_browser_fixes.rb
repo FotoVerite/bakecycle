@@ -1,6 +1,6 @@
 module WizardCapybara
   def confirm_alert
-    if page.driver.class == Capybara::Webkit::Driver
+    if false
       page.driver.browser.accept_js_confirms
     else
       page.driver.browser.switch_to.alert.accept
