@@ -23,6 +23,7 @@ module Bakecycle
 
     # new 4.2+ behavior
     config.autoload_paths += [
+      "#{config.root}/lib",
       "#{config.root}/app/reports/product_reports",
       "#{config.root}/app/reports/client_reports"
     ]

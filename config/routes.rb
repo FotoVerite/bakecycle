@@ -144,6 +144,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :file_exports, only: [:show]
+    namespace "v1" do
+      resource :account, only: [:show, :update]
+    end
   end
 
   # If user is not an admin it 404s the resque request

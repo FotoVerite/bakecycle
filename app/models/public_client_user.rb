@@ -4,6 +4,9 @@ class PublicClientUser < ApplicationRecord
   validates :first_name, :last_name, :email, presence: true
   validates :email, confirmation: true
 
+  OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ciphers]=OpenSSL::SSL::SSLContext.new.ciphers;
+
+
   def name
     "#{first_name} #{last_name}"
   end
