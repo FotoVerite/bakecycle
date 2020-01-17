@@ -48,29 +48,7 @@ class Api::V1::AccountsController < ActionController::Base
 
   def client_params
     params.require(:client).permit(
-      :business_phone,
-      :business_fax,
-      :delivery_address_street_1,
-      :delivery_address_street_2,
-      :delivery_address_city,
-      :delivery_address_state,
-      :delivery_address_zipcode,
-      :billing_address_street_1,
-      :billing_address_street_2,
-      :billing_address_city,
-      :billing_address_state,
-      :billing_address_zipcode,
-      :accounts_payable_contact_name,
-      :accounts_payable_contact_phone,
-      :accounts_payable_contact_email,
-      :primary_contact_name,
-      :primary_contact_phone,
-      :primary_contact_email,
-      :secondary_contact_name,
-      :secondary_contact_phone,
-      :secondary_contact_email,
-      :notes,
-      :wholesale_manager,
+     ATTRIBUTES
     )
   end
 
