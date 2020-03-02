@@ -143,6 +143,12 @@ class Product < ApplicationRecord
     order_items.map(&:order).uniq.select(&:still_in_use)
   end
 
+  def price_varient_info(client_id)
+     price_variants
+      .where("client_id IS NULL OR client_id = ?", client_id)
+      .order(quantity: :desc)
+  end
+
   private
 
   def order_items

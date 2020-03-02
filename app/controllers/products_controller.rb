@@ -1,10 +1,10 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
   before_action :skip_policy_scope, only: %i[
-    weekly_daily_report print_weekly_daily_report 
-    pricing_report 
-    products_per_client_per_week
-    print_products_per_client_per_week ]
+                                      weekly_daily_report print_weekly_daily_report
+                                      pricing_report
+                                      products_per_client_per_week
+                                      print_products_per_client_per_week]
   decorates_assigned :products, :product
 
   def index
@@ -112,7 +112,6 @@ class ProductsController < ApplicationController
     @date = date_query
   end
 
-
   def print_products_per_client_per_week
     authorize Product, :index?
     generator = ClientsPerProductForWeekGenerator.new(current_bakery, date_query)
@@ -129,8 +128,9 @@ class ProductsController < ApplicationController
     params.require(:product).permit(
       :cog, :name, :product_type, :weight, :unit, :description, :over_bake,
       :motherdough_id, :inclusion_id, :base_price, :sku, :batch_recipe,
+      :public,
       :inactive,
-      price_variants_attributes: %i[id client_id quantity price _destroy]
+      price_variants_attributes: %i[id client_id quantity price _destroy],
     )
   end
 

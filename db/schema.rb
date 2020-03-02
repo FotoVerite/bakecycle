@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191130214506) do
+ActiveRecord::Schema.define(version: 20200302024805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,7 @@ ActiveRecord::Schema.define(version: 20191130214506) do
     t.json "graph_data"
     t.boolean "inactive", default: false
     t.decimal "cog"
+    t.boolean "public", default: false
     t.index ["legacy_id", "bakery_id"], name: "index_products_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_products_on_name_and_bakery_id", unique: true
     t.index ["removed"], name: "index_products_on_removed"

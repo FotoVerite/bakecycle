@@ -153,6 +153,16 @@ class OrderItem < ApplicationRecord
     quantity(date) * product.price(total_quantity)
   end
 
+  def product_information
+    product_information = {}
+    product_information[:name] = product.name
+    product_information[:total] = total_quantity
+    product_information[:price_per_piece] = product_price
+    product_information[:total_price] = total_quantity_price
+    product_information[:total_lead_days] = total_lead_days
+    return product_information
+  end
+
   def destroy
     self.removed = true
     save

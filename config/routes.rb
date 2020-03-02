@@ -146,6 +146,7 @@ Rails.application.routes.draw do
     resources :file_exports, only: [:show]
     namespace "v1" do
       resource :account, only: [:show, :update]
+      resource :orders, only: [:show, :update]
     end
   end
 
