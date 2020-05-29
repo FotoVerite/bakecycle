@@ -6,6 +6,9 @@
           <%= link_to dashboard_path do %>
               <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
               <span class="header">Dashboard</span>
+              <ul class='sub'>
+                <li class="<%= active_nav?(:reports) %>"><%= link_to("Reports", reports_path) %></li>
+              </ul>
           <% end %>
         </li>
 
@@ -33,7 +36,6 @@
                 <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to("Print Batch Recipes", batch_recipes_path) %></li>
                 <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
                 <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
-                <li class="<%= active_nav?(:reports) %>"><%= link_to("Reports", reports_path) %></li>
                 <li class="<%= active_nav?(:production_checklists) %>"><%= link_to("Checklist", production_checklist_path) %></li>
               </ul>
             </li>
