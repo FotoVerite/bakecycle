@@ -1,9 +1,12 @@
 <%= simple_form_for search_form, url: shipments_path, method: :get, as: :search do |f| %>
   <div class="row collapse">
+    <div class="small-12 medium-1 columns">
+      <%= f.input :sequence_number, required: false, placeholder: "Numbers before -" %>
+    </div>
     <div class="small-12 medium-4 columns">
       <%= f.input :client_id , collection: shipments.available_clients, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Clients' } } %>
     </div>
-    <div class="small-12 medium-4 columns">
+    <div class="small-12 medium-3 columns">
       <%= f.input :product_id , collection: shipments.available_products, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Products' } } %>
     </div>
     <div class="small-12 medium-1 columns">

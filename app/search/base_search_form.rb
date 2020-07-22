@@ -24,16 +24,30 @@ class BaseSearchForm
     end
   end
 
-  def self.search_for_date(*fields)
+  def self.search_for_one(*fields)
     fields.each do |field|
       accessible_fields.push(field)
       params.push(field)
 
       define_method field do
-        parse_date params[field]
+        params[field]
       end
       define_method :"#{field}=" do |value|
         params[field] = value
+      end
+    end
+
+    def self.search_for_date(*fields)
+      fields.each do |field|
+        accessible_fields.push(field)
+        params.push(field)
+
+        define_method field do
+          parse_date params[field]
+        end
+        define_method :"#{field}=" do |value|
+          params[field] = value
+        end
       end
     end
   end

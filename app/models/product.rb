@@ -42,15 +42,15 @@ class Product < ApplicationRecord
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
 
   enum product_type: {
-     bread: 10,
-     cookie: 11,
-     pot_pie: 12,
-     quiche: 13,
-     sandwich_and_tartine: 14,
-     tart_and_desert: 15,
-     vienoisserie: 16,
-     dry_goods: 17,
-     other: 18
+    bread: 10,
+    cookie: 11,
+    pot_pie: 12,
+    quiche: 13,
+    sandwich_and_tartine: 14,
+    tart_and_desert: 15,
+    vienoisserie: 16,
+    dry_goods: 17,
+    other: 18,
   }
 
   enum unit: %i[oz lb g kg]
@@ -144,7 +144,7 @@ class Product < ApplicationRecord
   end
 
   def price_varient_info(client_id)
-     price_variants
+    price_variants
       .where("client_id IS NULL OR client_id = ?", client_id)
       .order(quantity: :desc)
   end

@@ -14,6 +14,7 @@ class ShipmentSearcher
     search_by_date(terms[:date])
     search_by_route(terms[:route_id])
     search_by_product(terms[:product_id])
+    search_by_sequence_number(terms[:sequence_number])
     @collection.order(date: :desc)
   end
 
@@ -47,5 +48,10 @@ class ShipmentSearcher
   def search_by_date_to(date_to)
     return if date_to.blank?
     @collection = @collection.where("date <= ?", date_to)
+  end
+
+  def search_by_sequence_number(sequence_number)
+    return if sequence_number.blank?
+    @collection = @collection.where("sequence_number::text LIKE ?", "#{sequence_number}")
   end
 end

@@ -17,10 +17,9 @@ class ShipmentsController < ApplicationController
       .select { |_k, v| v.size > 1 }.values.flatten
   end
 
-
   def product_invoiced_for_year
     authorize Shipment, :index?
-    @clients = policy_scope(Client).select {|x| x.price_variants.empty?}
+    @clients = policy_scope(Client).select { |x| x.price_variants.empty? }
     @shipments = Shipment.where(
       "bakery_id = ? AND client_id in(?) AND date between ? and ? ",
       current_bakery,
@@ -30,7 +29,7 @@ class ShipmentsController < ApplicationController
     )
     respond_to do |format|
       format.html
-      format.xlsx {render xlsx: 'product_invoiced_for_year', filename: "yearly_production_total.xlsx"}
+      format.xlsx { render xlsx: "product_invoiced_for_year", filename: "yearly_production_total.xlsx" }
     end
   end
 
@@ -141,7 +140,7 @@ class ShipmentsController < ApplicationController
   end
 
   def scope_with_search
-    policy_scope(Shipment).search(search_form).includes(:shipment_items)
+    policy_scope(Shipment).search(search_form).includes(:shipment_items, :client)
   end
 
   def search_params
@@ -154,8 +153,7 @@ class ShipmentsController < ApplicationController
       :client_id, :route_id, :date,
       :discount,
       :payment_due_date, :delivery_fee, :note,
-      shipment_items_attributes:
-      %i[id product_id product_quantity product_price _destroy]
+      shipment_items_attributes: %i[id product_id product_quantity product_price _destroy],
     )
   end
 
@@ -170,5 +168,4 @@ class ShipmentsController < ApplicationController
   def end_date
     Chronic.parse(params[:end_date]) || Time.zone.today + 1.days
   end
-
 end
