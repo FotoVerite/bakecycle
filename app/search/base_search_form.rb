@@ -50,7 +50,7 @@ class BaseSearchForm
         params[field] = value
       end
     end
-  endo
+  end
 
   def self.find(id)
     params = Rack::Utils.parse_nested_query(id).symbolize_keys
