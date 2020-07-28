@@ -130,6 +130,7 @@ class ProductsController < ApplicationController
       :motherdough_id, :inclusion_id, :base_price, :sku, :batch_recipe,
       :public,
       :inactive,
+      :lead_days_override,
       price_variants_attributes: %i[id client_id quantity price _destroy],
     )
   end

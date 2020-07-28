@@ -49,6 +49,9 @@
         <%= f.label :total_lead_days %>
         <input disabled="true" type="text" value="<%= product.total_lead_days %>" />
       </div>
+       <div class="small-12 medium-4 columns">
+        <%= f.input :lead_days_override, label: "lead days override", as: :integer%>
+      </div>
     </div>
     <div class="row">
       <div class="small-12 columns">

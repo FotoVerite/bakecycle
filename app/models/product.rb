@@ -89,12 +89,12 @@ class Product < ApplicationRecord
   end
 
   def set_total_lead_days
-    lead_days = [1, inclusion.try(:total_lead_days), motherdough.try(:total_lead_days)].compact.max
+    lead_days = [lead_days_override, inclusion.try(:total_lead_days), motherdough.try(:total_lead_days)].compact.max
     self.total_lead_days = lead_days
   end
 
   def update_total_lead_days?
-    new_record? || motherdough_id_changed? || inclusion_id_changed?
+    new_record? || motherdough_id_changed? || inclusion_id_changed? || lead_days_override_changed?
   end
 
   def queue_touch_order_items
