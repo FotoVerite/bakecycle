@@ -22,8 +22,9 @@ class ClientListXlsx
           "Primary Contact Phone",
           "Primary Contact Email",
           "Group",
-          "Channel"
-        ], header: @header
+          "Channel",
+          "Billing Terms",
+        ], header: @header,
       )
       add_rows(@clients, sheet)
     end
@@ -42,7 +43,8 @@ class ClientListXlsx
         p.primary_contact_phone,
         p.primary_contact_email,
         p.group,
-        p.channel
+        p.channel,
+        p.billing_term ? p.billing_term.humanize(capitalize: false).titleize : "None",
       ]
     end
   end
