@@ -36,6 +36,7 @@
         <tr>
           <th scope="col">Invoice</th>
           <th scope="col">Date</th>
+          <th scope="col">Updated At</th>
           <th scope="col">Client</th>
           <th scope="col">Price</th>
           <th scope="col">Action</th>
@@ -43,7 +44,7 @@
       </thead>
       <tbody>
       <% @double_invoices.each do |shipment| %>
-        <%= render 'shipment', shipment: ShipmentDecorator.decorate(shipment) %>
+        <%= render 'double_shipment', shipment: ShipmentDecorator.decorate(shipment) %>
       <% end %>
       </tbody>
     </table>

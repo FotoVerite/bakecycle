@@ -15,6 +15,7 @@ class ShipmentsController < ApplicationController
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
+    @double_invoices = Shipment.order("created_at DESC").limit(5)
   end
 
   def product_invoiced_for_year
@@ -66,8 +67,13 @@ class ShipmentsController < ApplicationController
   def destroy
     authorize @shipment
     @shipment.destroy!
-    flash[:notice] = "You have deleted the invoice for #{@shipment.client_name}."
-    redirect_to shipments_path
+    respond_to do |format|
+      format.html do
+        flash[:notice] = "You have deleted the invoice for #{@shipment.client_name}."
+        redirect_to shipments_path
+      end
+      format.js
+    end
   end
 
   def invoice
