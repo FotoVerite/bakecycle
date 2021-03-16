@@ -20,6 +20,11 @@
   <%= link_to "<i class='fi-page-export-pdf'></i> Print Daily Totals Without Routes".html_safe,
     print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :pdf), target: "_blank", class: "button small"%>
 
+<%= link_to "<i class='fi-page-export-pdf'></i> Export Daily Totals".html_safe,
+     print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :xlsx), target: "_blank", class: "button small" %>
+
+  <%= link_to "<i class='fi-page-export-pdf'></i> Export Daily Totals Without Routes".html_safe,
+        print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :xlsx), target: "_blank", class: "button small" %>
   <h2><%= pluralize(@recipes.shipments.count, "Invoice") %> on the following Routes</h2>
   <table class="responsive-table">
     <thead>

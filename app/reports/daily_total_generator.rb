@@ -2,34 +2,41 @@ class DailyTotalGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
-    bakery_id, date_string, show_routes = global_id.split("_")
+    bakery_id, date_string, type, show_routes = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     date = Date.iso8601(date_string)
     show_routes = show_routes == "true"
-    new(bakery, date, show_routes)
+    new(bakery, date, type, show_routes)
   end
 
-  def initialize(bakery, date, show_routes = true)
+  def initialize(bakery, date, type, show_routes = true)
     @bakery = bakery
     @date = date.to_date
+    @type = type
     @show_routes = show_routes
   end
 
   def id
-    "#{@bakery.id}_#{@date.iso8601}_#{@show_routes}"
+    "#{@bakery.id}_#{@date.iso8601}_#{@type}_#{@show_routes}"
   end
 
   def filename
-    "DailyTotal.pdf"
+    "DailyTotal_#{@date}_#{@show_routes}.#{@type}"
+  end
+
+  def content_type
+    if @type == "pdf"
+      "application/pdf"
+    else
+      "application/xlsx"
+    end
   end
 
   def generate
-    pdf.render
-  end
-
-  private
-
-  def pdf
-    DailyTotalPdf.new(@bakery, @date, @show_routes)
+    if @type == "pdf"
+      DailyTotalPdf.new(@bakery, @date).render
+    else
+      DailyTotalXlsx.new(@bakery, @date).generate
+    end
   end
 end
