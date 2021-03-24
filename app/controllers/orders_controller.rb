@@ -1,14 +1,14 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: %i[
-    add_invoices
-    copy
-    destroy
-    edit
-    future_invoices
-    print
-    papertrail
-    update
-  ]
+                              add_invoices
+                              copy
+                              destroy
+                              edit
+                              future_invoices
+                              print
+                              papertrail
+                              update
+                            ]
   before_action :skip_policy_scope, only: %i[grocery_list print_grocery_list]
   decorates_assigned :orders, :order
   helper_method :search_form
@@ -62,6 +62,7 @@ class OrdersController < ApplicationController
     @date = date_query
     @orders = policy_scope(Order)
       .updated_at_date(@date)
+      .where("end_date >= ?", @date - 1.day)
       .paginate(page: params[:page])
   end
 
@@ -156,9 +157,8 @@ class OrdersController < ApplicationController
       :alert,
       :discount,
       :start_date, :end_date, :client_id, :route_id, :note, :order_type,
-      order_items_attributes:
-        %i[id product_id monday tuesday wednesday
-           thursday friday saturday sunday _destroy]
+      order_items_attributes: %i[id product_id monday tuesday wednesday
+                                 thursday friday saturday sunday _destroy],
     )
   end
 
