@@ -62,7 +62,7 @@ class OrdersController < ApplicationController
     @date = date_query
     @orders = policy_scope(Order)
       .updated_at_date(@date)
-      .where("end_date >= ?", @date - 1.day)
+      .where("end_date >= ? OR end_date is NULL", @date - 1.day)
       .paginate(page: params[:page])
   end
 

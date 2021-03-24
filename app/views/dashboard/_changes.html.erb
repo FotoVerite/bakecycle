@@ -22,7 +22,7 @@
           <h3><%= 
                 item_finder.orders.
                 updated_at_date.
-                where("end_date >= ?", Date.today).
+                where("end_date >= ? OR end_date is NULL", Date.today).
                 count %></h3>
         </div>
         <i class="fi-shopping-bag right"></i>
