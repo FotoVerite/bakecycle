@@ -1,6 +1,13 @@
 class ShipmentsController < ApplicationController
   before_action :load_shipment, only: %i[edit update destroy invoice packing_slip invoice_iif invoice_csv]
-  after_action :skip_policy_scope, only: %i[detailed_invoice_report print_detailed_invoice_report export_csv export_iif export_pdf invoice_csv]
+  after_action :skip_policy_scope,
+               only: %i[
+                 detailed_invoice_report
+                 print_detailed_invoice_report
+                 total_sales_report
+                 print_total_sales_report
+                 export_csv export_iif export_pdf invoice_csv
+               ]
   decorates_assigned :shipments, :shipment
   helper_method :search_form
 
@@ -92,6 +99,20 @@ class ShipmentsController < ApplicationController
     @start_date = start_date
     @end_date = end_date
     generator = DetailedInvoiceReportGenerator.new(current_bakery, start_date, end_date)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
+  def total_sales_report
+    authorize Shipment, :index?
+    @start_date = start_date
+    @end_date = end_date
+  end
+
+  def print_total_sales_report
+    authorize Shipment, :index?
+    @start_date = start_date
+    @end_date = end_date
+    generator = TotalSalesGenerator.new(current_bakery, start_date, end_date)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 

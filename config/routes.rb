@@ -97,6 +97,8 @@ Rails.application.routes.draw do
     get "product_invoiced_for_year", on: :collection
     get "detailed_invoice_report", on: :collection
     get "print_detailed_invoice_report", on: :collection
+    get "total_sales_report", on: :collection
+    get "print_total_sales_report", on: :collection
   end
 
   resources :bakeries, except: [:show] do

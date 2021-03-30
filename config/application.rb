@@ -25,7 +25,8 @@ module Bakecycle
     config.autoload_paths += [
       "#{config.root}/lib",
       "#{config.root}/app/reports/product_reports",
-      "#{config.root}/app/reports/client_reports"
+      "#{config.root}/app/reports/client_reports",
+      "#{config.root}/app/reports/invoice_reports",
     ]
     config.serve_static_files = true
 
@@ -43,12 +44,12 @@ module Bakecycle
     config.assets.precompile << /(?:eot|svg|ttf|woff)$/
 
     config.generators do |g|
-      g.factory_girl    true
-      g.test_framework  :rspec
-      g.stylesheets     false
-      g.javascripts     false
-      g.helper          false
-      g.decorator       false
+      g.factory_girl true
+      g.test_framework :rspec
+      g.stylesheets false
+      g.javascripts false
+      g.helper false
+      g.decorator false
     end
 
     ActionMailer::Base.delivery_method = :smtp

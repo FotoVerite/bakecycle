@@ -12,25 +12,25 @@ class DetailedInvoiceReportXlxs
     @client_style = styles.add_style bg_color: "0000FF", fg_color: "FF", sz: 24, alignment: { horizontal: :center }
     wb.add_worksheet(name: "Invoices") do |sheet|
       sheet.add_row [
-        'Invoice Number', 
-        'Client Name', 
-        'Client Group', 
-        'Client Channel',
-        'Client ID',
-        'Invoice Date',
-        'Route',
-        'Subtotal',
-        'Fees',
-        'Bread',
-        'Cookie', 
-        'Pot Pie',
-        'Quiche',
-        'Sandwich & Tartine',
-        'Tart and Desert',
-        'Vienoisserie',
-        'Dry Goods',
-        'Other',
-        'Total'
+        "Invoice Number",
+        "Client Name",
+        "Client Group",
+        "Client Channel",
+        "Client ID",
+        "Invoice Date",
+        "Route",
+        "Subtotal",
+        "Fees",
+        "Bread",
+        "Cookie",
+        "Pot Pie",
+        "Quiche",
+        "Sandwich & Tartine",
+        "Tart and Desert",
+        "Vienoisserie",
+        "Dry Goods",
+        "Other",
+        "Total",
       ]
       add_rows(@shipments, sheet)
     end
@@ -40,15 +40,15 @@ class DetailedInvoiceReportXlxs
   def add_rows(shipments, sheet)
     shipments.each do |shipment|
       row = [
-        shipment.invoice_number, 
-        shipment.client_name, 
+        shipment.invoice_number,
+        shipment.client_name,
         shipment.client.group,
         shipment.client.channel,
         shipment.client_id,
         shipment.date,
         shipment.route_name,
         shipment.subtotal,
-        shipment.delivery_fee
+        shipment.delivery_fee,
       ]
       row += create_totals_for_invoice(shipment).values
       sheet.add_row row
@@ -66,16 +66,13 @@ class DetailedInvoiceReportXlxs
       vienoisserie: 0.00,
       dry_goods: 0.00,
       other: 0.00,
-      total: 0.00
+      total: 0.00,
     }
     shipment.shipment_items.each do |item|
       product_type = item.product.product_type
-      Rails.logger.error '****'
-      Rails.logger.error product_type
-      hash[product_type.to_sym] +=  (item.product_quantity * item.product_price)
-      hash[:total] +=  (item.product_quantity * item.product_price)
+      hash[product_type.to_sym] += (item.product_quantity * item.product_price)
+      hash[:total] += (item.product_quantity * item.product_price)
     end
-    Rails.logger.error hash
     hash
   end
 
