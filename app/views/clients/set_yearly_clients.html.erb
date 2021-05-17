@@ -1,0 +1,21 @@
+<style>
+body {
+  background-color: linen;
+}
+
+</style>
+
+<%= form_tag yearly_total_clients_path, method: :get do |f| %>
+
+
+  <fieldset>
+    <legend>Choose Clients to include in yearly total</legend>
+   <%= collection_check_boxes :client_ids, nil, @clients, :id, :name do |b| %>
+  <div>
+    <%= b.check_box %>
+    <%= b.label %>
+  </div>
+<% end %>
+  </fieldset>
+        <%= submit_tag "Generate", class: "button", name: nil %>
+<% end %>
