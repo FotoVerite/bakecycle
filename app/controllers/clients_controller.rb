@@ -110,7 +110,7 @@ class ClientsController < ApplicationController
   def yearly_total
     authorize Client, :index?
     ids = params[:client_ids].flatten.reject { |x| x.empty? }
-    @clients = policy_scope(Client).includes(shipments: [:shipment_items]).find(ids)
+    @clients = policy_scope(Client).find(ids)
     @start_date = (Time.now - 1.year).beginning_of_year
     @end_date = (Time.now - 1.year).end_of_year
     render :layout => false
