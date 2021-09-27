@@ -178,7 +178,9 @@ class ShipmentsController < ApplicationController
       :alert,
       :client_id, :route_id, :date,
       :discount,
-      :payment_due_date, :delivery_fee, :note,
+      :payment_due_date,
+      :po_number,
+      :delivery_fee, :note,
       shipment_items_attributes: %i[id product_id product_quantity product_price _destroy],
     )
   end

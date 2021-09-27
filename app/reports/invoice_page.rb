@@ -57,7 +57,8 @@ class InvoicePage
   end
 
   def information
-    table(information_rows, column_widths: [114.4, 114.4, 114.4, 114.4, 114.4]) do
+    sizing = @shipment.po_number.blank? ? [114.4, 114.4, 114.4, 114.4, 114.4] : [95.33, 95.33, 95.33, 95.33, 95.33, 95.33]
+    table(information_rows, column_widths: sizing) do
       column(0..4).style(align: :center)
       row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       row(1).style(overflow: :shrink_to_fit, min_font_size: 10)
@@ -65,11 +66,20 @@ class InvoicePage
   end
 
   def information_rows
-    [["Invoice Number", "Invoice Date", "Terms", "Due Date", "Total Due"]] +
-      [[
-        @shipment.invoice_number, @shipment.date, @shipment.terms,
-        @shipment.payment_due_date, @shipment.price
-      ]]
+    if @shipment.po_number.blank?
+      [["Invoice Number", "Invoice Date", "Terms", "Due Date", "Total Due"]] +
+        [[
+          @shipment.invoice_number, @shipment.date, @shipment.terms,
+          @shipment.payment_due_date, @shipment.price,
+        ]]
+    else
+      [["PO Number", "Invoice Number", "Invoice Date", "Terms", "Due Date", "Total Due"]] +
+        [[
+          @shipment.po_number,
+          @shipment.invoice_number, @shipment.date, @shipment.terms,
+          @shipment.payment_due_date, @shipment.price,
+        ]]
+    end
   end
 
   def shipment_items
@@ -97,7 +107,7 @@ class InvoicePage
           item.product_type,
           item.product_quantity,
           item.product_price,
-          item.object.price
+          item.object.price,
         ]
       elsif hash[item.product_name][3] == item.product_price
         hash[item.product_name][2] = hash[item.product_name][2] + item.product_quantity
@@ -108,7 +118,7 @@ class InvoicePage
           item.product_type,
           item.product_quantity,
           item.product_price,
-          item.price
+          item.price,
         ]
       end
     end
@@ -118,7 +128,7 @@ class InvoicePage
         array[1],
         array[2],
         array[3],
-        number_to_currency(array[4])
+        number_to_currency(array[4]),
       ]
     end
   end
