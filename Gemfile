@@ -4,9 +4,9 @@ ruby "2.5.1"
 gem "active_model_serializers", "~> 0.9.3"
 gem "airbrake"
 gem "aws-sdk", "< 2.0"
-gem 'axlsx_rails'
+gem "axlsx_rails"
 gem "axlsx", "2.0.1"
-gem "browserify-rails", '4.3.0'
+gem "browserify-rails", "4.3.0"
 gem "chronic"
 gem "devise"
 gem "devise-async", git: "https://github.com/klacointe/devise-async.git", branch: "devise4"
@@ -29,7 +29,6 @@ gem "pundit"
 gem "rails", "5.1.7"
 gem "redis", "3.3.5"
 gem "resque", require: "resque/server"
-gem "riif"
 gem "rubyzip", "1.0.0"
 gem "sass-rails"
 gem "simple_form"
@@ -37,9 +36,9 @@ gem "stripe"
 gem "uglifier"
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate"
-gem 'rest-client'
-gem 'dotenv-rails'
-gem 'jwt'
+gem "rest-client"
+gem "dotenv-rails"
+gem "jwt"
 
 group :development do
   gem "better_errors"
@@ -75,12 +74,12 @@ end
 group :test do
   gem "capybara-email"
   gem "capybara-screenshot"
-  gem 'selenium-webdriver'
+  gem "selenium-webdriver"
   gem "database_cleaner"
   gem "launchy"
   gem "rspec-activejob"
   gem "timecop"
-  gem 'stripe-ruby-mock', :require => 'stripe_mock'
+  gem "stripe-ruby-mock", :require => "stripe_mock"
   gem "webmock", require: false
 end
 
