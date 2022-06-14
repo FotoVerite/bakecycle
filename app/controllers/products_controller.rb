@@ -9,10 +9,17 @@ class ProductsController < ApplicationController
 
   def index
     authorize Product
-    @products = policy_scope(Product)
-      .where(removed: false)
-      .order_by_name
-      .paginate(page: params[:page])
+    if params[:active] != "any"
+      @products = policy_scope(Product)
+        .where(removed: false, inactive: params[:active] || false)
+        .order_by_name
+        .paginate(page: params[:page])
+    else
+      @products = policy_scope(Product)
+        .where(removed: false)
+        .order_by_name
+        .paginate(page: params[:page])
+    end
   end
 
   def new

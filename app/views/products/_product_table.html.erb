@@ -1,3 +1,4 @@
+<div class='replaceable'>
 <table class="responsive-table">
   <thead>
     <tr>
@@ -5,6 +6,7 @@
       <th scope="col">Product Type</th>
       <th scope="col">Description</th>
       <th scope="col">SKU</th>
+      <th scope="col">Active</th>
       <% if policy(Product).manage_permission? %>
         <th scope="col">Action</th>
       <% end %>
@@ -17,6 +19,7 @@
         <td data-title="Product Type"><%= product.type %></td>
         <td data-title="Description"><%= product.truncated_description %></td>
         <td data-title="SKU"><%= product.sku_display %></td>
+        <td data-title="Active"><%= product.inactive? ? "No" : "Yes" %></td>
         <% if policy(product).manage_permission? %>
           <td data-title="Action">
             <%= link_to product_path(product) do %>
@@ -38,3 +41,4 @@
 </table>
 
 <%= will_paginate products %>
+<div>
