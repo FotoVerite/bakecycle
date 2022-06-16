@@ -402,6 +402,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    riif (1.1.0)
     rspec-activejob (0.6.1)
       activejob (>= 4.2)
       rspec-mocks
@@ -583,6 +584,7 @@ DEPENDENCIES
   redis (= 3.3.5)
   resque
   rest-client
+  riif
   rspec-activejob
   rspec-rails
   rubocop

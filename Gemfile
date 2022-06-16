@@ -39,6 +39,7 @@ gem "will_paginate"
 gem "rest-client"
 gem "dotenv-rails"
 gem "jwt"
+gem "riif"
 
 group :development do
   gem "better_errors"
