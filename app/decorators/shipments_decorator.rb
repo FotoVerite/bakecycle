@@ -9,6 +9,10 @@ class ShipmentsDecorator < Draper::CollectionDecorator
     h.item_finder.products.order_by_name
   end
 
+  def active_products
+    h.item_finder.products.where(inactive: false).order_by_name
+  end
+
   def price_total
     h.number_to_currency object.to_a.sum(&:price)
   end
