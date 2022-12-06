@@ -45,7 +45,7 @@ class ClientListXlsx
         p.delivery_address.full,
         p.business_phone,
         p.created_at.strftime("%-m/%d/%y"),
-        p.orders.order(:created_at).first.start_date.try(:strftime, "%-m/%d/%y"),
+        p.orders.order(:created_at).first.try(:start_date).try(:strftime, "%-m/%d/%y"),
         p.primary_contact_name,
         p.primary_contact_phone,
         p.primary_contact_email,
