@@ -50,12 +50,12 @@ class Shipment < ApplicationRecord
   accepts_nested_attributes_for(
     :shipment_items,
     allow_destroy: true,
-    reject_if: proc { |attributes| attributes["product_id"].blank? }
+    reject_if: proc { |attributes| attributes["product_id"].blank? },
   )
 
   before_validation :set_payment_due_date
   before_create :set_sequence_number
-  after_create :increment_client_sequence
+  after_create :increment_client_sequence, :send_to_contact
   before_update :check_delivery_fee?
   before_update :cache_price
 
@@ -72,12 +72,12 @@ class Shipment < ApplicationRecord
 
   # create client= and client_id= methods
   denormalize :client, %i[
-    id name official_company_name billing_term billing_term_days delivery_address_street_1
-    delivery_address_street_2 delivery_address_city delivery_address_state
-    delivery_address_zipcode billing_address_street_1 billing_address_street_2
-    billing_address_city billing_address_state billing_address_zipcode
-    primary_contact_name primary_contact_phone notes
-  ]
+                id name official_company_name billing_term billing_term_days delivery_address_street_1
+                delivery_address_street_2 delivery_address_city delivery_address_state
+                delivery_address_zipcode billing_address_street_1 billing_address_street_2
+                billing_address_city billing_address_state billing_address_zipcode
+                primary_contact_name primary_contact_phone notes
+              ]
 
   delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
 
@@ -93,7 +93,7 @@ class Shipment < ApplicationRecord
     search(
       client_id: client_id,
       date_from: week.start_date,
-      date_to: week.end_date
+      date_to: week.end_date,
     ).to_a.sum(&:subtotal)
   end
 
@@ -133,9 +133,9 @@ class Shipment < ApplicationRecord
 
   def invoice_number
     if client.try(:legacy_id)
-      "#{sequence_number}-#{format('%05d', client.legacy_id)}"
+      "#{sequence_number}-#{format("%05d", client.legacy_id)}"
     else
-      "#{sequence_number}-#{format('%05d', client_id)}"
+      "#{sequence_number}-#{format("%05d", client_id)}"
     end
   end
 
@@ -184,5 +184,9 @@ class Shipment < ApplicationRecord
 
   def shipment_items_subtotal
     shipment_items.sum(&:price)
+  end
+
+  def send_to_contact
+    return unless client.accounts_payable_contact_email && client.send_shipment_when_generated
   end
 end

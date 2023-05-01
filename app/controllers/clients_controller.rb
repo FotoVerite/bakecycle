@@ -150,7 +150,9 @@ class ClientsController < ApplicationController
       :accounts_payable_contact_phone, :accounts_payable_contact_email, :primary_contact_name,
       :primary_contact_phone, :primary_contact_email, :secondary_contact_name,
       :secondary_contact_phone, :secondary_contact_email, :delivery_fee_option,
-      :notes, :print_invoice, :temp_vip, :wholesale_manager
+      :notes, :print_invoice,
+      :send_shipment_when_generated,
+      :temp_vip, :wholesale_manager
     )
   end
 end

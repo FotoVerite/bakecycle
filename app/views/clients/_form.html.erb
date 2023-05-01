@@ -1,10 +1,7 @@
 <%= simple_form_for @client do |f| %>
-
   <%= render partial: "shared/error_messages", locals: {f: f} %>
-
   <fieldset>
     <legend>Business Information</legend>
-
     <div class="row">
       <div class="small-12 medium-4 columns">
         <%= f.input :name %>
@@ -16,13 +13,10 @@
         <%= f.input :ein %>
       </div>
     </div>
-
     <div class="row">
-
       <div class="small-12 medium-4 columns">
         <%= f.input :business_phone %>
       </div>
-
       <div class="small-12 medium-4 columns">
         <%= f.input :business_fax %>
       </div>
@@ -30,21 +24,16 @@
         <%= f.input :billing_term, collection: Client.billing_terms_select, as: :select, include_blank: "Select One" %>
       </div>
     </div>
-
     <div class="row">
-
       <div class="small-12 medium-4 columns">
         <%= f.input :group %>
       </div>
-
       <div class="small-12 medium-4 columns">
         <%= f.input :channel, collection: Client.channel_options, as: :select, include_blank: "Select One" %>
       </div>
-
       <div>
       </div>
     </div>
-
     <div class="row">
       <div class="small-12 medium-4 columns">
         <%= f.label :active, "Active"%>
@@ -54,9 +43,7 @@
         <%= f.label(:active_false, "No") %>
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Delivery Notes</legend>
     <div class="row">
@@ -69,16 +56,13 @@
       <div class="small-12 medium-4 columns">
         <%= f.check_box(:alert) %>
         <%= f.label :alert, "VIP"%>
-         <%= f.check_box(:temp_vip) %>
+        <%= f.check_box(:temp_vip) %>
         <%= f.label :temp_vip, "Temp VIP"%>
         <%= f.check_box(:print_invoice) %>
         <%= f.label :print_invoice, "Print Invoice"%>
-
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Delivery Fee Information</legend>
     <div class="row">
@@ -92,140 +76,107 @@
         <%= f.input :delivery_fee %>
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Delivery Address</legend>
-
     <div class="row">
       <div class="small-12 columns">
         <%= f.input :delivery_address_street_1 %>
       </div>
     </div>
-
     <div class="row">
       <div class="small-12 columns">
         <%= f.input :delivery_address_street_2 %>
       </div>
     </div>
-
     <div class="row">
       <div class="small-12 large-4 columns">
         <%= f.input :delivery_address_city %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :delivery_address_state %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :delivery_address_zipcode %>
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Billing Address</legend>
-
     <div class="row">
       <div class="small-12 columns">
         <%= f.input :billing_address_street_1 %>
       </div>
     </div>
-
     <div class="row">
       <div class="small-12 columns">
         <%= f.input :billing_address_street_2 %>
       </div>
     </div>
-
     <div class="row">
       <div class="small-12 large-4 columns">
         <%= f.input :billing_address_city %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :billing_address_state %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :billing_address_zipcode %>
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Accounts Payable</legend>
-
     <div class="row">
       <div class="small-12 large-4 columns">
         <%= f.input :accounts_payable_contact_name %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :accounts_payable_contact_phone %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :accounts_payable_contact_email %>
+        <%= f.check_box(:send_shipment_when_generated) %>
+        <%= f.label :send_shipment_when_generated, "Automatcally Send Invoice"%>
       </div>
     </div>
-
   </fieldset>
-
-   <fieldset>
+  <fieldset>
     <legend>Wholesale Manager</legend>
-
     <div class="row">
       <div class="small-12 large-12 columns">
         <%= f.input :wholesale_manager %>
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Primary Contact</legend>
-
     <div class="row">
       <div class="small-12 large-4 columns">
         <%= f.input :primary_contact_name %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :primary_contact_phone %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :primary_contact_email %>
       </div>
     </div>
-
   </fieldset>
-
   <fieldset>
     <legend>Secondary Contact</legend>
-
-
     <div class="row">
       <div class="small-12 large-4 columns">
         <%= f.input :secondary_contact_name %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :secondary_contact_phone %>
       </div>
-
       <div class="small-12 large-4 columns">
         <%= f.input :secondary_contact_email %>
       </div>
-
     </div>
   </fieldset>
-
   <div class="row">
     <div class="small-12 columns">
       <%= f.submit (@client.new_record? ? "Create" : "Update"), class: "button", name: nil %>

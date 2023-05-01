@@ -1,7 +1,5 @@
 <% provide(:title, "Client: #{client.name}") %>
-
 <h1>Client: <%= client.name %></h1>
-
 <div class="client-actions">
   <ul class="stack-for-small secondary button-group left">
     <li><%= link_to 'Back', clients_path, class: "button small" %></li>
@@ -9,14 +7,11 @@
       <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
     <% end %>
   </ul>
-
   <% if policy(Client).new? %>
     <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button right" %>
   <% end %>
 </div>
-
 <%= react_component('ClientMap', client.serializable_hash) %>
-
 <fieldset>
   <legend>Business Information</legend>
   <div class="row">
@@ -30,7 +25,6 @@
       <p>EIN: <%= client.ein %></p>
     </div>
   </div>
-
   <div class="row">
     <div class="small-12 medium-4 columns">
       <p>Business Phone: <%= client.business_phone %></p>
@@ -42,7 +36,6 @@
       <p>Billing Terms: <%= client.billing %></p>
     </div>
   </div>
-
   <div class="row">
     <div class="small-12 medium-4 columns">
       <p>Group: <%= client.group %></p>
@@ -59,24 +52,20 @@
     </div>
   </div>
 </fieldset>
-
 <fieldset>
   <legend>Delivery Notes</legend>
   <div class="row">
     <div class="small-12 medium-4 columns">
       <p><%= client.notes %></p>
     </div>
-    
     <div class="small-12 medium-4 columns">
       Vip: <%= client.alert? ? "Yes" : "No" %>
     </div>
-
     <div class="small-12 medium-4 columns">
       Temp Vip: <%= client.alert? ? "Yes" : "No" %>
     </div>
   </div>
 </fieldset>
-
 <fieldset>
   <legend>Delivery Fee Information</legend>
   <div class="row">
@@ -90,9 +79,7 @@
       <p>Delivery Fee: <%= client.delivery_fee %></p>
     </div>
   </div>
-
 </fieldset>
-
 <div class="row">
   <div class="small-12 medium-4 columns">
     <fieldset>
@@ -115,18 +102,18 @@
   <div class="small-12 large-4 columns">
     <fieldset>
       <legend>Accounts Payable Contact</legend>
-
       <div class="row">
         <div class="small-12 columns">
           <p><%= client.accounts_payable_contact_name %></p>
         </div>
-
         <div class="small-12 columns">
           <p><%= client.accounts_payable_contact_phone %></p>
         </div>
-
         <div class="small-12 columns">
           <p><%= client.accounts_payable_contact_email %></p>
+        </div>
+        <div class="small-12 columns">
+          <p>Send Invoice Automatically: <%= client.send_shipment_when_generated? ? "Yes" : "No" %></p>
         </div>
       </div>
     </fieldset>
@@ -138,11 +125,9 @@
         <div class="small-12 columns">
           <p><%= client.primary_contact_name %></p>
         </div>
-
         <div class="small-12 columns">
           <p><%= client.primary_contact_phone %></p>
         </div>
-
         <div class="small-12 columns">
           <p><%= client.primary_contact_email %></p>
         </div>
@@ -156,11 +141,9 @@
         <div class="small-12 columns">
           <p><%= client.secondary_contact_name %></p>
         </div>
-
         <div class="small-12 columns">
           <p><%= client.secondary_contact_phone %></p>
         </div>
-
         <div class="small-12 columns">
           <p><%= client.secondary_contact_email %></p>
         </div>
@@ -168,7 +151,6 @@
     </fieldset>
   </div>
 </div>
-
 <fieldset>
   <legend>Client's Recent Orders</legend>
   <div class="row">
@@ -183,7 +165,6 @@
           <th scope="col">Action</th>
         </tr>
       </thead>
-
       <tbody>
         <% client.latest_orders.each do |order| %>
           <tr class="js-clickable-row" href="<%= edit_order_path(order) %>">
@@ -214,7 +195,6 @@
     <% end %>
   </div>
 </fieldset>
-
 <fieldset>
   <legend>Client's Recent Invoices</legend>
   <div class="row">
@@ -228,7 +208,6 @@
           <th scope="col">Action</th>
         </tr>
       </thead>
-
       <tbody>
         <% client.latest_shipments.each do |shipment| %>
           <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
@@ -251,7 +230,6 @@
       <%= link_to 'View All Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
     <% end %>
   </div>
-
   <div class="row" style='text-align:right;'>
     Four Week Average: <%= number_to_currency @client.average_sale_by_week %>
   </div>
