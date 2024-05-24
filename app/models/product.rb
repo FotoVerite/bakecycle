@@ -50,6 +50,7 @@ class Product < ApplicationRecord
     tart_and_desert: 15,
     vienoisserie: 16,
     dry_goods: 17,
+    wholesale_sandwiches: 19,
     other: 18,
   }
 
