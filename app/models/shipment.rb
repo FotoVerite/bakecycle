@@ -188,6 +188,6 @@ class Shipment < ApplicationRecord
 
   def send_to_contact
     return unless client.accounts_payable_contact_email && client.send_shipment_when_generated
-    ClientsMailer.send_invoice(self).deliver_now
+    #ClientsMailer.send_invoice(self).deliver_now
   end
 end
