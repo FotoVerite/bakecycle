@@ -158,8 +158,15 @@ class Shipment < ApplicationRecord
   end
 
   def check_delivery_fee?
-    return self.delivery_fee = 0 unless charge_daily_fee? || charge_weekly_fee?
-    self.delivery_fee = order.client_delivery_fee
+    return self.delivery_fee = 0 unless charge_precentage_fee? || charge_daily_fee? || charge_weekly_fee?
+    self.delivery_fee = order.client_calculate_delivery_fee(subtotal)
+  end
+
+   def charge_precentage_fee?
+    return false if order.blank?
+    return false unless order.client_percentage_fee?
+    return false if shipment_items.empty?
+    shipment_items_subtotal > order.client_delivery_minimum
   end
 
   def charge_daily_fee?

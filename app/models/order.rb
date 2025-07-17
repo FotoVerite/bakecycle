@@ -65,9 +65,11 @@ class Order < ApplicationRecord
   delegate(
     :weekly_delivery_fee?,
     :daily_delivery_fee?,
+    :percentage_fee?,
     :delivery_fee,
     :delivery_minimum,
     :name,
+    :calculate_delivery_fee,
     to: :client, prefix: true
   )
 

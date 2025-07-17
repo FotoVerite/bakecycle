@@ -57,7 +57,7 @@ class Client < ApplicationRecord
   has_many :shipments, dependent: :destroy
 
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
-  enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee]
+  enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee percentage_fee]
 
   enum channel_options: {
       Restaurant: "Restaurant",
@@ -79,6 +79,7 @@ class Client < ApplicationRecord
   validates :primary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validate :check_if_both_vip_and_vip_temp
+  validate :check_percentage_fee
 
   geocoded_by :delivery_address_full
   after_validation :geocode, if: :needs_geocode?
@@ -113,6 +114,18 @@ class Client < ApplicationRecord
     return 0 if %w[credit_card cod].include? billing_term
     self.class.billing_terms[billing_term]
   end
+  
+  def calculate_delivery_fee(subtotal)
+      return delivery_fee unless delivery_fee_option == "percentage_fee"
+      subtotal * (delivery_fee / 100.00)
+  end
+
+  def display_fee
+    return delivery_fee unless delivery_fee_option == "percentage_fee"
+    "#{format('%.2f', delivery_fee)}%"
+  end
+  
+    
 
   def average_sale_by_month
     months_hash = {}
@@ -148,5 +161,12 @@ class Client < ApplicationRecord
     return true unless alert && temp_vip
     errors.add(:base, "Client cannot be a VIP and a Temp VIP at the same time. ")
     false
+  end
+
+  def check_percentage_fee
+    return unless delivery_fee_option == "percentage_fee"
+    return if delivery_fee.blank?
+    return if delivery_fee >= -100 && delivery_fee <= 100
+    errors.add(:delivery_fee, "must be between -100 and 100 when fee is a percentage")
   end
 end
