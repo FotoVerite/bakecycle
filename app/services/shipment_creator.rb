@@ -61,8 +61,14 @@ class ShipmentCreator
 
   def delivery_fee
     return @_delivery_fee if @_delivery_fee
-    return @_delivery_fee = 0 unless charge_daily_fee? || charge_weekly_fee?
-    @_delivery_fee = order.client_delivery_fee
+    return @_delivery_fee = 0 unless charge_precentage_fee? || charge_daily_fee? || charge_weekly_fee?
+    @_delivery_fee =  order.client_calculate_delivery_fee(shipment_items_subtotal)
+  end
+
+   def charge_precentage_fee?
+    return false unless order.client_percentage_fee?
+    return false if shipment_items.empty?
+    shipment_items_subtotal > order.client_delivery_minimum
   end
 
   def charge_daily_fee?
