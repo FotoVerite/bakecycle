@@ -2,7 +2,8 @@
 lock "~> 3.11.0"
 
 set :application, "bakecycle"
-set :repo_url, "git@github.com:wizarddevelopment/bakecycle.git"
+set :repo_url, "git@github.com:reconbot/bakecycle.git"
+set :ssh_options, forward_agent: true
 
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 

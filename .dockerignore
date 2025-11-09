@@ -1,0 +1,12 @@
+log/*
+tmp/*
+.bundle
+vendor/bundle
+node_modules
+.byebug_history
+*.swp
+*.swo
+.DS_Store
+.git
+.gitignore
+docker-compose.override.yml
