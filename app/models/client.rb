@@ -59,6 +59,8 @@ class Client < ApplicationRecord
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
   enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee percentage_fee]
 
+  enum engagement_status: { current: 0, lapsed: 1, prospective: 2 }
+
   enum channel_options: {
       Restaurant: "Restaurant",
       Hotel: "Hotel",
@@ -94,6 +96,10 @@ class Client < ApplicationRecord
 
   def self.delivery_fee_options_select
     delivery_fee_options.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
+  end
+
+  def self.engagement_status_select
+    engagement_statuses.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
   end
 
   def delivery_fee?

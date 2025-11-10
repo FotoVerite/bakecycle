@@ -144,6 +144,7 @@ class ClientsController < ApplicationController
       :delivery_fee, :delivery_minimum,
       :delivery_address_street_1, :delivery_address_street_2,
       :delivery_address_city, :delivery_address_state, :delivery_address_zipcode,
+      :engagement_status,
       :name, :official_company_name, :ein, :business_phone, :business_fax,
       :billing_address_street_1, :billing_address_street_2, :billing_address_city,
       :billing_address_state, :billing_address_zipcode, :accounts_payable_contact_name,

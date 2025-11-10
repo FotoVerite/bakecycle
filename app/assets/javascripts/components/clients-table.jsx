@@ -27,11 +27,20 @@ function filterClients(collection, filter) {
     return activeSearch === client.active + '';
   }
 
+  function statusMatch(client) {
+    const statusSearch = filter.engagementStatus;
+    return statusSearch === client.engagementStatus + '';
+  }
+
   function matchAll(client) {
-    return nameMatch(client) && activeMatch(client);
+    return nameMatch(client) && activeMatch(client) && statusMatch(client);
   }
 
   return _.filter(collection, matchAll);
+}
+
+function capitalize(val) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
 const ClientsTable = createReactClass({
@@ -41,7 +50,7 @@ const ClientsTable = createReactClass({
 
   getInitialState() {
     const clients = this.props.data;
-    const search = { active: 'true', name: '' };
+    const search = { active: 'true', name: '', engagementStatus: 'current' };
     const filteredClients = filterClients(clients, search);
     return { clients, search, filteredClients };
   },
@@ -59,14 +68,24 @@ const ClientsTable = createReactClass({
   searchName(event) {
     this.setSearch({
       name: event.target.value,
-      active: this.state.search.active
+      active: this.state.search.active,
+      engagementStatus: this.state.search.engagementStatus 
     });
   },
 
   searchActive(event) {
     this.setSearch({
       name: this.state.search.name,
-      active: event.target.value
+      active: event.target.value,
+      engagementStatus: this.state.search.engagementStatus 
+    });
+  },
+
+  searchStatus(event) {
+    this.setSearch({
+      name: this.state.search.name,
+      active: this.state.search.active,
+      engagementStatus: event.target.value
     });
   },
 
@@ -77,6 +96,8 @@ const ClientsTable = createReactClass({
       document.location.href = clients[0].links.view;
     }
   },
+
+  
 
   search() {
     return (
@@ -92,6 +113,16 @@ const ClientsTable = createReactClass({
               onChange={this.searchName}
               onKeyDown={this.chooseName}
             />
+          </div>
+        </div>
+        <div className="small-12 medium-1 columns">
+          <div className="input string optional">
+            <label className="string optional">Status?</label>
+            <select value={this.state.search.engagementStatus} onChange={this.searchStatus}>
+              <option value="current">Current</option>
+              <option value="lapsed">Lapsed</option>
+              <option value="perspective">Perspective</option>
+            </select>
           </div>
         </div>
         <div className="small-12 medium-1 columns">
@@ -127,6 +158,7 @@ const ClientsTable = createReactClass({
       <thead>
         <tr>
           <th scope="col">Name</th>
+          <th scope="col">Status</th>
           <th scope="col">Active</th>
           <th scope="col">Actions</th>
         </tr>
@@ -136,11 +168,13 @@ const ClientsTable = createReactClass({
 
   rows() {
     return this.state.filteredClients.map(function(client) {
+      console.log(client)
       return (
         <tr className="js-clickable-row" href={client.links.view} key={client.id} >
           <th scope="row">
             <a href={client.links.view}>{client.name}</a>
           </th>
+          <td data-title="Status">{capitalize(client.engagementStatus)}</td>
           <td data-title="Active">{client.active ? 'Yes' : 'No'}</td>
           <td data-title="Actions">
             <a href={client.links.edit}>

@@ -15,6 +15,10 @@ class ClientDecorator < Draper::Decorator
     delivery_fee_option.humanize(capitalize: false).titleize if delivery_fee_option
   end
 
+  def engagement_status
+    engagement_status.humanize(capitalize: true).titleize if engagement_status
+  end
+
   def latest_orders
     object.orders.includes(:route).order_by_active.limit(10).decorate
   end

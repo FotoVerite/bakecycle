@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20230430215756) do
+ActiveRecord::Schema.define(version: 20251110031301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 20230430215756) do
     t.string "group"
     t.string "channel"
     t.boolean "send_shipment_when_generated", default: false
+    t.integer "engagement_status", default: 0, null: false
     t.index ["active"], name: "index_clients_on_active"
     t.index ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true

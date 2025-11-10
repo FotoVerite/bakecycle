@@ -29,6 +29,9 @@
         <%= f.input :group %>
       </div>
       <div class="small-12 medium-4 columns">
+        <%= f.input :engagement_status, collection: Client.engagement_status_select, as: :select, include_blank: false %>
+      </div>
+      <div class="small-12 medium-4 columns">
         <%= f.input :channel, collection: Client.channel_options, as: :select, include_blank: "Select One" %>
       </div>
       <div>
