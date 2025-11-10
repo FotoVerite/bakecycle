@@ -243,9 +243,9 @@
     Yearly Average: <%= number_to_currency @client.average_sale_by_week %> <br />
     <% this_year = @client.average_four_week_sales(Time.now().beginning_of_week)%>
     <% last_year = @client.average_four_week_sales(Time.now().beginning_of_week - 1.year)%>
-    <% percentage_changed = ((this_year - last_year) / last_year) * 100%>
+    <% percentage_changed = last_year.zero? ? "NA" : ((this_year - last_year) / last_year) * 100%>
     <b>Four Week Average: <%= number_to_currency this_year %></b> <br />
     <b>Last Year Four Week Average: <%= number_to_currency last_year %></b> <br />
-    <span class="<%= percentage_changed > 0 ? 'positive' : 'negative' %>"> <%= number_with_precision(percentage_changed, precision: 2)%>% </span>
+    <span class="<%= last_year.zero? || percentage_changed > 0 ? 'positive' : 'negative' %>"> <%= last_year.zero? ? "NA" : number_with_precision(percentage_changed, precision: 2)+ "%" %> </span>
   </div>
 </fieldset>
