@@ -53,6 +53,11 @@
     <div class="small-12 medium-4 columns">
       <p>Active: <%= client.active_status %></p>
     </div>
+    <div class="small-12 medium-4 columns">
+      <p>Delivery Days: <b><%= client.active_days %></b></p>
+    </div>
+     <div class="small-12 medium-4 columns">
+    </div>
   </div>
 </fieldset>
 <fieldset>
@@ -154,6 +159,7 @@
     </fieldset>
   </div>
 </div>
+
 <fieldset>
   <legend>Client's Recent Orders</legend>
   <div class="row">

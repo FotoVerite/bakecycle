@@ -19,6 +19,17 @@ class ClientDecorator < Draper::Decorator
     object.orders.includes(:route).order_by_active.limit(10).decorate
   end
 
+  def active_days
+    out = {}
+    standing_orders.active_orders.map(&:order_items).flatten.each do |i|
+      OrderItem::DAYS_OF_WEEK.each do |d|
+        out[d] = true if i.send(d) > 0 
+      end
+    end
+    return "Every Day" if out.keys.size == 7 
+    out.keys.map(&:capitalize).join(", ")
+  end
+
   def latest_shipments
     object.shipments.includes(:shipment_items).latest(10).decorate
   end

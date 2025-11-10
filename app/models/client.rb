@@ -53,6 +53,7 @@ class Client < ApplicationRecord
 
   belongs_to :bakery
   has_many :orders, dependent: :destroy
+  has_many :standing_orders, -> { where(order_type: "standing").includes(:order_items) }, class_name: "Order"
   has_many :price_variants, dependent: :destroy
   has_many :shipments, dependent: :destroy
 

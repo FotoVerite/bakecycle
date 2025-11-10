@@ -79,6 +79,7 @@ class Order < ApplicationRecord
   after_touch :update_total_lead_days
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
+  scope :active_orders, -> {where("end_date IS NULL OR end_date >= ?", Time.zone.today)}
   scope :created_at_date, ->(date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|
     where(updated_at: date.beginning_of_day..date.end_of_day)
