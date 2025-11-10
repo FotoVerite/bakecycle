@@ -163,21 +163,28 @@ class Client < ApplicationRecord
   end
 
   def average_last_four_weeks_per_week(time)
-  # Define the 4-week period (starting from 4 weeks ago)
-  start_date = (time - 4.weeks).beginning_of_week
-  end_date   = time.end_of_week
+    # Define the 4-week period (starting from 4 weeks ago)
+    time = time.in_time_zone
+    start_date = (time - 4.weeks).beginning_of_week 
+    end_date   = time.beginning_of_week 
 
-  # Get weekly totals from shipments
-  weekly_totals = shipments
-    .where(created_at: start_date..end_date)
-    .group("DATE_TRUNC('week', created_at)")
-    .sum(:cached_price)
-  # Fill missing weeks with 0
-  all_weeks = (0..3).map { |i| (start_date + i.weeks).beginning_of_week }
-  weekly_values = all_weeks.map { |week| weekly_totals[week] || 0 }
-  # Average of the 4 weeks
-  weekly_values.sum.to_f / weekly_values.size
-end
+    # Get shipments in the 4-week period
+    recent_shipments = shipments.where(created_at: start_date..end_date)
+
+    # Group shipments by week
+    weeks = recent_shipments.group_by { |s| s.created_at.beginning_of_week }
+
+    # Fill in missing weeks with 0
+
+    weekly_totals = weeks.map do |k, shipments|
+      shipments = shipments || []
+      # sum prices if price exists, otherwise count shipments
+      shipments.sum { |s| s.price.to_f } 
+    end
+    return 0 if weekly_totals.size.zero?
+    # Average per week
+    weekly_totals.sum.to_f / weekly_totals.size
+  end
   
 
   private
