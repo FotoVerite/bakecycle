@@ -161,6 +161,23 @@ class Client < ApplicationRecord
     return 0 if weeks.empty?
     weeks.sum(&:price) / weeks.size
   end
+
+  def average_last_four_weeks_per_week(time)
+  # Define the 4-week period (starting from 4 weeks ago)
+  start_date = (time - 4.weeks).beginning_of_week
+  end_date   = time.end_of_week
+
+  # Get weekly totals from shipments
+  weekly_totals = shipments
+    .where(created_at: start_date..end_date)
+    .group("DATE_TRUNC('week', created_at)")
+    .sum(:cached_price)
+  # Fill missing weeks with 0
+  all_weeks = (0..3).map { |i| (start_date + i.weeks).beginning_of_week }
+  weekly_values = all_weeks.map { |week| weekly_totals[week] || 0 }
+  # Average of the 4 weeks
+  weekly_values.sum.to_f / weekly_values.size
+end
   
 
   private
