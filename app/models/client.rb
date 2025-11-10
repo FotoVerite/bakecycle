@@ -155,6 +155,13 @@ class Client < ApplicationRecord
     weeks.inject{ |sum, el| sum + el }.to_f / weeks.size
   end
 
+  def average_four_week_sales(time)
+    weeks = shipments.where(created_at: (time - 4.weeks)..time)
+    return 0 if weeks.empty?
+    weeks.sum(&:price) / weeks.size
+  end
+  
+
   private
 
   def needs_geocode?

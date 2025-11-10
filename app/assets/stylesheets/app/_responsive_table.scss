@@ -286,3 +286,17 @@ $bp-xlarge: 75em;
     }
   }
 }
+
+span.positive {
+  display:block;
+  color: green;
+  margin-top: 5px;
+  font-size: 20px;
+}
+
+span.negative {
+  display:block;
+  color: red;
+  margin-top: 5px;
+  font-size: 20px;
+}
