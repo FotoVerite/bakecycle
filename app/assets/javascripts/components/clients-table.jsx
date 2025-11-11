@@ -121,7 +121,7 @@ const ClientsTable = createReactClass({
             <select value={this.state.search.engagementStatus} onChange={this.searchStatus}>
               <option value="current">Current</option>
               <option value="lapsed">Lapsed</option>
-              <option value="perspective">Perspective</option>
+              <option value="prospective">Prospective</option>
             </select>
           </div>
         </div>
