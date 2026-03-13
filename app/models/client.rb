@@ -63,12 +63,17 @@ class Client < ApplicationRecord
   enum engagement_status: { current: 0, lapsed: 1, prospective: 2 }
 
   enum channel_options: {
-      Restaurant: "Restaurant",
-      Hotel: "Hotel",
-      Grocery: "Grocery",
-      FoodService: "FoodService",
+    Catering: "Catering",
+      Coffee: "Coffee",
       Distro: "Distro",
-      Coffee: "Coffee"
+      "Farmer's Market": "Farmer's Market",
+      FoodService: "FoodService",
+      Grocery: "Grocery",
+      Hotel: "Hotel",
+      Internal: "Internal",
+      Office: "Office",
+      Samples: "Samples",
+      Restaurant: "Restaurant",
     }
 
   validates :accounts_payable_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
