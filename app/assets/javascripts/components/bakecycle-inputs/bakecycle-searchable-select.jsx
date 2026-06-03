@@ -1,20 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import ReactSelect from 'react-select';
 import uniqueId from 'lodash.uniqueid';
-import formMixin from './bakecycle-form-mixin';
+import BakecycleInputBase from './bakecycle-input-base';
 
-const BCSelect =  createReactClass({
-  displayName: 'BCSelect',
-  mixins: [formMixin],
-
-  propTypes: {
-    ...formMixin.mixinPropTypes,
-    options: PropTypes.array.isRequired,
-    includeBlank: PropTypes.string,
-  },
-
+class BCSearchableSelect extends BakecycleInputBase {
   render() {
     const {
       disabled,
@@ -50,6 +40,13 @@ const BCSelect =  createReactClass({
       </div>
     );
   }
-});
+}
 
-export default BCSelect;
+BCSearchableSelect.displayName = 'BCSelect';
+BCSearchableSelect.propTypes = {
+  ...BakecycleInputBase.propTypes,
+  options: PropTypes.array.isRequired,
+  includeBlank: PropTypes.string,
+};
+
+export default BCSearchableSelect;

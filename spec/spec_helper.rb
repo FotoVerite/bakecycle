@@ -3,6 +3,7 @@ if ENV["COVERAGE"]
 
   SimpleCov.start "rails" do
     enable_coverage :branch
+    track_files "{app,lib}/**/*.{rb,rake}"
     add_filter "/spec/"
     add_filter "/config/"
     add_filter "/vendor/"

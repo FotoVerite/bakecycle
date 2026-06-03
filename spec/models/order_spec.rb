@@ -313,6 +313,18 @@ describe Order do
     end
   end
 
+  describe ".order_by_active" do
+    it "sorts by end date with open ended orders treated as active today" do
+      old_order = create(:order, start_date: yesterday, end_date: yesterday, order_item_count: 0)
+      active_order = create(:order, start_date: yesterday, end_date: nil, order_item_count: 0)
+      future_order = create(:order, start_date: yesterday, end_date: tomorrow, order_item_count: 0)
+
+      expect(Order.where(id: [old_order, active_order, future_order]).order_by_active).to eq(
+        [future_order, active_order, old_order]
+      )
+    end
+  end
+
   describe ".active" do
     it "returns all active orders for a date" do
       order = create(:order, start_date: yesterday, order_item_count: 0)

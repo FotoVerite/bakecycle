@@ -1,22 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import uniqueId from 'lodash.uniqueid';
-import formMixin from './bakecycle-form-mixin';
+import BakecycleInputBase from './bakecycle-input-base';
 
-const BCCheckbox = createReactClass({
-  mixins: [formMixin],
-
-  propTypes: {
-    ...formMixin.mixinPropTypes,
-    type: PropTypes.string
-  },
-
+class BCCheckbox extends BakecycleInputBase {
   onClick(event) {
     const data = {};
     data[this.props.field] = event.target.checked;
     this.props.onChange(data);
-  },
+  }
 
   render() {
     const {
@@ -30,15 +22,16 @@ const BCCheckbox = createReactClass({
     } = this.props;
 
     const cid = uniqueId();
+
     return (
       <div className={`input ${this.requiredClass()} ${error ? 'error' : ''}`}>
         <input
           id={`input-${field}-${cid}`}
           className={`${type || 'text'} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
-          onChange={this.onClick}
-          type= "checkbox"
-          value= {true}
+          onChange={this.onClick.bind(this)}
+          type="checkbox"
+          value={true}
           checked={value}
           disabled={disabled}
         />
@@ -47,6 +40,11 @@ const BCCheckbox = createReactClass({
       </div>
     );
   }
-});
+}
+
+BCCheckbox.propTypes = {
+  ...BakecycleInputBase.propTypes,
+  type: PropTypes.string,
+};
 
 export default BCCheckbox;

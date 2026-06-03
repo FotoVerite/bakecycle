@@ -1,32 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Model as FileExportStore } from 'backbone';
 
-const FileExportRefresher = createReactClass({
-  propTypes: {
-    links: PropTypes.object.isRequired,
-    loadingMessage: PropTypes.string.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      status: '',
-      ready: false
-    };
-  },
-
-  componentWillMount() {
+class FileExportRefresher extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { status: '', ready: false };
     this.store = new FileExportStore();
     this.store.on('change', store => this.setState(store.toJSON()));
-    this.store.set(this.props);
+    this.store.set(props);
+    this.poll = this.poll.bind(this);
+  }
+
+  componentDidMount() {
     this.poll();
-  },
+  }
 
   componentWillUnmount() {
     this.store.off('change');
     this.stopPoll();
-  },
+  }
 
   poll() {
     this.jxr = $.get(this.props.links.self);
@@ -37,23 +30,18 @@ const FileExportRefresher = createReactClass({
         this.timeout = window.setTimeout(this.poll, 1000);
       }
     });
-
     this.jxr.fail(() => this.status('There was an error checking on the report, trying again in 5 seconds.'));
     this.jxr.fail(() => this.timeout = window.setTimeout(this.poll, 5000));
-  },
+  }
 
   status(message) {
-    this.setState({status: message});
-  },
+    this.setState({ status: message });
+  }
 
   stopPoll() {
     window.clearTimeout(this.timeout);
     if (this.jxr) { this.jxr.abort(); }
-  },
-
-  componentWillReceiveProps(newProps) {
-    this.store.update(newProps);
-  },
+  }
 
   loading() {
     return (
@@ -67,7 +55,7 @@ const FileExportRefresher = createReactClass({
         <div>{this.state.status}</div>
       </div>
     );
-  },
+  }
 
   complete() {
     window.location.replace(this.state.links.file);
@@ -80,13 +68,20 @@ const FileExportRefresher = createReactClass({
         </p>
       </div>
     );
-  },
+  }
 
   render() {
-    return (<div className="loading-report">
-      {this.state.ready ? this.complete() : this.loading()}
-    </div>);
+    return (
+      <div className="loading-report">
+        {this.state.ready ? this.complete() : this.loading()}
+      </div>
+    );
   }
-});
+}
+
+FileExportRefresher.propTypes = {
+  links: PropTypes.object.isRequired,
+  loadingMessage: PropTypes.string.isRequired,
+};
 
 export default FileExportRefresher;

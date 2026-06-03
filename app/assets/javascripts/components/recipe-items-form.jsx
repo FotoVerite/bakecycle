@@ -1,25 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import RecipeItemFields from './recipe-item-fields';
 
-const RecipeItemsForm = createReactClass({
-
-  propTypes: {
-    recipeItems: PropTypes.object,
-    recipe: PropTypes.object
-  },
-
-  componentWillMount() {
+class RecipeItemsForm extends React.Component {
+  constructor(props) {
+    super(props);
     this.placeholder = document.createElement('div');
     this.placeholder.className = 'draggable-placeholder';
-  },
+    this.addItem = this.addItem.bind(this);
+    this.dragStart = this.dragStart.bind(this);
+    this.dragEnd = this.dragEnd.bind(this);
+    this.dragOver = this.dragOver.bind(this);
+  }
 
   addItem(event) {
     event.preventDefault();
     this.props.recipeItems.add({});
-  },
+  }
 
   availableInclusions() {
     if (this.props.recipe.get('recipeType') === 'dough') {
@@ -27,37 +25,31 @@ const RecipeItemsForm = createReactClass({
     } else {
       return this.props.recipe.get('availableRecipeIngredients');
     }
-  },
+  }
 
   dragStart(e) {
     this.dragged = e.target;
     this.draggedOver = false;
     e.dataTransfer.effectAllowed = 'move';
-    // Firefox requires calling dataTransfer.setData
     e.dataTransfer.setData('text/html', this.dragged);
-  },
+  }
 
   dragEnd() {
     this.dragged.style.display = 'block';
     this.placeholder.remove();
-    if (!this.draggedOver) {
-      return;
-    }
+    if (!this.draggedOver) { return; }
     var draggedId = this.dragged.dataset.id;
     var targetId = this.draggedOver.dataset.id;
     this.props.recipeItems.move(draggedId, targetId, this.draggedPosition === 'after');
-  },
+  }
 
   dragOver(e) {
     e.preventDefault();
     var over = $(e.target).closest('[draggable=true]').get(0);
-    if (!over) {
-      return;
-    }
+    if (!over) { return; }
     this.draggedOver = over;
     this.dragged.style.display = 'none';
 
-    // for better dragging ux
     var overBoundingBox = this.draggedOver.getBoundingClientRect();
     var middle = overBoundingBox.height / 2;
     var relativeToMiddle = e.clientY - overBoundingBox.top - middle;
@@ -69,7 +61,7 @@ const RecipeItemsForm = createReactClass({
       this.draggedPosition = 'before';
       parent.insertBefore(this.placeholder, this.draggedOver);
     }
-  },
+  }
 
   render() {
     const fields = this.props.recipeItems.map((model) => {
@@ -81,7 +73,7 @@ const RecipeItemsForm = createReactClass({
         dragEnd={this.dragEnd} />);
     });
 
-    return (<div onDragOver={this.dragOver} >
+    return (<div onDragOver={this.dragOver}>
       <fieldset>
         <legend>Ingredients</legend>
         <div className="row collapse">
@@ -99,10 +91,15 @@ const RecipeItemsForm = createReactClass({
           </div>
         </div>
         {fields}
-        <a href="#" onClick={this.addItem} className="button" >Add New Ingredient</a>
+        <a href="#" onClick={this.addItem} className="button">Add New Ingredient</a>
       </fieldset>
     </div>);
   }
-});
+}
+
+RecipeItemsForm.propTypes = {
+  recipeItems: PropTypes.object,
+  recipe: PropTypes.object,
+};
 
 export default RecipeItemsForm;

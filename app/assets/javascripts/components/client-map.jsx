@@ -1,61 +1,66 @@
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import GoogleMap from 'google-map-react';
 import Marker from './client-marker';
 
-const ClientMap = createReactClass({
-  propTypes: {
-    name: PropTypes.string.isRequired,
-    longitude: PropTypes.number.isRequired,
-    latitude: PropTypes.number.isRequired,
-    deliveryAddressFull: PropTypes.string.isRequired,
-    apiKey: PropTypes.string.isRequired
-  },
+class ClientMap extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onResize = this.onResize.bind(this);
+    this.openMap = this.openMap.bind(this);
+  }
 
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
-  },
+  }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.onResize);
-  },
+  }
 
   onResize() {
-    const width = window.innerWidth;
-    this.setState({width});
-  },
-
-  mapOptions: {
-    'min-zoom': 15,
-    'max-zoom': 15,
-    scrollwheel: false,
-    draggable: false
-  },
+    this.setState({ width: window.innerWidth });
+  }
 
   openMap() {
-    const { deliveryAddressFull } = this.props;
-    window.open(`http://maps.google.com/?q=${encodeURIComponent(deliveryAddressFull)}`);
-  },
+    window.open(`http://maps.google.com/?q=${encodeURIComponent(this.props.deliveryAddressFull)}`);
+  }
 
   render() {
-    const center = [this.props.latitude, this.props.longitude];
-    return (<div className="map-container">
-      <GoogleMap
-        apiKey={this.props.apiKey}
-        ref="gmap"
-        center={center}
-        zoom={15}
-        options={this.mapOptions} >
-        <Marker
-          lat={this.props.latitude}
-          lng={this.props.longitude}
-          title={this.props.name}
-          onClick={this.openMap} >
-        </Marker>
-      </GoogleMap>
-    </div>);
+    const { latitude, longitude, name, apiKey } = this.props;
+    const center = { lat: latitude, lng: longitude };
+    const mapOptions = {
+      scrollwheel: false,
+      draggable: false,
+      minZoom: 15,
+      maxZoom: 15,
+    };
+    return (
+      <div className="map-container">
+        <GoogleMap
+          bootstrapURLKeys={{ key: apiKey }}
+          center={center}
+          zoom={15}
+          options={mapOptions}
+        >
+          <Marker
+            lat={latitude}
+            lng={longitude}
+            title={name}
+            onClick={this.openMap}
+          />
+        </GoogleMap>
+      </div>
+    );
   }
-});
+}
+
+ClientMap.propTypes = {
+  name: PropTypes.string.isRequired,
+  longitude: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  deliveryAddressFull: PropTypes.string.isRequired,
+  apiKey: PropTypes.string.isRequired,
+};
 
 export default ClientMap;

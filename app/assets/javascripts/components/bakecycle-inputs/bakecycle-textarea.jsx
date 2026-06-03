@@ -1,16 +1,8 @@
 import React from 'react';
-import createReactClass from 'create-react-class';
 import uniqueId from 'lodash.uniqueid';
-import formMixin from './bakecycle-form-mixin';
+import BakecycleInputBase from './bakecycle-input-base';
 
-const BCTextArea = createReactClass({
-  displayName: 'BCTextArea',
-  mixins: [formMixin],
-
-  propTypes: {
-    ...formMixin.mixinPropTypes,
-  },
-
+class BCTextArea extends BakecycleInputBase {
   render() {
     const {
       disabled,
@@ -30,14 +22,16 @@ const BCTextArea = createReactClass({
           id={`input-${field}-${cid}`}
           className={`textarea ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
-          onChange={this.onChange}
-          value={value}
+          onChange={this.onChange.bind(this)}
+          value={value ?? ''}
           disabled={disabled}
         />
         {error ? <small className="error">{error}</small> : ''}
       </div>
     );
   }
-});
+}
+
+BCTextArea.displayName = 'BCTextArea';
 
 export default BCTextArea;

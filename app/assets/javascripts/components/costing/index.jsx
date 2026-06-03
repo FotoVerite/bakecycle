@@ -1,22 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Provider } from 'react-redux';
 import createIngredientStore from '../../stores/ingredients';
 import CostingForm from './costing-form';
 
-const CostingFormProvider = createReactClass({
-  propTypes: {
-    ingredients: PropTypes.array.isRequired,
-    availableVendors: PropTypes.array.isRequired,
-    filter: PropTypes.array.isRequired,
-    weightUnitOptions: PropTypes.array.isRequired
-  },
-
-  componentWillMount() {
-    const store = createIngredientStore(this.props);
-    this.setState({store});
-  },
+class CostingFormProvider extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { store: createIngredientStore(props) };
+  }
 
   render() {
     return (
@@ -25,6 +17,13 @@ const CostingFormProvider = createReactClass({
       </Provider>
     );
   }
-});
+}
+
+CostingFormProvider.propTypes = {
+  ingredients: PropTypes.array.isRequired,
+  availableVendors: PropTypes.array.isRequired,
+  filter: PropTypes.array.isRequired,
+  weightUnitOptions: PropTypes.array.isRequired,
+};
 
 export default CostingFormProvider;

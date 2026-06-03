@@ -118,12 +118,12 @@ export default function OrderItemFields({
 
           <div className="order-item-price-per-qt" title={`Lead Days ${totalLeadDays}`}>
             <label className="hide-for-large-up">Price</label>
-            <input disabled="true" type="text" value={productPriceAndQuantity} />
+            <input disabled type="text" value={productPriceAndQuantity ?? ''} readOnly />
           </div>
 
           <div className="order-item-price-total">
             <label className="hide-for-large-up">Total</label>
-            <input disabled="true" type="text" value={totalQuantityPriceCurrency} />
+            <input disabled type="text" value={totalQuantityPriceCurrency ?? ''} readOnly />
           </div>
 
           {renderDays()}

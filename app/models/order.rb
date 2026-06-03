@@ -130,7 +130,7 @@ class Order < ApplicationRecord
 
   # sorts orders by their end date, putting open ended standing orders in for today
   def self.order_by_active
-    order("COALESCE(orders.end_date, now()) DESC")
+    order(Arel.sql("COALESCE(orders.end_date, now()) DESC"))
   end
 
   def self.temporary(date)

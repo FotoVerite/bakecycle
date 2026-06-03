@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-
 import { BCInput, BCSelect } from './bakecycle-inputs';
 
-const ProductPriceField = createReactClass({
-  propTypes: {
-    model: PropTypes.object.isRequired,
-    clients: PropTypes.array.isRequired
-  },
+class ProductPriceField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleDestroy = this.toggleDestroy.bind(this);
+  }
 
   toggleDestroy() {
     const model = this.props.model;
-    const destroy = model.get('destroy');
-    model.set({ destroy: !destroy });
-  },
+    model.set({ destroy: !model.get('destroy') });
+  }
 
   render() {
     const model = this.props.model;
@@ -28,76 +25,38 @@ const ProductPriceField = createReactClass({
     const namePrefix = `product[price_variants_attributes][${model.getNumericCID()}]`;
     const disabledClass = destroy ? 'disabled' : '';
 
-    const undoButton = <a onClick={this.toggleDestroy} className="button alert postfix" >Undo</a>;
-    const removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
+    const undoButton = <a onClick={this.toggleDestroy} className="button alert postfix">Undo</a>;
+    const removeButton = <a onClick={this.toggleDestroy} className="test-remove-button button alert postfix">X</a>;
 
-    let idField;
-    if (id) {
-      idField = <input type="hidden" name={`${namePrefix}[id]`} value={id} />;
-    }
-
-    let destroyField;
-    if (destroy) {
-      destroyField = <input type="hidden" name={`${namePrefix}[_destroy]`} value="true" />;
-    }
-
-    return (<div className={`fields ${disabledClass}`}>
-      {idField}
-      {destroyField}
-      <div className="row collapse">
-        <div className="small-12 medium-5 columns">
-          <label className="string required hide-for-medium-up">
-            Client
-          </label>
-          <BCSelect
-            value={data.clientId}
-            field="clientId"
-            options={clients}
-            name={`${namePrefix}[client_id]`}
-            type="number"
-            error={model.getError('client_id')}
-            disabled={destroy}
-            onChange={onChange}
-          />
-        </div>
-        <div className="small-12 medium-3 columns">
-          <label className="string required hide-for-medium-up">
-            Minimum Quantity <abbr title="required">*</abbr>
-          </label>
-          <BCInput
-            value={data.quantity}
-            field="quantity"
-            name={`${namePrefix}[quantity]`}
-            type="number"
-            error={model.getError('quantity')}
-            placeholder="0"
-            disabled={destroy}
-            required
-            onChange={onChange}
-          />
-        </div>
-        <div className="small-12 medium-3 columns">
-          <label className="string required hide-for-medium-up">
-            Price <abbr title="required">*</abbr>
-          </label>
-          <BCInput
-            value={data.price}
-            field="price"
-            name={`${namePrefix}[price]`}
-            type="number"
-            error={model.getError('price')}
-            placeholder="0.00"
-            disabled={destroy}
-            required
-            onChange={onChange}
-          />
-        </div>
-        <div className="small-12 medium-1 columns end">
-          {destroy ? undoButton : removeButton}
+    return (
+      <div className={`fields ${disabledClass}`}>
+        {id ? <input type="hidden" name={`${namePrefix}[id]`} value={id} /> : null}
+        {destroy ? <input type="hidden" name={`${namePrefix}[_destroy]`} value="true" /> : null}
+        <div className="row collapse">
+          <div className="small-12 medium-5 columns">
+            <label className="string required hide-for-medium-up">Client</label>
+            <BCSelect value={data.clientId} field="clientId" options={clients} name={`${namePrefix}[client_id]`} type="number" error={model.getError('client_id')} disabled={destroy} onChange={onChange} />
+          </div>
+          <div className="small-12 medium-3 columns">
+            <label className="string required hide-for-medium-up">Minimum Quantity <abbr title="required">*</abbr></label>
+            <BCInput value={data.quantity} field="quantity" name={`${namePrefix}[quantity]`} type="number" error={model.getError('quantity')} placeholder="0" disabled={destroy} required onChange={onChange} />
+          </div>
+          <div className="small-12 medium-3 columns">
+            <label className="string required hide-for-medium-up">Price <abbr title="required">*</abbr></label>
+            <BCInput value={data.price} field="price" name={`${namePrefix}[price]`} type="number" error={model.getError('price')} placeholder="0.00" disabled={destroy} required onChange={onChange} />
+          </div>
+          <div className="small-12 medium-1 columns end">
+            {destroy ? undoButton : removeButton}
+          </div>
         </div>
       </div>
-    </div>);
+    );
   }
-});
+}
+
+ProductPriceField.propTypes = {
+  model: PropTypes.object.isRequired,
+  clients: PropTypes.array.isRequired,
+};
 
 export default ProductPriceField;

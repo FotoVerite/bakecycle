@@ -62,8 +62,15 @@ describe Bakery do
 
   describe "#logo_local_file" do
     it "gives the path of the logo" do
-      bakery = create(:bakery, :with_logo)
-      expect(bakery.logo_local_file).to include(".png")
+      logo = instance_double(
+        Paperclip::Attachment,
+        default_style: :original,
+        options: { storage: :filesystem }
+      )
+      allow(logo).to receive(:path).with(:original).and_return("/tmp/logo.png")
+      allow(bakery).to receive(:logo).and_return(logo)
+
+      expect(bakery.logo_local_file).to eq("/tmp/logo.png")
     end
 
     it "returns nil with no logo" do

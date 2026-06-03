@@ -1,29 +1,15 @@
-import createReactClass from 'create-react-class';
+import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import React from 'react';
 import uniqueId from 'lodash.uniqueid';
-import formMixin from './bakecycle-form-mixin';
+import BakecycleInputBase from './bakecycle-input-base';
 
-// Set the first day of the week to be a Monday to match all other calendars
-moment.updateLocale('en', {
-  week : {
-    dow : 1
-  }
-});
-
-const BCDate = createReactClass({
-  mixins: [formMixin],
-
-  propTypes: {
-    ...formMixin.mixinPropTypes,
-  },
-
+class BCDate extends BakecycleInputBase {
   onChangeDate(date) {
     const data = {};
-    data[this.props.field] = date && date.format('YYYY-MM-DD');
+    data[this.props.field] = date ? moment(date).format('YYYY-MM-DD') : null;
     this.props.onChange(data);
-  },
+  }
 
   render() {
     const {
@@ -36,7 +22,9 @@ const BCDate = createReactClass({
       placeholder,
     } = this.props;
 
-    const date = value && moment(value);
+    // react-datepicker v4 uses Date objects; parse from YYYY-MM-DD string
+    // Use T00:00:00 to avoid UTC offset shifting the date by one day
+    const date = value ? new Date(value + 'T00:00:00') : null;
     const cid = uniqueId();
 
     return (
@@ -45,23 +33,23 @@ const BCDate = createReactClass({
         <input
           type="hidden"
           name={name}
-          value={value}
+          value={value || ''}
           disabled={disabled}
         />
-
         <DatePicker
           id={`input-${field}-${cid}`}
           selected={date}
-          onChange={this.onChangeDate}
+          onChange={this.onChangeDate.bind(this)}
           placeholderText={placeholder}
           todayButton="Today"
+          calendarStartDay={1}
           className={`text ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
+          dateFormat="yyyy-MM-dd"
         />
-
         {error ? <small className="error">{error}</small> : ''}
       </div>
     );
   }
-});
+}
 
 export default BCDate;

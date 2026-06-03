@@ -96,38 +96,38 @@ describe('toggleDestroy', () => {
 });
 
 describe('validateOrderStartDate — end date validation', () => {
-  const kickoff_time = '2020-01-01T14:00:00-05:00';
+  const kickoffTime = '2020-01-01T14:00:00-05:00';
 
-  it('returns end_date error when start is after end', () => {
+  it('returns endDate error when start is after end', () => {
     const action = validateOrderStartDate({
       id: 1,
-      kickoff_time,
+      kickoffTime,
       totalLeadDays: 0,
       startDate: '2025-06-10',
       endDate: '2025-06-01',
     });
     expect(action.type).toBe(types.ORDER_VALIDATE);
-    expect(action.data.errors.end_date).toEqual(['The end date cannot be before the start date']);
+    expect(action.data.errors.endDate).toEqual(['The end date cannot be before the start date']);
   });
 
-  it('returns no end_date error when start is before end', () => {
+  it('returns no endDate error when start is before end', () => {
     const action = validateOrderStartDate({
       id: 1,
-      kickoff_time,
+      kickoffTime,
       totalLeadDays: 0,
       startDate: '2025-06-01',
       endDate: '2025-06-10',
     });
-    expect(action.data.errors.end_date).toEqual([]);
+    expect(action.data.errors.endDate).toEqual([]);
   });
 
-  it('returns no end_date error when endDate is undefined', () => {
+  it('returns no endDate error when endDate is undefined', () => {
     const action = validateOrderStartDate({
       id: 1,
-      kickoff_time,
+      kickoffTime,
       totalLeadDays: 0,
       startDate: '2025-06-01',
     });
-    expect(action.data.errors.end_date).toEqual([]);
+    expect(action.data.errors.endDate).toEqual([]);
   });
 });

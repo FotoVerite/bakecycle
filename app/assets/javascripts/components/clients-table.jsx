@@ -1,103 +1,69 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-
 import _ from 'underscore';
 
 function filterClients(collection, filter) {
   function nameMatch(client) {
     const name = client.name.toLowerCase();
     const search = filter.name.toLowerCase();
-
     const searchChars = _.reject(search.split(''), char => char === ' ');
     let lastPostion = 0;
     return !_.detect(searchChars, char => {
       lastPostion = name.indexOf(char, lastPostion) + 1;
-      if (lastPostion === 0) {
-        return true;
-      }
+      if (lastPostion === 0) { return true; }
     });
   }
 
   function activeMatch(client) {
     const activeSearch = filter.active;
-    if (activeSearch === 'any') {
-      return true;
-    }
+    if (activeSearch === 'any') { return true; }
     return activeSearch === client.active + '';
   }
 
   function statusMatch(client) {
-    const statusSearch = filter.engagementStatus;
-    return statusSearch === client.engagementStatus + '';
+    return filter.engagementStatus === client.engagementStatus + '';
   }
 
-  function matchAll(client) {
-    return nameMatch(client) && activeMatch(client) && statusMatch(client);
-  }
-
-  return _.filter(collection, matchAll);
+  return _.filter(collection, c => nameMatch(c) && activeMatch(c) && statusMatch(c));
 }
 
 function capitalize(val) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
-const ClientsTable = createReactClass({
-  propTypes: {
-    data: PropTypes.object.isRequired,
-  },
-
-  getInitialState() {
-    const clients = this.props.data;
+class ClientsTable extends React.Component {
+  constructor(props) {
+    super(props);
+    const clients = props.data;
     const search = { active: 'true', name: '', engagementStatus: 'current' };
-    const filteredClients = filterClients(clients, search);
-    return { clients, search, filteredClients };
-  },
+    this.state = { clients, search, filteredClients: filterClients(clients, search) };
+    this.searchName = this.searchName.bind(this);
+    this.searchActive = this.searchActive.bind(this);
+    this.searchStatus = this.searchStatus.bind(this);
+    this.chooseName = this.chooseName.bind(this);
+  }
 
   setSearch(search) {
-    const filteredClients = filterClients(this.state.clients, search);
-    this.setState({ filteredClients, search });
-  },
-
-  willReceiveProps(nextProps) {
-    this.state.set({ clients: nextProps.data });
-    this.setSearch(this.state.search);
-  },
+    this.setState({ filteredClients: filterClients(this.state.clients, search), search });
+  }
 
   searchName(event) {
-    this.setSearch({
-      name: event.target.value,
-      active: this.state.search.active,
-      engagementStatus: this.state.search.engagementStatus 
-    });
-  },
+    this.setSearch({ name: event.target.value, active: this.state.search.active, engagementStatus: this.state.search.engagementStatus });
+  }
 
   searchActive(event) {
-    this.setSearch({
-      name: this.state.search.name,
-      active: event.target.value,
-      engagementStatus: this.state.search.engagementStatus 
-    });
-  },
+    this.setSearch({ name: this.state.search.name, active: event.target.value, engagementStatus: this.state.search.engagementStatus });
+  }
 
   searchStatus(event) {
-    this.setSearch({
-      name: this.state.search.name,
-      active: this.state.search.active,
-      engagementStatus: event.target.value
-    });
-  },
+    this.setSearch({ name: this.state.search.name, active: this.state.search.active, engagementStatus: event.target.value });
+  }
 
   chooseName(e) {
     if (e.key !== 'Enter') { return; }
     const clients = this.state.filteredClients;
-    if (clients.length === 1) {
-      document.location.href = clients[0].links.view;
-    }
-  },
-
-  
+    if (clients.length === 1) { document.location.href = clients[0].links.view; }
+  }
 
   search() {
     return (
@@ -138,20 +104,16 @@ const ClientsTable = createReactClass({
         <div className="small-12 medium-4 end columns">
           <div className="input string optional">
             <label className="string optional">&nbsp;</label>
-            <a 
-          className="button small"
-          target="_blank"
-          style={{
-            marginLeft:20,
-            paddingTop: 10,
-            paddingBottom: 10
-          }}
-          href={`/clients/print_client_list?type=${this.state.search.active}`}>Export Client List</a>
+            <a
+              className="button small"
+              target="_blank"
+              style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}
+              href={`/clients/print_client_list?type=${this.state.search.active}`}>Export Client List</a>
           </div>
         </div>
       </div>
     );
-  },
+  }
 
   header() {
     return (
@@ -164,16 +126,13 @@ const ClientsTable = createReactClass({
         </tr>
       </thead>
     );
-  },
+  }
 
   rows() {
     return this.state.filteredClients.map(function(client) {
-      console.log(client)
       return (
-        <tr className="js-clickable-row" href={client.links.view} key={client.id} >
-          <th scope="row">
-            <a href={client.links.view}>{client.name}</a>
-          </th>
+        <tr className="js-clickable-row" href={client.links.view} key={client.id}>
+          <th scope="row"><a href={client.links.view}>{client.name}</a></th>
           <td data-title="Status">{capitalize(client.engagementStatus)}</td>
           <td data-title="Active">{client.active ? 'Yes' : 'No'}</td>
           <td data-title="Actions">
@@ -196,19 +155,23 @@ const ClientsTable = createReactClass({
         </tr>
       );
     });
-  },
+  }
 
   render() {
-    return (<div>
-      {this.search()}
-      <table className="responsive-table clients-index">
-        {this.header()}
-        <tbody>
-          {this.rows()}
-        </tbody>
-      </table>
-    </div>);
+    return (
+      <div>
+        {this.search()}
+        <table className="responsive-table clients-index">
+          {this.header()}
+          <tbody>{this.rows()}</tbody>
+        </table>
+      </div>
+    );
   }
-});
+}
+
+ClientsTable.propTypes = {
+  data: PropTypes.object.isRequired,
+};
 
 export default ClientsTable;

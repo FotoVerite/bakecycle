@@ -1,18 +1,9 @@
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import uniqueId from 'lodash.uniqueid';
-import formMixin from './bakecycle-form-mixin';
+import BakecycleInputBase from './bakecycle-input-base';
 
-const BCInput = createReactClass({
-  mixins: [formMixin],
-
-  propTypes: {
-    ...formMixin.mixinPropTypes,
-    type: PropTypes.string,
-    autoComplete: PropTypes.string,
-  },
-
+class BCInput extends BakecycleInputBase {
   render() {
     const {
       autoComplete,
@@ -36,11 +27,11 @@ const BCInput = createReactClass({
           id={`input-${field}-${cid}`}
           className={`${type || 'text'} ${field} ${this.requiredClass()} ${inline ? 'inline' : ''}`}
           name={name}
-          onChange={this.onChange}
-          onBlur={this.onBlur}
+          onChange={this.onChange.bind(this)}
+          onBlur={this.onBlur.bind(this)}
           type={type || 'text'}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ''}
           disabled={disabled}
           autoComplete={autoComplete}
           step={step}
@@ -49,6 +40,12 @@ const BCInput = createReactClass({
       </div>
     );
   }
-});
+}
+
+BCInput.propTypes = {
+  ...BakecycleInputBase.propTypes,
+  type: PropTypes.string,
+  autoComplete: PropTypes.string,
+};
 
 export default BCInput;

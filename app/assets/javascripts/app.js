@@ -1,16 +1,8 @@
-// Polyfills for older browsers
+import './shims/react-prop-types'; // Must be first — sets React.PropTypes for legacy CJS packages
 
-//used by datepicker
-import 'classlist-polyfill';
-
-// used by almost everything redux
-import 'core-js/fn/object/assign';
-
-// 3rd party library code
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-// Our classes
 import ClientMap from './components/client-map';
 import ClientsTable from './components/clients-table';
 import FileExportRefresher from './components/file-export-refresher';
@@ -19,10 +11,9 @@ import OrderFormProvider from './components/order';
 import ProductPriceForm from './components/product-price-form';
 import RecipeForm from './components/recipe-form';
 
-// React Component Loader
 const componentsToRender = window.reactComponents || [];
 
-const bcComponents = window.bcComponents =  {
+const bcComponents = window.bcComponents = {
   ClientMap,
   ClientsTable,
   FileExportRefresher,
@@ -33,5 +24,5 @@ const bcComponents = window.bcComponents =  {
 };
 
 componentsToRender.forEach(([name, props, node]) => {
-  ReactDOM.render(React.createElement(bcComponents[name], props), node);
+  createRoot(node).render(React.createElement(bcComponents[name], props));
 });

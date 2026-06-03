@@ -13,7 +13,7 @@ export function updateOrder(data) {
 
 export function validateOrderStartDate(data) {
   //first we need to parse the kickoff
-  const errors = {errors: {start_date: validateLeadTime(data), end_date: validateEndTime(data) }};
+  const errors = {errors: {startDate: validateLeadTime(data), endDate: validateEndTime(data) }};
   return {
     type: types.ORDER_VALIDATE,
     data: errors,
@@ -21,10 +21,10 @@ export function validateOrderStartDate(data) {
 }
 
 function validateLeadTime(data) {
-  if(data.id !== null && 'orderType' === 'standing' ) {
+  if(data.id !== null && data.orderType === 'standing' ) {
     return [];
   }
-  let kickoff = moment.parseZone(data.kickoff_time);
+  let kickoff = moment.parseZone(data.kickoffTime);
   // because kickoff_time is a date we parse it for the hour and utc offset
   const offset = kickoff.utcOffset();
   const kickoffHour = kickoff.hour();
