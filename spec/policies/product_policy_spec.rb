@@ -2,10 +2,10 @@ require "rails_helper"
 
 shared_examples_for "product policy" do |model|
   let(:bakery) { build_stubbed(:bakery) }
-  let(:model_name) { model.model_name }
-  let(:record) { build_stubbed(model_name, bakery: bakery) }
+  let(:factory_name) { model.model_name.singular.to_sym }
+  let(:record) { model.new(bakery: bakery) }
   let(:policy) { ProductPolicy.new(current_user, record) }
-  let(:policy_with_class) { ProductPolicy.new(current_user, model_name) }
+  let(:policy_with_class) { ProductPolicy.new(current_user, model) }
 
   context "when you are an admin" do
     let(:current_user) { build_stubbed(:user, :as_admin, bakery: bakery) }
@@ -42,14 +42,14 @@ shared_examples_for "product policy" do |model|
     describe "scope" do
       let(:bakery) { create(:bakery) }
       let(:current_user) { create(:user, :as_admin, bakery: bakery) }
-      let(:record) { create(model_name, bakery: bakery) }
+      let(:record) { create(factory_name, bakery: bakery) }
       it "returns no #{model}s if you do not have a bakery" do
         current_user.bakery = nil
         expect(policy.scope).to be_empty
       end
 
       it "returns only #{model}s from your bakery" do
-        create(model_name)
+        create(factory_name)
         expect(policy.scope).to contain_exactly(record)
       end
     end
@@ -71,8 +71,8 @@ shared_examples_for "product policy" do |model|
       it "returns no #{model}s" do
         bakery = create(:bakery)
         current_user = create(:user, bakery: bakery, product_permission: "none")
-        record = create(model_name, bakery: bakery)
-        create(model_name, bakery: bakery)
+        record = create(factory_name, bakery: bakery)
+        create(factory_name, bakery: bakery)
         policy = ProductPolicy.new(current_user, record)
         expect(policy.scope).to be_empty
       end
@@ -95,9 +95,9 @@ shared_examples_for "product policy" do |model|
       it "returns all #{model}s" do
         bakery = create(:bakery)
         current_user = create(:user, bakery: bakery, product_permission: "read")
-        record = create(model_name, bakery: bakery)
-        record2 = create(model_name, bakery: bakery)
-        create(model_name)
+        record = create(factory_name, bakery: bakery)
+        record2 = create(factory_name, bakery: bakery)
+        create(factory_name)
         policy = ProductPolicy.new(current_user, record)
         expect(policy.scope).to contain_exactly(record, record2)
       end
@@ -107,7 +107,7 @@ shared_examples_for "product policy" do |model|
   context "when product access level of manage" do
     let(:bakery) { create(:bakery) }
     let(:current_user) { create(:user, bakery: bakery, user_permission: "none", product_permission: "manage") }
-    let(:record) { create(model_name, bakery: bakery) }
+    let(:record) { model.new(bakery: bakery) }
     let(:user_policy) { UserPolicy.new(current_user, record) }
 
     it "has access to users" do
@@ -122,8 +122,9 @@ shared_examples_for "product policy" do |model|
 
     describe "scope" do
       it "returns all #{model}s" do
-        record2 = create(model_name, bakery: bakery)
-        create(model_name)
+        record = create(factory_name, bakery: bakery)
+        record2 = create(factory_name, bakery: bakery)
+        create(factory_name)
         policy = ProductPolicy.new(current_user, record)
         expect(policy.scope).to contain_exactly(record, record2)
       end

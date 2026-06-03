@@ -35,7 +35,7 @@ describe OrderSearcher do
   end
 
   it "allows us to search by product" do
-    order = create(:order)
+    order = create(:order, order_item_count: 1)
     create(:order)
     terms = { product_id: order.order_items.first.product_id }
     expect(searcher.search(terms)).to contain_exactly(order)

@@ -19,7 +19,7 @@ class RecipeItem < ApplicationRecord
   belongs_to :recipe
 
   validates :bakers_percentage, presence: true
-  validates :bakers_percentage, numericality: { greater_than: 0 }, unless: "bakers_percentage.blank?"
+  validates :bakers_percentage, numericality: { greater_than: 0 }, unless: -> { bakers_percentage.blank? }
   validates :inclusionable_id_type, presence: true
 
   validate :no_infinite_loops

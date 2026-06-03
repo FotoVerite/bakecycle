@@ -33,7 +33,7 @@ describe Ingredient do
   end
 
   it "validates uniqueness of name" do
-    expect(ingredient).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    expect(create(:ingredient)).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
   end
 
   describe "#destroy" do

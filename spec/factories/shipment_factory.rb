@@ -39,31 +39,39 @@
 
 FactoryBot.define do
   factory :shipment do
-    date  { Time.zone.today + Faker::Number.number(1).to_i.days }
-    bakery
-    route { |t| t.association(:route, bakery: bakery) }
-    client { |t| t.association(:client, bakery: bakery) }
-    note { Faker::Lorem.sentence(1) }
+    date  { Time.zone.today + Faker::Number.number(digits: 2).to_i.days }
+    bakery { create(:bakery) }
+    route { create(:route, bakery: bakery) }
+    client { create(:client, bakery: bakery) }
+    note { Faker::Lorem.sentence(word_count: 1) }
 
     transient do
-      shipment_item_count 1
-      total_lead_days 2
-      product { |t| t.association(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
+      shipment_item_count { 0 }
+      total_lead_days { 2 }
+      product { create(:product, :with_motherdough, bakery: bakery, total_lead_days: total_lead_days) }
     end
 
-    shipment_items do |t|
-      Array.new(shipment_item_count) do
-        t.association(
-          :shipment_item,
-          shipment: t.instance_variable_get(:@instance),
-          product: product,
-          bakery: bakery
-        )
-      end
+    after(:create) do |shipment, evaluator|
+      next if evaluator.shipment_item_count.zero?
+
+      create_list(
+        :shipment_item,
+        evaluator.shipment_item_count,
+        shipment: shipment,
+        product: evaluator.product,
+        bakery: shipment.bakery
+      )
+      shipment.reload
     end
 
     trait :with_delivery_fee do
-      delivery_fee { Faker::Number.decimal(2) }
+      delivery_fee { Faker::Number.decimal(l_digits: 2) }
+    end
+
+    trait :with_items do
+      transient do
+        shipment_item_count { 1 }
+      end
     end
   end
 end

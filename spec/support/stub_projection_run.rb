@@ -1,6 +1,6 @@
 def new_stubed_production_run_projection
   today = Time.zone.now
-  bakery = build_stubbed(:bakery)
+  bakery = create(:bakery)
   order_item = new_stubed_order_item(bakery)
   allow(order_item.product.motherdough).to receive(:recipe_items).and_return([])
   projection = ProductionRunProjection.new(bakery, today, today)

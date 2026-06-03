@@ -13,11 +13,11 @@ describe ProductionRunService do
   end
 
   it "updates a production run" do
-    create(:shipment, bakery: bakery, date: today + 2.days)
+    create(:shipment, bakery: bakery, date: today + 2.days, shipment_item_count: 1)
     service.run
     pr = service.production_run
     expect(service.production_run.run_items.count).to eq(1)
-    create(:shipment, bakery: bakery, date: today + 2.days)
+    create(:shipment, bakery: bakery, date: today + 2.days, shipment_item_count: 1)
     service = ProductionRunService.new(bakery, today)
     service.run
     expect(service.production_run.run_items.count).to eq(2)

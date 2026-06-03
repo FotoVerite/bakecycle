@@ -32,7 +32,7 @@ describe ShipmentItem do
   end
 
   it "has association" do
-    expect(shipment_item).to belong_to(:shipment)
+    expect(shipment_item).to belong_to(:shipment).optional
   end
 
   it "has validations" do
@@ -95,6 +95,8 @@ describe ShipmentItem do
   end
 
   describe "product_duration" do
+    let(:shipment_item) { build(:shipment_item, total_lead_days: 1) }
+
     it "returns an array of dates" do
       Timecop.freeze(Time.zone.now.midnight)
       shipment_item.production_start = Time.zone.today
@@ -104,6 +106,8 @@ describe ShipmentItem do
   end
 
   describe "in_production?" do
+    let(:shipment_item) { build(:shipment_item, total_lead_days: 1) }
+
     it "returns false if item hasn't gone to production" do
       Timecop.freeze(Time.zone.now.midnight)
       shipment_item.production_start = Time.zone.today
@@ -138,6 +142,8 @@ describe ShipmentItem do
   end
 
   describe "after_production?" do
+    let(:shipment_item) { build(:shipment_item, total_lead_days: 1) }
+
     it "returns false if item hasn't gone to production" do
       Timecop.freeze(Time.zone.now.midnight)
       shipment_item.production_start = Time.zone.today

@@ -1,9 +1,9 @@
 source "https://rubygems.org"
 
-ruby "2.5.1"
-gem "active_model_serializers", "~> 0.9.3"
+ruby "3.1.1"
+
+gem "active_model_serializers", "~> 0.10.0"
 gem "airbrake"
-gem "aws-sdk", "< 2.0"
 gem "axlsx_rails"
 gem "axlsx", "2.0.1"
 gem "browserify-rails", "4.3.0"
@@ -12,27 +12,25 @@ gem "devise"
 gem "devise-async", git: "https://github.com/klacointe/devise-async.git", branch: "devise4"
 gem "devise_invitable"
 gem "draper"
-gem "foundation-icons-sass-rails"
-gem "foundation-rails", "~>5.5.0.0"
 gem "geocoder"
 gem "jbuilder", "~> 2.0"
 gem "jquery-rails"
 gem "jquery-timepicker-rails"
 gem "jquery-ui-sass-rails"
+gem "kt-paperclip", "~> 7.0"
 gem "memoist"
 gem "paper_trail"
-gem "paperclip", "~> 4.2"
 gem "pg"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "5.1.7"
-gem "redis", "3.3.5"
-gem "resque", require: "resque/server"
+gem "rails", "~> 6.1.0"
+gem "redis", "~> 4.0"
+gem "resque", "~> 2.0", require: "resque/server"
 gem "rubyzip", "1.0.0"
-gem "sass-rails"
+gem "sass-rails", ">= 6"
 gem "simple_form"
-gem "stripe"
+gem "stripe", "< 6"
 gem "uglifier"
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate"
@@ -53,9 +51,7 @@ group :development do
   gem "foreman", require: false
   gem "letter_opener"
   gem "rails-erd", require: false
-  gem "spring"
-  gem "spring-commands-rspec"
-  gem "web-console", "~> 2.0"
+  gem "web-console", ">= 4.1.0"
 end
 
 group :test, :development do
@@ -78,7 +74,9 @@ group :test do
   gem "selenium-webdriver"
   gem "database_cleaner"
   gem "launchy"
+  gem "pdf-reader", require: false
   gem "rspec-activejob"
+  gem "simplecov", require: false
   gem "timecop"
   gem "stripe-ruby-mock", :require => "stripe_mock"
   gem "webmock", require: false

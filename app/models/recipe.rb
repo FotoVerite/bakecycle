@@ -50,7 +50,7 @@ class Recipe < ApplicationRecord
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :lead_days, presence: true
   validates :mix_size, numericality: true, allow_nil: true
-  validates :mix_size_unit, presence: true, unless: "mix_size.blank?"
+  validates :mix_size_unit, presence: true, unless: -> { mix_size.blank? }
   validates :recipe_type, presence: true
   validates :note, length: { maximum: 500 }
   validates :lead_days, numericality: true

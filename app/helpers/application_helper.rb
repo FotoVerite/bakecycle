@@ -14,7 +14,7 @@ module ApplicationHelper
 
   def full_title(page_title = nil)
     base_title = "Bakecycle"
-    return base_title if page_title.empty?
+    return base_title if page_title.blank?
     "#{page_title} - #{base_title}".html_safe
   end
 

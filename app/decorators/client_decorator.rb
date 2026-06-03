@@ -36,5 +36,6 @@ class ClientDecorator < Draper::Decorator
 
   def serializable_hash
     ClientSerializer.new(client).serializable_hash
+      .transform_keys { |k| k.to_s.camelize(:lower) }
   end
 end

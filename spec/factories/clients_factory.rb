@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :client do
-    bakery
+    bakery { create(:bakery) }
 
     sequence(:name) { |n| "#{Faker::Company.name} #{Faker::Company.suffix} #{n}" }
     business_phone { Faker::PhoneNumber.cell_phone }
-    active true
+    active { true }
 
     delivery_address_street_1 { Faker::Address.street_address }
     delivery_address_city { Faker::Address.city }
@@ -28,7 +28,7 @@ FactoryBot.define do
 
     billing_term { %i[net_45 net_30 net_15 net_7 credit_card cod].sample }
 
-    delivery_fee_option :no_delivery_fee
+    delivery_fee_option { :no_delivery_fee }
 
     trait :with_secondary_contact do
       secondary_contact_name { Faker::Name.name }
@@ -38,8 +38,8 @@ FactoryBot.define do
 
     trait :with_delivery_fee do
       delivery_fee_option { Client.delivery_fee_options.except(:no_delivery_fee).keys.sample }
-      delivery_minimum { Faker::Number.decimal(3) }
-      delivery_fee { Faker::Number.decimal(2) }
+      delivery_minimum { Faker::Number.decimal(l_digits: 2) }
+      delivery_fee { Faker::Number.decimal(l_digits: 2) }
     end
   end
 end

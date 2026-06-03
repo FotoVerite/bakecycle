@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
   after_action :verify_authorized, :verify_policy_scoped, unless: :devise_controller?
   before_action :active_nav
   before_action :authenticate_user!

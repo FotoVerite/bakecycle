@@ -1,4 +1,2 @@
-ActiveModel::Serializer.root = false
-ActiveModel::Serializer.setup do |config|
-  config.key_format = :lower_camel
-end
+ActiveModelSerializers.config.adapter = :json
+ActiveModelSerializers.config.key_transform = :camel_lower

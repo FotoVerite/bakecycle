@@ -23,13 +23,13 @@ class FileExportSerializer < ActiveModel::Serializer
     }
   end
 
+  def loading_message
+    LoadingMessages.sample
+  end
+
   private
 
   def file
     object.file.url if object.ready?
-  end
-
-  def loading_message
-    LoadingMessages.sample
   end
 end

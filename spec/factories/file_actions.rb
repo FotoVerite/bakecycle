@@ -13,5 +13,8 @@
 
 FactoryBot.define do
   factory :file_action do
+    bakery { create(:bakery) }
+    user { create(:user, bakery: bakery) }
+    file_export { create(:file_export, bakery: bakery) }
   end
 end

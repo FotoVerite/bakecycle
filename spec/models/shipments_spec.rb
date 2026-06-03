@@ -74,27 +74,34 @@ describe Shipment do
       expect(shipment.price).to eq(15.0)
     end
 
-    it "removes daily delivery fee if minumum is updated to needed" do
-      client = FactoryBot.create(
-        :client,
-        :with_delivery_fee,
-        delivery_minimum: 11,
-        delivery_fee: 5,
-        shipments: [],
-        delivery_fee_option:
-        :daily_delivery_fee
-      )
-      order = FactoryBot.create(:order, client: client)
-      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0, shipment: nil)
-      shipment.delivery_fee = 5
-      shipment.client = client
-      shipment.order = order
-      shipment.save!
-      expect(shipment.subtotal).to eq(10.0)
-      expect(shipment.price).to eq(15.0)
-      shipment.shipment_items.first.update(product_quantity: 6)
-      expect(shipment.subtotal).to eq(11.0)
-      expect(shipment.price).to eq(16.0)
+    context "removes daily delivery fee if minimum is updated to needed" do
+      let(:route) { create(:route, bakery: bakery) }
+      let(:client_with_fee) do
+        FactoryBot.create(
+          :client,
+          :with_delivery_fee,
+          bakery: bakery,
+          delivery_minimum: 11,
+          delivery_fee: 5,
+          shipments: [],
+          delivery_fee_option: :daily_delivery_fee
+        )
+      end
+      let(:order) { FactoryBot.create(:order, client: client_with_fee, bakery: bakery) }
+      let(:shipment) { build(:shipment, bakery: bakery, route: route, client: client_with_fee) }
+
+      it "removes daily delivery fee if minumum is updated to needed" do
+        product = create(:product, :with_motherdough, bakery: bakery)
+        shipment.shipment_items = build_list(:shipment_item, 2, product: product, product_quantity: 5, product_price: 1.0, shipment: nil)
+        shipment.delivery_fee = 5
+        shipment.order = order
+        shipment.save!
+        expect(shipment.subtotal).to eq(10.0)
+        expect(shipment.price).to eq(15.0)
+        shipment.shipment_items.first.update(product_quantity: 6)
+        expect(shipment.subtotal).to eq(11.0)
+        expect(shipment.price).to eq(16.0)
+      end
     end
   end
 

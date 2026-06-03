@@ -41,14 +41,14 @@ describe Product do
     expect(product).to respond_to(:base_price)
     expect(product).to respond_to(:sku)
     expect(product).to belong_to(:bakery)
-    expect(product).to belong_to(:motherdough)
-    expect(product).to belong_to(:inclusion)
+    expect(product).to belong_to(:motherdough).optional
+    expect(product).to belong_to(:inclusion).optional
   end
 
   it "has validations" do
     expect(product).to validate_presence_of(:name)
     product.name = "a name"
-    expect(product).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    expect(create(:product, bakery: create(:bakery), name: "a name")).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     expect(product).to validate_presence_of(:product_type)
     expect(product).to validate_presence_of(:base_price)
     expect(product).to validate_presence_of(:weight)
@@ -61,7 +61,7 @@ describe Product do
       # TODO: make this state impossible to get into.
       bakery = create(:bakery)
       product = create(:product, bakery: bakery, inactive: true)
-      order = create(:order, bakery: bakery)
+      order = create(:order, bakery: bakery, order_item_count: 1)
       order.order_items.first.update!(product: product)
       expect(product.destroy).to eq(false)
       expect(product.errors.to_a).to eq(["This product is still used in orders"])
@@ -90,6 +90,8 @@ describe Product do
   end
 
   describe "lead days" do
+    let(:bakery) { create(:bakery) }
+
     it "calculates lead time for a product" do
       motherdough = create(:recipe_motherdough, lead_days: 5, bakery: bakery)
       inclusion = create(:recipe_inclusion, lead_days: 2, bakery: bakery)

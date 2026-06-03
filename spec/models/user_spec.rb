@@ -39,7 +39,7 @@ describe User do
   let(:user) { build(:user) }
 
   it "has association" do
-    expect(user).to belong_to(:bakery)
+    expect(user).to belong_to(:bakery).optional
   end
 
   it "has validations" do

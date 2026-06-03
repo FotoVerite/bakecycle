@@ -11,5 +11,6 @@
 
 FactoryBot.define do
   factory :vendor do
+    bakery { create(:bakery) }
   end
 end

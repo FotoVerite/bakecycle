@@ -41,7 +41,7 @@ class Shipment < ApplicationRecord
   include Denormalization
 
   belongs_to :bakery
-  belongs_to :order
+  belongs_to :order, optional: true
   belongs_to :client
   belongs_to :route
 
@@ -81,7 +81,7 @@ class Shipment < ApplicationRecord
 
   delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
 
-  scope :search, ->(terms) { ShipmentSearcher.search(self, terms) }
+  scope :search, ->(terms) { ShipmentSearcher.search(Shipment, terms) }
   scope :latest, ->(count) { order(date: :desc).limit(count) }
 
   def self.policy_class

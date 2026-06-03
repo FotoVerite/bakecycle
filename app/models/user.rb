@@ -35,7 +35,7 @@
 
 class User < ApplicationRecord
   ACCESS_LEVELS = %w[none read manage].freeze
-  belongs_to :bakery
+  belongs_to :bakery, optional: true
   has_many :created_orders, class_name: "Order", foreign_key: :created_by_user_id,
                             inverse_of: :created_by_user, dependent: :nullify
   has_many :orders_last_updated_by, class_name: "Order", foreign_key: :last_updated_by_user_id,

@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :ingredient do
     name { generate(:ingredient_name) }
-    description { Faker::Lorem.sentence(1) }
+    description { Faker::Lorem.sentence(word_count: 1) }
     ingredient_type { Ingredient::INGREDIENT_TYPES.to_a.sample }
-    bakery
+    bakery { create(:bakery) }
   end
 
   sequence :ingredient_name do |n|

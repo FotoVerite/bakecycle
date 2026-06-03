@@ -16,15 +16,15 @@ class PriceVariant < ApplicationRecord
   has_paper_trail
 
   belongs_to :product
-  belongs_to :client
+  belongs_to :client, optional: true
 
   validates :price, presence: true
-  validates :price, numericality: true, unless: "price.blank?"
+  validates :price, numericality: true, unless: -> { price.blank? }
   validates :quantity, presence: true, uniqueness: {
     scope: %i[product_id client_id],
     message: "quantity already exists"
   }
-  validates :quantity, numericality: true, unless: "quantity.blank?"
+  validates :quantity, numericality: true, unless: -> { quantity.blank? }
 
   def client_name
     if client

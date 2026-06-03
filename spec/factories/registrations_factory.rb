@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:last_name) { Faker::Name.name }
     sequence(:email) { |n| "#{n}#{Faker::Internet.email}" }
     sequence(:bakery_name) { |n| "#{Faker::Name.name} #{n}" }
-    password "foobarbaz"
-    plan
+    password { "foobarbaz" }
+    plan { create(:plan) }
   end
 end

@@ -61,7 +61,7 @@ describe ShipmentSearcher do
   end
 
   it "allows us to search by product" do
-    shipment = create(:shipment)
+    shipment = create(:shipment, shipment_item_count: 1)
     create(:shipment)
     terms = { product_id: shipment.shipment_items.first.product_id }
     expect(searcher.search(terms)).to contain_exactly(shipment)

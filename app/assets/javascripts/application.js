@@ -18,8 +18,6 @@
 //= require jquery_ujs
 //= require jquery.ui.datepicker
 //= require jquery.timepicker.js
-//= require foundation/foundation
-//= require foundation/foundation.alert
 //= require_tree ./jquery-components
 
 // Browserify'd app components can't use import

@@ -16,5 +16,6 @@ class ProductForm
 
   def serializable_hash
     ProductFormSerializer.new(self).serializable_hash
+      .transform_keys { |k| k.to_s.camelize(:lower) }
   end
 end

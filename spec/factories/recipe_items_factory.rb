@@ -5,13 +5,13 @@ FactoryBot.define do
     end
 
     recipe { |t| t.association(:recipe, bakery: bakery) }
-    bakers_percentage { Faker::Number.between(1, 100) }
+    bakers_percentage { Faker::Number.between(from: 1, to: 100) }
     inclusionable { |t| t.association(:ingredient, bakery: bakery) }
     sequence(:sort_id) { |n| n }
 
     factory :recipe_item_recipe do
       transient do
-        recipe_lead_days 2
+        recipe_lead_days { 2 }
       end
       inclusionable { |t| t.association(:recipe, bakery: bakery, lead_days: recipe_lead_days, recipe_type: :dough) }
     end

@@ -2,30 +2,30 @@ FactoryBot.define do
   factory :recipe do
     name { generate(:recipe_name) }
     recipe_type { Recipe.recipe_types.keys.sample }
-    mix_size 12
+    mix_size { 12 }
     mix_size_unit { Recipe.mix_size_units.keys.sample }
-    lead_days 2
-    bakery
+    lead_days { 2 }
+    bakery { create(:bakery) }
 
     factory :recipe_motherdough do
-      recipe_type :dough
-      lead_days 2
+      recipe_type { :dough }
+      lead_days { 2 }
     end
 
     factory :recipe_preferment do
-      recipe_type :preferment
-      lead_days 1
+      recipe_type { :preferment }
+      lead_days { 1 }
     end
 
     factory :recipe_inclusion do
-      recipe_type :inclusion
-      lead_days 0
+      recipe_type { :inclusion }
+      lead_days { 0 }
     end
 
     trait :with_ingredients do
-      lead_days 0
+      lead_days { 0 }
       transient do
-        ingredient_count 3
+        ingredient_count { 3 }
       end
 
       after(:build) do |recipe, evaluator|
@@ -39,8 +39,8 @@ FactoryBot.define do
 
     trait :with_nested_recipes do
       transient do
-        recipe_count 3
-        recipe_lead_days 2
+        recipe_count { 3 }
+        recipe_lead_days { 2 }
       end
 
       after(:build) do |recipe, evaluator|

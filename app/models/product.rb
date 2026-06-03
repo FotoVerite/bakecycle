@@ -28,8 +28,8 @@ class Product < ApplicationRecord
   include ResqueJobs
   has_paper_trail ignore: [:graph_data]
 
-  belongs_to :inclusion, class_name: "Recipe", inverse_of: :motherdough_products
-  belongs_to :motherdough, class_name: "Recipe", inverse_of: :inclusion_products
+  belongs_to :inclusion, class_name: "Recipe", inverse_of: :inclusion_products, optional: true
+  belongs_to :motherdough, class_name: "Recipe", inverse_of: :motherdough_products, optional: true
   belongs_to :bakery
 
   has_many :shipment_items, dependent: :nullify

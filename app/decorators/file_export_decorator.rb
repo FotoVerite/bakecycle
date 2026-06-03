@@ -3,5 +3,6 @@ class FileExportDecorator < Draper::Decorator
 
   def serializable_hash
     FileExportSerializer.new(object).serializable_hash
+      .transform_keys { |k| k.to_s.camelize(:lower) }
   end
 end

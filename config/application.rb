@@ -12,6 +12,9 @@ module Bakecycle
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.load_defaults 6.1
+    config.autoloader = :classic
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = "Eastern Time (US & Canada)"
@@ -28,8 +31,6 @@ module Bakecycle
       "#{config.root}/app/reports/client_reports",
       "#{config.root}/app/reports/invoice_reports",
     ]
-    config.serve_static_files = true
-
     # Browserify
     config.browserify_rails.source_map_environments = %w[development staging]
     config.browserify_rails.commandline_options = '-t [ babelify ] --extension=".jsx"'
@@ -37,14 +38,11 @@ module Bakecycle
     # for bower stuff
     config.assets.paths << Rails.root.join("vendor", "assets", "bower_components")
 
-    # for foundation
-    config.assets.precompile += %w[vendor/modernizr.js]
-
-    # fonts
-    config.assets.precompile << /(?:eot|svg|ttf|woff)$/
+    # fonts and standalone SVG assets
+    config.assets.precompile += %w[*.eot *.svg *.ttf *.woff]
 
     config.generators do |g|
-      g.factory_girl true
+      g.factory_bot true
       g.test_framework :rspec
       g.stylesheets false
       g.javascripts false

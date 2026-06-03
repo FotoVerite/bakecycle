@@ -6,7 +6,7 @@ describe ShipmentCreator do
 
   describe "#create!" do
     it "creates a shipment for an order" do
-      order = create(:order, bakery: bakery)
+      order = create(:order, bakery: bakery, order_item_count: 1)
       shipment = ShipmentCreator.new(order, today).create!
 
       expect(shipment).to be_persisted
@@ -48,7 +48,7 @@ describe ShipmentCreator do
     it "charges weekly fee" do
       sunday = Date.new(2015, 4, 5)
       client = create(:client, delivery_fee_option: 2, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)
-      order = create(:order, client: client, bakery: bakery, daily_item_count: 0)
+      order = create(:order, client: client, bakery: bakery, daily_item_count: 0, order_item_count: 1)
       creator = ShipmentCreator.new(order, sunday)
       expect(creator.send(:delivery_fee)).to eq(25)
     end
@@ -57,8 +57,8 @@ describe ShipmentCreator do
       saturday = Date.new(2015, 4, 4)
       sunday = Date.new(2015, 4, 5)
       client = create(:client, delivery_fee_option: 2, delivery_minimum: 1, delivery_fee: 25, bakery: bakery)
-      order = create(:order, client: client, bakery: bakery, daily_item_count: 0)
-      shipment = create(:shipment, bakery: bakery, client: client, date: saturday)
+      order = create(:order, client: client, bakery: bakery, daily_item_count: 0, order_item_count: 1)
+      shipment = create(:shipment, bakery: bakery, client: client, date: saturday, shipment_item_count: 1)
       expect(shipment.subtotal).to be > 1
       creator = ShipmentCreator.new(order, sunday)
       expect(creator.send(:delivery_fee)).to eq(0)
@@ -75,7 +75,7 @@ describe ShipmentCreator do
 
     it "sets delivery fee to 0 if client has no delivery fees" do
       client = create(:client, delivery_fee_option: 0, bakery: bakery)
-      order = create(:order, start_date: today, client: client, bakery: bakery)
+      order = create(:order, start_date: today, client: client, bakery: bakery, order_item_count: 1)
       shipment = ShipmentCreator.new(order, today).create!
       expect(shipment.delivery_fee).to eq(0)
     end
@@ -83,7 +83,7 @@ describe ShipmentCreator do
     it "sets delivery fee if client has delivery fees" do
       client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)
       product = create(:product, base_price: 10, bakery: bakery)
-      order = create(:order, start_date: today, client: client, bakery: bakery, daily_item_count: 1)
+      order = create(:order, start_date: today, client: client, bakery: bakery, daily_item_count: 1, order_item_count: 1)
       order.order_items.first.update!(product: product)
 
       shipment = ShipmentCreator.new(order, today).create!
@@ -94,7 +94,7 @@ describe ShipmentCreator do
     it "does not set daily delivery fee if client meets minimums" do
       client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)
       product = create(:product, base_price: 10, bakery: bakery)
-      order = create(:order, start_date: today, client: client, bakery: bakery, daily_item_count: 10)
+      order = create(:order, start_date: today, client: client, bakery: bakery, daily_item_count: 10, order_item_count: 1)
       order.order_items.first.update!(product: product)
       shipment = ShipmentCreator.new(order, today).create!
       expect(shipment.delivery_fee).to eq(0)
@@ -108,7 +108,7 @@ describe ShipmentCreator do
     let(:product) { create(:product, base_price: 10, bakery: bakery) }
 
     it "charged if client doesn't meet minimums" do
-      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 1)
+      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 1, order_item_count: 1)
       order.order_items.first.update!(product: product)
       monday_shipment = ShipmentCreator.new(order, monday).create!
       sunday_shipment = ShipmentCreator.new(order, sunday).create!
@@ -120,7 +120,7 @@ describe ShipmentCreator do
     end
 
     it "charged if client doesn't meet minimums and there is no order" do
-      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 0)
+      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 0, order_item_count: 1)
       order.order_items.first.update!(product: product)
 
       monday_shipment = ShipmentCreator.new(order, monday).create!
@@ -132,7 +132,7 @@ describe ShipmentCreator do
     end
 
     it "not charged if client does meet minimums" do
-      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 11)
+      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 11, order_item_count: 1)
       order.order_items.first.update!(product: product)
 
       monday_shipment = ShipmentCreator.new(order, monday).create!
@@ -145,7 +145,7 @@ describe ShipmentCreator do
     end
 
     it "not charged if client does meet minimums on Sunday" do
-      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 5)
+      order = create(:order, start_date: monday, client: client, bakery: bakery, daily_item_count: 5, order_item_count: 1)
       order.order_items.first.update!(product: product)
 
       monday_shipment = ShipmentCreator.new(order, monday).create!

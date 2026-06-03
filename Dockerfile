@@ -1,4 +1,4 @@
-# Dockerfile for compiling Ruby 2.5.1 on Ubuntu 20.04 and running your Rails 5.1.7 app
+# Dockerfile for compiling Ruby 2.5.1 on Ubuntu 20.04 and running your Rails 5.2.x app
 
 # 1) Base image
 FROM ubuntu:20.04
@@ -15,8 +15,11 @@ RUN apt-get update \
        libreadline-dev \
        zlib1g-dev \
        libpq-dev \
+       libxml2-dev \
+       libxslt1-dev \
        nodejs \
        npm \
+       shared-mime-info \
        ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
@@ -36,8 +39,10 @@ RUN curl -fsSL https://cache.ruby-lang.org/pub/ruby/2.5/ruby-2.5.1.tar.gz | tar 
 
 # 5) Set up the Rails app
 WORKDIR /app
-COPY Gemfile Gemfile.lock ./
-RUN gem install bundler:2.1.4 && bundle install --jobs 4 --retry 3 --quiet 
+COPY Gemfile ./
+# Gemfile.lock is optional — copy only if it exists (use a glob that won't fail)
+COPY Gemfile.loc[k] ./
+RUN gem install bundler:2.1.4 && bundle install --jobs 4 --retry 3
 # 6) Copy application code
 COPY . .
 

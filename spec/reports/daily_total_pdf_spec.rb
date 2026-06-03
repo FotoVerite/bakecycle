@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe DailyTotalPdf do
-  let(:bakery) { build_stubbed(:bakery) }
+  let(:bakery) { create(:bakery) }
   let(:today) { Time.zone.today }
 
   it "renders shipments on a date" do

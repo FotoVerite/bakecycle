@@ -24,6 +24,7 @@ class RecipeDecorator < Draper::Decorator
 
   def serializable_hash
     RecipeSerializer.new(object).as_json
+      .transform_keys { |k| k.to_s.camelize(:lower) }
   end
 
   private

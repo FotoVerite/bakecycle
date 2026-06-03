@@ -14,6 +14,6 @@ describe Route do
   it "has validations" do
     expect(route).to validate_presence_of(:name)
     expect(route).to validate_presence_of(:departure_time)
-    expect(build(:route)).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
+    expect(create(:route)).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
   end
 end

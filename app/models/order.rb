@@ -25,10 +25,10 @@ class Order < ApplicationRecord
   attr_accessor :kickoff_time
 
   belongs_to :client
-  belongs_to :route
+  belongs_to :route, optional: true
   belongs_to :bakery
-  belongs_to :created_by_user, class_name: "User", inverse_of: :created_orders
-  belongs_to :last_updated_by_user, class_name: "User", inverse_of: :orders_last_updated_by
+  belongs_to :created_by_user, class_name: "User", inverse_of: :created_orders, optional: true
+  belongs_to :last_updated_by_user, class_name: "User", inverse_of: :orders_last_updated_by, optional: true
 
   has_many :products, through: :order_items
 

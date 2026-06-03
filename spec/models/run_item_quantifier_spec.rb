@@ -1,14 +1,15 @@
 require "rails_helper"
 
 describe RunItemQuantifier do
-  let(:bakery) { build_stubbed(:bakery) }
-  let(:product) { build_stubbed(:product, bakery: bakery) }
-  let(:shipment_item) { build_stubbed(:shipment_item, bakery: bakery, product: product) }
+  let(:product) { build_stubbed(:product) }
+  let(:shipment_item) { build_stubbed(:shipment_item, shipment: nil, product: product) }
   let(:run_item) { RunItem.new(product: product) }
   let(:quantifier) { RunItemQuantifier.new(run_item, [shipment_item]) }
 
   it "requires shipment items to have the same product as the run_item" do
-    other_shipment_items = [build_stubbed(:shipment_item)]
+    other_shipment_items = [
+      build_stubbed(:shipment_item, shipment: nil, product: build_stubbed(:product))
+    ]
     expect {
       RunItemQuantifier.new(run_item, other_shipment_items)
     }.to raise_error(ArgumentError)

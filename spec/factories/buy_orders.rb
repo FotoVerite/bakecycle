@@ -13,5 +13,8 @@
 
 FactoryBot.define do
   factory :buy_order do
+    bakery { create(:bakery) }
+    ingredient { create(:ingredient, bakery: bakery) }
+    vendor { create(:vendor, bakery: bakery) }
   end
 end

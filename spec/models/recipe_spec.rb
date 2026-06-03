@@ -79,7 +79,7 @@ describe Recipe do
 
   describe "unique tests" do
     it "has validations that need the db" do
-      recipe = build(:recipe, name: "parent recipe")
+      recipe = create(:recipe, name: "parent recipe")
       expect(recipe).to validate_uniqueness_of(:name).scoped_to(:bakery_id)
     end
   end
@@ -87,6 +87,7 @@ describe Recipe do
   describe "#total_lead_days" do
     let(:recipe) { create(:recipe_motherdough) }
     let(:bakery) { recipe.bakery }
+    let(:product) { create(:product, :with_motherdough, bakery: bakery) }
 
     it "calculated from own lead_days plus max of included recipe lead days, is called in an after save" do
       product

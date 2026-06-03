@@ -27,28 +27,28 @@ FactoryBot.define do
   factory :product do
     name { generate(:product_name) }
     product_type { Product.product_types.keys.sample }
-    description { Faker::Lorem.sentence(1) }
-    weight { Faker::Number.decimal(0, 3) }
+    description { Faker::Lorem.sentence(word_count: 1) }
+    weight { Faker::Number.decimal(l_digits: 0, r_digits: 3) }
     unit { Product.units.keys.sample }
-    over_bake { Faker::Number.decimal(1, 1) }
-    base_price { Faker::Number.decimal(2) }
-    bakery
+    over_bake { Faker::Number.decimal(l_digits: 1, r_digits: 1) }
+    base_price { Faker::Number.decimal(l_digits: 2) }
+    bakery { create(:bakery) }
 
     transient do
-      force_total_lead_days 2
+      force_total_lead_days { 2 }
     end
 
     trait :with_inclusion do
-      inclusion { |t| t.association(:recipe_inclusion, bakery: bakery, lead_days: force_total_lead_days) }
+      inclusion { create(:recipe_inclusion, bakery: bakery, lead_days: force_total_lead_days) }
     end
 
     trait :with_motherdough do
-      motherdough { |t| t.association(:recipe_motherdough, bakery: bakery, lead_days: force_total_lead_days) }
+      motherdough { create(:recipe_motherdough, bakery: bakery, lead_days: force_total_lead_days) }
     end
 
     trait :with_recipe_items do
-      inclusion { |t| t.association(:recipe, :with_ingredients, bakery: bakery) }
-      motherdough { |t| t.association(:recipe_motherdough, :with_nested_recipes, bakery: bakery) }
+      inclusion { create(:recipe, :with_ingredients, bakery: bakery) }
+      motherdough { create(:recipe_motherdough, :with_nested_recipes, bakery: bakery) }
     end
 
     trait :with_sku do

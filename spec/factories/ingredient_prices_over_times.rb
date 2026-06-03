@@ -16,7 +16,13 @@
 
 FactoryBot.define do
   factory :ingredient_prices_over_time do
-    cost_per_unit 1
-    cost_per_gram 1
+    transient do
+      bakery { create(:bakery) }
+    end
+
+    ingredient { create(:ingredient, bakery: bakery) }
+    vendor { create(:vendor, bakery: bakery) }
+    cost_per_unit { 1 }
+    cost_per_gram { 1 }
   end
 end

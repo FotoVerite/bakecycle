@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ProductionPolicy do
   let(:bakery) { build_stubbed(:bakery) }
-  let(:record) { build_stubbed(:production_run, bakery: bakery) }
+  let(:record) { ProductionRun.new(bakery: bakery) }
   let(:policy) { ProductionPolicy.new(current_user, record) }
 
   context "when you are an admin" do

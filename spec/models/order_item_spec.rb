@@ -183,6 +183,7 @@ describe OrderItem do
           :temporary_order,
           start_date: tomorrow,
           force_total_lead_days: 1,
+          order_item_count: 1,
           bakery: bakery
         )
         standing = create(
@@ -191,6 +192,7 @@ describe OrderItem do
           route: temp.route,
           start_date: tomorrow + 1.day,
           force_total_lead_days: 2,
+          order_item_count: 1,
           bakery: bakery
         )
         temp_order_items = temp.order_items.first
@@ -205,6 +207,7 @@ describe OrderItem do
           :order,
           start_date: last_week,
           force_total_lead_days: 1,
+          order_item_count: 1,
           bakery: bakery
         )
 
@@ -214,6 +217,7 @@ describe OrderItem do
           route: standing.route,
           start_date: today,
           force_total_lead_days: 4,
+          order_item_count: 1,
           bakery: bakery
         )
 
@@ -234,6 +238,7 @@ describe OrderItem do
           :order,
           start_date: last_week,
           force_total_lead_days: 4,
+          order_item_count: 1,
           bakery: bakery
         )
 
@@ -243,6 +248,7 @@ describe OrderItem do
           route: standing.route,
           start_date: today,
           force_total_lead_days: 1,
+          order_item_count: 1,
           bakery: bakery
         )
 
@@ -263,6 +269,7 @@ describe OrderItem do
           :temporary_order,
           start_date: tomorrow,
           force_total_lead_days: 1,
+          order_item_count: 1,
           bakery: bakery
         )
         standing = create(
@@ -270,6 +277,7 @@ describe OrderItem do
           client: temp.client,
           start_date: tomorrow,
           force_total_lead_days: 1,
+          order_item_count: 1,
           bakery: bakery
         )
         temp_order_items = temp.order_items.first

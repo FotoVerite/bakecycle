@@ -7,7 +7,8 @@ describe InvoicesPdfGenerator do
       client_id: [1, 2, 3],
       product_id: [4, 5, 6],
       date_from: Date.parse("30/12/2015"),
-      date_to: Date.parse("30/12/2015")
+      date_to: Date.parse("30/12/2015"),
+      sequence_number: ""
     )
   end
   let(:generator) { InvoicesPdfGenerator.new(bakery, search_form) }

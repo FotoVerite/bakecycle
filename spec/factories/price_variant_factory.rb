@@ -14,8 +14,8 @@
 
 FactoryBot.define do
   factory :price_variant do
-    product
-    price { Faker::Number.decimal(2) }
-    quantity { Faker::Number.number(2) }
+    product { create(:product) }
+    price { Faker::Number.decimal(l_digits: 2) }
+    quantity { Faker::Number.number(digits: 2) }
   end
 end

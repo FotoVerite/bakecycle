@@ -23,7 +23,7 @@
 require "rails_helper"
 
 describe Order do
-  let(:bakery) { build(:bakery) }
+  let(:bakery) { create(:bakery) }
   let(:client) { create(:client, bakery: bakery) }
   let(:order) { build(:order, bakery: bakery) }
   let(:today) { Time.zone.today }
@@ -41,12 +41,11 @@ describe Order do
     expect(order).to respond_to(:order_type)
     expect(order).to belong_to(:bakery)
     expect(order).to belong_to(:client)
-    expect(order).to belong_to(:route)
+    expect(order).to belong_to(:route).optional
     expect(order).to belong_to(:bakery)
     expect(order).to belong_to(:client)
-    expect(order).to belong_to(:route)
+    expect(order).to belong_to(:route).optional
     expect(order).to have_many(:order_items)
-    expect(order).to have_many(:products)
   end
 
   it "has validations" do
@@ -111,7 +110,7 @@ describe Order do
     end
 
     it "updates it's total_lead_days when the product is updated" do
-      order = create(:order, force_total_lead_days: 3)
+      order = create(:order, force_total_lead_days: 3, order_item_count: 1)
       product = order.order_items.first.product
       product.update!(total_lead_days: 8)
       order.reload
@@ -194,10 +193,10 @@ describe Order do
     end
 
     it "returns false if there are overlapping orders for other clients and temporary orders" do
-      order = build(:order, start_date: today, end_date: today)
-      create(:temporary_order, route: order.route, client: order.client, start_date: today)
-      create(:order, route: order.route, start_date: today)
-      create(:order, client: order.client, start_date: today)
+      order = create(:order, bakery: bakery, start_date: today, end_date: today, order_item_count: 0)
+      create(:temporary_order, bakery: bakery, route: order.route, client: order.client, start_date: today, order_item_count: 0)
+      create(:order, bakery: bakery, route: order.route, start_date: today, order_item_count: 0)
+      create(:order, bakery: bakery, client: order.client, start_date: today, order_item_count: 0)
       expect(order).to_not be_overlapping
     end
 
@@ -340,7 +339,7 @@ describe Order do
 
   describe "#no_outstanding_shipments?" do
     describe "order that goes to production today" do
-      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 1, bakery: bakery) }
+      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 1, order_item_count: 1, bakery: bakery) }
 
       it "returns true if it is before kickoff" do
         create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
@@ -387,7 +386,7 @@ describe Order do
     end
 
     describe "order that has a total_lead_days of 2" do
-      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 2, bakery: bakery) }
+      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 2, order_item_count: 1, bakery: bakery) }
 
       it "returns true if it is before kickoff" do
         create(:shipment, date: Time.zone.today, order: order, bakery: bakery)

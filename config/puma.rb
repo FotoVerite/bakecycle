@@ -1,14 +1,17 @@
-# Change to match your CPU core count
-workers 1
+threads_count = ENV.fetch("RAILS_MAX_THREADS", 6).to_i
+threads 1, threads_count
 
-# Min and Max threads per worker
-threads 1, 6
+rails_env = ENV.fetch("RAILS_ENV", "development")
+workers_count = ENV.fetch("WEB_CONCURRENCY") do
+  rails_env == "production" ? 2 : 0
+end.to_i
+
+workers workers_count if workers_count.positive?
+preload_app! if workers_count.positive?
 
 app_dir = File.expand_path("..", __dir__)
 shared_dir = "#{app_dir}/../../shared"
 
-# Default to production
-rails_env = ENV["RAILS_ENV"] || "production"
 environment rails_env
 
 if %w[production staging].include?(rails_env)
@@ -24,12 +27,8 @@ if %w[production staging].include?(rails_env)
   activate_control_app
 
   on_worker_boot do
-    require "active_record"
-    begin
-      ActiveRecord::Base.connection.disconnect!
-    rescue StandardError
-      ActiveRecord::ConnectionNotEstablished
-    end
-    ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
+    ActiveRecord::Base.establish_connection
   end
+else
+  port ENV.fetch("PORT", 3000)
 end

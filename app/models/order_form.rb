@@ -25,6 +25,6 @@ class OrderForm
   def serializable_hash
     hash = OrderFormSerializer.new(self).serializable_hash
     hash[:order]["kickoff_time"] = @order.bakery.kickoff_time
-    hash
+    hash.transform_keys { |k| k.to_s.camelize(:lower) }
   end
 end
