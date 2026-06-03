@@ -1,4 +1,4 @@
-class TotalXlsx
+class ClientTotalXlsx
   def initialize(bakery, start_date, end_date)
     @bakery = bakery
     @start = start_date
@@ -32,10 +32,7 @@ class TotalXlsx
     hash
   end
 
-  # rubocop:enable
-
   def add_rows(hash, sheet)
-    # Set Product Type Row
     hash.each_value do |client_array|
       sheet.add_row client_array
     end
@@ -45,7 +42,7 @@ class TotalXlsx
 
   def create_output_string(page)
     outstrio = StringIO.new
-    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
+    page.use_shared_strings = true
     outstrio.write(page.to_stream.read)
     outstrio.string
   end

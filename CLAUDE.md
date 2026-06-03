@@ -39,7 +39,7 @@ PostgreSQL and Redis must be running locally (e.g. via Homebrew services).
 | Browserify → esbuild | ✅ done (jsbundling-rails + esbuild, 52 Jest tests) |
 | React 0.14 → 18 | ✅ done (RTK, no deprecated lifecycle methods) |
 | Paperclip → ActiveStorage | not yet (kt-paperclip bridges) |
-| Rails 6.1 → 7.x | not yet |
+| Rails 6.1 → 7.1 | not yet — checklist below |
 | React → Stimulus/Turbo (most components) | not yet — do after Rails 7 (see below) |
 
 ## Rails 6.1 migration notes
@@ -146,6 +146,109 @@ Common spec support files:
 
 Resque 2.x-based. Worker: `ResqueWorker`. Jobs live in `app/jobs/`.
 Redis connection: `REDIS_URL` env var (defaults to `redis://localhost:6379/1`).
+
+## Rails 6.1 → 7.1 upgrade checklist
+
+Target: **Rails 7.1** (stable, well-documented, good stepping stone to 8). Do items roughly in order — the Zeitwerk migration is the biggest risk and should be done first so everything else can be verified against a working autoloader.
+
+### 1. Zeitwerk autoloader (blocker — Rails 7 removes classic mode)
+
+`config.autoloader = :classic` must become `:zeitwerk`. This is the most disruptive change.
+
+**The problem:** Three report subdirectories are added to `autoload_paths` with un-namespaced classes:
+- `app/reports/client_reports/client_list_generator.rb` → class `ClientListGenerator` (not `ClientReports::ClientListGenerator`)
+- `app/reports/invoice_reports/total_sales_generator.rb` → class `TotalSalesGenerator`
+- `app/reports/product_reports/` → 4 classes, all un-namespaced
+
+Zeitwerk expects the directory name to map to a module namespace. **Fix:** move all files from the three subdirectories up into `app/reports/` and remove the `autoload_paths` additions. The class names are unique enough that no conflict risk — `TotalGenerator` and `TotalXlsx` in `client_reports/` are the only potentially generic ones (rename them `ClientTotalGenerator` / `ClientTotalXlsx` if needed). Remove the `autoload_paths +=` block for these subdirs from `application.rb` once files are moved.
+
+Run `bundle exec rails zeitwerk:check` to verify before and after. Fix any "expected ... to define ..." errors before proceeding.
+
+### 2. Replace `devise-async` gem (blocker — unmaintained git fork)
+
+`user.rb` has `devise :async` which sends email via the `devise-async` git fork. Rails 6+ Devise has native `deliver_later` support built in — no gem needed.
+
+**Fix:**
+- Remove `gem "devise-async"` from Gemfile
+- Remove `:async` from `devise` call in `app/models/user.rb`
+- Add to `config/initializers/devise.rb`: `config.send_email_changed_notification = true` (and other email opts as needed)
+- Devise will now use `deliver_later` automatically when a queue adapter is configured (Resque is already set up)
+
+### 3. Replace `axlsx` + `axlsx_rails` → `caxlsx` + `caxlsx_rails` (blocker — axlsx is unmaintained)
+
+`axlsx 2.0.1` is pinned because it's abandoned. The community successor `caxlsx` is a drop-in replacement with the same API.
+
+- `gem "axlsx", "2.0.1"` → `gem "caxlsx"`
+- `gem "axlsx_rails"` → `gem "caxlsx_rails"`
+- `gem "rubyzip", "1.0.0"` → remove pin; `caxlsx` requires rubyzip 2.x
+
+**Rubyzip audit:** grep for `Zip::` in the app — if any code calls `Zip::ZipFile` (v1 API), rename to `Zip::File` (v2 API). Run the xlsx report specs after.
+
+### 4. Remove `uglifier` (blocker — asset pipeline change)
+
+`config/environments/production.rb` sets `config.assets.js_compressor = :uglifier`. esbuild is now handling JS bundling and minification — Sprockets doesn't need to compress JS anymore.
+
+**Fix:**
+- Remove `gem "uglifier"` if it's in the Gemfile (it may be implicit)
+- Set `config.assets.js_compressor = nil` in `production.rb` (or remove the line)
+
+### 5. UJS: `jquery_ujs` → `rails-ujs` or Turbo
+
+4 views use `link_to method: :delete` (log out, cancel account, delete shipment) which relies on `jquery_ujs` intercepting clicks. Rails 7 with Turbo handles this natively with `data-turbo-method`.
+
+**Options (pick one):**
+- Keep `jquery-rails` + `jquery_ujs` — still works in Rails 7, lowest effort
+- Switch to `rails-ujs` (vanilla JS, ships with Rails) — remove `jquery-rails` and swap `//= require jquery_ujs` for `//= require rails-ujs`
+- Add Turbo and use `data: { turbo_method: :delete }` — the Rails 7 idiomatic way, sets up Turbo for future Hotwire work
+
+### 6. Bump `config.load_defaults` to 7.1
+
+Change `config.load_defaults 6.1` → `config.load_defaults 7.1` in `application.rb`.
+
+New defaults that need attention:
+- `action_controller.raise_on_open_redirects = true` — audit all `redirect_to params[:return_to]` or similar user-supplied redirect URLs
+- `active_record.verify_foreign_keys_for_fixtures = true` — run specs; fix any fixture FK violations
+- Session cookie digest changes (`SHA256`) — existing sessions will be invalidated on deploy (expected, one-time)
+
+### 7. Update Rails gem and run the upgrade task
+
+```bash
+# In Gemfile:
+gem "rails", "~> 7.1.0"
+
+bundle update rails
+bundle exec rails app:update   # review each diff carefully; don't blindly accept
+bundle exec rails zeitwerk:check
+bundle exec rspec
+```
+
+### 8. Gem compatibility audit
+
+Check these gems before bumping Rails — some may need version bumps alongside:
+
+| Gem | Risk | Action |
+|---|---|---|
+| `draper` | Medium — had Rails 7 issues in older versions | Bump to latest (4.x), run decorator specs |
+| `simple_form` | Low | Bump to 5.x if not already |
+| `paper_trail` | Low | Ensure 14.x or later |
+| `pundit` | Low | Works with Rails 7 |
+| `kt-paperclip` | Medium | Verify S3 upload/download in staging after upgrade |
+| `cucumber-rails` | Low | Bump to 2.6+ if needed |
+| `stripe < 6` | Low (pinned) | Keep pin; don't bump during Rails upgrade |
+| `geocoder` | Low | Works with Rails 7 |
+| `capistrano3-puma` | Low | Bump if needed for Puma 6 compat |
+
+### 9. After Rails 7 is stable: add Hotwire
+
+```ruby
+# Gemfile
+gem "turbo-rails"
+gem "stimulus-rails"
+```
+
+Then begin the React → Stimulus migration from the table above.
+
+---
 
 ## Post-Rails 7: React → Stimulus/Turbo migration
 

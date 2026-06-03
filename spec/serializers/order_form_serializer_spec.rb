@@ -14,12 +14,12 @@ describe OrderFormSerializer do
   end
 
   it "includes the order id" do
-    expect(hash["order"]).to include(id: order.id)
+    expect(hash["order"]).to include("id" => order.id)
   end
 
-  it "includes kickoff_time injected by OrderForm" do
-    expect(hash["order"]).to have_key("kickoff_time")
-    expect(hash["order"]["kickoff_time"]).to eq(bakery.kickoff_time)
+  it "includes kickoffTime injected by OrderForm" do
+    expect(hash["order"]).to have_key("kickoffTime")
+    expect(hash["order"]["kickoffTime"]).to eq(bakery.kickoff_time)
   end
 
   # React's OrderFormProvider expects camelCase prop names

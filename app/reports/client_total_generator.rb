@@ -1,4 +1,4 @@
-class TotalGenerator
+class ClientTotalGenerator
   include GlobalID::Identification
 
   def self.find(global_id)
@@ -28,6 +28,6 @@ class TotalGenerator
   end
 
   def generate
-    TotalXlsx.new(@bakery, @start_date, @end_date).generate
+    ClientTotalXlsx.new(@bakery, @start_date, @end_date).generate
   end
 end

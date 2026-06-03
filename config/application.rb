@@ -13,7 +13,7 @@ module Bakecycle
     # -- all .rb files in that directory are automatically loaded.
 
     config.load_defaults 6.1
-    config.autoloader = :classic
+    config.autoloader = :zeitwerk
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -24,13 +24,7 @@ module Bakecycle
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # new 4.2+ behavior
-    config.autoload_paths += [
-      "#{config.root}/lib",
-      "#{config.root}/app/reports/product_reports",
-      "#{config.root}/app/reports/client_reports",
-      "#{config.root}/app/reports/invoice_reports",
-    ]
+    config.autoload_paths += ["#{config.root}/lib"]
     # esbuild output
     config.assets.paths << Rails.root.join("app/assets/builds")
 

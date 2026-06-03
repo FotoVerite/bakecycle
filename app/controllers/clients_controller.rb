@@ -72,7 +72,7 @@ class ClientsController < ApplicationController
     authorize Route, :print?
     @start_date = start_date
     @end_date = end_date
-    generator = TotalGenerator.new(current_bakery, start_date, end_date)
+    generator = ClientTotalGenerator.new(current_bakery, start_date, end_date)
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
