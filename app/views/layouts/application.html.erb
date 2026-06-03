@@ -22,6 +22,7 @@
       </div>
     </div>
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "bakecycle" %>
     <%= yield :js %>
     <%= render "tracking" %>
     <% if current_bakery && (!session[:saw_notification_at] || Time.parse(session[:saw_notification_at]) < Time.zone.today) %>

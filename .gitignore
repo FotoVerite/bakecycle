@@ -23,6 +23,7 @@ config/database.yml
 .envrc
 
 node_modules
+/app/assets/builds/*.js
 bakecycle-erd.pdf
 screenshot_*.png
 screenshot_*.html

@@ -31,9 +31,8 @@ module Bakecycle
       "#{config.root}/app/reports/client_reports",
       "#{config.root}/app/reports/invoice_reports",
     ]
-    # Browserify
-    config.browserify_rails.source_map_environments = %w[development staging]
-    config.browserify_rails.commandline_options = '-t [ babelify ] --extension=".jsx"'
+    # esbuild output
+    config.assets.paths << Rails.root.join("app/assets/builds")
 
     # for bower stuff
     config.assets.paths << Rails.root.join("vendor", "assets", "bower_components")
