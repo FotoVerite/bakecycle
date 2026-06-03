@@ -1,6 +1,6 @@
 class InvoicePdfGenerator
   attr_reader :bakery, :shipment
-  include GlobalID::Identification
+  include Generator
 
   def self.find(id)
     bakery_id, shipment_id = id.split("_", 2)

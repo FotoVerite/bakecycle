@@ -1,5 +1,5 @@
 class GroceryListGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string = global_id.split("_")
@@ -21,9 +21,6 @@ class GroceryListGenerator
     "GroceryList-#{@date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     GroceryListXlsx.new(@bakery, @date).generate

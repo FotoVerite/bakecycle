@@ -1,5 +1,5 @@
 class OrderGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     order = Order.find(global_id)

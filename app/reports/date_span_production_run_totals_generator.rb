@@ -1,5 +1,5 @@
 class DateSpanProductionRunTotalsGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, start_date, end_date = global_id.split("_")
@@ -23,11 +23,8 @@ class DateSpanProductionRunTotalsGenerator
     "ProductionRunTotalsGenerator-#{@start_date.iso8601}-#{@end_date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
-    DateSpanProductionRunTotalsXlxs.new(@bakery, @start_date, @end_date).generate
+    DateSpanProductionRunTotalsXlsx.new(@bakery, @start_date, @end_date).generate
   end
 end

@@ -1,4 +1,11 @@
 class PackingSlipPage
+  extend Forwardable
+
+  def_delegators :@pdf,
+    :start_new_page, :stamp_or_create, :bounding_box, :grid, :cursor,
+    :text, :font_size, :table, :move_down, :image,
+    :bakery_logo_display, :bakery_info
+
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
     @bakery = bakery
@@ -18,10 +25,6 @@ class PackingSlipPage
   end
 
   private
-
-  def method_missing(method, *args, &block)
-    @pdf.send(method, *args, &block)
-  end
 
   def packing_slip_header_stamp
     # create a stamp/memoized copy for the header that has the star or not.

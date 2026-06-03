@@ -1,4 +1,4 @@
-class WeeklyProductionRunTotalsXlxs
+class WeeklyProductionRunTotalsXlsx
   def initialize(bakery, date)
     @bakery = bakery
     @date = date

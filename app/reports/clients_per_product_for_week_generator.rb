@@ -1,5 +1,5 @@
 class ClientsPerProductForWeekGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string, throw_away = global_id.split("_")
@@ -21,9 +21,6 @@ class ClientsPerProductForWeekGenerator
     "ClientsPerProductForWeek#{@date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     ClientsPerProductForWeekXlsx.new(@bakery, @date).generate

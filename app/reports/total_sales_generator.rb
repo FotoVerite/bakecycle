@@ -1,5 +1,5 @@
 class TotalSalesGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, start_date, end_date = global_id.split("_")
@@ -23,9 +23,6 @@ class TotalSalesGenerator
     "TotalSales_#{@start_date.iso8601}_#{@end_date.iso8601}.csv"
   end
 
-  def content_type
-    "text/csv"
-  end
 
   def generate
     TotalSalesXlsx.new(@bakery, @start_date, @end_date).generate

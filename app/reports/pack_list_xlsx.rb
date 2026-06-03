@@ -1,4 +1,4 @@
-class PackListXlxs
+class PackListXlsx
   def initialize(bakery, date)
     @bakery = bakery
     @date = date

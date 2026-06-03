@@ -1,5 +1,5 @@
 class DailyTotalGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string, type, show_routes = global_id.split("_")
@@ -24,13 +24,6 @@ class DailyTotalGenerator
     "DailyTotal_#{@date}_#{@show_routes}.#{@type}"
   end
 
-  def content_type
-    if @type == "pdf"
-      "application/pdf"
-    else
-      "application/xlsx"
-    end
-  end
 
   def generate
     if @type == "pdf"

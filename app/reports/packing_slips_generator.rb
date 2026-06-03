@@ -1,5 +1,5 @@
 class PackingSlipsGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string, print_string = global_id.split("_")

@@ -1,5 +1,5 @@
 class DetailedInvoiceReportGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, start_date, end_date = global_id.split("_")
@@ -21,11 +21,8 @@ class DetailedInvoiceReportGenerator
     "detailed_invoice_report_#{@start_date.iso8601}_#{@end_date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
-    DetailedInvoiceReportXlxs.new(@bakery, @start_date, @end_date).generate
+    DetailedInvoiceReportXlsx.new(@bakery, @start_date, @end_date).generate
   end
 end

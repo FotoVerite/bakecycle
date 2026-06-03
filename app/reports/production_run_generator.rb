@@ -1,5 +1,5 @@
 class ProductionRunGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     production_run = ProductionRun.find(global_id)

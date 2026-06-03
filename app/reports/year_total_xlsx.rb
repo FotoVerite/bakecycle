@@ -1,4 +1,4 @@
-class YearTotalXlxs
+class YearTotalXlsx
   def initialize(bakery, year)
     @bakery = bakery
     @year = year

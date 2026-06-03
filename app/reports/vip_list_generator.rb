@@ -1,5 +1,5 @@
 class VipListGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, _date = global_id.split("_")
@@ -20,9 +20,6 @@ class VipListGenerator
     "VipList-#{@date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     VipListXlsx.new(@bakery).generate

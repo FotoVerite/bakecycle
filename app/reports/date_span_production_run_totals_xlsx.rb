@@ -1,4 +1,4 @@
-class DateSpanProductionRunTotalsXlxs
+class DateSpanProductionRunTotalsXlsx
   def initialize(bakery, start_date, end_date)
     @bakery = bakery
     date_range = (start_date..end_date)

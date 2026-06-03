@@ -1,5 +1,5 @@
 class ClientTotalGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, start_date_string, end_date_string = global_id.split("_")
@@ -23,9 +23,6 @@ class ClientTotalGenerator
     "ClientTotals_#{@start_date.iso8601}_#{@end_date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     ClientTotalXlsx.new(@bakery, @start_date, @end_date).generate

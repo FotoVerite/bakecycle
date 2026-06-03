@@ -1,6 +1,6 @@
 class InvoicesIifGenerator
   attr_reader :bakery, :search
-  include GlobalID::Identification
+  include Generator
 
   def self.find(id)
     bakery_id, search_id = id.split("_", 2)

@@ -1,5 +1,10 @@
 class PrefermentDataPage
+  extend Forwardable
   include WeightDisplayer
+
+  def_delegators :@pdf,
+    :start_new_page, :define_grid, :grid, :text_box, :text,
+    :column_box, :table, :move_down, :cursor, :bounds
 
   def initialize(pdf, preferments)
     @pdf = pdf
@@ -13,10 +18,6 @@ class PrefermentDataPage
   end
 
   private
-
-  def method_missing(method, *args, &block)
-    @pdf.send(method, *args, &block)
-  end
 
   def page_layout
     define_grid(columns: 12, rows: 12, gutter: 10)

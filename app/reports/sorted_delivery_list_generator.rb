@@ -1,5 +1,5 @@
 class SortedDeliveryListGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string = global_id.split("_")
@@ -21,9 +21,6 @@ class SortedDeliveryListGenerator
     "delivery_list_#{@date}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     SortedDeliveryListXlsx.new(@bakery, @date).generate

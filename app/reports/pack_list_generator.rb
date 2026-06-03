@@ -1,5 +1,5 @@
 class PackListGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string = global_id.split("_")
@@ -21,11 +21,8 @@ class PackListGenerator
     "PackList-#{@date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
-    PackListXlxs.new(@bakery, @date).generate
+    PackListXlsx.new(@bakery, @date).generate
   end
 end

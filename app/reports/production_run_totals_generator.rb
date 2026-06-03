@@ -1,5 +1,5 @@
 class ProductionRunTotalsGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string, type = global_id.split("_")
@@ -27,15 +27,12 @@ class ProductionRunTotalsGenerator
     end
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     if @type == "daily"
-      DailyProductionRunTotalsXlxs.new(@bakery, @date).generate
+      DailyProductionRunTotalsXlsx.new(@bakery, @date).generate
     else
-      WeeklyProductionRunTotalsXlxs.new(@bakery, @date).generate
+      WeeklyProductionRunTotalsXlsx.new(@bakery, @date).generate
     end
   end
 end

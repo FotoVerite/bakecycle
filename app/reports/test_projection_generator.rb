@@ -1,5 +1,5 @@
 class TestProjectionGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     global_id_array = global_id.split("_")

@@ -1,5 +1,5 @@
 class BatchGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, start_date_string, end_date_string = global_id.split("_")

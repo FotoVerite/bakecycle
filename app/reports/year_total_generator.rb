@@ -1,5 +1,5 @@
 class YearTotalGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, year = global_id.split("_")
@@ -20,11 +20,8 @@ class YearTotalGenerator
     "year_total_#{@year}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
-    YearTotalXlxs.new(@bakery, @year).generate
+    YearTotalXlsx.new(@bakery, @year).generate
   end
 end

@@ -88,13 +88,6 @@ GEM
     airbrussh (1.6.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.3)
-    axlsx (2.0.1)
-      htmlentities (~> 4.3.1)
-      nokogiri (>= 1.4.1)
-      rubyzip (~> 1.0.0)
-    axlsx_rails (0.5.2)
-      actionpack (>= 3.1)
-      axlsx (>= 2.0.1)
     base64 (0.3.0)
     bcrypt (3.1.22)
     better_errors (2.10.1)
@@ -148,6 +141,14 @@ GEM
       launchy
     case_transform (0.2)
       activesupport
+    caxlsx (4.4.2)
+      htmlentities (~> 4.3, >= 4.3.4)
+      marcel (~> 1.0)
+      nokogiri (~> 1.10, >= 1.10.4)
+      rubyzip (>= 2.4, < 4)
+    caxlsx_rails (0.7.1)
+      actionpack (>= 6.1)
+      caxlsx (>= 4.0)
     childprocess (5.1.0)
       logger (~> 1.5)
     choice (0.2.0)
@@ -525,7 +526,7 @@ GEM
     ruby-progressbar (1.13.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    rubyzip (1.0.0)
+    rubyzip (2.4.1)
     rufus-scheduler (3.9.2)
       fugit (~> 1.1, >= 1.11.1)
     sass-rails (6.0.0)
@@ -538,11 +539,12 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (2.42.0)
-      childprocess (>= 0.5.0)
-      multi_json (~> 1.0)
-      rubyzip (~> 1.0)
-      websocket (~> 1.0.4)
+    selenium-webdriver (4.32.0)
+      base64 (~> 0.2)
+      logger (~> 1.4)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     shellany (0.0.1)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
@@ -634,8 +636,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   airbrake
-  axlsx (= 2.0.1)
-  axlsx_rails
   better_errors
   binding_of_caller
   brakeman
@@ -648,6 +648,8 @@ DEPENDENCIES
   capistrano3-puma
   capybara-email
   capybara-screenshot
+  caxlsx
+  caxlsx_rails
   chronic
   cucumber-rails
   database_cleaner
@@ -692,7 +694,7 @@ DEPENDENCIES
   rspec-activejob
   rspec-rails
   rubocop
-  rubyzip (= 1.0.0)
+  rubyzip (>= 2.0)
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers

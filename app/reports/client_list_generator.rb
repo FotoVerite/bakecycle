@@ -1,5 +1,5 @@
 class ClientListGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, type, throwAway = global_id.split("_")
@@ -21,9 +21,6 @@ class ClientListGenerator
     "ClientList_#{@type}_#{@date.iso8601}.xlsx"
   end
 
-  def content_type
-    "application/xlsx"
-  end
 
   def generate
     ClientListXlsx.new(@bakery, @date, @type).generate

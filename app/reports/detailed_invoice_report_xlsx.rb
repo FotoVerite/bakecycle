@@ -1,4 +1,4 @@
-class DetailedInvoiceReportXlxs
+class DetailedInvoiceReportXlsx
   def initialize(bakery, start_date, end_date)
     @bakery = bakery
     @shipments = Shipment.where(bakery: bakery, :date => start_date..end_date) || []

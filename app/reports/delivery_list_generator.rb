@@ -1,5 +1,5 @@
 class DeliveryListGenerator
-  include GlobalID::Identification
+  include Generator
 
   def self.find(global_id)
     bakery_id, date_string, type = global_id.split("_")
@@ -22,13 +22,6 @@ class DeliveryListGenerator
     "delivery_list_#{@date}.#{@type}"
   end
 
-  def content_type
-    if @type == "pdf"
-      "application/pdf"
-    else
-      "application/xlsx"
-    end
-  end
 
   def generate
     if @type == "pdf"

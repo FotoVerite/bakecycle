@@ -1,6 +1,6 @@
 class InvoiceCsvGenerator
   attr_reader :bakery, :invoice
-  include GlobalID::Identification
+  include Generator
 
   def self.find(id)
     bakery_id, id = id.split("_", 2)
@@ -20,9 +20,6 @@ class InvoiceCsvGenerator
     "#{bakery_file_name}_invoice_#{@invoice.invoice_number}.csv"
   end
 
-  def content_type
-    "text/csv"
-  end
 
   def generate
     InvoicesCsv.new([invoice]).generate
