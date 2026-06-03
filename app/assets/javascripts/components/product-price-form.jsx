@@ -1,29 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PricesStore from '../stores/prices-store';
 import PriceFields from './product-price-fields';
+
+function getError(price, field) {
+  const errors = price.errors || {};
+  const val = errors[field];
+  return Array.isArray(val) ? val[0] : val;
+}
 
 class ProductPriceForm extends React.Component {
   constructor(props) {
     super(props);
-    const prices = new PricesStore(props.product.priceVariants);
-    prices.addBlankForm();
-    prices.on('change sort remove add', () => this.setState({ prices }));
+    let keyCounter = 0;
+    let prices = props.product.priceVariants.map(data => ({ ...data, _key: keyCounter++ }));
+    if (prices.length === 0 || prices[prices.length - 1].id) {
+      prices = [...prices, { _key: keyCounter++ }];
+    }
+    this._keyCounter = keyCounter;
     this.state = { prices };
     this.addPrice = this.addPrice.bind(this);
+    this.updatePrice = this.updatePrice.bind(this);
+    this.toggleDestroy = this.toggleDestroy.bind(this);
   }
 
   addPrice(event) {
     event.preventDefault();
-    this.state.prices.add({});
+    const newPrice = { _key: this._keyCounter++ };
+    this.setState(state => ({ prices: [...state.prices, newPrice] }));
+  }
+
+  updatePrice(price, data) {
+    this.setState(state => ({
+      prices: state.prices.map(p => p === price ? { ...p, ...data } : p),
+    }));
+  }
+
+  toggleDestroy(price) {
+    if (!price.id) {
+      this.setState(state => ({ prices: state.prices.filter(p => p !== price) }));
+    } else {
+      this.updatePrice(price, { destroy: !price.destroy });
+    }
   }
 
   render() {
     const { prices } = this.state;
     const { clients } = this.props;
-    const fields = prices.map((priceVariant) => {
-      return <PriceFields key={priceVariant.cid} model={priceVariant} clients={clients} />;
-    });
+    const fields = prices.map((price) => (
+      <PriceFields
+        key={price._key}
+        model={price}
+        clients={clients}
+        onChange={(data) => this.updatePrice(price, data)}
+        onToggleDestroy={() => this.toggleDestroy(price)}
+        getError={(field) => getError(price, field)}
+      />
+    ));
     return (
       <div>
         <fieldset>

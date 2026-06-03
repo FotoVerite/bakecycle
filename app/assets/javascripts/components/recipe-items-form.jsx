@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 
 import RecipeItemFields from './recipe-item-fields';
 
+function getError(item, field) {
+  const errors = item.errors || {};
+  const val = errors[field];
+  return Array.isArray(val) ? val[0] : val;
+}
+
 class RecipeItemsForm extends React.Component {
   constructor(props) {
     super(props);
@@ -16,14 +22,15 @@ class RecipeItemsForm extends React.Component {
 
   addItem(event) {
     event.preventDefault();
-    this.props.recipeItems.add({});
+    this.props.onAddItem();
   }
 
   availableInclusions() {
-    if (this.props.recipe.get('recipeType') === 'dough') {
-      return this.props.recipe.get('availableInclusions');
+    const { recipe } = this.props;
+    if (recipe.recipeType === 'dough') {
+      return recipe.availableInclusions || [];
     } else {
-      return this.props.recipe.get('availableRecipeIngredients');
+      return recipe.availableRecipeIngredients || [];
     }
   }
 
@@ -38,9 +45,9 @@ class RecipeItemsForm extends React.Component {
     this.dragged.style.display = 'block';
     this.placeholder.remove();
     if (!this.draggedOver) { return; }
-    var draggedId = this.dragged.dataset.id;
-    var targetId = this.draggedOver.dataset.id;
-    this.props.recipeItems.move(draggedId, targetId, this.draggedPosition === 'after');
+    const draggedKey = this.dragged.dataset.id;
+    const targetKey = this.draggedOver.dataset.id;
+    this.props.onMoveItem(draggedKey, targetKey, this.draggedPosition === 'after');
   }
 
   dragOver(e) {
@@ -64,14 +71,21 @@ class RecipeItemsForm extends React.Component {
   }
 
   render() {
-    const fields = this.props.recipeItems.map((model) => {
-      return (<RecipeItemFields
-        key={model.cid}
-        availableInclusions={this.availableInclusions()}
-        model={model}
+    const { items, onUpdateItem, onToggleDestroyItem } = this.props;
+    const availableInclusions = this.availableInclusions();
+    const fields = items.map((item, index) => (
+      <RecipeItemFields
+        key={item._key}
+        availableInclusions={availableInclusions}
+        model={item}
+        index={index}
         dragStart={this.dragStart}
-        dragEnd={this.dragEnd} />);
-    });
+        dragEnd={this.dragEnd}
+        onChange={(data) => onUpdateItem(item, data)}
+        onToggleDestroy={() => onToggleDestroyItem(item)}
+        getError={(field) => getError(item, field)}
+      />
+    ));
 
     return (<div onDragOver={this.dragOver}>
       <fieldset>
@@ -98,8 +112,12 @@ class RecipeItemsForm extends React.Component {
 }
 
 RecipeItemsForm.propTypes = {
-  recipeItems: PropTypes.object,
-  recipe: PropTypes.object,
+  recipe: PropTypes.object.isRequired,
+  items: PropTypes.array.isRequired,
+  onAddItem: PropTypes.func.isRequired,
+  onUpdateItem: PropTypes.func.isRequired,
+  onToggleDestroyItem: PropTypes.func.isRequired,
+  onMoveItem: PropTypes.func.isRequired,
 };
 
 export default RecipeItemsForm;

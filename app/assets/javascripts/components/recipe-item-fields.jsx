@@ -8,50 +8,47 @@ export default function RecipeItemFields({
   dragEnd,
   dragStart,
   model,
+  index,
+  onChange,
+  onToggleDestroy,
+  getError,
 }) {
-  const data = model.toJSON();
   const {
     id,
     inclusionableTypeDisplay,
-    sortId,
     destroy,
     totalLeadDays,
-  } = data;
+    inclusionableIdType,
+    bakersPercentage,
+  } = model;
 
-  const onChange = model.set.bind(model);
-
-  const toggleDestroy = () => {
-    var destroy = model.get('destroy');
-    model.set({ destroy: !destroy });
-  };
-
-  var namePrefix = `recipe[recipe_items_attributes][${model.getNumericCID()}]`;
-  var undoButton = <a onClick={toggleDestroy} className="button alert postfix" >Undo</a>;
-  var removeButton = <a onClick={toggleDestroy} className="test-remove-button button alert postfix" >X</a>;
-  var recipeOptions = availableInclusions.map((item) => {
-    return <option key={`recipe-${id}-${item[1]}`} value={item[1]}>{item[0]}</option>;
-  });
+  var namePrefix = `recipe[recipe_items_attributes][${model._key}]`;
+  var undoButton = <a onClick={onToggleDestroy} className="button alert postfix" >Undo</a>;
+  var removeButton = <a onClick={onToggleDestroy} className="test-remove-button button alert postfix" >X</a>;
+  var recipeOptions = availableInclusions.map((item) => (
+    <option key={`recipe-${id}-${item[1]}`} value={item[1]}>{item[0]}</option>
+  ));
 
   var disabledClass = destroy ? 'disabled' : '';
 
   return (<div
-    data-id={model.cid}
+    data-id={String(model._key)}
     draggable="true"
     onDragEnd={dragEnd}
     onDragStart={dragStart}
     className={`fields ${disabledClass}`} >
     <input type="hidden" name={`${namePrefix}[id]`} value={id} />
-    <input type="hidden" name={`${namePrefix}[sort_id]`} value={sortId} />
+    <input type="hidden" name={`${namePrefix}[sort_id]`} value={index} />
     <input type="hidden" name={`${namePrefix}[_destroy]`} value={destroy} />
     <div className="row collapse">
       <div className="small-12 medium-4 columns">
         <i className="drag-handle fi-record inline"></i>
         <BCSelect
-          value={data['inclusionableIdType']}
+          value={inclusionableIdType}
           field="inclusionableIdType"
           name={`${namePrefix}[inclusionable_id_type]`}
           options={recipeOptions}
-          error={model.getError('inclusionable_id_type')}
+          error={getError('inclusionable_id_type')}
           disabled={destroy}
           required
           inline
@@ -60,11 +57,11 @@ export default function RecipeItemFields({
       </div>
       <div className="small-12 medium-2 columns">
         <BCInput
-          value={data['bakersPercentage']}
+          value={bakersPercentage}
           field="bakersPercentage"
           name={`${namePrefix}[bakers_percentage]`}
           type="number"
-          error={model.getError('bakers_percentage')}
+          error={getError('bakers_percentage')}
           placeholder="0"
           disabled={destroy}
           required
@@ -77,7 +74,8 @@ export default function RecipeItemFields({
           className="input text"
           type="text"
           disabled
-          value={inclusionableTypeDisplay} />
+          readOnly
+          value={inclusionableTypeDisplay ?? ''} />
       </div>
 
       <div className="small-12 medium-2 columns">
@@ -85,7 +83,8 @@ export default function RecipeItemFields({
           className="input text"
           type="text"
           disabled
-          value={totalLeadDays} />
+          readOnly
+          value={totalLeadDays ?? ''} />
       </div>
 
       <div className="small-12 medium-1 end columns">
@@ -99,5 +98,9 @@ RecipeItemFields.propTypes = {
   availableInclusions: PropTypes.array.isRequired,
   dragEnd: PropTypes.func.isRequired,
   dragStart: PropTypes.func.isRequired,
-  model: PropTypes.object.isRequired
+  model: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onToggleDestroy: PropTypes.func.isRequired,
+  getError: PropTypes.func.isRequired,
 };

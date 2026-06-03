@@ -5,4 +5,5 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   moduleDirectories: ['node_modules', 'app/assets/javascripts'],
+  setupFiles: ['./app/assets/javascripts/shims/react-prop-types.js'],
 };

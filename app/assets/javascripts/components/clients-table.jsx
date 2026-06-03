@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
-
 function filterClients(collection, filter) {
   function nameMatch(client) {
     const name = client.name.toLowerCase();
     const search = filter.name.toLowerCase();
-    const searchChars = _.reject(search.split(''), char => char === ' ');
+    const searchChars = search.split('').filter(char => char !== ' ');
     let lastPostion = 0;
-    return !_.detect(searchChars, char => {
+    return !searchChars.find(char => {
       lastPostion = name.indexOf(char, lastPostion) + 1;
       if (lastPostion === 0) { return true; }
     });
@@ -24,7 +22,7 @@ function filterClients(collection, filter) {
     return filter.engagementStatus === client.engagementStatus + '';
   }
 
-  return _.filter(collection, c => nameMatch(c) && activeMatch(c) && statusMatch(c));
+  return collection.filter(c => nameMatch(c) && activeMatch(c) && statusMatch(c));
 }
 
 function capitalize(val) {

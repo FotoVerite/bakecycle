@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Model as FileExportStore } from 'backbone';
 
 class FileExportRefresher extends React.Component {
   constructor(props) {
     super(props);
     this.state = { status: '', ready: false };
-    this.store = new FileExportStore();
-    this.store.on('change', store => this.setState(store.toJSON()));
-    this.store.set(props);
     this.poll = this.poll.bind(this);
   }
 
@@ -17,25 +13,20 @@ class FileExportRefresher extends React.Component {
   }
 
   componentWillUnmount() {
-    this.store.off('change');
     this.stopPoll();
   }
 
   poll() {
     this.jxr = $.get(this.props.links.self);
-    this.jxr.done(data => this.store.set(data));
-    this.jxr.done(() => this.status(''));
+    this.jxr.done(data => this.setState(data));
+    this.jxr.done(() => this.setState({ status: '' }));
     this.jxr.done((data) => {
       if (!data.ready) {
         this.timeout = window.setTimeout(this.poll, 1000);
       }
     });
-    this.jxr.fail(() => this.status('There was an error checking on the report, trying again in 5 seconds.'));
-    this.jxr.fail(() => this.timeout = window.setTimeout(this.poll, 5000));
-  }
-
-  status(message) {
-    this.setState({ status: message });
+    this.jxr.fail(() => this.setState({ status: 'There was an error checking on the report, trying again in 5 seconds.' }));
+    this.jxr.fail(() => { this.timeout = window.setTimeout(this.poll, 5000); });
   }
 
   stopPoll() {
