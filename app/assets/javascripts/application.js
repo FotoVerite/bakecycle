@@ -8,7 +8,7 @@
 //= require_tree ./vendor
 
 // JQuery components
-//= require jquery_ujs
+//= require rails-ujs
 //= require jquery.ui.datepicker
 //= require jquery.timepicker.js
 //= require_tree ./jquery-components

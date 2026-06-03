@@ -6,8 +6,8 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  # JS minification is handled by esbuild (npm run build:prod); Sprockets only compresses CSS.
+  config.assets.js_compressor = nil
   config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
