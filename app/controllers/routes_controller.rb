@@ -5,7 +5,7 @@ class RoutesController < ApplicationController
 
   def index
     authorize Route
-    @routes = policy_scope(Route).order("active desc", :name)
+    @routes = policy_scope(Route).order(active: :desc, name: :asc)
   end
 
   def new

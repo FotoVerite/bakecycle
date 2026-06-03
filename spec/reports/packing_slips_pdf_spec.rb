@@ -48,10 +48,36 @@ describe PackingSlipsPdf do
     expect(text).to include("$48.00")
   end
 
-  it "renders invoices from a collection of shipments" do
+  it "renders notes from shipment, order, and client" do
     bakery = create(:bakery)
-    build_stubbed_list(:shipment, 2, bakery: bakery)
-    pdf = PackingSlipsPdf.new(Shipment.all, bakery, true)
+    route = create(:route, bakery: bakery)
+    client = create(:client, bakery: bakery, notes: "Knock loudly")
+    shipment = create(:shipment, bakery: bakery, route: route, client: client, note: "Leave at side door")
+    create(:shipment_item, bakery: bakery, shipment: shipment)
+
+    text = pdf_text(PackingSlipsPdf.new([shipment], bakery, false).render)
+
+    expect(text).to include("Notes")
+    expect(text).to include("Knock loudly")
+    expect(text).to include("Leave at side door")
+  end
+
+  it "renders VIP star indicator when shipment is flagged alert" do
+    bakery = create(:bakery)
+    route = create(:route, bakery: bakery)
+    client = create(:client, bakery: bakery)
+    shipment = create(:shipment, bakery: bakery, route: route, client: client, alert: true)
+    create(:shipment_item, bakery: bakery, shipment: shipment)
+
+    pdf_bytes = PackingSlipsPdf.new([shipment], bakery, false).render
+    expect(pdf_bytes).to start_with("%PDF")
+    expect(pdf_text(pdf_bytes)).to include("Packing Slip")
+  end
+
+  it "renders multiple shipments without error" do
+    bakery = create(:bakery)
+    shipments = create_list(:shipment, 2, bakery: bakery)
+    pdf = PackingSlipsPdf.new(shipments, bakery, false)
     expect(pdf.render).to_not be_nil
   end
 end

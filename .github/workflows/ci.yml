@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [master, upgrade]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bakecycle_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      RAILS_ENV: test
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME_TEST: bakecycle_test
+      REDIS_URL: redis://localhost:6379/1
+      SECRET_KEY_BASE: test-secret-key-base-for-ci-only
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.1'
+          bundler-cache: true
+
+      - name: Install JS dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build JS
+        run: npm run build
+
+      - name: Run JS tests
+        run: npm test
+
+      - name: Set up database
+        run: bundle exec rails db:schema:load
+
+      - name: Run Ruby specs
+        run: bundle exec rspec

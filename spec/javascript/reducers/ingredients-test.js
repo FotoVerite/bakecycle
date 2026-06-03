@@ -7,6 +7,7 @@ describe('ingredients reducer', () => {
       ingredients: {},
       filter: {},
       weightUnitOptions: {},
+      availableVendors: {},
     });
   });
 

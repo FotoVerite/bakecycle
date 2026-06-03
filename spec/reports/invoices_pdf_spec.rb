@@ -55,7 +55,20 @@ describe InvoicesPdf do
     expect(text).to include("Leave by the back door")
   end
 
-  it "renders invoices from a collection of shipments" do
+  it "renders PO number column when shipment has a po_number" do
+    bakery = create(:bakery)
+    route = create(:route, bakery: bakery)
+    client = create(:client, bakery: bakery)
+    shipment = create(:shipment, bakery: bakery, route: route, client: client, po_number: "PO-9988")
+    create(:shipment_item, bakery: bakery, shipment: shipment)
+
+    text = pdf_text(InvoicesPdf.new(bakery, Shipment.where(id: shipment.id)).render)
+
+    expect(text).to include("PO Number")
+    expect(text).to include("PO-9988")
+  end
+
+  it "renders multiple shipments without error" do
     bakery = create(:bakery)
     create_list(:shipment, 2, bakery: bakery)
     pdf = InvoicesPdf.new(bakery, bakery.shipments)

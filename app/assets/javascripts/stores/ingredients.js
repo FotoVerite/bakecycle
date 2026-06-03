@@ -1,14 +1,11 @@
-import { createStore, compose } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import ingredientReducer from '../reducers/ingredients';
 
-const configureStore = initialState => {
-  // take the order items off of the order so we can separate out the reducers
-  return createStore(ingredientReducer, {
-    ...initialState
-  }, compose(
-    // enable dev tools
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  ));
+const createIngredientStore = initialState => {
+  return configureStore({
+    reducer: ingredientReducer,
+    preloadedState: { ...initialState },
+  });
 };
 
-export default configureStore;
+export default createIngredientStore;

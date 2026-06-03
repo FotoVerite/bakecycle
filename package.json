@@ -14,9 +14,11 @@
     "build:prod": "esbuild app/assets/javascripts/app.js --bundle --minify --outfile=app/assets/builds/bakecycle.js --loader:.jsx=jsx --define:global=globalThis",
     "build:watch": "esbuild app/assets/javascripts/app.js --bundle --outfile=app/assets/builds/bakecycle.js --loader:.jsx=jsx --define:global=globalThis --watch",
     "test": "jest",
+    "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --collectCoverageFrom='app/assets/javascripts/{actions,reducers,constants}/**/*.{js,jsx}'"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.12.0",
     "classlist-polyfill": "^1.0.2",
     "core-js": "^2.4.0",
     "create-react-class": "^15.6.0",
