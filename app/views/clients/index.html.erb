@@ -12,5 +12,91 @@
     <% end %>
   </div>
 
-  <%= react_component('ClientsTable', clients.serializable_hash) %>
+  <div data-controller="filter-table">
+    <div class="index-toolbar bakecycle-form">
+      <div class="index-filter index-filter-primary">
+        <div class="input string optional">
+          <label class="string optional">Name</label>
+          <input class="string optional"
+                 placeholder="Client Name"
+                 type="text"
+                 data-filter-table-target="nameInput"
+                 data-action="input->filter-table#filter keydown->filter-table#navigateIfOne" />
+        </div>
+      </div>
+      <div class="index-filter index-filter-medium">
+        <div class="input string optional">
+          <label class="string optional">Status</label>
+          <select data-filter-table-target="statusSelect"
+                  data-action="change->filter-table#filter">
+            <option value="current" selected>Current</option>
+            <option value="lapsed">Lapsed</option>
+            <option value="prospective">Prospective</option>
+            <option value="any">Any</option>
+          </select>
+        </div>
+      </div>
+      <div class="index-filter index-filter-small">
+        <div class="input string optional">
+          <label class="string optional">Active</label>
+          <select data-filter-table-target="activeSelect"
+                  data-action="change->filter-table#filter">
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+            <option value="any">Any</option>
+          </select>
+        </div>
+      </div>
+      <div class="index-toolbar-actions">
+        <a class="button small secondary"
+           target="_blank"
+           href="<%= print_client_list_clients_path(type: 'true') %>"
+           data-filter-table-target="exportLink">Export Client List</a>
+      </div>
+    </div>
+
+    <div class="index-table">
+      <table class="responsive-table clients-index">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Status</th>
+            <th scope="col">Active</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @clients.each do |client| %>
+            <tr class="js-clickable-row"
+                data-filter-table-target="row"
+                data-name="<%= client.name %>"
+                data-status="<%= client.engagement_status %>"
+                data-active="<%= client.active %>"
+                data-href="<%= client_path(client) %>">
+              <th scope="row"><a href="<%= client_path(client) %>"><%= client.name %></a></th>
+              <td data-title="Status"><%= client.engagement_status.capitalize %></td>
+              <td data-title="Active"><%= client.active? ? 'Yes' : 'No' %></td>
+              <td data-title="Actions">
+                <a href="<%= edit_client_path(client) %>">
+                  <span class="table-action-icon icon-link-tooltip" aria-label="Edit Client">
+                    <i class="fi-page-edit"></i>
+                  </span>
+                </a>
+                <a href="<%= client_path(client) %>">
+                  <span class="table-action-icon icon-link-tooltip" aria-label="View Client">
+                    <i class="fi-eye"></i>
+                  </span>
+                </a>
+                <a href="<%= new_order_path(client_id: client.id) %>">
+                  <span class="table-action-icon icon-link-tooltip" aria-label="Add Order For This Client">
+                    <i class="fi-page-add"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

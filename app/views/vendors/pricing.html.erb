@@ -1,4 +1,43 @@
 <h1><%= @vendor.name %> Ingredient Pricing</h1>
+
 <%= form_tag update_pricing_vendor_path(@vendor), method: 'patch' do %>
-  <%= react_component('VendorPricingFormProvider', VendorPricingForm.new(ingredients: @ingredients, vendor: @vendor).serializable_hash) %>
+  <fieldset data-controller="ingredient-filter">
+    <legend>Pricing</legend>
+
+    <div class="filter">
+      <div class="input select">
+        <label>Filter</label>
+        <select multiple
+                data-ingredient-filter-target="filter"
+                data-action="change->ingredient-filter#filter">
+          <% @ingredients.order(:name).each do |ingredient| %>
+            <option value="<%= ingredient.id %>"><%= ingredient.name %></option>
+          <% end %>
+        </select>
+      </div>
+      <br />
+      <input type="submit" value="Update Pricing" class="button btn" />
+    </div>
+
+    <div class="row show-for-large-up">
+      <div class="small-12 columns">
+        <div class="costing-ingredient-name"><label>Ingredient</label></div>
+        <div class="ingredient-cost-input"><label>Cost Per Unit</label></div>
+        <div class="ingredient-weight-units"><label>Bought By Units</label></div>
+        <div class="ingredient-conversion"><label>Conversion</label></div>
+        <div class="ingredient-current-cost-per-gram"><label>Cost/Gram</label></div>
+        <div class="ingredient-last-updated-at"><label>Updated At</label></div>
+      </div>
+    </div>
+
+    <% @ingredients.order(:ingredient_type, :name).group_by { |i| i.ingredient_type.humanize }.sort.each do |type, ingredients| %>
+      <hr />
+      <h2><%= type %></h2>
+      <% ingredients.each do |ingredient| %>
+        <%= render 'vendors/pricing_ingredient_row', ingredient: ingredient, vendor: @vendor %>
+      <% end %>
+    <% end %>
+
+    <input type="submit" value="Update Pricing" class="button btn" />
+  </fieldset>
 <% end %>

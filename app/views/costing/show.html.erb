@@ -1,3 +1,42 @@
 <%= form_tag costing_path, method: 'patch' do %>
-  <%= react_component('CostingFormProvider', CostingForm.new(ingredients: @ingredients, user: current_user).serializable_hash) %>
+  <fieldset data-controller="ingredient-filter">
+    <legend>Costing</legend>
+
+    <div class="filter">
+      <div class="input select">
+        <label>Filter</label>
+        <select multiple
+                data-ingredient-filter-target="filter"
+                data-action="change->ingredient-filter#filter">
+          <% @ingredients.each do |ingredient| %>
+            <option value="<%= ingredient.id %>"><%= ingredient.name %></option>
+          <% end %>
+        </select>
+      </div>
+      <br />
+      <input type="submit" value="Update Costing" class="button btn" />
+    </div>
+
+    <div class="row show-for-large-up">
+      <div class="small-12 columns">
+        <div class="costing-ingredient-name"><label>Ingredient</label></div>
+        <div class="ingredient-vendor-selection"><label>Vendor</label></div>
+        <div class="ingredient-cost-input"><label>Cost Per Unit</label></div>
+        <div class="ingredient-current-amount-grams"><label>Conversion To Grams</label></div>
+        <div class="ingredient-weight-units"><label>Bought By Units</label></div>
+        <div class="ingredient-conversion"><label>Conversion</label></div>
+        <div class="ingredient-current-cost-per-gram"><label>Cost/Gram</label></div>
+      </div>
+    </div>
+
+    <% @ingredients.group_by { |i| i.ingredient_type.humanize }.sort.each do |type, ingredients| %>
+      <hr />
+      <h2><%= type %></h2>
+      <% ingredients.each do |ingredient| %>
+        <%= render 'costing/ingredient_row', ingredient: ingredient, vendors: @vendors %>
+      <% end %>
+    <% end %>
+
+    <input type="submit" value="Update Costing" class="button btn" />
+  </fieldset>
 <% end %>

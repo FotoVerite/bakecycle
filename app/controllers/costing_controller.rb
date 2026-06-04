@@ -4,7 +4,8 @@ class CostingController < ApplicationController
   def show
     @bakery = policy_scope(Bakery).find(current_user.bakery.id)
     authorize Ingredient
-    @ingredients = @bakery.ingredients
+    @ingredients = @bakery.ingredients.order(:ingredient_type, :name)
+    @vendors = ItemFinder.new(current_user).vendors.order(:name)
   end
 
   def update

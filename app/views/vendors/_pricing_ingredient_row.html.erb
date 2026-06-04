@@ -1,0 +1,58 @@
+<% cost = ingredient.cost_by_vendor(vendor) %>
+<% conv = ingredient.conversion.to_f.nonzero? || 1.0 %>
+<div class="row ingredient"
+     data-ingredient-id="<%= ingredient.id %>"
+     data-ingredient-filter-target="row"
+     data-controller="ingredient-row"
+     data-action="change->ingredient-row#change input->ingredient-row#change">
+  <div class="small-12 columns">
+    <span class="costing-ingredient-name">
+      <h3><%= ingredient.name %></h3>
+    </span>
+    <input type="hidden" value="false" name="bakery[ingredients_attributes][<%= ingredient.id %>][dirty]"
+           data-ingredient-row-target="dirty" />
+    <input type="hidden" value="<%= ingredient.id %>" name="bakery[ingredients_attributes][<%= ingredient.id %>][id]" />
+    <input type="hidden" value="<%= vendor.id %>" name="bakery[ingredients_attributes][<%= ingredient.id %>][cost_over_time_vendor_id]" />
+    <input type="hidden" value=""
+           name="bakery[ingredients_attributes][<%= ingredient.id %>][updated_at]"
+           data-ingredient-row-target="updatedAt" />
+
+    <div class="ingredient-cost-input">
+      <label class="hide-for-large-up">Cost Per Unit</label>
+      <input type="number" step="0.01" autocomplete="off"
+             value="<%= cost %>"
+             name="bakery[ingredients_attributes][<%= ingredient.id %>][cost]"
+             data-ingredient-row-target="cost" />
+    </div>
+
+    <div class="ingredient-current-amount-grams">
+      <label class="hide-for-large-up">Amount in</label>
+      <select name="bakery[ingredients_attributes][<%= ingredient.id %>][weight_unit]">
+        <% Ingredient::WEIGHT_UNITS.each do |unit| %>
+          <option value="<%= unit %>" <%= 'selected' if unit == (ingredient.weight_unit || 'grams') %>><%= unit %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <div class="ingredient-conversion">
+      <label class="hide-for-large-up">Conversion</label>
+      <input type="number" step="0.001" autocomplete="off"
+             value="<%= ingredient.conversion %>"
+             name="bakery[ingredients_attributes][<%= ingredient.id %>][conversion]"
+             data-ingredient-row-target="conversion" />
+    </div>
+
+    <div class="ingredient-current-cost-per-gram">
+      <label class="hide-for-large-up">Current Cost Per Gram</label>
+      <input type="text" disabled
+             value="<%= '%0.4f' % (cost.to_f / conv) %>"
+             data-ingredient-row-target="costPerGram" />
+    </div>
+
+    <div class="ingredient-last-updated-at">
+      <label class="hide-for-large-up">Updated At</label>
+      <% updated_at = ingredient.pricing_updated_last_at(vendor) %>
+      <input type="text" disabled value="<%= updated_at ? updated_at.strftime('%b %-d, %y') : 'NA' %>" />
+    </div>
+  </div>
+</div>
