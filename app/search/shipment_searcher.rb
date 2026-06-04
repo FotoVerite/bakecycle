@@ -22,36 +22,43 @@ class ShipmentSearcher
 
   def search_by_client(client_id)
     return if client_id.blank?
+
     @collection = @collection.where(client_id: client_id)
   end
 
   def search_by_product(product_id)
     return if product_id.blank?
+
     @collection = @collection.joins(:shipment_items).where(shipment_items: { product_id: product_id })
   end
 
   def search_by_date(date)
     return if date.blank?
+
     @collection = @collection.where(date: date)
   end
 
   def search_by_route(route_id)
     return if route_id.blank?
+
     @collection = @collection.where(route_id: route_id)
   end
 
   def search_by_date_from(date_from)
     return if date_from.blank?
+
     @collection = @collection.where("date >= ?", date_from)
   end
 
   def search_by_date_to(date_to)
     return if date_to.blank?
+
     @collection = @collection.where("date <= ?", date_to)
   end
 
   def search_by_sequence_number(sequence_number)
     return if sequence_number.blank?
+
     @collection = @collection.where("sequence_number::text LIKE ?", "#{sequence_number}")
   end
 end

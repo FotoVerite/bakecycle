@@ -27,7 +27,8 @@ RSpec.describe "Vendors", type: :request do
 
     it "creates a vendor" do
       expect {
-        post vendors_path, params: { vendor: { name: "Flour Co", contact: "Jane", email: "jane@flour.co", phone: "555-1234" } }
+        post vendors_path,
+             params: { vendor: { name: "Flour Co", contact: "Jane", email: "jane@flour.co", phone: "555-1234" } }
       }.to change(Vendor, :count).by(1)
       expect(flash[:notice]).to match(/You have created/)
     end

@@ -1,5 +1,6 @@
 class BaseSearchForm
   attr_reader :params
+
   include GlobalID::Identification
 
   def self.params

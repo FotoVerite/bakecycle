@@ -23,7 +23,6 @@ class TotalSalesGenerator
     "TotalSales_#{@start_date.iso8601}_#{@end_date.iso8601}.csv"
   end
 
-
   def generate
     TotalSalesXlsx.new(@bakery, @start_date, @end_date).generate
   end

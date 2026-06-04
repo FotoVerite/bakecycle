@@ -9,7 +9,8 @@ class TotalSalesXlsx
     CSV.generate do |csv|
       csv << header
       @shipments.each do |shipment|
-        shipment_info = [shipment.invoice_number, shipment.date, shipment.updated_at.strftime("%Y-%m-%d %k:%M"), shipment.client.name]
+        shipment_info = [shipment.invoice_number, shipment.date, shipment.updated_at.strftime("%Y-%m-%d %k:%M"),
+                         shipment.client.name]
         shipment.shipment_items.each do |item|
           csv << invoice_row(shipment_info, item)
         end
@@ -36,7 +37,8 @@ class TotalSalesXlsx
   def invoice_row(shipment_info, item)
     row = shipment_info.dup
     Rails.logger.error row
-    row += [item.product_product_type, item.product_name, item.product_quantity, item.product_sku, number_to_currency(item.product_quantity * item.product_price)]
+    row += [item.product_product_type, item.product_name, item.product_quantity, item.product_sku,
+            number_to_currency(item.product_quantity * item.product_price)]
     Rails.logger.error row
     return row
   end

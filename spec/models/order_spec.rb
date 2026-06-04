@@ -194,7 +194,8 @@ describe Order do
 
     it "returns false if there are overlapping orders for other clients and temporary orders" do
       order = create(:order, bakery: bakery, start_date: today, end_date: today, order_item_count: 0)
-      create(:temporary_order, bakery: bakery, route: order.route, client: order.client, start_date: today, order_item_count: 0)
+      create(:temporary_order, bakery: bakery, route: order.route, client: order.client, start_date: today,
+                               order_item_count: 0)
       create(:order, bakery: bakery, route: order.route, start_date: today, order_item_count: 0)
       create(:order, bakery: bakery, client: order.client, start_date: today, order_item_count: 0)
       expect(order).to_not be_overlapping
@@ -238,11 +239,11 @@ describe Order do
         start_date, end_date, result = combo.values_at(:start_date, :end_date, :result)
         old_order.update(start_date: start_date, end_date: end_date)
         new_order = build_stubbed(:order,
-          bakery: bakery,
-          start_date: today,
-          end_date: nil,
-          route: route,
-          client: client)
+                                  bakery: bakery,
+                                  start_date: today,
+                                  end_date: nil,
+                                  route: route,
+                                  client: client)
         expect(new_order.overridable_order.present?).to eq(result)
       end
     end
@@ -351,7 +352,9 @@ describe Order do
 
   describe "#no_outstanding_shipments?" do
     describe "order that goes to production today" do
-      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 1, order_item_count: 1, bakery: bakery) }
+      let(:order) {
+        create(:order, start_date: yesterday, force_total_lead_days: 1, order_item_count: 1, bakery: bakery)
+      }
 
       it "returns true if it is before kickoff" do
         create(:shipment, date: Time.zone.today, order: order, bakery: bakery)
@@ -398,7 +401,9 @@ describe Order do
     end
 
     describe "order that has a total_lead_days of 2" do
-      let(:order) { create(:order, start_date: yesterday, force_total_lead_days: 2, order_item_count: 1, bakery: bakery) }
+      let(:order) {
+        create(:order, start_date: yesterday, force_total_lead_days: 2, order_item_count: 1, bakery: bakery)
+      }
 
       it "returns true if it is before kickoff" do
         create(:shipment, date: Time.zone.today, order: order, bakery: bakery)

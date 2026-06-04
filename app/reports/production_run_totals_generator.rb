@@ -27,7 +27,6 @@ class ProductionRunTotalsGenerator
     end
   end
 
-
   def generate
     if @type == "daily"
       DailyProductionRunTotalsXlsx.new(@bakery, @date).generate

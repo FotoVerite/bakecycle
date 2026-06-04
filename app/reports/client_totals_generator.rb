@@ -27,7 +27,6 @@ class ClientTotalsGenerator
     end
   end
 
-
   def generate
     if @type == "daily"
       DailyClientTotalsXlsx.new(@bakery, @date).generate

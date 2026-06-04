@@ -16,6 +16,7 @@ class BasePdfReport < Prawn::Document
 
   def stamp_or_create(name, &block)
     return stamp(name) if @stamps[name]
+
     create_stamp(name, &block)
     @stamps[name] = true
     stamp(name)
@@ -51,6 +52,7 @@ class BasePdfReport < Prawn::Document
   def bakery_logo_display(bakery)
     bakery_logo_image = bakery.logo_local_file(:invoice)
     return image bakery_logo_image, fit: [260, 60] if bakery_logo_image
+
     text_box bakery.name.upcase, size: 60, overflow: :shrink_to_fit
   end
 

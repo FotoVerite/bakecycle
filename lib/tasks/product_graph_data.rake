@@ -5,6 +5,7 @@ namespace :product_graph_data do
       bakery.products.each do |product|
         hash = { dates: [], amounts: [], shipped: [], shipments_count: [] }
         next if product.shipment_items.empty?
+
         items = product.shipment_items.joins(:shipment).order("shipments.date ASC")
         (items.first.shipment.date...Time.zone.today).each_with_index do |date, i|
           date_shipments = items.where("shipments.date" => date)
@@ -35,9 +36,11 @@ namespace :product_graph_data do
       bakery.products.each do |product|
         hash = product.graph_data
         next if product.shipment_items.empty?
+
         items = product.shipment_items.joins(:shipment).order("shipments.date ASC")
         ((Time.zone.today - 1.week)...Time.zone.today).each do |date|
           next if product.graph_data["dates"].nil?
+
           date_shipments = items.where("shipments.date" => date)
           i = hash["dates"].index date.strftime("%Y-%m-%d")
           i ||= hash["dates"].count

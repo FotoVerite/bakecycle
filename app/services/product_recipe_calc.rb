@@ -1,5 +1,6 @@
 class ProductRecipeCalc
   attr_reader :product, :quantity, :inclusion, :recipe
+
   def initialize(product, quantity)
     @product = product
     @quantity = quantity
@@ -19,6 +20,7 @@ class ProductRecipeCalc
 
   def inclusion_info
     return nil unless inclusion
+
     {
       product: product,
       recipe: inclusion,
@@ -44,6 +46,7 @@ class ProductRecipeCalc
 
   def percent_weight
     return product_weight if dough_percentage_zero? && inclusion_percentage_zero?
+
     product_weight / (dough_percentage + inclusion_percentage)
   end
 
@@ -57,6 +60,7 @@ class ProductRecipeCalc
 
   def inclusion_percentage
     return 0 unless inclusion
+
     inclusion.total_bakers_percentage
   end
 

@@ -20,7 +20,6 @@ class VipListGenerator
     "VipList-#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     VipListXlsx.new(@bakery).generate
   end

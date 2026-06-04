@@ -3,9 +3,9 @@ class InvoicePage
   include ActionView::Helpers::NumberHelper
 
   def_delegators :@pdf,
-    :start_new_page, :stamp_or_create, :bounding_box, :grid, :cursor,
-    :text, :font_size, :table, :move_down,
-    :bakery_logo_display, :bakery_info
+                 :start_new_page, :stamp_or_create, :bounding_box, :grid, :cursor,
+                 :text, :font_size, :table, :move_down,
+                 :bakery_logo_display, :bakery_info
 
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
@@ -59,7 +59,8 @@ class InvoicePage
   end
 
   def information
-    sizing = @shipment.po_number.blank? ? [114.4, 114.4, 114.4, 114.4, 114.4] : [95.33, 95.33, 95.33, 95.33, 95.33, 95.33]
+    sizing = @shipment.po_number.blank? ? [114.4, 114.4, 114.4, 114.4,
+                                           114.4] : [95.33, 95.33, 95.33, 95.33, 95.33, 95.33]
     table(information_rows, column_widths: sizing) do
       column(0..4).style(align: :center)
       row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)

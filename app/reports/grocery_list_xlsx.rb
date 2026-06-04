@@ -23,12 +23,14 @@ class GroceryListXlsx
   def seperate_item_ingredients_into_list(hash, items, day_of_week)
     items.each do |item|
       next unless item.product.motherdough
+
       data = CostingRecipeData.new(item.product, item.attributes[day_of_week])
       data.motherdough.items.each do |m_item|
         hash[m_item[:name]] = 0 unless hash[m_item[:name]]
         hash[m_item[:name]] += m_item[:weight].to_g.to_f
       end
       next unless data.inclusion
+
       data.inclusion.items.each do |i_item|
         hash[i_item[:name]] = 0 unless hash[i_item[:name]]
         hash[i_item[:name]] += i_item[:weight].to_g.to_f
@@ -41,6 +43,7 @@ class GroceryListXlsx
     # Set Product Type Row
     weights.each_key do |key|
       next unless weights[key].to_i > 0
+
       sheet.add_row [key, weights[key]]
     end
   end

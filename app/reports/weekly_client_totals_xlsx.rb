@@ -79,6 +79,7 @@ class WeeklyClientTotalsXlsx
       sheet.add_row [client], style: @client_style
       sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
       next unless hash[client][:products]
+
       hash[client][:products].each do |key, product_values|
         sheet.add_row [key], style: @header
         sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")

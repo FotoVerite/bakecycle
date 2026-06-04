@@ -2,9 +2,9 @@ class PackingSlipPage
   extend Forwardable
 
   def_delegators :@pdf,
-    :start_new_page, :stamp_or_create, :bounding_box, :grid, :cursor,
-    :text, :font_size, :table, :move_down, :image,
-    :bakery_logo_display, :bakery_info
+                 :start_new_page, :stamp_or_create, :bounding_box, :grid, :cursor,
+                 :text, :font_size, :table, :move_down, :image,
+                 :bakery_logo_display, :bakery_info
 
   def initialize(shipment, bakery, pdf)
     @shipment = shipment.decorate
@@ -44,7 +44,7 @@ class PackingSlipPage
     # Add alert star
     grid([0, 11.3], [0, 11.3]).bounding_box {
       image Rails.root.join("app", "assets", "images", "icons", "star.png"),
-      fit: [20, 20]
+            fit: [20, 20]
     }
   end
 
@@ -73,6 +73,7 @@ class PackingSlipPage
 
   def shipment_items_table
     return if shipment_items_rows.length == 1
+
     table(shipment_items_rows, column_widths: [300, 100, 57.3, 57.3, 57.3]) do
       row(0).style(background_color: @pdf.class::HEADER_ROW_COLOR)
       column(0).style(align: :left)

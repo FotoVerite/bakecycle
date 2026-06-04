@@ -31,6 +31,7 @@ class ProductCounter
 
   def product_counts
     return @_product_counts if @_product_counts
+
     @_product_counts = shipment_items.each_with_object({}) do |item, count|
       route_id = shipment_route_index[item.shipment_id]
       product_id = item.product_id

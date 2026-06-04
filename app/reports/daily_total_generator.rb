@@ -24,7 +24,6 @@ class DailyTotalGenerator
     "DailyTotal_#{@date}_#{@show_routes}.#{@type}"
   end
 
-
   def generate
     if @type == "pdf"
       DailyTotalPdf.new(@bakery, @date).render

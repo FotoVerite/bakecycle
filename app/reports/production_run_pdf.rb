@@ -33,6 +33,7 @@ class ProductionRunPdf < BasePdfReport
 
   def run_label
     return "Production Run ##{run_data.id}" if run_data.id
+
     "Production Run PROJECTION"
   end
 

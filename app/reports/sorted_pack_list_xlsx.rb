@@ -2,7 +2,8 @@ class SortedPackListXlsx
   def initialize(bakery, date)
     @bakery = bakery
     @date = date
-    @grouped_shipments = Shipment.where(bakery: bakery, date: date).order("route_name ASC, client_name ASC").group_by(&:route_name)
+    @grouped_shipments = Shipment.where(bakery: bakery,
+                                        date: date).order("route_name ASC, client_name ASC").group_by(&:route_name)
   end
 
   def generate

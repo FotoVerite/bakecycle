@@ -73,7 +73,8 @@ RSpec.describe ShipmentGraphDataService do
   def create_shipment_with_item(bakery, date, quantity:, price:)
     product = create(:product, :with_motherdough, bakery: bakery)
     shipment = create(:shipment, bakery: bakery, date: date)
-    create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: quantity, product_price: price)
+    create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: quantity,
+                           product_price: price)
     shipment
   end
 

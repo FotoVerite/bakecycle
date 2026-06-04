@@ -28,6 +28,7 @@ class Registration
 
   def save!
     raise ActiveRecord::RecordInvalid, self unless valid?
+
     ActiveRecord::Base.transaction do
       bakery.save! && user.save!
     end
@@ -94,6 +95,7 @@ class Registration
 
   def bakery_valid?
     return if bakery.valid?
+
     if bakery.errors[:name].any?
       errors.add(:bakery_name, bakery.errors[:name].first)
     else
@@ -103,6 +105,7 @@ class Registration
 
   def user_valid?
     return if user.valid?
+
     if user.errors[:email].any?
       errors.add(:email, user.errors[:email].first)
     else

@@ -47,7 +47,7 @@ class ClientsPerProductForWeekXlsx
     product_name = item.product.name
     day_quantity = item.send(day_name.downcase)
     hash[product_name] = {} unless hash[product_name]
-    hash[product_name][client] = {total_quantity: 0} unless hash[product_name][client]
+    hash[product_name][client] = { total_quantity: 0 } unless hash[product_name][client]
     client_hash = hash[product_name][client]
 
     # days

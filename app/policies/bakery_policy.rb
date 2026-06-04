@@ -62,6 +62,7 @@ class BakeryPolicy < ApplicationPolicy
     def resolve
       return scope.all if admin?
       return scope.where(id: user.bakery_id) if read_permission?
+
       scope.none
     end
 

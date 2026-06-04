@@ -1,5 +1,6 @@
 class InvoicesPdfGenerator
   attr_reader :bakery, :search
+
   include Generator
 
   def self.find(id)

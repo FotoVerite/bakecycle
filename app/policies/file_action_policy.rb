@@ -6,6 +6,7 @@ class FileActionPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.all if admin?
+
       scope.where(bakery_id: user.bakery_id)
     end
   end

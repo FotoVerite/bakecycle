@@ -22,6 +22,6 @@
 
 class OrderSerializer < ActiveModel::Serializer
   attributes :alert, :discount, :id, :start_date, :end_date, :start_date, :order_type,
-    :errors, :client_id, :route_id, :total_lead_days, :note
+             :errors, :client_id, :route_id, :total_lead_days, :note
   has_many :order_items
 end

@@ -59,6 +59,7 @@ class ShipmentItem < ApplicationRecord
 
   def in_production?
     return false if production_start == Time.zone.today && !after_kickoff_time?
+
     product_duration.include?(Time.zone.today)
   end
 
@@ -68,6 +69,7 @@ class ShipmentItem < ApplicationRecord
 
   def set_production_start
     return unless shipment && shipment.date
+
     self.production_start = shipment.date - product_total_lead_days
   end
 

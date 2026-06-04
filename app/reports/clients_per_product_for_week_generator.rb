@@ -21,7 +21,6 @@ class ClientsPerProductForWeekGenerator
     "ClientsPerProductForWeek#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     ClientsPerProductForWeekXlsx.new(@bakery, @date).generate
   end

@@ -36,7 +36,8 @@ describe InvoicesPdf do
       delivery_fee: 3.50,
       note: "Leave by the back door"
     )
-    create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: 4, product_price: 4.25)
+    create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: 4,
+                           product_price: 4.25)
 
     text = pdf_text(InvoicesPdf.new(bakery, Shipment.where(id: shipment.id)).render)
 

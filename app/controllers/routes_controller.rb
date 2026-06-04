@@ -64,6 +64,7 @@ class RoutesController < ApplicationController
 
   def error_if_remaining_route
     return false unless last_remaining_route?
+
     flash[:error] = "Cannot delete last remaining route"
     redirect_to edit_route_path(@route)
   end

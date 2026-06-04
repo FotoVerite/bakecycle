@@ -38,8 +38,8 @@ class Order < ApplicationRecord
       .includes(:product)
       .order("products.name ASC")
   },
-    dependent: :destroy,
-    inverse_of: :order
+           dependent: :destroy,
+           inverse_of: :order
   has_many :all_order_items, dependent: :destroy, class_name: "OrderItem", inverse_of: :order
 
   has_many :shipments, dependent: :nullify
@@ -79,7 +79,7 @@ class Order < ApplicationRecord
   after_touch :update_total_lead_days
 
   scope :search, ->(terms) { OrderSearcher.search(self, terms) }
-  scope :active_orders, -> {where("end_date IS NULL OR end_date >= ?", Time.zone.today)}
+  scope :active_orders, -> { where("end_date IS NULL OR end_date >= ?", Time.zone.today) }
   scope :created_at_date, ->(date = Time.zone.today) { where(created_at: date.beginning_of_day..date.end_of_day) }
   scope :updated_at_date, lambda { |date = Time.zone.today|
     where(updated_at: date.beginning_of_day..date.end_of_day)
@@ -122,6 +122,7 @@ class Order < ApplicationRecord
       # test if for this day of the week there are any items. If not there should be no invoice.
       next if order_items.sum(date.strftime("%A").downcase).zero?
       next if self.class.active(date).where(id: id).empty?
+
       dates.push date if shipments.where(date: date).empty?
     end
     dates
@@ -154,6 +155,7 @@ class Order < ApplicationRecord
   def end_date_is_not_before_start_date
     return unless end_date && start_date
     return unless end_date < start_date
+
     errors.add(:end_date, "The end date cannot be before the start date")
   end
 
@@ -163,6 +165,7 @@ class Order < ApplicationRecord
 
   def overlapping_orders
     return Order.none unless start_date
+
     overlapping = Order
       .where(bakery: bakery, client: client, route: route, order_type: order_type)
       .where.not(id: id)
@@ -177,6 +180,7 @@ class Order < ApplicationRecord
 
   def overridable_order
     return if overlapping_orders.count > 1
+
     overrideable = overlapping_orders.where("start_date < ?", start_date)
     overrideable = overrideable.where("end_date <= ? OR end_date is null", end_date) if end_date
     overrideable.last

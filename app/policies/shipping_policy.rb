@@ -44,6 +44,7 @@ class ShippingPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       return scope.where(bakery_id: user.bakery_id) if read_permission?
+
       scope.none
     end
 

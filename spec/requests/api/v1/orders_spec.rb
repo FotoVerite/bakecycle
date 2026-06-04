@@ -46,8 +46,8 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
     it "updates the standing order's note" do
       patch "/api/v1/orders",
-        params: { order: { note: "Ring the bell" } },
-        headers: jwt_auth_header(client.id)
+            params: { order: { note: "Ring the bell" } },
+            headers: jwt_auth_header(client.id)
       expect(response).to have_http_status(:ok)
       body = JSON.parse(response.body)
       expect(body["success"]).to be true

@@ -1,14 +1,14 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: %i[
-                              add_invoices
-                              copy
-                              destroy
-                              edit
-                              future_invoices
-                              print
-                              papertrail
-                              update
-                            ]
+    add_invoices
+    copy
+    destroy
+    edit
+    future_invoices
+    print
+    papertrail
+    update
+  ]
   before_action :skip_policy_scope, only: %i[grocery_list print_grocery_list]
   decorates_assigned :orders, :order
   helper_method :search_form

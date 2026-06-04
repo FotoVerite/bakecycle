@@ -14,6 +14,7 @@ class KickoffService
 
   def run
     return unless kickoff?
+
     ShipmentService.new(bakery, run_time).run
     ProductionRunService.new(bakery, run_time).run
     bakery.update!(last_kickoff: run_time)
@@ -33,6 +34,7 @@ class KickoffService
 
   def kickoff_expired?
     return true unless bakery.last_kickoff
+
     bakery.last_kickoff.tomorrow.beginning_of_day <= run_time
   end
 end

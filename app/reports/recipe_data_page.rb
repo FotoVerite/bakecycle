@@ -6,7 +6,7 @@ class RecipeDataPage
   attr_reader :recipe_run_data
 
   def_delegators :@pdf,
-    :start_new_page, :define_grid, :grid, :text_box, :table, :move_down
+                 :start_new_page, :define_grid, :grid, :text_box, :table, :move_down
 
   def initialize(pdf, recipe_run_data)
     @pdf = pdf
@@ -65,7 +65,7 @@ class RecipeDataPage
   end
 
   def header_info_data
-    #lead_days = ["Lead Days", recipe_run_data.total_lead_days]
+    # lead_days = ["Lead Days", recipe_run_data.total_lead_days]
     mix = ["Mix", display_date(recipe_run_data.mix_date)]
     deliver = ["Deliver", display_date(recipe_run_data.finished_date)]
     [mix, deliver]
@@ -92,6 +92,7 @@ class RecipeDataPage
 
   def products_table
     return if recipe_run_data.products.empty?
+
     table(product_data, column_widths: [52, 145, 32, 52], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
       column(0).style(align: :center)
@@ -142,6 +143,7 @@ class RecipeDataPage
 
   def inclusion_tables
     return if recipe_run_data.inclusions.empty?
+
     recipe_run_data.add_recipe_inclusions_info
     recipe_run_data.inclusions_info.each do |inclusion_info|
       move_down 10
@@ -221,6 +223,7 @@ class RecipeDataPage
 
   def nested_recipes_table
     return if recipe_run_data.nested_recipes.empty?
+
     move_down 15
     table(nested_recipes_data, column_widths: [169, 51, 61], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)
@@ -242,6 +245,7 @@ class RecipeDataPage
 
   def parent_recipes_table
     return if recipe_run_data.parent_recipes.empty?
+
     move_down 15 if recipe_run_data.products.any?
     table(parent_recipes_data, column_widths: [186, 95], cell_style: BasePdfReport::TABLE_STYLE) do
       row(0).style(background_color: BasePdfReport::HEADER_ROW_COLOR)

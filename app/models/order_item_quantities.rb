@@ -1,5 +1,6 @@
 class OrderItemQuantities
   attr_reader :product, :ship_date, :end_date
+
   delegate :name, :total_lead_days, :over_bake, to: :product, prefix: true
 
   def initialize(order_items, start_date, end_date = nil)
@@ -40,6 +41,7 @@ class OrderItemQuantities
 
   def validate_single_product
     return if @order_items.to_a.uniq(&:product_id).count == 1
+
     raise ArgumentError, "Order Items must belong to the same product"
   end
 end

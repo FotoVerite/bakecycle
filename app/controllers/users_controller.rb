@@ -91,6 +91,7 @@ class UsersController < ApplicationController
 
   def delete_passwords_if_blank(user)
     return if password_present?
+
     user.delete(:password)
     user.delete(:password_confirmation)
   end

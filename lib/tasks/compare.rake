@@ -58,6 +58,7 @@ class CompareProduction
     projection_item = projection_items[product]
     return "#{date} #{product.name} missing run_item" unless run_item
     return "#{date} #{product.name} missing projection_item" unless projection_item
+
     fields = CompareFields.new(date, run_item, projection_item)
     fields.order_quantity || fields.total_quantity
   end

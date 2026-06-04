@@ -20,7 +20,6 @@ class YearTotalGenerator
     "year_total_#{@year}.xlsx"
   end
 
-
   def generate
     YearTotalXlsx.new(@bakery, @year).generate
   end

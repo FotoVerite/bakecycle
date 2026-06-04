@@ -92,7 +92,8 @@ describe Shipment do
 
       it "removes daily delivery fee if minumum is updated to needed" do
         product = create(:product, :with_motherdough, bakery: bakery)
-        shipment.shipment_items = build_list(:shipment_item, 2, product: product, product_quantity: 5, product_price: 1.0, shipment: nil)
+        shipment.shipment_items = build_list(:shipment_item, 2, product: product, product_quantity: 5,
+                                                                product_price: 1.0, shipment: nil)
         shipment.delivery_fee = 5
         shipment.order = order
         shipment.save!

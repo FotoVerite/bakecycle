@@ -35,6 +35,7 @@ class CostingCalc
 
   def add_internal_ingredients(item, hash)
     return unless item.inclusionable_type == "Recipe"
+
     calculator = CostingCalc.new(item.inclusionable, hash[:weight])
     hash[:ingredients] = calculator.items
     hash[:cost] = calculator.total_cost

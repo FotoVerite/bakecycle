@@ -44,9 +44,11 @@ class RecipeRunData
   end
 
   attr_writer :mix_bowl_count
+
   def mix_bowl_count
     return @mix_bowl_count if @mix_bowl_count
     return 1 unless recipe.mix_size_with_unit > Unitwise(0, :kg)
+
     (weight / recipe.mix_size_with_unit).to_f.ceil
   end
 
@@ -64,6 +66,7 @@ class RecipeRunData
 
   def bowl_ingredient_weight(ingredient_info)
     return Unitwise(0, :kg) if ingredient_info[:weight] == Unitwise(0, :kg)
+
     ingredient_info[:weight] / mix_bowl_count
   end
 
@@ -73,6 +76,7 @@ class RecipeRunData
 
   def total_bowl_weight
     return Unitwise(0, :kg) if weight == Unitwise(0, :kg)
+
     weight / mix_bowl_count
   end
 
@@ -110,6 +114,7 @@ class RecipeRunData
   def inclusion_ingredients(inclusion, total_inclusion_weight)
     inclusion.recipe_items.map do |recipe_item|
       next unless recipe_item.inclusionable_type == "Ingredient"
+
       {
         ingredient: recipe_item.inclusionable,
         weight: weight_for(inclusion, recipe_item.bakers_percentage, total_inclusion_weight)

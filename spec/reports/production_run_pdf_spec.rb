@@ -14,7 +14,8 @@ describe ProductionRunPdf do
       mix_size: 2,
       mix_size_unit: :kg
     )
-    create(:recipe_item_ingredient, bakery: bakery, recipe: preferment, inclusionable: preferment_flour, bakers_percentage: 100)
+    create(:recipe_item_ingredient, bakery: bakery, recipe: preferment, inclusionable: preferment_flour,
+                                    bakers_percentage: 100)
 
     motherdough = create(
       :recipe_motherdough,
@@ -23,9 +24,12 @@ describe ProductionRunPdf do
       mix_size: 1,
       mix_size_unit: :kg
     )
-    create(:recipe_item_ingredient, bakery: bakery, recipe: motherdough, inclusionable: flour, bakers_percentage: 100, sort_id: 1)
-    create(:recipe_item_ingredient, bakery: bakery, recipe: motherdough, inclusionable: water, bakers_percentage: 70, sort_id: 2)
-    create(:recipe_item_recipe, bakery: bakery, recipe: motherdough, inclusionable: preferment, bakers_percentage: 20, sort_id: 3)
+    create(:recipe_item_ingredient, bakery: bakery, recipe: motherdough, inclusionable: flour, bakers_percentage: 100,
+                                    sort_id: 1)
+    create(:recipe_item_ingredient, bakery: bakery, recipe: motherdough, inclusionable: water, bakers_percentage: 70,
+                                    sort_id: 2)
+    create(:recipe_item_recipe, bakery: bakery, recipe: motherdough, inclusionable: preferment, bakers_percentage: 20,
+                                sort_id: 3)
 
     product = create(
       :product,
@@ -37,7 +41,8 @@ describe ProductionRunPdf do
       motherdough: motherdough
     )
     production_run = create(:production_run, bakery: bakery, date: run_date)
-    create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 10, overbake_quantity: 2)
+    create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 10,
+                      overbake_quantity: 2)
 
     pdf_bytes = ProductionRunPdf.new(ProductionRunData.new(production_run)).render
     text = pdf_text(pdf_bytes)

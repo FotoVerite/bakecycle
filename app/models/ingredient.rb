@@ -42,8 +42,8 @@ class Ingredient < ApplicationRecord
   has_many :buy_orders, dependent: :destroy
   has_one :todays_buy_order, lambda {
                                where("created_at between ? and ?",
-                                Time.zone.today.beginning_of_day,
-                                Time.zone.today.end_of_day)
+                                     Time.zone.today.beginning_of_day,
+                                     Time.zone.today.end_of_day)
                              }, class_name: "BuyOrder", inverse_of: :ingredient
 
   belongs_to :bakery
@@ -91,6 +91,7 @@ class Ingredient < ApplicationRecord
   def record_costing_change
     # We are tricking rails to run validation but setting updated_at in the form.
     return unless dirty == "true"
+
     ingredient_prices_over_time.create(
       vendor_id: cost_over_time_vendor_id,
       bakery_id: bakery_id,
@@ -103,6 +104,7 @@ class Ingredient < ApplicationRecord
 
   def check_for_recipes
     return unless recipe_items.any?
+
     errors.add(:base, I18n.t(:ingredient_in_use))
     throw(:abort)
   end

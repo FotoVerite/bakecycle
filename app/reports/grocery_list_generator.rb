@@ -21,7 +21,6 @@ class GroceryListGenerator
     "GroceryList-#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     GroceryListXlsx.new(@bakery, @date).generate
   end

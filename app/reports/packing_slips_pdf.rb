@@ -21,6 +21,7 @@ class PackingSlipsPdf < BasePdfReport
   def render_invoice(shipment)
     return unless @print_invoices
     return unless shipment.client.print_invoice
+
     InvoicePage.new(shipment, @bakery, self).render
   end
 end

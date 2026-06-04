@@ -119,6 +119,7 @@ class OrderItem < ApplicationRecord
 
   def touch_order
     return unless order && !order.destroyed?
+
     order.last_updated_by_user_id
     order.increment(:version_number)
     order.save

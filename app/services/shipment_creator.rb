@@ -10,6 +10,7 @@ class ShipmentCreator
     existing_shipment = Shipment.where(shipment_attributes).first
     return existing_shipment if existing_shipment
     return if shipment_items_is_empty_and_has_no_fee?
+
     create_shipment_transaction
   end
 
@@ -51,6 +52,7 @@ class ShipmentCreator
   def shipment_items
     @_shipment_items ||= order.order_items.includes(product: [:price_variants]).map do |item|
       next unless item.quantity(ship_date) > 0
+
       ShipmentItem.new(
         product: item.product,
         product_quantity: item.quantity(ship_date),
@@ -62,18 +64,21 @@ class ShipmentCreator
   def delivery_fee
     return @_delivery_fee if @_delivery_fee
     return @_delivery_fee = 0 unless charge_precentage_fee? || charge_daily_fee? || charge_weekly_fee?
-    @_delivery_fee =  order.client_calculate_delivery_fee(shipment_items_subtotal)
+
+    @_delivery_fee = order.client_calculate_delivery_fee(shipment_items_subtotal)
   end
 
-   def charge_precentage_fee?
+  def charge_precentage_fee?
     return false unless order.client_percentage_fee?
     return false if shipment_items.empty?
+
     shipment_items_subtotal > order.client_delivery_minimum
   end
 
   def charge_daily_fee?
     return false unless order.client_daily_delivery_fee?
     return false if shipment_items.empty?
+
     shipment_items_subtotal < order.client_delivery_minimum
   end
 

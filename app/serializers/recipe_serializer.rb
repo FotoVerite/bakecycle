@@ -18,8 +18,8 @@
 
 class RecipeSerializer < ActiveModel::Serializer
   attributes :id, :name, :recipe_type, :note, :mix_size, :mix_size_unit, :lead_days, :total_lead_days,
-   :available_inclusions, :available_recipe_ingredients, :recipe_types, :mix_units,
-   :errors
+             :available_inclusions, :available_recipe_ingredients, :recipe_types, :mix_units,
+             :errors
   has_many :recipe_items
 
   def recipe_items

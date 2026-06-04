@@ -41,8 +41,8 @@ RSpec.describe "Api::V1::Accounts", type: :request do
 
     it "updates the client and returns success" do
       patch "/api/v1/account",
-        params: { client: { name: "Updated Bakery Name" } },
-        headers: jwt_auth_header(client.id)
+            params: { client: { name: "Updated Bakery Name" } },
+            headers: jwt_auth_header(client.id)
       expect(response).to have_http_status(:ok)
       body = JSON.parse(response.body)
       expect(body["success"]).to be true
@@ -52,8 +52,8 @@ RSpec.describe "Api::V1::Accounts", type: :request do
     it "returns success false when update fails" do
       # name has presence validation — blank should fail
       patch "/api/v1/account",
-        params: { client: { name: "" } },
-        headers: jwt_auth_header(client.id)
+            params: { client: { name: "" } },
+            headers: jwt_auth_header(client.id)
       body = JSON.parse(response.body)
       expect(body["success"]).to be false
     end

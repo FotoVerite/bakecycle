@@ -36,13 +36,14 @@ class IngredientPricesOverTime < ApplicationRecord
     last_point = IngredientPricesOverTime.order("created_at DESC")
       .find_by(vendor_id: vendor_id, ingredient_id: ingredient_id)
     return if last_point.blank?
+
     if last_point.created_at.to_date == Time.zone.today
       last_point.update(cost_per_unit: cost_per_unit, conversion: conversion, weight_unit: weight_unit)
       throw(:abort)
     end
     throw(:abort) if last_point.cost_per_unit.to_f == cost_per_unit.to_f &&
-        last_point.conversion == conversion &&
-        last_point.weight_unit == weight_unit
+      last_point.conversion == conversion &&
+      last_point.weight_unit == weight_unit
   end
 
   # rubocop:enable Metrics/AbcSize

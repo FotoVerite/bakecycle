@@ -54,6 +54,7 @@ class DailyTotalPdf < BasePdfReport
     columns = information_header[0].count
     (0...columns).each do |x|
       next array << item_name_column_width if x.zero?
+
       array << (bounds.width - item_name_column_width) / (columns - 1)
     end
     array

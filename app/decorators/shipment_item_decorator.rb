@@ -39,6 +39,7 @@ class ShipmentItemDecorator < Draper::Decorator
 
   def product_name_and_sku
     return "#{product_sku}-#{product_name}" if product_sku.present?
+
     product_name
   end
 end

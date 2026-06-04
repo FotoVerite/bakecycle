@@ -20,7 +20,6 @@ class ProductPricingGenerator
     "ProductPricing_#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     ProductPricingXlsx.new(@bakery, @date).generate
   end

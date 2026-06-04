@@ -15,7 +15,8 @@ describe DailyTotalPdf do
       unit: :kg
     )
     production_run = create(:production_run, bakery: bakery, date: today)
-    create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 5, overbake_quantity: 2)
+    create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 5,
+                      overbake_quantity: 2)
     shipment = create(:shipment, bakery: bakery, route: route, date: today)
     create(
       :shipment_item,

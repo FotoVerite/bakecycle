@@ -21,7 +21,6 @@ class SortedPackListGenerator
     "Sorted-PackList-#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     SortedPackListXlsx.new(@bakery, @date).generate
   end

@@ -3,8 +3,8 @@ class PrefermentDataPage
   include WeightDisplayer
 
   def_delegators :@pdf,
-    :start_new_page, :define_grid, :grid, :text_box, :text,
-    :column_box, :table, :move_down, :cursor, :bounds
+                 :start_new_page, :define_grid, :grid, :text_box, :text,
+                 :column_box, :table, :move_down, :cursor, :bounds
 
   def initialize(pdf, preferments)
     @pdf = pdf

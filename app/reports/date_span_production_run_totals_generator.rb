@@ -23,7 +23,6 @@ class DateSpanProductionRunTotalsGenerator
     "ProductionRunTotalsGenerator-#{@start_date.iso8601}-#{@end_date.iso8601}.xlsx"
   end
 
-
   def generate
     DateSpanProductionRunTotalsXlsx.new(@bakery, @start_date, @end_date).generate
   end

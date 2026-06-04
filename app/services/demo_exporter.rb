@@ -32,6 +32,7 @@ class DemoExporter
 
   class Fetcher
     attr_reader :bakery
+
     def initialize(bakery)
       @bakery = bakery
     end
@@ -99,6 +100,7 @@ class DemoExporter
 
   class Reindexer
     attr_reader :data
+
     def initialize(data)
       @data = data
     end
@@ -156,6 +158,7 @@ class DemoExporter
     def reindex_inclusionables(type, id_map)
       data[:recipe_items].each_value do |attr_hash|
         next unless attr_hash[:inclusionable_type] == type
+
         attr_hash[:inclusionable_id] = id_map[attr_hash[:inclusionable_id]]
       end
     end

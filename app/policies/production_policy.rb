@@ -49,6 +49,7 @@ class ProductionPolicy < ApplicationPolicy
     def resolve
       return scope.none if user.bakery.nil?
       return scope.where(bakery_id: user.bakery_id) if read_permission? || admin?
+
       scope.none
     end
 

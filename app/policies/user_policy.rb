@@ -74,6 +74,7 @@ class UserPolicy < ApplicationPolicy
       return scope.all if admin?
       return scope.none unless user.bakery
       return scope.where(bakery_id: user.bakery_id) if read_permission?
+
       scope.where(id: user.id)
     end
 

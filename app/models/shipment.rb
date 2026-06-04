@@ -72,12 +72,12 @@ class Shipment < ApplicationRecord
 
   # create client= and client_id= methods
   denormalize :client, %i[
-                id name official_company_name billing_term billing_term_days delivery_address_street_1
-                delivery_address_street_2 delivery_address_city delivery_address_state
-                delivery_address_zipcode billing_address_street_1 billing_address_street_2
-                billing_address_city billing_address_state billing_address_zipcode
-                primary_contact_name primary_contact_phone notes
-              ]
+    id name official_company_name billing_term billing_term_days delivery_address_street_1
+    delivery_address_street_2 delivery_address_city delivery_address_state
+    delivery_address_zipcode billing_address_street_1 billing_address_street_2
+    billing_address_city billing_address_state billing_address_zipcode
+    primary_contact_name primary_contact_phone notes
+  ]
 
   delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
 
@@ -115,7 +115,7 @@ class Shipment < ApplicationRecord
 
   def subtotal
     subtotal = shipment_items.map(&:price).sum
-    #subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
+    # subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
     subtotal
   end
 
@@ -141,6 +141,7 @@ class Shipment < ApplicationRecord
 
   def set_payment_due_date
     return unless client_billing_term_days && date
+
     self.payment_due_date = date + client_billing_term_days.days
   end
 
@@ -159,13 +160,15 @@ class Shipment < ApplicationRecord
 
   def check_delivery_fee?
     return self.delivery_fee = 0 unless charge_precentage_fee? || charge_daily_fee? || charge_weekly_fee?
+
     self.delivery_fee = order.client_calculate_delivery_fee(subtotal)
   end
 
-   def charge_precentage_fee?
+  def charge_precentage_fee?
     return false if order.blank?
     return false unless order.client_percentage_fee?
     return false if shipment_items.empty?
+
     shipment_items_subtotal > order.client_delivery_minimum
   end
 
@@ -173,11 +176,13 @@ class Shipment < ApplicationRecord
     return false if order.blank?
     return false unless order.client_daily_delivery_fee?
     return false if shipment_items.empty?
+
     shipment_items_subtotal < order.client_delivery_minimum
   end
 
   def charge_weekly_fee?
     return false unless order
+
     order.client_weekly_delivery_fee? && date.sunday? && weekly_subtotal_too_low?
   end
 
@@ -195,6 +200,6 @@ class Shipment < ApplicationRecord
 
   def send_to_contact
     return unless client.accounts_payable_contact_email && client.send_shipment_when_generated
-    #ClientsMailer.send_invoice(self).deliver_now
+    # ClientsMailer.send_invoice(self).deliver_now
   end
 end

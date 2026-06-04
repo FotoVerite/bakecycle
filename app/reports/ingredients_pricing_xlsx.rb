@@ -21,6 +21,7 @@ class IngredientsPricingXlsx
             .order("created_at DESC").find_by(ingredient_id: i.id, vendor_id: v.id))
         end
         next if vendor_array.compact.empty?
+
         lowest_cost_array = vendor_array.compact.sort_by(&:cost_per_unit)
         lowest_cost_id = lowest_cost_array.first.id
         vendor_array.each do |price|

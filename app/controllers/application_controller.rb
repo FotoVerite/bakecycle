@@ -43,6 +43,7 @@ class ApplicationController < ActionController::Base
 
   def resque_no_worker
     return if Resque.info[:workers] > 0 || Resque.inline
+
     flash.now.alert = "There are no resque workers and Resque.inline is false"
   end
 
@@ -50,6 +51,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_path
     return dashboard_path if user_signed_in?
+
     root_path(message: true)
   end
 

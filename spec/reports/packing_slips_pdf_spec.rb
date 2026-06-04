@@ -28,7 +28,8 @@ describe PackingSlipsPdf do
       unit: :kg
     )
     shipment = create(:shipment, bakery: bakery, route: route, client: client, date: Date.new(2026, 6, 2))
-    create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: 6, product_price: 8.00)
+    create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: 6,
+                           product_price: 8.00)
 
     pdf_bytes = PackingSlipsPdf.new([shipment], bakery, true).render
     text = pdf_text(pdf_bytes)

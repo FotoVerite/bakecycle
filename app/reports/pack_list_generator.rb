@@ -21,7 +21,6 @@ class PackListGenerator
     "PackList-#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     PackListXlsx.new(@bakery, @date).generate
   end

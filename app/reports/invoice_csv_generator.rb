@@ -1,5 +1,6 @@
 class InvoiceCsvGenerator
   attr_reader :bakery, :invoice
+
   include Generator
 
   def self.find(id)
@@ -19,7 +20,6 @@ class InvoiceCsvGenerator
   def filename
     "#{bakery_file_name}_invoice_#{@invoice.invoice_number}.csv"
   end
-
 
   def generate
     InvoicesCsv.new([invoice]).generate

@@ -17,7 +17,7 @@ class TestProjectionGenerator
       OrderItem.new(
         product_id: parameters[0],
         (@start_date + product.total_lead_days)
-        .strftime("%A").downcase => parameters[1]
+          .strftime("%A").downcase => parameters[1]
       )
     end
   end

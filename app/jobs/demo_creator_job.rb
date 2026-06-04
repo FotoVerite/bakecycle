@@ -3,6 +3,7 @@ class DemoCreatorJob < ApplicationJob
 
   def perform(bakery)
     return if bakery.clients.any?
+
     DemoCreator.new(bakery).run
   rescue Resque::TermException
     Resque.logger.error "Resque job termination re-queuing #{self} #{bakery}"

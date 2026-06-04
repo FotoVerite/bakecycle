@@ -3,6 +3,7 @@ class StripeUserCreateJob < ApplicationJob
 
   def perform(user, token)
     return if user.bakery.stripe_customer_id
+
     customer = Stripe::Customer.create(
       email: user.email,
       card: token

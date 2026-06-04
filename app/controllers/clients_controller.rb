@@ -1,14 +1,14 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
   before_action :skip_policy_scope, only: %i[
-                                      print_client_list
-                                      print_total_report
-                                      print_vip_list
-                                      print_weekly_daily_report
-                                      print_year_total
-                                      total_report
-                                      weekly_daily_report
-                                    ]
+    print_client_list
+    print_total_report
+    print_vip_list
+    print_weekly_daily_report
+    print_year_total
+    total_report
+    weekly_daily_report
+  ]
   decorates_assigned :clients, :client
 
   def index
@@ -132,9 +132,9 @@ class ClientsController < ApplicationController
 
   def set_client
     @client = policy_scope(Client)
-    .joins(:shipments)
-    .includes(:shipments)
-    .find(params[:id])
+      .joins(:shipments)
+      .includes(:shipments)
+      .find(params[:id])
   end
 
   def client_params

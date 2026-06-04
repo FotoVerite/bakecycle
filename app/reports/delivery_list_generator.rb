@@ -22,7 +22,6 @@ class DeliveryListGenerator
     "delivery_list_#{@date}.#{@type}"
   end
 
-
   def generate
     if @type == "pdf"
       DeliveryListPdf.new(@bakery, @date).render

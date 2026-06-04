@@ -21,7 +21,6 @@ class SortedDeliveryListGenerator
     "delivery_list_#{@date}.xlsx"
   end
 
-
   def generate
     SortedDeliveryListXlsx.new(@bakery, @date).generate
   end

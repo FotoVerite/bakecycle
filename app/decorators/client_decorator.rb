@@ -14,7 +14,7 @@ class ClientDecorator < Draper::Decorator
   def delivery_fee_display
     delivery_fee_option.humanize(capitalize: false).titleize if delivery_fee_option
   end
-  
+
   def latest_orders
     object.orders.includes(:route).order_by_active.limit(10).decorate
   end
@@ -23,10 +23,11 @@ class ClientDecorator < Draper::Decorator
     out = {}
     standing_orders.active_orders.map(&:order_items).flatten.each do |i|
       OrderItem::DAYS_OF_WEEK.each do |d|
-        out[d] = true if i.send(d) > 0 
+        out[d] = true if i.send(d) > 0
       end
     end
-    return "Every Day" if out.keys.size == 7 
+    return "Every Day" if out.keys.size == 7
+
     out.keys.map(&:capitalize).join(", ")
   end
 

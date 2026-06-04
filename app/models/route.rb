@@ -38,6 +38,7 @@ class Route < ApplicationRecord
 
   def check_for_orders
     return unless orders.any?
+
     errors.add(:base, I18n.t(:route_in_use, count: orders.count))
     false
   end

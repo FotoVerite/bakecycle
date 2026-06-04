@@ -15,6 +15,7 @@ class ProductDecorator < Draper::Decorator
 
   def truncated_description
     return description.truncate(30) if description
+
     nil
   end
 
@@ -28,6 +29,7 @@ class ProductDecorator < Draper::Decorator
 
   def sku_display
     return "N/A" if sku.blank?
+
     sku
   end
 end

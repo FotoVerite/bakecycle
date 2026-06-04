@@ -38,9 +38,9 @@ class Recipe < ApplicationRecord
                                        class_name: "RecipeItem", inverse_of: :recipe
 
   has_many :child_recipes, -> { where('recipe_items.removed': false) },
-    through: :recipe_items, source: :inclusionable, source_type: "Recipe"
+           through: :recipe_items, source: :inclusionable, source_type: "Recipe"
   has_many :ingredients, -> { where('recipe_items.removed': false) },
-    through: :recipe_items, source: :inclusionable, source_type: "Ingredient"
+           through: :recipe_items, source: :inclusionable, source_type: "Ingredient"
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
@@ -88,7 +88,7 @@ class Recipe < ApplicationRecord
     queue_touch_parent_objects
   end
 
-   def update_product_total_lead_days
+  def update_product_total_lead_days
     motherdough_products.each do |product|
       product.total_lead_days = product.set_total_lead_days
       product.save
@@ -98,7 +98,6 @@ class Recipe < ApplicationRecord
       product.save
     end
   end
-
 
   def set_total_lead_days
     self.total_lead_days = calculate_total_lead_days
@@ -123,6 +122,7 @@ class Recipe < ApplicationRecord
 
   def set_recipe_lead_days
     return self.lead_days = 0 if inclusion?
+
     self.lead_days = 1 if preferment?
   end
 
@@ -140,6 +140,7 @@ class Recipe < ApplicationRecord
 
   def mix_size_with_unit
     return Unitwise(0, :kg) unless mix_size
+
     Unitwise(mix_size, mix_size_unit)
   end
 
@@ -151,12 +152,14 @@ class Recipe < ApplicationRecord
 
   def check_for_products
     return unless products.any?
+
     errors.add(:base, I18n.t(:recipe_in_use_products))
     throw(:abort)
   end
 
   def check_for_parent_recipes
     return unless parent_recipes.any?
+
     errors.add(:base, I18n.t(:recipe_in_use_recipies))
     throw(:abort)
   end

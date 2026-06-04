@@ -21,7 +21,6 @@ class ClientListGenerator
     "ClientList_#{@type}_#{@date.iso8601}.xlsx"
   end
 
-
   def generate
     ClientListXlsx.new(@bakery, @date, @type).generate
   end

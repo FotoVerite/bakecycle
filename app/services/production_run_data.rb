@@ -1,5 +1,6 @@
 class ProductionRunData
   attr_reader :bakery, :recipes_collection, :production_run
+
   def initialize(production_run)
     @production_run = production_run
     @items = production_run.run_items
@@ -60,6 +61,7 @@ class ProductionRunData
   def set_preferment_bowls
     preferments.each do |preferment|
       next if preferment.parent_recipes.count > 1
+
       parent_recipe = preferment.parent_recipes.first
       parent_data = recipes_collection.detect { |recipe_data| recipe_data.recipe == parent_recipe[:parent_recipe] }
       preferment.mix_bowl_count = parent_data.mix_bowl_count
@@ -73,6 +75,7 @@ class ProductionRunData
   def add_to_recipe_run_data(product, quantity)
     motherdough = product.motherdough
     return unless motherdough
+
     recipe_data = recipes_collection.find_or_create(motherdough, run_date)
     recipe_data.add_product(product, quantity)
     update_nested_recipes(recipe_data)

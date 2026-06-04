@@ -21,7 +21,6 @@ class DetailedInvoiceReportGenerator
     "detailed_invoice_report_#{@start_date.iso8601}_#{@end_date.iso8601}.xlsx"
   end
 
-
   def generate
     DetailedInvoiceReportXlsx.new(@bakery, @start_date, @end_date).generate
   end
