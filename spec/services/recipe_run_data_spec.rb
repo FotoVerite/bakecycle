@@ -142,7 +142,7 @@ describe RecipeRunData do
       allow_any_instance_of(RecipeRunData).to receive(:inclusions).and_return(inclusions)
       run_data.add_recipe_inclusions_info
       inclusion_info = run_data.inclusions_info.first
-      total_ingredients_weight = inclusion_info[:ingredients].map { |ingredient| ingredient[:weight] }.sum.round(3)
+      total_ingredients_weight = inclusion_info[:ingredients].map { |ingredient| ingredient[:weight] }.inject(:+).round(3)
 
       expect(inclusion_info[:inclusion]).to eq(inclusion)
       expect(inclusion_info[:dough]).to eq(motherdough)

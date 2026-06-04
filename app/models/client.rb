@@ -62,19 +62,19 @@ class Client < ApplicationRecord
 
   enum engagement_status: { current: 0, lapsed: 1, prospective: 2 }
 
-  enum channel_options: {
+  enum channel: {
     Catering: "Catering",
-      Coffee: "Coffee",
-      Distro: "Distro",
-      "Farmer's Market": "Farmer's Market",
-      FoodService: "FoodService",
-      Grocery: "Grocery",
-      Hotel: "Hotel",
-      Internal: "Internal",
-      Office: "Office",
-      Samples: "Samples",
-      Restaurant: "Restaurant",
-    }
+    Coffee: "Coffee",
+    Distro: "Distro",
+    "Farmer's Market": "Farmer's Market",
+    FoodService: "FoodService",
+    Grocery: "Grocery",
+    Hotel: "Hotel",
+    Internal: "Internal",
+    Office: "Office",
+    Samples: "Samples",
+    Restaurant: "Restaurant",
+  }
 
   validates :accounts_payable_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :active, inclusion: [true, false]
@@ -142,20 +142,21 @@ class Client < ApplicationRecord
   def average_sale_by_month
     months_hash = {}
     h = shipments
-      .where(:created_at => (Time.now.beginning_of_year.all_year))
-      .group(["EXTRACT(month FROM created_at)"]) 
-      .order("EXTRACT(month FROM created_at)")
+      .where(created_at: Time.now.beginning_of_year.all_year)
+      .group(Arel.sql("EXTRACT(month FROM created_at)"))
+      .order(Arel.sql("EXTRACT(month FROM created_at)"))
       .sum(:cached_price)
     months = Hash[(1..12).map { |month| [ month.to_f, 0 ] }].merge(h)
-    months.map {|k, v| months_hash["#{Time.now.year}-" + k.to_i.to_s] = v.to_f } 
+    months.map {|k, v| months_hash["#{Time.now.year}-" + k.to_i.to_s] = v.to_f }
     months_hash
   end
 
   def average_sale_by_week
-    weeks = shipments.where(:created_at => ((Time.now.beginning_of_week - 51.weeks)..Time.now.beginning_of_week))
-    .group(["EXTRACT(week FROM created_at)"]) 
-    .order("EXTRACT(week FROM created_at)")
-    .sum(:cached_price)
+    weeks = shipments
+      .where(created_at: (Time.now.beginning_of_week - 51.weeks)..Time.now.beginning_of_week)
+      .group(Arel.sql("EXTRACT(week FROM created_at)"))
+      .order(Arel.sql("EXTRACT(week FROM created_at)"))
+      .sum(:cached_price)
     weeks = Hash[(1..51).map { |week| [ week.to_f, 0 ] }].merge(weeks)
     weeks = weeks.values.in_groups_of(4,false).map {|x| x.reduce(:+)}
     weeks.inject{ |sum, el| sum + el }.to_f / weeks.size
