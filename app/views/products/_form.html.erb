@@ -84,7 +84,7 @@
     </div>
 
     <div data-nested-form-target="rows">
-      <% sorted_variants = @product.price_variants.sort_by { |pv| [pv.persisted? ? 0 : 1, pv.client_name, pv.quantity || 0] } %>
+      <% sorted_variants = @product.price_variants.sort_by { |pv| [pv.client_id.nil? ? 0 : 1, pv.persisted? ? 0 : 1, pv.client_name, pv.quantity || 0] } %>
       <%= f.simple_fields_for :price_variants, sorted_variants do |pv_form| %>
         <%= render 'price_variant_fields', pv_form: pv_form, clients: @clients %>
       <% end %>
@@ -92,7 +92,7 @@
 
     <template data-nested-form-target="template">
       <%= f.fields_for :price_variants, PriceVariant.new, index: 'NEW_RECORD' do |pv_form| %>
-        <%= render 'price_variant_fields', pv_form: pv_form, clients: @clients %>
+        <%= render 'price_variant_fields', pv_form: pv_form, clients: @clients, is_template: true %>
       <% end %>
     </template>
 

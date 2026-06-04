@@ -242,20 +242,29 @@
 .nested-row {
   border-top: 1px solid $bc-border-grey;
   padding: 8px 0 4px;
-  transition: opacity 0.15s ease;
+  transition: background-color 0.18s ease, opacity 0.15s ease;
 
   &:first-child {
     border-top: none;
   }
 
   &.nested-row--destroyed {
+    background: lighten($bc-alizarin-crimson, 41%);
     opacity: 0.35;
   }
 }
 
 .nested-row-grid {
+  align-items: center;
   gap: 8px 22px;
-  align-items: end;
+}
+
+.pv-all-clients-label {
+  align-items: center;
+  color: $bc-scorpion;
+  display: flex;
+  font-weight: 600;
+  height: 40px;
 }
 
 .price-variant-grid {
@@ -268,22 +277,79 @@
   .nested-field-price {
     text-align: right;
   }
+
+  .nested-row-actions .button {
+    align-items: center;
+    height: 40px;
+    padding: 0 10px;
+  }
 }
 
 .nested-row-actions {
+  align-items: center;
   display: flex;
   gap: 4px;
-  padding-bottom: 2px;
 
   .button {
     font-size: 0.72rem;
-    margin: 0;
+    margin-top: 5px;
     padding: 6px 10px;
+  }
+}
+
+.nested-icon-btn {
+  align-items: center;
+  background: $bc-white;
+  border: 1px solid $bc-border-grey;
+  color: $bc-scorpion;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  min-width: 40px;
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+
+  i {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  &:hover,
+  &:focus {
+    background: lighten($bc-alizarin-crimson, 41%);
+    border-color: lighten($bc-alizarin-crimson, 24%);
+    color: darken($bc-alizarin-crimson, 12%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.nested-btn-restore {
+  &:hover,
+  &:focus {
+    background: lighten($bc-lima, 42%);
+    border-color: lighten($bc-lima, 24%);
+    color: darken($bc-lima, 24%);
   }
 }
 
 .nested-add-btn {
   margin-top: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nested-row,
+  .nested-icon-btn {
+    transition: none;
+  }
+
+  .nested-icon-btn:hover,
+  .nested-icon-btn:focus,
+  .nested-icon-btn:active {
+    transform: none;
+  }
 }
 
 @media #{$small-only} {

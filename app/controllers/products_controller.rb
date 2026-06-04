@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
   before_action :set_clients, only: %i[new edit create update]
+  before_action :ensure_all_clients_price_variant, only: %i[edit]
   before_action :skip_policy_scope, only: %i[
     weekly_daily_report print_weekly_daily_report
     pricing_report
@@ -27,6 +28,7 @@ class ProductsController < ApplicationController
   def new
     @product = policy_scope(Product).build(unit: :kg)
     authorize @product
+    ensure_all_clients_price_variant
   end
 
   def created_at
@@ -44,6 +46,7 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have created #{@product.name}."
       redirect_to edit_product_path(@product)
     else
+      ensure_all_clients_price_variant
       render "new"
     end
   end
@@ -75,6 +78,7 @@ class ProductsController < ApplicationController
       flash[:notice] = "You have updated #{@product.name}."
       redirect_to edit_product_path(@product)
     else
+      ensure_all_clients_price_variant
       render "edit"
     end
   end
@@ -135,6 +139,12 @@ class ProductsController < ApplicationController
 
   def set_clients
     @clients = ItemFinder.new(current_user).clients.order(name: :asc)
+  end
+
+  def ensure_all_clients_price_variant
+    unless @product.price_variants.any? { |pv| pv.client_id.nil? }
+      @product.price_variants.build(quantity: 1, price: 0)
+    end
   end
 
   def product_params
