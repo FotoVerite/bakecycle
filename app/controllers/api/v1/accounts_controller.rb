@@ -37,7 +37,7 @@ class Api::V1::AccountsController < ActionController::Base
   def update
     client_id = request.env.values_at :client_id
     client = Client.find(client_id[0])
-    if client.update_attributes(client_params)
+    if client.update(client_params)
       render json: { success: true, client: Client.select(ATTRIBUTES).find(client_id[0])}
     else
       render json: {success: false, client: Client.select(ATTRIBUTES).find(client_id[0])}

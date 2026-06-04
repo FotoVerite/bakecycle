@@ -26,7 +26,7 @@ class Api::V1::OrdersController < ActionController::Base
         }
       }
     )
-    products =  Product.where(bakery_id: 1).available if params[:product_info] == 'true'
+    products = params[:product_info] == "true" ? Product.where(bakery_id: 1).available : []
 
     products_array = products.map do |product|
       {
@@ -45,20 +45,21 @@ class Api::V1::OrdersController < ActionController::Base
 
   def update
     client_id = request.env.values_at :client_id
-    client = Client.find(client_id[0])
-    if client.update_attributes(client_params)
-      render json: { success: true, client: Client.select(ATTRIBUTES).find(client_id[0])}
+    order = Client.find(client_id[0])
+      .orders
+      .where(order_type: "standing")
+      .order_by_active.limit(1).first
+    if order&.update(order_params)
+      render json: { success: true, order: order.as_json(only: ATTRIBUTES) }
     else
-      render json: {success: false, client: Client.select(ATTRIBUTES).find(client_id[0])}
+      render json: { success: false, order: order&.as_json(only: ATTRIBUTES) }
     end
   end
 
   private
 
-  def client_params
-    params.require(:client).permit(
-     ATTRIBUTES
-    )
+  def order_params
+    params.require(:order).permit(ATTRIBUTES - [:id, :client_id])
   end
 
 end
