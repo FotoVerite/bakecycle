@@ -177,6 +177,9 @@ GEM
     crass (1.0.6)
     csv (3.3.5)
     dante (0.2.0)
+    dartsass-rails (0.5.1)
+      railties (>= 6.0.0)
+      sass-embedded (~> 1.63)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.2.2)
@@ -220,8 +223,6 @@ GEM
       railties (>= 6.1.0)
     faker (3.6.1)
       i18n (>= 1.8.11, < 2)
-    ffi (1.17.4-arm64-darwin)
-    ffi (1.17.4-x86_64-darwin)
     foreman (0.90.0)
       thor (~> 1.4)
     fugit (1.12.2)
@@ -232,6 +233,12 @@ GEM
       csv (>= 3.0.0)
     globalid (1.3.0)
       activesupport (>= 6.1)
+    google-protobuf (4.35.0-arm64-darwin)
+      bigdecimal
+      rake (~> 13.3)
+    google-protobuf (4.35.0-x86_64-darwin)
+      bigdecimal
+      rake (~> 13.3)
     hashdiff (1.2.1)
     hashery (2.1.2)
     htmlentities (4.3.4)
@@ -354,6 +361,10 @@ GEM
       prawn (>= 1.3.0, < 3.0.0)
     prettyprint (0.2.0)
     prism (1.9.0)
+    propshaft (1.3.2)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
     pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -498,16 +509,10 @@ GEM
     rubyzip (2.4.1)
     rufus-scheduler (3.9.2)
       fugit (~> 1.1, >= 1.11.1)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
+    sass-embedded (1.100.0-arm64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.100.0-x86_64-darwin)
+      google-protobuf (~> 4.31)
     securerandom (0.4.1)
     selenium-webdriver (4.32.0)
       base64 (~> 0.2)
@@ -532,14 +537,6 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    sprockets (4.2.2)
-      concurrent-ruby (~> 1.0)
-      logger
-      rack (>= 2.2.4, < 4)
-    sprockets-rails (3.5.2)
-      actionpack (>= 6.1)
-      activesupport (>= 6.1)
-      sprockets (>= 3.0.0)
     sshkit (1.25.0)
       base64
       logger
@@ -618,6 +615,7 @@ DEPENDENCIES
   caxlsx
   caxlsx_rails
   chronic
+  dartsass-rails
   database_cleaner
   devise
   devise_invitable
@@ -642,6 +640,7 @@ DEPENDENCIES
   pg
   prawn
   prawn-table
+  propshaft
   pry
   puma
   pundit
@@ -655,7 +654,6 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubyzip (>= 2.0)
-  sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers
   simple_form
@@ -669,7 +667,7 @@ DEPENDENCIES
   will_paginate
 
 RUBY VERSION
-   ruby 3.1.1p18
+   ruby 3.3.1p55
 
 BUNDLED WITH
    2.6.9

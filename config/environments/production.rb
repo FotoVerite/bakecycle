@@ -6,19 +6,6 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # JS minification is handled by esbuild (npm run build:prod); Sprockets only compresses CSS.
-  config.assets.js_compressor = nil
-  config.assets.css_compressor = :sass
-
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
-
-  # Generate digests for assets URLs.
-  config.assets.digest = true
-
-  # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = "1.0"
-
   # Set static assets cache expiration to a year
   config.static_cache_control = "public, max-age=31536000"
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"

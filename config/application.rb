@@ -25,14 +25,6 @@ module Bakecycle
     # config.i18n.default_locale = :de
 
     config.autoload_paths += ["#{config.root}/lib"]
-    # esbuild output
-    config.assets.paths << Rails.root.join("app/assets/builds")
-
-    # for bower stuff
-    config.assets.paths << Rails.root.join("vendor", "assets", "bower_components")
-
-    # fonts and standalone SVG assets
-    config.assets.precompile += %w[*.eot *.svg *.ttf *.woff]
 
     config.generators do |g|
       g.factory_bot true

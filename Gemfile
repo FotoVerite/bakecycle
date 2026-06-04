@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.1.1"
+ruby "3.3.1"
 
 gem "active_model_serializers", "~> 0.10.0"
 gem "airbrake"
@@ -25,7 +25,8 @@ gem "rails", "~> 7.1.0"
 gem "redis", "~> 5.0"
 gem "resque", "~> 2.0", require: "resque/server"
 gem "rubyzip", ">= 2.0"
-gem "sass-rails", ">= 6"
+gem "dartsass-rails"
+gem "propshaft"
 gem "simple_form"
 gem "stripe", "< 6"
 gem "unitwise", "~>2.0.0", require: "unitwise"
