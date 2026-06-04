@@ -96,6 +96,11 @@
   grid-template-columns: minmax(120px, 160px);
 }
 
+.index-toolbar-production-runs {
+  grid-template-columns: minmax(190px, 240px) minmax(150px, 180px);
+  justify-content: start;
+}
+
 .index-filter {
   min-width: 0;
 }
@@ -169,7 +174,8 @@
 }
 
 .clients-index,
-.products-index {
+.products-index,
+.production-runs-index {
   td[data-title="Actions"],
   td[data-title="Action"],
   th:last-child {

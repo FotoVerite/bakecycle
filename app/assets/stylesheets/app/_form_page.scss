@@ -45,14 +45,20 @@
   background: $bc-white;
   border: 1px solid $bc-border-grey;
   margin: 0 0 18px;
-  padding: 22px 20px 24px;
+  padding: 26px 20px 24px;
 
   legend {
-    background: $bc-white;
-    color: $bc-charcoal;
-    font-size: 0.95rem;
+    background: lighten($bc-shakespeare, 38%);
+    border: 1px solid lighten($bc-shakespeare, 22%);
+    border-bottom-color: $bc-white;
+    color: darken($bc-shakespeare, 26%);
+    font-size: 1rem;
     font-weight: 700;
-    padding: 0 8px;
+    line-height: 1.2;
+    margin-left: -1px;
+    padding: 7px 14px 8px;
+    position: relative;
+    top: 1px;
   }
 }
 
@@ -95,6 +101,14 @@
   margin-bottom: 8px;
 }
 
+.form-span-1 {
+  grid-column: span 1;
+}
+
+.form-span-2 {
+  grid-column: span 2;
+}
+
 .form-span-3 {
   grid-column: span 3;
 }
@@ -105,6 +119,10 @@
 
 .form-span-6 {
   grid-column: span 6;
+}
+
+.form-span-7 {
+  grid-column: span 7;
 }
 
 .form-span-9 {
@@ -139,6 +157,22 @@
     height: 18px;
     margin: 0;
     width: 18px;
+  }
+}
+
+.form-summary-grid {
+  display: grid;
+  gap: 14px 22px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.form-summary-item {
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  padding: 14px 16px;
+
+  p {
+    margin: 0;
   }
 }
 
@@ -186,6 +220,72 @@
   }
 }
 
+// Nested attribute rows (price variants, recipe items, etc.)
+.nested-col-headers {
+  border-bottom: 2px solid $bc-border-grey;
+  margin-bottom: 2px;
+  padding-bottom: 8px;
+}
+
+.nested-col-label {
+  color: $bc-silver-chalice;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+
+  abbr {
+    color: $bc-alizarin-crimson;
+    text-decoration: none;
+  }
+}
+
+.nested-row {
+  border-top: 1px solid $bc-border-grey;
+  padding: 8px 0 4px;
+  transition: opacity 0.15s ease;
+
+  &:first-child {
+    border-top: none;
+  }
+
+  &.nested-row--destroyed {
+    opacity: 0.35;
+  }
+}
+
+.nested-row-grid {
+  gap: 8px 22px;
+  align-items: end;
+}
+
+.price-variant-grid {
+  select,
+  input {
+    height: 40px;
+  }
+
+  .nested-field-quantity,
+  .nested-field-price {
+    text-align: right;
+  }
+}
+
+.nested-row-actions {
+  display: flex;
+  gap: 4px;
+  padding-bottom: 2px;
+
+  .button {
+    font-size: 0.72rem;
+    margin: 0;
+    padding: 6px 10px;
+  }
+}
+
+.nested-add-btn {
+  margin-top: 14px;
+}
+
 @media #{$small-only} {
   .form-page {
     .form-header {
@@ -205,5 +305,13 @@
 
   .form-field {
     margin-bottom: 16px;
+  }
+
+  .form-summary-grid {
+    display: block;
+  }
+
+  .form-summary-item {
+    margin-bottom: 12px;
   }
 }

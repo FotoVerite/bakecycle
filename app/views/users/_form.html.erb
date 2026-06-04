@@ -1,20 +1,18 @@
-<%= simple_form_for @user do |f| %>
+<%= simple_form_for @user, html: { class: "form-stack" } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <fieldset>
-  <legend>User Information</legend>
-    <div class="row">
-      <div class="large-6 small-12 columns">
+  <fieldset class="form-section">
+    <legend>User Information</legend>
+    <div class="form-grid">
+      <div class="form-field form-span-6">
         <%= f.input :name, as: :string %>
       </div>
-      <div class="large-6 small-12 columns">
+      <div class="form-field form-span-6">
         <%= f.input :email, as: :string, required: true %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="large-6 small-12 columns">
+      <div class="form-field form-span-6">
         <%= f.input :password, as: :password %>
         <% unless @user.persisted? %>
           <p class="help-text">
@@ -22,13 +20,11 @@
           </p>
         <% end %>
       </div>
-      <div class="large-6 small-12 columns">
+      <div class="form-field form-span-6">
         <%= f.input :password_confirmation, as: :password %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="large-6 small-12 columns">
+      <div class="form-field form-span-6">
         <% if current_user.admin? %>
           <%= f.input(
             :bakery_id,
@@ -44,10 +40,10 @@
   </fieldset>
 
   <% if policy(@user).manage_permission? %>
-    <fieldset>
+    <fieldset class="form-section">
       <legend>Permissions</legend>
-      <div class="row">
-        <div class="large-6 small-12 columns">
+      <div class="form-grid">
+        <div class="form-field form-span-6">
           <%= f.input(
             :user_permission,
             collection: user.access_level,
@@ -55,10 +51,8 @@
             include_blank: false
           ) %>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="large-6 small-12 columns">
+        <div class="form-field form-span-6">
           <%= f.input(
             :product_permission,
             collection: user.access_level,
@@ -66,10 +60,8 @@
             include_blank: false
           ) %>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="large-6 small-12 columns">
+        <div class="form-field form-span-6">
           <%= f.input(
             :bakery_permission,
             collection: user.access_level,
@@ -77,10 +69,8 @@
             include_blank: false
           ) %>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="large-6 small-12 columns">
+        <div class="form-field form-span-6">
           <%= f.input(
             :client_permission,
             collection: user.access_level,
@@ -88,10 +78,8 @@
             include_blank: false
           ) %>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="large-6 small-12 columns">
+        <div class="form-field form-span-6">
           <%= f.input(
             :shipping_permission,
             collection: user.access_level,
@@ -99,10 +87,8 @@
             include_blank: false
           ) %>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="large-6 small-12 columns">
+        <div class="form-field form-span-6">
           <%= f.input(
             :production_permission,
             collection: user.access_level,
@@ -114,13 +100,11 @@
     </fieldset>
   <% end %>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.submit (@user.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless @user.new_record? %>
-        <%= link_to 'Delete', user_path(@user), class: "button alert",
-                                  method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+  <div class="form-actions">
+    <%= f.submit (@user.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+    <% unless @user.new_record? %>
+      <%= link_to 'Delete', user_path(@user), class: "button alert",
+                                method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

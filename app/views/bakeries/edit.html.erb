@@ -1,9 +1,18 @@
 <% provide(:title, "Editing Bakery: #{@bakery.name}") %>
 
-<h1>Editing Bakery: <%= @bakery.name %></h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>Editing Bakery: <%= @bakery.name %></h1>
+      <p>Update bakery contact details, schedule, settings, and logo.</p>
+    </div>
 
-<% if policy(Bakery).index? %>
-  <%= link_to "Back", bakeries_path, class: "button small" %>
-<% end %>
+    <div class="form-header-actions">
+      <% if policy(Bakery).index? %>
+        <%= link_to "Back", bakeries_path, class: "button small secondary" %>
+      <% end %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

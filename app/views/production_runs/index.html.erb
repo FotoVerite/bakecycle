@@ -1,30 +1,38 @@
 <% provide(:title, "Production Runs") %>
 
-<h1>Production Runs</h1>
-
-<%= simple_form_for :search, method: :get do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date, class: "js-datepicker", name: :date }, required: false %>
-    </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
+<div class="index-page production-runs-index">
+  <div class="index-header">
+    <div>
+      <h1>Production Runs</h1>
+      <p>Search scheduled runs and open the production detail or printable recipe packet.</p>
     </div>
   </div>
-<% end %>
 
- <table class="responsive-table">
-  <thead>
-    <th>Id </th>
-    <th>Date</th>
-    <th>Product Count</th>
-    <th>Actions</th>
-  </thead>
+  <%= simple_form_for :search, method: :get, html: { class: "index-toolbar index-toolbar-production-runs bakecycle-form" } do |f| %>
+    <div class="index-filter index-filter-medium">
+      <%= f.input :date, input_html: { value: @date, class: "js-datepicker", name: :date }, label: "Date", required: false %>
+    </div>
+    <div class="index-toolbar-actions">
+      <%= f.submit 'Search', class: "button search-button", name: nil %>
+    </div>
+  <% end %>
 
-  <tbody>
-    <%= render @production_runs %>
-  </tbody>
- </table>
+  <div class="index-table">
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Date</th>
+          <th>Product Count</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
- <%= will_paginate @production_runs %>
+      <tbody>
+        <%= render @production_runs %>
+      </tbody>
+    </table>
+  </div>
 
+  <%= will_paginate @production_runs %>
+</div>

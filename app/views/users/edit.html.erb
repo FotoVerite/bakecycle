@@ -1,9 +1,18 @@
 <% provide(:title, "Editing User: #{@user.name}") %>
 
-<h1>Editing User: <%= @user.name %></h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>Editing User: <%= @user.name %></h1>
+      <p>Update user profile, bakery access, and permissions.</p>
+    </div>
 
-<% if policy(User).index? %>
-  <%= link_to 'Back', users_path, class: "button small" %>
-<% end %>
+    <div class="form-header-actions">
+      <% if policy(User).index? %>
+        <%= link_to 'Back', users_path, class: "button small secondary" %>
+      <% end %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

@@ -1,39 +1,28 @@
 <% provide(:title, "Editing Invoice: #{@shipment.id}") %>
 
-<div class="row">
-  <div class="small-12 medium-6 columns">
-    <h1>Editing Invoice: <%= @shipment.id %></h1>
-  </div>
-</div>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>Editing Invoice: <%= @shipment.id %></h1>
+      <p>Client: <%= link_to @shipment.client_name, client_path(shipment.client_id), class: 'underlined-link' %></p>
+    </div>
 
-<ul class="stack-for-small button-group">
-    <li><%= link_to 'Back', shipments_path, class: "button small"%></li>
-    <li>
+    <div class="form-header-actions">
+      <%= link_to 'Back', shipments_path, class: "button small secondary"%>
       <%= link_to invoice_shipment_path(@shipment), target: "_blank", class: "button small" do %>
         <i class='fi-page-export-pdf'></i> Print
       <% end %>
-    </li>
-    <li>
       <%= link_to packing_slip_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button small" do %>
         <i class='fi-page-export'></i> Print Packing Slip
       <% end %>
-    </li>
-    <li>
       <%= link_to invoice_iif_shipment_path(shipment), target: "_blank", class: "button small" do %>
         <i class='fi-page-export'></i> Export to Quickbooks
       <% end %>
-    </li>
-      <li>
       <%= link_to invoice_csv_shipment_path(shipment), target: "_blank", class: "button small" do %>
         <i class='fi-page-export'></i> Export to CSV
       <% end %>
-    </li>
-</ul>
-
-<div class="row">
-  <div class="small-12 medium-6 columns">
-    <h3>Client: <%= link_to @shipment.client_name, client_path(shipment.client_id), class: 'underlined-link' %></h3>
+    </div>
   </div>
-</div>
 
-<%= render "form"%>
+  <%= render "form"%>
+</div>

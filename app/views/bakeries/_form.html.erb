@@ -1,113 +1,114 @@
-<%= simple_form_for @bakery do |f| %>
+<%= simple_form_for @bakery, html: { class: "form-stack" } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <fieldset>
-  <legend>Bakery Information</legend>
-    <div class="row">
-      <div class="small-12 medium-6 large-4 columns">
+  <fieldset class="form-section">
+    <legend>Bakery Information</legend>
+    <div class="form-grid">
+      <div class="form-field form-span-4">
         <%= f.input :name, as: :string %>
       </div>
 
-      <div class="small-12 medium-6 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :email, as: :string %>
       </div>
 
-      <div class="small-12 medium-6 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :phone_number, as: :string %>
       </div>
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Bakery Address</legend>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-6">
         <%= f.input :address_street_1, as: :string %>
       </div>
 
-      <div class="small-12 medium-4 end columns">
+      <div class="form-field form-span-6">
         <%= f.input :address_street_2, as: :string %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="small-12 medium-6 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :address_city, as: :string, label: "City" %>
       </div>
 
-      <div class="small-12 medium-6 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :address_state, as: :string, label: "State" %>
       </div>
 
-      <div class="small-12 medium-6 large-4 columns end">
+      <div class="form-field form-span-4">
         <%= f.input :address_zipcode, as: :string, label: "Zipcode" %>
       </div>
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Run Time</legend>
-    <div class="row">
-      <div class="small-12 medium-4 columns select-time-wrapper">
+    <div class="form-grid">
+      <div class="form-field form-span-4 select-time-wrapper">
         <%= f.input :kickoff_time, as: :string, placeholder: "Select Start Time", input_html: { value: "#{bakery.display_kickoff_time}", class: "js-timepicker" } %>
       </div>
-      <div class="small-12 medium-4 end columns">
+      <div class="form-field form-span-4">
         <%= f.label :last_kickoff %>
         <input disabled="true" type="text" value="<%= bakery.display_last_kickoff %>" />
       </div>
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Bakery Setting</legend>
-    <div class="row">
+    <div class="form-grid">
 
       <% if policy(Bakery).change_plan? %>
-        <div class="small-12 medium-4 columns">
+        <div class="form-field form-span-4">
           <%= f.input :plan_id, as: :select, collection: bakery.plans_select %>
         </div>
       <% end %>
 
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :quickbooks_account, as: :string %>
       </div>
-      <div class="small-12 medium-4 end columns">
-        <%= f.label :group_preferments, "Print all the preferments together at the end?"%>
-        <%= f.radio_button(:group_preferments, "true") %>
-        <%= f.label(:group_preferments_true, "Yes") %>
-        <%= f.radio_button(:group_preferments, "false") %>
-        <%= f.label(:group_preferments_false, "No") %>
+      <div class="form-field form-span-4">
+        <span class="form-field-label">Print all the preferments together at the end?</span>
+        <div class="form-choice-row">
+          <label class="form-choice">
+            <%= f.radio_button(:group_preferments, "true") %>
+            <span>Yes</span>
+          </label>
+          <label class="form-choice">
+            <%= f.radio_button(:group_preferments, "false") %>
+            <span>No</span>
+          </label>
+        </div>
       </div>
     </div>
   </fieldset>
 
   <% unless f.object.persisted? %>
-    <fieldset>
-      <div class="row">
-        <div class="small-12 columns">
-          <label class="category-select">
-            Create Demo Data?
-            <%= check_box_tag("set_demo_data", true, true) %>
-          </label>
-        </div>
+    <fieldset class="form-section">
+      <legend>Demo Data</legend>
+      <div class="form-grid">
+        <label class="form-field form-span-12 form-check">
+          <%= check_box_tag("set_demo_data", true, true) %>
+          <span>Create Demo Data?</span>
+        </label>
       </div>
     </fieldset>
   <% end %>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Bakery Logo</legend>
 
-    <% if f.object.persisted? %>
-      <div class="row">
-        <div class="small-12 columns">
+    <div class="form-grid">
+      <% if f.object.persisted? %>
+        <div class="form-field form-span-12">
           <%= image_tag bakery.logo(:thumb) if bakery.logo.present? && !bakery.logo_errors? %>
         </div>
-      </div>
-    <% end %>
+      <% end %>
 
-    <div class="row">
-      <div class="small-12 columns">
+      <div class="form-field form-span-12">
         <%= f.file_field :logo %>
         <% if bakery.logo_errors? %>
           <small class="error">Images must be a JPEG, PNG, TIFF or BMP</small>
@@ -116,20 +117,18 @@
     </div>
   </fieldset>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <% if @bakery.new_record? && policy(@bakery).create? %>
-        <%= f.submit "Create", class: "button", name: nil %>
-      <% end %>
+  <div class="form-actions">
+    <% if @bakery.new_record? && policy(@bakery).create? %>
+      <%= f.submit "Create", class: "button", name: nil %>
+    <% end %>
 
-      <% if @bakery.persisted? && policy(@bakery).update?%>
-        <%= f.submit "Update", class: "button", name: nil %>
-      <% end %>
+    <% if @bakery.persisted? && policy(@bakery).update?%>
+      <%= f.submit "Update", class: "button", name: nil %>
+    <% end %>
 
-      <% if @bakery.persisted? && policy(@bakery).destroy? %>
-        <%= link_to 'Delete', bakery_path(@bakery), class: "button alert",
-                    method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+    <% if @bakery.persisted? && policy(@bakery).destroy? %>
+      <%= link_to 'Delete', bakery_path(@bakery), class: "button alert",
+                  method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>
