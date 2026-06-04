@@ -30,6 +30,10 @@ describe FileExportSerializer do
       expect { decorator.serializable_hash }.not_to raise_error
     end
 
+    it "provides a loading message for the pending export page" do
+      expect(decorator.loading_message).to be_present
+    end
+
     it "returns camelCase string keys" do
       result = decorator.serializable_hash
       expect(result).to have_key("id")
