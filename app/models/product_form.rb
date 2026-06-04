@@ -15,7 +15,9 @@ class ProductForm
   end
 
   def serializable_hash
-    ProductFormSerializer.new(self).serializable_hash
-      .transform_keys { |k| k.to_s.camelize(:lower) }
+    {
+      product: ActiveModelSerializers::SerializableResource.new(product).as_json[:product],
+      clients: clients.map { |c| { id: c.id, name: c.name } },
+    }
   end
 end

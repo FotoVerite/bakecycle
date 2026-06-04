@@ -1,10 +1,12 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
+  before_action :set_clients, only: %i[new edit create update]
   before_action :skip_policy_scope, only: %i[
-                                      weekly_daily_report print_weekly_daily_report
-                                      pricing_report
-                                      products_per_client_per_week
-                                      print_products_per_client_per_week]
+    weekly_daily_report print_weekly_daily_report
+    pricing_report
+    products_per_client_per_week
+    print_products_per_client_per_week
+  ]
   decorates_assigned :products, :product
 
   def index
@@ -129,6 +131,10 @@ class ProductsController < ApplicationController
 
   def set_product
     @product = policy_scope(Product).find(params[:id])
+  end
+
+  def set_clients
+    @clients = ItemFinder.new(current_user).clients.order(name: :asc)
   end
 
   def product_params
