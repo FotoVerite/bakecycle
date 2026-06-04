@@ -1,11 +1,10 @@
+require "net/http"
+
 class PublicClientUser < ApplicationRecord
   belongs_to :client
 
   validates :first_name, :last_name, :email, presence: true
   validates :email, confirmation: true
-
-  OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ciphers]=OpenSSL::SSL::SSLContext.new.ciphers;
-
 
   def name
     "#{first_name} #{last_name}"
@@ -33,33 +32,42 @@ class PublicClientUser < ApplicationRecord
       password_confirmation: token,
     }
     begin
-      response = JSON.parse(
-        RestClient.post(
-          URI.join(ENV["PUBLIC_BAKECYCLE"], "api/", "v1/", "members").to_s,
-          { member: attributes },
-          headers = { AUTHORIZATION: ENV["JWT_TOKEN"] }
-        )
-      )
-      if response["success"] === true
-        self.save
-        return true
-      else
-        response["errors"].each do |k, v|
-          self.errors.add(:base, :api, message: "#{k.capitalize}: " + v.join(", "))
+      uri = URI.join(ENV["PUBLIC_BAKECYCLE"], "api/", "v1/", "members")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == "https"
+
+      request = Net::HTTP::Post.new(uri)
+      request["Authorization"] = ENV["JWT_TOKEN"]
+      request["Content-Type"] = "application/x-www-form-urlencoded"
+      form_data = attributes.each_with_object({}) { |(k, v), h| h["member[#{k}]"] = v.to_s }
+      request.set_form_data(form_data)
+
+      http_response = http.request(request)
+      response = JSON.parse(http_response.body)
+
+      case http_response
+      when Net::HTTPSuccess
+        if response["success"] == true
+          save
+          return true
+        else
+          response["errors"].each do |k, v|
+            errors.add(:base, :api, message: "#{k.capitalize}: " + v.join(", "))
+          end
+          return false
         end
+      when Net::HTTPUnauthorized
+        errors.add(:base, :api, message: "API ISSUE: Unauthorized")
+        return false
+      when Net::HTTPNotFound
+        errors.add(:base, :api, message: "API ISSUE: Not Found")
+        return false
+      else
+        errors.add(:base, :api, message: "API ISSUE: #{http_response.message}")
         return false
       end
-    rescue RestClient::Unauthorized => e
-      self.errors.add(:base, :api, message: "API ISSUE: " + e.message)
-      return false
-    rescue RestClient::ResourceNotFound => e
-      self.errors.add(:base, :api, message: "API ISSUE: " + e.message)
-      return false
-    rescue SocketError => e
-      self.errors.add(:base, :api, message: "API ISSUE: " + e.message)
-      return false
-    rescue Errno::ECONNREFUSED => e
-      self.errors.add(:base, :api, message: "API ISSUE: " + e.message)
+    rescue SocketError, Errno::ECONNREFUSED => e
+      errors.add(:base, :api, message: "API ISSUE: " + e.message)
       return false
     end
   end

@@ -12,19 +12,17 @@ gem "devise"
 gem "devise_invitable"
 gem "draper"
 gem "geocoder"
-gem "jbuilder", "~> 2.0"
 gem "jquery-rails"
 gem "jquery-timepicker-rails"
 gem "jquery-ui-sass-rails"
 gem "kt-paperclip", "~> 7.0"
-gem "memoist"
 gem "paper_trail"
 gem "pg"
 gem "prawn"
 gem "prawn-table"
 gem "pundit"
-gem "rails", "~> 6.1.0"
-gem "redis", "~> 4.0"
+gem "rails", "~> 7.1.0"
+gem "redis", "~> 5.0"
 gem "resque", "~> 2.0", require: "resque/server"
 gem "rubyzip", ">= 2.0"
 gem "sass-rails", ">= 6"
@@ -32,7 +30,6 @@ gem "simple_form"
 gem "stripe", "< 6"
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate"
-gem "rest-client"
 gem "dotenv-rails"
 gem "jwt"
 gem "riif"
@@ -55,14 +52,11 @@ end
 group :test, :development do
   gem "brakeman", require: false
   gem "bullet"
-  gem "cucumber-rails", require: false
-  gem "guard-livereload"
-  gem "guard-rails"
   gem "immigrant"
   gem "pry"
-  gem "rack-livereload"
   gem "rspec-rails"
   gem "rubocop", require: false
+  gem "rubocop-rails", require: false
   gem "shoulda-matchers", require: false
 end
 
