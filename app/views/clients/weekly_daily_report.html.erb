@@ -1,15 +1,26 @@
 <% provide(:title, "Generate Weekly/Daily Client Reports") %>
 
-<h1>Generate Weekly/Daily Client Report</h1>
-<%= link_to "Back to Reports", reports_path, class: "button small" %>
+<div class="report-page report-generator-page">
+  <%= render "shared/report_header",
+    title: "Client Totals",
+    date_text: @date.strftime("%A %b. %e, %Y"),
+    status: "Daily or weekly" %>
 
-<%= simple_form_for "", url: print_weekly_daily_report_clients_path, method: :get, :html => {:target => '_blank'}  do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+  <div class="report-toolbar">
+    <%= simple_form_for "", url: print_weekly_daily_report_clients_path, method: :get, html: { target: "_blank", class: "report-print-form" } do |f| %>
+      <div class="report-date-form report-date-form-with-actions">
+        <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+        <div class="report-action-buttons">
+          <%= button_tag "<i class='fi-page-export-pdf'></i> Daily Totals".html_safe, name: "type", value: "daily", class: "button search-button" %>
+          <%= button_tag "<i class='fi-page-export-pdf'></i> Weekly Totals".html_safe, name: "type", value: "weekly", class: "button secondary search-button" %>
+        </div>
+      </div>
+    <% end %>
+    <div class="report-toolbar-note">
+      <span>Client report</span>
+      Choose daily or weekly client totals for the selected date.
     </div>
   </div>
-<%= button_tag "<i class='fi-page-export-pdf'></i> Print Daily Client Totals".html_safe, name: 'type', value: 'daily' %>
-<%= button_tag "<i class='fi-page-export-pdf'></i> Print Weekly Client Totals".html_safe, name: 'type', value: 'weekly' %>
 
-<% end %>
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>

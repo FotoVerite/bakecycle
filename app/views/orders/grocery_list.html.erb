@@ -1,15 +1,23 @@
-<% provide(:title, "Generate Grocery List for- #{@date.strftime('%A %b. %e, %Y')}") %>
+<% provide(:title, "Grocery List") %>
 
-<h1>Generate Grocery Lists for &mdash; <%= @date.strftime("%A %b. %e, %Y") %></h1>
+<div class="report-page report-generator-page">
+  <%= render "shared/report_header",
+    title: "Grocery List",
+    date_text: @date.strftime("%A %b. %e, %Y"),
+    status: "Product runs" %>
 
-<%= simple_form_for :future_invoices, url: print_grocery_list_orders_path, method: :get, :html => {:target => '_blank'} do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
-    </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Generate Grocery List', class: "button postfix search-button", name: nil %>
+  <div class="report-toolbar">
+    <%= simple_form_for :future_invoices, url: print_grocery_list_orders_path, method: :get, html: { target: "_blank", class: "report-print-form" } do |f| %>
+      <div class="report-date-form">
+        <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+        <%= f.submit "Generate Grocery List", class: "button search-button", name: nil %>
+      </div>
+    <% end %>
+    <div class="report-toolbar-note">
+      <span>Production report</span>
+      Builds the grocery list for product runs on this date.
     </div>
   </div>
-<% end %>
 
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>
