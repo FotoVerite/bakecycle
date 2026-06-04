@@ -32,24 +32,4 @@ module ApplicationHelper
     render "loading_indicator"
   end
 
-  def react_component(name, props)
-    html = <<-SCRIPT
-    <script>
-    (function(){
-      var name = #{name.to_json};
-      var props = #{props.to_json};
-      var node = document.createElement('div');
-      node.setAttribute('data-reactComponent', name);
-
-      var scripts = document.getElementsByTagName('script');
-      var scriptTag = scripts[scripts.length-1];
-      scriptTag.parentNode.insertBefore(node, scriptTag);
-
-      window.reactComponents = window.reactComponents || [];
-      window.reactComponents.push([name, props, node]);
-    })();
-    </script>
-    SCRIPT
-    html.html_safe
-  end
 end

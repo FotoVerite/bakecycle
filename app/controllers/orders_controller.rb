@@ -9,6 +9,7 @@ class OrdersController < ApplicationController
     papertrail
     update
   ]
+  before_action :set_order_form_data, only: %i[new edit create update copy]
   before_action :skip_policy_scope, only: %i[grocery_list print_grocery_list]
   decorates_assigned :orders, :order
   helper_method :search_form
@@ -138,6 +139,14 @@ class OrdersController < ApplicationController
 
   def set_order
     @order = policy_scope(Order).find(params[:id])
+  end
+
+  def set_order_form_data
+    @available_products = item_finder.products.available.order(:name)
+      .map { |p| [p.name, p.id, { data: { lead_days: p.total_lead_days } }] }
+    @available_routes = item_finder.routes.active.order(:name)
+    @available_clients = item_finder.clients.order(:name)
+    @kickoff_time = current_user.bakery.kickoff_time.strftime("%H:%M")
   end
 
   def search_form

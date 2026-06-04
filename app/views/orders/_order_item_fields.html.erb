@@ -1,0 +1,60 @@
+<div class="nested-row form-grid order-item-grid"
+     data-controller="order-item"
+     data-order-item-row="true"
+     data-nested-row="true">
+
+  <% if item.persisted? %>
+    <%= oi.hidden_field :id %>
+    <%= oi.hidden_field :_destroy, value: "", data: { destroy_field: "" } %>
+  <% end %>
+
+  <div class="form-field">
+    <%= oi.select :product_id,
+        options_for_select([["Select Product", ""]] + available_products, item.product_id),
+        {},
+        class: "nested-field",
+        required: true,
+        data: {
+          order_item_target: "product",
+          action: "change->order-form#productChanged"
+        } %>
+  </div>
+
+  <div class="order-item-readonly">
+    <%= item.persisted? ? item.decorate.product_price_and_quantity : "" %>
+  </div>
+
+  <div class="order-item-readonly">
+    <%= item.persisted? ? item.decorate.total_quantity_price_currency : "" %>
+  </div>
+
+  <% [[:monday, 1], [:tuesday, 2], [:wednesday, 3], [:thursday, 4], [:friday, 5], [:saturday, 6], [:sunday, 0]].each do |day, day_num| %>
+    <div class="form-field">
+      <%= oi.number_field day,
+          class: "nested-field",
+          min: 0,
+          step: 1,
+          autocomplete: "off",
+          data: { order_item_day: day_num } %>
+    </div>
+  <% end %>
+
+  <div class="nested-row-actions">
+    <button type="button"
+            class="nested-icon-btn nested-btn-remove"
+            data-action="nested-form#remove order-form#rowChanged"
+            title="Remove">
+      <i class="fi-x"></i>
+    </button>
+    <% if item.persisted? %>
+      <button type="button"
+              class="nested-icon-btn nested-btn-restore"
+              data-action="nested-form#restore order-form#rowChanged"
+              title="Restore"
+              hidden>
+        <i class="fi-refresh"></i>
+      </button>
+    <% end %>
+  </div>
+
+</div>

@@ -1,0 +1,66 @@
+<% is_template = local_assigns.fetch(:is_template, false) %>
+<% type_display = item.persisted? ? (item.inclusionable_type == "Ingredient" ? item.inclusionable&.ingredient_type&.capitalize : item.inclusionable_type&.capitalize).to_s : "" %>
+<% lead_days_display = item.persisted? ? item.total_lead_days.to_i.to_s : "" %>
+
+<div class="nested-row" data-nested-row
+     data-controller="recipe-item">
+  <div class="form-grid nested-row-grid recipe-item-grid">
+
+    <div class="drag-handle">
+      <i class="fi-list"></i>
+    </div>
+
+    <div class="form-field">
+      <%= ri.select :inclusionable_id_type,
+          options_for_select([["Select Ingredient", ""]] + inclusions, item.persisted? ? item.inclusionable_id_type : nil),
+          {},
+          class: "nested-field",
+          required: true,
+          data: {
+            recipe_item_target: "inclusionable",
+            action: "change->recipe-item#selectIngredient"
+          } %>
+    </div>
+
+    <div class="form-field">
+      <%= ri.number_field :bakers_percentage,
+          step: "0.01",
+          placeholder: "0",
+          required: true,
+          class: "nested-field" %>
+    </div>
+
+    <div class="form-field">
+      <input type="text" disabled value="<%= type_display %>"
+             data-recipe-item-target="typeDisplay" />
+    </div>
+
+    <div class="form-field">
+      <input type="text" disabled value="<%= lead_days_display %>"
+             data-recipe-item-target="leadDaysDisplay" />
+    </div>
+
+    <div class="form-field nested-row-actions">
+      <%= ri.hidden_field :sort_id, value: 999, data: { sort_id: "" } %>
+      <% if item.persisted? && !is_template %>
+        <%= ri.hidden_field :_destroy, value: "", data: { destroy_field: "" } %>
+        <button type="button"
+                class="nested-btn-restore nested-icon-btn button tiny secondary"
+                data-action="nested-form#restore"
+                title="Restore ingredient"
+                aria-label="Restore ingredient"
+                hidden>
+          <i class="fi-refresh"></i>
+        </button>
+      <% end %>
+      <button type="button"
+              class="nested-btn-remove nested-icon-btn button tiny secondary"
+              data-action="nested-form#remove"
+              title="Remove ingredient"
+              aria-label="Remove ingredient">
+        <i class="fi-trash"></i>
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -47,16 +47,4 @@ describe ApplicationHelper, type: :helper do
     end
   end
 
-  describe "#react_component" do
-    it "emits a safe script that registers the component name and props" do
-      html = helper.react_component("OrderTable", { client_id: 12, name: "Main" })
-
-      expect(html).to be_html_safe
-      expect(html).to include("data-reactComponent")
-      expect(html).to include('"OrderTable"')
-      expect(html).to include('"client_id":12')
-      expect(html).to include('"name":"Main"')
-      expect(html).to include("window.reactComponents.push([name, props, node])")
-    end
-  end
 end

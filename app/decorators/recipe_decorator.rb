@@ -22,11 +22,6 @@ class RecipeDecorator < Draper::Decorator
     delete_itself_from_collection inclusionables(ingredients)
   end
 
-  def serializable_hash
-    RecipeSerializer.new(object).as_json
-      .transform_keys { |k| k.to_s.camelize(:lower) }
-  end
-
   private
 
   def ingredients

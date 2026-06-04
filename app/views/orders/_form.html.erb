@@ -1,27 +1,170 @@
-<div>
-<%= simple_form_for order do |f| %>
+<%= simple_form_for order, html: {
+  class: "form-stack",
+  data: {
+    controller: "order-form",
+    order_form_kickoff_value: @kickoff_time,
+    order_form_order_id_value: order.id.to_i
+  }
+} do |f| %>
+
   <%= render "shared/error_messages", f: f %>
-  <% if f.object.overridable_order? %>
-    <%= render  'overridable_order', f: f %>
-  <% elsif f.object.overlapping? %>
+
+  <% if order.overridable_order? %>
+    <%= render 'overridable_order', f: f %>
+  <% elsif order.overlapping? %>
     <%= render 'overlapping_orders', f: f %>
   <% end %>
+
   <%= render 'updated', updated: @updated %>
 
-  <%= react_component('OrderFormProvider', OrderForm.new(order: @order, user: current_user).serializable_hash) %>
+  <fieldset class="form-section">
+    <legend>Order Information</legend>
+    <div class="form-grid">
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless f.object.new_record? %>
-        <%= link_to 'Delete', order_path(f.object),
+      <% unless order.persisted? %>
+        <div class="form-field form-span-4">
+          <%= f.input :client_id,
+              collection: @available_clients,
+              label_method: :name,
+              value_method: :id,
+              as: :select,
+              required: true,
+              prompt: "Select Client" %>
+        </div>
+      <% end %>
+
+      <div class="form-field form-span-12 order-type-field">
+        <span class="form-field-label">Order Type <abbr title="required">*</abbr></span>
+        <div class="form-choice-row form-choice-card-row">
+          <label class="form-choice form-choice-card">
+            <%= f.radio_button :order_type, "standing",
+                data: { order_form_target: "orderType", action: "change->order-form#typeChanged" } %>
+            <span>
+              <strong>Standing</strong>
+              <small>Repeats weekly for this client.</small>
+            </span>
+          </label>
+          <label class="form-choice form-choice-card">
+            <%= f.radio_button :order_type, "temporary",
+                data: { order_form_target: "orderType", action: "change->order-form#typeChanged" } %>
+            <span>
+              <strong>Temporary</strong>
+              <small>Overrides standing orders for one date.</small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-field form-span-4" data-order-form-target="startDateField">
+        <%= f.input :start_date, as: :string,
+            required: true,
+            input_html: {
+              type: "date",
+              value: order.start_date&.to_s,
+              data: {
+                order_form_target: "startDate",
+                action: "change->order-form#startDateChanged"
+              }
+            } %>
+        <p data-order-form-target="startDateWarning" hidden class="order-field-warning"></p>
+      </div>
+
+      <div class="form-field form-span-4"
+           data-order-form-target="endDateField"
+           <%= "hidden" if order.temporary? %>>
+        <%= f.input :end_date, as: :string,
+            input_html: {
+              type: "date",
+              value: order.end_date&.to_s,
+              data: { action: "change->order-form#validate" }
+            } %>
+        <p data-order-form-target="endDateWarning" hidden class="order-field-warning"></p>
+      </div>
+
+      <div class="form-field form-span-4">
+        <%= f.input :route_id,
+            collection: @available_routes,
+            label_method: :name,
+            value_method: :id,
+            as: :select,
+            required: true,
+            prompt: "Select Route" %>
+      </div>
+
+      <div class="form-field form-span-12">
+        <%= f.input :note, as: :text %>
+      </div>
+
+      <div class="form-span-12 order-meta-row">
+        <label class="form-switch-card order-vip-card">
+          <%= f.check_box :alert %>
+          <span>
+            <strong>VIP order</strong>
+            <small>Flag this order for extra attention on production and delivery screens.</small>
+          </span>
+        </label>
+
+        <p class="order-lead-days">
+          <span>Lead days</span>
+          <strong data-order-form-target="leadDaysDisplay"><%= order.total_lead_days %></strong>
+        </p>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <fieldset class="form-section" data-controller="nested-form">
+    <legend>Products</legend>
+
+    <div class="form-grid nested-col-headers order-item-grid">
+      <div class="nested-col-label">Product <abbr title="required">*</abbr></div>
+      <div class="nested-col-label">Price</div>
+      <div class="nested-col-label">Total</div>
+      <div class="nested-col-label">Mon</div>
+      <div class="nested-col-label">Tue</div>
+      <div class="nested-col-label">Wed</div>
+      <div class="nested-col-label">Thur</div>
+      <div class="nested-col-label">Fri</div>
+      <div class="nested-col-label">Sat</div>
+      <div class="nested-col-label">Sun</div>
+      <div></div>
+    </div>
+
+    <div data-nested-form-target="rows">
+      <% order.order_items.each_with_index do |item, index| %>
+        <%= f.fields_for :order_items, item, index: index do |oi| %>
+          <%= render "orders/order_item_fields", oi: oi, item: item, available_products: @available_products %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <template data-nested-form-target="template">
+      <%= f.fields_for :order_items, OrderItem.new, index: "NEW_RECORD" do |oi| %>
+        <%= render "orders/order_item_fields", oi: oi, item: OrderItem.new, available_products: @available_products %>
+      <% end %>
+    </template>
+
+    <button type="button" class="button small nested-add-btn"
+            data-action="nested-form#add order-form#rowChanged">
+      + Add Product
+    </button>
+  </fieldset>
+
+  <div class="form-actions">
+    <%= f.submit (order.new_record? ? "Create" : "Update"),
+        class: "button",
+        name: nil,
+        data: { order_form_target: "submitBtn" } %>
+    <p data-order-form-target="actionWarning" hidden class="order-action-warning">
+      Warning, this order is being created without minimum lead days and will not be automatically invoiced.
+    </p>
+    <% unless order.new_record? %>
+      <%= link_to 'Delete', order_path(order),
           class: "button alert",
           method: :delete,
-          data: { confirm: 'Are you sure?' }
-        %>
-      <% end %>
-      <p id="kickoff-warning" class="hide">Warning, this order is being created without minimum lead days and will not be automatically invoiced.</p>
-    </div>
+          data: { confirm: 'Are you sure?' } %>
+    <% end %>
+    <%= link_to "Back to Orders", orders_path, class: "button secondary" %>
   </div>
+
 <% end %>
-</div>

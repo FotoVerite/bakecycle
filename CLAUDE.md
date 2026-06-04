@@ -102,9 +102,9 @@ Jest tests live in `spec/javascript/`. Run with `npm test`.
 
 ```bash
 npm run build          # dev build
-npm run build:prod     # minified production build (665 KB)
+npm run build:prod     # minified production build (~317 KB)
 npm run build:watch    # watch mode for development
-npm test               # Jest (52 tests)
+npm test               # Jest (0 tests remain — all React tests deleted)
 npm run test:watch     # Jest watch mode
 ```
 
@@ -161,17 +161,18 @@ After Turbo is installed, update the 16 `link_to method: :delete` views to use `
 
 ### Migration order
 
-| Priority | Component(s) | Replace with | Why / notes |
+| Priority | Component(s) | Replace with | Status |
 |---|---|---|---|
-| 1 | `file-export-refresher.jsx` | Stimulus polling controller | 78 lines, self-contained. Polls `links.self` JSON endpoint every 1s; redirects when `ready`. Rewrite as Stimulus controller: `connect()` starts `fetch` polling, `disconnect()` clears timeout. Remove `$.get` jQuery call. |
-| 2 | `client-map.jsx` + `client-marker.jsx` | Stimulus controller | Init Google Maps JS API directly in `connect()`, read lat/lng/name from `data-` attributes. Remove `google-map-react` npm package. No state machine — pure init. |
-| 3 | `product-price-form.jsx` + `product-price-fields.jsx` | Stimulus nested-form controller | Standard `accepts_nested_attributes_for` add/remove rows. The `toggleDestroy` flag (soft-delete of existing records) is the only wrinkle — add a `data-destroy` attribute that nested-form sets on remove. ~40 lines. |
-| 4 | `clients-table.jsx` | Turbo Frame + server-side filter | Currently client-side filters (name fuzzy, active, engagement status) over a JSON blob. Better as a `<turbo-frame>` wrapping the table with a real `<form>` that submits to `ClientsController#index` with filter params. Eliminates the JSON serialization entirely. Enter-to-navigate becomes a small Stimulus controller (~15 lines). |
-| 5 | `costing-form.jsx` + `costing-item-fields.jsx` | Stimulus filter controller | Redux holds 3 values: ingredients array, filter array, weightUnitOptions. Render rows server-side. Add a Stimulus controller for the multi-select filter that sets `hidden` on rows matching `data-ingredient-id`. Same pattern as clients-table filter. |
-| 6 | `vendor-pricing-form.jsx` + `pricing-item-fields.jsx` | Stimulus filter controller | Identical pattern to costing-form. Do at the same time. |
-| 7 | `recipe-form.jsx` + `recipe-items-form.jsx` + `recipe-item-fields.jsx` | Stimulus nested-form + SortableJS | Add/remove rows → nested-form controller (same as product-price-form). Drag-and-drop reordering → SortableJS via a Stimulus controller that writes `sort_id` values back to hidden inputs on `end` event. Most moving parts — do last. |
+| 1 | `file-export-refresher.jsx` | Stimulus polling controller | ✅ done |
+| 2 | `client-map.jsx` + `client-marker.jsx` | Stimulus controller | ✅ done |
+| 3 | `product-price-form.jsx` + `product-price-fields.jsx` | Stimulus nested-form controller | ✅ done |
+| 4 | `clients-table.jsx` | Stimulus filter + server-side table | ✅ done |
+| 5 | `costing-form.jsx` + `costing-item-fields.jsx` | Stimulus filter controller | ✅ done |
+| 6 | `vendor-pricing-form.jsx` + `pricing-item-fields.jsx` | Stimulus filter controller | ✅ done |
+| 7 | `recipe-form.jsx` + `recipe-items-form.jsx` + `recipe-item-fields.jsx` | Stimulus nested-form + SortableJS | ✅ done |
+| 8 | `order-form.jsx` + Redux store | Stimulus `order-form` + `order-item` controllers | ✅ done |
 
-**After all components are migrated:** remove `react`, `react-dom`, `react-redux`, `@reduxjs/toolkit`, `redux`, `create-react-class`, `google-map-react`, `lodash.pluck`, `lodash.filter`, `lodash.includes`, `lodash.uniq`, `lodash.sortby` from `package.json`. The esbuild pipeline and Jest tests can stay.
+**Migration complete.** React, Redux, moment.js, react-datepicker, react-select, prop-types, lodash.* (order), and all related serializers/models have been removed. esbuild pipeline and Jest infrastructure remain but no tests exist yet.
 
 ## Known pain points for future upgrade hops
 
@@ -180,7 +181,7 @@ After Turbo is installed, update the 16 `link_to method: :delete` views to use `
 - `resque 2.x` — Solid Queue is Rails 8 default. Resque still works; migrate when convenient.
 - `stripe < 6` — pinned; don't bump without a dedicated audit of the Stripe integration.
 - `jquery-rails` — jQuery is still needed for jquery-timepicker and jquery-ui-sass-rails. Can be removed when those UI widgets are replaced with native or Stimulus equivalents.
-- `order-form.jsx` — stays React until a server-side `totalLeadDays` validation endpoint exists. Changing this without that endpoint would regress the order start-date UX.
+- `order-form.jsx` — migrated to Stimulus. Lead time validation runs client-side in `order_form_controller.js`. No server endpoint needed.
 
 ---
 

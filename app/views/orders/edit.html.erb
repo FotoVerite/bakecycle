@@ -1,27 +1,49 @@
 <% provide(:title, "Editing Order ##{order.id}") %>
-<h1>Editing Order #<%= order.id %> - <%= link_to order.client_name, order.client, class: "underlined-link" %></h1>
 
-<ul class="stack-for-small secondary button-group">
-  <li><%= link_to 'Back', orders_path, class: "button small" %></li>
-  <li><%= link_to "Print", print_order_path(order), target: "_blank", class: "button small" %></li>
-  <li><%= link_to "Copy Order", copy_order_path(order), class: "button small" %></li>
-  <li><%= link_to "Create Future Invoices", future_invoices_order_path(order), class: "button small" %></li>
+<div class="form-page order-form-page">
+  <div class="form-header order-form-header">
+    <div>
+      <h1>Editing Order #<%= order.id %></h1>
+      <p>
+        <%= link_to order.client_name, order.client, class: "underlined-link" %>
+        <span>Standing schedule and invoice settings.</span>
+      </p>
+    </div>
 
-</ul>
-
-<% unless order.no_outstanding_shipments? %>
-  <div class="overridable-orders panel callout radius">
-    <h5>This order is missing invoices for <%= pluralize(order.missing_shipment_dates.size, 'date') %></h5>
-    <ul><% for date in order.missing_shipment_dates %>
-        <li><%= date %></li>
-        <% end %>
-    </ul>
-    <%= link_to 'Create these invoices', add_invoices_order_path(@order),
-          class: "button alert",
-          method: :put,
-          data: { confirm: "Production Run will need to be updated manually." } %>
+    <div class="form-header-actions order-action-bar">
+      <%= link_to orders_path, class: "button small secondary" do %>
+        <i class="fi-arrow-left"></i>
+        <span>Back</span>
+      <% end %>
+      <%= link_to print_order_path(order), target: "_blank", class: "button small" do %>
+        <i class="fi-print"></i>
+        <span>Print</span>
+      <% end %>
+      <%= link_to copy_order_path(order), class: "button small" do %>
+        <i class="fi-page-copy"></i>
+        <span>Copy Order</span>
+      <% end %>
+      <%= link_to future_invoices_order_path(order), class: "button small order-action-primary" do %>
+        <i class="fi-page-add"></i>
+        <span>Create Future Invoices</span>
+      <% end %>
+    </div>
   </div>
-<% end %>
 
-<%= render "form", order: order %>
-<%= render partial: 'upcoming_shipments' if order.upcoming_shipments.any? %>
+  <% unless order.no_outstanding_shipments? %>
+    <div class="overridable-orders panel callout radius">
+      <h5>This order is missing invoices for <%= pluralize(order.missing_shipment_dates.size, 'date') %></h5>
+      <ul><% for date in order.missing_shipment_dates %>
+          <li><%= date %></li>
+          <% end %>
+      </ul>
+      <%= link_to 'Create these invoices', add_invoices_order_path(@order),
+            class: "button alert",
+            method: :put,
+            data: { confirm: "Production Run will need to be updated manually." } %>
+    </div>
+  <% end %>
+
+  <%= render "form", order: order %>
+  <%= render partial: 'upcoming_shipments' if order.upcoming_shipments.any? %>
+</div>

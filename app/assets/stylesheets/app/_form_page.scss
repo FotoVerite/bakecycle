@@ -184,6 +184,14 @@
   min-height: 38px;
 }
 
+.form-choice-card-row {
+  align-items: stretch;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(260px, 340px));
+  min-height: 0;
+}
+
 .form-choice {
   align-items: center;
   color: $bc-scorpion;
@@ -194,6 +202,100 @@
   input[type='radio'] {
     flex: 0 0 auto;
     margin: 0;
+  }
+}
+
+.form-choice-card {
+  align-items: flex-start;
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  color: $bc-charcoal;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 22px minmax(0, 1fr);
+  min-height: 72px;
+  padding: 13px 16px;
+  transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+  width: auto;
+
+  input[type='radio'] {
+    margin-top: 3px;
+  }
+
+  strong,
+  small {
+    display: block;
+  }
+
+  span {
+    min-width: 0;
+  }
+
+  strong {
+    font-size: 0.94rem;
+    line-height: 1.2;
+  }
+
+  small {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+
+  &:has(input:checked) {
+    background: lighten($bc-shakespeare, 38%);
+    border-color: lighten($bc-shakespeare, 14%);
+    box-shadow: 0 0 0 2px rgba($bc-shakespeare, 0.12);
+    color: darken($bc-shakespeare, 26%);
+  }
+
+  &:hover,
+  &:focus-within {
+    border-color: lighten($bc-shakespeare, 18%);
+    transform: translateY(-1px);
+  }
+}
+
+.form-switch-card {
+  align-items: center;
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  color: $bc-charcoal;
+  display: inline-flex;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 14px;
+  transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+
+  input[type='checkbox'] {
+    flex: 0 0 auto;
+    height: 20px;
+    margin: 0;
+    width: 20px;
+  }
+
+  strong,
+  small {
+    display: block;
+  }
+
+  strong {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  small {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    margin-top: 2px;
+  }
+
+  &:has(input:checked) {
+    background: lighten($bc-lima, 42%);
+    border-color: lighten($bc-lima, 18%);
+    box-shadow: 0 0 0 2px rgba($bc-lima, 0.12);
   }
 }
 
@@ -218,6 +320,55 @@
   .button {
     margin: 0;
   }
+}
+
+.form-actions .button.warning,
+.button.warning {
+  background-color: $bc-alizarin-crimson;
+  border-color: darken($bc-alizarin-crimson, 10%);
+  color: $bc-white;
+
+  &:hover,
+  &:focus {
+    background-color: darken($bc-alizarin-crimson, 10%);
+    color: $bc-white;
+  }
+}
+
+.order-action-warning {
+  background: lighten($bc-alizarin-crimson, 39%);
+  border: 1px solid lighten($bc-alizarin-crimson, 24%);
+  color: darken($bc-alizarin-crimson, 12%);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0;
+  max-width: 520px;
+  padding: 10px 12px;
+}
+
+.form-field--error {
+  label,
+  .form-field-label {
+    color: darken($bc-alizarin-crimson, 10%);
+  }
+
+  input:not([type='submit']),
+  select,
+  textarea {
+    border-color: $bc-alizarin-crimson;
+    box-shadow: 0 0 0 2px rgba($bc-alizarin-crimson, 0.1);
+  }
+}
+
+.order-field-warning {
+  background: lighten($bc-alizarin-crimson, 39%);
+  border: 1px solid lighten($bc-alizarin-crimson, 24%);
+  color: darken($bc-alizarin-crimson, 12%);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  margin: 8px 0 0;
+  padding: 8px 10px;
 }
 
 // Nested attribute rows (price variants, recipe items, etc.)
@@ -341,15 +492,245 @@
 
 @media (prefers-reduced-motion: reduce) {
   .nested-row,
-  .nested-icon-btn {
+  .nested-icon-btn,
+  .form-choice-card,
+  .order-action-bar .button {
     transition: none;
   }
 
   .nested-icon-btn:hover,
   .nested-icon-btn:focus,
-  .nested-icon-btn:active {
+  .nested-icon-btn:active,
+  .form-choice-card:hover,
+  .form-choice-card:focus-within,
+  .order-action-bar .button:hover,
+  .order-action-bar .button:focus,
+  .order-action-bar .button:active {
     transform: none;
   }
+}
+
+.order-form-page {
+  .form-header {
+    margin-bottom: 14px;
+  }
+}
+
+.order-form-header {
+  h1 {
+    color: $bc-charcoal;
+  }
+
+  p {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+.order-action-bar {
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  padding: 6px;
+
+  .button {
+    align-items: center;
+    display: inline-flex;
+    gap: 6px;
+    min-height: 34px;
+    transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+
+    i {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    &:hover,
+    &:focus {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .order-action-primary {
+    background: darken($bc-shakespeare, 7%);
+  }
+}
+
+.order-type-field {
+  border-bottom: 1px solid $bc-border-grey;
+  padding-bottom: 4px;
+}
+
+.order-meta-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  justify-content: space-between;
+}
+
+.order-vip-card {
+  max-width: 430px;
+}
+
+.order-lead-days {
+  align-items: center;
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  color: $bc-scorpion;
+  display: inline-flex;
+  gap: 10px;
+  margin: 0;
+  min-height: 46px;
+  padding: 10px 14px;
+
+  span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  strong {
+    color: $bc-charcoal;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+}
+
+// Order item rows
+.order-item-grid {
+  grid-template-columns: minmax(300px, 1fr) 110px 100px repeat(7, 52px) 48px;
+
+  input[type='number'] {
+    height: 40px;
+    text-align: right;
+  }
+
+  select {
+    height: 40px;
+  }
+
+  .nested-row-actions {
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .nested-icon-btn {
+    box-sizing: border-box;
+    height: 38px;
+    min-width: 38px;
+    padding: 0;
+  }
+}
+
+.order-item-readonly {
+  align-items: center;
+  color: $bc-scorpion;
+  display: flex;
+  font-size: 0.85rem;
+  min-height: 40px;
+}
+
+.order-lead-warning {
+  color: darken($bc-alizarin-crimson, 10%);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.upcoming-invoices-panel {
+  background: $bc-white;
+  border: 1px solid $bc-border-grey;
+  margin-top: 22px;
+  padding: 18px 20px 20px;
+}
+
+.upcoming-invoices-header {
+  align-items: center;
+  border-bottom: 1px solid $bc-border-grey;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 14px;
+
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    color: $bc-charcoal;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  p {
+    color: $bc-scorpion;
+    font-size: 0.86rem;
+    margin-top: 3px;
+  }
+
+  > span {
+    background: lighten($bc-shakespeare, 38%);
+    color: darken($bc-shakespeare, 26%);
+    flex: 0 0 auto;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 7px 10px;
+    text-transform: uppercase;
+  }
+}
+
+// Recipe item rows
+.recipe-item-grid {
+  grid-template-columns: 32px 1fr 100px 90px 80px 44px;
+
+  select,
+  input[type='number'],
+  input[type='text'] {
+    height: 40px;
+  }
+}
+
+.drag-handle {
+  align-items: center;
+  color: $bc-silver-chalice;
+  cursor: grab;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $bc-scorpion;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  i {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+}
+
+.sortable-ghost {
+  background: lighten($bc-shakespeare, 40%);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+.help-text {
+  color: $bc-silver-chalice;
+  font-size: 0.78rem;
+  margin-top: 4px;
 }
 
 @media #{$small-only} {
@@ -379,5 +760,27 @@
 
   .form-summary-item {
     margin-bottom: 12px;
+  }
+
+  .form-choice-card {
+    width: 100%;
+  }
+
+  .order-action-bar,
+  .order-action-bar .button,
+  .order-vip-card,
+  .upcoming-invoices-header {
+    width: 100%;
+  }
+
+  .order-meta-row,
+  .upcoming-invoices-header {
+    align-items: stretch;
+    display: block;
+  }
+
+  .order-lead-days {
+    margin-top: 12px;
+    width: 100%;
   }
 }

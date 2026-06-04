@@ -1,5 +1,6 @@
 class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[edit papertrail update destroy]
+  before_action :set_inclusions, only: %i[new edit create update]
   decorates_assigned :recipes, :recipe
 
   def index
@@ -71,6 +72,22 @@ class RecipesController < ApplicationController
 
   def set_recipe
     @recipe = policy_scope(Recipe).find(params[:id])
+  end
+
+  def set_inclusions
+    ingredients = item_finder.ingredients.order(:name)
+    other_recipes = item_finder.recipes.where.not(id: @recipe&.id).order(:name)
+
+    ingredient_options = ingredients.map do |i|
+      [i.name, "#{i.id}-Ingredient", { data: { type: i.ingredient_type.capitalize, lead_days: i.total_lead_days.to_i } }]
+    end
+
+    recipe_options = other_recipes.map do |r|
+      [r.name, "#{r.id}-Recipe", { data: { type: "Recipe", lead_days: r.total_lead_days.to_i } }]
+    end
+
+    @available_inclusions = (ingredient_options + recipe_options).sort_by(&:first)
+    @available_ingredients = ingredient_options
   end
 
   def recipe_params

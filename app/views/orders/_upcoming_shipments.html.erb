@@ -1,25 +1,34 @@
-<h3>Upcoming Invoices for this Order</h3>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Invoice</th>
-      <th scope="col">Date</th>
-      <th scope="col">Client</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% order.upcoming_shipments.each do |shipment| %>
-      <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
-        <th scope="row"><%= shipment.invoice_number %></th>
-        <td data-title="Date"><%= shipment.date %></td>
-        <td data-title="Client Name"><%= shipment.client_name %></td>
-        <td data-title="Action">
-          <%= link_to edit_shipment_path(shipment) do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Shipment"><i class="fi-page-edit"></i></span>
-          <% end %>
-        </td>
+<section class="upcoming-invoices-panel">
+  <div class="upcoming-invoices-header">
+    <div>
+      <h3>Upcoming Invoices</h3>
+      <p>Scheduled invoices generated from this order.</p>
+    </div>
+    <span><%= pluralize(order.upcoming_shipments.size, "invoice") %></span>
+  </div>
+
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th scope="col">Invoice</th>
+        <th scope="col">Date</th>
+        <th scope="col">Client</th>
+        <th scope="col">Action</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% order.upcoming_shipments.each do |shipment| %>
+        <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
+          <th scope="row"><%= shipment.invoice_number %></th>
+          <td data-title="Date"><%= shipment.date %></td>
+          <td data-title="Client Name"><%= shipment.client_name %></td>
+          <td data-title="Action">
+            <%= link_to edit_shipment_path(shipment) do %>
+              <span class="table-action-icon icon-link-tooltip" aria-label="Edit Shipment"><i class="fi-page-edit"></i></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
