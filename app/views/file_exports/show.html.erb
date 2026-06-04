@@ -1,1 +1,13 @@
-<%= react_component('FileExportRefresher', file_export.serializable_hash) %>
+<div data-controller="file-export-refresher"
+     data-file-export-refresher-self-url-value="<%= api_file_export_path(@file_export) %>"
+     data-file-export-refresher-loading-message-value="<%= file_export.loading_message %>">
+  <div class="loading-report">
+    <h2 class="loading-message" data-file-export-refresher-target="message"></h2>
+    <div class="loading-indicator">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    <div data-file-export-refresher-target="status"></div>
+  </div>
+</div>
