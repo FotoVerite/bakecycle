@@ -32,11 +32,11 @@ class PackingSlipsController < ApplicationController
   end
 
   def date_query
-    Chronic.parse(params[:date] || Time.zone.today)
+    parsed_date_param(:date)
   end
 
   def slip_date
-    Chronic.parse(params[:print][:date])
+    parsed_date_param(:date)
   end
 
   def print_invoices?

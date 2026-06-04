@@ -28,10 +28,10 @@ class BatchRecipesController < ApplicationController
   private
 
   def start_date
-    Chronic.parse(params[:start_date]) || Time.zone.today
+    parsed_date_param(:start_date)
   end
 
   def end_date
-    Chronic.parse(params[:end_date]) || Time.zone.today + 6.days
+    parsed_date_param(:end_date, fallback: Time.zone.today + 6.days)
   end
 end

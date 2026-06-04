@@ -119,15 +119,15 @@ class ClientsController < ApplicationController
   private
 
   def date_query
-    Chronic.parse(params[:date]) || Time.zone.today
+    parsed_date_param(:date)
   end
 
   def start_date
-    Chronic.parse(params[:start_date]) || Time.zone.today
+    parsed_date_param(:start_date)
   end
 
   def end_date
-    Chronic.parse(params[:end_date]) || Time.zone.today + 1.days
+    parsed_date_param(:end_date, fallback: Time.zone.today + 1.day)
   end
 
   def set_client

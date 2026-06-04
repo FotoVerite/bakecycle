@@ -13,8 +13,10 @@ class ProductionRunsController < ApplicationController
 
   def index
     authorize ProductionRun
-    @production_runs = policy_scope(ProductionRun)
-      .order(date: :desc).paginate(page: params[:page])
+    @date = index_date_query
+    @production_runs = production_runs_index_scope
+      .order(date: :desc)
+      .paginate(page: params[:page])
   end
 
   def edit
@@ -112,15 +114,26 @@ class ProductionRunsController < ApplicationController
   end
 
   def date_query
-    Chronic.parse(params[:date]) || Time.zone.today
+    parsed_date_param(:date)
+  end
+
+  def index_date_query
+    optional_parsed_date_param(:date)
+  end
+
+  def production_runs_index_scope
+    scope = policy_scope(ProductionRun)
+    return scope unless @date
+
+    scope.for_date(@date)
   end
 
   def start_date
-    Chronic.parse(params[:start_date]) || Time.zone.today.beginning_of_year
+    parsed_date_param(:start_date, fallback: Time.zone.today.beginning_of_year)
   end
 
   def end_date
-    Chronic.parse(params[:end_date]) || Time.zone.today
+    parsed_date_param(:end_date)
   end
 
   def production_run_for_date(date)

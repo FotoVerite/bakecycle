@@ -59,4 +59,32 @@ class ApplicationController < ActionController::Base
     flash[:alert] = "You are not authorized to access this page."
     redirect_to(request.referer || redirect_path)
   end
+
+  def parsed_date_param(*keys, fallback: Time.zone.today)
+    parsed_date_value(date_param_value(*keys), fallback: fallback)
+  end
+
+  def optional_parsed_date_param(*keys)
+    parsed_date_value(date_param_value(*keys), fallback: nil)
+  end
+
+  def date_param_value(*keys)
+    keys.each do |key|
+      value = params[key]
+      return value if value.present?
+
+      %i[search print].each do |param_group|
+        value = params.dig(param_group, key)
+        return value if value.present?
+      end
+    end
+
+    nil
+  end
+
+  def parsed_date_value(value, fallback:)
+    date = Chronic.parse(value.to_s) if value.present?
+    date ||= fallback
+    date.to_date if date
+  end
 end

@@ -81,6 +81,6 @@ class RecipesController < ApplicationController
   end
 
   def date_query
-    Chronic.parse(params[:date] || params[:id]) || Time.zone.today
+    parsed_date_param(:date, :id)
   end
 end

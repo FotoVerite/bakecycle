@@ -10,7 +10,7 @@
 
   <%= simple_form_for :search, method: :get, html: { class: "index-toolbar index-toolbar-production-runs bakecycle-form" } do |f| %>
     <div class="index-filter index-filter-medium">
-      <%= f.input :date, input_html: { value: @date, class: "js-datepicker", name: :date }, label: "Date", required: false %>
+      <%= f.input :date, input_html: { value: @date&.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date }, label: "Date", required: false %>
     </div>
     <div class="index-toolbar-actions">
       <%= f.submit 'Search', class: "button search-button", name: nil %>

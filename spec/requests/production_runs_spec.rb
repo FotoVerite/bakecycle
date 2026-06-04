@@ -53,6 +53,18 @@ RSpec.describe "Production runs", type: :request do
       expect(response).to be_successful
     end
 
+    it "filters production runs by date" do
+      matched_run = create(:production_run, bakery: bakery, date: Date.new(2026, 6, 2))
+      unmatched_run = create(:production_run, bakery: bakery, date: Date.new(2026, 6, 3))
+
+      get production_runs_path(date: "2026-06-02")
+
+      expect(response.body).to include(matched_run.id.to_s)
+      expect(response.body).to include("2026-06-02")
+      expect(response.body).to_not include(unmatched_run.id.to_s)
+      expect(response.body).to_not include("2026-06-03")
+    end
+
     it "shows the print recipes page" do
       get print_recipes_path
       expect(response).to be_successful
