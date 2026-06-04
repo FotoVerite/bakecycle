@@ -11,7 +11,17 @@
     <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button right" %>
   <% end %>
 </div>
-<%= react_component('ClientMap', client.serializable_hash) %>
+<% if client.latitude.present? && client.longitude.present? %>
+  <div class="map-container"
+       data-controller="client-map"
+       data-client-map-lat-value="<%= client.latitude %>"
+       data-client-map-lng-value="<%= client.longitude %>"
+       data-client-map-name-value="<%= client.name %>"
+       data-client-map-api-key-value="<%= ENV['GOOGLE_GEOCODER_API_KEY'] %>"
+       data-client-map-address-value="<%= client.delivery_address_full %>"
+       style="height: 300px;">
+  </div>
+<% end %>
 <fieldset>
   <legend>Business Information</legend>
   <div class="row">

@@ -24,7 +24,6 @@
     "core-js": "^2.4.0",
     "create-react-class": "^15.6.0",
     "date-fns": "^4.4.0",
-    "google-map-react": "^2.2.5",
     "lodash.differenceby": "^4.6.0",
     "lodash.filter": "^4.6.0",
     "lodash.includes": "^4.3.0",
