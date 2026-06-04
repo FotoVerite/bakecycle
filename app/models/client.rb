@@ -124,20 +124,21 @@ class Client < ApplicationRecord
 
   def billing_term_days
     return 0 if %w[credit_card cod].include? billing_term
+
     self.class.billing_terms[billing_term]
   end
-  
+
   def calculate_delivery_fee(subtotal)
-      return delivery_fee unless delivery_fee_option == "percentage_fee"
-      subtotal * (delivery_fee / 100.00)
+    return delivery_fee unless delivery_fee_option == "percentage_fee"
+
+    subtotal * (delivery_fee / 100.00)
   end
 
   def display_fee
     return delivery_fee unless delivery_fee_option == "percentage_fee"
+
     "#{format('%.2f', delivery_fee)}%"
   end
-  
-    
 
   def average_sale_by_month
     months_hash = {}
@@ -146,8 +147,8 @@ class Client < ApplicationRecord
       .group(Arel.sql("EXTRACT(month FROM created_at)"))
       .order(Arel.sql("EXTRACT(month FROM created_at)"))
       .sum(:cached_price)
-    months = Hash[(1..12).map { |month| [ month.to_f, 0 ] }].merge(h)
-    months.map {|k, v| months_hash["#{Time.now.year}-" + k.to_i.to_s] = v.to_f }
+    months = Hash[(1..12).map { |month| [month.to_f, 0] }].merge(h)
+    months.map { |k, v| months_hash["#{Time.now.year}-" + k.to_i.to_s] = v.to_f }
     months_hash
   end
 
@@ -157,22 +158,23 @@ class Client < ApplicationRecord
       .group(Arel.sql("EXTRACT(week FROM created_at)"))
       .order(Arel.sql("EXTRACT(week FROM created_at)"))
       .sum(:cached_price)
-    weeks = Hash[(1..51).map { |week| [ week.to_f, 0 ] }].merge(weeks)
-    weeks = weeks.values.in_groups_of(4,false).map {|x| x.reduce(:+)}
-    weeks.inject{ |sum, el| sum + el }.to_f / weeks.size
+    weeks = Hash[(1..51).map { |week| [week.to_f, 0] }].merge(weeks)
+    weeks = weeks.values.in_groups_of(4, false).map { |x| x.reduce(:+) }
+    weeks.inject { |sum, el| sum + el }.to_f / weeks.size
   end
 
   def average_four_week_sales(time)
     weeks = shipments.where(created_at: (time - 4.weeks)..time)
     return 0 if weeks.empty?
+
     weeks.sum(&:price) / weeks.size
   end
 
   def average_last_four_weeks_per_week(time)
     # Define the 4-week period (starting from 4 weeks ago)
     time = time.in_time_zone
-    start_date = (time - 4.weeks).beginning_of_week 
-    end_date   = time.beginning_of_week 
+    start_date = (time - 4.weeks).beginning_of_week
+    end_date   = time.beginning_of_week
 
     # Get shipments in the 4-week period
     recent_shipments = shipments.where(created_at: start_date..end_date)
@@ -185,13 +187,13 @@ class Client < ApplicationRecord
     weekly_totals = weeks.map do |k, shipments|
       shipments = shipments || []
       # sum prices if price exists, otherwise count shipments
-      shipments.sum { |s| s.price.to_f } 
+      shipments.sum { |s| s.price.to_f }
     end
     return 0 if weekly_totals.size.zero?
+
     # Average per week
     weekly_totals.sum.to_f / weekly_totals.size
   end
-  
 
   private
 
@@ -203,6 +205,7 @@ class Client < ApplicationRecord
 
   def check_if_both_vip_and_vip_temp
     return true unless alert && temp_vip
+
     errors.add(:base, "Client cannot be a VIP and a Temp VIP at the same time. ")
     false
   end
@@ -211,6 +214,7 @@ class Client < ApplicationRecord
     return unless delivery_fee_option == "percentage_fee"
     return if delivery_fee.blank?
     return if delivery_fee >= -100 && delivery_fee <= 100
+
     errors.add(:delivery_fee, "must be between -100 and 100 when fee is a percentage")
   end
 end

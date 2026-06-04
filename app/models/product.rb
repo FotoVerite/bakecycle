@@ -136,6 +136,7 @@ class Product < ApplicationRecord
       return false
     end
     return false unless check_for_order_items
+
     self.removed = true
     save
   end
@@ -161,6 +162,7 @@ class Product < ApplicationRecord
     return true unless order_items.any?
     # see if any orders are still active
     return true unless order_items.map(&:order).uniq.map(&:still_in_use).uniq.include?(true)
+
     errors.add(:base, I18n.t(:product_in_use))
     false
   end
@@ -171,11 +173,13 @@ class Product < ApplicationRecord
 
   def percent_weight
     return weight if dough_percentage.zero? && inclusion_percentage.zero?
+
     weight / (dough_percentage + inclusion_percentage)
   end
 
   def inclusion_percentage
     return 0 unless inclusion
+
     inclusion.total_bakers_percentage
   end
 

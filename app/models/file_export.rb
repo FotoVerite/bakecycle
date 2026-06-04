@@ -16,10 +16,10 @@
 class FileExport < ApplicationRecord
   belongs_to :bakery
   has_attached_file :file,
-    s3_headers: { content_disposition: "attachment" },
-    use_timestamp: false,
-    default_url: "",
-    url: "/system/:class/:id/:attachment/:filename"
+                    s3_headers: { content_disposition: "attachment" },
+                    use_timestamp: false,
+                    default_url: "",
+                    url: "/system/:class/:id/:attachment/:filename"
 
   validates :bakery, presence: true
   do_not_validate_attachment_file_type :file
