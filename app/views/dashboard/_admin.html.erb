@@ -4,33 +4,27 @@
       <h2>Admin</h2>
     </div>
     <% if policy(:user).dashboard? %>
-      <%= link_to users_path do %>
-        <div class="large-4 medium-6 small-12 columns end">
-          <div class="stats border">
+      <div class="large-4 medium-6 small-12 columns end">
+        <%= link_to(users_path, class: "stats border") do %>
             <div class="left">
               Users
               <h3><%= item_finder.users.count %></h3>
             </div>
             <i class="fi-torso right"></i>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
 
     <% if policy(:bakery).dashboard? %>
-      <%= link_to bakeries_path do %>
-        <div class="large-4 medium-6 small-12 columns end">
-          <div class="stats border">
+      <div class="large-4 medium-6 small-12 columns end">
+        <%= link_to(bakeries_path, class: "stats border") do %>
             <div class="left">
               Bakeries
               <h3><%= item_finder.bakeries.count %></h3>
             </div>
             <i class="fi-torsos-all right"></i>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
 
     <% if policy(:job).dashboard? %>

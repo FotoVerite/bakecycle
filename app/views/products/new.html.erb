@@ -1,9 +1,17 @@
 <% provide(:title, "New Product") %>
 
-<h1>New Product</h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>New Product</h1>
+      <p>Create a product record for ordering, production, and reporting.</p>
+    </div>
 
-<%= link_to 'Back', products_path, class: "button small" %>
+    <div class="form-header-actions">
+      <%= link_to 'Back', products_path, class: "button small secondary" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
-
+  <%= render 'form' %>
+</div>
 

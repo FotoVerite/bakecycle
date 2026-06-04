@@ -1,90 +1,85 @@
-<%= simple_form_for @product do |f| %>
+<%= simple_form_for @product, html: { class: "form-stack" } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Product Information</legend>
-    <div class="row">
-      <div class="small-12 columns">
-        <%=  f.input_field :inactive, as: :boolean, inline_label: 'Inactive?', input_html: { id: 'inactive' }, style: "vertical-align: -webkit-baseline-middle;margin-right: 10px;zoom:2;" %>
+
+    <div class="form-grid">
+      <div class="form-field form-span-12">
+        <label class="form-check">
+          <%= f.input_field :inactive, as: :boolean, input_html: { id: 'inactive' } %>
+          <span>Inactive?</span>
+        </label>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
+
+      <div class="form-field form-span-12">
         <%= f.input :name, as: :string %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-6 columns">
+
+      <div class="form-field form-span-6">
         <%= f.input :product_type, collection: product.product_types_select, prompt: "Select One", as: :select %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :sku, as: :string %>
       </div>
-    </div>
 
-     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :base_price, as: :integer %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :cog, as: :integer %>
       </div>
-    </div>
 
-     <div class="row">
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :weight, as: :integer%>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :unit, collection: product.units_select, as: :select, include_blank: false %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :over_bake, label: "over bake %", as: :integer%>
       </div>
-      <div class="small-12 medium-4 columns end">
+      <div class="form-field form-span-4">
         <%= f.label :total_lead_days %>
         <input disabled="true" type="text" value="<%= product.total_lead_days %>" />
       </div>
-       <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :lead_days_override, label: "lead days override", as: :integer%>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
+
+      <div class="form-field form-span-12">
         <%= f.input :description, as: :text%>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-6 columns">
+
+      <div class="form-field form-span-6">
         <%= f.input :motherdough_id, collection: product.motherdoughs, label_method: :name, value_method: :id, include_blank: 'Select One', as: :select %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :inclusion_id, collection: product.inclusions, label_method: :name, value_method: :id,include_blank: 'Select One', as: :select %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
-      <%=  f.input_field :batch_recipe, as: :boolean, inline_label: 'Include Product on batch reports?', input_html: { id: 'batch_recipe' } %>
-      </div>
-      <div class="small-12 columns">
-      <%=  f.input_field :public, as: :boolean, inline_label: 'Display on public site', input_html: { id: 'public' } %>
+
+      <div class="form-field form-span-12 form-check-list">
+        <label class="form-check">
+          <%= f.input_field :batch_recipe, as: :boolean, input_html: { id: 'batch_recipe' } %>
+          <span>Include Product on batch reports?</span>
+        </label>
+        <label class="form-check">
+          <%= f.input_field :public, as: :boolean, input_html: { id: 'public' } %>
+          <span>Display on public site</span>
+        </label>
       </div>
     </div>
   </fieldset>
 
   <%= react_component('ProductPriceForm', ProductForm.new(product: @product, user: current_user).serializable_hash) %>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.submit (@product.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless @product.new_record? %>
-        <%= link_to 'Delete', product_path(@product), class: "button alert",
-                                  method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+  <div class="form-actions">
+    <%= f.submit (@product.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+    <% unless @product.new_record? %>
+      <%= link_to 'Delete', product_path(@product), class: "button alert",
+                                method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

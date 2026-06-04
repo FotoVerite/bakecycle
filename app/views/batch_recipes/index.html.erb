@@ -1,18 +1,24 @@
 <% provide(:title, 'Batch Recipes') %>
 
-<h1>Batch Recipes &mdash; <%= @projection.start_date.strftime("%A %b. %e, %Y") %> - <%= @projection.batch_end_date.strftime("%A %b. %e, %Y") %></h1>
+<div class="report-page">
+  <%= render "shared/report_header",
+    title: "Batch Recipes",
+    date_text: "#{@projection.start_date.strftime('%A %b. %e, %Y')} to #{@projection.batch_end_date.strftime('%A %b. %e, %Y')}",
+  status: "Projection" %>
 
-<%= simple_form_for :search, method: :get do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :start_date, input_html: { value: @projection.start_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :start_date}, required: false %>
-    </div>
-    <div class="small-12 medium-3 columns">
-      <%= f.input :end_date, input_html: { value: @projection.batch_end_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :end_date}, required: false %>
-    </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Select Dates', class: "button postfix search-button", name: nil %>
+  <div class="report-toolbar">
+    <%= simple_form_for :search, url: batch_recipes_path, method: :get do |f| %>
+      <div class="report-date-form report-date-range-form">
+        <%= f.input :start_date, input_html: { value: @projection.start_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :start_date}, required: false %>
+        <%= f.input :end_date, input_html: { value: @projection.batch_end_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :end_date}, required: false %>
+        <%= f.submit 'Select Dates', class: "button search-button", name: nil %>
+      </div>
+    <% end %>
+    <div class="report-toolbar-note">
+      <span>Batch projection</span>
+      Quantities are projected from active orders across this date range.
     </div>
   </div>
-<% end %>
-<%= render 'shared/projections' %>
+
+  <%= render 'shared/projections' %>
+</div>

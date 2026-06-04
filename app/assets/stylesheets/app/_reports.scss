@@ -1,0 +1,221 @@
+.report-page {
+  .report-header,
+  .report-toolbar,
+  .report-actions {
+    background: $bc-white;
+    border: 1px solid $bc-border-grey;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 18px 20px;
+  }
+
+  .report-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    p {
+      color: $bc-scorpion;
+      margin: 0.35rem 0 0;
+    }
+  }
+
+  .report-status {
+    background: lighten($bc-shakespeare, 34%);
+    border-radius: 4px;
+    color: darken($bc-shakespeare, 22%);
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 7px 10px;
+    text-transform: uppercase;
+  }
+
+  .report-toolbar {
+    align-items: end;
+    background: lighten($bc-shakespeare, 39%);
+    display: grid;
+    grid-template-columns: max-content minmax(240px, 1fr);
+    gap: 18px;
+    position: relative;
+
+    form {
+      margin: 0;
+    }
+
+    border-color: lighten($bc-shakespeare, 25%);
+  }
+
+  .report-date-form {
+    align-items: flex-end;
+    display: grid;
+    grid-template-columns: minmax(190px, 220px) auto;
+    gap: 10px;
+
+    .input {
+      margin: 0;
+      min-width: 0;
+    }
+
+    input[type="text"] {
+      box-sizing: border-box;
+      border-color: $bc-border-grey;
+      box-shadow: inset 0 1px 2px rgba(50, 60, 70, 0.04);
+      font-size: 0.95rem;
+      height: 40px;
+      margin: 0;
+      min-height: 40px;
+      width: 100%;
+    }
+
+    label {
+      color: $bc-scorpion;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .search-button {
+      height: 40px;
+      line-height: 40px;
+      min-height: 40px;
+      margin: 0;
+      padding-bottom: 0;
+      padding-left: 22px;
+      padding-right: 22px;
+      padding-top: 0;
+      width: auto;
+    }
+  }
+
+  .report-date-range-form {
+    grid-template-columns: minmax(170px, 190px) minmax(170px, 190px) auto;
+
+    .input {
+      min-width: 0;
+    }
+  }
+
+  .report-toolbar-note {
+    align-self: end;
+    color: $bc-scorpion;
+    font-size: 0.85rem;
+    justify-self: end;
+    max-width: 320px;
+    text-align: right;
+
+    span {
+      color: darken($bc-shakespeare, 20%);
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .report-actions {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    .projection {
+      color: $bc-scorpion;
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
+  .report-action-buttons {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    form {
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .button {
+      margin: 0;
+
+      i {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .report-checkbox {
+    align-items: center;
+    color: $bc-scorpion;
+    display: flex;
+    font-size: 0.82rem;
+    gap: 6px;
+    margin: 0;
+
+    input {
+      margin: 0;
+    }
+  }
+
+  .report-secondary-actions {
+    margin: -6px 0 16px;
+    text-align: right;
+  }
+
+  .button.secondary {
+    background: $bc-white;
+    border: 1px solid $bc-border-grey;
+    color: $bc-scorpion;
+
+    &:hover,
+    &:focus {
+      background: $bc-verylightgrey;
+      color: $bc-charcoal;
+    }
+  }
+
+  .report-table {
+    tbody td,
+    tbody th {
+      padding-bottom: 0.65rem;
+      padding-top: 0.65rem;
+    }
+  }
+}
+
+@media #{$small-only} {
+  .report-page {
+    .report-header,
+    .report-toolbar,
+    .report-actions,
+    .report-date-form {
+      align-items: stretch;
+      display: block;
+    }
+
+    .report-toolbar-note,
+    .report-secondary-actions {
+      margin-top: 12px;
+      text-align: left;
+    }
+
+    .report-action-buttons {
+      margin-top: 12px;
+    }
+  }
+}

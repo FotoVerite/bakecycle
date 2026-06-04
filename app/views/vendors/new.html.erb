@@ -1,7 +1,16 @@
 <% provide(:title, "New Vendor") %>
 
-<h1>New Vendor</h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>New Vendor</h1>
+      <p>Create a vendor contact for purchasing and supplier records.</p>
+    </div>
 
-<%= link_to 'Back', vendors_path, class: "button small" %>
+    <div class="form-header-actions">
+      <%= link_to 'Back', vendors_path, class: "button small secondary" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

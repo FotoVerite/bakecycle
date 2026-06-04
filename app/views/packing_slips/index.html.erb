@@ -1,20 +1,20 @@
 <% provide(:title, "Packing Slips - #{@date.strftime('%A %b. %e, %Y')}") %>
 
-<h1>Packing Slips &mdash; <%= @date.strftime("%A %b. %e, %Y") %></h1>
+<div class="report-page">
+  <%= render "shared/report_header",
+    title: "Packing Slips",
+    date_text: @date.strftime("%A %b. %e, %Y"),
+    status: pluralize(@shipments.count, "invoice") %>
 
-<%= simple_form_for :search, method: :get do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
-    </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Select Date', class: "button postfix search-button", name: nil %>
-    </div>
-  </div>
-<% end %>
+  <%= render "shared/report_date_toolbar",
+    url: packing_slips_path,
+    date: @date,
+    note_label: "Packing workflow",
+  note: "Print packing lists, sorted lists, or packing slips for this date." %>
 
-<% if @shipments.any? %>
-  <%= render partial: "packing_slips", locals: { shipments: @shipments } %>
-<% else %>
-  <h2>No packing slips for this date.</h2>
-<% end %>
+  <% if @shipments.any? %>
+    <%= render partial: "packing_slips/packing_slips", locals: { shipments: @shipments } %>
+  <% else %>
+    <h2>No packing slips for this date.</h2>
+  <% end %>
+</div>

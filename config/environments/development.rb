@@ -1,6 +1,6 @@
 Rails.application.configure do
   config.action_mailer.default_url_options = { host: "localhost:3000" }
-  config.cache_classes = false
+  config.enable_reloading = true
   config.eager_load = false
 
   # Show full error reports and disable caching.
@@ -11,9 +11,8 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = true
+  config.action_dispatch.show_exceptions = :all
 
-  # I want this to be raise
   config.active_support.deprecation = :log
 
   # Raise an error on page load if there are pending migrations.

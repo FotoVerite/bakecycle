@@ -1,30 +1,36 @@
 <% provide(:title, "Delivery Lists - #{@recipes.date.strftime('%A %b. %e, %Y')}") %>
 
-<h1>Delivery Lists &mdash; <%= @recipes.date.strftime("%A %b. %e, %Y") %></h1>
+<div class="report-page">
+  <%= render "shared/report_header",
+    title: "Delivery Lists",
+    date_text: @recipes.date.strftime("%A %b. %e, %Y"),
+    status: pluralize(@recipes.shipments.count, "invoice") %>
 
-<%= simple_form_for :search, method: :get do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @recipes.date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+  <%= render "shared/report_date_toolbar",
+    url: delivery_lists_path,
+    date: @recipes.date,
+    note_label: "Delivery workflow",
+    note: "Review routes and export delivery lists for this date." %>
+
+  <% if @recipes.shipments.any? %>
+    <div class="report-actions">
+      <div>
+        <p class="projection">Delivery routes for this date</p>
+      </div>
+      <div class="report-action-buttons">
+        <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf, type: :pdf), target: '_blank', class: "button small" do %>
+          <i class='fi-page-export-pdf'></i> Print Delivery List
+        <% end %>
+        <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), type: :xlsx), target: '_blank', class: "button small secondary" do %>
+          <i class='fi-page-export'></i> Export Excel
+        <% end %>
+        <%= link_to print_sorted_delivery_list_path(@recipes.date.strftime("%Y-%m-%d")), target: '_blank', class: "button small secondary" do %>
+          <i class='fi-page-export'></i> Export Sorted Excel
+        <% end %>
+      </div>
     </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Select Date', class: "button postfix search-button", name: nil %>
-    </div>
-  </div>
-<% end %>
 
-<% if @recipes.shipments.any? %>
-  <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf, type: :pdf), target: '_blank', class: "button" do %>
-    <i class='fi-page-export-pdf'></i> Print Delivery List
-  <% end %>
-   <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), type: :xlsx), target: '_blank', class: "button" do %>
-    <i class='fi-page-export-pdf'></i> Export Delivery List Excel Sheet
-  <% end %>
-  <%= link_to print_sorted_delivery_list_path(@recipes.date.strftime("%Y-%m-%d")), target: '_blank', class: "button" do %>
-    <i class='fi-page-export-pdf'></i> Export Sorted Delivery List Excel Sheet
-  <% end %>
-
-  <table class="responsive-table">
+  <table class="responsive-table report-table">
     <thead>
       <tr>
         <th scope="col">Client</th>
@@ -42,6 +48,7 @@
       <% end %>
     </tbody>
   </table>
-<% else %>
-  <h2>No delivery list for this date.</h2>
-<% end %>
+  <% else %>
+    <h2>No delivery list for this date.</h2>
+  <% end %>
+</div>

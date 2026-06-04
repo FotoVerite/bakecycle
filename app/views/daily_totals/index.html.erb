@@ -1,32 +1,37 @@
 <% provide(:title, "Daily Totals - #{@recipes.date.strftime('%A %b. %e, %Y')}") %>
 
-<h1>Daily Totals &mdash; <%= @recipes.date.strftime("%A %b. %e, %Y") %></h1>
+<div class="report-page">
+  <%= render "shared/report_header",
+    title: "Daily Totals",
+    date_text: @recipes.date.strftime("%A %b. %e, %Y"),
+    status: pluralize(@recipes.shipments.count, "invoice") %>
 
-<%= simple_form_for :search, method: :get do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.input :date, input_html: { value: @recipes.date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
+  <%= render "shared/report_date_toolbar",
+    url: daily_totals_path,
+    date: @recipes.date,
+    note_label: "Production totals",
+    note: "Print or export daily totals for routes and production planning." %>
+
+  <% if @recipes.routes.any? %>
+    <div class="report-actions">
+      <div>
+        <p class="projection"><%= pluralize(@recipes.shipments.count, "Invoice") %> on the following routes</p>
+      </div>
+      <div class="report-action-buttons">
+        <%= link_to "<i class='fi-page-export-pdf'></i> Print With Routes".html_safe,
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :pdf), target: "_blank", class: "button small"%>
+
+        <%= link_to "<i class='fi-page-export-pdf'></i> Print Without Routes".html_safe,
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :pdf), target: "_blank", class: "button small secondary"%>
+
+        <%= link_to "<i class='fi-page-export'></i> Export With Routes".html_safe,
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :xlsx), target: "_blank", class: "button small secondary" %>
+
+        <%= link_to "<i class='fi-page-export'></i> Export Without Routes".html_safe,
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :xlsx), target: "_blank", class: "button small secondary" %>
+      </div>
     </div>
-    <div class="small-12 medium-3 columns end">
-      <%= f.submit 'Select Date', class: "button postfix search-button", name: nil %>
-    </div>
-  </div>
-<% end %>
-
-<% if @recipes.routes.any? %>
-  <%= link_to "<i class='fi-page-export-pdf'></i> Print Daily Totals".html_safe,
-    print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :pdf), target: "_blank", class: "button small"%>
-
-  <%= link_to "<i class='fi-page-export-pdf'></i> Print Daily Totals Without Routes".html_safe,
-    print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :pdf), target: "_blank", class: "button small"%>
-
-<%= link_to "<i class='fi-page-export-pdf'></i> Export Daily Totals".html_safe,
-     print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :xlsx), target: "_blank", class: "button small" %>
-
-  <%= link_to "<i class='fi-page-export-pdf'></i> Export Daily Totals Without Routes".html_safe,
-        print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :xlsx), target: "_blank", class: "button small" %>
-  <h2><%= pluralize(@recipes.shipments.count, "Invoice") %> on the following Routes</h2>
-  <table class="responsive-table">
+  <table class="responsive-table report-table">
     <thead>
       <tr>
         <th scope="col">Route</th>
@@ -44,6 +49,7 @@
       <% end %>
     </tbody>
   </table>
-<% else %>
-  <h2>No daily totals for this date.</h2>
-<% end %>
+  <% else %>
+    <h2>No daily totals for this date.</h2>
+  <% end %>
+</div>

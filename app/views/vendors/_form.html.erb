@@ -1,38 +1,36 @@
-<%= simple_form_for @vendor do |f| %>
+<%= simple_form_for @vendor, html: { class: "form-stack" } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Vendor Information</legend>
-    <div class="row">
-      <div class="small-12 medium-6 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-6">
         <%= f.input :name, as: :string %>
       </div>
-       <div class="small-12 medium-6 columns">
+       <div class="form-field form-span-6">
         <%= f.input :contact, as: :string %>
       </div>
-       <div class="small-12 medium-6 columns">
+       <div class="form-field form-span-6">
         <%= f.input :email, as: :email %>
       </div>
-       <div class="small-12 medium-6 columns">
+       <div class="form-field form-span-6">
         <%= f.input :phone, as: :string %>
       </div>
     </div>
   </fieldset>
-   <div class="row">
-    <div class="small-12 columns">
-      <% if @vendor.new_record? && policy(@vendor).create? %>
-        <%= f.submit "Create", class: "button", name: nil %>
-      <% end %>
+  <div class="form-actions">
+    <% if @vendor.new_record? && policy(@vendor).create? %>
+      <%= f.submit "Create", class: "button", name: nil %>
+    <% end %>
 
-      <% if @vendor.persisted? && policy(@vendor).update?%>
-        <%= f.submit "Update", class: "button", name: nil %>
-      <% end %>
+    <% if @vendor.persisted? && policy(@vendor).update?%>
+      <%= f.submit "Update", class: "button", name: nil %>
+    <% end %>
 
-      <% if @vendor.persisted? && policy(@vendor).destroy? %>
-        <%= link_to 'Delete', vendor_path(@vendor), class: "button alert",
-                    method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+    <% if @vendor.persisted? && policy(@vendor).destroy? %>
+      <%= link_to 'Delete', vendor_path(@vendor), class: "button alert",
+                  method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

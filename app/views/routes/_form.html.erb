@@ -1,43 +1,43 @@
-<%= simple_form_for @route do |f| %>
+<%= simple_form_for @route, html: { class: "form-stack" } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <fieldset>
-  <legend>Route Information</legend>
-    <div class="row">
-      <div class="large-10 medium-9 small-6 columns">
+  <fieldset class="form-section">
+    <legend>Route Information</legend>
+    <div class="form-grid">
+      <div class="form-field form-span-9">
         <%= f.input :name, as: :string %>
       </div>
 
-      <div class="large-2 medium-3 small-6 columns select-time-wrapper">
+      <div class="form-field form-span-3 select-time-wrapper">
         <%= f.input :departure_time, as: :string, placeholder: "Select Time", input_html: { value: "#{route.formatted_time}", class: "js-timepicker" } %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="small-12 columns">
+      <div class="form-field form-span-12">
         <%= f.input :notes, as: :text%>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="large-6 columns">
-        <%= f.label :active, "Active"%>
-        <%= f.radio_button(:active, true) %>
-        <%= f.label(:active_true, "Yes") %>
-        <%= f.radio_button(:active, false) %>
-        <%= f.label(:active_false, "No") %>
+      <div class="form-field form-span-6">
+        <span class="form-field-label">Active</span>
+        <div class="form-choice-row">
+          <label class="form-choice">
+            <%= f.radio_button(:active, true) %>
+            <span>Yes</span>
+          </label>
+          <label class="form-choice">
+            <%= f.radio_button(:active, false) %>
+            <span>No</span>
+          </label>
+        </div>
       </div>
     </div>
   </fieldset>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.submit (@route.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless @route.new_record? %>
-        <%= link_to 'Delete', route_path(@route), class: "button alert",
-                                  method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+  <div class="form-actions">
+    <%= f.submit (@route.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+    <% unless @route.new_record? %>
+      <%= link_to 'Delete', route_path(@route), class: "button alert",
+                                method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

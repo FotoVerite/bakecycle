@@ -1,14 +1,14 @@
-<%= simple_form_for @ingredient do |f| %>
+<%= simple_form_for @ingredient, html: { class: "form-stack" } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Ingredient Information</legend>
-    <div class="row">
-      <div class="small-12 medium-6 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-6">
         <%= f.input :name, as: :string %>
       </div>
-      <div class="small-12 medium-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input(
           :ingredient_type,
           collection: ingredient.ingredient_types_select,
@@ -16,32 +16,26 @@
           include_blank: false
         ) %>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="small-12 columns">
+      <div class="form-field form-span-12">
         <%= f.input :description, as: :text%>
       </div>
-    </div>
 
-    <div class="row">
-       <div class="small-6 columns">
+      <div class="form-field form-span-6">
         <%= f.label :weight_unit, "Bought In" %>
         <%= f.select :weight_unit, Ingredient::WEIGHT_UNITS %>
       </div>
-      <div class="small-6 columns">
+      <div class="form-field form-span-6">
         <%= f.input :conversion, label: "Conversion to Grams" %>
       </div>
     </div>
   </fieldset>
 
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.submit (@ingredient.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless @ingredient.new_record? %>
-        <%= link_to 'Delete', ingredient_path(@ingredient), class: "button alert",
-                                  method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+  <div class="form-actions">
+    <%= f.submit (@ingredient.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+    <% unless @ingredient.new_record? %>
+      <%= link_to 'Delete', ingredient_path(@ingredient), class: "button alert",
+                                method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

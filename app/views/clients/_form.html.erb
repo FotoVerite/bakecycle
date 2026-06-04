@@ -1,192 +1,189 @@
-<%= simple_form_for @client do |f| %>
+<%= simple_form_for @client, html: { class: "form-stack" } do |f| %>
   <%= render partial: "shared/error_messages", locals: {f: f} %>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Business Information</legend>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-4">
         <%= f.input :name %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :official_company_name %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :ein %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :business_phone %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :business_fax %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :billing_term, collection: Client.billing_terms_select, as: :select, include_blank: "Select One" %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :group %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :engagement_status, collection: Client.engagement_status_select, as: :select, include_blank: false %>
       </div>
-      <div class="small-12 medium-4 columns">
-        <%= f.input :channel, collection: Client.channel_options, as: :select, include_blank: "Select One" %>
+      <div class="form-field form-span-4">
+        <%= f.input :channel, collection: Client.channels, as: :select, include_blank: "Select One" %>
       </div>
-      <div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
-        <%= f.label :active, "Active"%>
-        <%= f.radio_button(:active, "true") %>
-        <%= f.label(:active_true, "Yes") %>
-        <%= f.radio_button(:active, "false") %>
-        <%= f.label(:active_false, "No") %>
+      <div class="form-field form-span-4">
+        <span class="form-field-label">Active</span>
+        <div class="form-choice-row">
+          <label class="form-choice">
+            <%= f.radio_button(:active, "true") %>
+            <span>Yes</span>
+          </label>
+          <label class="form-choice">
+            <%= f.radio_button(:active, "false") %>
+            <span>No</span>
+          </label>
+        </div>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Delivery Notes</legend>
-    <div class="row">
-      <div class="small-12 columns">
-        <span class="label">Notes will print on delivery lists and packing slips</span>
+    <div class="form-grid">
+      <div class="form-field form-span-12">
+        <span class="form-help-tag">Notes will print on delivery lists and packing slips</span>
         <%= f.input :notes, label: false, as: :text %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
-        <%= f.check_box(:alert) %>
-        <%= f.label :alert, "VIP"%>
-        <%= f.check_box(:temp_vip) %>
-        <%= f.label :temp_vip, "Temp VIP"%>
-        <%= f.check_box(:print_invoice) %>
-        <%= f.label :print_invoice, "Print Invoice"%>
+      <div class="form-field form-span-12 form-check-list form-check-list-inline">
+        <label class="form-check">
+          <%= f.check_box(:alert) %>
+          <span>VIP</span>
+        </label>
+        <label class="form-check">
+          <%= f.check_box(:temp_vip) %>
+          <span>Temp VIP</span>
+        </label>
+        <label class="form-check">
+          <%= f.check_box(:print_invoice) %>
+          <span>Print Invoice</span>
+        </label>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Delivery Fee Information</legend>
-    <div class="row">
-      <div class="small-12 medium-4 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-4">
         <%= f.input :delivery_fee_option, collection: Client.delivery_fee_options_select , as: :select, include_blank: false %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :delivery_minimum %>
       </div>
-      <div class="small-12 medium-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :delivery_fee %>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Delivery Address</legend>
-    <div class="row">
-      <div class="small-12 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-12">
         <%= f.input :delivery_address_street_1 %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
+      <div class="form-field form-span-12">
         <%= f.input :delivery_address_street_2 %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :delivery_address_city %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :delivery_address_state %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :delivery_address_zipcode %>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Billing Address</legend>
-    <div class="row">
-      <div class="small-12 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-12">
         <%= f.input :billing_address_street_1 %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
+      <div class="form-field form-span-12">
         <%= f.input :billing_address_street_2 %>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :billing_address_city %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :billing_address_state %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :billing_address_zipcode %>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Accounts Payable</legend>
-    <div class="row">
-      <div class="small-12 large-4 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-4">
         <%= f.input :accounts_payable_contact_name %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :accounts_payable_contact_phone %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :accounts_payable_contact_email %>
-        <%= f.check_box(:send_shipment_when_generated) %>
-        <%= f.label :send_shipment_when_generated, "Automatcally Send Invoice"%>
+      </div>
+      <div class="form-field form-span-12">
+        <label class="form-check">
+          <%= f.check_box(:send_shipment_when_generated) %>
+          <span>Automatically Send Invoice</span>
+        </label>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Wholesale Manager</legend>
-    <div class="row">
-      <div class="small-12 large-12 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-12">
         <%= f.input :wholesale_manager %>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Primary Contact</legend>
-    <div class="row">
-      <div class="small-12 large-4 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-4">
         <%= f.input :primary_contact_name %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :primary_contact_phone %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :primary_contact_email %>
       </div>
     </div>
   </fieldset>
-  <fieldset>
+  <fieldset class="form-section">
     <legend>Secondary Contact</legend>
-    <div class="row">
-      <div class="small-12 large-4 columns">
+    <div class="form-grid">
+      <div class="form-field form-span-4">
         <%= f.input :secondary_contact_name %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :secondary_contact_phone %>
       </div>
-      <div class="small-12 large-4 columns">
+      <div class="form-field form-span-4">
         <%= f.input :secondary_contact_email %>
       </div>
     </div>
   </fieldset>
-  <div class="row">
-    <div class="small-12 columns">
-      <%= f.submit (@client.new_record? ? "Create" : "Update"), class: "button", name: nil %>
-      <% unless @client.new_record? %>
-        <%= link_to 'Delete', client_path(@client), class: "button alert",
-                                  method: :delete, data: { confirm: 'Are you sure?' } %>
-      <% end %>
-    </div>
+
+  <div class="form-actions">
+    <%= f.submit (@client.new_record? ? "Create" : "Update"), class: "button", name: nil %>
+    <% unless @client.new_record? %>
+      <%= link_to 'Delete', client_path(@client), class: "button alert",
+                                method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

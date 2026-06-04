@@ -1,0 +1,11 @@
+<div class="report-header">
+  <div>
+    <h1><%= title %></h1>
+    <% if local_assigns[:date_text].present? %>
+      <p><%= date_text %></p>
+    <% end %>
+  </div>
+  <% if local_assigns[:status].present? %>
+    <span class="report-status"><%= status %></span>
+  <% end %>
+</div>

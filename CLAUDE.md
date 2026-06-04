@@ -279,3 +279,37 @@ The order-form is intentionally excluded: its cross-item `totalLeadDays` computa
 - `jquery-rails` — jQuery not needed for Rails 7 UJS (which uses vanilla JS). Remove at Rails 7 hop.
 - `config.autoloader = :classic` — must migrate to Zeitwerk before Rails 7. Requires file/class naming audit.
 - React 18 + RTK — remaining React components are candidates for Stimulus/Turbo replacement after Rails 7; see migration table above. `order-form.jsx` stays React until server-side validation endpoint exists.
+
+---
+
+## Design Context
+
+Full details in `.impeccable.md`. Summary for quick reference:
+
+### Users
+Two audiences in equal measure: **bakery owners/managers** (desk, data-dense, full-session navigation) and **production staff** (kitchen/tablet, quick scanning, floury hands). Design must hold for both.
+
+### Brand Personality
+**Reliable workhorse** — dependable, clear, grounded. Professional and direct with enough warmth to feel human. Not cold enterprise software, not a lifestyle brand.
+
+### Aesthetic Direction
+Warmer and more approachable than current palette — shift cool greys toward warmer stone tones, keep Shakespeare blue (`#55aad7`) as primary interactive color, Open Sans stays. Avoid startup SaaS pastels or clinical white.
+
+### Design Principles
+1. **Clarity first** — One obvious primary action per screen; use visual weight, not decoration, to show hierarchy.
+2. **Consistent component vocabulary** — One button style, one form style, one table style, used everywhere. Inconsistency is the primary gap to close.
+3. **Warmth through spacing, not color** — Use generous padding and grouping to make dense pages breathable.
+4. **Floor-legible type** — Key data values and headings larger than they feel necessary on desktop; production staff may be 2 feet away.
+5. **Incremental, not systemic** — Improve components in place; don't require a full design system before shipping.
+
+### Token Reference
+| Token | Value | Usage |
+|---|---|---|
+| `$bc-shakespeare` | `#55aad7` | Primary brand blue — links, active states |
+| `$bc-limed-spruce` | `#323c46` | Dark header/nav backgrounds |
+| `$bc-alizarin-crimson` | `#eb3232` | Destructive / error |
+| `$bc-lima` | `#7ed321` | Success |
+| `$bc-scorpion` | `#5a5a5a` | Body text |
+| `$bc-off-white` | `#f2f3f4` | Page background |
+
+Font: **Open Sans** (300/400/600/700/800), self-hosted via `base/font_setup.scss`.

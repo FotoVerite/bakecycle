@@ -1,10 +1,17 @@
 <% provide(:title, "Editing Product: #{@product.name}") %>
 
-<h1>Editing Product: <%= @product.name %></h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>Editing Product: <%= @product.name %></h1>
+      <p>Update product details used by orders, recipes, and reports.</p>
+    </div>
 
-<%= link_to 'Back', products_path, class: "button small" %>
-<%= link_to 'View Products Orders', orders_product_path(@product), class: "button small" %>
-  
-<h2>Orders </h2>
+    <div class="form-header-actions">
+      <%= link_to 'Back', products_path, class: "button small secondary" %>
+      <%= link_to 'View Product Orders', orders_product_path(@product), class: "button small" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

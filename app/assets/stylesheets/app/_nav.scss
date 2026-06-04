@@ -1,7 +1,20 @@
 .side-column {
+  // Acts as large-2 / medium-12 column in the main flex row.
+  // The inner <div class="large-2 columns"> is display:block inside a flex item,
+  // so percentage widths resolve against .side-column's width, not the page.
+  // These rules give .side-column the correct flex sizing directly.
+  flex: 0 0 100%;
+  max-width: 100%;
+
+  @media #{$large-up} {
+    flex: 0 0 percentage(2 / 12);
+    max-width: percentage(2 / 12);
+  }
 
   .columns {
+    max-width: 100%;
     padding: 0;
+    width: 100%;
   }
 
   .header {
@@ -38,20 +51,24 @@
 
   .main {
     color: $bc-silver-chalice;
-    font-size: 14px;
-    letter-spacing: 1px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
     line-height: 25px;
-    padding: 15px 30px 75px;
+    padding: 14px 16px 75px;
 
     > li {
-      padding: 0 0 25px 50px;
+      display: grid;
+      grid-template-columns: 25px minmax(0, 1fr);
+      column-gap: 12px;
+      padding: 10px 10px 16px;
     }
 
     @media all and (min-width: 1026px) and (max-width: 1291px) {
       padding: 15px 10px 75px;
 
       > li {
-        padding: 0 0 25px 30px;
+        column-gap: 10px;
+        padding: 0 0 25px;
       }
     }
   }
@@ -59,26 +76,44 @@
   .sub {
     display: none;
     font-size: 12px;
-    padding: 25px 0 0;
+    grid-column: 2;
+    padding: 14px 0 0;
   }
 
   .icon {
-    display: inline-block;
+    align-items: center;
+    display: flex;
+    grid-column: 1;
+    grid-row: 1;
     height: 25px;
-    margin: 0 20px 0 -50px;
+    justify-content: center;
+    margin: 0;
     width: 25px;
 
-    @media all and (min-width: 1026px) and (max-width: 1291px) {
-      margin: 0 0 0 -30px;
+    img {
+      display: block;
+      max-height: 25px;
+      max-width: 25px;
+    }
+  }
+
+  .header {
+    grid-column: 2;
+    grid-row: 1;
+    line-height: 25px;
+    min-width: 0;
+
+    a {
+      line-height: 25px;
+      text-transform: uppercase;
     }
   }
 
   a {
     color: $bc-scorpion;
-    font-weight: 300;
-    line-height: 37px;
-    text-transform: none;
     font-weight: 600;
+    line-height: 32px;
+    text-transform: none;
 
     &:hover,
     &:focus {
@@ -94,6 +129,11 @@
   .active > a {
     color: $bc-shakespeare;
     font-weight: 600;
+  }
+
+  .main > .active {
+    background: lighten($bc-shakespeare, 36%);
+    border-radius: 4px;
   }
 
   .show-nav {

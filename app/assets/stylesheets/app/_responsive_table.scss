@@ -125,6 +125,9 @@ $bp-xlarge: 75em;
 }
 
 .responsive-table {
+  background: $bc-white;
+  border: 1px solid $bc-border-grey;
+  border-collapse: collapse;
   margin-bottom: 1.5em;
   width: 100%;
 
@@ -157,10 +160,14 @@ $bp-xlarge: 75em;
     }
 
     th {
-      background-color: $bc-shakespeare;
-      border: 1px solid $bc-shakespeare;
-      color: $white;
-      text-align: center;
+      background-color: lighten($bc-shakespeare, 36%);
+      border: 0;
+      border-bottom: 1px solid lighten($bc-shakespeare, 22%);
+      color: darken($bc-shakespeare, 28%);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-align: right;
 
       &:first-of-type {
         text-align: left;
@@ -217,12 +224,13 @@ $bp-xlarge: 75em;
     }
 
     tr {
-      border: 2px solid $bc-shakespeare;
+      border: 1px solid lighten($bc-shakespeare, 22%);
       margin-bottom: 1em;
 
       @media (min-width: $bp-medium) {
         // Undo display: block
-        border-width: 1px;
+        border: 0;
+        border-bottom: 1px solid lighten($bc-border-grey, 4%);
         display: table-row;
       }
 
@@ -232,31 +240,32 @@ $bp-xlarge: 75em;
 
       &:nth-of-type(even) {
         @media (min-width: $bp-medium) {
-          background-color: rgba(94, 93, 82, .1);
+          background-color: lighten($bc-verylightgrey, 2%);
         }
       }
     }
 
     th[scope="row"] {
-      background-color: $bc-shakespeare;
-      color: $white;
+      background-color: lighten($bc-shakespeare, 36%);
+      color: darken($bc-shakespeare, 28%);
+      font-weight: 700;
 
       @media (min-width: $bp-medium) {
         background-color: transparent;
-        color: $black;
+        color: $bc-charcoal;
         text-align: left;
       }
 
       a {
-        color: $white;
+        color: darken($bc-shakespeare, 28%);
         text-decoration: underline;
 
         @media (min-width: $bp-small) {
-          color: $white;
+          color: darken($bc-shakespeare, 28%);
           text-decoration: none;
         }
         @media (min-width: $bp-medium) {
-          color: $black;
+          color: $bc-charcoal;
         }
       }
     }
@@ -265,15 +274,16 @@ $bp-xlarge: 75em;
       text-align: right;
 
       @media (min-width: $bp-medium) {
-        text-align: center;
+        text-align: right;
       }
     }
 
     td[data-title]:before {
-      color: rgba(94, 93, 82, .75);
+      color: $bc-scorpion;
       content: attr(data-title);
       float: left;
       font-size: .8em;
+      font-weight: 700;
 
       @media (min-width: $bp-small) {
         font-size: .9em;

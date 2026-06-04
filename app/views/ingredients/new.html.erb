@@ -1,7 +1,16 @@
 <% provide(:title, "New Ingredient") %>
 
-<h1>New Ingredient</h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>New Ingredient</h1>
+      <p>Create an ingredient used by recipes and production costing.</p>
+    </div>
 
-<%= link_to 'Back', ingredients_path, class: "button small" %>
+    <div class="form-header-actions">
+      <%= link_to 'Back', ingredients_path, class: "button small secondary" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

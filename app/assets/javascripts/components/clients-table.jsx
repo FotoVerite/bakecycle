@@ -65,8 +65,8 @@ class ClientsTable extends React.Component {
 
   search() {
     return (
-      <div className="row collapse bakecycle-form">
-        <div className="small-12 medium-4 columns">
+      <div className="index-toolbar bakecycle-form">
+        <div className="index-filter index-filter-primary">
           <div className="input string optional">
             <label className="string optional">Name</label>
             <input
@@ -79,9 +79,9 @@ class ClientsTable extends React.Component {
             />
           </div>
         </div>
-        <div className="small-12 medium-1 columns">
+        <div className="index-filter index-filter-medium">
           <div className="input string optional">
-            <label className="string optional">Status?</label>
+            <label className="string optional">Status</label>
             <select value={this.state.search.engagementStatus} onChange={this.searchStatus}>
               <option value="current">Current</option>
               <option value="lapsed">Lapsed</option>
@@ -89,9 +89,9 @@ class ClientsTable extends React.Component {
             </select>
           </div>
         </div>
-        <div className="small-12 medium-1 columns">
+        <div className="index-filter index-filter-small">
           <div className="input string optional">
-            <label className="string optional">Active?</label>
+            <label className="string optional">Active</label>
             <select value={this.state.search.active} onChange={this.searchActive}>
               <option value="true">Yes</option>
               <option value="false">No</option>
@@ -99,15 +99,11 @@ class ClientsTable extends React.Component {
             </select>
           </div>
         </div>
-        <div className="small-12 medium-4 end columns">
-          <div className="input string optional">
-            <label className="string optional">&nbsp;</label>
-            <a
-              className="button small"
-              target="_blank"
-              style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}
-              href={`/clients/print_client_list?type=${this.state.search.active}`}>Export Client List</a>
-          </div>
+        <div className="index-toolbar-actions">
+          <a
+            className="button small secondary"
+            target="_blank"
+            href={`/clients/print_client_list?type=${this.state.search.active}`}>Export Client List</a>
         </div>
       </div>
     );
@@ -157,7 +153,7 @@ class ClientsTable extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="index-table">
         {this.search()}
         <table className="responsive-table clients-index">
           {this.header()}

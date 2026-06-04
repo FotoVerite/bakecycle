@@ -4,152 +4,116 @@
     <div class="small-12 columns">
       <h2>Product Runs</h2>
     </div>
-    <%= link_to weekly_daily_production_report_production_runs_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Daily/Weekly Totals
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to weekly_daily_production_report_production_runs_path, class: "stats border" do %>
+        <div class="left">
+          Daily/Weekly Totals
         </div>
-      </div>
-    <% end %>
-    <%= link_to date_span_production_report_production_runs_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Date Range Total
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to date_span_production_report_production_runs_path, class: "stats border" do %>
+        <div class="left">
+          Date Range Total
         </div>
-      </div>
-    <% end %>
-    <%= link_to grocery_list_orders_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Grocery List
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to grocery_list_orders_path, class: "stats border" do %>
+        <div class="left">
+          Grocery List
         </div>
-      </div>
-    <% end %>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
   </div>
   <div class="row">
     <div class="small-12 columns">
       <h2>Clients</h2>
     </div>
-    <%= link_to weekly_daily_report_clients_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Daily/Weekly Totals
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to weekly_daily_report_clients_path, class: "stats border" do %>
+        <div class="left">
+          Daily/Weekly Totals
         </div>
-      </div>
-    <% end %>
-    <%= link_to print_vip_list_clients_path, target: "_blank" do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Vip List
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to print_vip_list_clients_path, target: "_blank", class: "stats border" do %>
+        <div class="left">
+          Vip List
         </div>
-      </div>
-    <% end %>
-    <%= link_to total_report_clients_path, target: "_blank" do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Totals
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to total_report_clients_path, target: "_blank", class: "stats border" do %>
+        <div class="left">
+          Totals
         </div>
-      </div>
-    <% end %>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
   </div>
   <div class="row">
     <div class="small-12 columns">
       <h2>Products</h2>
     </div>
-    <%= link_to weekly_daily_report_products_path do %>
-      <div class="large-2 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Daily/Weekly Totals
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to weekly_daily_report_products_path, class: "stats border" do %>
+        <div class="left">
+          Daily/Weekly Totals
         </div>
-      </div>
-    <% end %>
-    <%= link_to print_pricing_vendors_path, target: "_blank" do %>
-      <div class="large-2 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Ingredient Pricing
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to print_pricing_vendors_path, target: "_blank", class: "stats border" do %>
+        <div class="left">
+          Ingredient Pricing
         </div>
-      </div>
-    <% end %>
-    <%= link_to pricing_report_products_path, target: "_blank" do %>
-      <div class="large-2 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Product Pricing
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to pricing_report_products_path, target: "_blank", class: "stats border" do %>
+        <div class="left">
+          Product Pricing
         </div>
-      </div>
-    <% end %>
-    <%= link_to products_per_client_per_week_products_path do %>
-      <div class="large-2 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Clients Per Product
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to products_per_client_per_week_products_path, class: "stats border" do %>
+        <div class="left">
+          Clients Per Product
         </div>
-      </div>
-    <% end %>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
   </div>
   <div class="row">
     <div class="small-12 columns">
       <h2>Shipments</h2>
     </div>
-    <%= link_to detailed_invoice_report_shipments_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Detailed Invoice Report
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to detailed_invoice_report_shipments_path, class: "stats border" do %>
+        <div class="left">
+          Detailed Invoice Report
         </div>
-      </div>
-    <% end %>
-    <%= link_to total_sales_report_shipments_path do %>
-      <div class="large-4 medium-6 small-12 columns">
-        <div class="stats border">
-          <div class="left">
-            Total Sales Report
-          </div>
-          <i class="fi-page-export right"></i>
-          <div class="clearfix"></div>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <%= link_to total_sales_report_shipments_path, class: "stats border" do %>
+        <div class="left">
+          Total Sales Report
         </div>
-      </div>
-    <% end %>
+        <i class="fi-page-export right"></i>
+      <% end %>
+    </div>
   </div>
 </div>

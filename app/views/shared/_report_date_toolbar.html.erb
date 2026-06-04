@@ -1,0 +1,16 @@
+<div class="report-toolbar">
+  <%= simple_form_for :search, url: url, method: :get do |f| %>
+    <div class="report-date-form">
+      <%= f.input :date, input_html: { value: date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date }, required: false %>
+      <%= f.submit "Select Date", class: "button search-button", name: nil %>
+    </div>
+  <% end %>
+  <% if local_assigns[:note].present? || local_assigns[:note_label].present? %>
+    <div class="report-toolbar-note">
+      <% if local_assigns[:note_label].present? %>
+        <span><%= note_label %></span>
+      <% end %>
+      <%= note %>
+    </div>
+  <% end %>
+</div>

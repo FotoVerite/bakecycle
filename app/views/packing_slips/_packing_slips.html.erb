@@ -1,35 +1,30 @@
-<%= simple_form_for :print, url:  print_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.submit 'Print Packing List', class: "button postfix search-button", action: 'print', name: nil %>
+<div class="report-actions">
+  <div>
+    <p class="projection">Packing documents for selected invoices</p>
+  </div>
+  <div class="report-action-buttons">
+    <%= simple_form_for :print, url: print_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
-    </div>
-  </div>
-<% end %>
+      <%= f.submit 'Print Packing List', class: "button small", action: 'print', name: nil %>
+    <% end %>
 
-<%= simple_form_for :print, url:  print_sorted_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.submit 'Print Sorted Packing List', class: "button postfix search-button", action: 'print', name: nil %>
+    <%= simple_form_for :print, url: print_sorted_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
-    </div>
-  </div>
-<% end %>
+      <%= f.submit 'Print Sorted List', class: "button small secondary", action: 'print', name: nil %>
+    <% end %>
 
-<%= simple_form_for :print, url:  print_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-3 columns">
-      <%= f.submit 'Print Packing Slips', class: "button postfix search-button", action: 'print', name: nil %>
-    </div>
-    <div class="small-12 medium-3 columns end">
-      <div class="invoices-checkbox">
-        <%=  f.input_field :include_invoices, as: :boolean, required: false, inline_label: true, checked: true %>
-        <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
-      </div>
-    </div>
+    <%= simple_form_for :print, url: print_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
+      <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
+      <label class="report-checkbox">
+        <%= f.input_field :include_invoices, as: :boolean, required: false, checked: true %>
+        Include invoices
+      </label>
+      <%= f.submit 'Print Packing Slips', class: "button small secondary", action: 'print', name: nil %>
+    <% end %>
   </div>
-<% end %>
-<table class="responsive-table">
+</div>
+
+<table class="responsive-table report-table">
   <thead>
     <tr>
       <th scope="col">Client</th>

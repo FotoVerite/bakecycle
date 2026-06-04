@@ -1,0 +1,448 @@
+// Foundation 5 component replacement — only the classes this app actually uses.
+// Keeps Foundation's class names so no view changes are needed.
+// Colors here are Foundation defaults; app/_buttons.scss overrides with brand palette.
+//
+// Propshaft note: font-url() and image-url() calls live in font_setup.scss and
+// landingpage/_hero.scss — swap those to url() when moving to Propshaft.
+
+// ─── Foundation color aliases (used by app SCSS files via $white / $black) ──
+$white: #ffffff;
+$black: #000000;
+
+// ─── Mixin shim (used by _responsive_table.scss) ─────────────────────────
+@mixin box-sizing($val) { box-sizing: $val; }
+
+// ─── Body ────────────────────────────────────────────────────────────────
+body {
+  background: #fff;
+  color: rgba(0, 0, 0, 0.75);
+  font-family: "Open Sans", sans-serif;
+  font-size: 100%;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+// ─── Typography ──────────────────────────────────────────────────────────
+h1, h2, h3, h4, h5, h6 {
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  margin-top: 0.2rem;
+  text-rendering: optimizeLegibility;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.6875rem; }
+h3 { font-size: 1.375rem; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
+
+p {
+  font-size: inherit;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+a {
+  color: #008cba;
+  line-height: inherit;
+  text-decoration: none;
+
+  &:hover, &:focus { color: #0078a0; }
+}
+
+ul, ol, dl {
+  font-size: 1rem;
+  line-height: 1.6;
+  list-style-position: outside;
+  margin-bottom: 1.25rem;
+}
+
+ul { list-style-type: disc; }
+ol { list-style-type: decimal; }
+
+// ─── Fieldsets ───────────────────────────────────────────────────────────
+fieldset {
+  border: solid 1px #dddddd;
+  margin: 1.125rem 0;
+  padding: 1.25rem;
+
+  legend {
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.4;
+    margin: 0;
+    margin-left: -0.1875rem;
+    padding: 0 0.1875rem;
+  }
+}
+
+// ─── HR ──────────────────────────────────────────────────────────────────
+hr {
+  border: none;
+  border-bottom: solid 1px #e6e6e6;
+  clear: both;
+  height: 0;
+  margin: 1.25rem auto;
+}
+
+// ─── Forms ───────────────────────────────────────────────────────────────
+label {
+  cursor: pointer;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="color"],
+textarea {
+  -webkit-appearance: none;
+  background-color: $white;
+  border: 1px solid #cccccc;
+  border-radius: 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.75);
+  display: block;
+  font-family: inherit;
+  font-size: 0.875rem;
+  height: 2.3125rem;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+  transition: box-shadow 0.45s, border-color 0.45s ease-in-out;
+  width: 100%;
+
+  &:focus {
+    border-color: #999999;
+    box-shadow: 0 0 5px #999999;
+    outline: none;
+  }
+}
+
+textarea {
+  height: auto;
+  min-height: 50px;
+}
+
+select {
+  background-color: $white;
+  border: 1px solid #cccccc;
+  color: rgba(0, 0, 0, 0.75);
+  display: block;
+  font-family: inherit;
+  font-size: 0.875rem;
+  height: 2.3125rem;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+// ─── Tables ──────────────────────────────────────────────────────────────
+table {
+  background: $white;
+  border-collapse: collapse;
+  border: solid 1px #dddddd;
+  margin-bottom: 1.25rem;
+  width: 100%;
+
+  thead, tfoot {
+    background: #f5f5f5;
+    font-weight: bold;
+
+    tr th, tr td {
+      color: rgba(0, 0, 0, 0.8);
+      font-size: 0.875rem;
+      padding: 0.5rem 0.625rem 0.625rem;
+    }
+  }
+
+  tr {
+    th, td {
+      color: rgba(0, 0, 0, 0.8);
+      font-size: 0.875rem;
+      padding: 0.5625rem 0.625rem;
+      text-align: left;
+    }
+
+    &.even, &.alt, &:nth-of-type(even) {
+      background: #f9f9f9;
+    }
+  }
+}
+
+// ─── Standalone modifier classes (used with @extend in app/registration SCSS) ──
+// These must exist as top-level selectors for @extend to work.
+.secondary {
+  background-color: #e7e7e7;
+  border-color: #cccccc;
+  color: #333333;
+}
+
+.small {
+  font-size: 0.75rem;
+  padding: 0.5625em 1.125em;
+}
+
+.tiny {
+  font-size: 0.6875rem;
+  padding: 0.4375em 0.875em;
+}
+
+.radius { border-radius: 3px; }
+
+// ─── Buttons ─────────────────────────────────────────────────────────────
+.button,
+button {
+  appearance: none;
+  background-color: #008cba;
+  border: none;
+  border-radius: 3px;
+  color: $white;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: normal;
+  margin: 0 0 1.25rem;
+  padding: 1em 2em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 300ms ease-out;
+
+  &:hover, &:focus { background-color: #007095; color: $white; }
+
+  &.secondary { background-color: #e7e7e7; border-color: #cccccc; color: #333; }
+  &.secondary:hover, &.secondary:focus { background-color: #d4d4d4; }
+
+  &.alert { background-color: #f04124; }
+  &.alert:hover, &.alert:focus { background-color: #cf2a0e; }
+
+  &.success { background-color: #43ac6a; }
+  &.success:hover, &.success:focus { background-color: #368a55; }
+
+  &.tiny { font-size: 0.6875rem; padding: 0.4375em 0.875em; }
+  &.small { font-size: 0.75rem; padding: 0.5625em 1.125em; }
+  &.large { font-size: 1.25rem; padding: 1.0625em 2.125em; }
+  &.expand { padding: 1em; width: 100%; }
+  &.radius { border-radius: 3px; }
+  &.round { border-radius: 1000px; }
+  &.disabled, &[disabled] { cursor: not-allowed; opacity: 0.7; }
+}
+
+// ─── Button group ─────────────────────────────────────────────────────────
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &::before, &::after { content: none; }
+
+  li { margin: 0; }
+
+  li:not(:last-child) .button,
+  li:not(:last-child) button {
+    border-radius: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  li:first-child .button,
+  li:first-child button { border-radius: 3px 0 0 3px; }
+
+  li:last-child .button,
+  li:last-child button { border-radius: 0 3px 3px 0; }
+}
+
+// ─── Panel placeholder (shared by .panel and .callout) ──────────────────
+%panel-base {
+  background: #f2f2f2;
+  border: solid 1px #d8d8d8;
+  border-radius: 3px;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+
+  h1, h2, h3, h4, h5, h6, p { color: inherit; }
+}
+
+.panel {
+  @extend %panel-base;
+
+  &.callout { background: #ecfaff; border-color: #a4c9d3; }
+  &.radius   { border-radius: 3px; }
+}
+
+// Foundation .callout (Foundation 5 uses .panel; app views use .callout)
+.callout { @extend %panel-base; }
+
+// ─── Alert boxes ─────────────────────────────────────────────────────────
+.alert-box {
+  border: solid 1px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.85);
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: bold;
+  margin-bottom: 1.25rem;
+  padding: 0.875rem 1.5rem 0.875rem 0.875rem;
+  position: relative;
+
+  .close {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 1.375rem;
+    line-height: 0;
+    margin-top: -0.6875rem;
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+  }
+
+  &.radius { border-radius: 3px; }
+
+  // Colors overridden by main.scss ($bc-alizarin-crimson / $bc-lima)
+  &.alert   { background-color: #f04124; border-color: #cf2a0e; color: $white; }
+  &.success { background-color: #43ac6a; border-color: #368a55; color: $white; }
+  &.info    { background-color: #a0d3e8; border-color: #74b9d3; }
+}
+
+// ─── Labels ──────────────────────────────────────────────────────────────
+.label {
+  background-color: #008cba;
+  border-radius: 2px;
+  color: $white;
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0.25em 0.5em 0.3125em;
+  white-space: nowrap;
+
+  &.alert     { background-color: #f04124; }
+  &.success   { background-color: #43ac6a; }
+  &.secondary { background-color: #e7e7e7; color: #333; }
+  &.radius    { border-radius: 3px; }
+  &.round     { border-radius: 1000px; }
+}
+
+// ─── Pricing table mixins (used by landingpage/_pricing.scss) ────────────
+@mixin pricing-table-title {
+  background-color: #333333;
+  color: $white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.9375rem 1.25rem;
+  text-align: center;
+}
+
+@mixin pricing-table-price {
+  background-color: #f2f2f2;
+  border-bottom: dotted 1px #dddddd;
+  color: #333333;
+  font-size: 2rem;
+  font-weight: normal;
+  padding: 0.9375rem 1.25rem;
+  text-align: center;
+}
+
+@mixin pricing-table-bullet {
+  background-color: $white;
+  border-bottom: dotted 1px #dddddd;
+  color: #777777;
+  font-size: 0.875rem;
+  font-weight: normal;
+  padding: 0.9375rem;
+  text-align: center;
+}
+
+// ─── Pricing tables (landing page only) ──────────────────────────────────
+.pricing-table {
+  border: solid 1px #dddddd;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  * { list-style: none; margin: 0; }
+
+  .title {
+    background-color: #333333;
+    color: $white;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.9375rem 1.25rem;
+    text-align: center;
+  }
+
+  .price {
+    background-color: #f2f2f2;
+    border-bottom: dotted 1px #dddddd;
+    color: #333333;
+    font-size: 2rem;
+    font-weight: normal;
+    padding: 0.9375rem 1.25rem;
+    text-align: center;
+  }
+
+  .description {
+    background-color: $white;
+    border-bottom: dotted 1px #dddddd;
+    color: #777777;
+    font-size: 0.75rem;
+    font-weight: normal;
+    padding: 0.9375rem;
+    text-align: center;
+  }
+
+  .bullet-item {
+    background-color: $white;
+    border-bottom: dotted 1px #dddddd;
+    color: #777777;
+    font-size: 0.875rem;
+    font-weight: normal;
+    padding: 0.9375rem;
+    text-align: center;
+  }
+
+  .cta-button {
+    background: $white;
+    padding: 1.25rem;
+    text-align: center;
+  }
+}
+
+// ─── Visibility ──────────────────────────────────────────────────────────
+.show-for-large-up {
+  display: none !important;
+
+  @media #{$large-up} { display: inherit !important; }
+}
+
+// ─── Utilities ───────────────────────────────────────────────────────────
+.clearfix {
+  &::before, &::after { content: ''; display: table; }
+  &::after { clear: both; }
+}
+
+.left  { float: left !important; }
+.right { float: right !important; }
+
+.text-center { text-align: center !important; }
+.text-left   { text-align: left !important; }
+.text-right  { text-align: right !important; }

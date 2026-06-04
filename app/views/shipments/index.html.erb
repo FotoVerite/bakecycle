@@ -1,68 +1,74 @@
 <% provide(:title, "Invoices") %>
 
-<h1>Invoices</h1>
-<% if policy(Shipment).new? %>
-  <p><%= link_to 'Add New Invoice', new_shipment_path, class: "button" %></p>
-<% end %>
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Invoices</h1>
+      <p>Search, export, and manage invoice records.</p>
+    </div>
 
-<%= render partial: 'search_form', object: search_form %>
+    <% if policy(Shipment).new? %>
+      <%= link_to 'Add New Invoice', new_shipment_path, class: "button index-header-action" %>
+    <% end %>
+  </div>
 
-<% if @shipments.any? %>
-  <ul class="stack-for-small secondary button-group">
-    <% search_params = params[:search].permit(ShipmentSearchForm.params) if params[:search] %>
-    <li>
-      <%= link_to export_pdf_shipments_path(search: search_params), target: '_blank', class: "button" do %>
-        <i class="fi-page-export-pdf"></i> Export Invoices
+  <%= render partial: 'search_form', object: search_form %>
+
+  <% if @shipments.any? %>
+    <div class="index-actions">
+      <% search_params = params[:search].permit(ShipmentSearchForm.params) if params[:search] %>
+      <%= link_to export_pdf_shipments_path(search: search_params), target: '_blank', class: "button small" do %>
+          <i class="fi-page-export-pdf"></i> Export Invoices
       <% end %>
-    </li>
-    <li>
-      <%= link_to export_csv_shipments_path(search: search_params), target: "_blank", class: "button" do %>
+
+      <%= link_to export_csv_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
         <i class="fi-page-export-csv"></i> Export CSV
       <% end %>
-    </li>
-    <li>
-      <%= link_to export_iif_shipments_path(search: search_params), target: "_blank", class: "button" do %>
+
+      <%= link_to export_iif_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
         <i class="fi-page-export"></i> Export QuickBooks
       <% end %>
-    </li>
-  </ul>
-<% end %>
+    </div>
+  <% end %>
 
-<% if !@double_invoices.empty?  %>
- <div class="dublicate_invoices panel callout radius">
-    <h5 style='font-size:24px;'>These <%= pluralize(@double_invoices.count, 'invoices') %> are duplicates. Please fix as soon as possible.</h5>
-    <table class="responsive-table orders-missing-shipment-table">
+  <% if !@double_invoices.empty?  %>
+   <div class="dublicate_invoices panel callout radius">
+      <h5 style='font-size:24px;'>These <%= pluralize(@double_invoices.count, 'invoices') %> are duplicates. Please fix as soon as possible.</h5>
+      <table class="responsive-table orders-missing-shipment-table">
+        <thead>
+          <tr>
+            <th scope="col">Invoice</th>
+            <th scope="col">Date</th>
+            <th scope="col">Updated At</th>
+            <th scope="col">Client</th>
+            <th scope="col">Price</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @double_invoices.each do |shipment| %>
+          <%= render 'double_shipment', shipment: ShipmentDecorator.decorate(shipment) %>
+        <% end %>
+        </tbody>
+      </table>
+    </div><% end %>
+
+  <div class="index-table">
+    <table class="responsive-table all-invoices">
       <thead>
         <tr>
           <th scope="col">Invoice</th>
           <th scope="col">Date</th>
-          <th scope="col">Updated At</th>
           <th scope="col">Client</th>
           <th scope="col">Price</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-      <% @double_invoices.each do |shipment| %>
-        <%= render 'double_shipment', shipment: ShipmentDecorator.decorate(shipment) %>
-      <% end %>
+        <%= render shipments %>
       </tbody>
     </table>
-  </div><% end %>
+  </div>
 
-<table class="responsive-table all-invoices">
-  <thead>
-    <tr>
-      <th scope="col">Invoice</th>
-      <th scope="col">Date</th>
-      <th scope="col">Client</th>
-      <th scope="col">Price</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render shipments %>
-  </tbody>
-</table>
-
-<%= will_paginate @shipments %>
+  <%= will_paginate @shipments %>
+</div>

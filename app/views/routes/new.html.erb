@@ -1,7 +1,16 @@
 <% provide(:title, "New Route") %>
 
-<h1>New Route</h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>New Route</h1>
+      <p>Create a delivery route with departure timing and notes.</p>
+    </div>
 
-<%= link_to 'Back', routes_path, class: "button small" %>
+    <div class="form-header-actions">
+      <%= link_to 'Back', routes_path, class: "button small secondary" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

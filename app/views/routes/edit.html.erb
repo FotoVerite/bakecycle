@@ -1,7 +1,16 @@
 <% provide(:title, "Editing Route: #{route.name}") %>
 
-<h1>Editing Route: <%= route.name %></h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>Editing Route: <%= route.name %></h1>
+      <p>Update delivery route timing, notes, and availability.</p>
+    </div>
 
-<%= link_to 'Back', routes_path, class: "button small" %>
+    <div class="form-header-actions">
+      <%= link_to 'Back', routes_path, class: "button small secondary" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

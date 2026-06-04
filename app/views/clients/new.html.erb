@@ -1,7 +1,16 @@
 <% provide(:title, "New Client") %>
 
-<h1>New Client</h1>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>New Client</h1>
+      <p>Create a client record for orders, delivery, billing, and contacts.</p>
+    </div>
 
-<%= link_to 'Back', clients_path, class: "button small" %>
+    <div class="form-header-actions">
+      <%= link_to 'Back', clients_path, class: "button small secondary" %>
+    </div>
+  </div>
 
-<%= render 'form' %>
+  <%= render 'form' %>
+</div>

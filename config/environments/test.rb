@@ -1,6 +1,6 @@
 Rails.application.configure do
   config.action_mailer.default_url_options = { host: "localhost:3000" }
-  config.cache_classes = true
+  config.enable_reloading = false
   config.eager_load = false
 
   # Show full error reports and disable caching.
@@ -10,7 +10,7 @@ Rails.application.configure do
   config.static_cache_control = "public, max-age=3600"
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  config.action_dispatch.show_exceptions = :none
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false

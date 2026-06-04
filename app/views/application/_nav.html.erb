@@ -3,13 +3,11 @@
     <div class="side-navigation js-nav-toggle">
       <ul class="main">
         <li class="show-nav <%= active_nav?(:dashboard) %>">
-          <%= link_to dashboard_path do %>
-              <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
-              <span class="header">Dashboard</span>
-              <ul class='sub'>
-                <li class="<%= active_nav?(:reports) %>"><%= link_to("Reports", reports_path) %></li>
-              </ul>
-          <% end %>
+          <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
+          <span class="header"><%= link_to("Dashboard", dashboard_path) %></span>
+          <ul class='sub'>
+            <li class="<%= active_nav?(:reports) %>"><%= link_to("Reports", reports_path) %></li>
+          </ul>
         </li>
 
         <% if policy(Client).index? %>

@@ -1,9 +1,16 @@
 <% provide(:title, "Clients") %>
 
-<h1>Clients</h1>
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Clients</h1>
+      <p>Search, export, and open client records.</p>
+    </div>
 
-<% if policy(Client).new? %>
-  <p><%= link_to 'Add New Client', new_client_path, class: "button" %></p>
-<% end %>
+    <% if policy(Client).new? %>
+      <%= link_to 'Add New Client', new_client_path, class: "button index-header-action" %>
+    <% end %>
+  </div>
 
-<%= react_component('ClientsTable', clients.serializable_hash) %>
+  <%= react_component('ClientsTable', clients.serializable_hash) %>
+</div>

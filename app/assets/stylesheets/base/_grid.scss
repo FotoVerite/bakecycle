@@ -1,0 +1,102 @@
+// Flexbox grid — Foundation 5 class API, modern implementation
+// Breakpoints match Foundation 5 exactly so existing media query vars keep working.
+
+// ─── Breakpoints ─────────────────────────────────────────────────────────
+$small-break:  40em;    // 640px
+$medium-break: 64em;    // 1024px
+
+$small-only:  "only screen and (max-width: #{$small-break})";
+$medium-up:   "only screen and (min-width: 40.0625em)";
+$medium-only: "only screen and (min-width: 40.0625em) and (max-width: #{$medium-break})";
+$large-up:    "only screen and (min-width: 64.0625em)";
+
+// ─── Config ──────────────────────────────────────────────────────────────
+$grid-columns:  12;
+$column-gutter: 1.875rem;   // 30px — matches Foundation 5
+$row-max-width: 62.5rem;    // 1000px — matches Foundation 5 default
+
+// ─── Row ─────────────────────────────────────────────────────────────────
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: $row-max-width;
+  width: 100%;
+
+  &.full-width {
+    max-width: 100%;
+  }
+
+  // Nested row: bleed to cancel parent gutters
+  .row {
+    margin-left: -($column-gutter * 0.5);
+    margin-right: -($column-gutter * 0.5);
+    max-width: none;
+    width: auto;
+  }
+
+  // .collapse strips gutters from direct child columns
+  &.collapse > .columns,
+  &.collapse > .column {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// ─── Column base ─────────────────────────────────────────────────────────
+.columns,
+.column {
+  flex: 0 0 100%;
+  max-width: 100%;
+  min-height: 0;
+  padding-left: $column-gutter * 0.5;
+  padding-right: $column-gutter * 0.5;
+  position: relative;
+}
+
+// ─── Column width + offset generator ────────────────────────────────────
+@mixin make-columns($prefix) {
+  @for $i from 1 through $grid-columns {
+    .#{$prefix}-#{$i} {
+      $w: percentage($i / $grid-columns);
+      flex: 0 0 $w;
+      max-width: $w;
+    }
+  }
+}
+
+@mixin make-offsets($prefix) {
+  @for $i from 0 through ($grid-columns - 1) {
+    .#{$prefix}-offset-#{$i} {
+      margin-left: percentage($i / $grid-columns);
+    }
+  }
+}
+
+// Small = mobile-first default (no media query wrapper)
+@include make-columns('small');
+
+@media #{$medium-up} {
+  @include make-columns('medium');
+  @include make-offsets('medium');
+}
+
+@media #{$large-up} {
+  @include make-columns('large');
+  @include make-offsets('large');
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────
+// Prevents last column from stretching in partial rows
+.end { margin-right: auto; }
+
+// Forces full-width columns on small screens
+.stack-for-small {
+  @media #{$small-only} {
+    > .columns,
+    > .column {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}
