@@ -7,6 +7,11 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  # Propshaft: don't scan 629 asset files on every request.
+  # dartsass:watch handles recompilation; restart server to pick up new files.
+  config.assets.sweep_cache = false
+  config.assets.quiet = true
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
