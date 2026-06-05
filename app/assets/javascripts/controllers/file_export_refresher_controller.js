@@ -15,8 +15,15 @@ export default class extends Controller {
 
   poll() {
     fetch(this.selfUrlValue, { headers: { Accept: "application/json" } })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) {
+          this.statusTarget.textContent = `Error: server returned ${r.status}. Stopped polling.`
+          return null
+        }
+        return r.json()
+      })
       .then(data => {
+        if (!data) return
         const export_ = data.fileExport || data
         if (export_["ready?"]) {
           window.location.replace(export_.links.file)
