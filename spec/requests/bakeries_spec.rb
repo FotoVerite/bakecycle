@@ -59,5 +59,11 @@ RSpec.describe "Bakeries", type: :request do
       patch bakery_path(other), params: { bakery: { name: "Updated Name" } }
       expect(other.reload.name).to eq("Updated Name")
     end
+
+    it "updates kickoff time from a native time input value" do
+      other = create(:bakery)
+      patch bakery_path(other), params: { bakery: { kickoff_time: "17:30" } }
+      expect(other.reload.kickoff_time.strftime("%H:%M")).to eq("17:30")
+    end
   end
 end

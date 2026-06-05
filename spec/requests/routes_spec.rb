@@ -32,6 +32,13 @@ RSpec.describe "Routes", type: :request do
       expect(flash[:notice]).to match(/You have created/)
     end
 
+    it "creates a route from a native time input value" do
+      expect {
+        post routes_path, params: { route: { name: "Early Run", active: true, departure_time: "06:00" } }
+      }.to change(Route, :count).by(1)
+      expect(Route.last.departure_time.strftime("%H:%M")).to eq("06:00")
+    end
+
     it "shows edit form" do
       get edit_route_path(route)
       expect(response).to be_successful

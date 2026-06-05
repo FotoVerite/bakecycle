@@ -29,10 +29,11 @@
 
 <%= content_for :js do %>
 <script>
-  $(document).ready(function() {
-    $('body').on('change', '.js-field', function() {
-      $(this).closest('form').submit()
-    })
+  document.addEventListener('change', function(event) {
+    if (!event.target.matches('.js-field')) return
+
+    var form = event.target.closest('form')
+    if (form) form.submit()
   })
 </script>
 <% end %>

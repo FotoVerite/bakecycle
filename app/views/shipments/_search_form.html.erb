@@ -1,21 +1,21 @@
-<%= simple_form_for search_form, url: shipments_path, method: :get, as: :search do |f| %>
+<%= simple_form_for search_form, url: shipments_path, method: :get, as: :search, html: { class: "index-search-form" } do |f| %>
   <div class="index-toolbar index-toolbar-invoices">
-    <div class="index-filter index-span-2">
+    <div class="index-filter index-filter-sequence index-span-2">
       <%= f.input :sequence_number, required: false, placeholder: "Numbers before -" %>
     </div>
-    <div class="index-filter index-span-4">
-      <%= f.input :client_id , collection: shipments.available_clients, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Clients' } } %>
+    <div class="index-filter index-filter-select index-filter-client index-span-4">
+      <%= f.input :client_id , collection: shipments.available_clients, as: :select, required: false, input_html: { multiple: true, data: { controller: "tom-select", placeholder: 'Select Clients' } } %>
     </div>
-    <div class="index-filter index-span-4">
-      <%= f.input :product_id , collection: shipments.active_products, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Products' } } %>
+    <div class="index-filter index-filter-select index-filter-product index-span-4">
+      <%= f.input :product_id , collection: shipments.active_products, as: :select, required: false, input_html: { multiple: true, data: { controller: "tom-select", placeholder: 'Select Products' } } %>
     </div>
     <div class="index-toolbar-actions index-span-2">
       <%= f.submit 'Search', class: "button small", name: nil %>
     </div>
-    <div class="index-filter index-span-2">
+    <div class="index-filter index-filter-date index-span-2">
       <%= f.input :date_from, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
     </div>
-    <div class="index-filter index-span-2">
+    <div class="index-filter index-filter-date index-span-2">
       <%= f.input :date_to, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
     </div>
   </div>

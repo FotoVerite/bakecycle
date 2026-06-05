@@ -14,11 +14,14 @@
 
 <%= content_for :js do %>
 <script>
-  $(document).ready(function() {
+  document.addEventListener('change', function(event) {
+    if (!event.target.matches('.js-chosen-add')) return
+
     var prices = <%= raw shipment.product_prices %>
-   $('body').on('change', '.js-chosen-add', function() {
-    $('#shipment_shipment_items_attributes_' + $(this).data('attr-id') + '_product_price').val(prices[$(this).val()])
-   })
+    var priceInput = document.getElementById(
+      'shipment_shipment_items_attributes_' + event.target.dataset.attrId + '_product_price'
+    )
+    if (priceInput) priceInput.value = prices[event.target.value]
   })
 </script>
 <% end %>

@@ -1,261 +1,311 @@
 <% provide(:title, "Client: #{client.name}") %>
-<h1>Client: <%= client.name %></h1>
-<div class="client-actions">
-  <ul class="stack-for-small secondary button-group left">
-    <li><%= link_to 'Back', clients_path, class: "button small" %></li>
-    <% if policy(client).edit? %>
-      <li><%= link_to 'Edit', edit_client_path(@client), class: "button small" %></li>
-    <% end %>
-  </ul>
-  <% if policy(Client).new? %>
-    <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button right" %>
-  <% end %>
-</div>
-<% if client.latitude.present? && client.longitude.present? %>
-  <div class="map-container"
-       data-controller="client-map"
-       data-client-map-lat-value="<%= client.latitude %>"
-       data-client-map-lng-value="<%= client.longitude %>"
-       data-client-map-name-value="<%= client.name %>"
-       data-client-map-api-key-value="<%= ENV['GOOGLE_GEOCODER_API_KEY'] %>"
-       data-client-map-address-value="<%= client.delivery_address_full %>"
-       style="height: 300px;">
-  </div>
-<% end %>
-<fieldset>
-  <legend>Business Information</legend>
-  <div class="row">
-    <div class="small-12 medium-4 columns">
-      <p>Name: <%= client.name %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Official Company Name: <%= client.official_company_name %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>EIN: <%= client.ein %></p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12 medium-4 columns">
-      <p>Business Phone: <%= client.business_phone %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Business Fax: <%= client.business_fax %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Billing Terms: <%= client.billing %></p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12 medium-4 columns">
-      <p>Group: <%= client.group %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Status: <%= client.engagement_status.capitalize %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Channel: <%= client.channel %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12 medium-4 columns">
-      <p>Active: <%= client.active_status %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Delivery Days: <b><%= client.active_days %></b></p>
-    </div>
-     <div class="small-12 medium-4 columns">
-    </div>
-  </div>
-</fieldset>
-<fieldset>
-  <legend>Delivery Notes</legend>
-  <div class="row">
-    <div class="small-12 medium-4 columns">
-      <p><%= client.notes %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      Vip: <%= client.alert? ? "Yes" : "No" %>
-    </div>
-    <div class="small-12 medium-4 columns">
-      Temp Vip: <%= client.alert? ? "Yes" : "No" %>
-    </div>
-  </div>
-</fieldset>
-<fieldset>
-  <legend>Delivery Fee Information</legend>
-  <div class="row">
-    <div class="small-12 medium-4 columns">
-      <p>Delivery Fee Option: <%= client.delivery_fee_display %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Delivery Minimum: <%= client.delivery_minimum %></p>
-    </div>
-    <div class="small-12 medium-4 columns">
-      <p>Delivery Fee: <%= client.display_fee %></p>
-    </div>
-  </div>
-</fieldset>
-<div class="row">
-  <div class="small-12 medium-4 columns">
-    <fieldset>
-      <legend>Delivery Address</legend>
-      <% client.delivery_address.full_array.each do |line| %>
-        <%= line %><br />
-      <% end %>
-    </fieldset>
-  </div>
-  <div class="small-12 medium-4 columns end">
-    <fieldset>
-      <legend>Billing Address</legend>
-      <% client.billing_address.full_array.each do |line| %>
-        <%= line %><br />
-      <% end %>
-    </fieldset>
-  </div>
-</div>
-<div class="row">
-  <div class="small-12 large-4 columns">
-    <fieldset>
-      <legend>Accounts Payable Contact</legend>
-      <div class="row">
-        <div class="small-12 columns">
-          <p><%= client.accounts_payable_contact_name %></p>
-        </div>
-        <div class="small-12 columns">
-          <p><%= client.accounts_payable_contact_phone %></p>
-        </div>
-        <div class="small-12 columns">
-          <p><%= client.accounts_payable_contact_email %></p>
-        </div>
-        <div class="small-12 columns">
-          <p>Send Invoice Automatically: <%= client.send_shipment_when_generated? ? "Yes" : "No" %></p>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-  <div class="small-12 large-4 columns">
-    <fieldset>
-      <legend>Primary Contact</legend>
-      <div class="row">
-        <div class="small-12 columns">
-          <p><%= client.primary_contact_name %></p>
-        </div>
-        <div class="small-12 columns">
-          <p><%= client.primary_contact_phone %></p>
-        </div>
-        <div class="small-12 columns">
-          <p><%= client.primary_contact_email %></p>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-  <div class="small-12 large-4 columns">
-    <fieldset>
-      <legend>Secondary Contact</legend>
-      <div class="row">
-        <div class="small-12 columns">
-          <p><%= client.secondary_contact_name %></p>
-        </div>
-        <div class="small-12 columns">
-          <p><%= client.secondary_contact_phone %></p>
-        </div>
-        <div class="small-12 columns">
-          <p><%= client.secondary_contact_email %></p>
-        </div>
-      </div>
-    </fieldset>
-  </div>
-</div>
 
-<fieldset>
-  <legend>Client's Recent Orders</legend>
-  <div class="row">
-    <table class="responsive-table upcoming-orders">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Route</th>
-          <th scope="col">Start Date</th>
-          <th scope="col">End Date</th>
-          <th scope="col">Type</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% client.latest_orders.each do |order| %>
-          <tr class="js-clickable-row" href="<%= edit_order_path(order) %>">
-            <th scope="row" data-title="Number"><%= order.id %></th>
-            <td data-title="Route"><%= order.route_name %></td>
-            <td data-title="Start Date"><%= order.start_date %></td>
-            <td data-title="End Date"><%= order.end_date %></td>
-            <td data-title="Order Type"><%= order.type %></td>
-            <td data-title="Action">
-              <%= link_to edit_order_path(order) do %>
-                <span class="table-action-icon icon-link-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
-              <% end %>
-              <%= link_to copy_order_path(order) do %>
-                <span class="table-action-icon icon-link-tooltip" aria-label="Copy Order"><i class="fi-page-copy"></i></span>
-              <% end %>
-            </td>
-          </tr>
+<% this_year = @client.average_last_four_weeks_per_week(Time.zone.now) %>
+<% last_year = @client.average_last_four_weeks_per_week(Time.zone.now.beginning_of_week - 1.year) %>
+<% percentage_changed = last_year.zero? ? nil : ((this_year - last_year) / last_year) * 100 %>
+
+<div class="client-show-page">
+  <div class="index-header client-show-header">
+    <div>
+      <h1><%= client.name %></h1>
+      <p>Client profile, delivery setup, recent orders, and invoice activity.</p>
+    </div>
+
+    <div class="client-show-header-actions">
+      <%= link_to 'Back', clients_path, class: "button small secondary" %>
+      <% if policy(client).edit? %>
+        <%= link_to 'Edit', edit_client_path(@client), class: "button small secondary" %>
+      <% end %>
+      <% if policy(Order).new? %>
+        <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button small" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="client-summary-grid">
+    <div class="client-summary-item">
+      <span>Status</span>
+      <strong><%= client.engagement_status.capitalize %></strong>
+    </div>
+    <div class="client-summary-item">
+      <span>Active</span>
+      <strong><%= client.active_status %></strong>
+    </div>
+    <div class="client-summary-item">
+      <span>Billing</span>
+      <strong><%= client.billing %></strong>
+    </div>
+    <div class="client-summary-item">
+      <span>Delivery Days</span>
+      <strong><%= client.active_days.presence || "Not set" %></strong>
+    </div>
+  </div>
+
+  <% if client.latitude.present? && client.longitude.present? %>
+    <section class="client-detail-section client-map-section">
+      <div class="client-section-heading">
+        <h2>Delivery Map</h2>
+        <p><%= client.delivery_address_full %></p>
+      </div>
+      <div class="map-container client-show-map"
+           data-controller="client-map"
+           data-client-map-lat-value="<%= client.latitude %>"
+           data-client-map-lng-value="<%= client.longitude %>"
+           data-client-map-name-value="<%= client.name %>"
+           data-client-map-api-key-value="<%= ENV['GOOGLE_GEOCODER_API_KEY'] %>"
+           data-client-map-address-value="<%= client.delivery_address_full %>">
+      </div>
+    </section>
+  <% end %>
+
+  <section class="client-detail-section">
+    <div class="client-section-heading">
+      <h2>Business Information</h2>
+      <p>Core account details used for orders and billing.</p>
+    </div>
+
+    <dl class="client-detail-list">
+      <div>
+        <dt>Name</dt>
+        <dd><%= client.name %></dd>
+      </div>
+      <div>
+        <dt>Official Company Name</dt>
+        <dd><%= client.official_company_name.presence || "Not set" %></dd>
+      </div>
+      <div>
+        <dt>EIN</dt>
+        <dd><%= client.ein.presence || "Not set" %></dd>
+      </div>
+      <div>
+        <dt>Business Phone</dt>
+        <dd><%= client.business_phone.presence || "Not set" %></dd>
+      </div>
+      <div>
+        <dt>Business Fax</dt>
+        <dd><%= client.business_fax.presence || "Not set" %></dd>
+      </div>
+      <div>
+        <dt>Group</dt>
+        <dd><%= client.group.presence || "Not set" %></dd>
+      </div>
+      <div>
+        <dt>Channel</dt>
+        <dd><%= client.channel.presence || "Not set" %></dd>
+      </div>
+      <div>
+        <dt>VIP</dt>
+        <dd><%= client.alert? ? "Yes" : "No" %></dd>
+      </div>
+      <div>
+        <dt>Temporary VIP</dt>
+        <dd><%= client.temp_vip? ? "Yes" : "No" %></dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="client-detail-columns">
+    <section class="client-detail-section">
+      <div class="client-section-heading">
+        <h2>Delivery Notes</h2>
+      </div>
+      <div class="client-note-box">
+        <%= simple_format(client.notes.presence || "No delivery notes recorded.") %>
+      </div>
+    </section>
+
+    <section class="client-detail-section">
+      <div class="client-section-heading">
+        <h2>Delivery Fees</h2>
+      </div>
+      <dl class="client-detail-list client-detail-list-compact">
+        <div>
+          <dt>Fee Option</dt>
+          <dd><%= client.delivery_fee_display %></dd>
+        </div>
+        <div>
+          <dt>Minimum</dt>
+          <dd><%= number_to_currency(client.delivery_minimum) %></dd>
+        </div>
+        <div>
+          <dt>Fee</dt>
+          <dd><%= client.display_fee %></dd>
+        </div>
+      </dl>
+    </section>
+  </div>
+
+  <div class="client-detail-columns">
+    <section class="client-detail-section">
+      <div class="client-section-heading">
+        <h2>Delivery Address</h2>
+      </div>
+      <address class="client-address">
+        <% client.delivery_address.full_array.each do |line| %>
+          <span><%= line %></span>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-  <div class="row">
-    <% if policy(Order).new? %>
-      <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button small right" %>
-    <% end %>
-    <% if policy(Order).index? %>
-      <%= link_to 'View All Orders', orders_path(search: {client_id: [@client.id]}), class: "button small right" %>
-    <% end %>
-  </div>
-</fieldset>
-<fieldset>
-  <legend>Client's Recent Invoices</legend>
-  <div class="row">
-    <table class="responsive-table recent-shipment">
-      <thead>
-        <tr>
-          <th scope="col">Number</th>
-          <th scope="col">Date</th>
-          <th scope="col">Route</th>
-          <th scope="col">Total</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% client.latest_shipments.each do |shipment| %>
-          <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
-            <th scope="row"><%= shipment.invoice_number %></th>
-            <td data-title="Date"><%= shipment.date %></td>
-            <td data-title="Route"><%= shipment.route_name %></td>
-            <td data-title="Total"><%= shipment.price %></td>
-            <td data-title="Action">
-              <%= link_to edit_shipment_path(shipment) do %>
-                <span class="table-action-icon icon-link-tooltip" aria-label="Edit Invoice"><i class="fi-page-edit"></i></span>
-              <% end %>
-            </td>
-          </tr>
+      </address>
+    </section>
+
+    <section class="client-detail-section">
+      <div class="client-section-heading">
+        <h2>Billing Address</h2>
+      </div>
+      <address class="client-address">
+        <% client.billing_address.full_array.each do |line| %>
+          <span><%= line %></span>
         <% end %>
-      </tbody>
-    </table>
+      </address>
+    </section>
   </div>
-  <div class="row">
-    <% if policy(Shipment).index? %>
-      <%= link_to 'View All Invoices', shipments_path(search: {client_id: [@client.id] }), class: "button small right" %>
-    <% end %>
-  </div>
-  <div class="row" style='text-align:right;'>
-    Yearly Average: <%= number_to_currency @client.average_sale_by_week %> <br />
-    <% this_year = @client.average_last_four_weeks_per_week(Time.now())%>
-    <% last_year = @client.average_last_four_weeks_per_week(Time.now().beginning_of_week - 1.year)%>
-    <% percentage_changed = last_year.zero? ? "NA" : ((this_year - last_year) / last_year) * 100%>
-    <b>Four Week Average: <%= number_to_currency this_year %></b> <br />
-    <b>Last Year Four Week Average: <%= number_to_currency last_year %></b> <br />
-    <span class="<%= last_year.zero? || percentage_changed > 0 ? 'positive' : 'negative' %>"> <%= last_year.zero? ? "NA" : number_with_precision(percentage_changed, precision: 2)+ "%" %> </span>
-  </div>
-</fieldset>
+
+  <section class="client-detail-section">
+    <div class="client-section-heading">
+      <h2>Contacts</h2>
+      <p>People and invoice routing for this account.</p>
+    </div>
+
+    <div class="client-contact-grid">
+      <div class="client-contact-card">
+        <h3>Accounts Payable</h3>
+        <p><%= client.accounts_payable_contact_name.presence || "No name recorded" %></p>
+        <p><%= client.accounts_payable_contact_phone.presence || "No phone recorded" %></p>
+        <p><%= mail_to client.accounts_payable_contact_email if client.accounts_payable_contact_email.present? %></p>
+        <span>Auto invoice: <%= client.send_shipment_when_generated? ? "Yes" : "No" %></span>
+      </div>
+
+      <div class="client-contact-card">
+        <h3>Primary</h3>
+        <p><%= client.primary_contact_name.presence || "No name recorded" %></p>
+        <p><%= client.primary_contact_phone.presence || "No phone recorded" %></p>
+        <p><%= mail_to client.primary_contact_email if client.primary_contact_email.present? %></p>
+      </div>
+
+      <div class="client-contact-card">
+        <h3>Secondary</h3>
+        <p><%= client.secondary_contact_name.presence || "No name recorded" %></p>
+        <p><%= client.secondary_contact_phone.presence || "No phone recorded" %></p>
+        <p><%= mail_to client.secondary_contact_email if client.secondary_contact_email.present? %></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="client-detail-section">
+    <div class="client-section-heading client-section-heading-with-actions">
+      <div>
+        <h2>Recent Orders</h2>
+        <p>Latest order activity for this client.</p>
+      </div>
+      <div class="client-section-actions">
+        <% if policy(Order).new? %>
+          <%= link_to 'Add New Order', new_order_path(client_id: @client.id), class: "button small" %>
+        <% end %>
+        <% if policy(Order).index? %>
+          <%= link_to 'View All Orders', orders_path(search: { client_id: [@client.id] }), class: "button small secondary" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="index-table">
+      <table class="responsive-table upcoming-orders client-activity-table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Route</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Type</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% client.latest_orders.each do |order| %>
+            <tr class="js-clickable-row" href="<%= edit_order_path(order) %>">
+              <th scope="row" data-title="Number"><%= order.id %></th>
+              <td data-title="Route"><%= order.route_name %></td>
+              <td data-title="Start Date"><%= order.start_date %></td>
+              <td data-title="End Date"><%= order.end_date %></td>
+              <td data-title="Order Type"><%= order.type %></td>
+              <td data-title="Action">
+                <%= link_to edit_order_path(order) do %>
+                  <span class="table-action-icon icon-link-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
+                <% end %>
+                <%= link_to copy_order_path(order) do %>
+                  <span class="table-action-icon icon-link-tooltip" aria-label="Copy Order"><i class="fi-page-copy"></i></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="client-detail-section">
+    <div class="client-section-heading client-section-heading-with-actions">
+      <div>
+        <h2>Recent Invoices</h2>
+        <p>Latest invoice activity and sales movement.</p>
+      </div>
+      <div class="client-section-actions">
+        <% if policy(Shipment).index? %>
+          <%= link_to 'View All Invoices', shipments_path(search: { client_id: [@client.id] }), class: "button small secondary" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="index-table">
+      <table class="responsive-table recent-shipment client-activity-table">
+        <thead>
+          <tr>
+            <th scope="col">Number</th>
+            <th scope="col">Date</th>
+            <th scope="col">Route</th>
+            <th scope="col">Total</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% client.latest_shipments.each do |shipment| %>
+            <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>">
+              <th scope="row"><%= shipment.invoice_number %></th>
+              <td data-title="Date"><%= shipment.date %></td>
+              <td data-title="Route"><%= shipment.route_name %></td>
+              <td data-title="Total"><%= shipment.price %></td>
+              <td data-title="Action">
+                <%= link_to edit_shipment_path(shipment) do %>
+                  <span class="table-action-icon icon-link-tooltip" aria-label="Edit Invoice"><i class="fi-page-edit"></i></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="client-sales-summary">
+      <div>
+        <span>Yearly Average</span>
+        <strong><%= number_to_currency @client.average_sale_by_week %></strong>
+      </div>
+      <div>
+        <span>Four Week Average</span>
+        <strong><%= number_to_currency this_year %></strong>
+      </div>
+      <div>
+        <span>Last Year Four Week Average</span>
+        <strong><%= number_to_currency last_year %></strong>
+      </div>
+      <div>
+        <span>Change</span>
+        <% if percentage_changed.nil? %>
+          <strong>NA</strong>
+        <% else %>
+          <strong class="<%= percentage_changed > 0 ? 'positive' : 'negative' %>">
+            <%= number_with_precision(percentage_changed, precision: 2) %>%
+          </strong>
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>

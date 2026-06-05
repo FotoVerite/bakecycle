@@ -108,21 +108,16 @@ Plotly.newPlot(SHIPPED, shipped_data, shipped_layout,  {displaylogo: false});
 Plotly.newPlot(SHIPMENTS, shipment_data, shipment_layout,  {displaylogo: false});
 <% end %>
 
-  $('#show-graphs').click(function() {
-    $i = $(this).find('i');
-    if($i.hasClass('fi-arrow-right')) {
-      $i.removeClass('fi-arrow-right').addClass('fi-arrow-down')
-    }
-    else {
-      $i.removeClass('fi-arrow-down').addClass('fi-arrow-right')
-    }
-    $("#graphs").toggle('fast', function(){
-      Plotly.Plots.resize(PROFITS);
-      Plotly.Plots.resize(SHIPPED);
-      Plotly.Plots.resize(SHIPMENTS);
-    });
+  document.getElementById('show-graphs').addEventListener('click', function() {
+    var icon = this.querySelector('i');
+    icon.classList.toggle('fi-arrow-right');
+    icon.classList.toggle('fi-arrow-down');
 
-
+    var graphs = document.getElementById('graphs');
+    graphs.style.display = graphs.style.display === 'none' ? 'block' : 'none';
+    Plotly.Plots.resize(PROFITS);
+    Plotly.Plots.resize(SHIPPED);
+    Plotly.Plots.resize(SHIPMENTS);
   })
  </script>
 <% end %>

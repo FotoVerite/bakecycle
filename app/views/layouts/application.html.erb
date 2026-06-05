@@ -28,12 +28,12 @@
     <% if current_bakery && (!session[:saw_notification_at] || Time.parse(session[:saw_notification_at]) < Time.zone.today) %>
       <%= session[:saw_notification_at] = Time.zone.today %>
       <script>
-          $( document ).ready(function(){
-            <% @kickoff = Time.zone.now.change({hour: 14, min:  current_bakery.kickoff_time.min }) %>
-            if(<%= (Time.zone.now > @kickoff - 10.minutes && Time.zone.now < @kickoff)  %>) {
-              alert('Production is about to kickoff. Check if it needs any resets.')
-            }
-          });
+        document.addEventListener('DOMContentLoaded', function() {
+          <% @kickoff = Time.zone.now.change({hour: 14, min:  current_bakery.kickoff_time.min }) %>
+          if (<%= (Time.zone.now > @kickoff - 10.minutes && Time.zone.now < @kickoff) %>) {
+            alert('Production is about to kickoff. Check if it needs any resets.')
+          }
+        });
       </script>
     <% end %>
   </body>
