@@ -25,6 +25,16 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+if Bullet.enable?
+  RSpec.configure do |config|
+    config.before(:each) { Bullet.start_request }
+    config.after(:each) do
+      Bullet.perform_out_of_channel_notifications if Bullet.notification?
+      Bullet.end_request
+    end
+  end
+end
+
 RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
 

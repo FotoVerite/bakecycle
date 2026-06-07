@@ -18,7 +18,6 @@ Rails.application.configure do
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = :all
 
-  config.active_support.deprecation = :log
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
@@ -33,6 +32,13 @@ Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.action_mailer.delivery_method = :letter_opener
+
+  config.after_initialize do
+    Bullet.enable        = true
+    Bullet.alert         = true
+    Bullet.rails_logger  = true
+    Bullet.add_footer    = true
+  end
 
   # Mailcatcher config
   # config.action_mailer.delivery_method = :smtp

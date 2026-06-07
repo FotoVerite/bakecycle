@@ -10,8 +10,7 @@ Rails.application.configure do
   config.static_cache_control = "public, max-age=31536000"
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Set to :debug to see everything in the log.
   config.log_level = :error
@@ -36,7 +35,6 @@ Rails.application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  config.active_support.deprecation = :notify
 
   # Disable automatic flushing of the log to improve performance.
   # config.autoflush_log = false

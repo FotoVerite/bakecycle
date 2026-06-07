@@ -20,12 +20,15 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  # I want this to be raise
-  config.active_support.deprecation = :log
 
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  config.after_initialize do
+    Bullet.enable       = true
+    Bullet.raise        = true
+    Bullet.unused_eager_loading_enable = false
+  end
 end
