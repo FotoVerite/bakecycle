@@ -23,15 +23,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      redis:
-        image: redis:7
-        ports: ['6379:6379']
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     env:
       RAILS_ENV: test
       DB_HOST: localhost
@@ -39,7 +30,6 @@ jobs:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
       DB_NAME_TEST: bakecycle_test
-      REDIS_URL: redis://localhost:6379/1
       SECRET_KEY_BASE: test-secret-key-base-for-ci-only
 
     steps:
@@ -54,7 +44,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1.1'
+          ruby-version: '3.3.1'
           bundler-cache: true
 
       - name: Install JS dependencies
