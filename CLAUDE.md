@@ -40,7 +40,7 @@ PostgreSQL and Redis must be running locally (e.g. via Homebrew services).
 | React 0.14 → 18 | ✅ done (RTK, no deprecated lifecycle methods) |
 | Rails 6.1 → 7.1 | ✅ done (running 7.1.6) |
 | Cucumber removed → RSpec request specs | ✅ done |
-| Paperclip → ActiveStorage | not yet (kt-paperclip bridges) |
+| Paperclip → ActiveStorage | **not planned** — kt-paperclip is actively maintained; do not migrate |
 | React → Stimulus/Turbo (most components) | in progress — see migration plan below |
 
 ## Rails 7.1 notes
@@ -177,8 +177,8 @@ After Turbo is installed, update the 16 `link_to method: :delete` views to use `
 ## Known pain points for future upgrade hops
 
 - `active_model_serializers 0.10` — API response shape should be verified in-browser; no spec coverage for JSON output.
-- `aws-sdk-s3` (via kt-paperclip) — file upload/download not covered by specs; verify S3 works in staging before any Paperclip → ActiveStorage migration.
-- `resque 2.x` — Solid Queue is Rails 8 default. Resque still works; migrate when convenient.
+- `aws-sdk-s3` (via kt-paperclip) — file upload/download not covered by specs; verify S3 works in staging before any major changes. **Do not migrate to ActiveStorage** — kt-paperclip is actively maintained and this project is staying on it.
+- `resque 2.x` → Solid Queue migration is complete.
 - `stripe < 6` — pinned; don't bump without a dedicated audit of the Stripe integration.
 - `jquery-rails` — jQuery is still needed for jquery-timepicker and jquery-ui-sass-rails. Can be removed when those UI widgets are replaced with native or Stimulus equivalents.
 - `order-form.jsx` — migrated to Stimulus. Lead time validation runs client-side in `order_form_controller.js`. No server endpoint needed.
