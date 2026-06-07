@@ -69,6 +69,7 @@ describe Bakery do
       )
       allow(logo).to receive(:path).with(:original).and_return("/tmp/logo.png")
       allow(bakery).to receive(:logo).and_return(logo)
+      allow(File).to receive(:exist?).with("/tmp/logo.png").and_return(true)
 
       expect(bakery.logo_local_file).to eq("/tmp/logo.png")
     end

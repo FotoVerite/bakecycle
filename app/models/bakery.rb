@@ -58,7 +58,11 @@ class Bakery < ApplicationRecord
 
   def logo_local_file(style = logo.default_style)
     return if logo.path(style).nil?
-    return logo.path(style) if logo.options[:storage] == :filesystem
+    if logo.options[:storage] == :filesystem
+      path = logo.path(style)
+      return path if File.exist?(path)
+      return
+    end
     return @_tempfile.path if @_tempfile
 
     @_tempfile = write_logo_to_tempfile(style)
