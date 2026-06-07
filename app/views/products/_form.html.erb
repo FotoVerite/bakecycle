@@ -103,7 +103,7 @@
     <%= f.submit (@product.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless @product.new_record? %>
       <%= link_to 'Delete', product_path(@product), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
+                                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

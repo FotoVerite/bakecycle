@@ -67,14 +67,14 @@
 
     <div data-nested-form-target="rows" data-recipe-form-target="sortable">
       <% @recipe.recipe_items.where(removed: false).order(:sort_id).includes(:inclusionable).each_with_index do |item, index| %>
-        <%= f.fields_for :recipe_items, item, index: index do |ri| %>
+        <%= f.fields_for :recipe_items, item, child_index: index do |ri| %>
           <%= render "recipes/recipe_item_fields", ri: ri, item: item, inclusions: inclusions %>
         <% end %>
       <% end %>
     </div>
 
     <template data-nested-form-target="template">
-      <%= f.fields_for :recipe_items, RecipeItem.new, index: "NEW_RECORD" do |ri| %>
+      <%= f.fields_for :recipe_items, RecipeItem.new, child_index: "NEW_RECORD" do |ri| %>
         <%= render "recipes/recipe_item_fields", ri: ri, item: RecipeItem.new, inclusions: inclusions, is_template: true %>
       <% end %>
     </template>
@@ -89,8 +89,7 @@
     <% unless @recipe.new_record? %>
       <%= link_to "Delete Recipe", recipe_path(@recipe),
           class: "button alert",
-          method: :delete,
-          data: { confirm: "Are you sure you want to delete this recipe?" } %>
+          data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this recipe?" } %>
     <% end %>
     <%= link_to "Back to Recipes", recipes_path, class: "button secondary" %>
   </div>

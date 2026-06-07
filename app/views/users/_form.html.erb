@@ -104,7 +104,7 @@
     <%= f.submit (@user.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless @user.new_record? %>
       <%= link_to 'Delete', user_path(@user), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
+                                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

@@ -30,7 +30,7 @@
 
     <% if @vendor.persisted? && policy(@vendor).destroy? %>
       <%= link_to 'Delete', vendor_path(@vendor), class: "button alert",
-                  method: :delete, data: { confirm: 'Are you sure?' } %>
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

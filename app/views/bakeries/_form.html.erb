@@ -128,7 +128,7 @@
 
     <% if @bakery.persisted? && policy(@bakery).destroy? %>
       <%= link_to 'Delete', bakery_path(@bakery), class: "button alert",
-                  method: :delete, data: { confirm: 'Are you sure?' } %>
+                  data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

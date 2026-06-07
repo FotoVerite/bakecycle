@@ -37,7 +37,7 @@
     <%= f.submit (@route.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless @route.new_record? %>
       <%= link_to 'Delete', route_path(@route), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
+                                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

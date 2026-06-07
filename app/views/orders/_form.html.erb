@@ -161,8 +161,7 @@
     <% unless order.new_record? %>
       <%= link_to 'Delete', order_path(order),
           class: "button alert",
-          method: :delete,
-          data: { confirm: 'Are you sure?' } %>
+          data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
     <%= link_to "Back to Orders", orders_path, class: "button secondary" %>
   </div>

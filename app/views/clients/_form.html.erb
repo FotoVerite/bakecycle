@@ -183,7 +183,7 @@
     <%= f.submit (@client.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless @client.new_record? %>
       <%= link_to 'Delete', client_path(@client), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
+                                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

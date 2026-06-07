@@ -15,8 +15,7 @@
         <%= f.submit "Update", class: "button", name: nil %>
         <%= link_to 'Delete', production_run_path(f.object),
           class: "button alert",
-          method: :delete,
-          data: { confirm: 'Are you sure?' } %>
+          data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
         <%= link_to 'Reset', reset_production_run_path(f.object),
           class: "button alert",
           method: :put,

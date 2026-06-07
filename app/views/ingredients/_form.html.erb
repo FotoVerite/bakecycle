@@ -35,7 +35,7 @@
     <%= f.submit (@ingredient.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless @ingredient.new_record? %>
       <%= link_to 'Delete', ingredient_path(@ingredient), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
+                                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>
