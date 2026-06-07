@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :active_nav
   before_action :authenticate_user!
   before_action :default_nav
-  before_action :resque_no_worker if Rails.env.development?
+  before_action :no_job_workers if Rails.env.development?
   before_action :set_paper_trail_whodunnit
 
   helper_method :current_bakery
@@ -41,10 +41,10 @@ class ApplicationController < ActionController::Base
     root_path(message: true)
   end
 
-  def resque_no_worker
-    return if Resque.info[:workers] > 0 || Resque.inline
+  def no_job_workers
+    return if SolidQueue::Process.any?
 
-    flash.now.alert = "There are no resque workers and Resque.inline is false"
+    flash.now.alert = "No Solid Queue workers running. Start with: bin/jobs"
   end
 
   private

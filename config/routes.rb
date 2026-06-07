@@ -154,13 +154,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # If user is not an admin it 404s the resque request
-  resque_web_constraint = lambda do |request|
-    current_user = request.env["warden"].user
-    current_user && JobPolicy.new(current_user, User).dashboard?
-  end
-  constraints resque_web_constraint do
-    mount Resque::Server, at: "/resque"
+  authenticate :user, ->(u) { JobPolicy.new(u, User).dashboard? } do
+    mount MissionControl::Jobs::Engine, at: "/jobs"
   end
 
   get "robots.txt", to: "robots#robots"

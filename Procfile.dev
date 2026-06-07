@@ -1,3 +1,4 @@
 web: bundle exec rails server
 js: yarn build:watch
 css: bundle exec rails dartsass:watch
+jobs: bin/jobs

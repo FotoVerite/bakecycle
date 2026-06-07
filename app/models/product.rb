@@ -25,7 +25,7 @@
 
 class Product < ApplicationRecord
   extend AlphabeticalOrder
-  include ResqueJobs
+  include AsyncJobs
   has_paper_trail ignore: [:graph_data]
 
   belongs_to :inclusion, class_name: "Recipe", inverse_of: :inclusion_products, optional: true

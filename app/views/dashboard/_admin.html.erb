@@ -28,7 +28,7 @@
     <% end %>
 
     <% if policy(:job).dashboard? %>
-      <%= resque_info_table %>
+      <%= job_queue_table %>
     <% end %>
   </div>
 <% end %>

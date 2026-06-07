@@ -20,8 +20,8 @@ module ApplicationHelper
     "#{page_title} - #{base_title}".html_safe
   end
 
-  def resque_info_table
-    render partial: "resque_info_table", locals: { info: Resque.info }
+  def job_queue_table
+    render partial: "dashboard/job_queue_table"
   end
 
   def funny_loading_message

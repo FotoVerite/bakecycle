@@ -9,8 +9,5 @@ class StripeUserCreateJob < ApplicationJob
       card: token
     )
     user.bakery.update!(stripe_customer_id: customer.id)
-  rescue Resque::TermException
-    Resque.logger.error "Resque job termination re-queuing #{self} #{user}"
-    self.class.perform_later(user, token)
   end
 end

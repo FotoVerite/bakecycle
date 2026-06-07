@@ -22,8 +22,8 @@ gem "prawn"
 gem "prawn-table"
 gem "pundit"
 gem "rails", "~> 7.1.0"
-gem "redis", "~> 5.0"
-gem "resque", "~> 2.0", require: "resque/server"
+gem "solid_queue"
+gem "mission_control-jobs"
 gem "rubyzip", ">= 2.0"
 gem "dartsass-rails"
 gem "propshaft"
@@ -42,7 +42,7 @@ group :development do
   gem "capistrano-bundler", require: false
   gem "capistrano-npm"
   gem "capistrano-rails", require: false
-  gem "capistrano-resque", "~> 0.2.2", require: false
+  gem "capistrano-solid_queue", require: false
   gem "capistrano3-puma"
   gem "foreman", require: false
   gem "letter_opener"
@@ -62,11 +62,6 @@ group :test, :development do
 end
 
 group :test do
-  gem "capybara-email"
-  gem "capybara-screenshot"
-  gem "selenium-webdriver"
-  gem "database_cleaner"
-  gem "launchy"
   gem "pdf-reader", require: false
   gem "rspec-activejob"
   gem "simplecov", require: false

@@ -18,7 +18,7 @@
 
 class Recipe < ApplicationRecord
   extend AlphabeticalOrder
-  include ResqueJobs
+  include AsyncJobs
   has_paper_trail
 
   belongs_to :bakery

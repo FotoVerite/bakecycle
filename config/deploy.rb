@@ -25,12 +25,12 @@ set :bundle_binstubs, nil
 set :keep_releases, 5
 
 namespace :app do
-  desc "Restart Puma and resque"
+  desc "Restart Puma and Solid Queue"
   task :restart do
     on roles(:web) do |_host|
       within release_path do
         execute :sudo, :systemctl, :restart, "puma.service"
-        execute :sudo, :systemctl, :restart, "resque.service"
+        execute :sudo, :systemctl, :restart, "solid_queue.service"
       end
     end
   end

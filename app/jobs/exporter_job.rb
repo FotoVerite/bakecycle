@@ -13,9 +13,6 @@ class ExporterJob < ApplicationJob
     else
       create_file(user, file_export, generator)
     end
-  rescue Resque::TermException
-    Resque.logger.error "Resque job termination re-queuing #{self} #{file_export}, #{generator}"
-    self.class.perform_later(file_export, generator)
   end
 
   def create_file(user, file_export, generator)

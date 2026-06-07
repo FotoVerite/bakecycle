@@ -3,7 +3,6 @@ set :user, "deploy"
 set :branch, "costing2"
 set :ssh_options, forward_agent: true, port: 21500
 set :workers, "*" => 2
-set :resque_environment_task, true
 
 # Simple Role Syntax
 # ==================
