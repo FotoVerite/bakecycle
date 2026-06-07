@@ -1,27 +1,17 @@
-<div data-controller="NestedItemCtrl">
+<div data-nested-form-target="rows">
   <%= f.simple_fields_for :shipment_items, shipment.sorted_shipment_items do |builder| %>
-    <%= render "shipment_item_fields", f: builder %>
+    <%= render "shipment_item_fields", f: builder, shipment: shipment %>
   <% end %>
-  <div>
-    <div data-repeat>
-      <%= f.simple_fields_for :shipment_items, @shipment.shipment_items.build do |builder| %>
-        <%= render "new_shipment_item_fields", f: builder %>
-      <% end %>
-    </div>
-  </div>
-  <%= link_to 'Add Product', '', data: { add: true }, class: "button" %>
 </div>
 
-<%= content_for :js do %>
-<script>
-  document.addEventListener('change', function(event) {
-    if (!event.target.matches('.js-chosen-add')) return
+<template data-nested-form-target="template">
+  <%= f.simple_fields_for :shipment_items, ShipmentItem.new, child_index: "NEW_RECORD" do |builder| %>
+    <%= render "shipment_item_fields", f: builder, shipment: shipment %>
+  <% end %>
+</template>
 
-    var prices = <%= raw shipment.product_prices %>
-    var priceInput = document.getElementById(
-      'shipment_shipment_items_attributes_' + event.target.dataset.attrId + '_product_price'
-    )
-    if (priceInput) priceInput.value = prices[event.target.value]
-  })
-</script>
-<% end %>
+<button type="button"
+        class="button small nested-add-btn"
+        data-action="nested-form#add">
+  + Add Product
+</button>

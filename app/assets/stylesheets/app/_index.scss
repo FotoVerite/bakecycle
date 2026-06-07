@@ -111,6 +111,11 @@
   }
 }
 
+.index-search-form {
+  position: relative;
+  z-index: 10;
+}
+
 .index-toolbar-invoices {
   align-items: end;
   background: $bc-white;
@@ -122,18 +127,25 @@
 
   .index-filter {
     position: relative;
+    z-index: 1;
   }
 
   .index-filter-select {
-    z-index: 3;
+    z-index: 20;
+
+    &:focus-within {
+      z-index: 100;
+    }
   }
 
   .index-filter-date {
     align-self: start;
+    z-index: 1;
   }
 
   .index-toolbar-actions {
     align-self: end;
+    z-index: 1;
   }
 
   .index-toolbar-actions .button {
@@ -143,6 +155,10 @@
 
   .ts-wrapper {
     background: $bc-white;
+
+    &.dropdown-active {
+      z-index: 100;
+    }
   }
 
   .ts-control {
@@ -168,9 +184,10 @@
   }
 
   .ts-dropdown {
+    background: $bc-white;
     border-color: lighten($bc-shakespeare, 20%);
     box-shadow: 0 10px 22px rgba(50, 60, 70, 0.14);
-    z-index: 20;
+    z-index: 1000;
   }
 
   input,
@@ -244,6 +261,8 @@
   flex-wrap: wrap;
   gap: 8px;
   padding: 14px 16px;
+  position: relative;
+  z-index: 1;
 
   .button {
     margin: 0;

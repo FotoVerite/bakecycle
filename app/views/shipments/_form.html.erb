@@ -56,39 +56,24 @@
       </div>
     </div>
   </fieldset>
-  <fieldset class="form-section">
+  <fieldset class="form-section shipment-products-section" data-controller="nested-form">
     <legend>Products</legend>
-    <div class="row collapse show-for-large-up">
-      <div class="small-12 columns">
-        <div class="row collapse">
-          <div class="small-12 large-4 columns">
-            <%= f.label :product_id, "Product" %>
-          </div>
-          <div class="small-12 large-2 columns">
-            <%= f.label :product_product_type, "Type" %>
-          </div>
-          <div class="small-12 large-1 columns">
-            <%= f.label :product_quantity, "Quantity" %>
-          </div>
-          <div class="small-12 large-1 columns">
-            <%= f.label :product_price, "Price" %>
-          </div>
-          <div class="small-12 large-2 columns">
-            <%= f.label :production_start, "Production Start" %>
-          </div>
-          <div class="small-12 large-1 columns end">
-            <%= f.label '', "In Production" %>
-          </div>
-        </div>
-      </div>
+    <div class="nested-col-headers form-grid nested-row-grid shipment-item-grid">
+      <div class="nested-col-label shipment-product-cell">Product <abbr title="required">*</abbr></div>
+      <div class="nested-col-label shipment-type-cell">Type</div>
+      <div class="nested-col-label shipment-quantity-cell">Quantity</div>
+      <div class="nested-col-label shipment-price-cell">Price</div>
+      <div class="nested-col-label shipment-production-start-cell">Production Start</div>
+      <div class="nested-col-label shipment-status-cell">In Production</div>
+      <div class="shipment-actions-cell"></div>
     </div>
-    <%= render partial: "shipment_items", locals: {f: f} %>
+    <%= render partial: "shipment_items", locals: { f: f, shipment: shipment } %>
   </fieldset>
   <div class="form-actions">
     <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless f.object.new_record? %>
       <%= link_to 'Delete', shipment_path(f.object), class: "button alert",
-                                method: :delete, data: { confirm: 'Are you sure?' } %>
+                                data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>
 <% end %>

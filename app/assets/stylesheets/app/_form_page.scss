@@ -637,6 +637,120 @@
   min-height: 40px;
 }
 
+// Shipment item rows
+.shipment-products-section {
+  padding-bottom: 42px;
+}
+
+.shipment-item-grid {
+  display: grid;
+  gap: 8px 12px;
+  grid-template-columns: minmax(440px, 1fr) 84px 70px 80px 120px 90px 44px;
+
+  .form-field,
+  .ts-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .ts-control {
+    min-height: 40px;
+  }
+
+  input[type='number'],
+  select {
+    height: 40px;
+    width: 100%;
+  }
+
+  input[type='number'] {
+    text-align: right;
+  }
+
+  .nested-row-actions {
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .nested-icon-btn {
+    box-sizing: border-box;
+    height: 38px;
+    min-width: 38px;
+    padding: 0;
+  }
+}
+
+.nested-row.shipment-item-grid {
+  padding-bottom: 12px;
+}
+
+.shipment-product-cell {
+  grid-column: 1 / 2;
+}
+
+.shipment-type-cell {
+  grid-column: 2 / 3;
+}
+
+.shipment-quantity-cell {
+  grid-column: 3 / 4;
+}
+
+.shipment-price-cell {
+  grid-column: 4 / 5;
+}
+
+.shipment-production-start-cell {
+  grid-column: 5 / 6;
+}
+
+.shipment-status-cell {
+  grid-column: 6 / 7;
+}
+
+.shipment-actions-cell {
+  grid-column: 7 / 8;
+}
+
+.shipment-item-readonly {
+  align-items: center;
+  color: $bc-scorpion;
+  display: flex;
+  font-size: 0.85rem;
+  min-height: 40px;
+}
+
+.shipment-item-status {
+  align-items: center;
+  display: flex;
+  min-height: 40px;
+}
+
+.shipment-item-status-pill {
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  color: $bc-scorpion;
+  display: inline-flex;
+  font-size: 0.76rem;
+  font-weight: 700;
+  gap: 6px;
+  line-height: 1;
+  padding: 7px 9px;
+  text-transform: uppercase;
+}
+
+.shipment-item-status-pill--success {
+  background: lighten($bc-lima, 42%);
+  border-color: lighten($bc-lima, 18%);
+  color: darken($bc-lima, 25%);
+}
+
+.shipment-item-status-pill--danger {
+  background: lighten($bc-alizarin-crimson, 40%);
+  border-color: lighten($bc-alizarin-crimson, 24%);
+  color: darken($bc-alizarin-crimson, 14%);
+}
+
 .order-lead-warning {
   color: darken($bc-alizarin-crimson, 10%);
   font-size: 0.85rem;
@@ -689,12 +803,55 @@
 
 // Recipe item rows
 .recipe-item-grid {
+  align-items: center;
+  gap: 8px 16px;
   grid-template-columns: 32px 1fr 100px 90px 80px 44px;
+
+  .form-field,
+  .ts-wrapper {
+    margin: 0;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .ts-wrapper {
+    display: flex;
+    height: 40px;
+    min-height: 40px;
+  }
+
+  .ts-wrapper.single .ts-control,
+  .ts-control {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    height: 40px;
+    min-height: 40px;
+    width: 100%;
+  }
 
   select,
   input[type='number'],
   input[type='text'] {
+    box-sizing: border-box;
     height: 40px;
+    margin: 0;
+  }
+
+  .nested-row-actions {
+    justify-content: flex-end;
+    min-width: 0;
+
+    .button {
+      margin: 0;
+    }
+  }
+
+  .nested-icon-btn {
+    box-sizing: border-box;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
   }
 }
 
