@@ -307,7 +307,7 @@ describe OrderItem do
       it "updates it's total_lead_days when the product is updated" do
         order_item = create(:order_item, force_total_lead_days: 3)
         product = order_item.product
-        product.update!(total_lead_days: 8)
+        perform_enqueued_jobs { product.update!(total_lead_days: 8) }
         order_item.reload
         expect(order_item.total_lead_days).to eq(8)
       end

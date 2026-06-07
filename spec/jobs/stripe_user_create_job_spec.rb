@@ -24,9 +24,5 @@ describe StripeUserCreateJob do
       expect(Bakery.last.stripe_customer_id).to eq(customer_id)
     end
 
-    it "re-enqueues itself when terminated" do
-      expect(user.bakery).to receive(:update!).and_raise(Resque::TermException, "TERM")
-      expect { StripeUserCreateJob.new.perform(user, token) }.to enqueue_a(StripeUserCreateJob)
-    end
   end
 end

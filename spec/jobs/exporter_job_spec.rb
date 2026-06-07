@@ -52,10 +52,5 @@ describe ExporterJob do
       expect(file_action.action).to eq("viewed")
     end
 
-    it "re-enqueues itself when terminated" do
-      export = FileExport.create!(bakery: bakery)
-      expect(export).to receive(:save!).and_raise(Resque::TermException, "TERM")
-      expect { ExporterJob.new.perform(user, export, generator) }.to enqueue_a(ExporterJob)
-    end
   end
 end

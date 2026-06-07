@@ -101,7 +101,11 @@ describe Recipe do
     end
 
     it "works with stacked recipes" do
-      dough = build(:recipe_motherdough, :with_nested_recipes, recipe_lead_days: 2, lead_days: 4, bakery: bakery)
+      nested = create(:recipe_motherdough, name: "nested dough", bakery: bakery, lead_days: 2)
+      dough = create(:recipe_motherdough, name: "child dough", bakery: bakery, lead_days: 4)
+      create(:recipe_item, recipe: dough, inclusionable: nested, bakery: bakery)
+      dough.reload
+
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
       expect(recipe.calculate_total_lead_days).to eq(8)
@@ -115,8 +119,8 @@ describe Recipe do
       dough = build(:recipe_motherdough, name: "child recipe", bakery: bakery, lead_days: 4)
       recipe_item = build(:recipe_item_recipe, bakery: bakery, inclusionable: dough, recipe_lead_days: 2)
       recipe.recipe_items = [recipe_item]
-      expect(Resque).to receive(:enqueue).at_least(:once).and_call_original
-      dough.update(lead_days: 5)
+      expect(ModelMethodJob).to receive(:perform_later).at_least(:once).and_call_original
+      perform_enqueued_jobs { dough.update(lead_days: 5) }
       recipe.reload
       expect(recipe.total_lead_days).to eq(7)
     end

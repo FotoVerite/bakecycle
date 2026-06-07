@@ -151,36 +151,18 @@ describe Product do
       dough = FactoryBot.create(:recipe_motherdough)
       product = FactoryBot.create(:product, motherdough: dough)
 
-      expect(Resque).to receive(:enqueue).at_least(:once).and_call_original
+      expect(ModelMethodJob).to receive(:perform_later).at_least(:once).and_call_original
       dough.update(lead_days: 9)
       product.reload
       expect(product.total_lead_days).to eq(9)
     end
   end
 
-  describe ResqueJobs do
-    describe "#async" do
-      let(:product) { create(:product) }
-      it "enqueues the job" do
-        expect(Resque).to receive(:enqueue).with(Product, product.id, :wohhh, :dude)
-        product.async(:wohhh, :dude)
-      end
-    end
-
-    describe ".perform" do
-      it "fetches the id and runs the method" do
-        expect(Product).to receive(:find).with(4).and_return(product)
-        expect(product).to receive(:price).with(:wohhh, :dude)
-        Product.perform(4, :price, :wohhh, :dude)
-      end
-
-      it "re-enqueues itself when terminated" do
-        id = 5
-        method = :wohhh
-        expect(Product).to receive(:find).and_raise(Resque::TermException, "TERM")
-        expect(Resque).to receive(:enqueue).with(Product, id, method)
-        Product.perform(id, method)
-      end
+  describe "#async" do
+    let(:product) { create(:product) }
+    it "enqueues a ModelMethodJob" do
+      expect(ModelMethodJob).to receive(:perform_later).with("Product", product.id, "wohhh", :dude)
+      product.async(:wohhh, :dude)
     end
   end
 end
