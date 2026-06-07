@@ -28,7 +28,7 @@ class PackingSlipsController < ApplicationController
   private
 
   def shipments_for(date)
-    item_finder.shipments.search(date: date).order_by_route_and_client.includes(:shipment_items)
+    item_finder.shipments.search(date: date).order_by_route_and_client
   end
 
   def date_query

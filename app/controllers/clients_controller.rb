@@ -132,8 +132,6 @@ class ClientsController < ApplicationController
 
   def set_client
     @client = policy_scope(Client)
-      .joins(:shipments)
-      .includes(:shipments)
       .find(params[:id])
   end
 

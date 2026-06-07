@@ -4,6 +4,7 @@ class ProductionChecklistsController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def show
     @missing_shipments = policy_scope(Order).production_date(Time.zone.today)
+      .includes(:bakery, :client, :route)
       .reject(&:no_outstanding_shipments?)
     @double_invoices = Shipment.where(
       "bakery_id = ? AND date between ? and ? ",

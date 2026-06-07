@@ -4,7 +4,7 @@ class IngredientsController < ApplicationController
 
   def index
     authorize Ingredient
-    @ingredients = policy_scope(Ingredient).order_by_name
+    @ingredients = policy_scope(Ingredient).includes(:bakery).order_by_name
   end
 
   def new

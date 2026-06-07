@@ -17,6 +17,10 @@ class ProductionRunsController < ApplicationController
     @production_runs = production_runs_index_scope
       .order(date: :desc)
       .paginate(page: params[:page])
+    @run_item_counts = RunItem
+      .where(production_run_id: @production_runs.map(&:id))
+      .group(:production_run_id)
+      .count
   end
 
   def edit
