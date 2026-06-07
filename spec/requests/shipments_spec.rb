@@ -67,6 +67,31 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       expect(flash[:notice]).to match(/You have created/)
     end
 
+    it "creates a shipment with nested product items" do
+      product = create(:product, bakery: bakery, base_price: 3.25, total_lead_days: 1)
+      params = {
+        client_id: client.id,
+        route_id: route.id,
+        date: Time.zone.today,
+        shipment_items_attributes: {
+          "0" => {
+            product_id: product.id,
+            product_quantity: 4,
+            product_price: 3.25,
+          },
+        },
+      }
+
+      expect {
+        post shipments_path, params: { shipment: params }
+      }.to change(ShipmentItem, :count).by(1)
+
+      shipment_item = Shipment.last.shipment_items.first
+      expect(shipment_item.product_name).to eq(product.name)
+      expect(shipment_item.product_quantity).to eq(4)
+      expect(shipment_item.product_price).to eq(3.25)
+    end
+
     it "shows edit form" do
       get edit_shipment_path(shipment)
       expect(response).to be_successful

@@ -49,8 +49,13 @@ RSpec.describe "Production runs", type: :request do
     before { sign_in user }
 
     it "lists production runs" do
+      create(:run_item, production_run: production_run)
+
       get production_runs_path
+
       expect(response).to be_successful
+      expect(response.body).to include("Product Count")
+      expect(response.body).to include("<td data-title=\"Product Count\">1</td>")
     end
 
     it "filters production runs by date" do

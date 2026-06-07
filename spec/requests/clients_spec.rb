@@ -5,9 +5,6 @@ RSpec.describe "Clients", type: :request do
   let(:user)    { create(:user, bakery: bakery) }
   let!(:client) { create(:client, bakery: bakery) }
 
-  # set_client does joins(:shipments), so the client must have at least one.
-  before { create(:shipment, bakery: bakery, client: client) }
-
   describe "unauthenticated" do
     it "redirects to sign in" do
       get clients_path
@@ -97,6 +94,14 @@ RSpec.describe "Clients", type: :request do
 
     it "shows edit form" do
       get edit_client_path(client)
+      expect(response).to be_successful
+    end
+
+    it "shows edit form for a client without shipments" do
+      client_without_shipments = create(:client, bakery: bakery)
+
+      get edit_client_path(client_without_shipments)
+
       expect(response).to be_successful
     end
 

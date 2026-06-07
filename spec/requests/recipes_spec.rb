@@ -56,6 +56,8 @@ RSpec.describe "Recipes", type: :request do
     it "shows new recipe form" do
       get new_recipe_path
       expect(response).to be_successful
+      expect(response.body).to include("data-controller=\"tom-select\"")
+      expect(response.body).to include("data-placeholder=\"Search ingredients\"")
     end
 
     it "creates a recipe with valid params" do
@@ -67,8 +69,13 @@ RSpec.describe "Recipes", type: :request do
     end
 
     it "shows edit form" do
+      create(:recipe_item, recipe: recipe, bakery: bakery)
+
       get edit_recipe_path(recipe)
+
       expect(response).to be_successful
+      expect(response.body).to include("name=\"recipe[recipe_items_attributes][0][inclusionable_id_type]\"")
+      expect(response.body).to_not include("name=\"recipe[recipe_items_attributes][0][0][inclusionable_id_type]\"")
     end
 
     it "updates a recipe" do
