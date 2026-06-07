@@ -5,7 +5,7 @@
   <td data-title="Client Name"><%= shipment.client_name %></td>
   <td data-title="Price"><%= shipment.price %></td>
   <td data-title="Action">
-    <%= link_to shipment_path(shipment), remote: true, method: :delete, data: {confirm: "Are you sure you want to delete this invoice?"} do %>
+    <%= link_to shipment_path(shipment), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this invoice?" } do %>
       <span class="table-action-icon icon-link-tooltip" aria-label="Delete Invoice">
         <i class="fi-page-delete" style="color:red;"></i>
       </span>

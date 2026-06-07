@@ -5,12 +5,22 @@ export default class extends Controller {
   connect() {
     if (this.element.tomselect) return
 
-    this.tomSelect = new TomSelect(this.element, {
+    const options = {
       allowEmptyOption: true,
-      closeAfterSelect: false,
       maxOptions: null,
-      plugins: ["remove_button"],
       placeholder: this.element.dataset.placeholder || "",
+    }
+
+    if (this.element.multiple) {
+      options.closeAfterSelect = false
+      options.plugins = ["remove_button"]
+    } else {
+      options.closeAfterSelect = true
+      options.maxItems = 1
+    }
+
+    this.tomSelect = new TomSelect(this.element, {
+      ...options,
     })
   }
 
