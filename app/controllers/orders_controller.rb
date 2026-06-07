@@ -23,6 +23,7 @@ class OrdersController < ApplicationController
       .paginate(page: params[:page])
     @missing_shipments = policy_scope(Order).production_date(Time.zone.today)
       .search(search_form)
+      .includes(:bakery)
       .reject(&:no_outstanding_shipments?)
   end
 
