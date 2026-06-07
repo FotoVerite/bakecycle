@@ -12,19 +12,20 @@
     <% end %>
   </div>
 
-  <%= form_tag(products_path, remote: true, method: :get, class: 'index-toolbar index-toolbar-compact bakecycle-form') do %>
+  <%= form_tag(products_path, method: :get, class: 'index-toolbar index-toolbar-compact bakecycle-form', data: { turbo_frame: "products" }) do %>
     <div class="index-filter index-filter-small">
       <label>Active</label>
       <%= select_tag :active, options_for_select([['Yes', false],['No', true],['Any', 'any']], params[:active] || false), class: 'js-field' %>
     </div>
   <% end %>
 
-  <%= render partial: "product_table", locals: {
-    products: @products.decorate,
-    show_created_whodoneit: false,
-    show_updated_at_whodoneit: false
-  }
-  %>
+  <%= turbo_frame_tag "products" do %>
+    <%= render partial: "product_table", locals: {
+      products: @products.decorate,
+      show_created_whodoneit: false,
+      show_updated_at_whodoneit: false
+    } %>
+  <% end %>
 </div>
 
 <%= content_for :js do %>

@@ -39,8 +39,8 @@
 var profit = {
   type: "scatter",
   mode: "lines",
-  x: <%= raw @product.graph_data['dates'] %>,
-  y: <%= raw @product.graph_data['amounts'] %>,
+  x: <%= raw json_escape(@product.graph_data['dates'].to_json) %>,
+  y: <%= raw json_escape(@product.graph_data['amounts'].to_json) %>,
   line: {color: '#17BECF'}
 }
 
@@ -62,8 +62,8 @@ var layout = {
 var shipped = {
   type: "scatter",
   mode: "lines",
-  x: <%= raw @product.graph_data['dates'] %>,
-  y: <%= raw @product.graph_data['shipped'] %>,
+  x: <%= raw json_escape(@product.graph_data['dates'].to_json) %>,
+  y: <%= raw json_escape(@product.graph_data['shipped'].to_json) %>,
   line: {color: '#17BECF'}
 }
 
@@ -85,8 +85,8 @@ var shipped_layout = {
 var shipment = {
   type: "scatter",
   mode: "lines",
-  x: <%= raw @product.graph_data['dates'] %>,
-  y: <%= raw @product.graph_data['shipments_count'] %>,
+  x: <%= raw json_escape(@product.graph_data['dates'].to_json) %>,
+  y: <%= raw json_escape(@product.graph_data['shipments_count'].to_json) %>,
   line: {color: '#17BECF'}
 }
 
