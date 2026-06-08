@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path("boot", __dir__)
+require_relative "boot"
 
 require "rails/all"
 
@@ -10,23 +10,15 @@ Bundler.require(*Rails.groups)
 
 module Bakecycle
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
-
+    # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
-    config.autoloader = :zeitwerk
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    config.autoload_lib(ignore: %w[assets tasks])
+
     config.time_zone = "Eastern Time (US & Canada)"
     config.active_record.default_timezone = :local
-
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
-
-    config.autoload_paths += ["#{config.root}/lib"]
 
     config.generators do |g|
       g.factory_bot true

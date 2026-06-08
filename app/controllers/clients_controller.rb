@@ -7,7 +7,6 @@ class ClientsController < ApplicationController
     print_total_report
     print_vip_list
     print_weekly_daily_report
-    print_year_total
     total_report
     weekly_daily_report
   ]

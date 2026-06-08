@@ -54,7 +54,6 @@ end
 group :test, :development do
   gem "brakeman", require: false
   gem "bullet"
-  gem "immigrant"
   gem "pry"
   gem "rspec-rails"
   gem "rubocop", require: false
