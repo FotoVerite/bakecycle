@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: shipments
@@ -50,7 +52,7 @@ class Shipment < ApplicationRecord
   accepts_nested_attributes_for(
     :shipment_items,
     allow_destroy: true,
-    reject_if: proc { |attributes| attributes["product_id"].blank? },
+    reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
   before_validation :set_payment_due_date
@@ -93,7 +95,7 @@ class Shipment < ApplicationRecord
     search(
       client_id: client_id,
       date_from: week.start_date,
-      date_to: week.end_date,
+      date_to: week.end_date
     ).to_a.sum(&:subtotal)
   end
 
@@ -114,9 +116,8 @@ class Shipment < ApplicationRecord
   end
 
   def subtotal
-    subtotal = shipment_items.map(&:price).sum
+    shipment_items.map(&:price).sum
     # subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
-    subtotal
   end
 
   def price
@@ -133,9 +134,9 @@ class Shipment < ApplicationRecord
 
   def invoice_number
     if client.try(:legacy_id)
-      "#{sequence_number}-#{format("%05d", client.legacy_id)}"
+      "#{sequence_number}-#{format('%05d', client.legacy_id)}"
     else
-      "#{sequence_number}-#{format("%05d", client_id)}"
+      "#{sequence_number}-#{format('%05d', client_id)}"
     end
   end
 
@@ -199,7 +200,7 @@ class Shipment < ApplicationRecord
   end
 
   def send_to_contact
-    return unless client.accounts_payable_contact_email && client.send_shipment_when_generated
+    nil unless client.accounts_payable_contact_email && client.send_shipment_when_generated
     # ClientsMailer.send_invoice(self).deliver_now
   end
 end

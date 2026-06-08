@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ClientsPerProductForWeekGenerator
   include Generator
 
   def self.find(global_id)
-    bakery_id, date_string, throw_away = global_id.split("_")
+    bakery_id, date_string, = global_id.split("_")
     date = Date.iso8601(date_string)
     bakery = Bakery.find(bakery_id)
     new(bakery, date)

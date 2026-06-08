@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Products", type: :request do
@@ -20,9 +22,11 @@ RSpec.describe "Products", type: :request do
       expect(flash[:alert]).to eq("You are not authorized to access this page.")
     end
 
-    # policy_scope returns scope.none → RecordNotFound at DB level (not Pundit)
-    it "raises RecordNotFound for show" do
-      expect { get product_path(product) }.to raise_error(ActiveRecord::RecordNotFound)
+    # policy_scope returns scope.none → RecordNotFound caught by ApplicationController → redirect
+    it "redirects to index when scope blocks access" do
+      get product_path(product)
+      expect(response).to redirect_to(products_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 
@@ -92,9 +96,11 @@ RSpec.describe "Products", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    it "raises RecordNotFound for another bakery's product" do
+    it "redirects to index for another bakery's product" do
       other = create(:product, bakery: create(:bakery))
-      expect { get product_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+      get product_path(other)
+      expect(response).to redirect_to(products_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

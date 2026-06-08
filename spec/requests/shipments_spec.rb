@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Shipments (Invoices)", type: :request do
@@ -59,7 +61,7 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       params = {
         client_id: client.id,
         route_id: route.id,
-        date: Time.zone.today,
+        date: Time.zone.today
       }
       expect {
         post shipments_path, params: { shipment: params }
@@ -77,9 +79,9 @@ RSpec.describe "Shipments (Invoices)", type: :request do
           "0" => {
             product_id: product.id,
             product_quantity: 4,
-            product_price: 3.25,
-          },
-        },
+            product_price: 3.25
+          }
+        }
       }
 
       expect {
@@ -107,9 +109,11 @@ RSpec.describe "Shipments (Invoices)", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    it "raises RecordNotFound for another bakery's shipment" do
+    it "redirects to index for another bakery's shipment" do
       other = create(:shipment, bakery: create(:bakery))
-      expect { get edit_shipment_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+      get edit_shipment_path(other)
+      expect(response).to redirect_to(shipments_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 namespace :product_graph_data do
   task generate: :environment do
     ActiveRecord::Base.connection.execute("TRUNCATE product_graph_data RESTART IDENTITY")
-    Bakery.all.where(id: [1, 17]).each do |bakery|
+    Bakery.all.where(id: [1, 17]).find_each do |bakery|
       bakery.products.each do |product|
         hash = { dates: [], amounts: [], shipped: [], shipments_count: [] }
         next if product.shipment_items.empty?
@@ -32,7 +34,7 @@ namespace :product_graph_data do
   end
 
   task digest_last_week: :environment do
-    Bakery.all.where(id: [1, 17]).each do |bakery|
+    Bakery.all.where(id: [1, 17]).find_each do |bakery|
       bakery.products.each do |product|
         hash = product.graph_data
         next if product.shipment_items.empty?

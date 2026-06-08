@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IngredientsController < ApplicationController
   before_action :set_ingredient, only: %i[edit update destroy]
   decorates_assigned :ingredients, :ingredient
@@ -19,7 +21,7 @@ class IngredientsController < ApplicationController
       flash[:notice] = "You have created #{@ingredient.name}."
       redirect_to edit_ingredient_path(@ingredient)
     else
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -33,7 +35,7 @@ class IngredientsController < ApplicationController
       flash[:notice] = "You have updated #{@ingredient.name}."
       redirect_to edit_ingredient_path(@ingredient)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -41,9 +43,9 @@ class IngredientsController < ApplicationController
     authorize @ingredient
     if @ingredient.destroy
       flash[:notice] = "You have deleted #{@ingredient.name}"
-      redirect_to ingredients_path
+      redirect_to ingredients_path, status: :see_other
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 

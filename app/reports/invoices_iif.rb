@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoicesIif
   attr_reader :shipments
 
@@ -73,7 +75,7 @@ class InvoicesIif
         end
       end
 
-      if shipment.delivery_fee_for_iif > 0
+      if shipment.delivery_fee_for_iif.positive?
         spl do
           row do
             splid row_counter.next

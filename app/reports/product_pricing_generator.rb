@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ProductPricingGenerator
   include Generator
 
   def self.find(global_id)
-    bakery_id, throwAway = global_id.split("_")
+    bakery_id, = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     new(bakery)
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Bakeries", type: :request do
@@ -34,9 +36,11 @@ RSpec.describe "Bakeries", type: :request do
       expect(flash[:alert]).to eq("You are not authorized to access this page.")
     end
 
-    it "raises RecordNotFound for none permission (scope returns empty)" do
+    it "redirects when none permission (scope returns empty)" do
       sign_in create(:user, bakery: bakery, bakery_permission: "none")
-      expect { get my_bakeries_path }.to raise_error(ActiveRecord::RecordNotFound)
+      get my_bakeries_path
+      expect(response).to redirect_to(bakeries_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 

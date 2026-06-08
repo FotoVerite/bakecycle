@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   config.action_mailer.default_url_options = { host: "localhost:3000" }
   config.enable_reloading = true
@@ -17,7 +19,6 @@ Rails.application.configure do
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = :all
-
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load

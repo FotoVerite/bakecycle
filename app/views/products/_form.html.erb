@@ -25,21 +25,21 @@
       </div>
 
       <div class="form-field form-span-6">
-        <%= f.input :base_price, as: :integer %>
+        <%= f.input :base_price, as: :decimal %>
       </div>
       <div class="form-field form-span-6">
-        <%= f.input :cog, as: :integer %>
+        <%= f.input :cog, as: :decimal %>
       </div>
 
       <div class="form-field form-span-6">
-        <%= f.input :weight, as: :integer%>
+        <%= f.input :weight, as: :decimal %>
       </div>
       <div class="form-field form-span-6">
         <%= f.input :unit, collection: product.units_select, as: :select, include_blank: false %>
       </div>
 
       <div class="form-field form-span-4">
-        <%= f.input :over_bake, label: "over bake %", as: :integer%>
+        <%= f.input :over_bake, label: "over bake %", as: :decimal %>
       </div>
       <div class="form-field form-span-4">
         <%= f.label :total_lead_days %>
@@ -91,7 +91,7 @@
     </div>
 
     <template data-nested-form-target="template">
-      <%= f.fields_for :price_variants, PriceVariant.new, index: 'NEW_RECORD' do |pv_form| %>
+      <%= f.fields_for :price_variants, PriceVariant.new, child_index: "NEW_RECORD" do |pv_form| %>
         <%= render 'price_variant_fields', pv_form: pv_form, clients: @clients, is_template: true %>
       <% end %>
     </template>

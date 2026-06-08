@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: orders
@@ -21,8 +23,7 @@
 #
 
 class Order < ApplicationRecord
-  attr_accessor :confirm_override
-  attr_accessor :kickoff_time
+  attr_accessor :confirm_override, :kickoff_time
 
   belongs_to :client
   belongs_to :route, optional: true

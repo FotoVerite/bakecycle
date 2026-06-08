@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
   before_action :skip_policy_scope, only: %i[
@@ -29,7 +31,7 @@ class ClientsController < ApplicationController
       flash[:notice] = "You have created #{@client.name}."
       redirect_to client_path(@client)
     else
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -47,7 +49,7 @@ class ClientsController < ApplicationController
       flash[:notice] = "You have updated #{@client.name}."
       redirect_to client_path(@client)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -55,7 +57,7 @@ class ClientsController < ApplicationController
     authorize @client
     @client.destroy!
     flash[:notice] = "You have deleted #{@client.name}"
-    redirect_to clients_path
+    redirect_to clients_path, status: :see_other
   end
 
   def year_total
@@ -109,11 +111,11 @@ class ClientsController < ApplicationController
 
   def yearly_total
     authorize Client, :index?
-    ids = params[:client_ids].flatten.reject { |x| x.empty? }
+    ids = params[:client_ids].flatten.reject(&:empty?)
     @clients = policy_scope(Client).find(ids)
-    @start_date = (Time.now - 1.year).beginning_of_year
-    @end_date = (Time.now - 1.year).end_of_year
-    render :layout => false
+    @start_date = (Time.zone.now - 1.year).beginning_of_year
+    @end_date = (Time.zone.now - 1.year).end_of_year
+    render layout: false
   end
 
   private

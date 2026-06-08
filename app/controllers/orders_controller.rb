@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   before_action :set_order, only: %i[
     add_invoices
@@ -50,7 +52,7 @@ class OrdersController < ApplicationController
       redirect_to edit_order_path(@order, updated: order_creator.updated_id), notice: order_creator.success_message
     else
       @order.order_items.each { |item| item.order = @order }
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -76,7 +78,7 @@ class OrdersController < ApplicationController
       flash[:notice] = "You have updated the #{@order.order_type} order for #{@order.client_name}."
       redirect_to edit_order_path(@order)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -84,7 +86,7 @@ class OrdersController < ApplicationController
     authorize @order
     @order.destroy!
     flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client_name}."
-    redirect_to orders_path
+    redirect_to orders_path, status: :see_other
   end
 
   def future_invoices
@@ -115,7 +117,7 @@ class OrdersController < ApplicationController
   def copy
     @order = OrderDuplicate.new(@order).duplicate
     authorize @order, :new?
-    render "new"
+    render "new", status: :unprocessable_content
   end
 
   def print
@@ -159,7 +161,7 @@ class OrdersController < ApplicationController
   end
 
   def search_params
-    params[:search].permit(OrderSearchForm.params) if params[:search]
+    params[:search]&.permit(OrderSearchForm.params)
   end
 
   def order_params
@@ -168,7 +170,7 @@ class OrdersController < ApplicationController
       :discount,
       :start_date, :end_date, :client_id, :route_id, :note, :order_type,
       order_items_attributes: %i[id product_id monday tuesday wednesday
-                                 thursday friday saturday sunday _destroy],
+                                 thursday friday saturday sunday _destroy]
     )
   end
 

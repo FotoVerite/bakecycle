@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentsController < ApplicationController
   before_action :load_shipment, only: %i[edit update destroy invoice packing_slip invoice_iif invoice_csv]
   after_action :skip_policy_scope,
@@ -17,8 +19,8 @@ class ShipmentsController < ApplicationController
     @double_invoices = Shipment.where(
       "bakery_id = ? AND date between ? and ? ",
       current_bakery,
-      (Time.zone.today - 2.days),
-      (Time.zone.today + 7.days)
+      Time.zone.today - 2.days,
+      Time.zone.today + 7.days
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
@@ -31,8 +33,8 @@ class ShipmentsController < ApplicationController
       "bakery_id = ? AND client_id in(?) AND date between ? and ? ",
       current_bakery,
       @clients,
-      (Time.zone.today.beginning_of_year),
-      (Time.zone.today.end_of_year)
+      Time.zone.today.beginning_of_year,
+      Time.zone.today.end_of_year
     )
     respond_to do |format|
       format.html
@@ -52,7 +54,7 @@ class ShipmentsController < ApplicationController
       flash[:notice] = "You have created an invoice for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -66,7 +68,7 @@ class ShipmentsController < ApplicationController
       flash[:notice] = "You have updated the invoice for #{@shipment.client_name}."
       redirect_to edit_shipment_path(@shipment)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -76,7 +78,7 @@ class ShipmentsController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:notice] = "You have deleted the invoice for #{@shipment.client_name}."
-        redirect_to shipments_path
+        redirect_to shipments_path, status: :see_other
       end
       format.js
     end
@@ -170,7 +172,7 @@ class ShipmentsController < ApplicationController
   end
 
   def search_params
-    params[:search].permit(ShipmentSearchForm.params) if params[:search]
+    params[:search]&.permit(ShipmentSearchForm.params)
   end
 
   def shipment_params
@@ -181,7 +183,7 @@ class ShipmentsController < ApplicationController
       :payment_due_date,
       :po_number,
       :delivery_fee, :note,
-      shipment_items_attributes: %i[id product_id product_quantity product_price _destroy],
+      shipment_items_attributes: %i[id product_id product_quantity product_price _destroy]
     )
   end
 

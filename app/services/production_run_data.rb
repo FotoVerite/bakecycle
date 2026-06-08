@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunData
   attr_reader :bakery, :recipes_collection, :production_run
 
@@ -10,9 +12,7 @@ class ProductionRunData
     set_preferment_bowls
   end
 
-  def id
-    @production_run.id
-  end
+  delegate :id, to: :@production_run
 
   def run_date
     production_run.date

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   config.action_mailer.default_url_options = { host: "localhost:3000" }
   config.enable_reloading = false
@@ -19,7 +21,6 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-
 
   config.action_controller.action_on_unpermitted_parameters = :raise
 

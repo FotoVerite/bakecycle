@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: ingredients
@@ -20,21 +22,21 @@ class Ingredient < ApplicationRecord
 
   attr_accessor :dirty, :cost, :cost_over_time_vendor_id
 
-  INGREDIENT_TYPES = %w[
-    flour
-    salt
-    yeast
-    sugar
-    hydration
-    eggs
-    fats
-    fruits\ and\ vegetables
-    spices
-    meat
-    dairy
-    nuts
-    chocolate
-    other
+  INGREDIENT_TYPES = [
+    "flour",
+    "salt",
+    "yeast",
+    "sugar",
+    "hydration",
+    "eggs",
+    "fats",
+    "fruits and vegetables",
+    "spices",
+    "meat",
+    "dairy",
+    "nuts",
+    "chocolate",
+    "other"
   ].freeze
 
   has_many :recipe_items, as: :inclusionable, class_name: "RecipeItem", dependent: :destroy, inverse_of: :inclusionable
@@ -98,7 +100,7 @@ class Ingredient < ApplicationRecord
       cost_per_unit: cost,
       weight_unit: weight_unit,
       conversion: conversion,
-      cost_per_gram: cost.to_f / conversion.to_f
+      cost_per_gram: cost.to_f / conversion
     )
   end
 

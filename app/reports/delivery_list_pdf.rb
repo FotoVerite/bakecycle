@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeliveryListPdf < BasePdfReport
   def initialize(bakery, date)
     @recipes = ProductCounter.new(bakery, date)
@@ -74,7 +76,7 @@ class DeliveryListPdf < BasePdfReport
   end
 
   def client_notes_row(client)
-    [content: client.notes, colspan: 5, background_color: "FFFFCC"]
+    [{ content: client.notes, colspan: 5, background_color: "FFFFCC" }]
   end
 
   def delivery_date

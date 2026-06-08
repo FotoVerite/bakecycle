@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BaseSearchForm
   attr_reader :params
 
@@ -63,8 +65,8 @@ class BaseSearchForm
   end
 
   def to_h
-    self.class.accessible_fields.each_with_object({}) do |field, object|
-      object[field] = send(field)
+    self.class.accessible_fields.index_with do |field|
+      send(field)
     end
   end
 
@@ -78,7 +80,7 @@ class BaseSearchForm
 
   def parse_date(date)
     date = Chronic.parse(date)
-    date.to_date if date
+    date&.to_date
   end
 
   def process_array(input)

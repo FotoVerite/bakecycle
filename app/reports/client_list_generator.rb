@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ClientListGenerator
   include Generator
 
   def self.find(global_id)
-    bakery_id, type, throwAway = global_id.split("_")
+    bakery_id, type, = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     new(bakery, type)
   end

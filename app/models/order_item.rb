@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: order_items
@@ -114,7 +116,7 @@ class OrderItem < ApplicationRecord
 
   def production_start_on?(start_date)
     ready_date = start_date + total_lead_days.days
-    quantity(ready_date) > 0
+    quantity(ready_date).positive?
   end
 
   def touch_order
@@ -161,7 +163,7 @@ class OrderItem < ApplicationRecord
     product_information[:price_per_piece] = product_price
     product_information[:total_price] = total_quantity_price
     product_information[:total_lead_days] = total_lead_days
-    return product_information
+    product_information
   end
 
   def destroy

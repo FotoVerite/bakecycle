@@ -30,7 +30,7 @@
             <span class="table-action-icon icon-link-tooltip" aria-label="Edit User"><i class="fi-page-edit"></i></span>
           <% end %>
           <% if user.invited_to_sign_up? %>
-            <%= link_to send_user_invitation_path(user), method: :post do %>
+            <%= link_to send_user_invitation_path(user), data: { turbo_method: :post } do %>
               <span class="table-action-icon icon-link-tooltip" aria-label="Resend Confirmation Email"><i class="fi-mail"></i></span>
             <% end %>
           <% end %>

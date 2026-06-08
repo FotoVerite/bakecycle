@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class UserDecorator < Draper::Decorator
   delegate_all
 
   def bakery_name
-    bakery.name if bakery
+    bakery&.name
   end
 
   def access_level

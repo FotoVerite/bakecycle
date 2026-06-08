@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class FakeFileIO < StringIO
-  attr_reader :original_filename
-  attr_reader :path
+  attr_reader :original_filename, :path
 
   def initialize(filename, content)
     super(content)

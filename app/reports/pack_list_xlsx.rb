@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PackListXlsx
   def initialize(bakery, date)
     @bakery = bakery
@@ -50,7 +52,7 @@ class PackListXlsx
       product_array[1]["quantity"].each do |client_name, quantity|
         sheet.add_row ["#{client_name} #{quantity}"]
       end
-      sheet.add_row ["Total: " + product_array[1]["total"].to_s]
+      sheet.add_row ["Total: #{product_array[1]['total']}"]
     end
   end
 

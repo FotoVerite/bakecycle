@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunsController < ApplicationController
   before_action :set_production_run, only: %i[edit update print reset]
   after_action :skip_policy_scope, only: %i[
@@ -33,7 +35,7 @@ class ProductionRunsController < ApplicationController
     if @production_run.update(production_run_params)
       redirect_to edit_production_run_path(@production_run), notice: "Successfully updated"
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 

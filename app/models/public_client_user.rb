@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "net/http"
 
 class PublicClientUser < ApplicationRecord
@@ -15,7 +17,7 @@ class PublicClientUser < ApplicationRecord
       exp: Time.now.to_i + 25.years,
       iat: Time.now.to_i,
       iss: ENV["JWT_ISSUER"],
-      client_id: client_id,
+      client_id: client_id
     }
     JWT.encode payload, ENV["JWT_SECRET"], "HS256"
   end
@@ -29,7 +31,7 @@ class PublicClientUser < ApplicationRecord
       jwt_token: jwt_token,
       last_name: last_name,
       password: token,
-      password_confirmation: token,
+      password_confirmation: token
     }
     begin
       uri = URI.join(ENV["PUBLIC_BAKECYCLE"], "api/", "v1/", "members")
@@ -49,26 +51,26 @@ class PublicClientUser < ApplicationRecord
       when Net::HTTPSuccess
         if response["success"] == true
           save
-          return true
+          true
         else
           response["errors"].each do |k, v|
             errors.add(:base, :api, message: "#{k.capitalize}: " + v.join(", "))
           end
-          return false
+          false
         end
       when Net::HTTPUnauthorized
         errors.add(:base, :api, message: "API ISSUE: Unauthorized")
-        return false
+        false
       when Net::HTTPNotFound
         errors.add(:base, :api, message: "API ISSUE: Not Found")
-        return false
+        false
       else
         errors.add(:base, :api, message: "API ISSUE: #{http_response.message}")
-        return false
+        false
       end
     rescue SocketError, Errno::ECONNREFUSED => e
-      errors.add(:base, :api, message: "API ISSUE: " + e.message)
-      return false
+      errors.add(:base, :api, message: "API ISSUE: #{e.message}")
+      false
     end
   end
 end

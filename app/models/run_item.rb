@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: run_items
@@ -31,7 +33,7 @@ class RunItem < ApplicationRecord
   delegate :name, :over_bake, :total_lead_days, to: :product, prefix: true
 
   def from_shipment?
-    order_quantity > 0 if order_quantity
+    order_quantity&.positive?
   end
 
   def shipment_items=(shipment_items)
@@ -42,7 +44,7 @@ class RunItem < ApplicationRecord
     self.overbake_quantity ||= 0
     self.order_quantity ||= 0
     # NB fix if you are removing all items from a production run
-    self.order_quantity = 0 if order_quantity < 0
+    self.order_quantity = 0 if order_quantity.negative?
   end
 
   def update_total_quantity

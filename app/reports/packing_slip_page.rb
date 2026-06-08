@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PackingSlipPage
   extend Forwardable
 
@@ -43,7 +45,7 @@ class PackingSlipPage
 
     # Add alert star
     grid([0, 11.3], [0, 11.3]).bounding_box {
-      image Rails.root.join("app", "assets", "images", "icons", "star.png"),
+      image Rails.root.join("app/assets/images/icons/star.png"),
             fit: [20, 20]
     }
   end
@@ -92,7 +94,7 @@ class PackingSlipPage
     grid([1.1, 10.4], [1.3, 11.5]).bounding_box do
       font_size 9
       packing_slip_info_data.each do |row|
-        text (row[1]).to_s, align: :left
+        text row[1].to_s, align: :left
       end
     end
   end

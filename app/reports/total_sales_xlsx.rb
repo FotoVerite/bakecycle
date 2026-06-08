@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class TotalSalesXlsx
   include ActionView::Helpers::NumberHelper
 
   def initialize(bakery, start_date, end_date)
-    @shipments = Shipment.where(bakery: bakery, :date => start_date..end_date) || []
+    @shipments = Shipment.where(bakery: bakery, date: start_date..end_date) || []
   end
 
   def generate
@@ -30,7 +32,7 @@ class TotalSalesXlsx
       "Item",
       "Qty",
       "SKU",
-      "Net Sales",
+      "Net Sales"
     ]
   end
 
@@ -40,6 +42,6 @@ class TotalSalesXlsx
     row += [item.product_product_type, item.product_name, item.product_quantity, item.product_sku,
             number_to_currency(item.product_quantity * item.product_price)]
     Rails.logger.error row
-    return row
+    row
   end
 end

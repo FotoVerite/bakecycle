@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe ApplicationHelper, type: :helper do
@@ -46,5 +48,4 @@ describe ApplicationHelper, type: :helper do
       expect(helper.full_title("Orders")).to eq("Orders - Bakecycle")
     end
   end
-
 end

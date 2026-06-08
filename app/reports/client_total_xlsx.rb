@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClientTotalXlsx
   def initialize(bakery, start_date, end_date)
     @bakery = bakery
@@ -37,7 +39,7 @@ class ClientTotalXlsx
       sheet.add_row client_array
     end
     sheet.add_row []
-    sheet.add_row ["Total: " + @total.to_s]
+    sheet.add_row ["Total: #{@total}"]
   end
 
   def create_output_string(page)

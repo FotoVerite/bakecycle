@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
-  after_action :verify_authorized, :verify_policy_scoped, unless: :devise_controller?
+  after_action :verify_authorized, :verify_policy_scoped, unless: :skip_pundit_verification?
   before_action :active_nav
   before_action :authenticate_user!
   before_action :default_nav
@@ -12,6 +14,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception,  prepend: true
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def active_nav(name = nil)
     @_active_nav = name || controller_name.to_sym
@@ -26,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_bakery
-    current_user.bakery if current_user
+    current_user&.bakery
   end
 
   def item_finder
@@ -49,6 +52,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def skip_pundit_verification?
+    devise_controller? || controller_path.start_with?("mission_control/jobs/")
+  end
+
   def redirect_path
     return dashboard_path if user_signed_in?
 
@@ -58,6 +65,13 @@ class ApplicationController < ActionController::Base
   def not_authorized
     flash[:alert] = "You are not authorized to access this page."
     redirect_to(request.referer || redirect_path)
+  end
+
+  def record_not_found
+    flash[:alert] = "That record no longer exists."
+    redirect_to url_for(action: :index)
+  rescue ActionController::UrlGenerationError
+    redirect_to redirect_path
   end
 
   def parsed_date_param(*keys, fallback: Time.zone.today)
@@ -85,6 +99,6 @@ class ApplicationController < ActionController::Base
   def parsed_date_value(value, fallback:)
     date = Chronic.parse(value.to_s) if value.present?
     date ||= fallback
-    date.to_date if date
+    date&.to_date
   end
 end

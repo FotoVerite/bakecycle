@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class BasePdfReport < Prawn::Document
-  HEADER_ROW_COLOR = "b0b0b0".freeze
-  INDENTED_ROW_COLOR = "d3d3d3".freeze
+  HEADER_ROW_COLOR = "b0b0b0"
+  INDENTED_ROW_COLOR = "d3d3d3"
   TABLE_STYLE = { size: 10, height: 18, overflow: :shrink_to_fit, min_font_size: 5 }.freeze
 
   def initialize(options = {})

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 describe ExporterJob do
   let(:bakery) { create(:bakery) }
@@ -51,6 +53,5 @@ describe ExporterJob do
       expect(file_action.file_export).to eq(export)
       expect(file_action.action).to eq("viewed")
     end
-
   end
 end

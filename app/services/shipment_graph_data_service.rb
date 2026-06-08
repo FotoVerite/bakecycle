@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentGraphDataService
   def self.generate
     new.generate
@@ -9,7 +11,7 @@ class ShipmentGraphDataService
 
   def generate
     ActiveRecord::Base.connection.execute("TRUNCATE shipment_graph_data RESTART IDENTITY")
-    Bakery.all.each do |bakery|
+    Bakery.all.find_each do |bakery|
       hash = { dates: [], amounts: [], product_counts: [] }
       shipments = bakery.shipments.order("date ASC")
       next if shipments.empty?
@@ -33,7 +35,7 @@ class ShipmentGraphDataService
   end
 
   def digest_last_week
-    Bakery.all.each do |bakery|
+    Bakery.all.find_each do |bakery|
       shipments = bakery.shipments.order("date ASC")
       next if shipments.empty?
       next if bakery.graph_data.nil?

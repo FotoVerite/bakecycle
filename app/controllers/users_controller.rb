@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :set_user, only: %i[edit update destroy]
   decorates_assigned :users, :user
@@ -33,7 +35,7 @@ class UsersController < ApplicationController
       flash[:notice] = "You have updated #{@user.name}."
       redirect_to edit_user_path(@user)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -41,7 +43,7 @@ class UsersController < ApplicationController
     authorize @user
     @user.destroy!
     flash[:notice] = "You have deleted #{@user.name}"
-    redirect_to users_path
+    redirect_to users_path, status: :see_other
   end
 
   def myaccount
@@ -62,7 +64,7 @@ class UsersController < ApplicationController
       flash[:notice] = t("devise.invitations.send_instructions", email: @user.email)
       redirect_to users_path
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -71,7 +73,7 @@ class UsersController < ApplicationController
       flash[:notice] = t("devise.invitations.user.user_added", email: user.email)
       redirect_to users_path
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 

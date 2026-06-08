@@ -20,8 +20,7 @@
       </ul>
         <%= link_to 'Add these items', reset_production_run_path(@production_run),
       class: "button alert",
-      method: :put,
-      data: { confirm: "Overbakes will be recaculated from the new totals. Continue?" } %>
+      data: { turbo_method: :put, turbo_confirm: "Overbakes will be recaculated from the new totals. Continue?" } %>
     </div>
   <% end %>
 

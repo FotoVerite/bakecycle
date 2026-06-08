@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunGenerator
   include Generator
 
@@ -10,9 +12,7 @@ class ProductionRunGenerator
     @production_run = production_run
   end
 
-  def id
-    @production_run.id
-  end
+  delegate :id, to: :@production_run
 
   def filename
     "Production-Run-#{@production_run.id}-#{@production_run.date}.pdf"

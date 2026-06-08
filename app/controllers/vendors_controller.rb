@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VendorsController < ApplicationController
   before_action :set_vendor, only: %i[buy_orders edit pricing update update_buy_orders update_pricing destroy]
   before_action :skip_policy_scope, only: %i[print_pricing]
@@ -19,7 +21,7 @@ class VendorsController < ApplicationController
       flash[:notice] = "You have created #{@vendor.name}."
       redirect_to vendors_path
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -67,7 +69,7 @@ class VendorsController < ApplicationController
       flash[:notice] = "You have updated #{@vendor.name}."
       redirect_to vendors_path(@vendor)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -75,9 +77,9 @@ class VendorsController < ApplicationController
     authorize @vendor
     if @vendor.destroy
       flash[:notice] = "You have deleted #{@vendor.name}"
-      redirect_to vendors_path
+      redirect_to vendors_path, status: :see_other
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[edit papertrail update destroy]
   before_action :set_inclusions, only: %i[new edit create update]
@@ -20,7 +22,7 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have created #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
     else
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -50,7 +52,7 @@ class RecipesController < ApplicationController
       flash[:notice] = "You have updated #{@recipe.name}."
       redirect_to edit_recipe_path(@recipe)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -58,9 +60,9 @@ class RecipesController < ApplicationController
     authorize @recipe
     if @recipe.destroy
       flash[:notice] = "You have deleted #{@recipe.name}"
-      redirect_to recipes_path
+      redirect_to recipes_path, status: :see_other
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -79,7 +81,8 @@ class RecipesController < ApplicationController
     other_recipes = item_finder.recipes.where.not(id: @recipe&.id).order(:name)
 
     ingredient_options = ingredients.map do |i|
-      [i.name, "#{i.id}-Ingredient", { data: { type: i.ingredient_type.capitalize, lead_days: i.total_lead_days.to_i } }]
+      [i.name, "#{i.id}-Ingredient",
+       { data: { type: i.ingredient_type.capitalize, lead_days: i.total_lead_days.to_i } }]
     end
 
     recipe_options = other_recipes.map do |r|

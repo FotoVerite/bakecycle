@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RouteDecorator < Draper::Decorator
   delegate_all
 
@@ -6,6 +8,6 @@ class RouteDecorator < Draper::Decorator
   end
 
   def formatted_time
-    departure_time.strftime("%I:%M %p") if departure_time
+    departure_time&.strftime("%I:%M %p")
   end
 end

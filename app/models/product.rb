@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: products
@@ -51,10 +53,10 @@ class Product < ApplicationRecord
     vienoisserie: 16,
     dry_goods: 17,
     wholesale_sandwiches: 19,
-    other: 18,
+    other: 18
   }
 
-  enum unit: %i[oz lb g kg]
+  enum unit: { oz: 0, lb: 1, g: 2, kg: 3 }
 
   validates :bakery, presence: true
   validates :name, presence: true, uniqueness: { scope: :bakery_id }
@@ -188,6 +190,6 @@ class Product < ApplicationRecord
       .where("client_id IS NULL OR client_id = ?", client.id)
       .order(quantity: :desc)
       .detect { |variant| variant.quantity <= quantity }
-    matching.price if matching
+    matching&.price
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   root "landing_pages#index"
   devise_for :users, skip: [:invitations]
@@ -122,7 +124,7 @@ Rails.application.routes.draw do
     get "print_sorted_list", on: :collection
   end
 
-  resources :public_client_users, only: [:index, :new, :create]
+  resources :public_client_users, only: %i[index new create]
 
   get "print-recipes", to: "production_runs#print_recipes"
 
@@ -149,8 +151,8 @@ Rails.application.routes.draw do
   namespace :api do
     resources :file_exports, only: [:show]
     namespace "v1" do
-      resource :account, only: [:show, :update]
-      resource :orders, only: [:show, :update]
+      resource :account, only: %i[show update]
+      resource :orders, only: %i[show update]
     end
   end
 

@@ -1,19 +1,47 @@
-<%= simple_form_for search_form, url: orders_destination, method: :get, as: :search do |f| %>
-  <div class="row collapse">
-    <div class="small-12 medium-1 columns">
-      <%= f.input :date, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
+<%= simple_form_for search_form, url: orders_destination, method: :get, as: :search, html: { class: "index-search-form" } do |f| %>
+  <div class="index-toolbar index-toolbar-invoices index-toolbar-orders">
+    <div class="index-filter index-filter-select index-filter-client index-span-4">
+      <%= f.input :client_id,
+          collection: orders.available_clients,
+          as: :select,
+          required: false,
+          input_html: {
+            multiple: true,
+            data: { controller: "tom-select", placeholder: "Filter by client" }
+          } %>
     </div>
-    <div class="small-12 medium-4 columns">
-      <%= f.input :client_id , collection: orders.available_clients, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Clients' } } %>
+
+    <div class="index-filter index-filter-select index-filter-product index-span-4">
+      <%= f.input :product_id,
+          collection: orders.available_products,
+          as: :select,
+          required: false,
+          input_html: {
+            multiple: true,
+            data: { controller: "tom-select", placeholder: "Filter by product" }
+          } %>
     </div>
-    <div class="small-12 medium-4 columns">
-      <%= f.input :product_id , collection: orders.available_products, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Products' } } %>
+
+    <div class="index-filter index-filter-select index-span-2">
+      <%= f.input :route_id,
+          collection: orders.available_routes,
+          as: :select,
+          required: false,
+          input_html: {
+            multiple: true,
+            data: { controller: "tom-select", placeholder: "Route" }
+          } %>
     </div>
-    <div class="small-12 medium-2 columns">
-      <%= f.input :route_id , collection: orders.available_routes, as: :select, required: false, input_html: { multiple: true, class: 'js-chosen', data: { placeholder: 'Select Routes' } } %>
+
+    <div class="index-toolbar-actions index-span-2">
+      <%= f.submit "Search", class: "button small", name: nil %>
     </div>
-    <div class="small-12 medium-1 columns end">
-      <%= f.submit 'Search', class: "button postfix search-button", name: nil %>
+
+    <div class="index-filter index-filter-date index-span-2">
+      <%= f.input :date,
+          input_html: { class: "js-datepicker" },
+          placeholder: "YYYY-MM-DD",
+          required: false %>
     </div>
   </div>
 <% end %>

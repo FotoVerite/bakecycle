@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PublicClientUsersController < ApplicationController
   def index
     authorize PublicClientUser
@@ -15,7 +17,7 @@ class PublicClientUsersController < ApplicationController
     if @user.valid? && @user.publish_user
       redirect_to public_client_users_path
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 # Orders has no show route — index, new, edit, update, copy are the key actions.
@@ -68,7 +70,7 @@ RSpec.describe "Orders", type: :request do
         order_type: "standing",
         start_date: Time.zone.today.to_s,
         client_id: fresh_client.id,
-        route_id: route.id,
+        route_id: route.id
       }
       post orders_path, params: { order: params }
       expect(flash[:notice]).to match(/You have created/)
@@ -89,9 +91,11 @@ RSpec.describe "Orders", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    it "raises RecordNotFound for another bakery's order" do
+    it "redirects to index for another bakery's order" do
       other = create(:order, bakery: create(:bakery))
-      expect { get edit_order_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+      get edit_order_path(other)
+      expect(response).to redirect_to(orders_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

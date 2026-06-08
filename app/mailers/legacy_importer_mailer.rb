@@ -1,4 +1,6 @@
-class LegacyImporterMailer < ActionMailer::Base
+# frozen_string_literal: true
+
+class LegacyImporterMailer < ApplicationMailer
   default from: "admin@bakecycle.com"
 
   def invalid_clients_csv(csv)

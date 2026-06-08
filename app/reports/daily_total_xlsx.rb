@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DailyTotalXlsx
   def initialize(bakery, date, show_routes = true)
     @bakery = bakery
@@ -22,15 +24,11 @@ class DailyTotalXlsx
     styles = wb.styles
     @header = styles.add_style bg_color: "DD", sz: 16, b: true, alignment: { horizontal: :left }
     wb.add_worksheet(name: "Daily Totals for #{@date}") do |sheet|
-      if (@show_routes)
-        sheet.add_row(
-          information_header, header: @header,
-        )
-      else
-        sheet.add_row(
-          information_header, header: @header,
-        )
+      if @show_routes
       end
+      sheet.add_row(
+        information_header, header: @header
+      )
       add_rows(@recipes.products, sheet)
     end
     create_output_string(p)
@@ -42,7 +40,7 @@ class DailyTotalXlsx
       data = [
         p.name,
         @recipes.product_counts[p.id][:total],
-        @recipes.product_counts[p.id][:overbake_count],
+        @recipes.product_counts[p.id][:overbake_count]
       ]
       if @show_routes
         @recipes.routes.map do |route|

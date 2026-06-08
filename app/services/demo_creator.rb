@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class DemoCreator
-  DEMO_DATA_YAML = "config/demo_data.yml".freeze
+  DEMO_DATA_YAML = "config/demo_data.yml"
 
   attr_reader :kickoff, :bakery
 

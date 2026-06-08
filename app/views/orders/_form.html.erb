@@ -132,14 +132,14 @@
 
     <div data-nested-form-target="rows">
       <% order.order_items.each_with_index do |item, index| %>
-        <%= f.fields_for :order_items, item, index: index do |oi| %>
+        <%= f.fields_for :order_items, item, child_index: index do |oi| %>
           <%= render "orders/order_item_fields", oi: oi, item: item, available_products: @available_products %>
         <% end %>
       <% end %>
     </div>
 
     <template data-nested-form-target="template">
-      <%= f.fields_for :order_items, OrderItem.new, index: "NEW_RECORD" do |oi| %>
+      <%= f.fields_for :order_items, OrderItem.new, child_index: "NEW_RECORD" do |oi| %>
         <%= render "orders/order_item_fields", oi: oi, item: OrderItem.new, available_products: @available_products %>
       <% end %>
     </template>

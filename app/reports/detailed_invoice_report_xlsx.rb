@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class DetailedInvoiceReportXlsx
   def initialize(bakery, start_date, end_date)
     @bakery = bakery
-    @shipments = Shipment.where(bakery: bakery, :date => start_date..end_date) || []
+    @shipments = Shipment.where(bakery: bakery, date: start_date..end_date) || []
   end
 
   def generate
@@ -30,7 +32,7 @@ class DetailedInvoiceReportXlsx
         "Vienoisserie",
         "Dry Goods",
         "Other",
-        "Total",
+        "Total"
       ]
       add_rows(@shipments, sheet)
     end
@@ -48,7 +50,7 @@ class DetailedInvoiceReportXlsx
         shipment.date,
         shipment.route_name,
         shipment.subtotal,
-        shipment.delivery_fee,
+        shipment.delivery_fee
       ]
       row += create_totals_for_invoice(shipment).values
       sheet.add_row row
@@ -66,7 +68,7 @@ class DetailedInvoiceReportXlsx
       vienoisserie: 0.00,
       dry_goods: 0.00,
       other: 0.00,
-      total: 0.00,
+      total: 0.00
     }
     shipment.shipment_items.each do |item|
       product_type = item.product.product_type

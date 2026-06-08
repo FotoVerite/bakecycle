@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: shipment_items
@@ -68,7 +70,7 @@ class ShipmentItem < ApplicationRecord
   end
 
   def set_production_start
-    return unless shipment && shipment.date
+    return unless shipment&.date
 
     self.production_start = shipment.date - product_total_lead_days
   end

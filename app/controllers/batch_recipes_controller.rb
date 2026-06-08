@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BatchRecipesController < ApplicationController
   after_action :skip_policy_scope, only: %i[index print export_csv]
 
@@ -19,7 +21,7 @@ class BatchRecipesController < ApplicationController
     filename = "Batch_Recipes_#{projection.start_date}_#{projection.batch_end_date}.csv"
     respond_to do |format|
       format.csv {
-        response.headers["Content-Disposition"] = 'attachment; filename="' + filename + '"'
+        response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}\""
         render plain: BatchRecipesCsv.new(projection).to_csv
       }
     end

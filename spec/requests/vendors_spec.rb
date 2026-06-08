@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Vendors", type: :request do
@@ -53,9 +55,11 @@ RSpec.describe "Vendors", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    it "raises RecordNotFound for another bakery's vendor" do
+    it "redirects to index for another bakery's vendor" do
       other = create(:vendor, bakery: create(:bakery))
-      expect { get edit_vendor_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+      get edit_vendor_path(other)
+      expect(response).to redirect_to(vendors_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

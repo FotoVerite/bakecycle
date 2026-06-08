@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Registration
   include ActiveModel::Model
   include ActiveModel::Validations
@@ -78,7 +80,7 @@ class Registration
   end
 
   def plan_id
-    plan.id if plan
+    plan&.id
   end
 
   private

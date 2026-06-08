@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderGenerator
   include Generator
 
@@ -10,9 +12,7 @@ class OrderGenerator
     @order = order
   end
 
-  def id
-    @order.id
-  end
+  delegate :id, to: :@order
 
   def filename
     "Order-#{@order.id}.pdf"

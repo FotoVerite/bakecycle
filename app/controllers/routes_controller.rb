@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RoutesController < ApplicationController
   before_action :set_route, only: %i[edit update destroy]
   before_action :error_if_remaining_route, only: :destroy
@@ -20,7 +22,7 @@ class RoutesController < ApplicationController
       flash[:notice] = "You have created #{@route.name}."
       redirect_to edit_route_path(@route)
     else
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -34,7 +36,7 @@ class RoutesController < ApplicationController
       flash[:notice] = "You have updated #{@route.name}."
       redirect_to edit_route_path(@route)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -42,9 +44,9 @@ class RoutesController < ApplicationController
     authorize @route
     if @route.destroy
       flash[:notice] = "You have deleted #{@route.name}"
-      redirect_to routes_path
+      redirect_to routes_path, status: :see_other
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 

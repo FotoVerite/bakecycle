@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExporterJob < ApplicationJob
   queue_as :file_exporter
 
@@ -24,7 +26,7 @@ class ExporterJob < ApplicationJob
   # This is a simple catch to deal with any issues arising from the PDF Generation
   rescue StandardError => e
     pdf = ErrorReport.new(e).render
-    file = FakeFileIO.new(generator.filename + "-error.pdf", pdf)
+    file = FakeFileIO.new("#{generator.filename}-error.pdf", pdf)
     file_export.file_content_type = "application/pdf"
     file_export.file = file
     file_export.save!

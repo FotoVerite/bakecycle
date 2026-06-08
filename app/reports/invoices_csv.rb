@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoicesCsv
   attr_reader :invoices
 
@@ -27,7 +29,7 @@ class InvoicesCsv
       "Route",
       "Invoice Subtotal",
       "Invoice fees",
-      "Invoice total",
+      "Invoice total"
     ]
   end
 
@@ -42,7 +44,7 @@ class InvoicesCsv
       invoice.route_name,
       invoice.subtotal,
       invoice.delivery_fee,
-      invoice.price,
+      invoice.price
     ]
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 task compare: :environment do
   ((Time.zone.today - 30)..Time.zone.today).map do |date|
     CompareProduction.new(date).compare
@@ -38,15 +40,11 @@ class CompareProduction
   end
 
   def run_items
-    @_run_items ||= production_run.run_items.each_with_object({}) { |item, obj|
-      obj[item.product] = item
-    }
+    @_run_items ||= production_run.run_items.index_by(&:product)
   end
 
   def projection_items
-    @_projection_items ||= projection.products_info.each_with_object({}) { |item, obj|
-      obj[item.product] = item
-    }
+    @_projection_items ||= projection.products_info.index_by(&:product)
   end
 
   def products
@@ -77,7 +75,7 @@ class CompareProduction
     def compare(field)
       run_qty = @run_item.send(field)
       prj_qty = @projection_item.send(field)
-      return "#{@date} #{@run_item.product.name} #{field} #{run_qty} #{prj_qty}" unless run_qty == prj_qty
+      "#{@date} #{@run_item.product.name} #{field} #{run_qty} #{prj_qty}" unless run_qty == prj_qty
     end
   end
 end

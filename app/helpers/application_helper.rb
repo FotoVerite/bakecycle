@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def render_nav?
     @_render_nav
@@ -31,5 +33,4 @@ module ApplicationHelper
   def loading_indicator
     render "loading_indicator"
   end
-
 end

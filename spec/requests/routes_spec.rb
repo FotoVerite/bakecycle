@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Routes", type: :request do
@@ -66,9 +68,11 @@ RSpec.describe "Routes", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    it "raises RecordNotFound for another bakery's route" do
+    it "redirects to index for another bakery's route" do
       other = create(:route, bakery: create(:bakery))
-      expect { get edit_route_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+      get edit_route_path(other)
+      expect(response).to redirect_to(routes_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

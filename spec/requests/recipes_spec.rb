@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Recipes", type: :request do
@@ -88,9 +90,11 @@ RSpec.describe "Recipes", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    it "raises RecordNotFound for another bakery's recipe" do
+    it "redirects to index for another bakery's recipe" do
       other = create(:recipe, bakery: create(:bakery))
-      expect { get edit_recipe_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+      get edit_recipe_path(other)
+      expect(response).to redirect_to(recipes_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

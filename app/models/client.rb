@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: clients
@@ -58,7 +60,8 @@ class Client < ApplicationRecord
   has_many :shipments, dependent: :destroy
 
   enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
-  enum delivery_fee_option: %i[no_delivery_fee daily_delivery_fee weekly_delivery_fee percentage_fee]
+  enum delivery_fee_option: { no_delivery_fee: 0, daily_delivery_fee: 1, weekly_delivery_fee: 2,
+                              percentage_fee: 3 }
 
   enum engagement_status: { current: 0, lapsed: 1, prospective: 2 }
 
@@ -73,7 +76,7 @@ class Client < ApplicationRecord
     Internal: "Internal",
     Office: "Office",
     Samples: "Samples",
-    Restaurant: "Restaurant",
+    Restaurant: "Restaurant"
   }
 
   validates :accounts_payable_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
@@ -143,18 +146,18 @@ class Client < ApplicationRecord
   def average_sale_by_month
     months_hash = {}
     h = shipments
-      .where(created_at: Time.now.beginning_of_year.all_year)
+      .where(created_at: Time.zone.now.beginning_of_year.all_year)
       .group(Arel.sql("EXTRACT(month FROM created_at)"))
       .order(Arel.sql("EXTRACT(month FROM created_at)"))
       .sum(:cached_price)
     months = Hash[(1..12).map { |month| [month.to_f, 0] }].merge(h)
-    months.map { |k, v| months_hash["#{Time.now.year}-" + k.to_i.to_s] = v.to_f }
+    months.map { |k, v| months_hash["#{Time.zone.now.year}-" + k.to_i.to_s] = v.to_f }
     months_hash
   end
 
   def average_sale_by_week
     weeks = shipments
-      .where(created_at: (Time.now.beginning_of_week - 51.weeks)..Time.now.beginning_of_week)
+      .where(created_at: (Time.zone.now.beginning_of_week - 51.weeks)..Time.zone.now.beginning_of_week)
       .group(Arel.sql("EXTRACT(week FROM created_at)"))
       .order(Arel.sql("EXTRACT(week FROM created_at)"))
       .sum(:cached_price)
@@ -184,12 +187,12 @@ class Client < ApplicationRecord
 
     # Fill in missing weeks with 0
 
-    weekly_totals = weeks.map do |k, shipments|
-      shipments = shipments || []
+    weekly_totals = weeks.map do |_k, shipments|
+      shipments ||= []
       # sum prices if price exists, otherwise count shipments
       shipments.sum { |s| s.price.to_f }
     end
-    return 0 if weekly_totals.size.zero?
+    return 0 if weekly_totals.empty?
 
     # Average per week
     weekly_totals.sum.to_f / weekly_totals.size

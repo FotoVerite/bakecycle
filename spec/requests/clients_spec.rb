@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Clients", type: :request do
@@ -86,7 +88,7 @@ RSpec.describe "Clients", type: :request do
         delivery_address_zipcode: "11201",
         accounts_payable_contact_name: "Jane Smith",
         accounts_payable_contact_email: "jane@wizards.com",
-        accounts_payable_contact_phone: "555-1234",
+        accounts_payable_contact_phone: "555-1234"
       }
       expect { post clients_path, params: { client: params } }.to change(Client, :count).by(1)
       expect(flash[:notice]).to match(/You have created Wizards Coffee/)
@@ -115,12 +117,14 @@ RSpec.describe "Clients", type: :request do
   describe "data scoping" do
     before { sign_in user }
 
-    # policy_scope scopes to current bakery at DB level → RecordNotFound, not Pundit error
-    it "raises RecordNotFound for another bakery's client" do
+    # policy_scope scopes to current bakery at DB level → RecordNotFound caught → redirect
+    it "redirects to index for another bakery's client" do
       other_bakery = create(:bakery)
       other_client = create(:client, bakery: other_bakery)
       create(:shipment, bakery: other_bakery, client: other_client)
-      expect { get client_path(other_client) }.to raise_error(ActiveRecord::RecordNotFound)
+      get client_path(other_client)
+      expect(response).to redirect_to(clients_path)
+      expect(flash[:alert]).to eq("That record no longer exists.")
     end
   end
 end

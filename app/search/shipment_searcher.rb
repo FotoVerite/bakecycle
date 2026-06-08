@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentSearcher
   def self.search(collection, terms)
     new(collection).search(terms)
@@ -59,6 +61,6 @@ class ShipmentSearcher
   def search_by_sequence_number(sequence_number)
     return if sequence_number.blank?
 
-    @collection = @collection.where("sequence_number::text LIKE ?", "#{sequence_number}")
+    @collection = @collection.where("sequence_number::text LIKE ?", sequence_number.to_s)
   end
 end

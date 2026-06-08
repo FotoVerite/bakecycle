@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
   before_action :set_clients, only: %i[new edit create update]
@@ -47,7 +49,7 @@ class ProductsController < ApplicationController
       redirect_to edit_product_path(@product)
     else
       ensure_all_clients_price_variant
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -79,7 +81,7 @@ class ProductsController < ApplicationController
       redirect_to edit_product_path(@product)
     else
       ensure_all_clients_price_variant
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -87,9 +89,9 @@ class ProductsController < ApplicationController
     authorize @product
     if @product.destroy
       flash[:notice] = "You have deleted #{@product.name}."
-      redirect_to products_path
+      redirect_to products_path, status: :see_other
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -134,7 +136,7 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    @product = policy_scope(Product).find(params[:id])
+    @product = policy_scope(Product).includes(price_variants: :client).find(params[:id])
   end
 
   def set_clients
@@ -142,9 +144,9 @@ class ProductsController < ApplicationController
   end
 
   def ensure_all_clients_price_variant
-    unless @product.price_variants.any? { |pv| pv.client_id.nil? }
-      @product.price_variants.build(quantity: 1, price: 0)
-    end
+    return if @product.price_variants.any? { |pv| pv.client_id.nil? }
+
+    @product.price_variants.build(quantity: 1, price: 0)
   end
 
   def product_params
@@ -154,7 +156,7 @@ class ProductsController < ApplicationController
       :public,
       :inactive,
       :lead_days_override,
-      price_variants_attributes: %i[id client_id quantity price _destroy],
+      price_variants_attributes: %i[id client_id quantity price _destroy]
     )
   end
 

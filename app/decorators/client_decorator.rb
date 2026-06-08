@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClientDecorator < Draper::Decorator
   delegate_all
 
@@ -8,11 +10,11 @@ class ClientDecorator < Draper::Decorator
   end
 
   def billing
-    billing_term.humanize(capitalize: false).titleize if billing_term
+    billing_term&.humanize(capitalize: false)&.titleize
   end
 
   def delivery_fee_display
-    delivery_fee_option.humanize(capitalize: false).titleize if delivery_fee_option
+    delivery_fee_option&.humanize(capitalize: false)&.titleize
   end
 
   def latest_orders
@@ -23,7 +25,7 @@ class ClientDecorator < Draper::Decorator
     out = {}
     standing_orders.active_orders.map(&:order_items).flatten.each do |i|
       OrderItem::DAYS_OF_WEEK.each do |d|
-        out[d] = true if i.send(d) > 0
+        out[d] = true if i.send(d).positive?
       end
     end
     return "Every Day" if out.keys.size == 7
@@ -35,8 +37,4 @@ class ClientDecorator < Draper::Decorator
     object.shipments.includes(:shipment_items).latest(10).decorate
   end
 
-  def serializable_hash
-    ClientSerializer.new(client).serializable_hash
-      .transform_keys { |k| k.to_s.camelize(:lower) }
-  end
 end

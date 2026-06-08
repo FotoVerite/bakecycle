@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BakeriesController < ApplicationController
   before_action :set_bakery, only: %i[edit update destroy]
   decorates_assigned :bakeries, :bakery
@@ -23,7 +25,7 @@ class BakeriesController < ApplicationController
       flash[:notice] = "You have created #{@bakery.name}."
       redirect_to bakeries_path
     else
-      render "new"
+      render "new", status: :unprocessable_content
     end
   end
 
@@ -37,7 +39,7 @@ class BakeriesController < ApplicationController
       flash[:notice] = "You have updated #{@bakery.name}."
       redirect_to edit_bakery_path(@bakery)
     else
-      render "edit"
+      render "edit", status: :unprocessable_content
     end
   end
 
@@ -45,7 +47,7 @@ class BakeriesController < ApplicationController
     authorize @bakery
     @bakery.destroy!
     flash[:notice] = "You have deleted #{@bakery.name}"
-    redirect_to bakeries_path
+    redirect_to bakeries_path, status: :see_other
   end
 
   def mybakery

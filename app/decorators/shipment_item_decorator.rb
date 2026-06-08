@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentItemDecorator < Draper::Decorator
   delegate_all
 
@@ -18,7 +20,7 @@ class ShipmentItemDecorator < Draper::Decorator
   end
 
   def price_for_iif
-    if object.price > 0
+    if object.price.positive?
       "-#{object.price}"
     else
       object.price.abs.to_s
@@ -30,7 +32,7 @@ class ShipmentItemDecorator < Draper::Decorator
   end
 
   def product_quantity_for_iif
-    if object.product_quantity > 0
+    if object.product_quantity.positive?
       "-#{object.product_quantity}"
     else
       object.product_quantity.abs.to_s

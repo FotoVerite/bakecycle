@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 namespace :js do
-  desc 'Build production JS bundle with esbuild'
+  desc "Build production JS bundle with esbuild"
   task :build do
     on roles(:web) do
       within release_path do
-        execute :npm, 'run build:prod'
+        execute :npm, "run build:prod"
       end
     end
   end
 end
 
 # Run after npm install, before asset precompile
-after 'npm:install', 'js:build'
+after "npm:install", "js:build"

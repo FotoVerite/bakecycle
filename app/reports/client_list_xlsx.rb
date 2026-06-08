@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ClientListXlsx
   def initialize(bakery, date, type)
     @bakery = bakery
@@ -28,8 +30,8 @@ class ClientListXlsx
           "Accounts Payable Email",
           "Group",
           "Channel",
-          "Billing Terms",
-        ], header: @header,
+          "Billing Terms"
+        ], header: @header
       )
       add_rows(@clients, sheet)
     end
@@ -54,7 +56,7 @@ class ClientListXlsx
         p.accounts_payable_contact_email,
         p.group,
         p.channel,
-        p.billing_term ? p.billing_term.humanize(capitalize: false).titleize : "None",
+        p.billing_term ? p.billing_term.humanize(capitalize: false).titleize : "None"
       ]
     end
   end

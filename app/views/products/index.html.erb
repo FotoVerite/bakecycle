@@ -34,7 +34,7 @@
     if (!event.target.matches('.js-field')) return
 
     var form = event.target.closest('form')
-    if (form) form.submit()
+    if (form) form.requestSubmit()
   })
 </script>
 <% end %>

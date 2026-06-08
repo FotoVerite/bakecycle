@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentCreator
   attr_reader :order, :ship_date
 
@@ -51,7 +53,7 @@ class ShipmentCreator
 
   def shipment_items
     @_shipment_items ||= order.order_items.includes(product: [:price_variants]).map do |item|
-      next unless item.quantity(ship_date) > 0
+      next unless item.quantity(ship_date).positive?
 
       ShipmentItem.new(
         product: item.product,

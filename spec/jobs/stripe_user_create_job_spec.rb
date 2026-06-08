@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "stripe_mock"
 require "rails_helper"
 
@@ -23,6 +25,5 @@ describe StripeUserCreateJob do
       StripeUserCreateJob.new.perform(user, token)
       expect(Bakery.last.stripe_customer_id).to eq(customer_id)
     end
-
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ShipmentGraphDataService do
@@ -23,7 +25,7 @@ RSpec.describe ShipmentGraphDataService do
       expect_graph_datum(bakery, Date.new(2026, 6, 2), amount: 20, product_count: 4)
       expect_graph_datum(other_bakery, Date.new(2026, 6, 2), amount: 77, product_count: 7)
       expect(bakery.reload.graph_data).to include(
-        "dates" => ["2026-06-01", "2026-06-02"],
+        "dates" => %w[2026-06-01 2026-06-02],
         "amounts" => ["6.0", "20.0"],
         "product_counts" => [2, 4]
       )

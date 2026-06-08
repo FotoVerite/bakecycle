@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Api::FileExports", type: :request do
@@ -35,9 +37,10 @@ RSpec.describe "Api::FileExports", type: :request do
         expect(data["links"]["file"]).to be_present
       end
 
-      it "raises RecordNotFound for another bakery's export" do
+      it "returns 404 for another bakery's export" do
         other = create(:file_export, bakery: create(:bakery))
-        expect { get api_file_export_path(other) }.to raise_error(ActiveRecord::RecordNotFound)
+        get api_file_export_path(other)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

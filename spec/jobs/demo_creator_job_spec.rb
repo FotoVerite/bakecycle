@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 describe DemoCreatorJob do
   let(:bakery) { create(:bakery) }
@@ -17,6 +19,5 @@ describe DemoCreatorJob do
       DemoCreatorJob.new.perform(bakery)
       expect(bakery.clients.count).to eq(1)
     end
-
   end
 end

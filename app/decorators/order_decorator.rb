@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderDecorator < Draper::Decorator
   delegate_all
   decorates_association :order_items
@@ -5,7 +7,7 @@ class OrderDecorator < Draper::Decorator
   decorates_association :overridable_order
 
   def route_name
-    route.name if route
+    route&.name
   end
 
   def type
@@ -33,7 +35,7 @@ class OrderDecorator < Draper::Decorator
   end
 
   def created_whodunnit
-    object.created_by_user.name if object.created_by_user
+    object.created_by_user&.name
   end
 
   def updated_at_whodunnit

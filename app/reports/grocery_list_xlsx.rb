@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GroceryListXlsx
   def initialize(bakery, date)
     @bakery = bakery
@@ -42,7 +44,7 @@ class GroceryListXlsx
   def add_rows(weights, sheet)
     # Set Product Type Row
     weights.each_key do |key|
-      next unless weights[key].to_i > 0
+      next unless weights[key].to_i.positive?
 
       sheet.add_row [key, weights[key]]
     end
