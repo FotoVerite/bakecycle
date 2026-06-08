@@ -1,49 +1,50 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 ruby "3.3.1"
 
-gem "active_model_serializers", "~> 0.10.0"
 gem "airbrake"
-gem "caxlsx_rails"
 gem "caxlsx"
-gem "jsbundling-rails"
+gem "caxlsx_rails"
 gem "chronic"
+gem "dartsass-rails"
 gem "devise"
 gem "devise_invitable"
+gem "dotenv-rails"
 gem "draper"
 gem "geocoder"
 gem "jquery-rails"
 gem "jquery-timepicker-rails"
 gem "jquery-ui-sass-rails"
+gem "jsbundling-rails"
+gem "jwt"
 gem "kt-paperclip", "~> 7.0"
+gem "mission_control-jobs"
 gem "paper_trail"
 gem "pg"
 gem "prawn"
 gem "prawn-table"
+gem "propshaft"
 gem "pundit"
 gem "rails", "~> 7.1.0"
-gem "solid_queue"
-gem "mission_control-jobs"
+gem "riif"
 gem "rubyzip", ">= 2.0"
-gem "dartsass-rails"
-gem "propshaft"
 gem "simple_form"
+gem "solid_queue"
 gem "stripe", "< 6"
 gem "unitwise", "~>2.0.0", require: "unitwise"
 gem "will_paginate"
-gem "dotenv-rails"
-gem "jwt"
-gem "riif"
 
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
   gem "capistrano"
+  gem "capistrano3-puma"
   gem "capistrano-bundler", require: false
   gem "capistrano-npm"
   gem "capistrano-rails", require: false
   gem "capistrano-solid_queue", require: false
-  gem "capistrano3-puma"
   gem "foreman", require: false
   gem "letter_opener"
   gem "rails-erd", require: false
@@ -62,11 +63,14 @@ group :test, :development do
 end
 
 group :test do
+  gem "capybara"
+  gem "cuprite"
+  gem "database_cleaner-active_record"
   gem "pdf-reader", require: false
   gem "rspec-activejob"
   gem "simplecov", require: false
+  gem "stripe-ruby-mock", require: "stripe_mock"
   gem "timecop"
-  gem "stripe-ruby-mock", :require => "stripe_mock"
   gem "webmock", require: false
 end
 
