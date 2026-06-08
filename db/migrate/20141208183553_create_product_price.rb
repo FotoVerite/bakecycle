@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateProductPrice < ActiveRecord::Migration
   def change
     create_table :product_prices do |t|

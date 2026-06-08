@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoicesPdf < BasePdfReport
   attr_reader :bakery, :shipments
 

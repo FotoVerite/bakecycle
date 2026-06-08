@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :immigrant do
   desc "Checks for missing foreign key relationships in the database"
   task my_check_keys: :environment do

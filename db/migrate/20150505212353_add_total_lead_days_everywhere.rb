@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTotalLeadDaysEverywhere < ActiveRecord::Migration
   def change
     add_column :recipes, :total_lead_days, :integer

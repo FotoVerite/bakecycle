@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunPdf < BasePdfReport
   include WeightDisplayer
   attr_reader :run_data

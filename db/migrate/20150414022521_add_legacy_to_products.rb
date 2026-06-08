@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLegacyToProducts < ActiveRecord::Migration
   def change
     add_column :products, :legacy_id, :string

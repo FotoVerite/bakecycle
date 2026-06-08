@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderCliffnotes < ActiveRecord::Migration
   def change
     change_column :orders, :note, :text

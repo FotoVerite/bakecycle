@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUniquenessBakeryScopesToModels < ActiveRecord::Migration
   def change
     remove_index :clients, :name

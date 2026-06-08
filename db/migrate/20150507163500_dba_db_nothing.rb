@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DbaDbNothing < ActiveRecord::Migration
   def change
     rename_column :clients, :dba, :official_company_name

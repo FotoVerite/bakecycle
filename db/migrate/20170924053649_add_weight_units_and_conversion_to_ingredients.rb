@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddWeightUnitsAndConversionToIngredients < ActiveRecord::Migration[5.1]
   def change
     add_column :ingredients, :weight_unit, :string, default: "grams"

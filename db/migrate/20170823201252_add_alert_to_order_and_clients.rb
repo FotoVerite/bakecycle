@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAlertToOrderAndClients < ActiveRecord::Migration
   def change
     add_column :clients, :alert, :boolean, default: false

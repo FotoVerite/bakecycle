@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 # These specs verify that the DELETE endpoints work correctly after switching from

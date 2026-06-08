@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FileActionsController < ApplicationController
   def index
     authorize FileAction

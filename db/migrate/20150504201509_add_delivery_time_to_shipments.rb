@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDeliveryTimeToShipments < ActiveRecord::Migration
   def change
     change_column :routes, :departure_time, :time, null: false

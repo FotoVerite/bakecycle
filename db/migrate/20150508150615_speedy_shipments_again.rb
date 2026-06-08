@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SpeedyShipmentsAgain < ActiveRecord::Migration
   def change
     add_index :shipments, %i[client_id route_id date]

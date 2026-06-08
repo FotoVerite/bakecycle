@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderSearcher
   def self.search(collection, terms)
     new(collection).search(terms)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddNotesToClients < ActiveRecord::Migration
   def change
     add_column :clients, :notes, :string

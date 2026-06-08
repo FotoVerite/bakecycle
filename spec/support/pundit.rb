@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :authorize do |action|
   match do |policy|
     policy.public_send(:"#{action}?")

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveEffectiveDateFromPriceVarient < ActiveRecord::Migration
   def up
     remove_index(:price_varients, name: "unique_price_varient")

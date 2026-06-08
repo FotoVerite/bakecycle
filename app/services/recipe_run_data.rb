@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecipeRunData
   delegate :total_lead_days, :mix_size_with_unit, to: :recipe
   attr_reader :recipe, :products, :inclusions, :inclusions_info, :weight,

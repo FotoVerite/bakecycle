@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PackingSlipsController < ApplicationController
   before_action :skip_policy_scope
 

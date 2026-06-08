@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :bakecycle do
   namespace :legacy_import do
     desc "reload all of biencuits data"

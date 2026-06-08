@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProductPermissionToUser < ActiveRecord::Migration
   def change
     add_column :users, :product_permission, :string, null: false, default: "none"

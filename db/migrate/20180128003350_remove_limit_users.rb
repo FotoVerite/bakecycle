@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveLimitUsers < ActiveRecord::Migration[5.1]
   def up
     change_column :users, :invitation_token, :string, limit: nil

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeColumnExtraAmountOnProducts < ActiveRecord::Migration
   def up
     rename_column :products, :extra_amount, :over_bake

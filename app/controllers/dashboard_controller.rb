@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DashboardController < ApplicationController
   before_action :skip_authorization, :skip_policy_scope
 

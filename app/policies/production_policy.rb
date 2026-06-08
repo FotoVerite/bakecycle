@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionPolicy < ApplicationPolicy
   def index?
     (admin? || can_read?) && bakery?

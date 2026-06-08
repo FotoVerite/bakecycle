@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateIngredientPricesOverTimes < ActiveRecord::Migration[5.1]
   def change
     drop_table :cost_over_times do |t|

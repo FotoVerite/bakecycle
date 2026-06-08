@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 set :deploy_to, "/var/www/bakecycle_production"
 set :user, "deploy"
 set :branch, "master"

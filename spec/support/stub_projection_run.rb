@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def new_stubed_production_run_projection
   today = Time.zone.now
   bakery = create(:bakery)

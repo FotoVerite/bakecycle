@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderPdf < BasePdfReport
   def initialize(order)
     @order = order.decorate

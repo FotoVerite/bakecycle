@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Configuration details:
 # https://github.com/airbrake/airbrake-ruby#configuration
 Airbrake.configure do |c|

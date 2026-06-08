@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LegacyFields < ActiveRecord::Migration
   def change
     add_column :clients, :legacy_id, :string

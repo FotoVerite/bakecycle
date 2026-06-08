@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Shared helpers for request-level authorization assertions.
 # Use include_examples inside a describe/context block (not inside an it block).
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddBakeryIdToModels < ActiveRecord::Migration
   def change
     add_column :shipments, :bakery_id, :integer

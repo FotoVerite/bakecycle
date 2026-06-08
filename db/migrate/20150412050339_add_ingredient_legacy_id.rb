@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIngredientLegacyId < ActiveRecord::Migration
   def change
     add_column :ingredients, :legacy_id, :string

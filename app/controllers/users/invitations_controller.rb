@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Users
   class InvitationsController < Devise::InvitationsController
     skip_before_action :authenticate_user!

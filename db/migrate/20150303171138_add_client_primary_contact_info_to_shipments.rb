@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddClientPrimaryContactInfoToShipments < ActiveRecord::Migration
   def change
     change_table :shipments do |t|

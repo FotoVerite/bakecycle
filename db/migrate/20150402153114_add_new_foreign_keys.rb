@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddNewForeignKeys < ActiveRecord::Migration
   def change
     add_foreign_key "production_runs", "bakeries", name: "production_runs_bakery_id_fk"

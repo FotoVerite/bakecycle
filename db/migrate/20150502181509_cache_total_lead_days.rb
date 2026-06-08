@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CacheTotalLeadDays < ActiveRecord::Migration
   def change
     add_column :shipment_items, :product_total_lead_days, :integer

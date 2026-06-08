@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDeliverFeeInfoToClient < ActiveRecord::Migration
   def change
     add_column :clients, :charge_delivery_fee, :boolean, default: false

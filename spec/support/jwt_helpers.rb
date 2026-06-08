@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JwtHelpers
   JWT_TEST_SECRET = "test_secret"
   JWT_TEST_ISSUER = "test_issuer"

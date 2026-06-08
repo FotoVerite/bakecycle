@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderItemQuantities
   attr_reader :product, :ship_date, :end_date
 

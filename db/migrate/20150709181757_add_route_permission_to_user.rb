@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddRoutePermissionToUser < ActiveRecord::Migration
   def change
     add_column :users, :route_permission, :string, null: false, default: "none"

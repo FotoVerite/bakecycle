@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CostingController < ApplicationController
   after_action :skip_policy_scope
 

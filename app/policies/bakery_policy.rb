@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BakeryPolicy < ApplicationPolicy
   def index?
     admin?

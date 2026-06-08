@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunService
   attr_reader :bakery, :production_run, :date
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePublicClientUsers < ActiveRecord::Migration[5.1]
   def change
     create_table :public_client_users do |t|

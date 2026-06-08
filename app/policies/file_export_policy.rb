@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FileExportPolicy < ApplicationPolicy
   def show?
     admin? || belongs_to_bakery?

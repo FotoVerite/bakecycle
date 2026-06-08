@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFileExports < ActiveRecord::Migration
   def change
     enable_extension "uuid-ossp"

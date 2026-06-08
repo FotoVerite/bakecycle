@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BakeryDecorator < Draper::Decorator
   delegate_all
 

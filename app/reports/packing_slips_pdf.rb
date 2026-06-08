@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PackingSlipsPdf < BasePdfReport
   def initialize(shipments, bakery, print_invoices = false)
     @shipments = shipments

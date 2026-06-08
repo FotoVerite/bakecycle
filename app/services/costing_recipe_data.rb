@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CostingRecipeData
   attr_reader :recipe, :product, :product_calculations, :inclusion, :weight,
               :motherdough, :total_cost

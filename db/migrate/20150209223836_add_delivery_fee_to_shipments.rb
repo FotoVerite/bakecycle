@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDeliveryFeeToShipments < ActiveRecord::Migration
   def change
     add_column :shipments, :delivery_fee, :decimal, default: 0.0, null: false

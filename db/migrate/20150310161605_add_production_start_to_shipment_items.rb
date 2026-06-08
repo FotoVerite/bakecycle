@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProductionStartToShipmentItems < ActiveRecord::Migration
   def up
     add_column :shipment_items, :production_start, :date, null: false, default: Time.zone.today

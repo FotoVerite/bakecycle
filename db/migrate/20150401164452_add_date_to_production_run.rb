@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDateToProductionRun < ActiveRecord::Migration
   def change
     add_column :production_runs, :date, :datetime, null: false

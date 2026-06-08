@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderLeadDays < ActiveRecord::Migration
   def change
     add_column :orders, :total_lead_days, :integer, null: true

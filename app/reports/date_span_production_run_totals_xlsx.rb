@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DateSpanProductionRunTotalsXlsx
   def initialize(bakery, start_date, end_date)
     @bakery = bakery

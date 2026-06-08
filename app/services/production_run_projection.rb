@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunProjection
   attr_reader :bakery, :start_date, :batch_end_date
 

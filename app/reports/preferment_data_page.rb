@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PrefermentDataPage
   extend Forwardable
   include WeightDisplayer

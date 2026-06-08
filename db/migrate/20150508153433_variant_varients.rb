@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VariantVarients < ActiveRecord::Migration
   def change
     rename_table :price_varients, :price_variants

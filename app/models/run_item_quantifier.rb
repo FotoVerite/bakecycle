@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RunItemQuantifier
   attr_reader :run_item, :product, :shipment_items
 

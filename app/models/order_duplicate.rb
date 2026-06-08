@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderDuplicate
   attr_reader :order
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OrderByProduct
   def order_by_product_name
     includes(:product).order("products.name asc")

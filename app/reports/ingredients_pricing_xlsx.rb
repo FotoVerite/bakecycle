@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IngredientsPricingXlsx
   def initialize(bakery)
     @bakery = bakery

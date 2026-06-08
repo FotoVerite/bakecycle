@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OverlappingOrdersValidator < ActiveModel::Validator
   def validate(record)
     return unless record.overlapping?

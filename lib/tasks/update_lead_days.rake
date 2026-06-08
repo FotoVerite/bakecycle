@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :bakecycle do
   desc "Update preferment lead day data to new value"
   task update_lead_days: :environment do

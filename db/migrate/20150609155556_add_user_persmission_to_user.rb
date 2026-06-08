@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUserPersmissionToUser < ActiveRecord::Migration
   def change
     add_column :users, :user_permission, :string, null: false, default: "none"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VendorPolicy < ApplicationPolicy
   def index?
     (admin? || read_permission?) && user.bakery

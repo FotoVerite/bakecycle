@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DailyProductionRun < ActiveRecord::Migration
   def change
     change_column :production_runs, :date, :date

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAutoGenerateToShipment < ActiveRecord::Migration
   def change
     add_column :shipments, :auto_generated, :boolean, default: false, null: false

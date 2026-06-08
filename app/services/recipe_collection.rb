@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecipeCollection < Set
   def find_or_create(recipe, date)
     recipe_data = detect { |data| data.recipe == recipe } || RecipeRunData.new(recipe, date)

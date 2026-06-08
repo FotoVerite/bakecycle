@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecipeItemDecorator < Draper::Decorator
   delegate_all
 

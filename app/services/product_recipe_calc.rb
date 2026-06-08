@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductRecipeCalc
   attr_reader :product, :quantity, :inclusion, :recipe
 

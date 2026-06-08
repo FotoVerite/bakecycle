@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EditDeliveryFeeFromClient < ActiveRecord::Migration
   def up
     remove_column :clients, :charge_delivery_fee

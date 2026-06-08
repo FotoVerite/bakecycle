@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # To stub a specific query see the following link
 # https://github.com/alexreisner/geocoder#testing-apps-that-use-geocoder
 

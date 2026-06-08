@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OrdersHelper
   def new_order_return_path
     if @client

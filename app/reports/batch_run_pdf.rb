@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BatchRunPdf < ProductionRunPdf
   def run_label
     "Production Run BATCH PROJECTION"

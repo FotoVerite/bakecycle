@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class KickoffService
   attr_reader :bakery, :run_time
 

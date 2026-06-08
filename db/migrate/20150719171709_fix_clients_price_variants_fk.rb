@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixClientsPriceVariantsFk < ActiveRecord::Migration
   def change
     remove_foreign_key :price_variants, :clients

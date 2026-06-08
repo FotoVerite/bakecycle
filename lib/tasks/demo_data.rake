@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :bakecycle do
   desc "Export the first bakery data and save it as demo data source"
   task export_demo_data: :environment do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(Capybara::Webkit)
   Capybara::Webkit.configure do |config|
     # config.allow_url "http://thinkwhyfirst?"

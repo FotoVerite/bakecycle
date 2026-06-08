@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderItemCleanup < ActiveRecord::Migration
   def change
     change_column_null :order_items, :monday, false

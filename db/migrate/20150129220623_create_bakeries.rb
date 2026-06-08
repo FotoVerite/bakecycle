@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateBakeries < ActiveRecord::Migration
   def change
     create_table :bakeries do |t|

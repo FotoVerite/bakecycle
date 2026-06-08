@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateCostOverTimes < ActiveRecord::Migration[5.1]
   def change
     unless table_exists? :cost_over_times

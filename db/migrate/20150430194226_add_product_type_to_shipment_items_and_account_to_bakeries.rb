@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProductTypeToShipmentItemsAndAccountToBakeries < ActiveRecord::Migration
   def change
     add_column :shipment_items, :product_product_type, :string

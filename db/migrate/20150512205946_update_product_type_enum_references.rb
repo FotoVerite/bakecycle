@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateProductTypeEnumReferences < ActiveRecord::Migration
   def change
     Product.where(product_type: 0).update_all(product_type: 10)

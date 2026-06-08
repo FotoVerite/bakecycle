@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FileExportsController < ApplicationController
   decorates_assigned :file_export
 

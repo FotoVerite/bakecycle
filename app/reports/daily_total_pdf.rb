@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DailyTotalPdf < BasePdfReport
   def initialize(bakery, date, show_routes = true)
     @recipes = ProductCounter.new(bakery, date)

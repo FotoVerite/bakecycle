@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddClientIdToPriceVariants < ActiveRecord::Migration
   def change
     add_reference :price_variants, :client

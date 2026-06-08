@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErrorReport < BasePdfReport
   def initialize(error)
     @error = error

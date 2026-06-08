@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BakeriesEverywhere < ActiveRecord::Migration
   def change
     change_column :clients, :bakery_id, :integer, null: false

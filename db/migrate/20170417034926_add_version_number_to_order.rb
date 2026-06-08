@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddVersionNumberToOrder < ActiveRecord::Migration
   def change
     add_column :orders, :version_number, :integer, default: 0

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoicesPdfGenerator
   attr_reader :bakery, :search
 

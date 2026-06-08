@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddNotNulls < ActiveRecord::Migration
   def change
     change_column :products, :name, :string, null: false

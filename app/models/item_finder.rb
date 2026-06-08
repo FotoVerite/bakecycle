@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ItemFinder
   attr_reader :user
 

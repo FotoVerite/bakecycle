@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :recipe_item, aliases: [:recipe_item_ingredient] do
     transient do

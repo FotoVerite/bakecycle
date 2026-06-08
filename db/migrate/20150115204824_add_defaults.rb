@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDefaults < ActiveRecord::Migration
   def up
     Client.where(active: nil).update_all(active: true)

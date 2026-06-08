@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductionRunDecorator < Draper::Decorator
   delegate_all
   decorates_association :run_items

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LoadingMessages
   MESSAGES = [
     "Borrowing some flour",

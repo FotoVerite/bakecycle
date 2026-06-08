@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveColumnsFromIngredients < ActiveRecord::Migration
   def down
     remove_column :ingredients, :ingredient_type

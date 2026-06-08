@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvoiceCsvGenerator
   attr_reader :bakery, :invoice
 

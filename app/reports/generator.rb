@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Generator
   def self.included(base)
     base.include GlobalID::Identification

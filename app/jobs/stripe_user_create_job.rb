@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StripeUserCreateJob < ApplicationJob
   queue_as :payments
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CostingCalc
   attr_reader :items, :recipe, :total_cost, :weight
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :bakery do
     sequence(:name) { |n| "#{Faker::Company.name} #{Faker::Company.suffix} #{n}" }

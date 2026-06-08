@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderCreator
   attr_reader :order, :confirm_override, :overrideable, :updated_id
 

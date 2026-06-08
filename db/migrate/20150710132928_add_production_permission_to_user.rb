@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProductionPermissionToUser < ActiveRecord::Migration
   def up
     add_column :users, :production_permission, :string

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DemoCreatorJob < ApplicationJob
   queue_as :demo_creation
 

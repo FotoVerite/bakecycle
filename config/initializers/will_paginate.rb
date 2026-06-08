@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "will_paginate/array"
 require "will_paginate/collection"
 
