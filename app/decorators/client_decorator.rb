@@ -36,5 +36,4 @@ class ClientDecorator < Draper::Decorator
   def latest_shipments
     object.shipments.includes(:shipment_items).latest(10).decorate
   end
-
 end

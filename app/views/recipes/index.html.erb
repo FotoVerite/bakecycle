@@ -1,12 +1,23 @@
 <% provide(:title, "Recipes") %>
 
-<h1>Recipes</h1>
-<% if policy(Product).new? %>
-  <p><%= link_to 'Add New Recipe', new_recipe_path, class: "button" %></p>
-<% end %>
-<%= render partial: 'recipe_table', locals: {
-    recipes: recipes,
-    show_created_whodoneit: false,
-    show_updated_at_whodoneit: false
-  }
-%>
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Recipes</h1>
+      <p>Review, edit, and manage production recipes.</p>
+    </div>
+
+    <% if policy(Product).new? %>
+      <%= link_to 'Add New Recipe', new_recipe_path, class: "button index-header-action" %>
+    <% end %>
+  </div>
+
+  <div class="index-table">
+    <%= render partial: 'recipe_table', locals: {
+        recipes: recipes,
+        show_created_whodoneit: false,
+        show_updated_at_whodoneit: false
+      }
+    %>
+  </div>
+</div>

@@ -32,7 +32,7 @@ class ProductionRun < ApplicationRecord
     where(date: date)
   end
 
-  def save(*args)
+  def save(*args) # rubocop:disable Rails/ActiveRecordOverride
     super
   rescue ActiveRecord::RecordNotUnique
     errors[:base] << "Cannot add the same product more than once"

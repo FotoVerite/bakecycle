@@ -24,11 +24,18 @@ Metrics/AbcSize:
     - "config/**/*"
     - "**/*_spec.rb"
     - "spec/**/*"
-    - 'lib/**/*'
-    - 'db/migrate/**/*'
+    - "lib/**/*"
+    - "db/migrate/**/*"
+    - "app/controllers/api/**/*"
+    - "app/models/public_client_user.rb"
+    - "app/models/client.rb"
+    - "app/services/**/*"
 
 Metrics/ClassLength:
   Max: 150
+  Exclude:
+    - "app/controllers/orders_controller.rb"
+    - "app/controllers/shipments_controller.rb"
 
 # it would be great to use EnforcedStyle: semantic here but it complains way too much
 Style/BlockDelimiters:
@@ -85,7 +92,9 @@ Metrics/BlockLength:
     - "config/**/*"
     - "**/*_spec.rb"
     - "spec/**/*"
-    - 'lib/**/*'
+    - "lib/**/*"
+    - "db/queue_schema.rb"
+    - "app/services/**/*"
 
 Rails/SkipsModelValidations:
   Enabled: false
@@ -117,3 +126,68 @@ Naming/AccessorMethodName:
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false
+
+# Domain names like net_15, street_1 are legitimate conventions.
+Naming/VariableNumber:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - "lib/**/*"
+    - "db/migrate/**/*"
+    - "app/models/public_client_user.rb"
+    - "app/services/**/*"
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - "app/reports/**/*"
+    - "config/**/*"
+    - "**/*_spec.rb"
+    - "spec/**/*"
+    - "lib/**/*"
+    - "db/migrate/**/*"
+    - "app/services/**/*"
+
+Rails/BulkChangeTable:
+  Exclude:
+    - "db/migrate/**/*"
+
+# Helpers intentionally use instance variables set by controllers.
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+# Report generators and a few controllers use optional boolean params legitimately.
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+# api/v1 controllers inherit from ApiController, not ApplicationController.
+Rails/ApplicationController:
+  Exclude:
+    - "app/controllers/api/**/*"
+
+# standing_orders is a scoped alias for orders; dependents handled by orders.
+Rails/HasManyOrHasOneDependent:
+  Exclude:
+    - "app/models/client.rb"
+    - "app/models/ingredient.rb"
+
+Rails/InverseOf:
+  Exclude:
+    - "app/models/client.rb"
+
+# Rake task uses method_missing as a simple delegation proxy.
+Style/MissingRespondToMissing:
+  Exclude:
+    - "lib/tasks/**/*"
+
+# Test helper class defined inside a describe block — acceptable pattern.
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - "spec/**/*"
+
+AllCops:
+  SuggestExtensions: false

@@ -1,29 +1,39 @@
 <% provide(:title, "Routes") %>
 
-<h1>Routes</h1>
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Routes</h1>
+      <p>Manage delivery route names, departure times, and active status.</p>
+    </div>
 
-<p><%= link_to 'Add New Route', new_route_path, class: "button"%></p>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Departure Time</th>
-      <th scope="col">Active</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% routes.each do |route| %>
-      <tr class="js-clickable-row" href="<%= edit_route_path(route) %>">
-        <th scope="row"><%= link_to route.name, edit_route_path(route) %></th>
-        <td data-title="Departure Time"><%= route.formatted_time %></td>
-        <td data-title="Active"><%= route.active_status %></td>
-        <td data-title="Action">
-          <%= link_to edit_route_path(route) do %>
-            <span class="table-action-icon icon-link-tooltip" aria-label="Edit Route"><i class="fi-page-edit"></i></span>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <%= link_to 'Add New Route', new_route_path, class: "button index-header-action" %>
+  </div>
+
+  <div class="index-table">
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Departure Time</th>
+          <th scope="col">Active</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% routes.each do |route| %>
+          <tr class="js-clickable-row" href="<%= edit_route_path(route) %>">
+            <th scope="row"><%= link_to route.name, edit_route_path(route) %></th>
+            <td data-title="Departure Time"><%= route.formatted_time %></td>
+            <td data-title="Active"><%= route.active_status %></td>
+            <td data-title="Action">
+              <%= link_to edit_route_path(route) do %>
+                <span class="table-action-icon icon-link-tooltip" aria-label="Edit Route"><i class="fi-page-edit"></i></span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

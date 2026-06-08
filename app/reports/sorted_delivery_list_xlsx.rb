@@ -5,9 +5,9 @@ class SortedDeliveryListXlsx
     @bakery = bakery
     @date = date
     @grouped_shipments = Shipment
-                          .where(bakery_id: 1, date: Time.zone.now - 1.year)
-                          .order("route_name ASC, client_name ASC")
-                          .group_by(&:route_name) || []
+      .where(bakery_id: 1, date: Time.zone.now - 1.year)
+      .order("route_name ASC, client_name ASC")
+      .group_by(&:route_name) || []
   end
 
   def generate

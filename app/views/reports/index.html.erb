@@ -1,119 +1,139 @@
-<h1>Reports</h1>
-<div class="dashboard">
-  <div class="row">
-    <div class="small-12 columns">
-      <h2>Product Runs</h2>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to weekly_daily_production_report_production_runs_path, class: "stats border" do %>
-        <div class="left">
-          Daily/Weekly Totals
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to date_span_production_report_production_runs_path, class: "stats border" do %>
-        <div class="left">
-          Date Range Total
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to grocery_list_orders_path, class: "stats border" do %>
-        <div class="left">
-          Grocery List
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Reports</h1>
+      <p>Open production, client, product, and shipment reporting tools.</p>
     </div>
   </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <h2>Clients</h2>
+
+  <div class="dashboard">
+    <div class="row">
+      <div class="small-12 columns">
+        <h2>Product Runs</h2>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to weekly_daily_production_report_production_runs_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Daily/Weekly Totals</span>
+            <span class="report-card-copy">Production totals by day or week for a selected date.</span>
+          </div>
+          <i class="fi-graph-bar right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to date_span_production_report_production_runs_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Date Range Total</span>
+            <span class="report-card-copy">Production totals across a start and end date.</span>
+          </div>
+          <i class="fi-calendar right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to grocery_list_orders_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Grocery List</span>
+            <span class="report-card-copy">Ingredients needed for projected orders on one date.</span>
+          </div>
+          <i class="fi-shopping-cart right" aria-hidden="true"></i>
+        <% end %>
+      </div>
     </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to weekly_daily_report_clients_path, class: "stats border" do %>
-        <div class="left">
-          Daily/Weekly Totals
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
+    <div class="row">
+      <div class="small-12 columns">
+        <h2>Clients</h2>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to weekly_daily_report_clients_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Daily/Weekly Totals</span>
+            <span class="report-card-copy">Client order totals by day or week for a selected date.</span>
+          </div>
+          <i class="fi-results-demographics right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to print_vip_list_clients_path, target: "_blank", class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">VIP List</span>
+            <span class="report-card-copy">Current VIP clients for production and delivery review.</span>
+          </div>
+          <i class="fi-crown right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to total_report_clients_path, target: "_blank", class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Totals</span>
+            <span class="report-card-copy">Client totals for a selected date range.</span>
+          </div>
+          <i class="fi-graph-pie right" aria-hidden="true"></i>
+        <% end %>
+      </div>
     </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to print_vip_list_clients_path, target: "_blank", class: "stats border" do %>
-        <div class="left">
-          Vip List
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
+    <div class="row">
+      <div class="small-12 columns">
+        <h2>Products</h2>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to weekly_daily_report_products_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Daily/Weekly Totals</span>
+            <span class="report-card-copy">Product totals by day or week for a selected date.</span>
+          </div>
+          <i class="fi-graph-horizontal right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to print_pricing_vendors_path, target: "_blank", class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Ingredient Pricing</span>
+            <span class="report-card-copy">Vendor ingredient prices for purchasing and costing.</span>
+          </div>
+          <i class="fi-pricetag-multiple right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to pricing_report_products_path, target: "_blank", class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Product Pricing</span>
+            <span class="report-card-copy">Product prices and variants for customer billing checks.</span>
+          </div>
+          <i class="fi-price-tag right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to products_per_client_per_week_products_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Clients Per Product</span>
+            <span class="report-card-copy">Which clients receive each product during the week.</span>
+          </div>
+          <i class="fi-torsos-all right" aria-hidden="true"></i>
+        <% end %>
+      </div>
     </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to total_report_clients_path, target: "_blank", class: "stats border" do %>
-        <div class="left">
-          Totals
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <h2>Products</h2>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to weekly_daily_report_products_path, class: "stats border" do %>
-        <div class="left">
-          Daily/Weekly Totals
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to print_pricing_vendors_path, target: "_blank", class: "stats border" do %>
-        <div class="left">
-          Ingredient Pricing
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to pricing_report_products_path, target: "_blank", class: "stats border" do %>
-        <div class="left">
-          Product Pricing
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to products_per_client_per_week_products_path, class: "stats border" do %>
-        <div class="left">
-          Clients Per Product
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns">
-      <h2>Shipments</h2>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to detailed_invoice_report_shipments_path, class: "stats border" do %>
-        <div class="left">
-          Detailed Invoice Report
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
-    </div>
-    <div class="large-4 medium-6 small-12 columns">
-      <%= link_to total_sales_report_shipments_path, class: "stats border" do %>
-        <div class="left">
-          Total Sales Report
-        </div>
-        <i class="fi-page-export right"></i>
-      <% end %>
+    <div class="row">
+      <div class="small-12 columns">
+        <h2>Shipments</h2>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to detailed_invoice_report_shipments_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Detailed Invoice Report</span>
+            <span class="report-card-copy">Invoice line detail across a selected date range.</span>
+          </div>
+          <i class="fi-page-search right" aria-hidden="true"></i>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to total_sales_report_shipments_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Total Sales Report</span>
+            <span class="report-card-copy">Sales totals by invoice date range for revenue review.</span>
+          </div>
+          <i class="fi-dollar-bill right" aria-hidden="true"></i>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

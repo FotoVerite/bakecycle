@@ -1,26 +1,38 @@
-<% provide(:title, "PublicClientUsers") %>
-<h1>PublicClientUsers</h1>
-<% if policy(PublicClientUser).new? %>
-  <p><%= link_to 'Add New User', new_public_client_user_path, class: "button"%></p>
-<% end %>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Client</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |public_client_user| %>
-      <tr class="">
-        <th scope="row"><%= public_client_user.name %></th>
-        <td data-title="Email"><%= public_client_user.email %></td>
-        <td data-title="client"><%= public_client_user.client.name %></td>
-        <td data-title="Action">
-        </td>
-      </tr>
+<% provide(:title, "Public Client Users") %>
+
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Public Client Users</h1>
+      <p>Manage public client account access.</p>
+    </div>
+
+    <% if policy(PublicClientUser).new? %>
+      <%= link_to 'Add New User', new_public_client_user_path, class: "button index-header-action" %>
     <% end %>
-  </tbody>
-</table>
+  </div>
+
+  <div class="index-table">
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Client</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |public_client_user| %>
+          <tr class="">
+            <th scope="row"><%= public_client_user.name %></th>
+            <td data-title="Email"><%= public_client_user.email %></td>
+            <td data-title="client"><%= public_client_user.client.name %></td>
+            <td data-title="Action">
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

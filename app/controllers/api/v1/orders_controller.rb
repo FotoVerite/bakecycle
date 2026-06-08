@@ -37,8 +37,9 @@ module Api
             base_price: product.base_price,
             total_lead_days: product.total_lead_days,
             price_varient_info: product.price_varient_info(client_id)
-        }
-        end.sort_by { |h| h[:name] }
+          }
+        end
+        products_array.sort_by! { |h| h[:name] }
         render json: { success: true,
                        order: order,
                        products: products_array.to_json }

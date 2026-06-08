@@ -7,7 +7,6 @@ class ClientTotalsGenerator
     bakery_id, date_string, type = global_id.split("_")
     bakery = Bakery.find(bakery_id)
     date = Date.iso8601(date_string)
-    type = type
     new(bakery, date, type)
   end
 

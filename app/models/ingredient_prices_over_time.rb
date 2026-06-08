@@ -41,7 +41,7 @@ class IngredientPricesOverTime < ApplicationRecord
       last_point.update(cost_per_unit: cost_per_unit, conversion: conversion, weight_unit: weight_unit)
       throw(:abort)
     end
-    throw(:abort) if last_point.cost_per_unit.to_f == cost_per_unit.to_f &&
+    throw(:abort) if last_point.cost_per_unit == cost_per_unit &&
       last_point.conversion == conversion &&
       last_point.weight_unit == weight_unit
   end

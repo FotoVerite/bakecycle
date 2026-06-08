@@ -44,6 +44,28 @@
       line-height: 1.3;
     }
 
+    .report-card-title,
+    .report-card-copy {
+      display: block;
+    }
+
+    .report-card-title {
+      color: $bc-scorpion;
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.25;
+    }
+
+    .report-card-copy {
+      color: color.adjust($bc-scorpion, $lightness: 12%);
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.35;
+      margin-top: 0.3rem;
+    }
+
     h3 {
       margin: 0.35rem 0 0;
       color: $bc-charcoal;

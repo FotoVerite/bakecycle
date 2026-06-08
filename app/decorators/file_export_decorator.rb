@@ -6,5 +6,4 @@ class FileExportDecorator < Draper::Decorator
   def loading_message
     LoadingMessages.sample
   end
-
 end

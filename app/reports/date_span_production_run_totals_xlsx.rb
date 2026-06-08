@@ -38,9 +38,7 @@ class DateSpanProductionRunTotalsXlsx
     total_quantity = item.total_quantity
     hash[product_name] = {} unless hash[product_name]
     unless hash[product_name]["weight"]
-      hash[product_name]["weight"] = format(
-        "%0.3f", item.product.weight_with_unit.to_kg.round(3)
-      ) + " kg"
+      hash[product_name]["weight"] = "#{format('%0.3f', item.product.weight_with_unit.to_kg.round(3))} kg"
     end
     # product price
     hash[product_name]["total_products"] = total_quantity + hash[product_name]["total_products"].to_i

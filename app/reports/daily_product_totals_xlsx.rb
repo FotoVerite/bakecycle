@@ -57,9 +57,7 @@ class DailyProductTotalsXlsx
     total_quantity = item.product_quantity
     hash[product_name] = { clients: {} } unless hash[product_name]
     unless hash[product_name]["weight"]
-      hash[product_name]["weight"] = format(
-        "%0.3f", item.product.weight_with_unit.to_kg.round(3)
-      ) + " kg"
+      hash[product_name]["weight"] = "#{format('%0.3f', item.product.weight_with_unit.to_kg.round(3))} kg"
     end
     if hash[product_name][:clients][client_name].nil?
       hash[product_name][:clients][client_name] = total_quantity

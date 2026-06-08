@@ -24,8 +24,6 @@ class DailyTotalXlsx
     styles = wb.styles
     @header = styles.add_style bg_color: "DD", sz: 16, b: true, alignment: { horizontal: :left }
     wb.add_worksheet(name: "Daily Totals for #{@date}") do |sheet|
-      if @show_routes
-      end
       sheet.add_row(
         information_header, header: @header
       )
