@@ -46,8 +46,8 @@ class Recipe < ApplicationRecord
 
   accepts_nested_attributes_for :recipe_items, allow_destroy: true, reject_if: :reject_recipe_items
 
-  enum recipe_type: { dough: 0, preferment: 1, inclusion: 2 }
-  enum mix_size_unit: { oz: 0, lb: 1, g: 2, kg: 3 }
+  enum :recipe_type, { dough: 0, preferment: 1, inclusion: 2 }
+  enum :mix_size_unit, { oz: 0, lb: 1, g: 2, kg: 3 }
 
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :lead_days, presence: true

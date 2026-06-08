@@ -1,40 +1,54 @@
 <% provide(:title, "Orders") %>
 
-<h1>Orders</h1>
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Orders</h1>
+      <p>Search active orders, review missing invoices, and manage order records.</p>
+    </div>
 
-<% if policy(Client).new? %>
-  <p><%= link_to 'Add New Order', new_order_path, class: "button" %></p>
-<% end %>
-
-<% unless @missing_shipments.empty? %>
-  <div class="overridable-orders panel callout radius">
-    <h5>These <%= pluralize(@missing_shipments.count, 'order') %> are missing invoices.</h5>
-    <table class="responsive-table orders-missing-shipment-table">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Start Date</th>
-          <th scope="col">End Date</th>
-          <th scope="col">Client</th>
-          <th scope="col">Type</th>
-          <th scope="col">Route</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @missing_shipments.each do |order| %>
-        <%= render 'order_target_blank', order: OrderDecorator.decorate(order) %>
-      <% end %>
-      </tbody>
-    </table>
+    <% if policy(Client).new? %>
+      <%= link_to 'Add New Order', new_order_path, class: "button index-header-action" %>
+    <% end %>
   </div>
-<% end %>
 
-<%= render partial: 'search_form', object: search_form, locals: { orders_destination: orders_path } %>
-<%= render partial: "order_table", locals: {
-    orders: @orders,
-    missing_shipment_ids: @missing_shipments.map(&:id),
-    show_created_whodoneit: false,
-    show_updated_at_whodoneit: false
-  }
-%>
+  <%= render partial: 'search_form', object: search_form, locals: { orders_destination: orders_path } %>
+
+  <% unless @missing_shipments.empty? %>
+    <details class="index-alert-panel overridable-orders panel callout radius">
+      <summary class="index-alert-heading">
+        <span>Needs attention</span>
+        <strong>Missing invoices</strong>
+        <small>These <%= pluralize(@missing_shipments.count, 'order') %> need invoice review.</small>
+      </summary>
+      <table class="responsive-table orders-missing-shipment-table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Client</th>
+            <th scope="col">Type</th>
+            <th scope="col">Route</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @missing_shipments.each do |order| %>
+          <%= render 'order_target_blank', order: OrderDecorator.decorate(order) %>
+        <% end %>
+        </tbody>
+      </table>
+    </details>
+  <% end %>
+
+  <div class="index-table">
+    <%= render partial: "order_table", locals: {
+        orders: @orders,
+        missing_shipment_ids: @missing_shipments.map(&:id),
+        show_created_whodoneit: false,
+        show_updated_at_whodoneit: false
+      }
+    %>
+  </div>
+</div>

@@ -16,6 +16,12 @@
 
   <% if @shipments.any? %>
     <div class="index-actions">
+      <div class="index-actions-summary">
+        <span>Exports</span>
+        <strong>Current invoice results</strong>
+      </div>
+
+      <div class="index-action-buttons">
       <% search_params = params[:search].permit(ShipmentSearchForm.params) if params[:search] %>
       <%= link_to export_pdf_shipments_path(search: search_params), target: '_blank', class: "button small" do %>
           <i class="fi-page-export-pdf"></i> Export Invoices
@@ -28,6 +34,7 @@
       <%= link_to export_iif_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
         <i class="fi-page-export"></i> Export QuickBooks
       <% end %>
+      </div>
     </div>
   <% end %>
 

@@ -59,13 +59,13 @@ class Client < ApplicationRecord
   has_many :price_variants, dependent: :destroy
   has_many :shipments, dependent: :destroy
 
-  enum billing_term: { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
-  enum delivery_fee_option: { no_delivery_fee: 0, daily_delivery_fee: 1, weekly_delivery_fee: 2,
-                              percentage_fee: 3 }
+  enum :billing_term, { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
+  enum :delivery_fee_option, { no_delivery_fee: 0, daily_delivery_fee: 1, weekly_delivery_fee: 2,
+                               percentage_fee: 3 }
 
-  enum engagement_status: { current: 0, lapsed: 1, prospective: 2 }
+  enum :engagement_status, { current: 0, lapsed: 1, prospective: 2 }
 
-  enum channel: {
+  enum :channel, {
     Catering: "Catering",
     Coffee: "Coffee",
     Distro: "Distro",

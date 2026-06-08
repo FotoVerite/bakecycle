@@ -64,20 +64,20 @@ class OrderItem < ApplicationRecord
                   orders.id order_id,
                   orders.client_id client_id,
                   orders.route_id route_id,
-                  (DATE :production_date + order_items.total_lead_days) ship_date
+                  (CAST(:production_date AS date) + order_items.total_lead_days) ship_date
                 FROM order_items
                 INNER JOIN orders ON orders.id = order_items.order_id
                 WHERE
                   -- this section reduces the dataset by a bunch so we do less work with each item's total_lead_days
-                  DATE :production_date >= (orders.start_date - (SELECT COALESCE(max(total_lead_days), 1) FROM order_items))
+                  CAST(:production_date AS date) >= (orders.start_date - (SELECT COALESCE(max(total_lead_days), 1) FROM order_items))
                   AND (
-                    DATE :production_date <= orders.end_date
+                    CAST(:production_date AS date) <= orders.end_date
                     OR orders.end_date IS NULL
                   )
                   -- find all order items that have active orders on the production_date + lead time
-                  AND DATE :production_date >= (orders.start_date::date - order_items.total_lead_days)
+                  AND CAST(:production_date AS date) >= (orders.start_date::date - order_items.total_lead_days)
                   AND (
-                    DATE :production_date <= (orders.end_date::date - order_items.total_lead_days)
+                    CAST(:production_date AS date) <= (orders.end_date::date - order_items.total_lead_days)
                     OR orders.end_date IS NULL
                   )
               )

@@ -43,7 +43,7 @@ class Product < ApplicationRecord
 
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
 
-  enum product_type: {
+  enum :product_type, {
     bread: 10,
     cookie: 11,
     pot_pie: 12,
@@ -56,7 +56,7 @@ class Product < ApplicationRecord
     other: 18
   }
 
-  enum unit: { oz: 0, lb: 1, g: 2, kg: 3 }
+  enum :unit, { oz: 0, lb: 1, g: 2, kg: 3 }
 
   validates :bakery, presence: true
   validates :name, presence: true, uniqueness: { scope: :bakery_id }
