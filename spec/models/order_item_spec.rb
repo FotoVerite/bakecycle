@@ -266,6 +266,25 @@ describe OrderItem do
         expect(OrderItem.production_date(today)).to contain_exactly(standing_order_items)
       end
 
+      it "includes open-ended standing orders (nil end_date) arbitrarily far in the future" do
+        # Verifies the OR orders.end_date IS NULL branches in the CTE.
+        # The factory default is end_date: nil — make it explicit here.
+        order.update!(start_date: today - 30.days, end_date: nil)
+        far_future_production_date = today + 180.days
+        expect(OrderItem.production_date(far_future_production_date - lead_time.days)).to contain_exactly(order_item)
+      end
+
+      it "excludes a standing order whose end_date is in the past" do
+        order.update!(start_date: last_week - 7.days, end_date: last_week)
+        expect(OrderItem.production_date(today)).to be_empty
+      end
+
+      it "returns empty and does not raise when no order items exist" do
+        # Verifies the COALESCE(max(total_lead_days), 1) guard against NULL on an empty table.
+        # Neither `order` nor `order_item` is referenced, so no records are created.
+        expect(OrderItem.production_date(today)).to be_empty
+      end
+
       it "respects differences in routes" do
         temp = create(
           :temporary_order,
