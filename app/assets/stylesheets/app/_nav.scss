@@ -1,3 +1,6 @@
+@use "sass:math";
+@use "sass:color";
+
 .side-column {
   // Acts as large-2 / medium-12 column in the main flex row.
   // The inner <div class="large-2 columns"> is display:block inside a flex item,
@@ -7,8 +10,8 @@
   max-width: 100%;
 
   @media #{$large-up} {
-    flex: 0 0 percentage(2 / 12);
-    max-width: percentage(2 / 12);
+    flex: 0 0 math.percentage(math.div(2, 12));
+    max-width: math.percentage(math.div(2, 12));
   }
 
   .columns {
@@ -132,7 +135,7 @@
   }
 
   .main > .active {
-    background: lighten($bc-shakespeare, 36%);
+    background: color.adjust($bc-shakespeare, $lightness: 36%);
     border-radius: 4px;
   }
 

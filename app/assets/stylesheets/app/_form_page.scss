@@ -1,3 +1,4 @@
+@use "sass:color";
 .form-page {
   .form-header {
     align-items: center;
@@ -48,10 +49,10 @@
   padding: 26px 20px 24px;
 
   legend {
-    background: lighten($bc-shakespeare, 38%);
-    border: 1px solid lighten($bc-shakespeare, 22%);
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    border: 1px solid color.adjust($bc-shakespeare, $lightness: 22%);
     border-bottom-color: $bc-white;
-    color: darken($bc-shakespeare, 26%);
+    color: color.adjust($bc-shakespeare, $lightness: -26%);
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.2;
@@ -244,15 +245,15 @@
   }
 
   &:has(input:checked) {
-    background: lighten($bc-shakespeare, 38%);
-    border-color: lighten($bc-shakespeare, 14%);
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 14%);
     box-shadow: 0 0 0 2px rgba($bc-shakespeare, 0.12);
-    color: darken($bc-shakespeare, 26%);
+    color: color.adjust($bc-shakespeare, $lightness: -26%);
   }
 
   &:hover,
   &:focus-within {
-    border-color: lighten($bc-shakespeare, 18%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 18%);
     transform: translateY(-1px);
   }
 }
@@ -293,14 +294,14 @@
   }
 
   &:has(input:checked) {
-    background: lighten($bc-lima, 42%);
-    border-color: lighten($bc-lima, 18%);
+    background: color.adjust($bc-lima, $lightness: 42%);
+    border-color: color.adjust($bc-lima, $lightness: 18%);
     box-shadow: 0 0 0 2px rgba($bc-lima, 0.12);
   }
 }
 
 .form-help-tag {
-  background: darken($bc-shakespeare, 8%);
+  background: color.adjust($bc-shakespeare, $lightness: -8%);
   color: $bc-white;
   display: inline-block;
   font-size: 0.72rem;
@@ -325,20 +326,20 @@
 .form-actions .button.warning,
 .button.warning {
   background-color: $bc-alizarin-crimson;
-  border-color: darken($bc-alizarin-crimson, 10%);
+  border-color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
   color: $bc-white;
 
   &:hover,
   &:focus {
-    background-color: darken($bc-alizarin-crimson, 10%);
+    background-color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
     color: $bc-white;
   }
 }
 
 .order-action-warning {
-  background: lighten($bc-alizarin-crimson, 39%);
-  border: 1px solid lighten($bc-alizarin-crimson, 24%);
-  color: darken($bc-alizarin-crimson, 12%);
+  background: color.adjust($bc-alizarin-crimson, $lightness: 39%);
+  border: 1px solid color.adjust($bc-alizarin-crimson, $lightness: 24%);
+  color: color.adjust($bc-alizarin-crimson, $lightness: -12%);
   font-size: 0.84rem;
   font-weight: 600;
   line-height: 1.35;
@@ -350,7 +351,7 @@
 .form-field--error {
   label,
   .form-field-label {
-    color: darken($bc-alizarin-crimson, 10%);
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
   }
 
   input:not([type='submit']),
@@ -362,9 +363,9 @@
 }
 
 .order-field-warning {
-  background: lighten($bc-alizarin-crimson, 39%);
-  border: 1px solid lighten($bc-alizarin-crimson, 24%);
-  color: darken($bc-alizarin-crimson, 12%);
+  background: color.adjust($bc-alizarin-crimson, $lightness: 39%);
+  border: 1px solid color.adjust($bc-alizarin-crimson, $lightness: 24%);
+  color: color.adjust($bc-alizarin-crimson, $lightness: -12%);
   font-size: 0.8rem;
   line-height: 1.35;
   margin: 8px 0 0;
@@ -400,7 +401,7 @@
   }
 
   &.nested-row--destroyed {
-    background: lighten($bc-alizarin-crimson, 41%);
+    background: color.adjust($bc-alizarin-crimson, $lightness: 41%);
     opacity: 0.35;
   }
 }
@@ -466,9 +467,9 @@
 
   &:hover,
   &:focus {
-    background: lighten($bc-alizarin-crimson, 41%);
-    border-color: lighten($bc-alizarin-crimson, 24%);
-    color: darken($bc-alizarin-crimson, 12%);
+    background: color.adjust($bc-alizarin-crimson, $lightness: 41%);
+    border-color: color.adjust($bc-alizarin-crimson, $lightness: 24%);
+    color: color.adjust($bc-alizarin-crimson, $lightness: -12%);
     transform: translateY(-1px);
   }
 
@@ -480,9 +481,9 @@
 .nested-btn-restore {
   &:hover,
   &:focus {
-    background: lighten($bc-lima, 42%);
-    border-color: lighten($bc-lima, 24%);
-    color: darken($bc-lima, 24%);
+    background: color.adjust($bc-lima, $lightness: 42%);
+    border-color: color.adjust($bc-lima, $lightness: 24%);
+    color: color.adjust($bc-lima, $lightness: -24%);
   }
 }
 
@@ -557,7 +558,7 @@
   }
 
   .order-action-primary {
-    background: darken($bc-shakespeare, 7%);
+    background: color.adjust($bc-shakespeare, $lightness: -7%);
   }
 }
 
@@ -740,19 +741,19 @@
 }
 
 .shipment-item-status-pill--success {
-  background: lighten($bc-lima, 42%);
-  border-color: lighten($bc-lima, 18%);
-  color: darken($bc-lima, 25%);
+  background: color.adjust($bc-lima, $lightness: 42%);
+  border-color: color.adjust($bc-lima, $lightness: 18%);
+  color: color.adjust($bc-lima, $lightness: -25%);
 }
 
 .shipment-item-status-pill--danger {
-  background: lighten($bc-alizarin-crimson, 40%);
-  border-color: lighten($bc-alizarin-crimson, 24%);
-  color: darken($bc-alizarin-crimson, 14%);
+  background: color.adjust($bc-alizarin-crimson, $lightness: 40%);
+  border-color: color.adjust($bc-alizarin-crimson, $lightness: 24%);
+  color: color.adjust($bc-alizarin-crimson, $lightness: -14%);
 }
 
 .order-lead-warning {
-  color: darken($bc-alizarin-crimson, 10%);
+  color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -791,8 +792,8 @@
   }
 
   > span {
-    background: lighten($bc-shakespeare, 38%);
-    color: darken($bc-shakespeare, 26%);
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    color: color.adjust($bc-shakespeare, $lightness: -26%);
     flex: 0 0 auto;
     font-size: 0.78rem;
     font-weight: 700;
@@ -879,7 +880,7 @@
 }
 
 .sortable-ghost {
-  background: lighten($bc-shakespeare, 40%);
+  background: color.adjust($bc-shakespeare, $lightness: 40%);
   border-radius: 2px;
   opacity: 0.5;
 }

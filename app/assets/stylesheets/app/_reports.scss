@@ -1,3 +1,4 @@
+@use "sass:color";
 .report-page {
   .report-header,
   .report-toolbar,
@@ -28,9 +29,9 @@
   }
 
   .report-status {
-    background: lighten($bc-shakespeare, 34%);
+    background: color.adjust($bc-shakespeare, $lightness: 34%);
     border-radius: 4px;
-    color: darken($bc-shakespeare, 22%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;
@@ -41,7 +42,7 @@
 
   .report-toolbar {
     align-items: end;
-    background: lighten($bc-shakespeare, 39%);
+    background: color.adjust($bc-shakespeare, $lightness: 39%);
     display: grid;
     grid-template-columns: max-content minmax(240px, 1fr);
     gap: 18px;
@@ -51,7 +52,7 @@
       margin: 0;
     }
 
-    border-color: lighten($bc-shakespeare, 25%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 25%);
   }
 
   .report-print-form {
@@ -128,7 +129,7 @@
     text-align: right;
 
     span {
-      color: darken($bc-shakespeare, 20%);
+      color: color.adjust($bc-shakespeare, $lightness: -20%);
       display: block;
       font-size: 0.72rem;
       font-weight: 700;
@@ -221,8 +222,8 @@
 
   .report-toolbar {
     align-items: center;
-    background: linear-gradient(90deg, lighten($bc-shakespeare, 40%), lighten($bc-shakespeare, 44%));
-    border-left: 4px solid lighten($bc-shakespeare, 14%);
+    background: linear-gradient(90deg, color.adjust($bc-shakespeare, $lightness: 40%), color.adjust($bc-shakespeare, $lightness: 44%));
+    border-left: 4px solid color.adjust($bc-shakespeare, $lightness: 14%);
     grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
     min-height: 116px;
   }

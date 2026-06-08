@@ -1,5 +1,6 @@
 // Flexbox grid — Foundation 5 class API, modern implementation
 // Breakpoints match Foundation 5 exactly so existing media query vars keep working.
+@use "sass:math";
 
 // ─── Breakpoints ─────────────────────────────────────────────────────────
 $small-break:  40em;    // 640px
@@ -58,7 +59,7 @@ $row-max-width: 62.5rem;    // 1000px — matches Foundation 5 default
 @mixin make-columns($prefix) {
   @for $i from 1 through $grid-columns {
     .#{$prefix}-#{$i} {
-      $w: percentage($i / $grid-columns);
+      $w: math.percentage(math.div($i, $grid-columns));
       flex: 0 0 $w;
       max-width: $w;
     }
@@ -68,7 +69,7 @@ $row-max-width: 62.5rem;    // 1000px — matches Foundation 5 default
 @mixin make-offsets($prefix) {
   @for $i from 0 through ($grid-columns - 1) {
     .#{$prefix}-offset-#{$i} {
-      margin-left: percentage($i / $grid-columns);
+      margin-left: math.percentage(math.div($i, $grid-columns));
     }
   }
 }

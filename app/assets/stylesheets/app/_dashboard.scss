@@ -1,3 +1,4 @@
+@use "sass:color";
 .dashboard {
   h2 {
     color: $bc-scorpion;
@@ -24,7 +25,7 @@
 
     &:hover,
     &:focus {
-      border-color: darken($bc-border-grey, 8%);
+      border-color: color.adjust($bc-border-grey, $lightness: -8%);
       box-shadow: 0 3px 8px rgba(50, 60, 70, 0.08);
       color: $bc-charcoal;
       text-decoration: none;
@@ -65,7 +66,7 @@
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
       border-radius: 3px;
-      background: lighten($bc-shakespeare, 34%);
+      background: color.adjust($bc-shakespeare, $lightness: 34%);
     }
   }
 

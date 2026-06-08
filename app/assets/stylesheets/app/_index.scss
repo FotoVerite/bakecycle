@@ -1,3 +1,4 @@
+@use "sass:color";
 .index-page {
   .index-header {
     align-items: center;
@@ -37,8 +38,8 @@
 
 .index-toolbar {
   align-items: flex-end;
-  background: lighten($bc-shakespeare, 39%);
-  border: 1px solid lighten($bc-shakespeare, 25%);
+  background: color.adjust($bc-shakespeare, $lightness: 39%);
+  border: 1px solid color.adjust($bc-shakespeare, $lightness: 25%);
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(150px, 180px) minmax(120px, 150px) auto;
   gap: 14px;
@@ -88,9 +89,9 @@
   }
 
   .ts-wrapper.multi .ts-control > div {
-    background: lighten($bc-shakespeare, 37%);
-    border: 1px solid lighten($bc-shakespeare, 24%);
-    color: darken($bc-shakespeare, 28%);
+    background: color.adjust($bc-shakespeare, $lightness: 37%);
+    border: 1px solid color.adjust($bc-shakespeare, $lightness: 24%);
+    color: color.adjust($bc-shakespeare, $lightness: -28%);
     margin: 2px 4px 2px 0;
   }
 
@@ -119,7 +120,7 @@
 .index-toolbar-invoices {
   align-items: end;
   background: $bc-white;
-  border-color: lighten($bc-shakespeare, 24%);
+  border-color: color.adjust($bc-shakespeare, $lightness: 24%);
   grid-template-columns: repeat(12, minmax(0, 1fr));
   overflow: visible;
   padding: 18px;
@@ -175,7 +176,7 @@
 
   .ts-wrapper.multi .ts-control > div {
     background: $bc-shakespeare;
-    border: 1px solid darken($bc-shakespeare, 5%);
+    border: 1px solid color.adjust($bc-shakespeare, $lightness: -5%);
     border-radius: 3px;
     color: $bc-white;
     font-size: 0.8rem;
@@ -185,7 +186,7 @@
 
   .ts-dropdown {
     background: $bc-white;
-    border-color: lighten($bc-shakespeare, 20%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 20%);
     box-shadow: 0 10px 22px rgba(50, 60, 70, 0.14);
     z-index: 1000;
   }
@@ -193,6 +194,16 @@
   input,
   select {
     height: 42px;
+  }
+}
+
+.index-toolbar-orders {
+  .index-filter-select {
+    z-index: 20;
+
+    &:focus-within {
+      z-index: 100;
+    }
   }
 }
 

@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @mixin transform-origin($horizontal:0, $vertical:0) {
       -ms-transform-origin: ($horizontal $vertical);
   -webkit-transform-origin: ($horizontal $vertical);
@@ -17,6 +19,6 @@
 
   &:hover,
   &:focus {
-    color: darken($bc-shakespeare, 5%);
+    color: color.adjust($bc-shakespeare, $lightness: -5%);
   }
 }

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .map-container {
   height: 350px;
   width: 100%;
@@ -14,8 +16,8 @@
   position: absolute;
   width: $size;
   height: $size;
-  left: -$size / 2;
-  top: -$size / 2;
+  left: math.div(-$size, 2);
+  top: math.div(-$size, 2);
   border: 5px solid #f44336;
   border-radius: $size;
   background-color: white;

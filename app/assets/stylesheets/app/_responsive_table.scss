@@ -1,3 +1,4 @@
+@use "sass:color";
 // Breakpoints
 
 $bp-small: 30em;
@@ -160,10 +161,10 @@ $bp-xlarge: 75em;
     }
 
     th {
-      background-color: lighten($bc-shakespeare, 36%);
+      background-color: color.adjust($bc-shakespeare, $lightness: 36%);
       border: 0;
-      border-bottom: 1px solid lighten($bc-shakespeare, 22%);
-      color: darken($bc-shakespeare, 28%);
+      border-bottom: 1px solid color.adjust($bc-shakespeare, $lightness: 22%);
+      color: color.adjust($bc-shakespeare, $lightness: -28%);
       font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.02em;
@@ -224,13 +225,13 @@ $bp-xlarge: 75em;
     }
 
     tr {
-      border: 1px solid lighten($bc-shakespeare, 22%);
+      border: 1px solid color.adjust($bc-shakespeare, $lightness: 22%);
       margin-bottom: 1em;
 
       @media (min-width: $bp-medium) {
         // Undo display: block
         border: 0;
-        border-bottom: 1px solid lighten($bc-border-grey, 4%);
+        border-bottom: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
         display: table-row;
       }
 
@@ -240,14 +241,14 @@ $bp-xlarge: 75em;
 
       &:nth-of-type(even) {
         @media (min-width: $bp-medium) {
-          background-color: lighten($bc-verylightgrey, 2%);
+          background-color: color.adjust($bc-verylightgrey, $lightness: 2%);
         }
       }
     }
 
     th[scope="row"] {
-      background-color: lighten($bc-shakespeare, 36%);
-      color: darken($bc-shakespeare, 28%);
+      background-color: color.adjust($bc-shakespeare, $lightness: 36%);
+      color: color.adjust($bc-shakespeare, $lightness: -28%);
       font-weight: 700;
 
       @media (min-width: $bp-medium) {
@@ -257,11 +258,11 @@ $bp-xlarge: 75em;
       }
 
       a {
-        color: darken($bc-shakespeare, 28%);
+        color: color.adjust($bc-shakespeare, $lightness: -28%);
         text-decoration: underline;
 
         @media (min-width: $bp-small) {
-          color: darken($bc-shakespeare, 28%);
+          color: color.adjust($bc-shakespeare, $lightness: -28%);
           text-decoration: none;
         }
         @media (min-width: $bp-medium) {

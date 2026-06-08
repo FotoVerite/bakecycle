@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .default-btn {
   border-radius: 5px;
   cursor: pointer;
@@ -26,7 +28,7 @@
 
   &:hover,
   &:focus {
-    background-color: darken( $bc-shakespeare, 5% );
+    background-color: color.adjust($bc-shakespeare, $lightness: -5%);
     color: $bc-white;
   }
 }
@@ -55,7 +57,7 @@ button,
 
   &:hover,
   &:focus {
-    background-color: darken( $bc-shakespeare, 10% );
+    background-color: color.adjust($bc-shakespeare, $lightness: -10%);
   }
 }
 
@@ -69,5 +71,5 @@ button.alert:hover,
 button.alert:focus,
 .button.alert:hover,
 .button.alert:focus {
-  background-color: darken( $bc-alizarin-crimson, 10% );
+  background-color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
 }

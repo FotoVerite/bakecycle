@@ -1,3 +1,5 @@
+@use "sass:color";
+
 body, html {
   position: relative;
   min-height: 100%;
@@ -81,15 +83,15 @@ input[type="text"] {
 }
 
 .alert-box.alert {
-  background-color: lighten($bc-alizarin-crimson, 38%);
-  border: 1px solid lighten($bc-alizarin-crimson, 24%);
-  color: darken($bc-alizarin-crimson, 20%);
+  background-color: color.adjust($bc-alizarin-crimson, $lightness: 38%);
+  border: 1px solid color.adjust($bc-alizarin-crimson, $lightness: 24%);
+  color: color.adjust($bc-alizarin-crimson, $lightness: -20%);
 }
 
 .alert-box.success {
-  background-color: lighten($bc-lima, 42%);
-  border: 1px solid lighten($bc-lima, 24%);
-  color: darken($bc-lima, 28%);
+  background-color: color.adjust($bc-lima, $lightness: 42%);
+  border: 1px solid color.adjust($bc-lima, $lightness: 24%);
+  color: color.adjust($bc-lima, $lightness: -28%);
 }
 
 .hide {
