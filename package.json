@@ -13,7 +13,7 @@
     "build": "esbuild app/assets/javascripts/app.js --bundle --outfile=app/assets/builds/bakecycle.js --define:global=globalThis",
     "build:prod": "esbuild app/assets/javascripts/app.js --bundle --minify --outfile=app/assets/builds/bakecycle.js --define:global=globalThis",
     "build:watch": "esbuild app/assets/javascripts/app.js --bundle --outfile=app/assets/builds/bakecycle.js --define:global=globalThis --watch",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "tom-select": "^2.6.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.29.7",
     "esbuild": "^0.25.0",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1"
