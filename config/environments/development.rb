@@ -19,8 +19,8 @@ Rails.application.configure do
 
   config.cache_store = :memory_store
 
-  # Propshaft: don't scan asset files on every request.
-  config.assets.sweep_cache = false
+  # Keep local UI work honest by picking up regenerated CSS/JS without a server restart.
+  config.assets.sweep_cache = true
   config.assets.quiet = true
 
   config.action_mailer.raise_delivery_errors = false

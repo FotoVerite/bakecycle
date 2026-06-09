@@ -1,0 +1,129 @@
+<% provide(:title, "Nightly Sign Off — #{@date.strftime('%A %b. %-d, %Y')}") %>
+<% formatted_date = @date.strftime("%A, %B %-d, %Y") %>
+
+<div class="report-page nightly-sign-off-page">
+  <div class="report-header">
+    <div>
+      <h1>Nightly Sign Off</h1>
+      <p><%= formatted_date %></p>
+    </div>
+    <span class="report-status"><%= pluralize(@total_invoices, "invoice") %></span>
+  </div>
+
+  <div class="report-toolbar sign-off-toolbar">
+    <div class="sign-off-date-controls">
+      <span class="sign-off-toolbar-label">Delivery date</span>
+      <div class="sign-off-control-row">
+        <div class="sign-off-date-nav">
+          <%= link_to raw("&#8249;"), nightly_sign_off_path(date: (@date - 1.day).strftime("%Y-%m-%d")),
+                class: "sign-off-nav-arrow", title: "Previous day", "aria-label": "Previous day" %>
+
+          <%= form_tag nightly_sign_off_path, method: :get, class: "sign-off-date-form" do %>
+            <%= text_field_tag :date, @date.strftime("%Y-%m-%d"),
+                  class: "sign-off-date-input js-datepicker",
+                  onchange: "this.form.submit()",
+                  autocomplete: "off",
+                  "aria-label": "Delivery date" %>
+          <% end %>
+
+          <%= link_to raw("&#8250;"), nightly_sign_off_path(date: (@date + 1.day).strftime("%Y-%m-%d")),
+                class: "sign-off-nav-arrow sign-off-nav-arrow--right", title: "Next day", "aria-label": "Next day" %>
+        </div>
+
+        <button class="button secondary sign-off-print-btn" onclick="window.print(); return false;" type="button">
+          <i class="fi-print" aria-hidden="true"></i>
+          Print
+        </button>
+      </div>
+    </div>
+
+    <div class="report-toolbar-note">
+      <span>Sign-off list</span>
+      Review client counts, then print for nightly packing.
+    </div>
+  </div>
+
+  <%# Standard sections: Initials | Client | Boxes | Bags | Notes %>
+  <% [
+    ["All Clients", @all_clients,  "Client"],
+    ["Blue Bottle", @blue_bottle,  "Blue Bottle"]
+  ].each do |title, shipments, col_label| %>
+    <div class="sign-off-section">
+      <h2 class="sign-off-screen-header">
+        <span><%= title %></span>
+        <small class="sign-off-count"><%= pluralize(shipments.size, "invoice") %></small>
+      </h2>
+      <% if shipments.any? %>
+        <table class="sign-off-table">
+          <thead>
+            <%# Print-only: combined title + date row replacing the screen h2 %>
+            <tr class="sign-off-print-header">
+              <th colspan="5" class="print-section-title">
+                <%= title %> &mdash; <%= formatted_date %>
+                <span class="print-section-count"><%= pluralize(shipments.size, "invoice") %></span>
+              </th>
+            </tr>
+            <tr class="sign-off-col-headers">
+              <th class="col-initials" aria-label="Packer initials"></th>
+              <th class="col-client"><%= col_label %></th>
+              <th class="col-boxes">Boxes</th>
+              <th class="col-bags">Bags</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% shipments.each do |shipment| %>
+              <tr>
+                <td class="col-initials"><span class="initials-box"></span></td>
+                <td class="col-client"><%= shipment.client_name %></td>
+                <td class="col-boxes"></td>
+                <td class="col-bags"></td>
+                <td class="col-notes"></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="no-shipments">No shipments for this section.</p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# Wholesale Sandwiches: Initials | Client | Cold Boxes | Notes (no Bags column) %>
+  <div class="sign-off-section sign-off-section--sandwiches">
+    <h2 class="sign-off-screen-header">
+      <span>Wholesale Sandwiches</span>
+      <small class="sign-off-count"><%= pluralize(@wholesale_sandwiches.size, "invoice") %></small>
+    </h2>
+    <% if @wholesale_sandwiches.any? %>
+      <table class="sign-off-table sign-off-table--sandwiches">
+        <thead>
+          <tr class="sign-off-print-header">
+            <th colspan="4" class="print-section-title">
+              Wholesale Sandwiches &mdash; <%= formatted_date %>
+              <span class="print-section-count"><%= pluralize(@wholesale_sandwiches.size, "invoice") %></span>
+            </th>
+          </tr>
+          <tr class="sign-off-col-headers">
+            <th class="col-initials" aria-label="Packer initials"></th>
+            <th class="col-client">Client</th>
+            <th class="col-boxes">Cold Boxes</th>
+            <th class="col-notes">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @wholesale_sandwiches.each do |shipment| %>
+            <tr>
+              <td class="col-initials"><span class="initials-box"></span></td>
+              <td class="col-client"><%= shipment.client_name %></td>
+              <td class="col-boxes"></td>
+              <td class="col-notes"></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="no-shipments">No wholesale sandwich orders for this date.</p>
+    <% end %>
+  </div>
+</div>

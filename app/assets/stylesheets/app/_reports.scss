@@ -243,6 +243,262 @@
   }
 }
 
+.report-page.nightly-sign-off-page {
+  .sign-off-toolbar {
+    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    min-height: 94px;
+  }
+
+  .sign-off-date-controls {
+    min-width: 0;
+  }
+
+  .sign-off-toolbar-label {
+    color: $bc-scorpion;
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+  }
+
+  .sign-off-control-row {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .sign-off-date-nav {
+    align-items: stretch;
+    background: $bc-white;
+    border: 1px solid $bc-border-grey;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(50, 60, 70, 0.04);
+    display: inline-flex;
+    height: 40px;
+    overflow: visible;
+  }
+
+  .sign-off-nav-arrow {
+    align-items: center;
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    border-right: 1px solid color.adjust($bc-shakespeare, $lightness: 25%);
+    color: color.adjust($bc-shakespeare, $lightness: -24%);
+    display: inline-flex;
+    flex: 0 0 38px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1;
+    min-width: 38px;
+    text-decoration: none;
+    transition: background 160ms ease-out, color 160ms ease-out;
+    user-select: none;
+
+    &:hover,
+    &:focus {
+      background: $bc-shakespeare;
+      color: $bc-white;
+      text-decoration: none;
+    }
+  }
+
+  .sign-off-nav-arrow--right {
+    border-left: 1px solid color.adjust($bc-shakespeare, $lightness: 25%);
+    border-right: 0;
+  }
+
+  .sign-off-date-form {
+    display: flex;
+    margin: 0;
+  }
+
+  .sign-off-date-input {
+    background: $bc-white !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: $bc-charcoal;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    height: 38px;
+    margin: 0 !important;
+    min-width: 152px;
+    padding: 0 12px !important;
+
+    &:focus {
+      background: color.adjust($bc-shakespeare, $lightness: 41%) !important;
+      color: color.adjust($bc-shakespeare, $lightness: -22%);
+      outline: 0 !important;
+    }
+  }
+
+  .sign-off-print-btn {
+    align-items: center;
+    display: inline-flex;
+    height: 40px;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+    min-height: 40px;
+    padding: 0 18px;
+
+    i {
+      margin-right: 6px;
+    }
+  }
+
+  // Print-only combined title row — hidden on screen
+  .sign-off-print-header {
+    display: none;
+  }
+
+  .sign-off-section {
+    margin-bottom: 24px;
+
+    .sign-off-screen-header {
+      align-items: baseline;
+      background: $bc-limed-spruce;
+      color: $bc-white;
+      display: flex;
+      font-size: 1rem;
+      font-weight: 800;
+      justify-content: space-between;
+      letter-spacing: 0.04em;
+      margin: 0;
+      padding: 0.65rem 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .sign-off-section-meta {
+      align-items: baseline;
+      display: flex;
+      flex-shrink: 0;
+      gap: 1rem;
+    }
+
+    .sign-off-date {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: none;
+    }
+
+    .sign-off-count {
+      color: color.adjust($bc-shakespeare, $lightness: 28%);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+  }
+
+  .sign-off-table {
+    border-collapse: collapse;
+    border: 2px solid $bc-border-grey;
+    font-size: 0.9rem;
+    width: 100%;
+
+    th,
+    td {
+      border-right: 2px solid $bc-border-grey;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    th {
+      background: $bc-shakespeare;
+      color: $bc-white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      text-transform: uppercase;
+
+      &.col-boxes,
+      &.col-bags {
+        text-align: center;
+      }
+    }
+
+    td {
+      border-bottom: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
+      padding: 0.5rem 0.75rem;
+    }
+
+    tr:nth-child(even) td {
+      background: $bc-verylightgrey;
+    }
+
+    // Initials column — narrow box for packer to sign
+    .col-initials {
+      text-align: center;
+      width: 2.5rem;
+    }
+
+    .initials-box {
+      border: 1.5px solid color.adjust($bc-border-grey, $lightness: -15%);
+      border-radius: 2px;
+      display: inline-block;
+      height: 22px;
+      vertical-align: middle;
+      width: 28px;
+    }
+
+    .col-client {
+      width: 38%;
+    }
+
+    .col-boxes {
+      text-align: center;
+      width: 11%;
+    }
+
+    .col-bags {
+      text-align: center;
+      width: 11%;
+    }
+
+    // Notes column gets a tinted background so it reads as a distinct "writing area"
+    td.col-notes {
+      background: color.adjust($bc-verylightgrey, $lightness: 2%);
+    }
+
+    tr:nth-child(even) td.col-notes {
+      background: color.adjust($bc-verylightgrey, $lightness: -2%);
+    }
+  }
+
+  // Sandwiches section: no Bags column, "Cold Boxes" replaces Boxes
+  .sign-off-table--sandwiches {
+    .col-boxes {
+      width: 13%;
+    }
+  }
+
+  .no-shipments {
+    color: $bc-scorpion;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin: 0;
+    padding: 0.75rem;
+  }
+
+  .print-page-header {
+    display: none;
+  }
+}
+
 @media #{$small-only} {
   .report-page {
     .report-header,
@@ -273,5 +529,131 @@
     .report-date-form-with-actions {
       display: block;
     }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .report-page.nightly-sign-off-page {
+    .sign-off-toolbar,
+    .sign-off-control-row {
+      display: block;
+    }
+
+    .sign-off-date-nav,
+    .sign-off-print-btn {
+      width: 100%;
+    }
+
+    .sign-off-print-btn {
+      margin-top: 10px;
+    }
+  }
+}
+
+@media print {
+  .report-page.nightly-sign-off-page {
+    .report-header,
+    .sign-off-toolbar {
+      display: none !important;
+    }
+
+    .sign-off-section {
+      margin-bottom: 1.5rem;
+      page-break-inside: avoid;
+    }
+
+    .sign-off-section + .sign-off-section {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    .sign-off-table {
+      font-size: 10pt;
+    }
+
+    // Hide screen header; show print-only combined title row
+    .sign-off-screen-header {
+      display: none !important;
+    }
+
+    .sign-off-print-header {
+      display: table-row !important;
+
+      .print-section-title {
+        background: $bc-limed-spruce;
+        color: $bc-white;
+        font-size: 11pt;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        text-transform: uppercase;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .print-section-count {
+        float: right;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        opacity: 0.7;
+      }
+    }
+
+    .sign-off-col-headers th {
+      background: $bc-shakespeare;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .sign-off-table tr:nth-child(even) td,
+    .initials-box {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .sign-off-table tr:nth-child(even) td {
+      background: $bc-verylightgrey !important;
+    }
+
+    .initials-box {
+      height: 20px;
+      width: 26px;
+    }
+
+    .sign-off-table {
+      border: 2px solid $bc-border-grey;
+
+      th, td {
+        border-right: 2px solid $bc-border-grey;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      td.col-notes,
+      tr:nth-child(even) td.col-notes {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    .print-page-header {
+      display: none;
+    }
+  }
+
+  .top-menu-section,
+  .side-column {
+    display: none !important;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .content-bg,
+  .wrapper {
+    padding: 0 !important;
   }
 }

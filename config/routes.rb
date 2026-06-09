@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get :dashboard, to: "dashboard#index"
 
   resource :production_checklist, only: [:show]
+  resource :nightly_sign_off, only: [:show]
   resources :registrations, only: %i[new]
 
   resources :ingredients, except: [:show]
