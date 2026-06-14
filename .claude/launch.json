@@ -1,0 +1,24 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Rails server",
+      "runtimeExecutable": "/usr/bin/perl",
+      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='3.3.1'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/3.3.1/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/rails','server','-P','/Volumes/Work-Play/rails/bakecycle/tmp/pids/preview.pid'"],
+      "port": 3001,
+      "autoPort": true
+    },
+    {
+      "name": "Delayed Job worker",
+      "runtimeExecutable": "/Users/matthewbergman/.rbenv/shims/bundle",
+      "runtimeArgs": ["exec", "rails", "delayed_job:start"],
+      "port": null
+    },
+    {
+      "name": "Dart Sass watch",
+      "runtimeExecutable": "/usr/bin/perl",
+      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='3.3.1'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/3.3.1/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/rails','dartsass:watch'"],
+      "port": null
+    }
+  ]
+}
