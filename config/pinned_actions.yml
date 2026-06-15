@@ -1,0 +1,105 @@
+new_order:
+  label: "New Order"
+  description: "Start a standing or temporary client order."
+  context: "Orders"
+  icon: "fi-page-add"
+  route: new_order_path
+  permission: client_manage?
+new_invoice:
+  label: "New Invoice"
+  description: "Create an invoice with delivery and product details."
+  context: "Invoices"
+  icon: "fi-page-add"
+  route: new_shipment_path
+  permission: shipping_manage?
+daily_recipes:
+  label: "Daily Recipes"
+  description: "Review or print recipe quantities for a production date."
+  context: "Production"
+  icon: "fi-clipboard-notes"
+  route: print_recipes_path
+  permission: production_read?
+batch_recipes:
+  label: "Batch Recipes"
+  description: "Plan recipe quantities across a date range."
+  context: "Production"
+  icon: "fi-calendar"
+  route: batch_recipes_path
+  permission: production_read?
+production_runs:
+  label: "Production Runs"
+  description: "Open scheduled production runs and run sheets."
+  context: "Production"
+  icon: "fi-results"
+  route: production_runs_path
+  permission: production_read?
+production_checklist:
+  label: "Production Checklist"
+  description: "Review orders that still need production attention."
+  context: "Production"
+  icon: "fi-checkbox"
+  route: production_checklist_path
+  permission: production_read?
+packing_slips:
+  label: "Packing Slips"
+  description: "Prepare client packing slips for a delivery date."
+  context: "Shipping"
+  icon: "fi-page-export-pdf"
+  route: packing_slips_path
+  permission: shipping_read?
+delivery_lists:
+  label: "Delivery Lists"
+  description: "Build route-ready delivery lists for the day."
+  context: "Shipping"
+  icon: "fi-list-thumbnails"
+  route: delivery_lists_path
+  permission: shipping_read?
+nightly_sign_off:
+  label: "Nightly Sign Off"
+  description: "Confirm boxes and bags before deliveries leave."
+  context: "Shipping"
+  icon: "fi-check"
+  route: nightly_sign_off_path
+  permission: shipping_read?
+reports:
+  label: "Reports"
+  description: "Open operational, client, product, and sales reports."
+  context: "Reporting"
+  icon: "fi-graph-bar"
+  route: reports_path
+  permission: bakery_member?
+clients:
+  label: "Clients"
+  description: "Search and manage client records."
+  context: "Clients"
+  icon: "fi-torsos-all"
+  route: clients_path
+  permission: client_read?
+orders:
+  label: "Orders"
+  description: "Search standing and temporary orders."
+  context: "Clients"
+  icon: "fi-shopping-bag"
+  route: orders_path
+  permission: client_read?
+invoices:
+  label: "Invoices"
+  description: "Search, export, and manage invoices."
+  context: "Clients"
+  icon: "fi-page-multiple"
+  route: shipments_path
+  permission: client_read?
+products:
+  label: "Products"
+  description: "Search products, pricing, and production details."
+  context: "Catalog"
+  icon: "fi-price-tag"
+  route: products_path
+  permission: product_read?
+recipes:
+  label: "Recipes"
+  description: "Search and maintain production recipes."
+  context: "Catalog"
+  icon: "fi-clipboard-notes"
+  route: recipes_path
+  permission: product_read?

@@ -42,6 +42,7 @@ class User < ApplicationRecord
                             inverse_of: :created_by_user, dependent: :nullify
   has_many :orders_last_updated_by, class_name: "Order", foreign_key: :last_updated_by_user_id,
                                     inverse_of: :last_updated_by_user, dependent: :nullify
+  has_many :user_pinned_actions, -> { ordered }, dependent: :destroy, inverse_of: :user
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

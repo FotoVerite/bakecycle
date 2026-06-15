@@ -1,0 +1,33 @@
+<section class="dashboard-workspace dashboard-pinned-actions" aria-labelledby="dashboard-pins-heading">
+  <div class="dashboard-section-heading">
+    <div>
+      <h2 id="dashboard-pins-heading">Pinned Actions</h2>
+      <p>Your shortcuts to frequently used workflows.</p>
+    </div>
+    <%= link_to "Manage Pins", pinned_actions_path %>
+  </div>
+
+  <% if navigation_pinned_actions.any? %>
+    <div class="dashboard-pin-list">
+      <% navigation_pinned_actions.each do |action| %>
+        <%= link_to action.path, class: "dashboard-pin" do %>
+          <i class="<%= action.icon %>" aria-hidden="true"></i>
+          <span>
+            <strong><%= action.label %></strong>
+            <small><%= action.context %> · <%= action.description %></small>
+          </span>
+          <i class="fi-arrow-right dashboard-pin-arrow" aria-hidden="true"></i>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="dashboard-pin-empty">
+      <i class="fi-bookmark" aria-hidden="true"></i>
+      <div>
+        <strong>Keep frequent actions close</strong>
+        <p>Pin frequently used actions to keep them close at hand.</p>
+      </div>
+      <%= link_to "Choose Actions", pinned_actions_path, class: "button small secondary" %>
+    </div>
+  <% end %>
+</section>

@@ -42,6 +42,7 @@ describe User do
 
   it "has association" do
     expect(user).to belong_to(:bakery).optional
+    expect(user).to have_many(:user_pinned_actions).dependent(:destroy)
   end
 
   it "has validations" do

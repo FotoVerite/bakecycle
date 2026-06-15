@@ -2,10 +2,6 @@
 @use "sass:color";
 
 .side-column {
-  // Acts as large-2 / medium-12 column in the main flex row.
-  // The inner <div class="large-2 columns"> is display:block inside a flex item,
-  // so percentage widths resolve against .side-column's width, not the page.
-  // These rules give .side-column the correct flex sizing directly.
   flex: 0 0 100%;
   max-width: 100%;
 
@@ -19,129 +15,302 @@
     padding: 0;
     width: 100%;
   }
+}
 
-  .header {
-    text-transform: uppercase;
+.side-navigation {
+  background: color.mix($bc-off-white, $bc-white, 45%);
+  border-right: 1px solid $bc-lightgrey;
+  min-height: calc(100vh - 70px);
+  padding: 22px 14px 60px 17px;
+  width: 100%;
 
-    &:hover,
-    &:focus {
-      color: $bc-shakespeare;
-      cursor: pointer;
-    }
-  }
-
-  .side-navigation {
-    background: $white;
-    border: 1px solid $bc-lightgrey;
-    display: block;
-    height: auto;
-    width: 100%;
-
-    @media all and (max-width:1025px) {
-      display: none;
-    }
-
-    @media all and (min-width:1026px) {
-      display: block !important;
-    }
-  }
-
-  .main,
-  .sub {
-    list-style: none;
-    margin: 0;
-  }
-
-  .main {
-    color: $bc-silver-chalice;
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    line-height: 25px;
-    padding: 14px 16px 75px;
-
-    > li {
-      display: grid;
-      grid-template-columns: 25px minmax(0, 1fr);
-      column-gap: 12px;
-      padding: 10px 10px 16px;
-    }
-
-    @media all and (min-width: 1026px) and (max-width: 1291px) {
-      padding: 15px 10px 75px;
-
-      > li {
-        column-gap: 10px;
-        padding: 0 0 25px;
-      }
-    }
-  }
-
-  .sub {
+  @media all and (max-width: 1025px) {
     display: none;
-    font-size: 12px;
-    grid-column: 2;
-    padding: 14px 0 0;
-  }
+    min-height: auto;
 
-  .icon {
-    align-items: center;
-    display: flex;
-    grid-column: 1;
-    grid-row: 1;
-    height: 25px;
-    justify-content: center;
-    margin: 0;
-    width: 25px;
-
-    img {
+    &.is-mobile-open {
       display: block;
-      max-height: 25px;
-      max-width: 25px;
     }
   }
 
-  .header {
-    grid-column: 2;
-    grid-row: 1;
-    line-height: 25px;
-    min-width: 0;
-
-    a {
-      line-height: 25px;
-      text-transform: uppercase;
-    }
+  @media all and (min-width: 1026px) {
+    display: block !important;
   }
 
   a {
+    text-decoration: none;
+  }
+}
+
+.nav-primary-links {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 14px;
+}
+
+.nav-primary-link {
+  align-items: center;
+  border-radius: 5px;
+  color: $bc-scorpion;
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 700;
+  gap: 11px;
+  grid-template-columns: 22px minmax(0, 1fr);
+  margin-left: 3px;
+  min-height: 42px;
+  padding: 8px 10px;
+  position: relative;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+
+  &::before {
+    background: transparent;
+    border-radius: 0 3px 3px 0;
+    content: "";
+    height: 22px;
+    left: -13px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background-color 150ms ease-out, height 150ms ease-out;
+    width: 3px;
+  }
+
+  i {
+    color: $bc-silver-chalice;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: color 150ms ease-out;
+  }
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 37%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+
+  &.active {
+    background: color.adjust($bc-shakespeare, $lightness: 37%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+
+    &::before {
+      background: $bc-shakespeare;
+    }
+
+    i {
+      color: $bc-shakespeare;
+    }
+  }
+}
+
+.nav-icon {
+  display: block;
+  height: 22px;
+  width: 22px;
+}
+
+.nav-pins {
+  border-bottom: 1px solid $bc-lightgrey;
+  border-top: 1px solid $bc-lightgrey;
+  margin: 18px 0;
+  padding: 16px 4px 18px;
+
+  ul {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+
+  li a {
+    align-items: center;
+    border-radius: 4px;
     color: $bc-scorpion;
+    display: grid;
+    font-size: 0.78rem;
     font-weight: 600;
-    line-height: 32px;
-    text-transform: none;
+    gap: 10px;
+    grid-template-columns: 20px minmax(0, 1fr);
+    min-height: 38px;
+    padding: 7px 8px;
+    transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
+
+    i {
+      color: $bc-shakespeare;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    &:hover,
+    &:focus {
+      background: color.adjust($bc-shakespeare, $lightness: 39%);
+      color: color.adjust($bc-shakespeare, $lightness: -22%);
+      transform: translateX(2px);
+    }
+  }
+
+  p {
+    color: color.adjust($bc-scorpion, $lightness: 9%);
+    font-size: 0.74rem;
+    line-height: 1.4;
+    margin: 9px 7px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-primary-link,
+  .nav-pins li a {
+    transition: none;
+  }
+}
+
+.nav-section-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 7px;
+
+  span {
+    color: $bc-scorpion;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+}
+
+.nav-section-action {
+  align-items: center;
+  background: color.adjust($bc-shakespeare, $lightness: 34%);
+  border-radius: 4px;
+  color: color.adjust($bc-shakespeare, $lightness: -18%);
+  display: inline-flex;
+  font-size: 0.66rem;
+  font-weight: 700;
+  gap: 5px;
+  letter-spacing: 0.03em;
+  margin: -5px -7px;
+  padding: 6px 8px;
+  text-transform: uppercase;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+
+  i {
+    font-size: 0.78rem;
+  }
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 33%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-section-action {
+    transition: none;
+  }
+}
+
+.nav-groups {
+  padding-top: 12px;
+}
+
+.nav-group {
+  margin-bottom: 4px;
+
+  summary {
+    align-items: center;
+    border-radius: 5px;
+    color: $bc-scorpion;
+    cursor: pointer;
+    display: grid;
+    font-size: 0.8rem;
+    font-weight: 700;
+    gap: 10px;
+    grid-template-columns: 22px minmax(0, 1fr) 14px;
+    list-style: none;
+    margin-left: 3px;
+    min-height: 42px;
+    padding: 8px 10px;
+    position: relative;
+    text-transform: uppercase;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      background: transparent;
+      border-radius: 0 3px 3px 0;
+      content: "";
+      height: 22px;
+      left: -13px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: background-color 150ms ease-out;
+      width: 3px;
+    }
+
+    &:hover,
+    &:focus {
+      background: color.adjust($bc-off-white, $lightness: 1%);
+      color: color.adjust($bc-shakespeare, $lightness: -22%);
+    }
+  }
+
+  &[open] summary {
+    background: color.adjust($bc-shakespeare, $lightness: 37%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+
+    &::before {
+      background: $bc-shakespeare;
+    }
+  }
+
+  .nav-caret {
+    color: $bc-silver-chalice;
+    font-size: 0.72rem;
+    transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &[open] .nav-caret {
+    transform: rotate(180deg);
+  }
+
+  ul {
+    list-style: none;
+    margin: 2px 0 8px;
+    overflow: hidden;
+  }
+
+  li a {
+    border-radius: 4px;
+    color: $bc-scorpion;
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 5px 10px 5px 34px;
+    transition: color 150ms ease-out;
 
     &:hover,
     &:focus {
       color: $bc-shakespeare;
     }
-
-    .header {
-      font-weight: 600;
-    }
   }
 
-  .active,
-  .active > a {
-    color: $bc-shakespeare;
-    font-weight: 600;
+  li.active a {
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+    font-weight: 700;
   }
+}
 
-  .main > .active {
-    background: color.adjust($bc-shakespeare, $lightness: 36%);
-    border-radius: 4px;
-  }
-
-  .show-nav {
-    .sub {
-      display: block;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .nav-group .nav-caret,
+  .nav-group summary,
+  .nav-group summary::before,
+  .nav-group li a {
+    transition: none;
   }
 }

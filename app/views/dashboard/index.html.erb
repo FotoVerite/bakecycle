@@ -1,71 +1,47 @@
 <% provide(:title, "Dashboard") %>
 <div class="dashboard">
-  <div id="gross-profits"></div><br />
-  <div id="shipments"></div>
+  <header class="dashboard-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Production, delivery, and account activity for <%= current_bakery&.name %>.</p>
+    </div>
+  </header>
+
+  <%= render "daily_operations" %>
+  <%= render "pinned_actions" %>
+
+  <% if current_bakery.try(:graph_data) %>
+    <section class="dashboard-charts" aria-label="Bakery trends">
+      <div class="dashboard-chart" data-controller="dashboard-chart"
+           data-dashboard-chart-labels-value="<%= current_bakery.graph_data['dates'].to_json %>"
+           data-dashboard-chart-data-value="<%= current_bakery.graph_data['amounts'].to_json %>"
+           data-dashboard-chart-title-value="Gross Profit Per Day"
+           data-dashboard-chart-format-value="currency">
+        <button type="button" class="dashboard-chart-reset" data-action="click->dashboard-chart#resetZoom">Reset zoom</button>
+        <div class="dashboard-chart-canvas">
+          <canvas data-dashboard-chart-target="canvas"></canvas>
+        </div>
+        <p class="dashboard-chart-hint">Scroll to zoom, drag to pan</p>
+      </div>
+      <div class="dashboard-chart" data-controller="dashboard-chart"
+           data-dashboard-chart-labels-value="<%= current_bakery.graph_data['dates'].to_json %>"
+           data-dashboard-chart-data-value="<%= current_bakery.graph_data['product_counts'].to_json %>"
+           data-dashboard-chart-title-value="Total Shipments Per Day"
+           data-dashboard-chart-format-value="number">
+        <button type="button" class="dashboard-chart-reset" data-action="click->dashboard-chart#resetZoom">Reset zoom</button>
+        <div class="dashboard-chart-canvas">
+          <canvas data-dashboard-chart-target="canvas"></canvas>
+        </div>
+        <p class="dashboard-chart-hint">Scroll to zoom, drag to pan</p>
+      </div>
+    </section>
+  <% end %>
+
+  <div class="dashboard-overview">
   <%= render 'clients' if policy(:client).dashboard? %>
   <%= render 'production' if policy(:production).dashboard? %>
   <%= render 'products' if policy(:product).dashboard? %>
   <%= render 'changes' if policy(:client).dashboard? %>
   <%= render 'admin' %>
+  </div>
 </div>
-
-<%= content_for :head do %>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<% end %>
-
-<%= content_for :js do %>
- <script>
-  <% if  current_bakery.try(:graph_data) %>
-    PROFITS = document.getElementById('gross-profits');
-    SHIPMENTS = document.getElementById('shipments');
-
-
-    var profit = {
-      type: "scatter",
-      mode: "lines",
-      x: <%= raw current_bakery.graph_data['dates'] %>,
-      y: <%= raw current_bakery.graph_data['amounts'] %>,
-      line: {color: '#17BECF'}
-    }
-
-    var data = [profit];
-
-    var layout = {
-      title: 'Gross Profit Per Day',
-      yaxis: {
-        tickformat: ',',
-        tickprefix: '$',
-        type: 'currency'
-      },
-      xaxis: {
-        range: ['<%= Date.today.beginning_of_year %>', '<%= Date.today %>'],
-        type: 'date'
-      }
-    };
-
-    var shipment = {
-      type: "scatter",
-      mode: "lines",
-      x: <%= raw current_bakery.graph_data['dates'] %>,
-      y: <%= raw current_bakery.graph_data['product_counts'] %>,
-      line: {color: '#17BECF'}
-    }
-
-    var shipment_data = [shipment];
-
-    var shipment_layout = {
-      title: 'Total Shipments Per Day',
-      yaxis: {
-        tickformat: ','
-      },
-      xaxis: {
-        range: ['<%= Date.today.beginning_of_year %>', '<%= Date.today %>'],
-        type: 'date'
-      }
-    };
-
-    Plotly.newPlot(PROFITS, data, layout,  {displaylogo: false});
-    Plotly.newPlot(SHIPMENTS, shipment_data, shipment_layout,  {displaylogo: false});
-  <% end %>
- </script>
-<% end %>

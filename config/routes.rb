@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   get "plans", to: "landing_pages#plans"
   get :dashboard, to: "dashboard#index"
 
+  resources :pinned_actions, only: %i[index create destroy] do
+    patch :reorder, on: :collection
+  end
+
   resource :production_checklist, only: [:show]
   resource :nightly_sign_off, only: [:show]
   resources :registrations, only: %i[new]

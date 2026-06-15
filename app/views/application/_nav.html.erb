@@ -1,129 +1,107 @@
 <div class="side-column">
   <div class="large-2 medium-12 small-12 columns">
-    <div class="side-navigation js-nav-toggle">
-      <ul class="main">
-        <li class="show-nav <%= active_nav?(:dashboard) %>">
-          <span class="icon"><%= image_tag 'icons/icon-dashboard.svg'%></span>
-          <span class="header"><%= link_to("Dashboard", dashboard_path) %></span>
-          <ul class='sub'>
-            <li class="<%= active_nav?(:reports) %>"><%= link_to("Reports", reports_path) %></li>
+    <nav class="side-navigation js-nav-toggle" data-controller="navigation" aria-label="Primary navigation">
+      <div class="nav-primary-links">
+        <%= link_to dashboard_path, class: "nav-primary-link #{'active' if active_nav_group?(:dashboard)}" do %>
+          <%= image_tag "icons/icon-dashboard.svg", alt: "", class: "nav-icon" %>
+          <span>Dashboard</span>
+        <% end %>
+        <%= link_to reports_path, class: "nav-primary-link #{'active' if active_nav_group?(:reports)}" do %>
+          <i class="fi-graph-bar" aria-hidden="true"></i>
+          <span>Reports</span>
+        <% end %>
+      </div>
+
+      <section class="nav-pins" aria-labelledby="nav-pins-heading">
+        <div class="nav-section-heading">
+          <span id="nav-pins-heading">Pinned</span>
+          <%= link_to pinned_actions_path, class: "nav-section-action" do %>
+            <i class="fi-widget" aria-hidden="true"></i>
+            Manage
+          <% end %>
+        </div>
+        <% if navigation_pinned_actions.any? %>
+          <ul>
+            <% navigation_pinned_actions.each do |action| %>
+              <li>
+                <%= link_to action.path do %>
+                  <i class="<%= action.icon %>" aria-hidden="true"></i>
+                  <span><%= action.label %></span>
+                <% end %>
+              </li>
+            <% end %>
           </ul>
-        </li>
+        <% else %>
+          <p>Pin frequent actions to keep them close.</p>
+        <% end %>
+      </section>
 
+      <div class="nav-groups">
         <% if policy(Client).index? %>
-            <li class="show-nav <%= active_nav?(:clients, :orders, :shipments) %>">
-              <span class="icon"><%= image_tag 'icons/icon-client.svg'%></span>
-              <span class="header">Clients</span>
-
-              <ul class="sub">
-                <li class="<%= active_nav?(:clients) %>"><%= link_to("Clients", clients_path) %></li>
-                <li class="<%= active_nav?(:orders) %>"><%= link_to("Orders", orders_path) %></li>
-                <li class="<%= active_nav?(:shipments) %>"><%= link_to("Invoices", shipments_path) %></li>
-              </ul>
-            </li>
-          <% end %>
-
-        <% if current_bakery %>
-          <% if policy(ProductionRun).index? %>
-            <li class="show-nav <%= active_nav?(:print_recipes, :batch_recipes, :production_runs, :daily_totals) %>">
-              <span class="icon"><%= image_tag 'icons/icon-production.svg'%></span>
-              <span class="header">Production</span>
-
-              <ul class="sub">
-                <li class="<%= active_nav?(:print_recipes) %>"><%= link_to("Print Recipes", print_recipes_path) %></li>
-                <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to("Print Batch Recipes", batch_recipes_path) %></li>
-                <li class="<%= active_nav?(:daily_totals) %>"><%= link_to("Print Daily Totals", daily_totals_path) %></li>
-                <li class="<%= active_nav?(:production_runs) %>"><%= link_to("Production Runs", production_runs_path) %></li>
-                <li class="<%= active_nav?(:production_checklists) %>"><%= link_to("Checklist", production_checklist_path) %></li>
-              </ul>
-            </li>
-
-          <% end %>
-
-          <% if policy(Route).index? %>
-            <li class="show-nav <%= active_nav?(:routes, :delivery_lists, :packing_slips) %>">
-              <span class="icon"><%= image_tag 'icons/icon-shipping.svg'%></span>
-              <span class="header">Shipping</span>
-
-              <ul class="sub">
-                <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to("Print Delivery Lists", delivery_lists_path) %></li>
-                <li class="<%= active_nav?(:packing_slips) %>"><%= link_to("Print Packing Slips", packing_slips_path) %></li>
-                <li class="<%= active_nav?(:routes) %>"><%= link_to("Routes", routes_path) %></li>
-              </ul>
-            </li>
-          <% end %>
-
-          <% if policy(Product).index? %>
-            <li class="show-nav <%= active_nav?(:ingredients, :recipes, :products) %>">
-              <span class="icon"><%= image_tag 'icons/icon-product.svg'%></span>
-              <span class="header">Products</span>
-              <ul class="sub">
-                <li class="<%= active_nav?(:ingredients) %>">
-                  <%= link_to("Ingredients", ingredients_path)%>
-                </li>
-                <li class="<%= active_nav?(:recipes) %>">
-                  <%= link_to("Recipes", recipes_path) %>
-                </li>
-                <li class="<%= active_nav?(:products) %>">
-                  <%= link_to("Products", products_path) %>
-                </li>
-                <li class="<%= active_nav?(:vendors) %>">
-                  <%= link_to("Vendors", vendors_path) %>
-                </li>
-                 <li class="<%= active_nav?(:buy_orders) %>">
-                  <%= link_to("Buy Orders", buy_orders_path) %>
-                </li>
-              </ul>
-            </li>
-          <% end %>
+          <details class="nav-group" <%= "open" if active_nav_group?(:clients, :orders, :shipments) %>>
+            <summary data-action="click->navigation#toggleGroup">
+              <%= image_tag "icons/icon-client.svg", alt: "", class: "nav-icon" %>
+              <span>Clients</span>
+              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+            </summary>
+            <ul>
+              <li class="<%= active_nav?(:clients) %>"><%= link_to "Clients", clients_path %></li>
+              <li class="<%= active_nav?(:orders) %>"><%= link_to "Orders", orders_path %></li>
+              <li class="<%= active_nav?(:shipments) %>"><%= link_to "Invoices", shipments_path %></li>
+            </ul>
+          </details>
         <% end %>
 
-        <li class="show-nav <%= active_nav?(:users, :bakeries, :my_bakery) %>">
-          <span class="icon"><%= image_tag 'icons/icon-account.svg'%></span>
-          <span class="header">Admin</span>
+        <% if current_bakery && policy(ProductionRun).index? %>
+          <details class="nav-group" <%= "open" if active_nav_group?(:print_recipes, :batch_recipes, :production_runs, :production_checklists, :daily_totals) %>>
+            <summary data-action="click->navigation#toggleGroup">
+              <%= image_tag "icons/icon-production.svg", alt: "", class: "nav-icon" %>
+              <span>Production</span>
+              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+            </summary>
+            <ul>
+              <li class="<%= active_nav?(:print_recipes) %>"><%= link_to "Daily Recipes", print_recipes_path %></li>
+              <li class="<%= active_nav?(:batch_recipes) %>"><%= link_to "Batch Recipes", batch_recipes_path %></li>
+              <li class="<%= active_nav?(:daily_totals) %>"><%= link_to "Daily Totals", daily_totals_path %></li>
+              <li class="<%= active_nav?(:production_runs) %>"><%= link_to "Production Runs", production_runs_path %></li>
+              <li class="<%= active_nav?(:production_checklists) %>"><%= link_to "Checklist", production_checklist_path %></li>
+            </ul>
+          </details>
+        <% end %>
 
-          <ul class="sub">
-            <% if policy(User).index? %>
-              <li class="<%= active_nav?(:users) %>">
-                <%= link_to("Users", users_path) %>
-              </li>
-            <% end %>
+        <% if current_bakery && policy(Route).index? %>
+          <details class="nav-group" <%= "open" if active_nav_group?(:routes, :delivery_lists, :packing_slips, :nightly_sign_offs) %>>
+            <summary data-action="click->navigation#toggleGroup">
+              <%= image_tag "icons/icon-shipping.svg", alt: "", class: "nav-icon" %>
+              <span>Shipping</span>
+              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+            </summary>
+            <ul>
+              <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to "Delivery Lists", delivery_lists_path %></li>
+              <li class="<%= active_nav?(:packing_slips) %>"><%= link_to "Packing Slips", packing_slips_path %></li>
+              <li class="<%= active_nav?(:nightly_sign_offs) %>"><%= link_to "Nightly Sign Off", nightly_sign_off_path %></li>
+              <li class="<%= active_nav?(:routes) %>"><%= link_to "Routes", routes_path %></li>
+            </ul>
+          </details>
+        <% end %>
 
-            <% if policy(PublicClientUser).index? && false %>
-              <li class="<%= active_nav?(:public_client_users) %>">
-                <%= link_to("Public Client Users", public_client_users_path) %>
-              </li>
-            <% end %>
-
-            <% if policy(current_user).edit? %>
-              <li class="<%= active_nav?(:my_account) %>">
-                <%= link_to('My Account', my_users_path) %>
-              </li>
-            <% end %>
-
-            <% if policy(Bakery).index? %>
-              <li class="<%= active_nav?(:bakeries) %>">
-                <%= link_to('Bakeries', bakeries_path) %>
-              </li>
-            <% end %>
-
-
-            <%if current_bakery && policy(current_bakery).edit? %>
-              <li class="<%= active_nav?(:my_bakery) %>">
-                <%= link_to('My Bakery', my_bakeries_path) %>
-              </li>
-            <% end %>
-
-            <% if policy(:job).dashboard? %>
-              <li><%= link_to "Jobs", mission_control_jobs.root_path %></li>
-            <% end %>
-
-            <% if user_signed_in? %>
-              <li><%= link_to "Log Out", destroy_user_session_path, data: { turbo_method: :delete } %></li>
-            <% end %>
-          </ul>
-        </li>
-      </ul>
-    </div>
+        <% if current_bakery && policy(Product).index? %>
+          <details class="nav-group" <%= "open" if active_nav_group?(:ingredients, :recipes, :products, :vendors, :buy_orders) %>>
+            <summary data-action="click->navigation#toggleGroup">
+              <%= image_tag "icons/icon-product.svg", alt: "", class: "nav-icon" %>
+              <span>Catalog</span>
+              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+            </summary>
+            <ul>
+              <li class="<%= active_nav?(:ingredients) %>"><%= link_to "Ingredients", ingredients_path %></li>
+              <li class="<%= active_nav?(:recipes) %>"><%= link_to "Recipes", recipes_path %></li>
+              <li class="<%= active_nav?(:products) %>"><%= link_to "Products", products_path %></li>
+              <li class="<%= active_nav?(:vendors) %>"><%= link_to "Vendors", vendors_path %></li>
+              <li class="<%= active_nav?(:buy_orders) %>"><%= link_to "Buy Orders", buy_orders_path %></li>
+            </ul>
+          </details>
+        <% end %>
+      </div>
+    </nav>
   </div>
 </div>

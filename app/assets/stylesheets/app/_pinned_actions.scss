@@ -1,0 +1,248 @@
+@use "sass:color";
+
+.pinned-actions-page {
+  padding-bottom: 32px;
+}
+
+.pinned-actions-section {
+  @extend %bc-card;
+  margin-bottom: 18px;
+}
+
+.pinned-actions-heading {
+  align-items: center;
+  border-bottom: 1px solid $bc-border-grey;
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 20px;
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  p {
+    color: $bc-scorpion;
+    margin: 4px 0 0;
+  }
+}
+
+.pinned-actions-hint {
+  align-items: center;
+  color: $bc-scorpion;
+  display: flex;
+  font-size: 0.78rem;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 20px 0;
+
+  i {
+    color: $bc-silver-chalice;
+    font-size: 0.95rem;
+  }
+}
+
+.pinned-actions-status {
+  color: color.adjust($bc-lima, $lightness: -22%);
+  font-size: 0.76rem;
+  font-weight: 600;
+  margin: 0;
+  min-height: 1.4em;
+  padding: 8px 20px 0;
+
+  &--error,
+  &.pinned-actions-status--error {
+    color: $bc-alizarin-crimson;
+  }
+}
+
+.pinned-actions-list {
+  list-style: none;
+  margin: 0;
+
+  li {
+    align-items: center;
+    border-bottom: 1px solid $bc-border-grey;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 44px 38px minmax(0, 1fr) auto;
+    min-height: 78px;
+    padding: 12px 20px;
+  }
+
+  li:last-child {
+    border-bottom: 0;
+  }
+}
+
+.available-actions-list .available-action-row {
+  align-items: center;
+  border-bottom: 1px solid $bc-border-grey;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  min-height: 72px;
+  padding: 12px 20px;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .button,
+  form {
+    margin: 0;
+  }
+}
+
+.pinned-action-icon {
+  align-items: center;
+  background: color.adjust($bc-shakespeare, $lightness: 38%);
+  border-radius: 5px;
+  color: color.adjust($bc-shakespeare, $lightness: -22%);
+  display: flex;
+  font-size: 1.15rem;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.pinned-action-copy {
+  min-width: 0;
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    color: $bc-charcoal;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  span {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    margin-top: 3px;
+  }
+}
+
+.pinned-action-controls {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+
+  form {
+    margin: 0;
+  }
+}
+
+.pinned-action-remove {
+  align-items: center;
+  @extend %bc-card;
+  border-radius: 4px;
+  color: $bc-scorpion;
+  display: inline-flex;
+  font-size: 0.76rem;
+  gap: 6px;
+  height: 36px;
+  justify-content: center;
+  margin: 0;
+  padding: 0 10px;
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 39%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 22%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+
+  &:disabled {
+    background: $bc-off-white;
+    color: $bc-silver-chalice;
+    cursor: default;
+  }
+}
+
+.pinned-action-move {
+  align-items: center;
+  @extend %bc-card;
+  border-radius: 4px;
+  color: $bc-scorpion;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  margin: 0;
+  width: 36px;
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 39%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 22%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+
+  &:disabled {
+    background: $bc-off-white;
+    color: $bc-silver-chalice;
+    cursor: default;
+  }
+}
+
+.pinned-state {
+  color: color.adjust($bc-lima, $lightness: -22%);
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  &--limit {
+    color: $bc-scorpion;
+    font-weight: 600;
+    text-align: right;
+  }
+}
+
+.pinned-actions-empty {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  min-height: 110px;
+  padding: 24px;
+
+  > i {
+    color: $bc-shakespeare;
+    font-size: 1.8rem;
+  }
+
+  strong {
+    color: $bc-charcoal;
+    display: block;
+  }
+
+  p {
+    color: $bc-scorpion;
+    margin: 4px 0 0;
+  }
+}
+
+@media #{$small-only} {
+  .pinned-actions-list li {
+    grid-template-columns: 44px 34px minmax(0, 1fr);
+  }
+
+  .available-actions-list .available-action-row {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .pinned-action-controls,
+  .available-actions-list form,
+  .pinned-state {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
+  .pinned-state--limit {
+    text-align: right;
+  }
+}

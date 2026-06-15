@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20251110031301) do
+ActiveRecord::Schema.define(version: 20260613000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -421,6 +421,17 @@ ActiveRecord::Schema.define(version: 20251110031301) do
     t.index ["order_id"], name: "index_shipments_on_order_id"
   end
 
+  create_table "user_pinned_actions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "action_key", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "action_key"], name: "index_user_pinned_actions_on_user_id_and_action_key", unique: true
+    t.index ["user_id", "position"], name: "index_user_pinned_actions_on_user_id_and_position"
+    t.index ["user_id"], name: "index_user_pinned_actions_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "name", default: "", null: false
@@ -501,5 +512,6 @@ ActiveRecord::Schema.define(version: 20251110031301) do
   add_foreign_key "shipment_items", "production_runs", name: "shipment_items_production_run_id_fk", on_delete: :nullify
   add_foreign_key "shipment_items", "shipments", name: "shipment_items_shipment_id_fk", on_delete: :cascade
   add_foreign_key "shipments", "bakeries", name: "shipments_bakery_id_fk"
+  add_foreign_key "user_pinned_actions", "users"
   add_foreign_key "users", "bakeries", name: "users_bakery_id_fk"
 end

@@ -1,5 +1,291 @@
 @use "sass:color";
 .dashboard {
+  padding-bottom: 36px;
+
+  .dashboard-header {
+    align-items: center;
+    @extend %bc-card;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0 18px;
+    min-height: 96px;
+    padding: 20px 24px;
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    p {
+      color: $bc-scorpion;
+      line-height: 1.45;
+      margin: 0.35rem 0 0;
+    }
+  }
+
+  .dashboard-workspace {
+    @extend %bc-card;
+    margin-bottom: 18px;
+  }
+
+  .dashboard-section-heading {
+    align-items: center;
+    border-bottom: 1px solid $bc-border-grey;
+    display: flex;
+    gap: 18px;
+    justify-content: space-between;
+    padding: 16px 20px;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    p {
+      color: $bc-scorpion;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      margin: 3px 0 0;
+    }
+
+    > a {
+      color: $bc-shakespeare;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    time {
+      color: $bc-scorpion;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  }
+
+  .daily-operation-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .daily-operation {
+    align-items: center;
+    border-bottom: 1px solid $bc-border-grey;
+    color: $bc-charcoal;
+    display: grid;
+    gap: 13px;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    min-height: 78px;
+    padding: 12px 18px;
+
+    &:nth-child(odd) {
+      border-right: 1px solid $bc-border-grey;
+    }
+
+    &:hover,
+    &:focus {
+      background: color.adjust($bc-shakespeare, $lightness: 40%);
+      color: $bc-charcoal;
+    }
+
+    > i {
+      align-items: center;
+      background: color.adjust($bc-shakespeare, $lightness: 37%);
+      border-radius: 5px;
+      color: color.adjust($bc-shakespeare, $lightness: -22%);
+      display: flex;
+      font-size: 1.15rem;
+      height: 38px;
+      justify-content: center;
+      width: 38px;
+    }
+
+    &--checklist > i {
+      background: color.adjust($bc-shakespeare, $hue: 25deg, $lightness: 35%);
+      color: color.adjust($bc-shakespeare, $hue: 25deg, $lightness: -25%);
+    }
+
+    &--packing > i {
+      background: color.mix(#e0a458, $bc-white, 35%);
+      color: color.adjust(#e0a458, $lightness: -18%);
+    }
+
+    &--signoff > i {
+      background: color.adjust($bc-lima, $lightness: 38%);
+      color: color.adjust($bc-lima, $lightness: -28%);
+    }
+
+    strong,
+    small {
+      display: block;
+    }
+
+    strong {
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    small {
+      color: $bc-scorpion;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      margin-top: 3px;
+    }
+  }
+
+  .daily-operation-state {
+    color: $bc-shakespeare;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .dashboard-pin-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .dashboard-pin {
+    align-items: center;
+    border-bottom: 1px solid $bc-border-grey;
+    color: $bc-charcoal;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 34px minmax(0, 1fr) 16px;
+    min-height: 72px;
+    padding: 12px 18px;
+
+    &:hover,
+    &:focus {
+      background: color.adjust($bc-off-white, $lightness: 1%);
+      color: $bc-charcoal;
+    }
+
+    > i:first-child {
+      color: $bc-shakespeare;
+      font-size: 1.25rem;
+      text-align: center;
+    }
+
+    strong,
+    small {
+      display: block;
+    }
+
+    strong {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    small {
+      color: $bc-scorpion;
+      font-size: 0.73rem;
+      line-height: 1.35;
+      margin-top: 3px;
+    }
+  }
+
+  .dashboard-pin-arrow {
+    color: $bc-silver-chalice !important;
+    font-size: 0.85rem !important;
+  }
+
+  .dashboard-pin-empty {
+    align-items: center;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    min-height: 92px;
+    padding: 18px 20px;
+
+    > i {
+      color: $bc-shakespeare;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    strong {
+      color: $bc-charcoal;
+      display: block;
+    }
+
+    p {
+      color: $bc-scorpion;
+      font-size: 0.8rem;
+      margin: 3px 0 0;
+    }
+
+    .button {
+      margin: 0;
+    }
+  }
+
+  .dashboard-charts {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 18px;
+
+    > div {
+      @extend %bc-card;
+      min-width: 0;
+      min-height: 340px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .dashboard-chart {
+      padding: 16px;
+      position: relative;
+    }
+
+    .dashboard-chart-canvas {
+      height: 300px;
+      position: relative;
+      width: 100%;
+    }
+
+    .dashboard-chart-reset {
+      @extend %bc-card;
+      border-radius: 4px;
+      color: $bc-scorpion;
+      cursor: pointer;
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      z-index: 1;
+
+      &:hover {
+        border-color: color.adjust($bc-border-grey, $lightness: -8%);
+        color: $bc-charcoal;
+      }
+    }
+
+    .dashboard-chart-hint {
+      color: $bc-scorpion;
+      font-size: 0.72rem;
+      margin: 6px 0 0;
+      text-align: right;
+    }
+  }
+
+  .dashboard-overview {
+    > .row {
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+    }
+
+    > .row > .columns {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+
   h2 {
     color: $bc-scorpion;
     font-size: 1.65rem;
@@ -94,5 +380,51 @@
 
   .border {
     border: 1px solid $bc-border-grey;
+  }
+}
+
+@media #{$medium-only} {
+  .dashboard {
+    .dashboard-charts {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media #{$small-only} {
+  .dashboard {
+    .dashboard-header,
+    .dashboard-section-heading {
+      align-items: flex-start;
+      display: block;
+    }
+
+    .dashboard-section-heading time,
+    .dashboard-section-heading > a {
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    .daily-operation-list,
+    .dashboard-charts {
+      grid-template-columns: 1fr;
+    }
+
+    .daily-operation:nth-child(odd) {
+      border-right: 0;
+    }
+
+    .daily-operation-state {
+      display: none;
+    }
+
+    .dashboard-pin-empty {
+      grid-template-columns: 34px minmax(0, 1fr);
+
+      .button {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+    }
   }
 }

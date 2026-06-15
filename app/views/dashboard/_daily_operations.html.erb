@@ -1,0 +1,40 @@
+<section class="dashboard-workspace dashboard-daily-operations" aria-labelledby="daily-operations-heading">
+  <div class="dashboard-section-heading">
+    <div>
+      <h2 id="daily-operations-heading">Daily Operations</h2>
+      <p>System workflows for today’s production and deliveries.</p>
+    </div>
+    <time datetime="<%= Time.zone.today.iso8601 %>"><%= Time.zone.today.to_fs(:long) %></time>
+  </div>
+
+  <div class="daily-operation-list">
+    <% if PinnedActionRegistry.available?("daily_recipes", current_user) %>
+      <%= link_to print_recipes_path(date: Time.zone.today), class: "daily-operation daily-operation--recipes" do %>
+        <i class="fi-clipboard-notes" aria-hidden="true"></i>
+        <span><strong>Daily Recipes</strong><small>Review and print today’s production quantities.</small></span>
+        <span class="daily-operation-state">Open <i class="fi-arrow-right" aria-hidden="true"></i></span>
+      <% end %>
+    <% end %>
+    <% if PinnedActionRegistry.available?("production_checklist", current_user) %>
+      <%= link_to production_checklist_path, class: "daily-operation daily-operation--checklist" do %>
+        <i class="fi-checkbox" aria-hidden="true"></i>
+        <span><strong>Production Checklist</strong><small>Review orders that still need production attention.</small></span>
+        <span class="daily-operation-state">Review <i class="fi-arrow-right" aria-hidden="true"></i></span>
+      <% end %>
+    <% end %>
+    <% if PinnedActionRegistry.available?("packing_slips", current_user) %>
+      <%= link_to packing_slips_path(date: Time.zone.today), class: "daily-operation daily-operation--packing" do %>
+        <i class="fi-page-export-pdf" aria-hidden="true"></i>
+        <span><strong>Packing Slips</strong><small>Prepare client paperwork for today’s deliveries.</small></span>
+        <span class="daily-operation-state">Prepare <i class="fi-arrow-right" aria-hidden="true"></i></span>
+      <% end %>
+    <% end %>
+    <% if PinnedActionRegistry.available?("nightly_sign_off", current_user) %>
+      <%= link_to nightly_sign_off_path(date: Time.zone.today), class: "daily-operation daily-operation--signoff" do %>
+        <i class="fi-check" aria-hidden="true"></i>
+        <span><strong>Nightly Sign Off</strong><small>Confirm boxes and bags before dispatch.</small></span>
+        <span class="daily-operation-state">Sign off <i class="fi-arrow-right" aria-hidden="true"></i></span>
+      <% end %>
+    <% end %>
+  </div>
+</section>
