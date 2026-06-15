@@ -38,7 +38,7 @@
 
       <div class="nav-groups">
         <% if policy(Client).index? %>
-          <details class="nav-group" <%= "open" if active_nav_group?(:clients, :orders, :shipments) %>>
+          <details class="nav-group" <%= "open" if active_nav_group?(:clients, :orders, :shipments, :cancellations) %>>
             <summary data-action="click->navigation#toggleGroup">
               <%= image_tag "icons/icon-client.svg", alt: "", class: "nav-icon" %>
               <span>Clients</span>
@@ -48,6 +48,9 @@
               <li class="<%= active_nav?(:clients) %>"><%= link_to "Clients", clients_path %></li>
               <li class="<%= active_nav?(:orders) %>"><%= link_to "Orders", orders_path %></li>
               <li class="<%= active_nav?(:shipments) %>"><%= link_to "Invoices", shipments_path %></li>
+              <% if policy(Client).new? %>
+                <li class="<%= active_nav?(:cancellations) %>"><%= link_to "Cancellations", new_cancellation_path %></li>
+              <% end %>
             </ul>
           </details>
         <% end %>

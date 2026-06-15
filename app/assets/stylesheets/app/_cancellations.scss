@@ -1,0 +1,623 @@
+@use "sass:color";
+
+.cancellation-page {
+  // ── Toolbar ──────────────────────────────────────────────────────────
+  .cancellation-toolbar {
+    @extend %bc-card;
+    display: grid;
+    gap: 16px 24px;
+    grid-template-columns: auto 1fr;
+    align-items: end;
+    margin-bottom: 16px;
+    padding: 18px 20px;
+
+    @media #{$small-only} {
+      display: block;
+    }
+  }
+
+  .cancellation-date-field,
+  .cancellation-filter-field {
+    label {
+      color: $bc-scorpion;
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    input[type="date"],
+    input[type="text"],
+    select {
+      border-color: $bc-border-grey;
+      box-sizing: border-box;
+      font-size: 0.95rem;
+      height: 40px;
+      margin: 0;
+      min-height: 40px;
+      padding: 0 10px;
+      width: 100%;
+    }
+  }
+
+  .cancellation-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    @media #{$small-only} {
+      display: block;
+    }
+  }
+
+  // ── Selection layout (available clients + cart) ────────────────────────
+  .cancellation-layout {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr 320px;
+    margin-bottom: 16px;
+
+    @media #{$small-only} {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cancellation-available {
+    @extend %bc-card;
+    min-width: 0;
+  }
+
+  .cancellation-list-header {
+    align-items: center;
+    border-bottom: 2px solid $bc-border-grey;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+
+  .cancellation-list-title {
+    color: $bc-scorpion;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .cancellation-select-all {
+    background: none;
+    border: 1px solid $bc-border-grey;
+    border-radius: 4px;
+    color: $bc-shakespeare;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+    text-transform: uppercase;
+    transition: background 100ms ease-out, border-color 100ms ease-out;
+
+    &:hover {
+      background: color.adjust($bc-shakespeare, $lightness: 41%);
+      border-color: $bc-shakespeare;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $bc-shakespeare;
+      outline-offset: 1px;
+    }
+  }
+
+  .cancellation-visible-count {
+    color: $bc-silver-chalice;
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .cancellation-client-rows {
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  .cancellation-client-row {
+    align-items: center;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
+    color: $bc-scorpion;
+    cursor: pointer;
+    display: flex;
+    font-family: inherit;
+    gap: 10px;
+    margin: 0;
+    padding: 9px 14px;
+    text-align: left;
+    transition: background 100ms ease-out;
+    width: 100%;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:hover {
+      background: color.adjust($bc-shakespeare, $lightness: 41%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $bc-shakespeare;
+      outline-offset: -2px;
+    }
+
+    &[data-selected="true"] {
+      background: color.adjust($bc-shakespeare, $lightness: 38%);
+
+      .cancellation-client-check {
+        background: $bc-shakespeare;
+        border-color: $bc-shakespeare;
+
+        &::after {
+          content: "\2713";
+          color: $bc-white;
+        }
+      }
+    }
+  }
+
+  .cancellation-client-check {
+    align-items: center;
+    border: 2px solid $bc-border-grey;
+    border-radius: 4px;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    height: 18px;
+    justify-content: center;
+    line-height: 1;
+    transition: background 100ms ease-out, border-color 100ms ease-out;
+    width: 18px;
+  }
+
+  .cancellation-client-name {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+
+  .cancellation-client-route {
+    color: $bc-silver-chalice;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  // ── Cart (to be cancelled) ───────────────────────────────────────────
+  .cancellation-cart {
+    @extend %bc-card;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 40px);
+    position: sticky;
+    top: 20px;
+
+    @media #{$small-only} {
+      max-height: none;
+      position: static;
+    }
+  }
+
+  .cancellation-cart-header {
+    align-items: center;
+    background: $bc-white;
+    border: 0;
+    border-bottom: 2px solid $bc-border-grey;
+    color: $bc-scorpion;
+    cursor: default;
+    display: flex;
+    font-family: inherit;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 10px 14px;
+    text-align: left;
+    width: 100%;
+
+    h2 {
+      color: $bc-scorpion;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $bc-shakespeare;
+      outline-offset: -2px;
+    }
+  }
+
+  .cancellation-cart-chevron {
+    display: none;
+  }
+
+  .cancellation-cart-count {
+    align-items: center;
+    background: $bc-border-grey;
+    border-radius: 999px;
+    color: $bc-scorpion;
+    display: flex;
+    font-size: 0.78rem;
+    font-weight: 700;
+    height: 22px;
+    justify-content: center;
+    min-width: 22px;
+    padding: 0 6px;
+    transition: background 150ms ease-out, color 150ms ease-out;
+  }
+
+  .cancellation-cart.has-selection .cancellation-cart-count {
+    background: $bc-shakespeare;
+    color: $bc-white;
+  }
+
+  .cancellation-cart-empty {
+    color: $bc-silver-chalice;
+    font-size: 0.85rem;
+    margin: 0;
+    padding: 24px 16px;
+    text-align: center;
+  }
+
+  .cancellation-cart-list {
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 0;
+
+    @media #{$small-only} {
+      max-height: 320px;
+    }
+  }
+
+  .cancellation-cart-item {
+    align-items: center;
+    border-bottom: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
+    display: flex;
+    gap: 8px;
+    padding: 8px 14px;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .cancellation-cart-item-name {
+    flex: 1;
+    font-size: 0.88rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cancellation-cart-item-route {
+    color: $bc-silver-chalice;
+    flex-shrink: 0;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .cancellation-cart-item-remove {
+    align-items: center;
+    align-self: center;
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    color: $bc-silver-chalice;
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    height: 28px;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    transition: background 100ms ease-out, color 100ms ease-out;
+    width: 28px;
+
+    i {
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    &:hover {
+      background: color.adjust($bc-alizarin-crimson, $lightness: 38%);
+      color: $bc-alizarin-crimson;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $bc-shakespeare;
+      outline-offset: 1px;
+    }
+  }
+
+  .cancellation-cart-footer {
+    border-top: 1px solid $bc-border-grey;
+    padding: 14px;
+
+    .button {
+      margin: 0;
+      width: 100%;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  // ── Mobile sticky cart ────────────────────────────────────────────────
+  // z-index scale (this page only): 1 = sticky cart summary
+  @media #{$small-only} {
+    .cancellation-layout {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cancellation-available {
+      order: 2;
+    }
+
+    .cancellation-cart {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      max-height: none;
+      order: 1;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .cancellation-cart-header {
+      cursor: pointer;
+      padding: 12px 14px;
+    }
+
+    .cancellation-client-row {
+      padding: 12px 14px;
+    }
+
+    .cancellation-select-all {
+      padding: 9px 12px;
+    }
+
+    .cancellation-cart-chevron {
+      border-bottom: 2px solid $bc-silver-chalice;
+      border-right: 2px solid $bc-silver-chalice;
+      display: block;
+      flex-shrink: 0;
+      height: 7px;
+      transform: rotate(45deg);
+      transition: transform 200ms ease-out;
+      width: 7px;
+    }
+
+    // Collapsed by default: only the header (name + count + chevron) shows.
+    .cancellation-cart-empty,
+    .cancellation-cart-list,
+    .cancellation-cart-footer {
+      display: none;
+    }
+
+    .cancellation-cart-expanded {
+      .cancellation-cart-chevron {
+        transform: rotate(225deg);
+      }
+
+      .cancellation-cart-empty {
+        display: block;
+      }
+
+      .cancellation-cart-list:not([hidden]) {
+        display: block;
+      }
+
+      .cancellation-cart-footer {
+        display: block;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cancellation-cart-chevron {
+      transition: none;
+    }
+  }
+
+  // ── Preview / confirmation ────────────────────────────────────────────
+  .cancellation-preview {
+    @extend %bc-card;
+    padding: 20px;
+  }
+
+  .cancellation-preview-header {
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    p {
+      color: $bc-scorpion;
+      margin: 0;
+    }
+  }
+
+  .cancellation-group {
+    margin-bottom: 20px;
+  }
+
+  .cancellation-group-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin: 0 0 6px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+
+    &--cancel {
+      background: color.adjust($bc-alizarin-crimson, $lightness: 36%);
+      color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+    }
+
+    &--warn {
+      background: #fef9e7;
+      color: #7d5800;
+    }
+
+    &--skip {
+      background: $bc-verylightgrey;
+      color: $bc-scorpion;
+    }
+  }
+
+  .cancellation-group-note {
+    color: $bc-scorpion;
+    font-size: 0.85rem;
+    margin: 0 0 8px;
+  }
+
+  .cancellation-force-label {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .cancellation-force-cb {
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  .cancellation-confirm-actions {
+    align-items: center;
+    border-top: 1px solid $bc-border-grey;
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+
+    .button {
+      margin: 0;
+    }
+  }
+
+  // ── Summary table (shared by preview + results) ───────────────────────
+  .cancellation-summary-table {
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    width: 100%;
+
+    th {
+      background: $bc-limed-spruce;
+      color: $bc-white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 8px 12px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    td {
+      border-bottom: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
+      padding: 8px 12px;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tr:nth-child(even) td {
+      background: $bc-verylightgrey;
+    }
+  }
+
+  .cancellation-msg {
+    color: $bc-scorpion;
+    font-size: 0.85rem;
+  }
+
+  // ── Results page ──────────────────────────────────────────────────────
+  .cancellation-results {
+    @extend %bc-card;
+    padding: 20px;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 16px;
+    }
+  }
+
+  .cancellation-result-row {
+    &.cancellation-result--cancelled td:first-child {
+      font-weight: 600;
+    }
+  }
+
+  .cancellation-badge {
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+
+    &--cancelled {
+      background: color.adjust($bc-lima, $lightness: 28%);
+      color: color.adjust($bc-lima, $lightness: -28%);
+    }
+
+    &--already_cancelled,
+    &--skipped {
+      background: $bc-verylightgrey;
+      color: $bc-silver-chalice;
+    }
+
+    &--no_order {
+      background: $bc-verylightgrey;
+      color: $bc-silver-chalice;
+    }
+
+    &--error {
+      background: color.adjust($bc-alizarin-crimson, $lightness: 36%);
+      color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+    }
+  }
+
+  .cancellation-result-msg {
+    color: $bc-scorpion;
+    font-size: 0.85rem;
+  }
+
+  .cancellation-result-actions {
+    align-items: center;
+    border-top: 1px solid $bc-border-grey;
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+
+    .button {
+      margin: 0;
+    }
+  }
+}

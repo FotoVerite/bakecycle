@@ -11,6 +11,7 @@ import OrderItemController from "./controllers/order_item_controller"
 import ShipmentItemController from "./controllers/shipment_item_controller"
 import RecipeFormController from "./controllers/recipe_form_controller"
 import RecipeItemController from "./controllers/recipe_item_controller"
+import CancellationFormController from "./controllers/cancellation_form_controller"
 import NavigationController from "./controllers/navigation_controller"
 import PinnedActionsController from "./controllers/pinned_actions_controller"
 import DashboardChartController from "./controllers/dashboard_chart_controller"
@@ -28,6 +29,7 @@ application.register("order-item", OrderItemController)
 application.register("shipment-item", ShipmentItemController)
 application.register("recipe-form", RecipeFormController)
 application.register("recipe-item", RecipeItemController)
+application.register("cancellation-form", CancellationFormController)
 application.register("navigation", NavigationController)
 application.register("pinned-actions", PinnedActionsController)
 application.register("dashboard-chart", DashboardChartController)

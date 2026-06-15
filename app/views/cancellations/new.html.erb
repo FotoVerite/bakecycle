@@ -1,0 +1,267 @@
+<% provide(:title, "Cancellations") %>
+
+<div class="index-page cancellation-page">
+  <div class="index-header">
+    <div>
+      <h1>Cancellations</h1>
+      <p>Select a date and clients to cancel. A zero-out temporary order will be created for each, and any existing invoices for that date will be deleted.</p>
+    </div>
+  </div>
+
+  <% if @step == "results" %>
+    <%# ── Results ───────────────────────────────────────────────────── %>
+    <div class="cancellation-results">
+      <h2>Done — <%= @date.strftime("%A, %B %-d, %Y") %></h2>
+      <table class="cancellation-summary-table">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @results.each do |r| %>
+            <tr class="cancellation-result-row cancellation-result--<%= r.status %>">
+              <td><%= r.client.name %></td>
+              <td>
+                <span class="cancellation-badge cancellation-badge--<%= r.status %>">
+                  <%= r.status.to_s.humanize %>
+                </span>
+                <span class="cancellation-result-msg"><%= r.message %></span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%
+        cancelled_client_ids = @results.select { |r| r.status == :cancelled }.map { |r| r.client.id }
+      %>
+      <div class="cancellation-result-actions">
+        <%= link_to "Run another cancellation", new_cancellation_path, class: "button secondary" %>
+        <%= link_to "View invoices for #{@date.strftime("%b %-d")}",
+              shipments_path(search: {
+                date_from: @date.strftime("%Y-%m-%d"),
+                date_to: @date.strftime("%Y-%m-%d"),
+                client_id: cancelled_client_ids
+              }), class: "button secondary" %>
+      </div>
+    </div>
+
+  <% elsif @step == "preview" %>
+    <%# ── Confirmation ─────────────────────────────────────────────── %>
+    <%
+      will_cancel       = @preview.select { |r| r.status == :will_cancel }
+      already_cancelled = @preview.select { |r| r.status == :already_cancelled }
+      needs_confirm     = @preview.select { |r| r.status == :needs_confirm }
+      no_order          = @preview.select { |r| r.status == :no_order }
+    %>
+
+    <div class="cancellation-preview">
+      <div class="cancellation-preview-header">
+        <h2>Confirm cancellations for <%= @date.strftime("%A, %B %-d, %Y") %></h2>
+        <p>
+          <strong><%= pluralize(will_cancel.size, "client") %></strong> will be cancelled.
+          <% if needs_confirm.any? %>
+            <strong><%= needs_confirm.size %></strong> need your decision.
+          <% end %>
+          <% if already_cancelled.any? %>
+            <strong><%= already_cancelled.size %></strong> already cancelled.
+          <% end %>
+          <% if no_order.any? %>
+            <strong><%= no_order.size %></strong> have no order on this day.
+          <% end %>
+        </p>
+      </div>
+
+      <%= form_tag cancellations_path, method: :post, class: "cancellation-confirm-form", data: { turbo: false } do %>
+        <input type="hidden" name="step"  value="confirm">
+        <input type="hidden" name="date"  value="<%= @date.strftime("%Y-%m-%d") %>">
+        <% @client_ids.each do |id| %>
+          <input type="hidden" name="client_ids[]" value="<%= id %>">
+        <% end %>
+
+        <% if will_cancel.any? %>
+          <div class="cancellation-group">
+            <h3 class="cancellation-group-title cancellation-group-title--cancel">
+              Will be cancelled (<%= will_cancel.size %>)
+            </h3>
+            <table class="cancellation-summary-table">
+              <tbody>
+                <% will_cancel.each do |r| %>
+                  <tr>
+                    <td><%= r.client.name %></td>
+                    <td class="cancellation-msg"><%= r.message %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+        <% if needs_confirm.any? %>
+          <div class="cancellation-group">
+            <h3 class="cancellation-group-title cancellation-group-title--warn">
+              Modified temporary orders — confirm to override (<%= needs_confirm.size %>)
+            </h3>
+            <p class="cancellation-group-note">These clients already have a non-zero temporary order for this date. Check the ones you want to zero out.</p>
+            <table class="cancellation-summary-table">
+              <tbody>
+                <% needs_confirm.each do |r| %>
+                  <tr>
+                    <td>
+                      <label class="cancellation-force-label">
+                        <%= check_box_tag "force_client_ids[]", r.client.id, false, class: "cancellation-force-cb" %>
+                        <%= r.client.name %>
+                      </label>
+                    </td>
+                    <td class="cancellation-msg"><%= r.message %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+        <% if already_cancelled.any? %>
+          <div class="cancellation-group">
+            <h3 class="cancellation-group-title cancellation-group-title--skip">
+              Already cancelled (<%= already_cancelled.size %>)
+            </h3>
+            <table class="cancellation-summary-table">
+              <tbody>
+                <% already_cancelled.each do |r| %>
+                  <tr>
+                    <td><%= r.client.name %></td>
+                    <td class="cancellation-msg"><%= r.message %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+        <% if no_order.any? %>
+          <div class="cancellation-group">
+            <h3 class="cancellation-group-title cancellation-group-title--skip">
+              No order on this day (<%= no_order.size %>)
+            </h3>
+            <table class="cancellation-summary-table">
+              <tbody>
+                <% no_order.each do |r| %>
+                  <tr>
+                    <td><%= r.client.name %></td>
+                    <td class="cancellation-msg"><%= r.message %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+        <div class="cancellation-confirm-actions">
+          <%= link_to "Back", new_cancellation_path(date: @date.strftime("%Y-%m-%d"), client_ids: @client_ids), class: "button secondary" %>
+          <% if will_cancel.any? || needs_confirm.any? %>
+            <%= submit_tag "Confirm and cancel", class: "button alert", data: { disable_with: "Cancelling…" } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+  <% else %>
+    <%# ── Selection form ───────────────────────────────────────────── %>
+    <%= form_tag cancellations_path, method: :post,
+          data: { controller: "cancellation-form", turbo: false } do %>
+      <input type="hidden" name="step" value="preview">
+
+      <div class="cancellation-toolbar">
+        <div class="cancellation-date-field">
+          <label for="cancellation_date">Cancellation date</label>
+          <input type="date" id="cancellation_date" name="date"
+                 value="<%= @date.strftime("%Y-%m-%d") %>"
+                 class="cancellation-date-input"
+                 data-action="change->cancellation-form#changeDate">
+        </div>
+
+        <div class="cancellation-filters">
+          <div class="cancellation-filter-field">
+            <label for="cancellation_name_filter">Filter by name</label>
+            <input type="text" id="cancellation_name_filter" placeholder="Search clients…"
+                   autocomplete="off"
+                   data-cancellation-form-target="nameFilter"
+                   data-action="input->cancellation-form#filter">
+          </div>
+          <div class="cancellation-filter-field">
+            <label for="cancellation_route_filter">Filter by route</label>
+            <select id="cancellation_route_filter"
+                    data-cancellation-form-target="routeFilter"
+                    data-action="change->cancellation-form#filter">
+              <option value="">All routes</option>
+              <% @routes.each do |route| %>
+                <option value="<%= route.id %>"><%= route.name %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="cancellation-layout">
+        <div class="cancellation-available">
+          <div class="cancellation-list-header">
+            <span class="cancellation-list-title">Clients</span>
+            <button type="button" class="cancellation-select-all"
+                    data-action="click->cancellation-form#selectAllVisible">
+              Add all visible
+            </button>
+            <span class="cancellation-visible-count" data-cancellation-form-target="count">
+              <%= pluralize(@clients.size, "client") %>
+            </span>
+          </div>
+
+          <div class="cancellation-client-rows">
+            <% @clients.each do |client| %>
+              <% route_id   = @client_route[client.id] %>
+              <% route_name = @routes.find { |r| r.id == route_id }&.name %>
+              <button type="button" class="cancellation-client-row"
+                      data-cancellation-form-target="clientRow"
+                      data-action="click->cancellation-form#toggleClient"
+                      data-id="<%= client.id %>"
+                      data-name="<%= client.name %>"
+                      data-route-id="<%= route_id %>"
+                      data-route-name="<%= route_name %>"
+                      data-selected="<%= @selected_client_ids.include?(client.id) %>"
+                      aria-pressed="<%= @selected_client_ids.include?(client.id) %>">
+                <span class="cancellation-client-check" aria-hidden="true"></span>
+                <span class="cancellation-client-name"><%= client.name %></span>
+                <% if route_name %>
+                  <span class="cancellation-client-route"><%= route_name %></span>
+                <% end %>
+              </button>
+            <% end %>
+          </div>
+        </div>
+
+        <aside class="cancellation-cart" data-cancellation-form-target="cart">
+          <button type="button" class="cancellation-cart-header" data-action="click->cancellation-form#toggleMobileCart">
+            <h2>To be cancelled</h2>
+            <span class="cancellation-cart-count" data-cancellation-form-target="cartCount">0</span>
+            <span class="cancellation-cart-chevron" aria-hidden="true"></span>
+          </button>
+
+          <p class="cancellation-cart-empty" data-cancellation-form-target="cartEmpty">
+            No clients selected yet. Click a client on the left to add them here.
+          </p>
+
+          <ul class="cancellation-cart-list" data-cancellation-form-target="cartList" hidden></ul>
+
+          <div class="cancellation-cart-footer">
+            <div data-cancellation-form-target="hiddenInputs"></div>
+            <%= submit_tag "Preview cancellations →", class: "button",
+                  disabled: @selected_client_ids.empty?,
+                  data: { disable_with: "Loading…", cancellation_form_target: "submit" } %>
+          </div>
+        </aside>
+      </div>
+    <% end %>
+  <% end %>
+</div>
