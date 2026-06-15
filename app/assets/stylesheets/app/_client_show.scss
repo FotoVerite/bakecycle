@@ -27,8 +27,7 @@
 }
 
 .client-summary-item {
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   padding: 16px 18px;
 
   span {
@@ -50,8 +49,7 @@
 }
 
 .client-detail-section {
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   box-sizing: border-box;
   margin-bottom: 16px;
   padding: 18px 20px;

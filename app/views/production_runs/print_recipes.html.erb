@@ -4,7 +4,8 @@
   <%= render "shared/report_header",
     title: "Print Recipes",
     date_text: @date.strftime("%A %b. %e, %Y"),
-    status: (@production_run ? "Production run" : "Projection") %>
+    status: (@production_run ? "Production run" : "Projection"),
+    pin_action_key: "daily_recipes" %>
 
   <%= render "shared/report_date_toolbar",
     url: print_recipes_path,

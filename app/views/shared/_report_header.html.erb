@@ -5,7 +5,12 @@
       <p><%= date_text %></p>
     <% end %>
   </div>
-  <% if local_assigns[:status].present? %>
-    <span class="report-status"><%= status %></span>
-  <% end %>
+  <div class="report-header-actions">
+    <% if local_assigns[:status].present? %>
+      <span class="report-status"><%= status %></span>
+    <% end %>
+    <% if local_assigns[:pin_action_key].present? %>
+      <%= render "shared/pin_action_menu", action_key: pin_action_key %>
+    <% end %>
+  </div>
 </div>

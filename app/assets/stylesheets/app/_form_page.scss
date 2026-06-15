@@ -2,8 +2,7 @@
 .form-page {
   .form-header {
     align-items: center;
-    background: $bc-white;
-    border: 1px solid $bc-border-grey;
+    @extend %bc-card;
     display: flex;
     gap: 24px;
     justify-content: space-between;
@@ -43,8 +42,7 @@
 }
 
 .form-section {
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   margin: 0 0 18px;
   padding: 26px 20px 24px;
 
@@ -451,8 +449,7 @@
 
 .nested-icon-btn {
   align-items: center;
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   color: $bc-scorpion;
   display: inline-flex;
   height: 40px;
@@ -759,8 +756,7 @@
 }
 
 .upcoming-invoices-panel {
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   margin-top: 22px;
   padding: 18px 20px 20px;
 }

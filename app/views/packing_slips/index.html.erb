@@ -4,7 +4,8 @@
   <%= render "shared/report_header",
     title: "Packing Slips",
     date_text: @date.strftime("%A %b. %e, %Y"),
-    status: pluralize(@shipments.count, "invoice") %>
+    status: pluralize(@shipments.count, "invoice"),
+    pin_action_key: "packing_slips" %>
 
   <%= render "shared/report_date_toolbar",
     url: packing_slips_path,

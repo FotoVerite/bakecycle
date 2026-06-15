@@ -8,7 +8,10 @@
     </div>
 
     <% if policy(Shipment).new? %>
-      <%= link_to 'Add New Invoice', new_shipment_path, class: "button index-header-action" %>
+      <div class="index-header-actions">
+        <%= link_to 'Add New Invoice', new_shipment_path, class: "button index-header-action" %>
+        <%= render "shared/pin_action_menu", action_key: "new_invoice" %>
+      </div>
     <% end %>
   </div>
 

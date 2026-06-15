@@ -2,8 +2,7 @@
 .index-page {
   .index-header {
     align-items: center;
-    background: $bc-white;
-    border: 1px solid $bc-border-grey;
+    @extend %bc-card;
     display: flex;
     gap: 24px;
     justify-content: space-between;
@@ -34,6 +33,13 @@
     padding-bottom: 0;
     padding-top: 0;
     text-align: center;
+  }
+
+  .index-header-actions {
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
   }
 }
 
@@ -266,8 +272,7 @@
 
 .index-actions {
   align-items: center;
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   border-bottom: 0;
   display: flex;
   flex-wrap: wrap;
@@ -329,8 +334,7 @@
 }
 
 .index-alert-panel {
-  background: $bc-white;
-  border: 1px solid $bc-border-grey;
+  @extend %bc-card;
   margin-bottom: 18px;
   padding: 0;
 
@@ -439,6 +443,15 @@
     .index-header-action {
       margin-top: 14px;
       width: 100%;
+    }
+
+    .index-header-actions {
+      align-items: stretch;
+      margin-top: 14px;
+
+      .index-header-action {
+        margin-top: 0;
+      }
     }
   }
 

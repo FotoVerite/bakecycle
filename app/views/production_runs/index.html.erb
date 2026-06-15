@@ -6,6 +6,9 @@
       <h1>Production Runs</h1>
       <p>Search scheduled runs and open the production detail or printable recipe packet.</p>
     </div>
+    <div class="index-header-actions">
+      <%= render "shared/pin_action_menu", action_key: "production_runs" %>
+    </div>
   </div>
 
   <%= simple_form_for :search, method: :get, html: { class: "index-toolbar index-toolbar-production-runs bakecycle-form" } do |f| %>
