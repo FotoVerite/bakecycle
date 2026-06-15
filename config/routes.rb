@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     patch :reorder, on: :collection
   end
 
+  resources :cancellations, only: %i[new create]
+
   resource :production_checklist, only: [:show]
   resource :nightly_sign_off, only: [:show]
   resources :registrations, only: %i[new]
