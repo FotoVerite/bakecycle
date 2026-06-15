@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_bakery
   helper_method :item_finder
+  helper_method :job_workers_offline?
   protect_from_forgery with: :exception,  prepend: true
 
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
@@ -45,9 +46,11 @@ class ApplicationController < ActionController::Base
   end
 
   def no_job_workers
-    return if SolidQueue::Process.any?
+    @job_workers_offline = SolidQueue::Process.none?
+  end
 
-    flash.now.alert = "No Solid Queue workers running. Start with: bin/jobs"
+  def job_workers_offline?
+    @job_workers_offline == true
   end
 
   private

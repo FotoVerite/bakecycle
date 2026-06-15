@@ -101,3 +101,13 @@ input[type="text"] {
 [hidden] {
   display: none !important;
 }
+
+.show-for-sr {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}

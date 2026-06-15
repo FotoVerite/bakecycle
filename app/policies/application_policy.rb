@@ -8,7 +8,9 @@ class ApplicationPolicy
     @record = record
   end
 
-  delegate :admin?, to: :user
+  def admin?
+    user&.admin? || false
+  end
 
   def index?
     false
@@ -56,7 +58,9 @@ class ApplicationPolicy
       @scope = scope
     end
 
-    delegate :admin?, to: :user
+    def admin?
+      user&.admin? || false
+    end
 
     def resolve
       scope.none

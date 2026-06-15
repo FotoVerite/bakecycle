@@ -1,25 +1,62 @@
-<div class="top-menu-section">
-  <div class="row">
-    <div class="large-2 medium-4 small-12 columns top-part-no-padding">
-      <div class="logo-bg">
-        <i class="fi-list js-toggles" data-toggle="hide"></i>
-      </div>
+<header class="top-menu-section" data-controller="navigation">
+  <div class="top-menu-brand">
+    <button class="top-menu-toggle" type="button" data-action="click->navigation#toggleMenu" aria-label="Toggle navigation">
+      <i class="fi-list" aria-hidden="true"></i>
+    </button>
+    <%= link_to "Bakecycle", dashboard_path, class: "top-menu-logo" %>
+  </div>
+
+  <div class="top-menu-context">
+    <div class="bakery-context">
+      <span>Bakery</span>
+      <strong><%= current_bakery&.name || "No bakery selected" %></strong>
     </div>
-    <div class="large-10 medium-8 small-12 columns top-menu">
-      <div class="row">
-        <div class="large-4 large-offset-8 medium-12 small-12 columns text-center">
-          <div class="row">
-            <div class="medium-3 small-3 columns right">
-              <% if current_user %>
-                <%= link_to destroy_user_session_path, class: 'logout-icon', title: current_user.email, data: { turbo_method: :delete } do %>
-                  <i class="fi-power power-off"></i>
-                <% end %>
-              <% end %>
-            </div>
+
+    <div class="top-menu-actions">
+      <% if job_workers_offline? %>
+        <% if policy(:job).dashboard? %>
+          <%= link_to mission_control_jobs.root_path, class: "operations-status warning", title: "Solid Queue workers are offline", aria: { label: "Workers offline" } do %>
+            <i class="fi-alert" aria-hidden="true"></i>
+            <span>Workers offline</span>
+          <% end %>
+        <% else %>
+          <span class="operations-status warning" title="Solid Queue workers are offline" aria-label="Workers offline">
+            <i class="fi-alert" aria-hidden="true"></i>
+            <span>Workers offline</span>
+          </span>
+        <% end %>
+      <% end %>
+
+      <% if current_user %>
+        <details class="account-menu">
+          <summary>
+            <span class="account-avatar"><%= current_user.name.first&.upcase %></span>
+            <span class="account-identity">
+              <strong><%= current_user.name %></strong>
+              <small>Account</small>
+            </span>
+            <i class="fi-arrow-down" aria-hidden="true"></i>
+          </summary>
+          <div class="account-menu-panel">
+            <% if policy(current_user).edit? %>
+              <%= link_to "My Account", my_users_path %>
+            <% end %>
+            <% if current_bakery && policy(current_bakery).edit? %>
+              <%= link_to "Bakery Settings", my_bakeries_path %>
+            <% end %>
+            <% if policy(User).index? %>
+              <%= link_to "Users", users_path %>
+            <% end %>
+            <% if policy(Bakery).index? %>
+              <%= link_to "Bakeries", bakeries_path %>
+            <% end %>
+            <% if policy(:job).dashboard? %>
+              <%= link_to "Jobs", mission_control_jobs.root_path %>
+            <% end %>
+            <%= link_to "Log Out", destroy_user_session_path, class: "account-menu-logout", data: { turbo_method: :delete } %>
           </div>
-        </div>
-      </div>
-      <div class="clearfix"></div>
+        </details>
+      <% end %>
     </div>
   </div>
-</div>
+</header>
