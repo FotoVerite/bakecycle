@@ -40,4 +40,4 @@ namespace :app do
   end
 end
 
-after "deploy:restart", "app:restart"
+after "deploy:published", "app:restart"
