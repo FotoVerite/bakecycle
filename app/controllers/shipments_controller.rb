@@ -15,7 +15,9 @@ class ShipmentsController < ApplicationController
 
   def index
     authorize Shipment
-    @shipments = scope_with_search.paginate(page: params[:page])
+    searched_scope = scope_with_search
+    @shipments = searched_scope.paginate(page: params[:page])
+    @search_active = search_params.present? && search_params.to_h.values.flatten.any?(&:present?)
     @double_invoices = Shipment.where(
       "bakery_id = ? AND date between ? and ? ",
       current_bakery,
@@ -24,6 +26,13 @@ class ShipmentsController < ApplicationController
     )
       .group_by { |e| [e.date, e.client_id, e.route_id] }
       .select { |_k, v| v.size > 1 }.values.flatten
+    if @double_invoices.any?
+      ActiveRecord::Associations::Preloader.new(
+        records: @double_invoices,
+        associations: %i[client shipment_items]
+      ).call
+    end
+    @duplicate_invoice_count_in_results = searched_scope.where(id: @double_invoices.map(&:id)).distinct.count
   end
 
   def product_invoiced_for_year

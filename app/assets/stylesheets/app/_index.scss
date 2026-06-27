@@ -156,6 +156,27 @@
     z-index: 1;
   }
 
+  // Predictable two-row layout: all filters first, then dates + search.
+  .index-filter-sequence {
+    grid-column: span 2;
+  }
+
+  .index-filter-client {
+    grid-column: span 5;
+  }
+
+  .index-filter-product {
+    grid-column: span 5;
+  }
+
+  .index-filter-date {
+    grid-column: span 4;
+  }
+
+  .index-filter-submit {
+    grid-column: span 4;
+  }
+
   .index-toolbar-actions .button {
     font-weight: 700;
     width: 100%;
@@ -270,6 +291,134 @@
   }
 }
 
+.index-filter-feedback {
+  align-items: center;
+  @extend %bc-card;
+  border-bottom: 0;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 10px 14px 10px 18px;
+
+  .button {
+    margin: 0;
+  }
+}
+
+.index-filter-results {
+  strong {
+    color: $bc-charcoal;
+    font-size: 0.95rem;
+  }
+}
+
+.index-filter-reset {
+  align-items: center;
+  background: transparent;
+  border: 1px solid color.adjust($bc-scorpion, $lightness: 34%);
+  border-radius: 4px;
+  color: $bc-scorpion;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  gap: 7px;
+  min-height: 34px;
+  padding: 7px 11px;
+  transition: background-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+              color 160ms cubic-bezier(0.25, 1, 0.5, 1),
+              transform 100ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  i {
+    font-size: 0.9rem;
+    transition: transform 240ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 12%);
+    color: color.adjust($bc-shakespeare, $lightness: -25%);
+    outline: none;
+
+    i {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    background: transparent;
+    border-color: color.adjust($bc-scorpion, $lightness: 43%);
+    color: color.adjust($bc-scorpion, $lightness: 25%);
+    cursor: default;
+    opacity: 0.72;
+    transform: none;
+
+    i {
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index-filter-reset,
+  .index-filter-reset i {
+    transition: none;
+  }
+}
+
+.index-empty-state {
+  align-items: center;
+  @extend %bc-card;
+  display: flex;
+  gap: 16px;
+  min-height: 150px;
+  padding: 28px;
+
+  &[hidden] {
+    display: none;
+  }
+
+  > i {
+    align-items: center;
+    background: color.adjust($bc-shakespeare, $lightness: 37%);
+    border-radius: 4px;
+    color: color.adjust($bc-shakespeare, $lightness: -24%);
+    display: flex;
+    flex: 0 0 44px;
+    font-size: 1.3rem;
+    height: 44px;
+    justify-content: center;
+  }
+
+  h2 {
+    color: $bc-charcoal;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  p {
+    color: $bc-scorpion;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    margin: 4px 0 0;
+    max-width: 58ch;
+  }
+
+  .button {
+    margin: 14px 0 0;
+  }
+}
+
 .index-actions {
   align-items: center;
   @extend %bc-card;
@@ -315,6 +464,16 @@
     font-size: 0.95rem;
     font-weight: 700;
     line-height: 1.3;
+  }
+
+  small {
+    color: $bc-scorpion;
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-top: 5px;
+    max-width: 68ch;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -404,6 +563,16 @@
   transform: rotate(90deg);
 }
 
+.duplicate-invoice-actions {
+  .button {
+    margin: 0 8px 0 0;
+  }
+
+  .fi-page-delete {
+    color: $bc-alizarin-crimson;
+  }
+}
+
 .index-alert-heading {
   span {
     color: $bc-alizarin-crimson;
@@ -473,8 +642,28 @@
     }
   }
 
+  .index-toolbar-invoices .index-filter-submit {
+    grid-column: auto;
+  }
+
   .index-toolbar-actions .button {
     width: 100%;
+  }
+
+  .index-filter-feedback {
+    align-items: stretch;
+    display: block;
+
+    .index-filter-reset {
+      justify-content: center;
+      margin-top: 10px;
+      width: 100%;
+    }
+  }
+
+  .index-empty-state {
+    align-items: flex-start;
+    padding: 22px 18px;
   }
 
   .index-actions {

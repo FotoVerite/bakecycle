@@ -33,3 +33,10 @@ screenshot_*.html
 .DS_Store
 /public/assets
 /log
+/.github/skills
+/.claude
+/.impeccable
+
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
+

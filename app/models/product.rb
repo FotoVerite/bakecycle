@@ -187,8 +187,8 @@ class Product < ApplicationRecord
 
   def lookup_price_variant(quantity, client)
     matching = price_variants
-      .where("client_id IS NULL OR client_id = ?", client.id)
-      .order(quantity: :desc)
+      .select { |variant| variant.client_id.nil? || variant.client_id == client.id }
+      .sort_by { |variant| -variant.quantity }
       .detect { |variant| variant.quantity <= quantity }
     matching&.price
   end

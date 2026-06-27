@@ -1,22 +1,22 @@
 <%= simple_form_for search_form, url: shipments_path, method: :get, as: :search, html: { class: "index-search-form" } do |f| %>
   <div class="index-toolbar index-toolbar-invoices">
     <div class="index-filter index-filter-sequence index-span-2">
-      <%= f.input :sequence_number, required: false, placeholder: "Numbers before -" %>
+      <%= f.input :sequence_number, label: "Invoice prefix", required: false, placeholder: "e.g. 34084" %>
     </div>
-    <div class="index-filter index-filter-select index-filter-client index-span-4">
+    <div class="index-filter index-filter-select index-filter-client index-span-3">
       <%= f.input :client_id , collection: shipments.available_clients, as: :select, required: false, input_html: { multiple: true, data: { controller: "tom-select", placeholder: 'Select Clients' } } %>
     </div>
-    <div class="index-filter index-filter-select index-filter-product index-span-4">
+    <div class="index-filter index-filter-select index-filter-product index-span-3">
       <%= f.input :product_id , collection: shipments.active_products, as: :select, required: false, input_html: { multiple: true, data: { controller: "tom-select", placeholder: 'Select Products' } } %>
     </div>
-    <div class="index-toolbar-actions index-span-2">
-      <%= f.submit 'Search', class: "button small", name: nil %>
+    <div class="index-filter index-filter-date index-span-2">
+      <%= f.input :date_from, label: "Delivery date from", input_html: { class: "js-datepicker" }, placeholder: "MM/DD/YYYY", required: false %>
     </div>
     <div class="index-filter index-filter-date index-span-2">
-      <%= f.input :date_from, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
+      <%= f.input :date_to, label: "Delivery date to", input_html: { class: "js-datepicker" }, placeholder: "MM/DD/YYYY", required: false %>
     </div>
-    <div class="index-filter index-filter-date index-span-2">
-      <%= f.input :date_to, input_html: { class: "js-datepicker" }, placeholder: "YYYY-MM-DD", required: false %>
+    <div class="index-toolbar-actions index-filter-submit index-span-2">
+      <%= f.submit 'Find invoices', class: "button small", name: nil %>
     </div>
   </div>
 <% end %>

@@ -22,13 +22,16 @@ class ShipmentDecorator < Draper::Decorator
   end
 
   def product_prices
-    hash = {}
-    if client
-      h.item_finder.products.each { |p| hash[p.id] =  p.price(1, client) }
-    else
-      h.item_finder.products.each { |p| hash[p.id] =  p.base_price }
+    @product_prices ||= begin
+      hash = {}
+      products = h.item_finder.products.includes(:price_variants)
+      if client
+        products.each { |p| hash[p.id] = p.price(1, client) }
+      else
+        products.each { |p| hash[p.id] = p.base_price }
+      end
+      hash.to_json
     end
-    hash.to_json
   end
 
   def auto_generated?

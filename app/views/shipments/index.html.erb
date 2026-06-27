@@ -4,7 +4,7 @@
   <div class="index-header">
     <div>
       <h1>Invoices</h1>
-      <p>Search, export, and manage invoice records.</p>
+      <p>Find invoices by number, client, product, or delivery date.</p>
     </div>
 
     <% if policy(Shipment).new? %>
@@ -17,42 +17,39 @@
 
   <%= render partial: 'search_form', object: search_form %>
 
-  <% if @shipments.any? %>
-    <div class="index-actions">
-      <div class="index-actions-summary">
-        <span>Exports</span>
-        <strong>Current invoice results</strong>
-      </div>
-
-      <div class="index-action-buttons">
-      <% search_params = params[:search].permit(ShipmentSearchForm.params) if params[:search] %>
-      <%= link_to export_pdf_shipments_path(search: search_params), target: '_blank', class: "button small" do %>
-          <i class="fi-page-export-pdf"></i> Export Invoices
-      <% end %>
-
-      <%= link_to export_csv_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
-        <i class="fi-page-export-csv"></i> Export CSV
-      <% end %>
-
-      <%= link_to export_iif_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
-        <i class="fi-page-export"></i> Export QuickBooks
-      <% end %>
-      </div>
+  <div class="index-filter-feedback">
+    <div class="index-filter-results" role="status" aria-live="polite" aria-atomic="true">
+      <strong><%= pluralize(number_with_delimiter(@shipments.total_entries), 'invoice') %></strong>
     </div>
-  <% end %>
 
-  <% if !@double_invoices.empty?  %>
-   <div class="dublicate_invoices panel callout radius">
-      <h5 style='font-size:24px;'>These <%= pluralize(@double_invoices.count, 'invoices') %> are duplicates. Please fix as soon as possible.</h5>
+    <% if @search_active %>
+      <%= link_to shipments_path, class: "index-filter-reset" do %>
+        <i class="fi-refresh" aria-hidden="true"></i>
+        Reset filters
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @double_invoices.any? %>
+    <details class="index-alert-panel duplicate-invoices panel callout radius" open>
+      <summary class="index-alert-heading">
+        <span>Needs attention</span>
+        <strong><%= pluralize(@double_invoices.count, 'duplicate invoice') %></strong>
+        <% if @duplicate_invoice_count_in_results.positive? %>
+          <small><%= pluralize(@duplicate_invoice_count_in_results, 'flagged invoice') %> will be included in exports from the current results. Review them before exporting.</small>
+        <% else %>
+          <small>These invoices need review, but they are not included in the current export results.</small>
+        <% end %>
+      </summary>
       <table class="responsive-table orders-missing-shipment-table">
         <thead>
           <tr>
             <th scope="col">Invoice</th>
             <th scope="col">Date</th>
-            <th scope="col">Updated At</th>
+            <th scope="col">Updated</th>
             <th scope="col">Client</th>
             <th scope="col">Price</th>
-            <th scope="col">Action</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -61,24 +58,68 @@
         <% end %>
         </tbody>
       </table>
-    </div><% end %>
+    </details>
+  <% end %>
 
-  <div class="index-table">
-    <table class="responsive-table all-invoices">
-      <thead>
-        <tr>
-          <th scope="col">Invoice</th>
-          <th scope="col">Date</th>
-          <th scope="col">Client</th>
-          <th scope="col">Price</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render shipments %>
-      </tbody>
-    </table>
-  </div>
+  <% if @shipments.any? %>
+    <div class="index-actions">
+      <div class="index-actions-summary">
+        <span>Export scope</span>
+        <strong><%= pluralize(number_with_delimiter(@shipments.total_entries), 'invoice') %> in current results</strong>
+        <small><%= invoice_search_scope_description(search_form, shipments) %></small>
+      </div>
 
-  <%= will_paginate @shipments %>
+      <div class="index-action-buttons">
+      <% search_params = params[:search].permit(ShipmentSearchForm.params) if params[:search] %>
+      <%= link_to export_pdf_shipments_path(search: search_params), target: '_blank', class: "button small" do %>
+          <i class="fi-page-export-pdf"></i> Export invoice PDFs
+      <% end %>
+
+      <%= link_to export_csv_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
+        <i class="fi-page-export-csv"></i> Export CSV
+      <% end %>
+
+      <%= link_to export_iif_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
+        <i class="fi-dollar"></i> Export QuickBooks IIF
+      <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @shipments.any? %>
+    <div class="index-table">
+      <table class="responsive-table all-invoices">
+        <thead>
+          <tr>
+            <th scope="col">Invoice</th>
+            <th scope="col">Date</th>
+            <th scope="col">Client</th>
+            <th scope="col">Price</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render shipments %>
+        </tbody>
+      </table>
+    </div>
+
+    <%= will_paginate @shipments %>
+  <% else %>
+    <div class="index-empty-state">
+      <i class="fi-magnifying-glass" aria-hidden="true"></i>
+      <div>
+        <% if @search_active %>
+          <h2>No invoices match these filters</h2>
+          <p>Try a different invoice number, client, product, or date range, or reset the filters above.</p>
+        <% else %>
+          <h2>No invoices yet</h2>
+          <p>Create an invoice to start tracking deliveries and exports.</p>
+          <% if policy(Shipment).new? %>
+            <%= link_to "Create invoice", new_shipment_path, class: "button small" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

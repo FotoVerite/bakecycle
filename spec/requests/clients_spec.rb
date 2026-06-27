@@ -64,6 +64,9 @@ RSpec.describe "Clients", type: :request do
     it "lists clients" do
       get clients_path
       expect(response).to be_successful
+      expect(response.body).to include("Find clients by name, status, or active account state.")
+      expect(response.body).to include("No clients match these filters")
+      expect(response.body).to include("Reset filters")
     end
 
     it "shows a client" do

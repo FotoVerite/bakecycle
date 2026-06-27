@@ -50,6 +50,60 @@ RSpec.describe "Shipments (Invoices)", type: :request do
     it "lists shipments" do
       get shipments_path
       expect(response).to be_successful
+      expect(response.body).to include("Find invoices by number, client, product, or delivery date.")
+      expect(response.body).to include("1 invoice")
+      expect(response.body).to include("Export invoice PDFs")
+      expect(response.body).to include("Export QuickBooks IIF")
+    end
+
+    it "shows filter feedback and recovery when no invoices match" do
+      get shipments_path, params: { search: { sequence_number: "missing" } }
+
+      expect(response).to be_successful
+      expect(response.body).to include("0 invoices")
+      expect(response.body).to include("No invoices match these filters")
+      expect(response.body).to include("Reset filters")
+      expect(response.body).not_to include("Export invoice PDFs")
+    end
+
+    it "warns about duplicate invoices before exports and links to review them" do
+      shipment.update!(date: Time.zone.today)
+      duplicate = create(
+        :shipment,
+        bakery: bakery,
+        client: client,
+        route: route,
+        date: shipment.date
+      )
+
+      get shipments_path
+
+      expect(response).to be_successful
+      expect(response.body.index("duplicate invoices")).to be < response.body.index("Export scope")
+      expect(response.body).to include("2 flagged invoices will be included in exports")
+      expect(response.body).to include(edit_shipment_path(shipment))
+      expect(response.body).to include(edit_shipment_path(duplicate))
+      expect(response.body).to include("Review invoice")
+    end
+
+    it "describes the active export criteria" do
+      product = create(:product, bakery: bakery)
+      shipment.update!(date: Date.new(2026, 6, 15))
+      create(:shipment_item, bakery: bakery, shipment: shipment, product: product)
+
+      get shipments_path, params: {
+        search: {
+          client_id: [client.id],
+          product_id: [product.id],
+          date_from: "2026-06-01",
+          date_to: "2026-06-30"
+        }
+      }
+
+      expect(response).to be_successful
+      expect(response.body).to include("Clients: #{ERB::Util.html_escape(client.name)}")
+      expect(response.body).to include("Products: #{ERB::Util.html_escape(product.name)}")
+      expect(response.body).to include("Delivery dates: June 1, 2026 to June 30, 2026")
     end
 
     it "shows new shipment form" do

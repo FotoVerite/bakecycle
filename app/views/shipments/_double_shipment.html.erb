@@ -1,13 +1,14 @@
 <tr class="js-clickable-row" href="<%= edit_shipment_path(shipment) %>" id="shipment-<%= shipment.id%>">
-  <th scope="row"><%= shipment.invoice_number %></th>
+  <th scope="row"><%= link_to shipment.invoice_number, edit_shipment_path(shipment) %></th>
   <td data-title="Date"><%= shipment.date %></td>
-  <td data-title="Price"><%= shipment.updated_at.strftime("%d/%m/%y: %H:%M %p") %></td>
+  <td data-title="Updated"><%= shipment.updated_at.to_fs(:long) %></td>
   <td data-title="Client Name"><%= shipment.client_name %></td>
   <td data-title="Price"><%= shipment.price %></td>
-  <td data-title="Action">
-    <%= link_to shipment_path(shipment), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this invoice?" } do %>
+  <td data-title="Actions" class="duplicate-invoice-actions">
+    <%= link_to "Review invoice", edit_shipment_path(shipment), class: "button tiny secondary" %>
+    <%= link_to shipment_path(shipment), data: { turbo_method: :delete, turbo_confirm: "Delete duplicate invoice #{shipment.invoice_number}? This cannot be undone." } do %>
       <span class="table-action-icon icon-link-tooltip" aria-label="Delete Invoice">
-        <i class="fi-page-delete" style="color:red;"></i>
+        <i class="fi-page-delete"></i>
       </span>
     <% end %>
   </td>

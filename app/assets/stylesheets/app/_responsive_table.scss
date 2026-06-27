@@ -72,12 +72,11 @@ $bp-xlarge: 75em;
 }
 
 .icon-link-tooltip {
-  &:hover {
+  position: relative;
+  z-index: 1;
 
-    @media (min-width: $bp-medium) {
-      display: inline;
-      position: relative;
-    }
+  &:hover {
+    z-index: 100;
 
     &:before {
       @media (min-width: $bp-medium) {
@@ -87,7 +86,7 @@ $bp-xlarge: 75em;
         content: '';
         left: 4%;
         position: absolute;
-        top: 20px;
+        top: calc(100% + 6px);
         z-index: 99;
       }
     }
@@ -100,7 +99,7 @@ $bp-xlarge: 75em;
         padding: 12px;
         position: absolute;
         right: -40%;
-        top: 26px;
+        top: calc(100% + 12px);
         width: 140px;
         z-index: 98;
       }
@@ -109,10 +108,54 @@ $bp-xlarge: 75em;
 }
 
 .table-action-icon {
-  margin-left: 10px;
+  align-items: center;
+  border-radius: 50%;
+  display: inline-flex;
+  height: 30px;
+  justify-content: center;
+  margin-left: 6px;
+  transition: filter 100ms ease-out;
+  width: 30px;
 
   i {
-    font-size: 1.5em;
+    font-size: 1.15em;
+  }
+
+  &--edit {
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+
+  &--document {
+    background: $bc-off-white;
+    color: $bc-scorpion;
+  }
+
+  &--fulfillment {
+    background: #e3eedb;
+    color: #4f6b3d;
+  }
+
+  &--financial {
+    background: #f8f1de;
+    color: #8a6d23;
+  }
+
+  &:hover,
+  &:focus {
+    filter: brightness(0.94);
+  }
+}
+
+a:focus .table-action-icon,
+a:focus-visible .table-action-icon {
+  outline: 2px solid $bc-shakespeare;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .table-action-icon {
+    transition: none;
   }
 }
 

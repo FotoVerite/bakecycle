@@ -4,7 +4,7 @@
   <div class="index-header">
     <div>
       <h1>Clients</h1>
-      <p>Search, export, and open client records.</p>
+      <p>Find clients by name, status, or active account state.</p>
     </div>
 
     <% if policy(Client).new? %>
@@ -16,9 +16,9 @@
     <div class="index-toolbar bakecycle-form">
       <div class="index-filter index-filter-primary">
         <div class="input string optional">
-          <label class="string optional">Name</label>
+          <label class="string optional">Client name</label>
           <input class="string optional"
-                 placeholder="Client Name"
+                 placeholder="Search clients"
                  type="text"
                  data-filter-table-target="nameInput"
                  data-action="input->filter-table#filter keydown->filter-table#navigateIfOne" />
@@ -51,11 +51,32 @@
         <a class="button small secondary"
            target="_blank"
            href="<%= print_client_list_clients_path(type: 'true') %>"
-           data-filter-table-target="exportLink">Export Client List</a>
+           data-filter-table-target="exportLink">Export active clients</a>
       </div>
     </div>
 
-    <div class="index-table">
+    <div class="index-filter-feedback">
+      <div class="index-filter-results" role="status" aria-live="polite" aria-atomic="true">
+        <strong data-filter-table-target="resultCount"><%= @clients.size %> clients</strong>
+      </div>
+      <button type="button"
+              class="index-filter-reset"
+              data-filter-table-target="resetButton"
+              data-action="filter-table#reset">
+        <i class="fi-refresh" aria-hidden="true"></i>
+        Reset filters
+      </button>
+    </div>
+
+    <div class="index-empty-state" data-filter-table-target="emptyState" hidden>
+      <i class="fi-magnifying-glass" aria-hidden="true"></i>
+      <div>
+        <h2>No clients match these filters</h2>
+        <p>Try a different name, status, or active setting, or reset the filters above.</p>
+      </div>
+    </div>
+
+    <div class="index-table" data-filter-table-target="table">
       <table class="responsive-table clients-index">
         <thead>
           <tr>
