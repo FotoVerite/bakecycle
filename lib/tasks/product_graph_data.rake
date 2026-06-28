@@ -34,45 +34,6 @@ namespace :product_graph_data do
   end
 
   task digest_last_week: :environment do
-    Bakery.all.where(id: [1, 17]).find_each do |bakery|
-      bakery.products.each do |product|
-        hash = product.graph_data
-        next if product.shipment_items.empty?
-
-        items = product.shipment_items.joins(:shipment).order("shipments.date ASC")
-        ((Time.zone.today - 1.week)...Time.zone.today).each do |date|
-          next if product.graph_data["dates"].nil?
-
-          date_shipments = items.where("shipments.date" => date)
-          i = hash["dates"].index date.strftime("%Y-%m-%d")
-          i ||= hash["dates"].count
-          hash["amounts"][i] = 0
-          hash["shipped"][i] = 0
-          hash["shipments_count"][i] = 0
-          hash["dates"][i] = date
-          hash["amounts"][i] += date_shipments.sum(&:price)
-          hash["shipped"][i] += date_shipments.sum(&:product_quantity)
-          hash["shipments_count"][i] += date_shipments.size
-          datum = ProductGraphDatum.where(product_id: product.id, date: date).first
-          if datum
-            datum.update(
-              amount: hash["amounts"][i],
-              shipped: hash["shipped"][i],
-              shipment_count: hash["shipments_count"][i]
-            )
-          else
-            ProductGraphDatum.create(
-              bakery_id: bakery.id,
-              product_id: product.id,
-              date: hash["dates"][i],
-              amount: hash["amounts"][i],
-              shipped: hash["shipped"][i],
-              shipment_count: hash["shipments_count"][i]
-            )
-          end
-        end
-        product.update(graph_data: hash)
-      end
-    end
+    ProductGraphDataService.digest_last_week
   end
 end

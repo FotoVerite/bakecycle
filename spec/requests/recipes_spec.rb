@@ -87,6 +87,41 @@ RSpec.describe "Recipes", type: :request do
     end
   end
 
+  describe "whodunnit column" do
+    before { sign_in user }
+
+    it "renders updated_at list without crashing when a recipe has no versions" do
+      PaperTrail::Version.where(item: recipe).delete_all
+      expect(recipe.reload.versions).to be_empty
+
+      get updated_at_recipes_path
+
+      expect(response).to be_successful
+    end
+
+    it "renders created_at list without crashing when a recipe has no versions" do
+      PaperTrail::Version.where(item: recipe).delete_all
+      expect(recipe.reload.versions).to be_empty
+
+      get created_at_recipes_path
+
+      expect(response).to be_successful
+    end
+
+    it "shows 'Unknown user' when the editor was deleted" do
+      editor = create(:user, bakery: bakery)
+      sign_in editor
+      patch recipe_path(recipe), params: { recipe: { name: "Sourdough" } }
+      editor.destroy
+
+      sign_in user
+      get updated_at_recipes_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("Unknown user")
+    end
+  end
+
   describe "data scoping" do
     before { sign_in user }
 

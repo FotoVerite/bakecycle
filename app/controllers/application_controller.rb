@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
+  include JobQueueHelper
   after_action :verify_authorized, :verify_policy_scoped, unless: :skip_pundit_verification?
   before_action :active_nav
   before_action :authenticate_user!
@@ -46,7 +47,7 @@ class ApplicationController < ActionController::Base
   end
 
   def no_job_workers
-    @job_workers_offline = SolidQueue::Process.none?
+    @job_workers_offline = active_solid_queue_workers.zero?
   end
 
   def job_workers_offline?

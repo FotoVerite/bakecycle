@@ -20,16 +20,17 @@
         <td data-title="Type"><%= recipe.recipe_type %></td>
         <% if show_created_whodoneit %>
           <td data-title="By">
-            <% if recipe.versions.first.whodunnit  %>
-              <%= User.find(recipe.versions.first.whodunnit).name %>
+            <% if (first_editor = recipe.versions.first&.whodunnit) %>
+              <%= User.find_by(id: first_editor)&.name || "Unknown user" %>
             <% end %>
           </td>
         <% end %>
         <% if show_updated_at_whodoneit %>
           <td data-title="By">
-            <% if recipe.versions.last.whodunnit  %>
-             <%= User.find(recipe.versions.last.whodunnit).name %></td>
+            <% if (last_editor = recipe.versions.last&.whodunnit) %>
+             <%= User.find_by(id: last_editor)&.name || "Unknown user" %>
             <% end %>
+          </td>
         <% end %>
         <% if policy(recipe).manage_permission? %>
           <td data-title="Action">

@@ -4,7 +4,6 @@ source "https://rubygems.org"
 
 ruby "3.3.1"
 
-gem "airbrake"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "chronic"

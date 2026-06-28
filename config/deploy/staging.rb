@@ -12,7 +12,7 @@ set :default_env, {
 }
 set :ssh_options, forward_agent: true
 set :puma_service_unit, "bakecycle-staging-puma.service"
-set :solid_queue_service_unit, "bakecycle-staging-solid-queue.service"
+set :worker_service_units, %w[bakecycle-staging-solid-queue.service]
 set :workers, "*" => 2
 
 append :linked_files, "config/credentials/staging.key"

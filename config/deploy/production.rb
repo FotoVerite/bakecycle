@@ -4,6 +4,7 @@ set :deploy_to, "/var/www/bakecycle_production"
 set :user, "deploy"
 set :branch, "master"
 set :ssh_options, forward_agent: true, port: 21500
+set :worker_service_units, %w[resque.service]
 
 # Simple Role Syntax
 # ==================

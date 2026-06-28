@@ -10,17 +10,41 @@
 #     schedule: at 5am every day
 
 production:
+  kickoff:
+    class: KickoffJob
+    queue: operations
+    schedule: every 5 minutes
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
   purge_old_versions:
     class: PurgeOldVersionsJob
     schedule: every day at 3am
+  product_graph_data_digest:
+    class: ProductGraphDataDigestJob
+    queue: operations
+    schedule: every day at 6:30am
+  shipment_graph_data_digest:
+    class: ShipmentGraphDataDigestJob
+    queue: operations
+    schedule: every day at 6:45am
 
 staging:
+  kickoff:
+    class: KickoffJob
+    queue: operations
+    schedule: every 5 minutes
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
   purge_old_versions:
     class: PurgeOldVersionsJob
     schedule: every day at 3am
+  product_graph_data_digest:
+    class: ProductGraphDataDigestJob
+    queue: operations
+    schedule: every day at 6:30am
+  shipment_graph_data_digest:
+    class: ShipmentGraphDataDigestJob
+    queue: operations
+    schedule: every day at 6:45am

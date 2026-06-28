@@ -3,10 +3,14 @@ default: &default
     - polling_interval: 1
       batch_size: 500
   workers:
-    - queues: "*"
+    - queues: [file_exporter, default, payments, demo_creation]
       threads: 3
       processes: <%= ENV.fetch("JOB_CONCURRENCY", 1) %>
       polling_interval: 0.1
+    - queues: [operations]
+      threads: 1
+      processes: <%= ENV.fetch("OPERATIONS_JOB_CONCURRENCY", 1) %>
+      polling_interval: 1
 
 development:
   <<: *default

@@ -83,10 +83,6 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     afm (1.0.0)
-    airbrake (13.0.5)
-      airbrake-ruby (~> 6.0)
-    airbrake-ruby (6.2.2)
-      rbtree3 (~> 0.6)
     airbrussh (1.6.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.3)
@@ -423,7 +419,6 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.4.2)
-    rbtree3 (0.7.1)
     rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
@@ -578,7 +573,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  airbrake
   better_errors
   binding_of_caller
   brakeman
