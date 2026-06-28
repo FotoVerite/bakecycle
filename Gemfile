@@ -6,6 +6,7 @@ ruby "3.3.1"
 
 gem "caxlsx"
 gem "caxlsx_rails"
+gem "aws-sdk-s3"
 gem "chronic"
 gem "dartsass-rails"
 gem "devise"

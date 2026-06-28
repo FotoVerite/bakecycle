@@ -15,7 +15,12 @@ Rails.application.configure do
   config.force_ssl = ENV.fetch("FORCE_SSL", "true") == "true"
 
   config.log_tags = [:request_id]
-  config.logger = ActiveSupport::TaggedLogging.logger($stdout)
+  config.logger = ActiveSupport::TaggedLogging.new(
+    ActiveSupport::BroadcastLogger.new(
+      ActiveSupport::Logger.new($stdout),
+      ActiveSupport::Logger.new(Rails.root.join("log/staging.log"))
+    )
+  )
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
   config.silence_healthcheck_path = "/up"
 

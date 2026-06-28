@@ -29,6 +29,10 @@ set :puma_service_unit, "puma.service"
 set :worker_service_units, []
 
 namespace :app do
+  def app_service_units
+    [fetch(:puma_service_unit), *Array(fetch(:worker_service_units, []))]
+  end
+
   desc "Restart Puma"
   task :restart_puma do
     on roles(:web) do |_host|
@@ -59,6 +63,58 @@ namespace :app do
       worker_service_units.each do |service_unit|
         execute :sudo, :systemctl, :status, service_unit, "--no-pager"
       end
+    end
+  end
+
+  desc "Show app service status"
+  task :status do
+    on roles(:app) do |_host|
+      app_service_units.each do |service_unit|
+        execute :sudo, :systemctl, :status, service_unit, "--no-pager"
+      end
+    end
+  end
+
+  desc "Show recent app service logs"
+  task :logs do
+    lines = ENV.fetch("LINES", 200)
+
+    on roles(:app) do |_host|
+      app_service_units.each do |service_unit|
+        execute :sudo, :journalctl, "-u", service_unit, "-n", lines, "--no-pager", "-o", "short-iso"
+      end
+    end
+  end
+
+  desc "Tail app service logs"
+  task :tail_logs do
+    lines = ENV.fetch("LINES", 100)
+    units = app_service_units.flat_map { |service_unit| ["-u", service_unit] }
+
+    on roles(:app) do |_host|
+      execute :sudo, :journalctl, *units, "-n", lines, "-f", "-o", "short-iso"
+    end
+  end
+
+  desc "Tail Puma logs"
+  task :tail_puma_logs do
+    lines = ENV.fetch("LINES", 100)
+
+    on roles(:web) do |_host|
+      execute :sudo, :journalctl, "-u", fetch(:puma_service_unit), "-n", lines, "-f", "-o", "short-iso"
+    end
+  end
+
+  desc "Tail worker service logs"
+  task :tail_worker_logs do
+    lines = ENV.fetch("LINES", 100)
+    worker_service_units = Array(fetch(:worker_service_units, []))
+    next if worker_service_units.empty?
+
+    units = worker_service_units.flat_map { |service_unit| ["-u", service_unit] }
+
+    on roles(:app) do |_host|
+      execute :sudo, :journalctl, *units, "-n", lines, "-f", "-o", "short-iso"
     end
   end
 
