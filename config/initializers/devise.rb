@@ -302,4 +302,14 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+
+  # ==> Hotwire/Turbo configuration
+  # Devise's failure app recalls the sign-in form on auth failure and returns
+  # whatever status `error_status` names. The library default is `:ok` (200),
+  # which Turbo Drive rejects for a POST response ("Form responses must
+  # redirect to another location") since it expects either a redirect or a
+  # 4xx/5xx. Match Devise's own Turbo-app generator defaults instead.
+  config.navigational_formats = ["*/*", :html, :turbo_stream]
+  config.responder.error_status = :unprocessable_content
+  config.responder.redirect_status = :see_other
 end
