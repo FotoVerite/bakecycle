@@ -1,42 +1,46 @@
 <% provide(:title, "Papertrail of Recipe ##{@recipe.id}") %>
-<h1>Papertrail of Recipe #<%= recipe.id %></h1>
-<% if @recipe.versions.last.whodunnit %>
-<p>Last edited by <%= User.find(@recipe.versions.last.whodunnit).name %> at <%= @recipe.updated_at.strftime("%Y-%m-%d %k:%M%p") %></p>
-<% end %>
-<% @recipe.versions.reverse.each do | version| %>
-  <% next if version.event == 'create' %>
-  <% if version.whodunnit %>
-  changed by <%= User.find(version.whodunnit).name %> at <%= version.changeset['updated_at'][1].strftime("%Y-%m-%d %k:%M%p") %>
-  <% end %>
-  <% version.changeset.except!('updated_at').each do |k, v| %>
-    <% changed_from = (v[0].is_a?(String) && v[0].blank?) ? 'blank' : v[0] %>
-   <p> <%= "#{k} from #{changed_from} to #{v[1]}" %></p>
-  <% end %>
-<% end %>
-<h2>Recipe Items</h2>
-<% @recipe.recipe_items_with_removes.order('updated_at DESC').each do |item| %>
-  <h3>
-    <%= item.inclusionable.name %>
-    <hr />
-  </h3>
-  <% for version in item.versions.reverse %>
-    <% if version.changeset.has_key?(:recipe_id) && version.whodunnit %>
-      <p>Created By: <%= User.find(version.whodunnit).name %>
-        at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
+<div class="papertrail-page">
+  <div class="index-header">
+    <div>
+      <h1>Papertrail of <%= @recipe.name %></h1>
+      <p class="papertrail-summary">
+        <% if (last_editor = @recipe.versions.last&.whodunnit) %>
+          <span class="account-avatar"><%= (User.find_by(id: last_editor)&.name || "?").first.upcase %></span>
+          <span>
+            Last edited by <strong><%= User.find_by(id: last_editor)&.name || "Unknown user" %></strong>
+            at <%= @recipe.updated_at.strftime("%b %-d, %Y · %-I:%M%P") %>
+          </span>
+        <% else %>
+          <span>Recipe #<%= @recipe.id %></span>
+        <% end %>
       </p>
-    <% elsif version.changeset.has_key?(:removed) %>
-      <p>
-      Removed By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
-      </p>
-    <% else  %>
-     <p>
-     <% if version.whodunnit %>
-      Edited By: <%= User.find(version.whodunnit).name %> at <%= version.changeset[:updated_at][1].strftime("%Y-%m-%d %k:%M%p") %>
-      <% end %>
-         <% version.changeset.except!('updated_at').each do |k, v| %>
-          <p> <%= "#{k} from #{v[0]} to #{v[1]}" %></p>
-         <% end %>
-      </p>
+    </div>
+  </div>
+
+  <div class="papertrail-section">
+    <div class="papertrail-section-heading">
+      <h2>Change History</h2>
+    </div>
+    <%= render partial: "shared/papertrail_timeline", locals: { versions: @recipe.versions.includes(:item).reverse } %>
+  </div>
+
+  <div class="papertrail-section">
+    <div class="papertrail-section-heading">
+      <h2>Recipe Items</h2>
+    </div>
+    <% @recipe.recipe_items_with_removes.includes(:inclusionable).order("updated_at DESC").each do |item| %>
+      <div class="papertrail-group">
+        <div class="papertrail-group-heading">
+          <h3><%= item.inclusionable.name %></h3>
+          <% if item.removed.to_i != 0 %>
+            <span class="papertrail-removed-badge">Removed</span>
+          <% end %>
+        </div>
+        <%= render partial: "shared/papertrail_timeline", locals: {
+          versions: item.versions.includes(:item).reverse,
+          empty_message: "No changes recorded yet."
+        } %>
+      </div>
     <% end %>
-  <% end %>
-<% end %>
+  </div>
+</div>

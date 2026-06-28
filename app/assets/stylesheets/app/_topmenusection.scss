@@ -134,7 +134,8 @@
 
 .account-avatar {
   align-items: center;
-  background: color.adjust($bc-shakespeare, $lightness: 5%);
+  // -20% clears 4.5:1 contrast for the white initials (was +5%, ~2.3:1, AA fail)
+  background: color.adjust($bc-shakespeare, $lightness: -20%);
   border-radius: 50%;
   color: $bc-white;
   display: flex;

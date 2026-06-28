@@ -1,0 +1,55 @@
+<%#
+  locals:
+    versions      - Enumerable of PaperTrail::Version, newest first
+    only_fields   - optional Array of field names (String) to display; all fields shown if omitted
+    empty_message - optional String shown when there are no versions
+%>
+<% versions = versions.to_a %>
+<% only_fields = local_assigns[:only_fields] %>
+<% empty_message = local_assigns.fetch(:empty_message, "No changes recorded yet.") %>
+<% actor_names = User.where(id: versions.map(&:whodunnit).compact.uniq).pluck(:id, :name).to_h %>
+
+<% if versions.empty? %>
+  <p class="papertrail-empty"><%= empty_message %></p>
+<% else %>
+  <ol class="papertrail-feed">
+    <% versions.each do |version| %>
+      <% actor = version.whodunnit.present? ? (actor_names[version.whodunnit.to_i] || "Unknown user") : "System" %>
+      <% changes = version.changeset.except("updated_at", :updated_at, "id", :id) %>
+      <% changes = changes.slice(*only_fields) if only_fields %>
+      <% next if version.event == "update" && changes.empty? %>
+      <li class="papertrail-entry papertrail-entry--<%= version.event %>">
+        <span class="papertrail-avatar"><%= actor.first.upcase %></span>
+        <div class="papertrail-entry-body">
+          <div class="papertrail-entry-meta">
+            <strong class="papertrail-actor"><%= actor %></strong>
+            <span class="papertrail-verb">
+              <% case version.event
+                 when "create" %>created this
+              <% when "destroy" %>removed this
+              <% else %>made changes
+              <% end %>
+            </span>
+            <% if version.created_at %>
+              <time class="papertrail-time" title="<%= version.created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %>">
+                <%= version.created_at.strftime("%b %-d, %Y · %-I:%M%P") %>
+              </time>
+            <% end %>
+          </div>
+          <% if changes.any? %>
+            <ul class="papertrail-changes">
+              <% changes.each do |field, (from_value, to_value)| %>
+                <li class="papertrail-change">
+                  <span class="papertrail-field"><%= field.to_s.humanize %></span>
+                  <span class="papertrail-value papertrail-value--from"><%= from_value.blank? ? "—" : from_value %></span>
+                  <span class="papertrail-arrow" aria-hidden="true">→</span>
+                  <span class="papertrail-value papertrail-value--to"><%= to_value.blank? ? "—" : to_value %></span>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+<% end %>

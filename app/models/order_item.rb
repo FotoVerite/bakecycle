@@ -21,7 +21,10 @@
 #
 
 class OrderItem < ApplicationRecord
-  has_paper_trail
+  # :touch is in PaperTrail's default `on:` list, but Product#touch_order_items
+  # touches every order item on any product save, which was flooding the
+  # versions table with no-op rows (object_changes blank). Track real changes only.
+  has_paper_trail on: %i[create update destroy]
   extend OrderByProduct
 
   belongs_to :product

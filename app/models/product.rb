@@ -70,7 +70,7 @@ class Product < ApplicationRecord
 
   before_validation :strip_name
   before_save :set_total_lead_days, if: :update_total_lead_days?
-  after_commit :queue_touch_order_items, on: %i[create update]
+  after_commit :queue_touch_order_items, on: %i[create update], if: :lead_days_relevant_change?
   after_touch :update_total_lead_days
   before_destroy :check_for_order_items, prepend: true
 
@@ -98,6 +98,14 @@ class Product < ApplicationRecord
 
   def update_total_lead_days?
     new_record? || motherdough_id_changed? || inclusion_id_changed? || lead_days_override_changed?
+  end
+
+  # Touching every order item for this product (and thus PaperTrail-versioning
+  # them) is only meaningful when total_lead_days could have changed -- not on
+  # every unrelated product edit (name, price, etc).
+  def lead_days_relevant_change?
+    previously_new_record? || saved_change_to_total_lead_days? ||
+      saved_change_to_motherdough_id? || saved_change_to_inclusion_id? || saved_change_to_lead_days_override?
   end
 
   def queue_touch_order_items

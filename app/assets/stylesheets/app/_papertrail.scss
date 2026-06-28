@@ -1,0 +1,231 @@
+@use "sass:color";
+
+.papertrail-page {
+  .index-header {
+    margin-bottom: 16px;
+  }
+}
+
+.papertrail-summary {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin: 0.35rem 0 0;
+
+  .account-avatar {
+    flex: 0 0 auto;
+    font-size: 0.72rem;
+    height: 26px;
+    width: 26px;
+  }
+
+  span {
+    color: $bc-scorpion;
+  }
+}
+
+.papertrail-section {
+  @extend %bc-card;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+}
+
+.papertrail-section-heading {
+  border-bottom: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+
+  h2 {
+    color: $bc-charcoal;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.papertrail-group {
+  & + & {
+    border-top: 1px solid color.adjust($bc-border-grey, $lightness: 4%);
+    margin-top: 18px;
+    padding-top: 18px;
+  }
+}
+
+.papertrail-group-heading {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  h3 {
+    color: $bc-charcoal;
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.papertrail-removed-badge {
+  background: color.adjust($bc-alizarin-crimson, $lightness: 42%);
+  border-radius: 3px;
+  color: color.adjust($bc-alizarin-crimson, $lightness: -8%);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 7px;
+  text-transform: uppercase;
+}
+
+.papertrail-empty {
+  color: $bc-scorpion;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+}
+
+// The feed itself: a vertical timeline with a connecting rail behind the avatars.
+.papertrail-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.papertrail-entry {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 30px minmax(0, 1fr);
+  padding-bottom: 16px;
+  position: relative;
+
+  &:not(:last-child)::before {
+    background: color.adjust($bc-border-grey, $lightness: 4%);
+    content: "";
+    left: 14px;
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    width: 2px;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.papertrail-avatar {
+  align-items: center;
+  // -20% clears 4.5:1 contrast for the white initials (was +5%, ~2.3:1, AA fail)
+  background: color.adjust($bc-shakespeare, $lightness: -20%);
+  border-radius: 50%;
+  color: $bc-white;
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  height: 30px;
+  justify-content: center;
+  position: relative;
+  width: 30px;
+  z-index: 1;
+}
+
+.papertrail-entry--create .papertrail-avatar {
+  background: color.adjust($bc-lima, $lightness: -20%);
+}
+
+.papertrail-entry--destroy .papertrail-avatar {
+  background: color.adjust($bc-alizarin-crimson, $lightness: -8%);
+}
+
+.papertrail-entry-body {
+  min-width: 0;
+}
+
+.papertrail-entry-meta {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.papertrail-actor {
+  color: $bc-charcoal;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.papertrail-verb {
+  color: $bc-scorpion;
+  font-size: 0.88rem;
+}
+
+.papertrail-entry--create .papertrail-verb {
+  color: color.adjust($bc-lima, $lightness: -22%);
+}
+
+.papertrail-entry--destroy .papertrail-verb {
+  color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+}
+
+.papertrail-time {
+  // scorpion clears 4.5:1 (silver-chalice was ~2.3:1, AA fail)
+  color: $bc-scorpion;
+  font-size: 0.78rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.papertrail-changes {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.papertrail-change {
+  align-items: center;
+  background: $bc-verylightgrey;
+  border-radius: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.86rem;
+  gap: 8px;
+  padding: 7px 10px;
+}
+
+.papertrail-field {
+  color: $bc-scorpion;
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  min-width: 110px;
+  text-transform: uppercase;
+}
+
+.papertrail-value {
+  color: $bc-charcoal;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.papertrail-value--from {
+  // scorpion clears 4.5:1 against the tinted card bg (silver-chalice was ~2.2:1, AA fail)
+  color: $bc-scorpion;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.papertrail-arrow {
+  color: $bc-silver-chalice;
+}
+
+@media #{$small-only} {
+  .papertrail-field {
+    min-width: 100%;
+  }
+}
