@@ -24,7 +24,9 @@ class ShipmentDecorator < Draper::Decorator
   def product_prices
     @product_prices ||= begin
       hash = {}
-      products = h.item_finder.products.includes(:price_variants)
+      products = h.item_finder.products
+      products = products.includes(:price_variants) if client
+
       if client
         products.each { |p| hash[p.id] = p.price(1, client) }
       else

@@ -99,17 +99,17 @@
               <td data-title="Active"><%= client.active? ? 'Yes' : 'No' %></td>
               <td data-title="Actions">
                 <a href="<%= edit_client_path(client) %>">
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Edit Client">
+                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Client">
                     <i class="fi-page-edit"></i>
                   </span>
                 </a>
                 <a href="<%= client_path(client) %>">
-                  <span class="table-action-icon icon-link-tooltip" aria-label="View Client">
+                  <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="View Client">
                     <i class="fi-eye"></i>
                   </span>
                 </a>
                 <a href="<%= new_order_path(client_id: client.id) %>">
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Add Order For This Client">
+                  <span class="table-action-icon table-action-icon--create icon-link-tooltip" aria-label="Add Order For This Client">
                     <i class="fi-page-add"></i>
                   </span>
                 </a>

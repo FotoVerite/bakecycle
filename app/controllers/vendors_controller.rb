@@ -6,7 +6,7 @@ class VendorsController < ApplicationController
 
   def index
     authorize Vendor
-    @vendors = policy_scope(Vendor)
+    @vendors = policy_scope(Vendor).includes(:bakery)
   end
 
   def new

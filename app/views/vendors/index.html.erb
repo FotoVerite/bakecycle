@@ -29,13 +29,13 @@
             <% if policy(vendor).edit? %>
               <td data-title="Action">
                  <%= link_to pricing_vendor_path(vendor) do %>
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Price Ingredients"><i class="fi-page-edit"></i></span>
+                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Price Ingredients"><i class="fi-page-edit"></i></span>
                 <% end %>
                  <%= link_to buy_orders_vendor_path(vendor) do %>
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Buy Orders"><i class="fi-database"></i></span>
+                  <span class="table-action-icon table-action-icon--financial icon-link-tooltip" aria-label="Buy Orders"><i class="fi-database"></i></span>
                 <% end %>
                 <%= link_to edit_vendor_path(vendor) do %>
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Edit Vendor"><i class="fi-page-edit"></i></span>
+                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Vendor"><i class="fi-page-edit"></i></span>
                 <% end %>
               </td>
             <% end %>

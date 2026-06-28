@@ -126,6 +126,14 @@ $bp-xlarge: 75em;
     color: color.adjust($bc-shakespeare, $lightness: -22%);
   }
 
+  // Spawns a new record (add, copy/duplicate) rather than editing in place.
+  // Deliberately a different hue (teal) from --edit's blue, not just a
+  // different shade, so the two read apart at a glance.
+  &--create {
+    background: #dff1f0;
+    color: #1f6b66;
+  }
+
   &--document {
     background: $bc-off-white;
     color: $bc-scorpion;
@@ -139,6 +147,11 @@ $bp-xlarge: 75em;
   &--financial {
     background: #f8f1de;
     color: #8a6d23;
+  }
+
+  &--destructive {
+    background: color.adjust($bc-alizarin-crimson, $lightness: 38%);
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
   }
 
   &:hover,

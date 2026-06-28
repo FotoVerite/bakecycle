@@ -24,15 +24,15 @@
             <% if policy(product).manage_permission? %>
               <td data-title="Action">
                 <%= link_to product_path(product) do %>
-                  <span class="table-action-icon icon-link-tooltip" aria-label="View Product"><i class="fi-eye"></i></span>
+                  <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="View Product"><i class="fi-eye"></i></span>
                 <% end %>
                 <%= link_to edit_product_path(product) do %>
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Edit Product">
-                    <i class="fi-page-edit large"></i>
+                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Product">
+                    <i class="fi-page-edit"></i>
                   </span>
                 <% end %>
                 <%= link_to papertrail_product_path(product) do %>
-                  <span class="table-action-icon icon-link-tooltip" aria-label="Papertrail"><i class="fi-eye"></i></span>
+                  <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Papertrail"><i class="fi-eye"></i></span>
                 <% end %>
               </td>
             <% end %>
