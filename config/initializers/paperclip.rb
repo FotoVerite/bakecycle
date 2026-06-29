@@ -11,6 +11,7 @@ aws_s3_key = ENV["AWS_S3_KEY"].presence || ENV["AWS_SECRET_ACCESS_KEY"].presence
              Rails.application.credentials.dig(:aws, :secret_access_key)
 aws_s3_region = ENV["AWS_S3_REGION"].presence || ENV["AWS_REGION"].presence ||
                 Rails.application.credentials.dig(:aws, :region).presence || "us-east-1"
+aws_s3_host_name = aws_s3_region == "us-east-1" ? "s3.amazonaws.com" : "s3.#{aws_s3_region}.amazonaws.com"
 
 if aws_s3_bucket.present? && aws_s3_id.present? && aws_s3_key.present?
   Paperclip::Attachment.default_options[:storage] = :s3
@@ -21,6 +22,7 @@ if aws_s3_bucket.present? && aws_s3_id.present? && aws_s3_key.present?
       s3_region: aws_s3_region
     }
   Paperclip::Attachment.default_options[:s3_region] = aws_s3_region
+  Paperclip::Attachment.default_options[:s3_host_name] = aws_s3_host_name
   Paperclip::Attachment.default_options[:s3_protocol] = :https
   Paperclip::Attachment.default_options[:s3_acl_enabled] = false
 end
