@@ -4,6 +4,13 @@ require "rails_helper"
 
 RSpec.describe "Authentication", type: :request do
   describe "unauthenticated access" do
+    it "does not show bakery context on the sign in page" do
+      get new_user_session_path
+
+      expect(response.body).not_to include("No bakery selected")
+      expect(response.body).not_to include("bakery-context")
+    end
+
     it "redirects to sign in from any protected page" do
       get clients_path
       expect(response).to redirect_to(new_user_session_path)

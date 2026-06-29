@@ -167,7 +167,7 @@ class Client < ApplicationRecord
   end
 
   def average_four_week_sales(time)
-    weeks = shipments.where(created_at: (time - 4.weeks)..time)
+    weeks = shipments.includes(:shipment_items).where(created_at: (time - 4.weeks)..time)
     return 0 if weeks.empty?
 
     weeks.sum(&:price) / weeks.size
@@ -180,7 +180,7 @@ class Client < ApplicationRecord
     end_date   = time.beginning_of_week
 
     # Get shipments in the 4-week period
-    recent_shipments = shipments.where(created_at: start_date..end_date)
+    recent_shipments = shipments.includes(:shipment_items).where(created_at: start_date..end_date)
 
     # Group shipments by week
     weeks = recent_shipments.group_by { |s| s.created_at.beginning_of_week }

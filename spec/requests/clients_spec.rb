@@ -74,6 +74,21 @@ RSpec.describe "Clients", type: :request do
       expect(response).to be_successful
     end
 
+    it "shows a delivery location map when coordinates are present" do
+      client.update!(latitude: 40.7143528, longitude: -74.0059731)
+
+      get client_path(client)
+
+      document = Nokogiri::HTML(response.body)
+      map_frame = document.at_css(".client-show-map iframe")
+      map_link = document.at_css(".client-map-section a")
+
+      expect(map_frame["src"]).to include("https://www.google.com/maps")
+      expect(map_frame["src"]).to include("40.7143528%2C-74.0059731")
+      expect(map_link["href"]).to include("https://www.google.com/maps/search/")
+      expect(map_link.text).to include("Open in Google Maps")
+    end
+
     it "shows new client form" do
       get new_client_path
       expect(response).to be_successful

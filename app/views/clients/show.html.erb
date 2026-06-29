@@ -42,18 +42,28 @@
   </div>
 
   <% if client.latitude.present? && client.longitude.present? %>
+    <% map_query = "#{client.latitude},#{client.longitude}" %>
+    <% google_maps_url = "https://www.google.com/maps/search/?api=1&query=#{u(map_query)}" %>
+    <% google_maps_embed_url = "https://www.google.com/maps?q=#{u(map_query)}&z=15&output=embed" %>
+
     <section class="client-detail-section client-map-section">
-      <div class="client-section-heading">
-        <h2>Delivery Map</h2>
-        <p><%= client.delivery_address_full %></p>
+      <div class="client-section-heading client-section-heading-with-actions">
+        <div>
+          <h2>Delivery Map</h2>
+          <p><%= client.delivery_address_full %></p>
+        </div>
+        <div class="client-section-actions">
+          <%= link_to "Open in Google Maps", google_maps_url, class: "button small secondary", target: "_blank", rel: "noopener" %>
+        </div>
       </div>
-      <div class="map-container client-show-map"
-           data-controller="client-map"
-           data-client-map-lat-value="<%= client.latitude %>"
-           data-client-map-lng-value="<%= client.longitude %>"
-           data-client-map-name-value="<%= client.name %>"
-           data-client-map-api-key-value="<%= ENV['GOOGLE_GEOCODER_API_KEY'] %>"
-           data-client-map-address-value="<%= client.delivery_address_full %>">
+
+      <div class="map-container client-show-map">
+        <iframe
+          title="Delivery location for <%= client.name %>"
+          src="<%= google_maps_embed_url %>"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
     </section>
   <% end %>
