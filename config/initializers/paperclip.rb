@@ -22,4 +22,5 @@ if aws_s3_bucket.present? && aws_s3_id.present? && aws_s3_key.present?
     }
   Paperclip::Attachment.default_options[:s3_region] = aws_s3_region
   Paperclip::Attachment.default_options[:s3_protocol] = :https
+  Paperclip::Attachment.default_options[:s3_acl_enabled] = false
 end
