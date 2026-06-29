@@ -29,4 +29,10 @@ class FileExport < ApplicationRecord
   def ready?
     file.present?
   end
+
+  def download_url
+    return unless ready?
+
+    file.expiring_url(10.minutes.to_i)
+  end
 end

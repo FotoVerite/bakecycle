@@ -19,7 +19,7 @@ module Api
         loadingMessage: LoadingMessages.sample,
         links: {
           self: api_file_export_path(export),
-          file: export.ready? ? export.file.url : nil
+          file: export.download_url
         }
       }
     end

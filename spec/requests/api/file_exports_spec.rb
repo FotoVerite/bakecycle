@@ -31,7 +31,9 @@ RSpec.describe "Api::FileExports", type: :request do
 
       it "returns JSON with ready true and a file URL when generated" do
         file_export_with_file = create(:file_export, :with_file, bakery: bakery)
+
         get api_file_export_path(file_export_with_file)
+
         data = JSON.parse(response.body)["fileExport"]
         expect(data["ready?"]).to be true
         expect(data["links"]["file"]).to be_present
