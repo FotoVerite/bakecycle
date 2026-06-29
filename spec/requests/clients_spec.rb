@@ -89,6 +89,25 @@ RSpec.describe "Clients", type: :request do
       expect(map_link.text).to include("Open in Google Maps")
     end
 
+    it "shows a delivery location map from the address when coordinates are missing" do
+      client.update_columns(
+        latitude: nil,
+        longitude: nil,
+        delivery_address_street_1: "54 Mercer St",
+        delivery_address_city: "New York",
+        delivery_address_state: "NY",
+        delivery_address_zipcode: "10013"
+      )
+
+      get client_path(client)
+
+      document = Nokogiri::HTML(response.body)
+      map_frame = document.at_css(".client-show-map iframe")
+
+      expect(map_frame["src"]).to include("https://www.google.com/maps")
+      expect(map_frame["src"]).to include("54%20Mercer%20St%20New%20York%2C%20NY%2010013")
+    end
+
     it "shows new client form" do
       get new_client_path
       expect(response).to be_successful
