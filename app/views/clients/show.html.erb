@@ -42,7 +42,7 @@
   </div>
 
   <% if (client.latitude.present? && client.longitude.present?) || client.delivery_address_full.present? %>
-    <% map_query = client.latitude.present? && client.longitude.present? ? "#{client.latitude},#{client.longitude}" : client.delivery_address_full.squish %>
+    <% map_query = client.delivery_address_full.present? ? "#{client.name} #{client.delivery_address_full.squish}" : "#{client.latitude},#{client.longitude}" %>
     <% google_maps_url = "https://www.google.com/maps/search/?api=1&query=#{u(map_query)}" %>
     <% google_maps_embed_url = "https://www.google.com/maps?q=#{u(map_query)}&z=15&output=embed" %>
 

@@ -84,8 +84,9 @@ RSpec.describe "Clients", type: :request do
       map_link = document.at_css(".client-map-section a")
 
       expect(map_frame["src"]).to include("https://www.google.com/maps")
-      expect(map_frame["src"]).to include("40.7143528%2C-74.0059731")
+      expect(map_frame["src"]).to include(ERB::Util.url_encode(client.name))
       expect(map_link["href"]).to include("https://www.google.com/maps/search/")
+      expect(map_link["href"]).to include(ERB::Util.url_encode(client.name))
       expect(map_link.text).to include("Open in Google Maps")
     end
 
@@ -105,7 +106,9 @@ RSpec.describe "Clients", type: :request do
       map_frame = document.at_css(".client-show-map iframe")
 
       expect(map_frame["src"]).to include("https://www.google.com/maps")
+      expect(map_frame["src"]).to include(ERB::Util.url_encode(client.name))
       expect(map_frame["src"]).to include("54%20Mercer%20St%20New%20York%2C%20NY%2010013")
+      expect(document.at_css(".client-map-section a")["href"]).to include(ERB::Util.url_encode(client.name))
     end
 
     it "shows new client form" do
