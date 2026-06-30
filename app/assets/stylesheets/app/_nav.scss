@@ -76,7 +76,7 @@
     width: 3px;
   }
 
-  i {
+  .bc-icon {
     color: $bc-silver-chalice;
     font-size: 1.2rem;
     text-align: center;
@@ -97,7 +97,7 @@
       background: $bc-shakespeare;
     }
 
-    i {
+    .bc-icon {
       color: $bc-shakespeare;
     }
   }
@@ -134,7 +134,7 @@
     padding: 7px 8px;
     transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
 
-    i {
+    .bc-icon {
       color: $bc-shakespeare;
       font-size: 1rem;
       text-align: center;
@@ -193,7 +193,7 @@
   text-transform: uppercase;
   transition: background-color 150ms ease-out, color 150ms ease-out;
 
-  i {
+  .bc-icon {
     font-size: 0.78rem;
   }
 
@@ -226,7 +226,7 @@
     font-size: 0.8rem;
     font-weight: 700;
     gap: 10px;
-    grid-template-columns: 22px minmax(0, 1fr) 14px;
+    grid-template-columns: 22px minmax(0, 1fr) 18px;
     list-style: none;
     margin-left: 3px;
     min-height: 42px;
@@ -269,8 +269,9 @@
   }
 
   .nav-caret {
-    color: $bc-silver-chalice;
-    font-size: 0.72rem;
+    color: color.adjust($bc-scorpion, $lightness: -4%);
+    font-size: 0.95rem;
+    stroke-width: 3;
     transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 

@@ -19,13 +19,13 @@
       </div>
       <div class="report-action-buttons">
         <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf, type: :pdf), target: '_blank', class: "button small" do %>
-          <i class='fi-page-export-pdf'></i> Print Delivery List
+          <%= icon("file-text") %> Print Delivery List
         <% end %>
         <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), type: :xlsx), target: '_blank', class: "button small secondary" do %>
-          <i class='fi-page-export'></i> Export Excel
+          <%= icon("download") %> Export Excel
         <% end %>
         <%= link_to print_sorted_delivery_list_path(@recipes.date.strftime("%Y-%m-%d")), target: '_blank', class: "button small secondary" do %>
-          <i class='fi-page-export'></i> Export Sorted Excel
+          <%= icon("download") %> Export Sorted Excel
         <% end %>
       </div>
     </div>

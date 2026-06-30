@@ -242,10 +242,10 @@
               <td data-title="Order Type"><%= order.type %></td>
               <td data-title="Action">
                 <%= link_to edit_order_path(order) do %>
-                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Order"><i class="fi-page-edit"></i></span>
+                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Order"><%= icon("pencil") %></span>
                 <% end %>
                 <%= link_to copy_order_path(order) do %>
-                  <span class="table-action-icon table-action-icon--create icon-link-tooltip" aria-label="Copy Order"><i class="fi-page-copy"></i></span>
+                  <span class="table-action-icon table-action-icon--create icon-link-tooltip" aria-label="Copy Order"><%= icon("copy") %></span>
                 <% end %>
               </td>
             </tr>
@@ -288,7 +288,7 @@
               <td data-title="Total"><%= shipment.price %></td>
               <td data-title="Action">
                 <%= link_to edit_shipment_path(shipment) do %>
-                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Invoice"><i class="fi-page-edit"></i></span>
+                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Invoice"><%= icon("pencil") %></span>
                 <% end %>
               </td>
             </tr>

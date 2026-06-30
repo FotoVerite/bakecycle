@@ -8,7 +8,7 @@
           Clients
           <h3><%= item_finder.clients.count %></h3>
         </div>
-        <i class="fi-torsos-all right"></i>
+        <%= icon("users", class: "right") %>
     <% end %>
   </div>
   <div class="large-4 medium-6 small-12 columns">
@@ -17,7 +17,7 @@
           Orders
           <h3><%= item_finder.orders.count %></h3>
         </div>
-        <i class="fi-shopping-bag right"></i>
+        <%= icon("shopping-bag", class: "right") %>
     <% end %>
   </div>
   <div class="large-4 medium-6 small-12 columns">
@@ -26,7 +26,7 @@
           Invoices
           <h3><%= item_finder.shipments.count %></h3>
         </div>
-        <i class="fi-calendar right"></i>
+        <%= icon("files", class: "right") %>
     <% end %>
   </div>
 </div>

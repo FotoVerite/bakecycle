@@ -9,7 +9,7 @@
             back to plain text rather than risk a link to a guessed id. %>
         <% field_id = "#{f.object.model_name.param_key}_#{error.attribute}" unless error.attribute == :base %>
         <li>
-          <i class="fi-alert" aria-hidden="true"></i>
+          <%= icon("triangle-alert") %>
           <% if field_id %>
             <%= link_to error.full_message, "##{field_id}", data: { turbo: false } %>
           <% else %>

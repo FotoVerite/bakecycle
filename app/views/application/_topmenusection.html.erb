@@ -1,7 +1,7 @@
 <header class="top-menu-section" data-controller="navigation">
   <div class="top-menu-brand">
     <button class="top-menu-toggle" type="button" data-action="click->navigation#toggleMenu" aria-label="Toggle navigation">
-      <i class="fi-list" aria-hidden="true"></i>
+      <%= icon("menu") %>
     </button>
     <%= link_to "Bakecycle", dashboard_path, class: "top-menu-logo" %>
   </div>
@@ -17,12 +17,12 @@
         <% if job_workers_offline? %>
           <% if policy(:job).dashboard? %>
             <%= link_to mission_control_jobs.root_path, class: "operations-status warning", title: "Solid Queue workers are offline", aria: { label: "Workers offline" } do %>
-              <i class="fi-alert" aria-hidden="true"></i>
+              <%= icon("triangle-alert") %>
               <span>Workers offline</span>
             <% end %>
           <% else %>
             <span class="operations-status warning" title="Solid Queue workers are offline" aria-label="Workers offline">
-              <i class="fi-alert" aria-hidden="true"></i>
+              <%= icon("triangle-alert") %>
               <span>Workers offline</span>
             </span>
           <% end %>
@@ -35,25 +35,45 @@
               <strong><%= current_user.name %></strong>
               <small>Account</small>
             </span>
-            <i class="fi-arrow-down account-menu-caret" aria-hidden="true"></i>
+            <span class="account-menu-settings">
+              <%= icon("settings", class: "account-menu-settings-icon", label: "Account settings") %>
+            </span>
           </summary>
           <div class="account-menu-panel">
             <% if policy(current_user).edit? %>
-              <%= link_to "My Account", my_users_path %>
+              <%= link_to my_users_path do %>
+                <%= icon("user") %>
+                <span>My Account</span>
+              <% end %>
             <% end %>
             <% if current_bakery && policy(current_bakery).edit? %>
-              <%= link_to "Bakery Settings", my_bakeries_path %>
+              <%= link_to my_bakeries_path do %>
+                <%= icon("building-2") %>
+                <span>Bakery Settings</span>
+              <% end %>
             <% end %>
             <% if policy(User).index? %>
-              <%= link_to "Users", users_path %>
+              <%= link_to users_path do %>
+                <%= icon("users") %>
+                <span>Users</span>
+              <% end %>
             <% end %>
             <% if policy(Bakery).index? %>
-              <%= link_to "Bakeries", bakeries_path %>
+              <%= link_to bakeries_path do %>
+                <%= icon("building-2") %>
+                <span>Bakeries</span>
+              <% end %>
             <% end %>
             <% if policy(:job).dashboard? %>
-              <%= link_to "Jobs", mission_control_jobs.root_path %>
+              <%= link_to mission_control_jobs.root_path do %>
+                <%= icon("list-checks") %>
+                <span>Jobs</span>
+              <% end %>
             <% end %>
-            <%= link_to "Log Out", destroy_user_session_path, class: "account-menu-logout", data: { turbo_method: :delete } %>
+            <%= link_to destroy_user_session_path, class: "account-menu-logout", data: { turbo_method: :delete } do %>
+              <%= icon("log-out") %>
+              <span>Log Out</span>
+            <% end %>
           </div>
         </details>
       </div>

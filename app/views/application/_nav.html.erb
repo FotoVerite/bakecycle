@@ -3,11 +3,11 @@
     <nav class="side-navigation js-nav-toggle" data-controller="navigation" aria-label="Primary navigation">
       <div class="nav-primary-links">
         <%= link_to dashboard_path, class: "nav-primary-link #{'active' if active_nav_group?(:dashboard)}" do %>
-          <%= image_tag "icons/icon-dashboard.svg", alt: "", class: "nav-icon" %>
+          <%= icon("layout-dashboard", class: "nav-icon") %>
           <span>Dashboard</span>
         <% end %>
         <%= link_to reports_path, class: "nav-primary-link #{'active' if active_nav_group?(:reports)}" do %>
-          <i class="fi-graph-bar" aria-hidden="true"></i>
+          <%= icon("chart-bar") %>
           <span>Reports</span>
         <% end %>
       </div>
@@ -16,7 +16,7 @@
         <div class="nav-section-heading">
           <span id="nav-pins-heading">Pinned</span>
           <%= link_to pinned_actions_path, class: "nav-section-action" do %>
-            <i class="fi-widget" aria-hidden="true"></i>
+            <%= icon("settings") %>
             Manage
           <% end %>
         </div>
@@ -25,7 +25,7 @@
             <% navigation_pinned_actions.each do |action| %>
               <li>
                 <%= link_to action.path do %>
-                  <i class="<%= action.icon %>" aria-hidden="true"></i>
+                  <%= icon(action.icon) %>
                   <span><%= action.label %></span>
                 <% end %>
               </li>
@@ -40,9 +40,9 @@
         <% if policy(Client).index? %>
           <details class="nav-group" <%= "open" if active_nav_group?(:clients, :orders, :shipments, :cancellations) %>>
             <summary data-action="click->navigation#toggleGroup">
-              <%= image_tag "icons/icon-client.svg", alt: "", class: "nav-icon" %>
+              <%= icon("users", class: "nav-icon") %>
               <span>Clients</span>
-              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+              <%= icon("chevron-down", class: "nav-caret") %>
             </summary>
             <ul>
               <li class="<%= active_nav?(:clients) %>"><%= link_to "Clients", clients_path %></li>
@@ -58,9 +58,9 @@
         <% if current_bakery && policy(ProductionRun).index? %>
           <details class="nav-group" <%= "open" if active_nav_group?(:print_recipes, :batch_recipes, :production_runs, :production_checklists, :daily_totals) %>>
             <summary data-action="click->navigation#toggleGroup">
-              <%= image_tag "icons/icon-production.svg", alt: "", class: "nav-icon" %>
+              <%= icon("wheat", class: "nav-icon") %>
               <span>Production</span>
-              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+              <%= icon("chevron-down", class: "nav-caret") %>
             </summary>
             <ul>
               <li class="<%= active_nav?(:print_recipes) %>"><%= link_to "Daily Recipes", print_recipes_path %></li>
@@ -75,9 +75,9 @@
         <% if current_bakery && policy(Route).index? %>
           <details class="nav-group" <%= "open" if active_nav_group?(:routes, :delivery_lists, :packing_slips, :nightly_sign_offs) %>>
             <summary data-action="click->navigation#toggleGroup">
-              <%= image_tag "icons/icon-shipping.svg", alt: "", class: "nav-icon" %>
+              <%= icon("truck", class: "nav-icon") %>
               <span>Shipping</span>
-              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+              <%= icon("chevron-down", class: "nav-caret") %>
             </summary>
             <ul>
               <li class="<%= active_nav?(:delivery_lists) %>"><%= link_to "Delivery Lists", delivery_lists_path %></li>
@@ -91,9 +91,9 @@
         <% if current_bakery && policy(Product).index? %>
           <details class="nav-group" <%= "open" if active_nav_group?(:ingredients, :recipes, :products, :vendors, :buy_orders) %>>
             <summary data-action="click->navigation#toggleGroup">
-              <%= image_tag "icons/icon-product.svg", alt: "", class: "nav-icon" %>
+              <%= icon("package", class: "nav-icon") %>
               <span>Catalog</span>
-              <i class="fi-arrow-down nav-caret" aria-hidden="true"></i>
+              <%= icon("chevron-down", class: "nav-caret") %>
             </summary>
             <ul>
               <li class="<%= active_nav?(:ingredients) %>"><%= link_to "Ingredients", ingredients_path %></li>

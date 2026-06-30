@@ -2,26 +2,26 @@
   <% pin = pinned_action_record(action_key) %>
   <details class="pin-action-menu">
     <summary aria-label="More actions" title="More actions">
-      <i class="fi-widget" aria-hidden="true"></i>
+      <%= icon("settings") %>
     </summary>
     <div class="pin-action-menu-panel">
       <% if pin %>
         <%= button_to pinned_action_path(pin), method: :delete,
                       params: { return_to: local_assigns[:return_to] || request.fullpath },
                       class: "pin-action-menu-item" do %>
-          <i class="fi-x" aria-hidden="true"></i>
+          <%= icon("x") %>
           <span>Unpin action</span>
         <% end %>
       <% else %>
         <%= button_to pinned_actions_path,
                       params: { action_key: action_key, return_to: local_assigns[:return_to] || request.fullpath },
                       class: "pin-action-menu-item" do %>
-          <i class="fi-bookmark" aria-hidden="true"></i>
+          <%= icon("bookmark") %>
           <span>Pin action</span>
         <% end %>
       <% end %>
       <%= link_to pinned_actions_path, class: "pin-action-menu-item" do %>
-        <i class="fi-list" aria-hidden="true"></i>
+        <%= icon("list") %>
         <span>Manage pins</span>
       <% end %>
     </div>

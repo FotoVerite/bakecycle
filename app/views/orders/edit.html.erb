@@ -12,19 +12,19 @@
 
     <div class="form-header-actions order-action-bar">
       <%= link_to orders_path, class: "button small secondary" do %>
-        <i class="fi-arrow-left"></i>
+        <%= icon("arrow-left") %>
         <span>Back</span>
       <% end %>
       <%= link_to print_order_path(order), target: "_blank", class: "button small" do %>
-        <i class="fi-print"></i>
+        <%= icon("printer") %>
         <span>Print</span>
       <% end %>
       <%= link_to copy_order_path(order), class: "button small" do %>
-        <i class="fi-page-copy"></i>
+        <%= icon("copy") %>
         <span>Copy Order</span>
       <% end %>
       <%= link_to future_invoices_order_path(order), class: "button small order-action-primary" do %>
-        <i class="fi-page-add"></i>
+        <%= icon("file-plus") %>
         <span>Create Future Invoices</span>
       <% end %>
     </div>

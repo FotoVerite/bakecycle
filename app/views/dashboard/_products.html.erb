@@ -8,7 +8,7 @@
           Ingredients
           <h3><%= item_finder.ingredients.count %></h3>
         </div>
-        <i class="fi-info right"></i>
+        <%= icon("wheat", class: "right") %>
     <% end %>
   </div>
   <div class="large-4 medium-6 small-12 columns">
@@ -17,7 +17,7 @@
           Recipes
           <h3><%= item_finder.recipes.count %></h3>
         </div>
-        <i class="fi-info right"></i>
+        <%= icon("clipboard-list", class: "right") %>
     <% end %>
   </div>
   <div class="large-4 medium-6 small-12 columns">
@@ -26,7 +26,7 @@
           Products
           <h3><%= item_finder.products.count %></h3>
         </div>
-        <i class="fi-price-tag right"></i>
+        <%= icon("tag", class: "right") %>
     <% end %>
   </div>
 </div>

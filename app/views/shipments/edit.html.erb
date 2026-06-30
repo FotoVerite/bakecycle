@@ -10,16 +10,16 @@
     <div class="form-header-actions">
       <%= link_to 'Back', shipments_path, class: "button small secondary"%>
       <%= link_to invoice_shipment_path(@shipment), target: "_blank", class: "button small" do %>
-        <i class='fi-page-export-pdf'></i> Print
+        <%= icon("file-text") %> Print
       <% end %>
       <%= link_to packing_slip_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button small" do %>
-        <i class='fi-page-export'></i> Print Packing Slip
+        <%= icon("file-text") %> Print Packing Slip
       <% end %>
       <%= link_to invoice_iif_shipment_path(shipment), target: "_blank", class: "button small" do %>
-        <i class='fi-page-export'></i> Export to Quickbooks
+        <%= icon("dollar-sign") %> Export to Quickbooks
       <% end %>
       <%= link_to invoice_csv_shipment_path(shipment), target: "_blank", class: "button small" do %>
-        <i class='fi-page-export'></i> Export to CSV
+        <%= icon("file-spreadsheet") %> Export to CSV
       <% end %>
     </div>
   </div>

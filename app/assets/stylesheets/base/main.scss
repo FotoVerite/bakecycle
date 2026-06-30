@@ -89,7 +89,7 @@ input[type="text"] {
     }
   }
 
-  i {
+  .bc-icon {
     flex: 0 0 auto;
     font-size: 0.85em;
   }
@@ -127,6 +127,19 @@ input[type="text"] {
 
 [hidden] {
   display: none !important;
+}
+
+.bc-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 1em;
+  stroke: currentColor;
+  vertical-align: -0.14em;
+  width: 1em;
+}
+
+.button .bc-icon {
+  margin-right: 0.35rem;
 }
 
 .show-for-sr {

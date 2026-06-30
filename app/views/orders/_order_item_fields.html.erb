@@ -44,7 +44,7 @@
             class="nested-icon-btn nested-btn-remove"
             data-action="nested-form#remove order-form#rowChanged"
             title="Remove">
-      <i class="fi-x"></i>
+      <%= icon("x") %>
     </button>
     <% if item.persisted? %>
       <button type="button"
@@ -52,7 +52,7 @@
               data-action="nested-form#restore order-form#rowChanged"
               title="Restore"
               hidden>
-        <i class="fi-refresh"></i>
+        <%= icon("rotate-ccw") %>
       </button>
     <% end %>
   </div>

@@ -116,7 +116,7 @@
     color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
   }
 
-  i {
+  .bc-icon {
     color: color.adjust($bc-alizarin-crimson, $lightness: -8%);
     font-size: 0.78rem;
     margin-left: 4px;
@@ -128,7 +128,7 @@
     border-color: color.adjust($bc-alizarin-crimson, $lightness: 18%);
 
     strong,
-    strong i {
+    strong .bc-icon {
       color: color.adjust($bc-alizarin-crimson, $lightness: -16%);
     }
   }
@@ -893,7 +893,7 @@
   min-width: 40px;
   transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 
-  i {
+  .bc-icon {
     font-size: 1rem;
     line-height: 1;
   }
@@ -981,7 +981,7 @@
     min-height: 34px;
     transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 
-    i {
+    .bc-icon {
       font-size: 0.95rem;
       line-height: 1;
     }
@@ -1311,7 +1311,7 @@
     cursor: grabbing;
   }
 
-  i {
+  .bc-icon {
     font-size: 1.1rem;
     line-height: 1;
   }

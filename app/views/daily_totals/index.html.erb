@@ -18,16 +18,16 @@
         <p class="projection"><%= pluralize(@recipes.shipments.count, "Invoice") %> on the following routes</p>
       </div>
       <div class="report-action-buttons">
-        <%= link_to "<i class='fi-page-export-pdf'></i> Print With Routes".html_safe,
+        <%= link_to "#{icon('file-text')} Print With Routes".html_safe,
           print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :pdf), target: "_blank", class: "button small"%>
 
-        <%= link_to "<i class='fi-page-export-pdf'></i> Print Without Routes".html_safe,
+        <%= link_to "#{icon('file-text')} Print Without Routes".html_safe,
           print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :pdf), target: "_blank", class: "button small secondary"%>
 
-        <%= link_to "<i class='fi-page-export'></i> Export With Routes".html_safe,
+        <%= link_to "#{icon('download')} Export With Routes".html_safe,
           print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :xlsx), target: "_blank", class: "button small secondary" %>
 
-        <%= link_to "<i class='fi-page-export'></i> Export Without Routes".html_safe,
+        <%= link_to "#{icon('download')} Export Without Routes".html_safe,
           print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :xlsx), target: "_blank", class: "button small secondary" %>
       </div>
     </div>

@@ -24,11 +24,11 @@
         <% if pv_form.object.persisted? %>
           <%= pv_form.hidden_field :_destroy, value: '', data: { destroy_field: '' } %>
           <button type="button" class="nested-btn-restore nested-icon-btn button tiny secondary" data-action="nested-form#restore" title="Restore price" aria-label="Restore price" hidden>
-            <i class="fi-refresh"></i>
+            <%= icon("rotate-ccw") %>
           </button>
         <% end %>
         <button type="button" class="nested-btn-remove nested-icon-btn button tiny secondary" data-action="nested-form#remove" title="Remove price" aria-label="Remove price">
-          <i class="fi-trash"></i>
+          <%= icon("trash-2") %>
         </button>
       <% end %>
     </div>

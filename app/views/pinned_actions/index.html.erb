@@ -19,7 +19,7 @@
 
     <% if @pinned_actions.any? %>
       <p class="pinned-actions-hint" id="pinned-actions-hint">
-        <i class="fi-list" aria-hidden="true"></i>
+        <%= icon("list") %>
         Drag <span class="show-for-sr">the handle</span> to reorder, or use the move buttons.
       </p>
       <div data-controller="pinned-actions" data-pinned-actions-url-value="<%= reorder_pinned_actions_path %>">
@@ -29,10 +29,10 @@
           <% next unless action %>
           <li data-pin-id="<%= pin.id %>">
             <span class="drag-handle" title="Drag to reorder">
-              <i class="fi-list" aria-hidden="true"></i>
+              <%= icon("list") %>
               <span class="show-for-sr">Drag to reorder</span>
             </span>
-            <i class="<%= action.icon %> pinned-action-icon" aria-hidden="true"></i>
+            <%= icon(action.icon, class: "pinned-action-icon") %>
             <div class="pinned-action-copy">
               <strong><%= action.label %></strong>
               <span><%= action.description %></span>
@@ -40,18 +40,18 @@
             <div class="pinned-action-controls">
               <button type="button" class="pinned-action-move" data-action="click->pinned-actions#moveUp"
                       title="Move <%= action.label %> up" <%= "disabled" if index.zero? %>>
-                <i class="fi-arrow-up" aria-hidden="true"></i>
+                <%= icon("arrow-up") %>
                 <span class="show-for-sr">Move up</span>
               </button>
               <button type="button" class="pinned-action-move" data-action="click->pinned-actions#moveDown"
                       title="Move <%= action.label %> down" <%= "disabled" if index == @pinned_actions.size - 1 %>>
-                <i class="fi-arrow-down" aria-hidden="true"></i>
+                <%= icon("chevron-down") %>
                 <span class="show-for-sr">Move down</span>
               </button>
               <%= button_to pinned_action_path(pin), method: :delete,
                             class: "pinned-action-remove",
                             title: "Remove #{action.label}" do %>
-                <i class="fi-x" aria-hidden="true"></i>
+                <%= icon("x") %>
                 <span>Remove</span>
               <% end %>
             </div>
@@ -62,7 +62,7 @@
       </div>
     <% else %>
       <div class="pinned-actions-empty">
-        <i class="fi-bookmark" aria-hidden="true"></i>
+        <%= icon("bookmark") %>
         <div>
           <strong>No pinned actions yet</strong>
           <p>Pin frequently used actions to keep them close at hand.</p>
@@ -83,13 +83,13 @@
       <% @available_actions.each do |action| %>
         <% pin = pinned_action_record(action.key) %>
         <div class="available-action-row">
-          <i class="<%= action.icon %> pinned-action-icon" aria-hidden="true"></i>
+          <%= icon(action.icon, class: "pinned-action-icon") %>
           <div class="pinned-action-copy">
             <strong><%= action.label %></strong>
             <span><%= action.description %></span>
           </div>
           <% if pin %>
-            <span class="pinned-state"><i class="fi-check" aria-hidden="true"></i> Pinned</span>
+            <span class="pinned-state"><%= icon("check") %> Pinned</span>
           <% elsif @pinned_actions.size >= UserPinnedAction::MAX_PER_USER %>
             <span class="pinned-state pinned-state--limit">Limit reached &mdash; remove a pin to add this</span>
           <% else %>

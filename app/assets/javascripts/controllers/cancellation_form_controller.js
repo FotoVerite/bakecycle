@@ -115,7 +115,7 @@ export default class extends Controller {
       remove.dataset.id = client.id
       remove.dataset.action = "click->cancellation-form#removeFromCart"
       remove.setAttribute("aria-label", `Remove ${client.name}`)
-      remove.innerHTML = '<i class="fi-x" aria-hidden="true"></i>'
+      remove.innerHTML = '<span aria-hidden="true">&times;</span>'
       item.appendChild(remove)
 
       this.cartListTarget.appendChild(item)

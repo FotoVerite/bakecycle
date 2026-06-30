@@ -4,7 +4,7 @@
       <h3>Job Queues</h3>
       <% online = active_solid_queue_workers.positive? %>
       <span class="job-queue-status <%= online ? 'job-queue-status--online' : 'job-queue-status--offline' %>">
-        <i class="<%= online ? 'fi-check' : 'fi-alert' %>" aria-hidden="true"></i>
+        <%= icon(online ? "check" : "triangle-alert") %>
         <%= online ? pluralize(active_solid_queue_workers, "worker") + " online" : "Workers offline" %>
       </span>
     </div>

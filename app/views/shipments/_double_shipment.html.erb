@@ -8,7 +8,7 @@
     <%= link_to "Review invoice", edit_shipment_path(shipment), class: "button tiny secondary" %>
     <%= link_to shipment_path(shipment), data: { turbo_method: :delete, turbo_confirm: "Delete duplicate invoice #{shipment.invoice_number}? This cannot be undone." } do %>
       <span class="table-action-icon table-action-icon--destructive icon-link-tooltip" aria-label="Delete Invoice">
-        <i class="fi-page-delete"></i>
+        <%= icon("file-x") %>
       </span>
     <% end %>
   </td>

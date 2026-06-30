@@ -10,7 +10,7 @@
     <%= simple_form_for "", url: print_products_per_client_per_week_products_path, method: :get, html: { target: "_blank", class: "report-print-form" } do |f| %>
       <div class="report-date-form">
         <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
-        <%= button_tag "<i class='fi-page-export-pdf'></i> Print Report".html_safe, name: "type", value: "daily", class: "button search-button" %>
+        <%= button_tag "#{icon('file-text')} Print Report".html_safe, name: "type", value: "daily", class: "button search-button" %>
       </div>
     <% end %>
     <div class="report-toolbar-note">

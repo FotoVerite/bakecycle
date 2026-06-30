@@ -4,7 +4,13 @@
 
 <%= link_to 'Back', products_path, class: "button small" %>
     
-  <h2 id="show-graphs">Graphs <i class="fi-arrow-right right"></i></h2> 
+  <h2 id="show-graphs">
+    Graphs
+    <span class="right graphs-toggle-icons">
+      <%= icon("arrow-right", class: "graphs-toggle-icon graphs-toggle-icon--closed") %>
+      <%= icon("chevron-down", class: "graphs-toggle-icon graphs-toggle-icon--open", hidden: true) %>
+    </span>
+  </h2>
   <div id="graphs" style="display: none;">
     <div id="gross-profits"></div><br />
     <div id="shipped"></div><br />
@@ -109,9 +115,8 @@ Plotly.newPlot(SHIPMENTS, shipment_data, shipment_layout,  {displaylogo: false})
 <% end %>
 
   document.getElementById('show-graphs').addEventListener('click', function() {
-    var icon = this.querySelector('i');
-    icon.classList.toggle('fi-arrow-right');
-    icon.classList.toggle('fi-arrow-down');
+    this.querySelector('.graphs-toggle-icon--closed').toggleAttribute('hidden');
+    this.querySelector('.graphs-toggle-icon--open').toggleAttribute('hidden');
 
     var graphs = document.getElementById('graphs');
     graphs.style.display = graphs.style.display === 'none' ? 'block' : 'none';

@@ -62,11 +62,11 @@
     <% if f.object.production_start.present? && f.object.product_total_lead_days.present? && (f.object.in_production? || f.object.after_production?) %>
       <% if f.object.production_run_id %>
         <span class="shipment-item-status-pill shipment-item-status-pill--success">
-          <i class="fi-checkbox"></i> Yes
+          <%= icon("square-check") %> Yes
         </span>
       <% else %>
         <span class="shipment-item-status-pill shipment-item-status-pill--danger">
-          <i class="fi-x"></i> No
+          <%= icon("x") %> No
         </span>
       <% end %>
     <% else %>
@@ -80,7 +80,7 @@
               class="nested-icon-btn nested-btn-remove"
               data-action="nested-form#remove"
               title="Remove">
-        <i class="fi-x"></i>
+        <%= icon("x") %>
       </button>
       <% if f.object.persisted? %>
         <button type="button"
@@ -88,7 +88,7 @@
                 data-action="nested-form#restore"
                 title="Restore"
                 hidden>
-          <i class="fi-refresh"></i>
+          <%= icon("rotate-ccw") %>
         </button>
       <% end %>
     <% end %>

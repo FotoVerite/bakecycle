@@ -333,7 +333,7 @@
               color 160ms cubic-bezier(0.25, 1, 0.5, 1),
               transform 100ms cubic-bezier(0.25, 1, 0.5, 1);
 
-  i {
+  .bc-icon {
     font-size: 0.9rem;
     transition: transform 240ms cubic-bezier(0.25, 1, 0.5, 1);
   }
@@ -345,7 +345,7 @@
     color: color.adjust($bc-shakespeare, $lightness: -25%);
     outline: none;
 
-    i {
+    .bc-icon {
       transform: rotate(-45deg);
     }
   }
@@ -362,7 +362,7 @@
     opacity: 0.72;
     transform: none;
 
-    i {
+    .bc-icon {
       transform: none;
     }
   }
@@ -370,7 +370,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .index-filter-reset,
-  .index-filter-reset i {
+  .index-filter-reset .bc-icon {
     transition: none;
   }
 }
@@ -387,7 +387,7 @@
     display: none;
   }
 
-  > i {
+  > .bc-icon {
     align-items: center;
     background: color.adjust($bc-shakespeare, $lightness: 37%);
     border-radius: 4px;
@@ -434,7 +434,7 @@
   .button {
     margin: 0;
 
-    i {
+    .bc-icon {
       margin-right: 6px;
     }
   }
@@ -568,7 +568,7 @@
     margin: 0 8px 0 0;
   }
 
-  .fi-page-delete {
+  .bc-icon {
     color: $bc-alizarin-crimson;
   }
 }

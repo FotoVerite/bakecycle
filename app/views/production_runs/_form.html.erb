@@ -1,5 +1,5 @@
 <div class="form-actions">
-  <%= link_to "<i class='fi-page-export-pdf'></i> Print Recipes for Production Run".html_safe, print_production_run_path(production_run), target: "_blank", class: "button small"%>
+  <%= link_to "#{icon('file-text')} Print Recipes for Production Run".html_safe, print_production_run_path(production_run), target: "_blank", class: "button small"%>
   <%= link_to 'Create Test Production Run', test_projection_production_runs_path, class: "button small secondary" %>
 </div>
 
