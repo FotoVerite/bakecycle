@@ -63,7 +63,9 @@ button,
 
 button.alert,
 .button.alert {
-  background-color: $bc-alizarin-crimson;
+  // -8% clears 4.5:1 for white text (base crimson was ~4.2:1, fails AA).
+  // Same darkening factor as the --destructive table-action-icon variant.
+  background-color: color.adjust($bc-alizarin-crimson, $lightness: -8%);
   border-color: #cf2a0e;
   color: #FFFFFF; }
 

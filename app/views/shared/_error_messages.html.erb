@@ -3,8 +3,19 @@
 <% if f.object.errors.any? %>
   <div id="error_explanation">
     <ul>
-      <% f.object.errors.to_a.each do |msg| %>
-        <li> <%= "* #{msg}" %> </li>
+      <% f.object.errors.each do |error| %>
+        <%# Only top-level attributes have a predictable field id this way --
+            nested-attribute errors (price_variants, recipe_items, etc.) fall
+            back to plain text rather than risk a link to a guessed id. %>
+        <% field_id = "#{f.object.model_name.param_key}_#{error.attribute}" unless error.attribute == :base %>
+        <li>
+          <i class="fi-alert" aria-hidden="true"></i>
+          <% if field_id %>
+            <%= link_to error.full_message, "##{field_id}", data: { turbo: false } %>
+          <% else %>
+            <%= error.full_message %>
+          <% end %>
+        </li>
       <% end %>
     </ul>
   </div>

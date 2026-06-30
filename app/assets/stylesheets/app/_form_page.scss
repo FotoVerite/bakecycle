@@ -63,6 +63,7 @@
   display: block;
   min-height: 0;
   padding: 11px 12px;
+  position: relative;
   text-decoration: none;
   transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
 
@@ -99,6 +100,37 @@
   &:focus {
     outline: 2px solid color.adjust($bc-shakespeare, $lightness: 8%);
     outline-offset: 2px;
+  }
+}
+
+// Same tinted-card recipe as the item's own :hover/:focus state above (light
+// background + matching border + colored text), just in the destructive hue
+// instead of brand blue -- reuses the established pattern instead of a
+// separate floating notification-dot, which doesn't appear anywhere else in
+// this app's vocabulary.
+.form-section-nav-item--error {
+  background: color.adjust($bc-alizarin-crimson, $lightness: 40%);
+  border-color: color.adjust($bc-alizarin-crimson, $lightness: 26%);
+
+  strong {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+  }
+
+  i {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -8%);
+    font-size: 0.78rem;
+    margin-left: 4px;
+  }
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-alizarin-crimson, $lightness: 34%);
+    border-color: color.adjust($bc-alizarin-crimson, $lightness: 18%);
+
+    strong,
+    strong i {
+      color: color.adjust($bc-alizarin-crimson, $lightness: -16%);
+    }
   }
 }
 
@@ -251,6 +283,11 @@
   input:not([type='checkbox']),
   select,
   textarea {
+    // Matches .form-section's own scroll-margin-top so a deep link straight
+    // to a field (e.g. an error message link) doesn't land the field
+    // underneath the sticky section nav -- same gotcha as section anchors,
+    // just one level deeper.
+    scroll-margin-top: 128px;
     width: 100%;
   }
 
@@ -714,7 +751,17 @@
   padding: 10px 12px;
 }
 
-.form-field--error {
+// .form-field--error was dead code -- no view ever applied the modifier.
+// simple_form actually wraps an invalid field in its own `.error` class
+// (config/initializers/simple_form.rb), nested inside our `.form-field`,
+// and `simple_form_for`'s `html: { class: ... }` on this form replaces
+// (rather than appends to) SimpleForm's default `bakecycle-form` class, so
+// the app-wide `.bakecycle-form .error` rule in _forms.scss never matched
+// here either. Scoped to .client-edit-form rather than changing either of
+// those globally, since the other ~12 forms with the same html: override
+// haven't been audited for this fix yet.
+.form-field--error,
+.client-edit-form .error {
   label,
   .form-field-label {
     color: color.adjust($bc-alizarin-crimson, $lightness: -10%);

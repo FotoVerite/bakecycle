@@ -76,6 +76,33 @@ input[type="text"] {
     list-style: none;
     margin: 0 0 18px 0;
   }
+
+  li {
+    align-items: baseline;
+    display: flex;
+    gap: 7px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  i {
+    flex: 0 0 auto;
+    font-size: 0.85em;
+  }
+
+  a {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+      color: color.adjust($bc-alizarin-crimson, $lightness: -18%);
+    }
+  }
 }
 
 .underlined-link {

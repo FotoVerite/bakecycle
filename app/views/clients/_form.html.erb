@@ -5,13 +5,35 @@
   ["contacts", "Contacts"]
 ] %>
 
+<% client_section_fields = {
+  "business" => %i[name official_company_name ein business_phone business_fax group engagement_status channel active],
+  "billing" => %i[billing_term print_invoice send_shipment_when_generated accounts_payable_contact_name
+                  accounts_payable_contact_phone accounts_payable_contact_email billing_address_street_1
+                  billing_address_street_2 billing_address_city billing_address_state billing_address_zipcode
+                  default_discount_type default_discount_value],
+  "delivery" => %i[delivery_fee_option delivery_minimum delivery_fee notes alert temp_vip
+                   delivery_address_street_1 delivery_address_street_2 delivery_address_city
+                   delivery_address_state delivery_address_zipcode],
+  "contacts" => %i[wholesale_manager primary_contact_name primary_contact_phone primary_contact_email
+                   secondary_contact_name secondary_contact_phone secondary_contact_email]
+} %>
+
 <%= simple_form_for @client, html: { class: "form-stack client-edit-form" } do |f| %>
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 
   <nav class="form-section-nav" aria-label="Client form sections">
+    <% errored_attributes = @client.errors.attribute_names %>
     <% client_sections.each do |section_id, label| %>
-      <a href="#client-<%= section_id %>" class="form-section-nav-item">
-        <strong><%= label %></strong>
+      <% section_has_error = errored_attributes.any? { |attr| client_section_fields[section_id].include?(attr) } %>
+      <a href="#client-<%= section_id %>" data-turbo="false"
+         class="form-section-nav-item <%= "form-section-nav-item--error" if section_has_error %>">
+        <strong>
+          <%= label %>
+          <% if section_has_error %>
+            <i class="fi-alert" aria-hidden="true"></i>
+            <span class="show-for-sr">(has errors to review)</span>
+          <% end %>
+        </strong>
       </a>
     <% end %>
   </nav>
