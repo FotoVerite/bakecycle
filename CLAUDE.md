@@ -113,7 +113,7 @@ npm run test:watch     # Jest watch mode
 
 ## Asset build gotcha (CSS and JS — read before debugging "my style change isn't showing up")
 
-`bundle exec rails server` does **not** live-compile Sass or JS. It serves whatever is currently sitting in `app/assets/builds/application.css` and `app/assets/builds/bakecycle.js` — both of which are **committed, tracked files**, not gitignored build output. Editing a `.scss` or `.js` source file has zero effect on the running app until one of these runs:
+`bundle exec rails server` does **not** live-compile Sass or JS. It serves whatever is currently sitting in `app/assets/builds/application.css` and `app/assets/builds/bakecycle.js`. Editing a `.scss` or `.js` source file has zero effect on the running app until one of these runs:
 
 ```bash
 bundle exec rails dartsass:build   # rebuilds application.css from Sass sources
@@ -122,7 +122,9 @@ npm run build                      # rebuilds bakecycle.js from app.js
 
 or the watch processes (`bin/rails dartsass:watch`, `npm run build:watch` — both registered in `.claude/launch.json`) are running continuously.
 
-`bundle exec rails assets:precompile` (which compiles into `public/assets/` for production) is a **separate** pipeline and is not a substitute for the above — running it does *not* update `app/assets/builds/*`, so "it precompiled with no errors" only proves the Sass/JS syntax is valid, not that your change is live. If you use `assets:precompile` to sanity-check Sass syntax during a session, remember the actual `app/assets/builds/*.css`/`.js` files still need rebuilding (and, since they're tracked, committing) for the change to ship at all.
+**Only `application.css` is committed** — `app/assets/builds/*.js` is gitignored (`.gitignore:29`), so `bakecycle.js` must be rebuilt locally/in CI but never needs (and never should) show up in `git status`. `application.css` is a tracked, committed file, so a CSS source change isn't actually shipped until the rebuilt file is committed alongside it.
+
+`bundle exec rails assets:precompile` (which compiles into `public/assets/` for production) is a **separate** pipeline and is not a substitute for the above — running it does *not* update `app/assets/builds/*`, so "it precompiled with no errors" only proves the Sass/JS syntax is valid, not that your change is live. If you use `assets:precompile` to sanity-check Sass syntax during a session, remember the actual `app/assets/builds/*.css`/`.js` files still need rebuilding for the change to ship at all.
 
 Vendor CSS copied manually (do not overwrite from npm):
 - `app/assets/stylesheets/vendor/chosen.css`

@@ -14,6 +14,7 @@ import CancellationFormController from "./controllers/cancellation_form_controll
 import NavigationController from "./controllers/navigation_controller"
 import PinnedActionsController from "./controllers/pinned_actions_controller"
 import DashboardChartController from "./controllers/dashboard_chart_controller"
+import DiscountController from "./controllers/discount_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -31,5 +32,6 @@ application.register("cancellation-form", CancellationFormController)
 application.register("navigation", NavigationController)
 application.register("pinned-actions", PinnedActionsController)
 application.register("dashboard-chart", DashboardChartController)
+application.register("discount", DiscountController)
 
 export { application }

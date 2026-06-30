@@ -49,6 +49,10 @@ class Shipment < ApplicationRecord
 
   has_many :shipment_items, dependent: :destroy
 
+  attribute :discount_type, :integer
+
+  enum :discount_type, { fixed_amount: 0, percentage: 1 }, prefix: :discount
+
   accepts_nested_attributes_for(
     :shipment_items,
     allow_destroy: true,
@@ -56,6 +60,7 @@ class Shipment < ApplicationRecord
   )
 
   before_validation :set_payment_due_date
+  before_validation :apply_client_default_discount, on: :create
   before_create :set_sequence_number
   after_create :increment_client_sequence, :send_to_contact
   before_update :check_delivery_fee?
@@ -67,7 +72,8 @@ class Shipment < ApplicationRecord
   validates :delivery_fee, presence: true, numericality: true
   validates :client_id, presence: true
   validates :route_id, presence: true
-  validates :discount, inclusion: 0..100, allow_nil: true
+  validates :discount_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validate :check_discount
 
   # create route= and route_id= methods
   denormalize :route, %i[id name departure_time]
@@ -107,6 +113,10 @@ class Shipment < ApplicationRecord
     order("route_departure_time asc, route_name asc, client_name asc")
   end
 
+  def self.discount_types_select
+    [["$ Amount", "fixed_amount"], ["Percentage", "percentage"]]
+  end
+
   def client_delivery_address
     @_client_delivery_address ||= Address.new(self, "client_delivery_address")
   end
@@ -117,11 +127,30 @@ class Shipment < ApplicationRecord
 
   def subtotal
     shipment_items.map(&:price).sum
-    # subtotal -= (subtotal * (discount / 100)) if discount && !discount_changed?
+  end
+
+  def discount?
+    discount_type.present? && discount_value.present? && discount_value.positive?
+  end
+
+  def discount_base_amount
+    subtotal
+  end
+
+  def discount_amount
+    return 0.to_d unless discount?
+
+    amount = if discount_percentage?
+               discount_base_amount * (discount_value / 100.to_d)
+             else
+               discount_value
+             end
+
+    [amount, subtotal + delivery_fee].min
   end
 
   def price
-    subtotal + delivery_fee
+    [subtotal + delivery_fee - discount_amount, 0.to_d].max
   end
 
   def cache_price
@@ -202,5 +231,27 @@ class Shipment < ApplicationRecord
   def send_to_contact
     nil unless client.accounts_payable_contact_email && client.send_shipment_when_generated
     # ClientsMailer.send_invoice(self).deliver_now
+  end
+
+  def apply_client_default_discount
+    return if discount_type.present? || discount_value.present?
+    return unless client&.default_discount?
+
+    self.discount_type = client.default_discount_type
+    self.discount_value = client.default_discount_value
+  end
+
+  def check_discount
+    if discount_type.present? && discount_value.blank?
+      errors.add(:discount_value, "must be present when a discount type is selected")
+    end
+
+    if discount_value.present? && discount_type.blank?
+      errors.add(:discount_type, "must be present when a discount value is entered")
+    end
+
+    return unless discount_percentage? && discount_value.to_d > 100
+
+    errors.add(:discount_value, "must be less than or equal to 100 for percentage discounts")
   end
 end

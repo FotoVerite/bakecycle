@@ -48,6 +48,10 @@ class ShipmentDecorator < Draper::Decorator
     object.price
   end
 
+  def discount_amount_for_iif
+    object.discount_amount
+  end
+
   def delivery_fee_for_iif
     object.delivery_fee
   end
@@ -66,6 +70,17 @@ class ShipmentDecorator < Draper::Decorator
 
   def subtotal
     h.number_to_currency(object.subtotal)
+  end
+
+  def discount_amount
+    h.number_to_currency(object.discount_amount)
+  end
+
+  def discount_display
+    return "No discount" unless object.discount?
+    return h.number_to_currency(object.discount_value) if object.discount_fixed_amount?
+
+    "#{h.number_with_precision(object.discount_value, strip_insignificant_zeros: true)}%"
   end
 
   def terms

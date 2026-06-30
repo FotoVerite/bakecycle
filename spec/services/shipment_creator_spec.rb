@@ -31,6 +31,25 @@ describe ShipmentCreator do
       expect(shipment_item.production_start).to be < today
     end
 
+    it "copies the client's default discount to generated shipments" do
+      client = create(:client, bakery: bakery, default_discount_type: "fixed_amount", default_discount_value: 5)
+      order = create(:order, client: client, bakery: bakery, order_item_count: 1)
+      shipment = ShipmentCreator.new(order, today).create!
+
+      expect(shipment.discount_type).to eq("fixed_amount")
+      expect(shipment.discount_value).to eq(5)
+    end
+
+    it "does not create a duplicate shipment if the client discount changes later" do
+      client = create(:client, bakery: bakery, default_discount_type: "fixed_amount", default_discount_value: 5)
+      order = create(:order, client: client, bakery: bakery, order_item_count: 1)
+      shipment = ShipmentCreator.new(order, today).create!
+      client.update!(default_discount_value: 7)
+
+      expect(ShipmentCreator.new(order.reload, today).create!).to eq(shipment)
+      expect(Shipment.where(order: order, date: today).count).to eq(1)
+    end
+
     it "doesn't create shipment items with a 0 quantity" do
       order = create(:order, order_item_count: 2, bakery: bakery, daily_item_count: 0)
       order.order_items.first.update!(monday: 1)

@@ -143,6 +143,8 @@ class ClientsController < ApplicationController
       :billing_term,
       :group,
       :channel,
+      :default_discount_type,
+      :default_discount_value,
       :delivery_fee, :delivery_minimum,
       :delivery_address_street_1, :delivery_address_street_2,
       :delivery_address_city, :delivery_address_state, :delivery_address_zipcode,

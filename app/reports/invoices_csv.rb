@@ -29,6 +29,7 @@ class InvoicesCsv
       "Route",
       "Invoice Subtotal",
       "Invoice fees",
+      "Invoice discount",
       "Invoice total"
     ]
   end
@@ -44,6 +45,7 @@ class InvoicesCsv
       invoice.route_name,
       invoice.subtotal,
       invoice.delivery_fee,
+      invoice.discount_amount,
       invoice.price
     ]
   end

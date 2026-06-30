@@ -16,6 +16,7 @@ class TotalSalesXlsx
         shipment.shipment_items.each do |item|
           csv << invoice_row(shipment_info, item)
         end
+        csv << discount_row(shipment_info, shipment) if shipment.discount_amount.positive?
       end
     end
   end
@@ -43,5 +44,15 @@ class TotalSalesXlsx
             number_to_currency(item.product_quantity * item.product_price)]
     Rails.logger.error row
     row
+  end
+
+  def discount_row(shipment_info, shipment)
+    shipment_info + [
+      "Discount",
+      "Invoice Discount",
+      1,
+      nil,
+      number_to_currency(-shipment.discount_amount)
+    ]
   end
 end

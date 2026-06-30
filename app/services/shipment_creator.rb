@@ -9,7 +9,7 @@ class ShipmentCreator
   end
 
   def create!
-    existing_shipment = Shipment.where(shipment_attributes).first
+    existing_shipment = Shipment.where(shipment_lookup_attributes).first
     return existing_shipment if existing_shipment
     return if shipment_items_is_empty_and_has_no_fee?
 
@@ -36,17 +36,25 @@ class ShipmentCreator
       item.shipment = shipment
       item.save!
     end
-    shipment
+    shipment.reload.tap do |reloaded_shipment|
+      reloaded_shipment.update_column(:cached_price, reloaded_shipment.price)
+    end
   end
 
   def shipment_attributes
+    shipment_lookup_attributes.merge(
+      auto_generated: true,
+      discount_type: order.client.default_discount_type,
+      discount_value: order.client.default_discount_value
+    )
+  end
+
+  def shipment_lookup_attributes
     {
       bakery_id: order.bakery_id,
       client_id: order.client_id,
       route_id: order.route_id,
       date: ship_date,
-      auto_generated: true,
-      discount: order.discount,
       order_id: order.id
     }
   end

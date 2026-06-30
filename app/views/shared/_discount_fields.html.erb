@@ -1,0 +1,59 @@
+<% object = form.object %>
+<% selected_type = object.public_send(type_method) %>
+<% discount_active = selected_type.present? && object.public_send(value_method).present? %>
+<% compact = local_assigns.fetch(:compact, false) %>
+<% discount_base_amount = local_assigns[:discount_base_amount] %>
+
+<div class="discount-panel <%= "discount-panel--compact" if compact %>"
+     data-controller="discount"
+     <%= "data-discount-base-amount-value=#{discount_base_amount}" if discount_base_amount.present? %>>
+  <div class="discount-panel-copy">
+    <h3><%= title %></h3>
+    <% if description.present? %>
+      <p><%= description %></p>
+    <% end %>
+  </div>
+
+  <div class="discount-type-options">
+    <label class="form-choice-card discount-choice-card">
+      <%= form.radio_button(type_method, "", checked: selected_type.blank?,
+            data: { discount_target: "typeInput", action: "change->discount#sync" }) %>
+      <span>
+        <strong>No discount</strong>
+        <small>Leave invoice totals unchanged.</small>
+      </span>
+    </label>
+
+    <label class="form-choice-card discount-choice-card">
+      <%= form.radio_button(type_method, "fixed_amount", checked: selected_type == "fixed_amount",
+            data: { discount_target: "typeInput", action: "change->discount#sync" }) %>
+      <span>
+        <strong>$ Amount</strong>
+        <small>Subtract a fixed dollar value.</small>
+      </span>
+    </label>
+
+    <label class="form-choice-card discount-choice-card">
+      <%= form.radio_button(type_method, "percentage", checked: selected_type == "percentage",
+            data: { discount_target: "typeInput", action: "change->discount#sync" }) %>
+      <span>
+        <strong>Percent</strong>
+        <small>Calculate from the invoice subtotal.</small>
+      </span>
+    </label>
+  </div>
+
+  <div class="discount-entry-row <%= "discount-entry-row--solo" unless discount_active %>" data-discount-target="entryRow">
+    <div class="form-field discount-value-field" data-discount-target="valueField">
+      <%= form.input value_method, label: "Discount Value",
+            input_html: { inputmode: "decimal", data: { discount_target: "valueInput", action: "input->discount#sync" } } %>
+    </div>
+
+    <div class="discount-preview <%= "is-active" if discount_active %> <%= "discount-preview--hidden" unless discount_active %>"
+         data-discount-target="preview">
+      <span><%= preview_label %></span>
+      <strong data-discount-target="previewValue"><%= preview_value %></strong>
+      <small><%= preview_note %></small>
+    </div>
+  </div>
+</div>

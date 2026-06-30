@@ -17,6 +17,13 @@ class ClientDecorator < Draper::Decorator
     delivery_fee_option&.humanize(capitalize: false)&.titleize
   end
 
+  def default_discount_display
+    return "No discount" unless object.default_discount?
+    return h.number_to_currency(object.default_discount_value) if object.default_discount_fixed_amount?
+
+    "#{h.number_with_precision(object.default_discount_value, strip_insignificant_zeros: true)}%"
+  end
+
   def latest_orders
     object.orders.includes(:route).order_by_active.limit(10).decorate
   end

@@ -95,6 +95,27 @@ class InvoicesIif
           end
         end
       end
+
+      if shipment.discount_amount_for_iif.positive?
+        spl do
+          row do
+            splid row_counter.next
+            trnstype "INVOICE"
+            date shipment.date_for_iif
+            accnt shipment.bakery_quickbooks_account
+            name
+            amount "-#{shipment.discount_amount_for_iif}"
+            docnum
+            memo "Invoice Discount"
+            method_missing(:class, "Wholesale")
+            qnty "-1"
+            price shipment.discount_amount_for_iif
+            invitem "Invoice Discount"
+            paymeth
+            taxable "N"
+          end
+        end
+      end
     end
   end
   # rubocop:enable

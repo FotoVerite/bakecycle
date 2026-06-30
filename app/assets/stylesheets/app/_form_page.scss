@@ -41,10 +41,72 @@
   margin: 0;
 }
 
+.form-section-nav {
+  align-items: stretch;
+  background: $bc-white;
+  border: 1px solid $bc-border-grey;
+  box-shadow: 0 2px 8px rgba($bc-charcoal, 0.06);
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 18px;
+  padding: 5px;
+  position: sticky;
+  top: 70px;
+  z-index: 10;
+}
+
+.form-section-nav-item {
+  background: transparent;
+  border: 1px solid transparent;
+  color: $bc-scorpion;
+  display: block;
+  min-height: 0;
+  padding: 11px 12px;
+  text-decoration: none;
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    color: $bc-charcoal;
+    font-size: 0.92rem;
+    line-height: 1.2;
+  }
+
+  span {
+    color: $bc-scorpion;
+    font-size: 0.76rem;
+    line-height: 1.25;
+    margin-top: 3px;
+  }
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 40%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 28%);
+    color: color.adjust($bc-shakespeare, $lightness: -26%);
+
+    strong,
+    span {
+      color: color.adjust($bc-shakespeare, $lightness: -26%);
+    }
+  }
+
+  &:focus {
+    outline: 2px solid color.adjust($bc-shakespeare, $lightness: 8%);
+    outline-offset: 2px;
+  }
+}
+
 .form-section {
   @extend %bc-card;
-  margin: 0 0 18px;
-  padding: 26px 20px 24px;
+  margin: 0 0 16px;
+  padding: 24px 20px 22px;
+  scroll-margin-top: 128px;
 
   legend {
     background: color.adjust($bc-shakespeare, $lightness: 38%);
@@ -61,10 +123,110 @@
   }
 }
 
+.client-form-section {
+  padding-bottom: 22px;
+}
+
+.form-section-intro {
+  margin-bottom: 16px;
+  max-width: 72ch;
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    color: $bc-charcoal;
+    font-size: 1.12rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  p {
+    color: $bc-scorpion;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    margin-top: 4px;
+  }
+}
+
+.form-section-intro-with-summary {
+  align-items: start;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  max-width: none;
+}
+
+.form-section-summary {
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  color: $bc-scorpion;
+  flex: 0 0 auto;
+  min-width: 190px;
+  padding: 10px 12px;
+  text-align: right;
+
+  span,
+  strong {
+    display: block;
+  }
+
+  span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  strong {
+    color: $bc-charcoal;
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+}
+
+.form-subsection {
+  border-top: 1px solid $bc-border-grey;
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.form-subsection--first {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.form-subsection-heading {
+  margin-bottom: 12px;
+
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    color: $bc-charcoal;
+    font-size: 0.96rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  p {
+    color: $bc-scorpion;
+    font-size: 0.84rem;
+    line-height: 1.4;
+    margin-top: 3px;
+  }
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 16px 22px;
+  gap: 14px 20px;
 }
 
 .form-field {
@@ -74,7 +236,12 @@
     margin: 0;
   }
 
-  label {
+  // :not(.form-check) excludes .form-check/.form-switch-card labels (the
+  // checkbox-as-card pattern) -- without it, this rule's specificity beats
+  // .form-switch-card's own `color: $bc-charcoal`/.form-check's `$bc-scorpion`
+  // (element+class beats single class), so every switch card's bold title
+  // silently rendered in low-contrast $bc-silver-chalice (~2.3:1, fails AA).
+  label:not(.form-check) {
     color: $bc-silver-chalice;
     font-size: 0.78rem;
     line-height: 1.2;
@@ -89,6 +256,19 @@
 
   textarea {
     min-height: 92px;
+  }
+}
+
+.form-field--switch-card {
+  padding-top: 24px;
+
+  .form-switch-card {
+    box-sizing: border-box;
+    height: 37px;
+    min-height: 37px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    width: 100%;
   }
 }
 
@@ -116,12 +296,20 @@
   grid-column: span 4;
 }
 
+.form-span-5 {
+  grid-column: span 5;
+}
+
 .form-span-6 {
   grid-column: span 6;
 }
 
 .form-span-7 {
   grid-column: span 7;
+}
+
+.form-span-8 {
+  grid-column: span 8;
 }
 
 .form-span-9 {
@@ -172,6 +360,186 @@
 
   p {
     margin: 0;
+  }
+}
+
+.discount-panel {
+  background: $bc-wild-sand;
+  border: 1px solid $bc-border-grey;
+  margin-bottom: 18px;
+  padding: 18px;
+}
+
+.discount-panel-copy {
+  margin-bottom: 14px;
+  max-width: 72ch;
+
+  h3 {
+    color: $bc-charcoal;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 4px;
+  }
+
+  p {
+    color: $bc-scorpion;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin: 0;
+  }
+}
+
+.discount-type-options {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+
+.discount-choice-card {
+  background: $bc-white;
+  min-height: 82px;
+}
+
+.discount-entry-row {
+  align-items: end;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(220px, 320px) minmax(260px, 1fr);
+
+  // No discount selected yet -- there's nothing for the preview card to
+  // show beyond what the "No discount" choice card already says, so it
+  // drops out and the value field is free to use the row on its own.
+  &--solo {
+    grid-template-columns: minmax(220px, 360px);
+  }
+}
+
+.discount-value-field {
+  .input {
+    margin: 0;
+  }
+
+  &--disabled {
+    input {
+      background: $bc-wild-sand;
+      color: $bc-silver-chalice;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.discount-preview {
+  background: $bc-white;
+  border: 1px solid $bc-border-grey;
+  color: $bc-scorpion;
+  min-height: 74px;
+  padding: 12px 14px;
+
+  span,
+  small {
+    display: block;
+  }
+
+  span {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+
+  strong {
+    color: $bc-charcoal;
+    display: block;
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+
+  small {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    margin-top: 5px;
+  }
+
+  &.is-active {
+    background: color.adjust($bc-shakespeare, $lightness: 38%);
+    border-color: color.adjust($bc-shakespeare, $lightness: 20%);
+
+    span,
+    strong {
+      color: color.adjust($bc-shakespeare, $lightness: -28%);
+    }
+  }
+
+  &--hidden {
+    display: none;
+  }
+}
+
+.discount-preview-value--updating {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+.discount-preview strong {
+  transition: opacity 150ms ease-out, transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discount-preview strong {
+    transition: none;
+  }
+}
+
+.discount-panel--compact {
+  background: $bc-white;
+  margin: 0;
+  padding: 14px;
+
+  .discount-panel-copy {
+    margin-bottom: 12px;
+
+    h3 {
+      font-size: 0.95rem;
+    }
+
+    p {
+      font-size: 0.82rem;
+    }
+  }
+
+  .discount-type-options {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .discount-choice-card {
+    min-height: 64px;
+    padding: 10px 12px;
+
+    strong {
+      font-size: 0.86rem;
+    }
+
+    small {
+      font-size: 0.72rem;
+    }
+  }
+
+  .discount-entry-row {
+    grid-template-columns: minmax(190px, 260px) minmax(220px, 1fr);
+  }
+
+  .discount-preview {
+    min-height: 64px;
+    padding: 10px 12px;
+
+    strong {
+      font-size: 1rem;
+    }
   }
 }
 
@@ -492,6 +860,8 @@
   .nested-row,
   .nested-icon-btn,
   .form-choice-card,
+  .discount-choice-card,
+  .form-section-nav-item,
   .order-action-bar .button {
     transition: none;
   }
@@ -501,6 +871,10 @@
   .nested-icon-btn:active,
   .form-choice-card:hover,
   .form-choice-card:focus-within,
+  .discount-choice-card:hover,
+  .discount-choice-card:focus-within,
+  .form-section-nav-item:hover,
+  .form-section-nav-item:focus,
   .order-action-bar .button:hover,
   .order-action-bar .button:focus,
   .order-action-bar .button:active {
@@ -887,6 +1261,61 @@
   margin-top: 4px;
 }
 
+.client-delivery-rules {
+  .form-grid {
+    align-items: start;
+  }
+}
+
+.client-delivery-notes-grid {
+  align-items: start;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+}
+
+.client-flag-list {
+  gap: 8px;
+  padding-top: 21px;
+
+  .form-switch-card {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    height: 38px;
+    min-height: 38px;
+    padding: 8px 12px;
+    width: 100%;
+  }
+}
+
+// Billing term + the two invoice switch cards (keeping .form-switch-card's
+// green checked state -- removing it broke consistency with Active
+// Client/VIP/Temp VIP, which all use the same tint-on-check pattern).
+// The actual problem was never the card style, it was a 12-span grid
+// stretching the cards' *column* far past their own content width, leaving
+// visible card-colored emptiness inside the box. Sizing each item to its
+// own content (instead of an equal 1/3 share) removes that gap entirely --
+// the card's edges now match what's actually inside it.
+.client-invoice-settings {
+  .form-grid {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+  }
+
+  .form-field {
+    flex: 0 0 auto;
+  }
+}
+
+.compact-textarea {
+  textarea {
+    min-height: 84px;
+  }
+}
+
 @media #{$small-only} {
   .form-page {
     .form-header {
@@ -904,8 +1333,70 @@
     display: block;
   }
 
+  .form-section-nav {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow-x: visible;
+    padding: 6px;
+    position: static;
+  }
+
+  .form-section-nav-item {
+    flex: initial;
+    min-width: 118px;
+    padding: 9px 12px;
+    text-align: center;
+  }
+
+  .form-section {
+    padding: 22px 14px 18px;
+    scroll-margin-top: 18px;
+  }
+
+  .form-section-intro {
+    margin-bottom: 14px;
+  }
+
+  .form-section-intro-with-summary {
+    display: block;
+  }
+
+  .form-section-summary {
+    margin-top: 12px;
+    min-width: 0;
+    text-align: left;
+    width: 100%;
+  }
+
   .form-field {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+  }
+
+  .client-delivery-notes-grid {
+    display: block;
+  }
+
+  .client-billing-address,
+  .client-delivery-address {
+    .form-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .form-span-12 {
+      grid-column: span 6;
+    }
+
+    .form-span-5,
+    .form-span-4 {
+      grid-column: span 3;
+    }
+
+    .form-span-3 {
+      grid-column: span 2;
+    }
   }
 
   .form-summary-grid {
@@ -918,6 +1409,21 @@
 
   .form-choice-card {
     width: 100%;
+  }
+
+  .discount-panel {
+    padding: 14px;
+  }
+
+  .discount-type-options,
+  .discount-entry-row {
+    display: block;
+  }
+
+  .discount-choice-card,
+  .discount-value-field,
+  .discount-preview {
+    margin-bottom: 12px;
   }
 
   .order-action-bar,

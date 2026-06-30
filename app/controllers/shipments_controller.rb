@@ -188,7 +188,8 @@ class ShipmentsController < ApplicationController
     params.require(:shipment).permit(
       :alert,
       :client_id, :route_id, :date,
-      :discount,
+      :discount_type,
+      :discount_value,
       :payment_due_date,
       :po_number,
       :delivery_fee, :note,

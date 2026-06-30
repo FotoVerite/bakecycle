@@ -1,7 +1,26 @@
-<%= simple_form_for @client, html: { class: "form-stack" } do |f| %>
+<% client_sections = [
+  ["business", "Business"],
+  ["billing", "Billing"],
+  ["delivery", "Delivery"],
+  ["contacts", "Contacts"]
+] %>
+
+<%= simple_form_for @client, html: { class: "form-stack client-edit-form" } do |f| %>
   <%= render partial: "shared/error_messages", locals: {f: f} %>
-  <fieldset class="form-section">
-    <legend>Business Information</legend>
+
+  <nav class="form-section-nav" aria-label="Client form sections">
+    <% client_sections.each do |section_id, label| %>
+      <a href="#client-<%= section_id %>" class="form-section-nav-item">
+        <strong><%= label %></strong>
+      </a>
+    <% end %>
+  </nav>
+
+  <fieldset class="form-section client-form-section" id="client-business">
+    <legend>Business</legend>
+    <div class="form-section-intro">
+      <h2>Business information</h2>
+    </div>
     <div class="form-grid">
       <div class="form-field form-span-4">
         <%= f.input :name %>
@@ -19,9 +38,6 @@
         <%= f.input :business_fax %>
       </div>
       <div class="form-field form-span-4">
-        <%= f.input :billing_term, collection: Client.billing_terms_select, as: :select, include_blank: "Select One" %>
-      </div>
-      <div class="form-field form-span-4">
         <%= f.input :group %>
       </div>
       <div class="form-field form-span-4">
@@ -30,151 +46,223 @@
       <div class="form-field form-span-4">
         <%= f.input :channel, collection: Client.channels, as: :select, include_blank: "Select One" %>
       </div>
-      <div class="form-field form-span-4">
-        <span class="form-field-label">Active</span>
-        <div class="form-choice-row">
-          <label class="form-choice">
-            <%= f.radio_button(:active, "true") %>
-            <span>Yes</span>
+      <div class="form-field form-field--switch-card form-span-4">
+        <label class="form-check form-switch-card">
+          <%= f.check_box(:active) %>
+          <span>
+            <strong>Active client</strong>
+          </span>
+        </label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-section client-form-section" id="client-billing">
+    <legend>Billing</legend>
+    <div class="form-section-intro">
+      <h2>Billing setup</h2>
+    </div>
+
+    <div class="form-subsection form-subsection--first client-invoice-settings">
+      <div class="form-subsection-heading">
+        <h3>Invoice settings</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-field form-span-4">
+          <%= f.input :billing_term, collection: Client.billing_terms_select, as: :select, include_blank: "Select One" %>
+        </div>
+        <div class="form-field">
+          <label class="form-check form-switch-card">
+            <%= f.check_box(:print_invoice) %>
+            <span>
+              <strong>Print invoice</strong>
+              <small>Include in normal invoice print workflows.</small>
+            </span>
           </label>
-          <label class="form-choice">
-            <%= f.radio_button(:active, "false") %>
-            <span>No</span>
+        </div>
+        <div class="form-field">
+          <label class="form-check form-switch-card">
+            <%= f.check_box(:send_shipment_when_generated) %>
+            <span>
+              <strong>Automatically send invoice</strong>
+              <small>Email invoices when generated.</small>
+            </span>
           </label>
         </div>
       </div>
     </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Delivery Notes</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-12">
-        <span class="form-help-tag">Notes will print on delivery lists and packing slips</span>
-        <%= f.input :notes, label: false, as: :text %>
+
+    <div class="form-subsection">
+      <div class="form-subsection-heading">
+        <h3>Accounts payable</h3>
       </div>
-      <div class="form-field form-span-12 form-check-list form-check-list-inline">
-        <label class="form-check">
-          <%= f.check_box(:alert) %>
-          <span>VIP</span>
-        </label>
-        <label class="form-check">
-          <%= f.check_box(:temp_vip) %>
-          <span>Temp VIP</span>
-        </label>
-        <label class="form-check">
-          <%= f.check_box(:print_invoice) %>
-          <span>Print Invoice</span>
-        </label>
+      <div class="form-grid">
+        <div class="form-field form-span-4">
+          <%= f.input :accounts_payable_contact_name %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :accounts_payable_contact_phone %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :accounts_payable_contact_email %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-subsection client-billing-address">
+      <div class="form-subsection-heading">
+        <h3>Billing address</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-field form-span-6">
+          <%= f.input :billing_address_street_1, label: "Street 1" %>
+        </div>
+        <div class="form-field form-span-6">
+          <%= f.input :billing_address_street_2, label: "Street 2" %>
+        </div>
+        <div class="form-field form-span-5">
+          <%= f.input :billing_address_city, label: "City" %>
+        </div>
+        <div class="form-field form-span-3">
+          <%= f.input :billing_address_state, label: "State" %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :billing_address_zipcode, label: "Zip" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-subsection">
+      <%= render "shared/discount_fields",
+                 form: f,
+                 type_method: :default_discount_type,
+                 value_method: :default_discount_value,
+                 title: "Default invoice discount",
+                 description: "Applied automatically to this client's future invoices.",
+                 preview_label: "Default",
+                 preview_value: client.default_discount_display,
+                 preview_note: "Future invoices only.",
+                 compact: true %>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-section client-form-section" id="client-delivery">
+    <legend>Delivery</legend>
+    <div class="form-section-intro">
+      <h2>Delivery setup</h2>
+    </div>
+
+    <div class="form-subsection form-subsection--first client-delivery-rules">
+      <div class="form-subsection-heading">
+        <h3>Fees and notes</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-field form-span-6">
+          <%= f.input :delivery_fee_option, collection: Client.delivery_fee_options_select , as: :select, include_blank: false %>
+        </div>
+        <div class="form-field form-span-3">
+          <%= f.input :delivery_minimum %>
+        </div>
+        <div class="form-field form-span-3">
+          <%= f.input :delivery_fee %>
+        </div>
+        <div class="form-field form-span-12">
+          <div class="client-delivery-notes-grid">
+            <div class="compact-textarea">
+              <%= f.input :notes, label: "Delivery notes", as: :text %>
+            </div>
+            <div class="form-check-list client-flag-list">
+              <span class="show-for-sr">Flags</span>
+              <label class="form-check form-switch-card">
+                <%= f.check_box(:alert) %>
+                <span>
+                  <strong>VIP</strong>
+                </span>
+              </label>
+              <label class="form-check form-switch-card">
+                <%= f.check_box(:temp_vip) %>
+                <span>
+                  <strong>Temp VIP</strong>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-subsection client-delivery-address">
+      <div class="form-subsection-heading">
+        <h3>Delivery address</h3>
+      </div>
+      <div class="form-grid">
+        <div class="form-field form-span-6">
+          <%= f.input :delivery_address_street_1, label: "Street 1" %>
+        </div>
+        <div class="form-field form-span-6">
+          <%= f.input :delivery_address_street_2, label: "Street 2" %>
+        </div>
+        <div class="form-field form-span-5">
+          <%= f.input :delivery_address_city, label: "City" %>
+        </div>
+        <div class="form-field form-span-3">
+          <%= f.input :delivery_address_state, label: "State" %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :delivery_address_zipcode, label: "Zip" %>
+        </div>
       </div>
     </div>
   </fieldset>
-  <fieldset class="form-section">
-    <legend>Delivery Fee Information</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-4">
-        <%= f.input :delivery_fee_option, collection: Client.delivery_fee_options_select , as: :select, include_blank: false %>
+
+  <fieldset class="form-section client-form-section" id="client-contacts">
+    <legend>Contacts</legend>
+    <div class="form-section-intro">
+      <h2>People</h2>
+    </div>
+
+    <div class="form-subsection">
+      <div class="form-subsection-heading">
+        <h3>Wholesale manager</h3>
       </div>
-      <div class="form-field form-span-4">
-        <%= f.input :delivery_minimum %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :delivery_fee %>
+      <div class="form-grid">
+        <div class="form-field form-span-12">
+          <%= f.input :wholesale_manager %>
+        </div>
       </div>
     </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Delivery Address</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-12">
-        <%= f.input :delivery_address_street_1 %>
+
+    <div class="form-subsection">
+      <div class="form-subsection-heading">
+        <h3>Primary contact</h3>
       </div>
-      <div class="form-field form-span-12">
-        <%= f.input :delivery_address_street_2 %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :delivery_address_city %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :delivery_address_state %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :delivery_address_zipcode %>
+      <div class="form-grid">
+        <div class="form-field form-span-4">
+          <%= f.input :primary_contact_name %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :primary_contact_phone %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :primary_contact_email %>
+        </div>
       </div>
     </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Billing Address</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-12">
-        <%= f.input :billing_address_street_1 %>
+
+    <div class="form-subsection">
+      <div class="form-subsection-heading">
+        <h3>Secondary contact</h3>
       </div>
-      <div class="form-field form-span-12">
-        <%= f.input :billing_address_street_2 %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :billing_address_city %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :billing_address_state %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :billing_address_zipcode %>
-      </div>
-    </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Accounts Payable</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-4">
-        <%= f.input :accounts_payable_contact_name %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :accounts_payable_contact_phone %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :accounts_payable_contact_email %>
-      </div>
-      <div class="form-field form-span-12">
-        <label class="form-check">
-          <%= f.check_box(:send_shipment_when_generated) %>
-          <span>Automatically Send Invoice</span>
-        </label>
-      </div>
-    </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Wholesale Manager</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-12">
-        <%= f.input :wholesale_manager %>
-      </div>
-    </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Primary Contact</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-4">
-        <%= f.input :primary_contact_name %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :primary_contact_phone %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :primary_contact_email %>
-      </div>
-    </div>
-  </fieldset>
-  <fieldset class="form-section">
-    <legend>Secondary Contact</legend>
-    <div class="form-grid">
-      <div class="form-field form-span-4">
-        <%= f.input :secondary_contact_name %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :secondary_contact_phone %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :secondary_contact_email %>
+      <div class="form-grid">
+        <div class="form-field form-span-4">
+          <%= f.input :secondary_contact_name %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :secondary_contact_phone %>
+        </div>
+        <div class="form-field form-span-4">
+          <%= f.input :secondary_contact_email %>
+        </div>
       </div>
     </div>
   </fieldset>

@@ -36,6 +36,8 @@ describe InvoicesPdf do
       client: client,
       date: Date.new(2026, 6, 2),
       delivery_fee: 3.50,
+      discount_type: "fixed_amount",
+      discount_value: 2.00,
       note: "Leave by the back door"
     )
     create(:shipment_item, bakery: bakery, shipment: shipment, product: product, product_quantity: 4,
@@ -54,7 +56,8 @@ describe InvoicesPdf do
     expect(text).to include("$4.25")
     expect(text).to include("$17.00")
     expect(text).to include("$3.50")
-    expect(text).to include("$20.50")
+    expect(text).to include("-$2.00")
+    expect(text).to include("$18.50")
     expect(text).to include("Leave by the back door")
   end
 

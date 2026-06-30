@@ -153,7 +153,10 @@ class InvoicePage
   end
 
   def totals_row
-    [["Subtotal:", @shipment.subtotal], ["Delivery Fee:", @shipment.delivery_fee], ["Total:", @shipment.price]]
+    rows = [["Subtotal:", @shipment.subtotal], ["Delivery Fee:", @shipment.delivery_fee]]
+    rows << ["Discount:", "-#{@shipment.discount_amount}"] if @shipment.discount?
+    rows << ["Total:", @shipment.price]
+    rows
   end
 
   def note

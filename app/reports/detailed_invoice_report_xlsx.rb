@@ -23,6 +23,7 @@ class DetailedInvoiceReportXlsx
         "Route",
         "Subtotal",
         "Fees",
+        "Discount",
         "Bread",
         "Cookie",
         "Pot Pie",
@@ -50,7 +51,8 @@ class DetailedInvoiceReportXlsx
         shipment.date,
         shipment.route_name,
         shipment.subtotal,
-        shipment.delivery_fee
+        shipment.delivery_fee,
+        shipment.discount_amount
       ]
       row += create_totals_for_invoice(shipment).values
       sheet.add_row row
@@ -68,12 +70,11 @@ class DetailedInvoiceReportXlsx
       vienoisserie: 0.00,
       dry_goods: 0.00,
       other: 0.00,
-      total: 0.00
+      total: shipment.price
     }
     shipment.shipment_items.each do |item|
       product_type = item.product.product_type
       hash[product_type.to_sym] += (item.product_quantity * item.product_price)
-      hash[:total] += (item.product_quantity * item.product_price)
     end
     hash
   end

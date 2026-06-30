@@ -59,9 +59,12 @@ class Client < ApplicationRecord
   has_many :price_variants, dependent: :destroy
   has_many :shipments, dependent: :destroy
 
+  attribute :default_discount_type, :integer
+
   enum :billing_term, { net_45: 45, net_30: 30, net_15: 15, net_7: 7, credit_card: 1, cod: 0 }
   enum :delivery_fee_option, { no_delivery_fee: 0, daily_delivery_fee: 1, weekly_delivery_fee: 2,
                                percentage_fee: 3 }
+  enum :default_discount_type, { fixed_amount: 0, percentage: 1 }, prefix: :default_discount
 
   enum :engagement_status, { current: 0, lapsed: 1, prospective: 2 }
 
@@ -89,7 +92,9 @@ class Client < ApplicationRecord
   validates :name, presence: true, length: { maximum: 150 }, uniqueness: { scope: :bakery_id }
   validates :primary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
   validates :secondary_contact_email, format: { with: /\A.+@.+\..+\z/ }, allow_blank: true
+  validates :default_discount_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
   validate :check_if_both_vip_and_vip_temp
+  validate :check_default_discount
   validate :check_percentage_fee
 
   geocoded_by :delivery_address_full
@@ -109,6 +114,10 @@ class Client < ApplicationRecord
 
   def self.engagement_status_select
     engagement_statuses.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
+  end
+
+  def self.discount_types_select
+    [["$ Amount", "fixed_amount"], ["Percentage", "percentage"]]
   end
 
   def delivery_fee?
@@ -141,6 +150,10 @@ class Client < ApplicationRecord
     return delivery_fee unless delivery_fee_option == "percentage_fee"
 
     "#{format('%.2f', delivery_fee)}%"
+  end
+
+  def default_discount?
+    default_discount_type.present? && default_discount_value.present? && default_discount_value.positive?
   end
 
   def average_sale_by_month
@@ -219,5 +232,19 @@ class Client < ApplicationRecord
     return if delivery_fee >= -100 && delivery_fee <= 100
 
     errors.add(:delivery_fee, "must be between -100 and 100 when fee is a percentage")
+  end
+
+  def check_default_discount
+    if default_discount_type.present? && default_discount_value.blank?
+      errors.add(:default_discount_value, "must be present when a discount type is selected")
+    end
+
+    if default_discount_value.present? && default_discount_type.blank?
+      errors.add(:default_discount_type, "must be present when a discount value is entered")
+    end
+
+    return unless default_discount_percentage? && default_discount_value.to_d > 100
+
+    errors.add(:default_discount_value, "must be less than or equal to 100 for percentage discounts")
   end
 end

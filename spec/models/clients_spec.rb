@@ -82,6 +82,29 @@ describe Client do
     expect(build(:client, :with_delivery_fee, delivery_fee: "not a number")).to_not be_valid
   end
 
+  it "allows fixed amount invoice defaults" do
+    client.default_discount_type = "fixed_amount"
+    client.default_discount_value = 12.50
+
+    expect(client).to be_valid
+    expect(client.default_discount?).to eq(true)
+  end
+
+  it "requires a default discount type when a default discount value is entered" do
+    client.default_discount_value = 10
+
+    expect(client).to be_invalid
+    expect(client.errors[:default_discount_type]).to include("must be present when a discount value is entered")
+  end
+
+  it "limits percentage default discounts to 100" do
+    client.default_discount_type = "percentage"
+    client.default_discount_value = 101
+
+    expect(client).to be_invalid
+    expect(client.errors[:default_discount_value]).to include("must be less than or equal to 100 for percentage discounts")
+  end
+
   describe "geocoding" do
     it "geocodes new records" do
       client = build(:client, latitude: nil, longitude: nil)

@@ -76,6 +76,63 @@ describe Shipment do
       expect(shipment.price).to eq(15.0)
     end
 
+    it "subtracts fixed amount discounts from the invoice total" do
+      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0)
+      shipment.delivery_fee = 5
+      shipment.discount_type = "fixed_amount"
+      shipment.discount_value = 3
+
+      expect(shipment.discount_base_amount).to eq(10.0)
+      expect(shipment.discount_amount).to eq(3)
+      expect(shipment.price).to eq(12.0)
+    end
+
+    it "calculates percentage discounts from the subtotal" do
+      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0)
+      shipment.delivery_fee = 5
+      shipment.discount_type = "percentage"
+      shipment.discount_value = 10
+
+      expect(shipment.discount_base_amount).to eq(10.0)
+      expect(shipment.discount_amount).to eq(1)
+      expect(shipment.price).to eq(14.0)
+    end
+
+    it "does not let discounts make the invoice total negative" do
+      shipment.shipment_items = build_list(:shipment_item, 2, product_quantity: 5, product_price: 1.0)
+      shipment.delivery_fee = 5
+      shipment.discount_type = "fixed_amount"
+      shipment.discount_value = 20
+
+      expect(shipment.discount_amount).to eq(15.0)
+      expect(shipment.price).to eq(0)
+    end
+
+    it "applies a client's default discount to new invoices" do
+      client = create(:client, default_discount_type: "percentage", default_discount_value: 10)
+      shipment = build(:shipment, client: client, bakery: client.bakery)
+
+      shipment.valid?
+
+      expect(shipment.discount_type).to eq("percentage")
+      expect(shipment.discount_value).to eq(10)
+    end
+
+    it "requires a discount type when a discount value is entered" do
+      shipment.discount_value = 10
+
+      expect(shipment).to be_invalid
+      expect(shipment.errors[:discount_type]).to include("must be present when a discount value is entered")
+    end
+
+    it "limits percentage discounts to 100" do
+      shipment.discount_type = "percentage"
+      shipment.discount_value = 101
+
+      expect(shipment).to be_invalid
+      expect(shipment.errors[:discount_value]).to include("must be less than or equal to 100 for percentage discounts")
+    end
+
     context "removes daily delivery fee if minimum is updated to needed" do
       let(:route) { create(:route, bakery: bakery) }
       let(:client_with_fee) do
