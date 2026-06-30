@@ -130,6 +130,24 @@
       display: none;
     }
   }
+
+  &[open] .account-menu-caret {
+    transform: rotate(180deg);
+  }
+}
+
+// Same fi-arrow-down-as-dropdown-caret pattern as the sidebar's .nav-caret,
+// just without its color override -- white already has the right contrast
+// against this header's dark background, unlike the sidebar's light one.
+.account-menu-caret {
+  font-size: 0.7rem;
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-menu-caret {
+    transition: none;
+  }
 }
 
 .account-avatar {

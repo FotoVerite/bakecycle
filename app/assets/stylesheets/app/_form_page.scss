@@ -751,17 +751,18 @@
   padding: 10px 12px;
 }
 
-// .form-field--error was dead code -- no view ever applied the modifier.
-// simple_form actually wraps an invalid field in its own `.error` class
-// (config/initializers/simple_form.rb), nested inside our `.form-field`,
-// and `simple_form_for`'s `html: { class: ... }` on this form replaces
-// (rather than appends to) SimpleForm's default `bakecycle-form` class, so
-// the app-wide `.bakecycle-form .error` rule in _forms.scss never matched
-// here either. Scoped to .client-edit-form rather than changing either of
-// those globally, since the other ~12 forms with the same html: override
-// haven't been audited for this fix yet.
-.form-field--error,
-.client-edit-form .error {
+// .form-field--error itself was dead code -- no view applies the modifier
+// except the order form's JS-driven date-field highlighting
+// (order_form_controller.js), which is why it's kept below. For real
+// server-side validation errors, SimpleForm wraps the invalid field in its
+// own classes with no help from any view: a `.input.error` wrapper div
+// (config/initializers/simple_form.rb) and a `<small class="error">` message
+// (simple_form_foundation.rb overrides the message tag to :small to match
+// Foundation's convention) -- both nested inside `.form-field`, the wrapper
+// div every view in this app's form-grid system writes by hand. These two
+// rules key off SimpleForm's actual output instead, scoped to `.form-field`
+// generally (not one form's class) so every form in the app gets it.
+.form-field--error {
   label,
   .form-field-label {
     color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
@@ -773,6 +774,26 @@
     border-color: $bc-alizarin-crimson;
     box-shadow: 0 0 0 2px rgba($bc-alizarin-crimson, 0.1);
   }
+}
+
+.form-field .input.error {
+  label {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+  }
+
+  input:not([type='submit']),
+  select,
+  textarea {
+    border-color: $bc-alizarin-crimson;
+    box-shadow: 0 0 0 2px rgba($bc-alizarin-crimson, 0.1);
+  }
+}
+
+.form-field small.error {
+  color: $bc-alizarin-crimson;
+  display: block;
+  font-size: 0.74rem;
+  margin-top: 4px;
 }
 
 .order-field-warning {
