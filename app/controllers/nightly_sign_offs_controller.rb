@@ -10,7 +10,7 @@ class NightlySignOffsController < ApplicationController
 
     @total_invoices       = shipments.size
     @blue_bottle          = shipments.select { |s| blue_bottle?(s.client_name) }
-    @wholesale_sandwiches = shipments.select { |s| wholesale_sandwiches?(s) }
+    @wholesale_sandwiches = shipments.select { |s| sandwich_and_tartine?(s) }
 
     excluded_ids = (@blue_bottle + @wholesale_sandwiches).map(&:id).to_set
     @all_clients = shipments.reject { |s| excluded_ids.include?(s.id) }
@@ -22,7 +22,7 @@ class NightlySignOffsController < ApplicationController
     Shipment
       .where(bakery: current_bakery, date: @date)
       .joins(:client)
-      .where.not(clients: { channel: "Internal" })
+      .where("clients.channel IS NULL OR clients.channel != ?", "Internal")
       .includes(:shipment_items)
       .order(:client_name)
       .to_a
@@ -30,7 +30,7 @@ class NightlySignOffsController < ApplicationController
 
   def blue_bottle?(name) = name.downcase.include?("blue bottle")
 
-  def wholesale_sandwiches?(shipment)
-    shipment.shipment_items.any? { |item| item.product_product_type == "wholesale_sandwiches" }
+  def sandwich_and_tartine?(shipment)
+    shipment.shipment_items.any? { |item| item.product_product_type == "sandwich_and_tartine" }
   end
 end
