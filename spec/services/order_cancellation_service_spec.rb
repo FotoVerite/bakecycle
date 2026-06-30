@@ -16,10 +16,11 @@ describe OrderCancellationService do
     order.reload
   end
 
-  def make_temp_order(for_client: client, with_items: false)
+  def make_temp_order(for_client: client, with_items: false, zero_items: false)
     temp = create(:temporary_order, bakery: bakery, client: for_client,
                                     route: route, start_date: date)
     create(:order_item, order: temp, bakery: bakery, monday: 3) if with_items
+    create(:order_item, order: temp, bakery: bakery, daily_item_count: 0) if zero_items
     temp.reload
   end
 
@@ -47,10 +48,16 @@ describe OrderCancellationService do
       expect(service.preview.first.status).to eq(:no_order)
     end
 
-    it "returns already_cancelled when a zero temp order exists" do
+    it "returns already_cancelled when a zero-quantity temp order exists" do
       make_standing_order
-      make_temp_order(with_items: false)
+      make_temp_order(zero_items: true)
       expect(service.preview.first.status).to eq(:already_cancelled)
+    end
+
+    it "returns needs_confirm when an empty temp order exists" do
+      make_standing_order
+      make_temp_order
+      expect(service.preview.first.status).to eq(:needs_confirm)
     end
 
     it "returns needs_confirm when a non-zero temp order exists" do
@@ -86,11 +93,12 @@ describe OrderCancellationService do
     context "with a will_cancel client" do
       before { make_standing_order }
 
-      it "creates a zero-item temporary order" do
+      it "creates a temporary order with zero-quantity line items" do
         expect { service.cancel! }
           .to change { Order.temporary(date).where(client: client, bakery: bakery).count }.by(1)
         temp = Order.temporary(date).where(client: client, bakery: bakery).first
-        expect(temp.order_items).to be_empty
+        expect(temp.order_items.size).to eq(1)
+        expect(temp.order_items.first.quantity(date)).to eq(0)
       end
 
       it "destroys existing shipments for that client and date" do
@@ -154,10 +162,11 @@ describe OrderCancellationService do
         make_temp_order(with_items: true)
       end
 
-      it "removes the temp order's items to zero it out" do
+      it "replaces the temp order's items with zero-quantity overrides" do
         service.cancel!(force_client_ids: [client.id])
         temp = Order.temporary(date).where(client: client, bakery: bakery).first
-        expect(temp.order_items).to be_empty
+        expect(temp.order_items.size).to eq(1)
+        expect(temp.order_items.first.quantity(date)).to eq(0)
       end
 
       it "returns cancelled status" do

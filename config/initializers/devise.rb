@@ -99,7 +99,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  config.pepper = ENV["DEVISE_PEPPER"]
+  config.pepper = ENV["DEVISE_PEPPER"].presence || Rails.application.credentials.dig(:devise, :pepper)
 
   # ==> Configuration for :invitable
   # The period the generated invitation token is valid, after

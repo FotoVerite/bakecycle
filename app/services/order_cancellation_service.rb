@@ -58,6 +58,10 @@ class OrderCancellationService
       if zero_order?(existing_temp)
         return Result.new(client: client, status: :already_cancelled,
                           message: "Already has a cancellation for #{@date.strftime('%b %-d')}.")
+      elsif existing_temp.order_items.empty?
+        return Result.new(client: client, status: :needs_confirm,
+                          message: "Has an empty temporary order for #{@date.strftime('%b %-d')} " \
+                                   "— confirm to rebuild it as a zero-quantity cancellation.")
       else
         return Result.new(client: client, status: :needs_confirm,
                           message: "Has a modified temporary order for #{@date.strftime('%b %-d')} " \
@@ -85,7 +89,7 @@ class OrderCancellationService
       if existing_temp
         existing_temp.all_order_items.destroy_all
       else
-        Order.create!(
+        existing_temp = Order.create!(
           bakery: @bakery,
           client: client,
           route: standing.route,
@@ -95,6 +99,7 @@ class OrderCancellationService
           discount: standing.discount
         )
       end
+      create_zero_items(existing_temp, standing)
     end
   end
 
@@ -113,7 +118,22 @@ class OrderCancellationService
   end
 
   def zero_order?(order)
-    order.order_items.none?
+    order.order_items.any? && order.order_items.all? { |item| item.quantity(@date).zero? }
+  end
+
+  def create_zero_items(temp_order, standing_order)
+    standing_order.order_items.find_each do |item|
+      temp_order.all_order_items.create!(
+        product: item.product,
+        monday: 0,
+        tuesday: 0,
+        wednesday: 0,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0
+      )
+    end
   end
 
   def skip_result(client)
