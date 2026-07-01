@@ -226,14 +226,23 @@
 
   .report-toolbar {
     align-items: center;
-    background: linear-gradient(90deg, color.adjust($bc-shakespeare, $lightness: 40%), color.adjust($bc-shakespeare, $lightness: 44%));
-    border-left: 4px solid color.adjust($bc-shakespeare, $lightness: 14%);
+    background: color.adjust($bc-shakespeare, $lightness: 42%);
     grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
-    min-height: 116px;
   }
 
   .report-header {
     min-height: 92px;
+  }
+
+  // Stack the date field above the action buttons instead of splitting them
+  // into fixed-width/auto grid columns -- with 3 action buttons (this page has
+  // one more than the toolbar pattern was originally sized for), the auto
+  // column was too narrow and forced an ugly 2-line wrap that also threw off
+  // the date field's flex-end alignment. Stacking gives the buttons the full
+  // column width to lay out on one line.
+  .report-date-form-with-actions {
+    align-items: stretch;
+    grid-template-columns: 1fr;
   }
 
   .report-action-buttons {
