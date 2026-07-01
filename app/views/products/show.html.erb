@@ -21,9 +21,9 @@
   
   <h2>Orders </h2>
   <div id='orders'>
-    Used in: <%= pluralize(@product.orders_in_use.count, 'order') %>
+    Used in: <%= pluralize(@orders_in_use.count, 'order') %>
     <%= render partial: "orders/order_table", locals: {
-      orders: @product.orders_in_use,
+      orders: @orders,
       missing_shipment_ids: [],
       show_created_whodoneit: false,
       show_updated_at_whodoneit: false

@@ -56,6 +56,8 @@ class ProductsController < ApplicationController
 
   def show
     authorize @product
+    @orders_in_use = @product.orders_in_use
+    @orders = @orders_in_use.order(id: :desc).paginate(page: params[:page])
   end
 
   def edit
@@ -64,7 +66,7 @@ class ProductsController < ApplicationController
 
   def orders
     authorize @product, :index?
-    @orders = @product.orders_in_use
+    @orders = @product.orders_in_use.order(id: :desc).paginate(page: params[:page])
   end
 
   def updated_at
@@ -143,7 +145,12 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    @product = policy_scope(Product).includes(price_variants: :client).find(params[:id])
+    scope = policy_scope(Product)
+    # show/orders/costing/destroy don't render price_variants -- eager loading them there
+    # was flagged by Bullet as unnecessary. edit/update (which re-renders the edit form
+    # on validation failure) and papertrail all render price_variants via _form.html.erb.
+    scope = scope.includes(price_variants: :client) if %w[edit update papertrail].include?(action_name)
+    @product = scope.find(params[:id])
   end
 
   def set_clients

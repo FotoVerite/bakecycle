@@ -153,8 +153,13 @@ class Product < ApplicationRecord
     save
   end
 
+  # Returns a relation (not an Array) so callers can paginate/count in the database
+  # instead of loading every order_item for the product into Ruby, which was the source
+  # of the slowdown on products with thousands of orders.
   def orders_in_use
-    order_items.map(&:order).uniq.select(&:still_in_use)
+    Order.where(id: OrderItem.where(product_id: id).select(:order_id))
+         .merge(Order.still_in_use)
+         .includes(:client, :route)
   end
 
   def price_varient_info(client_id)
@@ -173,7 +178,7 @@ class Product < ApplicationRecord
     return true unless inactive
     return true unless order_items.any?
     # see if any orders are still active
-    return true unless order_items.map(&:order).uniq.map(&:still_in_use).uniq.include?(true)
+    return true unless orders_in_use.exists?
 
     errors.add(:base, I18n.t(:product_in_use))
     false

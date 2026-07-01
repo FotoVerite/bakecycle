@@ -103,10 +103,8 @@ class Order < ApplicationRecord
     where(sql, date: date)
   end
 
-  # TODO: make more efficient and secure
   def self.production_date(date)
-    order_ids = OrderItem.production_date(date).map(&:order_id).uniq
-    where(id: order_ids)
+    where(id: OrderItem.production_date(date).select(:order_id))
   end
 
   def no_outstanding_shipments?
@@ -138,6 +136,17 @@ class Order < ApplicationRecord
   def self.temporary(date)
     where(order_type: "temporary", start_date: date)
   end
+
+  # SQL equivalent of #still_in_use, for scopes that need to filter/paginate in the
+  # database instead of loading every row into Ruby to check still_in_use on each.
+  scope :still_in_use, lambda {
+    today = Time.zone.today
+    where(
+      "(order_type = 'temporary' AND start_date >= :today) OR " \
+      "(order_type = 'standing' AND (end_date IS NULL OR end_date >= :today))",
+      today: today
+    )
+  }
 
   def self.standing(date)
     where(order_type: "standing")
