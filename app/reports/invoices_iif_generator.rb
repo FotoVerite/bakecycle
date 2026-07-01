@@ -20,7 +20,7 @@ class InvoicesIifGenerator
   end
 
   def filename
-    "#{bakery_file_name}_quickbooks#{date}.iif"
+    "#{bakery_file_name}-QuickBooks#{date}.iif"
   end
 
   def content_type
@@ -44,6 +44,6 @@ class InvoicesIifGenerator
   def date
     date_from = invoices.minimum(:date)
     date_to = invoices.maximum(:date)
-    "_#{date_from}_#{date_to}" if date_to && date_from
+    "-#{date_from}-to-#{date_to}" if date_to && date_from
   end
 end

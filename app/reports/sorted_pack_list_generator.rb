@@ -20,7 +20,7 @@ class SortedPackListGenerator
   end
 
   def filename
-    "Sorted-PackList-#{@date.iso8601}.xlsx"
+    "Sorted-Pack-List-#{@date.iso8601}.xlsx"
   end
 
   def generate

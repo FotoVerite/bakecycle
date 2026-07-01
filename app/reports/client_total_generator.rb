@@ -22,7 +22,7 @@ class ClientTotalGenerator
   end
 
   def filename
-    "ClientTotals_#{@start_date.iso8601}_#{@end_date.iso8601}.xlsx"
+    "Client-Totals-#{@start_date.iso8601}-to-#{@end_date.iso8601}.xlsx"
   end
 
   def generate

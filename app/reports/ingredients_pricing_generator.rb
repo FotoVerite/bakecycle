@@ -19,7 +19,7 @@ class IngredientsPricingGenerator
   end
 
   def filename
-    "IngredientPricing-#{@date.iso8601}.xlsx"
+    "Ingredient-Pricing-#{@date.iso8601}.xlsx"
   end
 
   def generate

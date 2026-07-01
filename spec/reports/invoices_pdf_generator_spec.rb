@@ -17,13 +17,13 @@ describe InvoicesPdfGenerator do
 
   it "produces a file and a filename" do
     create_list(:shipment, 2, bakery: bakery)
-    expect(generator.filename).to match(/invoices.*\.pdf/)
+    expect(generator.filename).to match(/Invoices.*\.pdf/)
     expect_any_instance_of(InvoicesPdf).to receive(:render).and_call_original
     expect(generator.generate).to_not be_nil
   end
 
   it "produces a file and filename when there are no shipments" do
-    expect(generator.filename).to match(/invoices.*\.pdf/)
+    expect(generator.filename).to match(/Invoices.*\.pdf/)
     expect_any_instance_of(InvoicesPdf).to receive(:render).and_call_original
     expect(generator.generate).to_not be_nil
   end

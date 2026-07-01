@@ -20,7 +20,7 @@ class SortedDeliveryListGenerator
   end
 
   def filename
-    "delivery_list_#{@date}.xlsx"
+    "Sorted-Delivery-List-#{@date.to_date.iso8601}.xlsx"
   end
 
   def generate

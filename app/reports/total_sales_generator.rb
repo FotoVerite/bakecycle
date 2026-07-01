@@ -22,7 +22,7 @@ class TotalSalesGenerator
   end
 
   def filename
-    "TotalSales_#{@start_date.iso8601}_#{@end_date.iso8601}.csv"
+    "Total-Sales-#{@start_date.iso8601}-to-#{@end_date.iso8601}.csv"
   end
 
   def generate

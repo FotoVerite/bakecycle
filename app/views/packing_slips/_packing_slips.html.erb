@@ -5,12 +5,12 @@
   <div class="report-action-buttons">
     <%= simple_form_for :print, url: print_list_packing_slips_path, method: :get, html: { data: { turbo_stream: true } } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
-      <%= f.submit 'Print Packing List', class: "button small", action: 'print', name: nil %>
+      <%= f.submit 'Export Packing List', class: "button small", action: 'print', name: nil %>
     <% end %>
 
     <%= simple_form_for :print, url: print_sorted_list_packing_slips_path, method: :get, html: { data: { turbo_stream: true } } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
-      <%= f.submit 'Print Sorted List', class: "button small secondary", action: 'print', name: nil %>
+      <%= f.submit 'Export Sorted List', class: "button small secondary", action: 'print', name: nil %>
     <% end %>
 
     <%= simple_form_for :print, url: print_packing_slips_path, method: :get, html: { data: { turbo_stream: true } } do |f| %>

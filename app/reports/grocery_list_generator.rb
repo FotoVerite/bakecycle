@@ -20,7 +20,7 @@ class GroceryListGenerator
   end
 
   def filename
-    "GroceryList-#{@date.iso8601}.xlsx"
+    "Grocery-List-#{@date.iso8601}.xlsx"
   end
 
   def generate

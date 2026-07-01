@@ -20,7 +20,7 @@ class ClientListGenerator
   end
 
   def filename
-    "ClientList_#{@type}_#{@date.iso8601}.xlsx"
+    "Client-List-#{@type.to_s.titleize}-#{@date.iso8601}.xlsx"
   end
 
   def generate

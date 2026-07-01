@@ -22,7 +22,7 @@ class BatchRecipesCsvGenerator
   end
 
   def filename
-    "Batch_Recipes_#{@start_date}_#{@end_date}.csv"
+    "Batch-Recipes-#{@start_date.iso8601}-to-#{@end_date.iso8601}.csv"
   end
 
   def generate

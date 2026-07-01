@@ -17,13 +17,13 @@ describe InvoicesIifGenerator do
 
   it "produces a file and a filename" do
     create_list(:shipment, 2, bakery: bakery)
-    expect(generator.filename).to match(/quickbooks.*\.iif/)
+    expect(generator.filename).to match(/QuickBooks.*\.iif/)
     expect_any_instance_of(InvoicesIif).to receive(:generate).and_call_original
     expect(generator.generate).to_not be_nil
   end
 
   it "produces a file and filename when there are no shipments" do
-    expect(generator.filename).to match(/quickbooks.*\.iif/)
+    expect(generator.filename).to match(/QuickBooks.*\.iif/)
     expect_any_instance_of(InvoicesIif).to receive(:generate).and_call_original
     expect(generator.generate).to_not be_nil
   end

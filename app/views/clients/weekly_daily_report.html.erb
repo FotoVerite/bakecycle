@@ -11,8 +11,8 @@
       <div class="report-date-form report-date-form-with-actions">
         <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
         <div class="report-action-buttons">
-          <%= button_tag "#{icon('file-text')} Daily Totals".html_safe, name: "type", value: "daily", class: "button search-button" %>
-          <%= button_tag "#{icon('file-text')} Weekly Totals".html_safe, name: "type", value: "weekly", class: "button secondary search-button" %>
+          <%= button_tag "#{icon('download')} Export Daily Totals".html_safe, name: "type", value: "daily", class: "button search-button" %>
+          <%= button_tag "#{icon('download')} Export Weekly Totals".html_safe, name: "type", value: "weekly", class: "button secondary search-button" %>
         </div>
       </div>
     <% end %>

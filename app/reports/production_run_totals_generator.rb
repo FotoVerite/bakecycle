@@ -22,9 +22,9 @@ class ProductionRunTotalsGenerator
 
   def filename
     if @type == "daily"
-      "DailyProductionTotalsReport-#{@date.iso8601}.xlsx"
+      "Daily-Production-Totals-#{@date.iso8601}.xlsx"
     else
-      "WeeklyProductionTotalsReport-#{@date.iso8601}.xlsx"
+      "Weekly-Production-Totals-#{@date.iso8601}.xlsx"
     end
   end
 

@@ -22,9 +22,9 @@ class ClientTotalsGenerator
 
   def filename
     if @type == "daily"
-      "DailyClientTotalsReport-#{@date.iso8601}.xlsx"
+      "Daily-Client-Totals-#{@date.iso8601}.xlsx"
     else
-      "WeeklyClientTotalsReport-#{@date.iso8601}.xlsx"
+      "Weekly-Client-Totals-#{@date.iso8601}.xlsx"
     end
   end
 

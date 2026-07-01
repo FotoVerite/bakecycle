@@ -20,7 +20,7 @@ class ClientsPerProductForWeekGenerator
   end
 
   def filename
-    "ClientsPerProductForWeek#{@date.iso8601}.xlsx"
+    "Clients-Per-Product-#{@date.iso8601}.xlsx"
   end
 
   def generate

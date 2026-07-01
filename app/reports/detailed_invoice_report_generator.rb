@@ -20,7 +20,7 @@ class DetailedInvoiceReportGenerator
   end
 
   def filename
-    "detailed_invoice_report_#{@start_date.iso8601}_#{@end_date.iso8601}.xlsx"
+    "Detailed-Invoice-Report-#{@start_date.iso8601}-to-#{@end_date.iso8601}.xlsx"
   end
 
   def generate

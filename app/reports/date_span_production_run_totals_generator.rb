@@ -22,7 +22,7 @@ class DateSpanProductionRunTotalsGenerator
   end
 
   def filename
-    "ProductionDateSpanTotals-#{@start_date.iso8601}-#{@end_date.iso8601}.xlsx"
+    "Production-Date-Span-Totals-#{@start_date.iso8601}-to-#{@end_date.iso8601}.xlsx"
   end
 
   def generate

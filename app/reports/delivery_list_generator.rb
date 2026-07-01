@@ -21,7 +21,7 @@ class DeliveryListGenerator
   end
 
   def filename
-    "delivery_list_#{@date}.#{@type}"
+    "Delivery-List-#{@date.iso8601}.#{@type}"
   end
 
   def generate

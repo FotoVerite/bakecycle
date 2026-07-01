@@ -19,7 +19,7 @@ class VipListGenerator
   end
 
   def filename
-    "VipList-#{@date.iso8601}.xlsx"
+    "VIP-List-#{@date.iso8601}.xlsx"
   end
 
   def generate

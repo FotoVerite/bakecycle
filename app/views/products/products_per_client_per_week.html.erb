@@ -10,12 +10,12 @@
     <%= simple_form_for "", url: print_products_per_client_per_week_products_path, method: :get, html: { class: "report-print-form", data: { turbo_stream: true } } do |f| %>
       <div class="report-date-form">
         <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
-        <%= button_tag "#{icon('file-text')} Print Report".html_safe, name: "type", value: "daily", class: "button search-button" %>
+        <%= button_tag "#{icon('download')} Export Report".html_safe, name: "type", value: "daily", class: "button search-button" %>
       </div>
     <% end %>
     <div class="report-toolbar-note">
       <span>Product report</span>
-      Prints weekly product quantities grouped by client.
+      Exports weekly product quantities grouped by client.
     </div>
   </div>
 

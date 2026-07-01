@@ -19,7 +19,7 @@ class ProductPricingGenerator
   end
 
   def filename
-    "ProductPricing_#{@date.iso8601}.xlsx"
+    "Product-Pricing-#{@date.iso8601}.xlsx"
   end
 
   def generate

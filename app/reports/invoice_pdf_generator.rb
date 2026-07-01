@@ -20,7 +20,7 @@ class InvoicePdfGenerator
   end
 
   def filename
-    "#{bakery_file_name}_invoice_#{shipment.invoice_number}.pdf"
+    "#{bakery_file_name}-Invoice-#{shipment.invoice_number}.pdf"
   end
 
   def generate

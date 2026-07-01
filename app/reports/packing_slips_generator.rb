@@ -22,8 +22,7 @@ class PackingSlipsGenerator
   end
 
   def filename
-    formatted_date = @date.strftime("%Y-%m-%d")
-    "packing_slips_#{formatted_date}.pdf"
+    "Packing-Slips-#{@date.iso8601}.pdf"
   end
 
   def generate

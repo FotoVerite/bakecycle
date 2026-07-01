@@ -22,7 +22,7 @@ class BatchGenerator
   end
 
   def filename
-    "Batch_Recipes_#{@start_date}_#{@end_date}.pdf"
+    "Batch-Recipes-#{@start_date.iso8601}-to-#{@end_date.iso8601}.pdf"
   end
 
   def generate

@@ -41,16 +41,16 @@ class ProductTotalsDateRangeGenerator
   end
 
   def filename
-    if @date == @end_date
-      date_part = @date.iso8601
+    date_part = if @date == @end_date
+      @date.iso8601
     else
-      date_part = "#{@date.iso8601}-through-#{@end_date.iso8601}"
+      "#{@date.iso8601}-to-#{@end_date.iso8601}"
     end
 
     if source == "generated_invoices"
-      "CreatedShipmentProductTotals-#{date_part}.xlsx"
+      "Created-Shipment-Product-Totals-#{date_part}.xlsx"
     else
-      "OrderProductTotals-#{date_part}.xlsx"
+      "Order-Product-Totals-#{date_part}.xlsx"
     end
   end
 

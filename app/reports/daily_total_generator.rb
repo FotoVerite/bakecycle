@@ -23,7 +23,7 @@ class DailyTotalGenerator
   end
 
   def filename
-    "DailyTotal_#{@date}_#{@show_routes}.#{@type}"
+    "Daily-Total-#{@date.iso8601}.#{@type}"
   end
 
   def generate

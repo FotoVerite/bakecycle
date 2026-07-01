@@ -20,7 +20,7 @@ class PackListGenerator
   end
 
   def filename
-    "PackList-#{@date.iso8601}.xlsx"
+    "Pack-List-#{@date.iso8601}.xlsx"
   end
 
   def generate

@@ -20,7 +20,7 @@ class ProjectionGenerator
   end
 
   def filename
-    "Production_Run_Projection_#{@start_date}.pdf"
+    "Production-Run-Projection-#{@start_date.iso8601}.pdf"
   end
 
   def generate

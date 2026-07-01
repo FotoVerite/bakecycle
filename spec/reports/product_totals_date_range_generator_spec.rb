@@ -9,7 +9,7 @@ describe ProductTotalsDateRangeGenerator do
     generator = described_class.new(bakery, date)
 
     expect(generator.id).to eq("#{bakery.id}_2026-06-03_2026-06-13_order_projection_product_totals_date_range")
-    expect(generator.filename).to eq("OrderProductTotals-2026-06-03-through-2026-06-13.xlsx")
+    expect(generator.filename).to eq("Order-Product-Totals-2026-06-03-to-2026-06-13.xlsx")
   end
 
   it "uses a distinct export id and filename for generated invoices" do
@@ -18,7 +18,7 @@ describe ProductTotalsDateRangeGenerator do
     generator = described_class.new(bakery, date, end_date: date + 6.days, source: "generated_invoices")
 
     expect(generator.id).to eq("#{bakery.id}_2026-06-03_2026-06-09_generated_invoices_product_totals_date_range")
-    expect(generator.filename).to eq("CreatedShipmentProductTotals-2026-06-03-through-2026-06-09.xlsx")
+    expect(generator.filename).to eq("Created-Shipment-Product-Totals-2026-06-03-to-2026-06-09.xlsx")
   end
 
   it "finds a generator from its global id" do
@@ -28,7 +28,7 @@ describe ProductTotalsDateRangeGenerator do
 
     expect(generator.end_date).to eq(Date.new(2026, 6, 9))
     expect(generator.source).to eq("order_projection")
-    expect(generator.filename).to eq("OrderProductTotals-2026-06-03-through-2026-06-09.xlsx")
+    expect(generator.filename).to eq("Order-Product-Totals-2026-06-03-to-2026-06-09.xlsx")
   end
 
   it "finds old generator ids as order projections" do
@@ -38,6 +38,6 @@ describe ProductTotalsDateRangeGenerator do
 
     expect(generator.end_date).to eq(Date.new(2026, 6, 13))
     expect(generator.source).to eq("order_projection")
-    expect(generator.filename).to eq("OrderProductTotals-2026-06-03-through-2026-06-13.xlsx")
+    expect(generator.filename).to eq("Order-Product-Totals-2026-06-03-to-2026-06-13.xlsx")
   end
 end

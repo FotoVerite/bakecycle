@@ -20,7 +20,7 @@ class InvoicesCsvGenerator
   end
 
   def filename
-    "#{bakery_file_name}_invoices#{date}.csv"
+    "#{bakery_file_name}-Invoices#{date}.csv"
   end
 
   def generate
@@ -40,6 +40,6 @@ class InvoicesCsvGenerator
   def date
     date_from = invoices.minimum(:date)
     date_to = invoices.maximum(:date)
-    "_#{date_from}_#{date_to}" if date_to && date_from
+    "-#{date_from}-to-#{date_to}" if date_to && date_from
   end
 end
