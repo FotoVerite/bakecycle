@@ -1,5 +1,6 @@
 <% is_all_clients = pv_form.object.client_id.nil? && !local_assigns.fetch(:is_template, false) %>
 <div class="nested-row" data-nested-row>
+  <%= pv_form.hidden_field :id if pv_form.object.persisted? %>
   <div class="form-grid nested-row-grid price-variant-grid">
     <div class="form-field form-span-7">
       <% if is_all_clients %>
