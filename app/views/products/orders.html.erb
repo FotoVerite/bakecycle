@@ -1,10 +1,22 @@
-<h1>Orders for <%= @product.name %></h1>
-<%= link_to 'Back', products_path, class: "button small" %>
+<% provide(:title, "Orders for #{@product.name}") %>
 
-<%= render partial: "orders/order_table", locals: {
-    orders: @orders,
-    missing_shipment_ids: [],
-    show_created_whodoneit: false,
-    show_updated_at_whodoneit: false
-  }
-%>
+<div class="form-page">
+  <div class="form-header">
+    <div>
+      <h1>Orders for <%= @product.name %></h1>
+      <p>Active orders using this product.</p>
+    </div>
+
+    <div class="form-header-actions">
+      <%= link_to 'Back', products_path, class: "button small secondary" %>
+    </div>
+  </div>
+
+  <%= render partial: "orders/order_table", locals: {
+      orders: @orders,
+      missing_shipment_ids: [],
+      show_created_whodoneit: false,
+      show_updated_at_whodoneit: false
+    }
+  %>
+</div>
