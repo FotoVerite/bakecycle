@@ -67,6 +67,135 @@ button,
     outline: 2px solid $bc-shakespeare;
     outline-offset: 2px;
   }
+
+  // Instant feedback for links that trigger a synchronous send_data download
+  // (packing slip, Quickbooks IIF) -- these never touch the async export tray,
+  // so without this the click looks like nothing happened during the wait.
+  &.is-loading {
+    align-items: center;
+    background-color: color.adjust($bc-shakespeare, $lightness: -10%);
+    display: inline-flex;
+    gap: 8px;
+    justify-content: center;
+  }
+}
+
+// Same sync-download feedback, but for compact table-action-icon links --
+// the outer <a> gets .is-loading while only its inner icon swaps to a spinner.
+a.is-loading {
+  cursor: progress;
+  pointer-events: none;
+}
+
+.sync-download-spinner {
+  animation: sync-download-spin 800ms linear infinite;
+  border: 2px solid rgba($bc-white, 0.35);
+  border-top-color: $bc-white;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 14px;
+  width: 14px;
+}
+
+@keyframes sync-download-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sync-download-spinner {
+    animation: none;
+  }
+}
+
+// Universal "export started" acknowledgment, delegated app-wide via
+// export_trigger_controller.js against every async report/export trigger
+// (~30 link/button/form-submit call sites). Pure overlay pseudo-elements so
+// it works without touching each element's markup -- the controller applies
+// .is-starting/.is-started directly to whatever element it resolves to
+// (including bare <input type="submit">, which can't have children swapped).
+.is-starting,
+.is-started {
+  pointer-events: none;
+  position: relative;
+}
+
+.is-starting::before,
+.is-started::before {
+  background: rgba($bc-white, 0.7);
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.is-starting::after {
+  animation: export-trigger-spin 700ms linear infinite;
+  border: 2px solid rgba($bc-shakespeare, 0.3);
+  border-radius: 50%;
+  border-top-color: $bc-shakespeare;
+  content: "";
+  height: 14px;
+  left: 50%;
+  margin: -7px 0 0 -7px;
+  position: absolute;
+  top: 50%;
+  width: 14px;
+}
+
+.is-started::after {
+  animation: export-trigger-pop 1400ms ease-out forwards;
+  color: color.adjust($bc-lima, $lightness: -15%);
+  content: "\2713";
+  font-size: 1.1rem;
+  font-weight: 700;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes export-trigger-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes export-trigger-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  30% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-starting::after {
+    animation: none;
+  }
+
+  .is-started::after {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 button.alert,

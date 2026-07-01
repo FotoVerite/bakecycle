@@ -7,7 +7,7 @@
     status: "Invoice report" %>
 
   <div class="report-toolbar">
-    <%= simple_form_for "", url: print_detailed_invoice_report_shipments_path, method: :get, html: { target: "_blank", class: "report-print-form" } do |f| %>
+    <%= simple_form_for "", url: print_detailed_invoice_report_shipments_path, method: :get, html: { class: "report-print-form", data: { turbo_stream: true } } do |f| %>
       <div class="report-date-form report-date-range-form">
         <%= f.input :start_date, input_html: { value: @start_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :start_date}, required: false %>
         <%= f.input :end_date, input_html: { value: @end_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :end_date}, required: false %>

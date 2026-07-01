@@ -3,17 +3,17 @@
     <p class="projection">Packing documents for selected invoices</p>
   </div>
   <div class="report-action-buttons">
-    <%= simple_form_for :print, url: print_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
+    <%= simple_form_for :print, url: print_list_packing_slips_path, method: :get, html: { data: { turbo_stream: true } } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
       <%= f.submit 'Print Packing List', class: "button small", action: 'print', name: nil %>
     <% end %>
 
-    <%= simple_form_for :print, url: print_sorted_list_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
+    <%= simple_form_for :print, url: print_sorted_list_packing_slips_path, method: :get, html: { data: { turbo_stream: true } } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
       <%= f.submit 'Print Sorted List', class: "button small secondary", action: 'print', name: nil %>
     <% end %>
 
-    <%= simple_form_for :print, url: print_packing_slips_path, method: :get, html: { target: '_blank' } do |f| %>
+    <%= simple_form_for :print, url: print_packing_slips_path, method: :get, html: { data: { turbo_stream: true } } do |f| %>
       <%= f.hidden_field :date, value: @date.strftime("%Y-%m-%d") %>
       <label class="report-checkbox">
         <%= f.input_field :include_invoices, as: :boolean, required: false, checked: true %>

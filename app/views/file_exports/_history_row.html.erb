@@ -1,0 +1,47 @@
+<%
+  variant = local_assigns[:variant]
+  row_class = "file-export-row"
+  row_class += " file-export-row--enter" if variant == :enter
+  row_class += " file-export-row--flash" if variant == :flash
+%>
+<tr id="file_export_<%= file_export.id %>" class="<%= row_class %>">
+  <td data-title="File" class='file-column'>
+    <% if file_export.failed? %>
+      <span class="file-export-name file-export-name--failed">
+        <%= icon("triangle-alert") %>
+        Export failed
+      </span>
+    <% elsif file_export.ready? %>
+      <span class="file-export-name">
+        <%= icon(file_export.format_icon) %>
+        <%= file_export.file_file_name %>
+      </span>
+    <% else %>
+      <span class="file-export-pending">Generating&hellip;</span>
+    <% end %>
+  </td>
+  <td data-title="Requested"><%= file_export.created_at.strftime("%-m/%d/%y %I:%M %p") %></td>
+  <td data-title="Status">
+    <% if file_export.failed? %>
+      <span class="file-export-status file-export-status--failed">
+        <%= icon("triangle-alert") %> Failed
+      </span>
+    <% elsif file_export.ready? %>
+      <span class="file-export-status file-export-status--ready">
+        <%= icon("circle-check") %> Ready
+      </span>
+    <% else %>
+      <span class="file-export-status file-export-status--pending">
+        <span class="file-export-spinner" aria-hidden="true"></span>
+        Generating
+      </span>
+    <% end %>
+  </td>
+  <td data-title="Action">
+    <% if file_export.ready? %>
+      <%= link_to file_export_path(file_export), class: "button small", data: { turbo: false } do %>
+        <%= icon("download") %> <%= file_export.failed? ? "Details" : "Download" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

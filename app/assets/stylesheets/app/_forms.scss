@@ -18,8 +18,12 @@ fieldset legend {
 }
 
 .js-datepicker {
-  position: relative;
-  z-index: 100;
+  // No position/z-index here -- the z-index: 100 this used to carry was a
+  // 2015-era leftover for the old jQuery UI datepicker popup (long since
+  // replaced by date_fields.js's native <input type="date"> enhancement).
+  // Left in place, it silently outranked every dropdown/panel in the app
+  // (tray, account menu, pin menu all sit at z-index: 30) any time a date
+  // field's layout happened to overlap one.
 }
 
 .row .back-button {

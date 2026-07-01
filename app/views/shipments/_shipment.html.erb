@@ -9,22 +9,24 @@
         <%= icon("pencil") %>
       </span>
     <% end %>
-    <%= link_to invoice_shipment_path(shipment), target: "_blank" do %>
+    <%= link_to invoice_shipment_path(shipment), data: { turbo_stream: true } do %>
       <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Invoice">
         <%= icon("file-text") %>
       </span>
     <% end %>
-    <%= link_to packing_slip_shipment_path(shipment), target: "_blank" do %>
-      <span class="table-action-icon table-action-icon--fulfillment icon-link-tooltip" aria-label="Packing Slip">
+    <%= link_to packing_slip_shipment_path(shipment),
+          data: { controller: "sync-download", action: "click->sync-download#start" } do %>
+      <span class="table-action-icon table-action-icon--fulfillment icon-link-tooltip" aria-label="Packing Slip" data-sync-download-target="icon">
         <%= icon("clipboard-list") %>
       </span>
     <% end %>
-    <%= link_to invoice_iif_shipment_path(shipment), target: "_blank" do %>
-      <span class="table-action-icon table-action-icon--financial icon-link-tooltip" aria-label="Quickbooks IIF">
+    <%= link_to invoice_iif_shipment_path(shipment),
+          data: { controller: "sync-download", action: "click->sync-download#start" } do %>
+      <span class="table-action-icon table-action-icon--financial icon-link-tooltip" aria-label="Quickbooks IIF" data-sync-download-target="icon">
         <%= icon("dollar-sign") %>
       </span>
     <% end %>
-     <%= link_to invoice_csv_shipment_path(shipment), target: "_blank" do %>
+     <%= link_to invoice_csv_shipment_path(shipment), data: { turbo_stream: true } do %>
       <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="CSV">
         <%= icon("file-spreadsheet") %>
       </span>

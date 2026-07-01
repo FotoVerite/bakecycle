@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BatchRecipesController < ApplicationController
+  include ExportsReportable
+
   after_action :skip_policy_scope, only: %i[index print export_csv]
 
   def index
@@ -12,19 +14,13 @@ class BatchRecipesController < ApplicationController
   def print
     authorize ProductionRun, :can_print?
     generator = BatchGenerator.new(current_bakery, start_date, end_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def export_csv
     authorize ProductionRun, :can_print?
-    projection = ProductionRunProjection.new(current_bakery, start_date, end_date)
-    filename = "Batch_Recipes_#{projection.start_date}_#{projection.batch_end_date}.csv"
-    respond_to do |format|
-      format.csv {
-        response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}\""
-        render plain: BatchRecipesCsv.new(projection).to_csv
-      }
-    end
+    generator = BatchRecipesCsvGenerator.new(current_bakery, start_date, end_date)
+    create_export_and_respond(generator)
   end
 
   private

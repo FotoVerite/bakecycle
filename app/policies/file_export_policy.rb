@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class FileExportPolicy < ApplicationPolicy
+  def index?
+    admin? || user.bakery.present?
+  end
+
   def show?
     admin? || belongs_to_bakery?
   end

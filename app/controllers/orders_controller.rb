@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
+  include ExportsReportable
+
   before_action :set_order, only: %i[
     add_invoices
     copy
@@ -130,7 +132,7 @@ class OrdersController < ApplicationController
   def print
     authorize @order, :show?
     generator = OrderGenerator.new(@order)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def grocery_list
@@ -142,7 +144,7 @@ class OrdersController < ApplicationController
     authorize Order, :index?
     @date = date_query
     generator = GroceryListGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   private

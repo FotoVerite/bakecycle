@@ -1,0 +1,23 @@
+<% if current_bakery %>
+  <details class="export-tray" data-controller="export-tray" data-action="toggle->export-tray#toggled">
+    <summary aria-label="Recent exports" title="Recent exports">
+      <%= icon("download") %>
+      <span class="export-tray-badge" data-export-tray-target="badge" hidden>0</span>
+    </summary>
+    <div class="export-tray-panel">
+      <div class="export-tray-header">
+        <strong>Recent exports</strong>
+        <%= link_to "View all", file_exports_path, class: "export-tray-viewall", data: { turbo: false } %>
+      </div>
+      <ul id="export_tray_list" class="export-tray-list" data-export-tray-target="list">
+        <% current_bakery.file_exports.order(created_at: :desc).limit(10).each do |file_export| %>
+          <%= render partial: "file_exports/tray_item", locals: { file_export: file_export } %>
+        <% end %>
+      </ul>
+      <div class="export-tray-empty">
+        <%= icon("inbox") %>
+        <p>Nothing here yet &mdash; reports you generate will show up here.</p>
+      </div>
+    </div>
+  </details>
+<% end %>

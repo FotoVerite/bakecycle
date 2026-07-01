@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PackingSlipsController < ApplicationController
+  include ExportsReportable
+
   before_action :skip_policy_scope
 
   def index
@@ -12,19 +14,19 @@ class PackingSlipsController < ApplicationController
   def print
     authorize Route, :print?
     generator = PackingSlipsGenerator.new(current_bakery, slip_date, print_invoices?)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_list
     authorize Route, :print?
     generator = PackListGenerator.new(current_bakery, slip_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_sorted_list
     authorize Route, :print?
     generator = SortedPackListGenerator.new(current_bakery, slip_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   private

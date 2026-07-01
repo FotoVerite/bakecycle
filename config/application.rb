@@ -20,6 +20,12 @@ module Bakecycle
     config.time_zone = "Eastern Time (US & Canada)"
     config.active_record.default_timezone = :local
 
+    # Must be set here, not in config/initializers/solid_queue.rb -- ActiveJob's
+    # on_load(:active_job) hook fires before app initializers run, so setting
+    # this later was a no-op and every job silently ran on the :async fallback
+    # adapter instead.
+    config.active_job.queue_adapter = :solid_queue
+
     config.generators do |g|
       g.factory_bot true
       g.test_framework :rspec

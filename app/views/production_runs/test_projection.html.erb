@@ -1,6 +1,6 @@
 <h1>Create A Test Production Run</h1>
 
-<%= simple_form_for @production_run, url: print_test_projection_production_runs_path, method: 'get', html: {target: '_blank'} do |f| %>
+<%= simple_form_for @production_run, url: print_test_projection_production_runs_path, method: 'get', html: { data: { turbo_stream: true } } do |f| %>
 
   <%= render partial: "shared/error_messages", locals: {f: f} %>
 

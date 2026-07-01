@@ -32,6 +32,8 @@ Rails.application.configure do
     host: "bakecycle.com"
   }
 
+  config.action_cable.allowed_request_origins = ["https://bakecycle.com", "https://www.bakecycle.com"]
+
   ActionMailer::Base.smtp_settings = {
     address: "smtp.sendgrid.net",
     port: "587",

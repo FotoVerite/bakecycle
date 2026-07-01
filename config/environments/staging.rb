@@ -32,6 +32,8 @@ Rails.application.configure do
     host: "staging.bakecycle.com"
   }
 
+  config.action_cable.allowed_request_origins = ["https://staging.bakecycle.com"]
+
   config.i18n.fallbacks = true
 
   ActionMailer::Base.smtp_settings = {

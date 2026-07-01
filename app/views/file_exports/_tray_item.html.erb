@@ -1,0 +1,35 @@
+<%
+  variant = local_assigns[:variant]
+  item_class = "export-tray-item"
+  item_class += " export-tray-item--enter" if variant == :enter
+  item_class += " export-tray-item--flash" if variant == :flash
+%>
+<li id="tray_file_export_<%= file_export.id %>" class="<%= item_class %>">
+  <% if file_export.failed? %>
+    <%= link_to file_export_path(file_export), class: "export-tray-item-link export-tray-item-link--failed", data: { turbo: false } do %>
+      <%= icon("triangle-alert", class: "export-tray-item-icon export-tray-item-icon--failed") %>
+      <span class="export-tray-item-body">
+        <span class="export-tray-item-name">Export failed</span>
+        <span class="export-tray-item-meta"><%= time_ago_in_words(file_export.created_at) %> ago</span>
+      </span>
+      <%= icon("download", class: "export-tray-item-action") %>
+    <% end %>
+  <% elsif file_export.ready? %>
+    <%= link_to file_export_path(file_export), class: "export-tray-item-link", data: { turbo: false } do %>
+      <%= icon(file_export.format_icon, class: "export-tray-item-icon") %>
+      <span class="export-tray-item-body">
+        <span class="export-tray-item-name"><%= file_export.file_file_name %></span>
+        <span class="export-tray-item-meta"><%= time_ago_in_words(file_export.created_at) %> ago</span>
+      </span>
+      <%= icon("download", class: "export-tray-item-action") %>
+    <% end %>
+  <% else %>
+    <span class="export-tray-item-link export-tray-item-link--pending">
+      <span class="file-export-spinner" aria-hidden="true"></span>
+      <span class="export-tray-item-body">
+        <span class="export-tray-item-name">Generating&hellip;</span>
+        <span class="export-tray-item-meta">Started <%= time_ago_in_words(file_export.created_at) %> ago</span>
+      </span>
+    </span>
+  <% end %>
+</li>

@@ -9,10 +9,12 @@
     <%= javascript_include_tag "bakecycle", defer: true %>
     <%= yield :head %>
     <%= csrf_meta_tags %>
+    <%= action_cable_meta_tag %>
   </head>
-  <body ng-app="bakecycle">
+  <body ng-app="bakecycle" data-controller="export-trigger" data-action="click->export-trigger#click submit->export-trigger#submit">
     <div class="row full-width wrapper">
       <div class="large-12 columns content-bg">
+        <%= turbo_stream_from FileExport.broadcast_stream_for(current_bakery) if current_user && current_bakery %>
         <%= render 'topmenusection' %>
         <div class="row">
           <%= render 'nav' if render_nav? %>

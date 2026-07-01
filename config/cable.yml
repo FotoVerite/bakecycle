@@ -1,13 +1,17 @@
 development:
-  adapter: async
+  adapter: solid_cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
 
 test:
   adapter: test
 
 staging:
-  adapter: async
+  adapter: solid_cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
 
 production:
-  adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: bakecycle_production
+  adapter: solid_cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day

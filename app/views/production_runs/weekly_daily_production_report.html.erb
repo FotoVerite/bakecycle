@@ -7,7 +7,7 @@
     status: "Daily or weekly" %>
 
   <div class="report-toolbar">
-    <%= simple_form_for "", url: print_weekly_daily_production_report_production_runs_path, method: :get, html: { target: "_blank", class: "report-print-form" } do |f| %>
+    <%= simple_form_for "", url: print_weekly_daily_production_report_production_runs_path, method: :get, html: { class: "report-print-form", data: { turbo_stream: true } } do |f| %>
       <div class="report-date-form report-date-form-with-actions">
         <%= f.input :date, input_html: { value: @date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date}, required: false %>
         <div class="report-action-buttons">

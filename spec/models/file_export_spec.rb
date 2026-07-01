@@ -41,4 +41,21 @@ describe FileExport do
       expect(attachment).to have_received(:expiring_url).with(10.minutes.to_i)
     end
   end
+
+  describe "#failed?" do
+    it "is false when there's no file yet" do
+      allow(file_export).to receive(:ready?).and_return(false)
+      expect(file_export).not_to be_failed
+    end
+
+    it "is false for a successful export" do
+      allow(file_export).to receive_messages(ready?: true, file_file_name: "DailyProductTotalsReport-2026-07-01.xlsx")
+      expect(file_export).not_to be_failed
+    end
+
+    it "is true for an error report" do
+      allow(file_export).to receive_messages(ready?: true, file_file_name: "export-error.pdf")
+      expect(file_export).to be_failed
+    end
+  end
 end

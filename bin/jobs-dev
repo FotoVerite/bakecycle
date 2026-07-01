@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Local-dev-only alternative to bin/jobs. bin/jobs runs SolidQueue::Cli, whose
+# Supervisor forks a separate OS process per dispatcher/worker group -- on
+# this machine that segfaults inside the pg gem's native extension
+# (connect_start) the instant a forked child touches its inherited DB
+# connection. Confirmed as a fork-only issue: a plain in-process Worker
+# (threads, no fork) runs fine. Use bin/jobs (or a real Supervisor) in
+# staging/production where this doesn't reproduce.
+require_relative "../config/environment"
+
+worker = SolidQueue::Worker.new(queues: "*", threads: 3, polling_interval: 0.5)
+
+# Just exit on signal rather than calling worker.stop (which joins the
+# thread) -- Thread#join isn't safe to call from inside a trap handler.
+%w[INT TERM].each { |signal| Signal.trap(signal) { exit } }
+
+worker.start
+sleep

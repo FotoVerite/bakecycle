@@ -56,7 +56,7 @@
         <% end %>
       </div>
       <div class="large-4 medium-6 small-12 columns">
-        <%= link_to print_vip_list_clients_path, target: "_blank", class: "stats border" do %>
+        <%= link_to print_vip_list_clients_path, data: { turbo_stream: true }, class: "stats border" do %>
           <div class="left">
             <span class="report-card-title">VIP List</span>
             <span class="report-card-copy">Current VIP clients for production and delivery review.</span>
@@ -65,7 +65,7 @@
         <% end %>
       </div>
       <div class="large-4 medium-6 small-12 columns">
-        <%= link_to total_report_clients_path, target: "_blank", class: "stats border" do %>
+        <%= link_to total_report_clients_path, class: "stats border" do %>
           <div class="left">
             <span class="report-card-title">Totals</span>
             <span class="report-card-copy">Client totals for a selected date range.</span>
@@ -88,7 +88,7 @@
         <% end %>
       </div>
       <div class="large-4 medium-6 small-12 columns">
-        <%= link_to print_pricing_vendors_path, target: "_blank", class: "stats border" do %>
+        <%= link_to print_pricing_vendors_path, data: { turbo_stream: true }, class: "stats border" do %>
           <div class="left">
             <span class="report-card-title">Ingredient Pricing</span>
             <span class="report-card-copy">Vendor ingredient prices for purchasing and costing.</span>
@@ -97,7 +97,7 @@
         <% end %>
       </div>
       <div class="large-4 medium-6 small-12 columns">
-        <%= link_to pricing_report_products_path, target: "_blank", class: "stats border" do %>
+        <%= link_to pricing_report_products_path, data: { turbo_stream: true }, class: "stats border" do %>
           <div class="left">
             <span class="report-card-title">Product Pricing</span>
             <span class="report-card-copy">Product prices and variants for customer billing checks.</span>

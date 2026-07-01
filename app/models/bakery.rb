@@ -39,6 +39,9 @@ class Bakery < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :production_runs, dependent: :destroy
   has_many :vendors, dependent: :destroy
+  # No dependent: :destroy -- exports (including invoices) are retained even if a
+  # bakery is removed, matching the "never prune FileExport" retention decision.
+  has_many :file_exports
 
   has_many :shipment_items, through: :shipments
   has_many :order_items, through: :orders

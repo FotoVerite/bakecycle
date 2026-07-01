@@ -15,7 +15,7 @@
         <%= icon("arrow-left") %>
         <span>Back</span>
       <% end %>
-      <%= link_to print_order_path(order), target: "_blank", class: "button small" do %>
+      <%= link_to print_order_path(order), data: { turbo_stream: true }, class: "button small" do %>
         <%= icon("printer") %>
         <span>Print</span>
       <% end %>

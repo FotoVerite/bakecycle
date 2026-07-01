@@ -15,6 +15,9 @@ import NavigationController from "./controllers/navigation_controller"
 import PinnedActionsController from "./controllers/pinned_actions_controller"
 import DashboardChartController from "./controllers/dashboard_chart_controller"
 import DiscountController from "./controllers/discount_controller"
+import ExportTrayController from "./controllers/export_tray_controller"
+import SyncDownloadController from "./controllers/sync_download_controller"
+import ExportTriggerController from "./controllers/export_trigger_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -33,5 +36,8 @@ application.register("navigation", NavigationController)
 application.register("pinned-actions", PinnedActionsController)
 application.register("dashboard-chart", DashboardChartController)
 application.register("discount", DiscountController)
+application.register("export-tray", ExportTrayController)
+application.register("sync-download", SyncDownloadController)
+application.register("export-trigger", ExportTriggerController)
 
 export { application }

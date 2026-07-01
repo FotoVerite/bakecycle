@@ -9,16 +9,20 @@
 
     <div class="form-header-actions">
       <%= link_to 'Back', shipments_path, class: "button small secondary"%>
-      <%= link_to invoice_shipment_path(@shipment), target: "_blank", class: "button small" do %>
+      <%= link_to invoice_shipment_path(@shipment), data: { turbo_stream: true }, class: "button small" do %>
         <%= icon("file-text") %> Print
       <% end %>
-      <%= link_to packing_slip_shipment_path(@shipment, format: :pdf), target: "_blank", class: "button small" do %>
-        <%= icon("file-text") %> Print Packing Slip
+      <%= link_to packing_slip_shipment_path(@shipment, format: :pdf), class: "button small",
+            data: { controller: "sync-download", action: "click->sync-download#start", sync_download_label_value: "Preparing PDF…" } do %>
+        <span data-sync-download-target="icon"><%= icon("file-text") %></span>
+        <span data-sync-download-target="label">Print Packing Slip</span>
       <% end %>
-      <%= link_to invoice_iif_shipment_path(shipment), target: "_blank", class: "button small" do %>
-        <%= icon("dollar-sign") %> Export to Quickbooks
+      <%= link_to invoice_iif_shipment_path(shipment), class: "button small",
+            data: { controller: "sync-download", action: "click->sync-download#start", sync_download_label_value: "Preparing IIF…" } do %>
+        <span data-sync-download-target="icon"><%= icon("dollar-sign") %></span>
+        <span data-sync-download-target="label">Export to Quickbooks</span>
       <% end %>
-      <%= link_to invoice_csv_shipment_path(shipment), target: "_blank", class: "button small" do %>
+      <%= link_to invoice_csv_shipment_path(shipment), data: { turbo_stream: true }, class: "button small" do %>
         <%= icon("file-spreadsheet") %> Export to CSV
       <% end %>
     </div>

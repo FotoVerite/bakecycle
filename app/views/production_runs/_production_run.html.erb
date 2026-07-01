@@ -6,7 +6,7 @@
     <%= link_to edit_production_run_path(production_run) do %>
       <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Run"><%= icon("pencil") %></span>
     <% end %>
-    <%= link_to print_production_run_path(production_run, format: :pdf), target: "_blank" do %>
+    <%= link_to print_production_run_path(production_run, format: :pdf), data: { turbo_stream: true } do %>
       <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Print Run"><%= icon("file-text") %></span>
     <% end %>
   </td>

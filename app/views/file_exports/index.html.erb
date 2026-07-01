@@ -1,0 +1,37 @@
+<% provide(:title, "Exports") %>
+
+<div class="index-page">
+  <div class="index-header">
+    <div>
+      <h1>Exports</h1>
+      <p>Your 10 most recent reports and exports.</p>
+    </div>
+  </div>
+
+  <table class="responsive-table file-exports-table">
+    <thead>
+      <tr>
+        <th scope="col">File</th>
+        <th scope="col">Requested</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody id="file_exports_list">
+      <% @file_exports.each do |file_export| %>
+        <%= render partial: "file_exports/history_row", locals: { file_export: file_export } %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%# Table stays in the DOM even when empty -- a live export triggered from
+      elsewhere while this page is open needs #file_exports_list to still be
+      there for the turbo_stream prepend to land. Toggled via :empty in CSS. %>
+  <div class="index-empty-state file-exports-empty-state">
+    <%= icon("inbox") %>
+    <div>
+      <h2>No exports yet</h2>
+      <p>Reports and exports you generate anywhere in Bakecycle will show up here.</p>
+    </div>
+  </div>
+</div>

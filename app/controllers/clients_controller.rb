@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ClientsController < ApplicationController
+  include ExportsReportable
+
   before_action :set_client, only: %i[show edit update destroy]
   before_action :skip_policy_scope, only: %i[
     print_client_list
@@ -74,7 +76,7 @@ class ClientsController < ApplicationController
     @start_date = start_date
     @end_date = end_date
     generator = ClientTotalGenerator.new(current_bakery, start_date, end_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def weekly_daily_report
@@ -85,21 +87,21 @@ class ClientsController < ApplicationController
   def print_client_list
     authorize Client, :index?
     generator = ClientListGenerator.new(current_bakery, params[:type])
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_weekly_daily_report
     authorize Client, :index?
     @date = date_query
     generator = ClientTotalsGenerator.new(current_bakery, date_query, params[:type])
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_vip_list
     authorize Client, :index?
     @date = date_query
     generator = VipListGenerator.new(current_bakery)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def set_yearly_clients

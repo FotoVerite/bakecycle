@@ -15,6 +15,23 @@ bundle exec rails db:migrate
 
 PostgreSQL and Redis must be running locally (e.g. via Homebrew services).
 
+## Verification policy — read before running specs/preview server
+
+Don't run the full test suite, start the preview server, or do browser-based
+verification by default after a change. It's expensive and low-signal for
+most edits. Only do it when:
+- The change is genuinely hard to verify by reading the code/diff (complex
+  async/timing behavior, a bug that only reproduces at runtime).
+- The user explicitly asks for verification.
+- It's a UI/CSS change where visual regression is the actual risk (layout,
+  contrast, responsive behavior).
+
+For everything else — config fixes, backend logic, refactors covered by
+existing specs, mechanical multi-file edits — read the code and relevant
+specs, run only the narrowly-scoped spec file(s) that exercise the change if
+needed, and state your confidence. Don't reach for a browser or the full
+suite to "be sure."
+
 ## Stack
 
 - **Ruby** 3.1.1 (arm64-darwin, native — not Docker)

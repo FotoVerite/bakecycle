@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DailyTotalsController < ApplicationController
+  include ExportsReportable
+
   before_action :skip_authorization, :skip_policy_scope
 
   def index
@@ -9,7 +11,7 @@ class DailyTotalsController < ApplicationController
 
   def print
     generator = DailyTotalGenerator.new(current_bakery, date_query, params[:format] || "pdf", params[:show_routes])
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   private

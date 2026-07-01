@@ -374,3 +374,112 @@ span.negative {
   margin-top: 5px;
   font-size: 20px;
 }
+
+.file-export-pending {
+  color: $bc-scorpion;
+  font-style: italic;
+}
+
+.file-export-name {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+
+  .bc-icon {
+    color: $bc-silver-chalice;
+    flex: 0 0 auto;
+  }
+
+  &--failed {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+
+    .bc-icon {
+      color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+    }
+  }
+}
+
+.file-export-status {
+  align-items: center;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 600;
+  gap: 6px;
+
+  &--ready {
+    color: color.adjust($bc-lima, $lightness: -18%);
+  }
+
+  &--pending {
+    color: $bc-scorpion;
+  }
+
+  &--failed {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+  }
+}
+
+.file-export-row {
+  &--enter {
+    animation: file-export-row-enter 220ms ease-out;
+  }
+
+  &--flash {
+    animation: file-export-row-flash 1400ms ease-out;
+  }
+}
+
+@keyframes file-export-row-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes file-export-row-flash {
+  0% {
+    background: color.adjust($bc-lima, $lightness: 40%);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .file-export-row--enter,
+  .file-export-row--flash {
+    animation: none;
+  }
+}
+
+// The empty state and the table both stay in the DOM (see file_exports/index)
+// so a live turbo_stream prepend always has #file_exports_list to land in,
+// even on a page that rendered empty. Toggle visibility off :empty instead.
+.file-exports-empty-state {
+  display: none;
+}
+
+.file-exports-table:has(#file_exports_list:empty) {
+  display: none;
+}
+
+.file-exports-table:has(#file_exports_list:empty) + .file-exports-empty-state {
+  display: flex;
+  
+}
+.file-exports-table .file-column {
+  text-align: left;
+}
+
+
+
+#export_tray_list {
+  padding:0px;
+  z-index: 10000;
+}

@@ -39,6 +39,12 @@ end
 
 RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
+  # Turbo::Broadcastable::TestHelper's assert_turbo_stream_broadcasts uses Minitest
+  # assertions (assert_not_empty) that aren't available in plain RSpec example
+  # groups, so specs use its lower-level capture_turbo_stream_broadcasts/broadcasts
+  # methods directly with normal RSpec `expect` assertions instead.
+  config.include ActionCable::TestHelper, type: :job
+  config.include Turbo::Broadcastable::TestHelper, type: :job
 
   config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 

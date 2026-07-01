@@ -53,5 +53,49 @@ describe ExporterJob do
       expect(file_action.file_export).to eq(export)
       expect(file_action.action).to eq("viewed")
     end
+
+    it "broadcasts a turbo stream replace for the tray and history row targets" do
+      export = FileExport.create!(bakery: bakery)
+
+      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(bakery)) do
+        ExporterJob.new.perform(user, export, generator)
+      end
+
+      expect(streams.size).to eq(2)
+      expect(streams.map { |s| s["target"] })
+        .to contain_exactly("tray_file_export_#{export.id}", "file_export_#{export.id}")
+      expect(streams.map { |s| s["action"] }).to all(eq("replace"))
+    end
+
+    it "still broadcasts when generation fails and falls back to an error report" do
+      export = FileExport.create!(bakery: bakery)
+      failing_generator = instance_double(PackingSlipsGenerator, filename: "packing-slips", generate: nil)
+      allow(failing_generator).to receive(:generate).and_raise(StandardError, "boom")
+
+      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(bakery)) do
+        ExporterJob.new.perform(user, export, failing_generator)
+      end
+
+      expect(export.reload).to be_ready
+      expect(export.reload).to be_failed
+      expect(streams.size).to eq(2)
+    end
+
+    it "marks the file export as failed if a job argument fails to deserialize" do
+      # perform's own rescue never runs here since ActiveJob raises trying to
+      # resolve the corrupted GlobalID before perform is even called -- this
+      # is what used to leave a FileExport stuck at "Generating..." forever.
+      export = FileExport.create!(bakery: bakery)
+      job = ExporterJob.new(user, export, generator)
+      serialized = job.serialize
+      serialized["arguments"][2]["_aj_globalid"] = "gid://bakecycle/PackingSlipsGenerator/nonexistent"
+
+      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(bakery)) do
+        ExporterJob.execute(serialized)
+      end
+
+      expect(export.reload).to be_failed
+      expect(streams.size).to eq(2)
+    end
   end
 end

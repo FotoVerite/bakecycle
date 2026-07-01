@@ -10,7 +10,7 @@
           date: @date.strftime("%Y-%m-%d"),
           format: :pdf
         ),
-        target: "_blank", class: "button small"
+        data: { turbo_stream: true }, class: "button small"
       ) %>
     </div>
   </div>
@@ -27,17 +27,16 @@
           end_date: @projection.batch_end_date.strftime("%Y-%m-%d"),
           format: :pdf
         ),
-        target: "_blank", class: "button small"
+        data: { turbo_stream: true }, class: "button small"
       ) %>
 
       <%= link_to(
         "#{icon('download')} Export CSV".html_safe,
         export_csv_batch_recipes_path(
           start_date: @projection.start_date.strftime("%Y-%m-%d"),
-          end_date: @projection.batch_end_date.strftime("%Y-%m-%d"),
-          format: :csv
+          end_date: @projection.batch_end_date.strftime("%Y-%m-%d")
         ),
-        class: "button small secondary"
+        data: { turbo_stream: true }, class: "button small secondary"
       ) %>
     </div>
   </div>

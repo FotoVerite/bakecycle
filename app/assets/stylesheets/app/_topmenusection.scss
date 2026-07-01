@@ -321,6 +321,320 @@
   }
 }
 
+.export-tray {
+  display: inline-block;
+  position: relative;
+
+  > summary {
+    align-items: center;
+    background: $bc-white;
+    border: 1px solid $bc-border-grey;
+    border-radius: 4px;
+    color: $bc-scorpion;
+    cursor: pointer;
+    display: inline-flex;
+    height: 40px;
+    justify-content: center;
+    list-style: none;
+    position: relative;
+    width: 40px;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover,
+    &:focus {
+      border-color: $bc-shakespeare;
+      color: $bc-shakespeare;
+    }
+  }
+}
+
+.export-tray-badge {
+  align-items: center;
+  // Same -8% darkening already used for .button.alert elsewhere in this file
+  // -- base $bc-alizarin-crimson is ~4.2:1 against white text, just under the
+  // 4.5:1 AA floor at this text size (10px bold doesn't qualify as "large").
+  background: color.adjust($bc-alizarin-crimson, $lightness: -8%);
+  // A ring in the header's own bar color (not the button under it) makes the
+  // badge read as punched through the bar, rather than a flat sticker pasted
+  // over the button's corner -- the previous flat circle collided directly
+  // with the white button square with no separation.
+  border: 2px solid #343740;
+  border-radius: 999px;
+  box-sizing: content-box;
+  color: $bc-white;
+  display: flex;
+  font-size: 0.7rem;
+  font-weight: 700;
+  height: 16px;
+  justify-content: center;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  min-width: 16px;
+  padding: 0 3px;
+  position: absolute;
+  right: -8px;
+  top: -8px;
+
+  &--pop {
+    animation: export-tray-badge-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
+
+.export-tray-panel {
+  background: $bc-white;
+  border: 1px solid $bc-lightgrey;
+  min-width: 300px;
+  max-width: 360px;
+  padding: 6px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  transform-origin: top right;
+  z-index: 30;
+}
+
+// Details' content box is created fresh in the render tree each time [open]
+// flips display:none -> block, so this restarts on every open, not just once.
+.export-tray[open] .export-tray-panel {
+  animation: export-tray-reveal 160ms ease-out;
+}
+
+.export-tray-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 9px 9px;
+
+  strong {
+    color: $bc-charcoal;
+    font-size: 0.82rem;
+  }
+}
+
+.export-tray-viewall {
+  color: $bc-shakespeare;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    color: color.adjust($bc-shakespeare, $lightness: -15%);
+  }
+}
+
+.export-tray-list {
+  list-style: none;
+  margin: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.export-tray-item {
+  border-top: 1px solid $bc-lightgrey;
+
+  &:first-child {
+    border-top: 0;
+  }
+
+  &--enter {
+    animation: export-tray-item-enter 220ms ease-out;
+  }
+
+  &--flash .export-tray-item-link {
+    animation: export-tray-item-flash 1400ms ease-out;
+  }
+}
+
+.export-tray-item-link {
+  align-items: center;
+  border-radius: 3px;
+  color: $bc-charcoal;
+  display: flex;
+  gap: 10px;
+  padding: 8px 9px;
+
+  &:hover,
+  &:focus {
+    background: color.adjust($bc-shakespeare, $lightness: 39%);
+
+    .export-tray-item-name {
+      color: color.adjust($bc-shakespeare, $lightness: -22%);
+    }
+
+    .export-tray-item-action {
+      color: color.adjust($bc-shakespeare, $lightness: -22%);
+    }
+  }
+
+  &--pending {
+    cursor: default;
+
+    &:hover,
+    &:focus {
+      background: none;
+    }
+  }
+
+  &--failed {
+    .export-tray-item-name {
+      color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+    }
+
+    &:hover,
+    &:focus {
+      background: color.adjust($bc-alizarin-crimson, $lightness: 38%);
+
+      .export-tray-item-name,
+      .export-tray-item-action {
+        color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+      }
+    }
+  }
+}
+
+.export-tray-item-icon {
+  color: $bc-silver-chalice;
+  flex: 0 0 auto;
+  font-size: 1.05rem;
+
+  &--failed {
+    color: color.adjust($bc-alizarin-crimson, $lightness: -10%);
+  }
+}
+
+.export-tray-item-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.export-tray-item-name {
+  color: $bc-charcoal;
+  font-size: 0.78rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.export-tray-item-meta {
+  color: $bc-scorpion;
+  font-size: 0.68rem;
+  font-weight: 500;
+}
+
+.export-tray-item-action {
+  color: $bc-silver-chalice;
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+}
+
+.export-tray-empty {
+  display: none;
+  padding: 30px 16px 26px;
+  text-align: center;
+
+  .bc-icon {
+    color: $bc-border-grey;
+    font-size: 1.7rem;
+  }
+
+  p {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    margin: 10px auto 0;
+    max-width: 220px;
+  }
+}
+
+.export-tray-list:empty + .export-tray-empty {
+  display: block;
+}
+
+.file-export-spinner {
+  animation: file-export-spin 800ms linear infinite;
+  border: 2px solid $bc-lightgrey;
+  border-top-color: $bc-shakespeare;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 14px;
+  width: 14px;
+}
+
+@keyframes file-export-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes export-tray-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes export-tray-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes export-tray-item-flash {
+  0% {
+    background: color.adjust($bc-lima, $lightness: 32%);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+@keyframes export-tray-badge-pop {
+  0% {
+    transform: scale(0.5);
+  }
+
+  60% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .file-export-spinner {
+    animation: none;
+  }
+
+  .export-tray[open] .export-tray-panel,
+  .export-tray-item--enter,
+  .export-tray-item--flash .export-tray-item-link,
+  .export-tray-badge--pop {
+    animation: none;
+  }
+}
+
 @media all and (max-width: 1025px) {
   .top-menu-section {
     grid-template-columns: minmax(180px, 32%) minmax(0, 1fr);

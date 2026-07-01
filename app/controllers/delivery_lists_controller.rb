@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DeliveryListsController < ApplicationController
+  include ExportsReportable
+
   before_action :skip_policy_scope
 
   def index
@@ -11,13 +13,13 @@ class DeliveryListsController < ApplicationController
   def print
     authorize Route, :print?
     generator = DeliveryListGenerator.new(current_bakery, date_query, params[:type])
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_sorted
     authorize Route, :print?
     generator = SortedDeliveryListGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   private

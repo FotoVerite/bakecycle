@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ShipmentsController < ApplicationController
+  include ExportsReportable
+
   before_action :load_shipment, only: %i[edit update destroy invoice packing_slip invoice_iif invoice_csv]
   after_action :skip_policy_scope,
                only: %i[
@@ -96,7 +98,7 @@ class ShipmentsController < ApplicationController
   def invoice
     authorize @shipment, :show?
     generator = InvoicePdfGenerator.new(current_bakery, @shipment)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def detailed_invoice_report
@@ -110,7 +112,7 @@ class ShipmentsController < ApplicationController
     @start_date = start_date
     @end_date = end_date
     generator = DetailedInvoiceReportGenerator.new(current_bakery, start_date, end_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def total_sales_report
@@ -124,7 +126,7 @@ class ShipmentsController < ApplicationController
     @start_date = start_date
     @end_date = end_date
     generator = TotalSalesGenerator.new(current_bakery, start_date, end_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def packing_slip
@@ -138,25 +140,25 @@ class ShipmentsController < ApplicationController
   def invoice_csv
     authorize @shipment, :show?
     generator = InvoiceCsvGenerator.new(current_bakery, @shipment)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def export_csv
     authorize Shipment, :index?
     generator = InvoicesCsvGenerator.new(current_bakery, search_form)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def export_iif
     authorize Shipment, :index?
     generator = InvoicesIifGenerator.new(current_bakery, search_form)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def export_pdf
     authorize Shipment, :index?
     generator = InvoicesPdfGenerator.new(current_bakery, search_form)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def invoice_iif

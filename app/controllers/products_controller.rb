@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ProductsController < ApplicationController
+  include ExportsReportable
+
   before_action :set_product, only: %i[costing edit orders papertrail show update destroy]
   before_action :set_clients, only: %i[new edit create update]
   before_action :ensure_all_clients_price_variant, only: %i[edit]
@@ -116,19 +118,19 @@ class ProductsController < ApplicationController
     authorize Product, :index?
     @date = date_query
     generator = ProductTotalsGenerator.new(current_bakery, date_query, params[:type])
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_delivery_product_projection
     authorize Product, :index?
     generator = ProductDeliveryProjectionGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def pricing_report
     authorize Product, :index?
     generator = ProductPricingGenerator.new(current_bakery)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def products_per_client_per_week
@@ -139,7 +141,7 @@ class ProductsController < ApplicationController
   def print_products_per_client_per_week
     authorize Product, :index?
     generator = ClientsPerProductForWeekGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   private

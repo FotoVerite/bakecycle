@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount ActionCable.server => "/cable"
+
   root "landing_pages#index"
   devise_for :users, skip: [:invitations]
   devise_scope :user do
@@ -96,7 +98,7 @@ Rails.application.routes.draw do
 
   resources :file_actions, only: [:index]
 
-  resources :file_exports, only: [:show]
+  resources :file_exports, only: %i[index show]
 
   resources :shipments, path: "invoices", except: [:show] do
     get "invoice", on: :member

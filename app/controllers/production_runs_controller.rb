@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ProductionRunsController < ApplicationController
+  include ExportsReportable
+
   before_action :set_production_run, only: %i[edit update print reset]
   after_action :skip_policy_scope, only: %i[
     print_projection
@@ -42,7 +44,7 @@ class ProductionRunsController < ApplicationController
   def print
     authorize @production_run
     generator = ProductionRunGenerator.new(@production_run)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def reset
@@ -60,7 +62,7 @@ class ProductionRunsController < ApplicationController
     authorize ProductionRun, :can_print?
     @date = date_query
     generator = ProductionRunTotalsGenerator.new(current_bakery, date_query, params[:type])
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def date_span_production_report
@@ -74,7 +76,7 @@ class ProductionRunsController < ApplicationController
     @start_date = start_date
     @end_date = end_date
     generator = DateSpanProductionRunTotalsGenerator.new(current_bakery, start_date, end_date)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def print_recipes
@@ -88,7 +90,7 @@ class ProductionRunsController < ApplicationController
   def print_projection
     authorize ProductionRun, :can_print?
     generator = ProjectionGenerator.new(current_bakery, date_query)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def test_projection
@@ -102,7 +104,7 @@ class ProductionRunsController < ApplicationController
       "#{o[1]['product_id']}:#{o[1]['overbake_quantity']}"
     end
     generator = TestProjectionGenerator.new(current_bakery, Time.zone.today, order_items)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   private

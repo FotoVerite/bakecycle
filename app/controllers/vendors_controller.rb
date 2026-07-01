@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class VendorsController < ApplicationController
+  include ExportsReportable
+
   before_action :set_vendor, only: %i[buy_orders edit pricing update update_buy_orders update_pricing destroy]
   before_action :skip_policy_scope, only: %i[print_pricing]
 
@@ -44,7 +46,7 @@ class VendorsController < ApplicationController
   def print_pricing
     authorize Vendor, :index?
     generator = IngredientsPricingGenerator.new(current_bakery)
-    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+    create_export_and_respond(generator)
   end
 
   def update_pricing

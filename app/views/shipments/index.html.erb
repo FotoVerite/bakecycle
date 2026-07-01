@@ -71,15 +71,15 @@
 
       <div class="index-action-buttons">
       <% search_params = params[:search].permit(ShipmentSearchForm.params) if params[:search] %>
-      <%= link_to export_pdf_shipments_path(search: search_params), target: '_blank', class: "button small" do %>
+      <%= link_to export_pdf_shipments_path(search: search_params), data: { turbo_stream: true }, class: "button small" do %>
           <%= icon("file-text") %> Export invoice PDFs
       <% end %>
 
-      <%= link_to export_csv_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
+      <%= link_to export_csv_shipments_path(search: search_params), data: { turbo_stream: true }, class: "button small secondary" do %>
         <%= icon("file-spreadsheet") %> Export CSV
       <% end %>
 
-      <%= link_to export_iif_shipments_path(search: search_params), target: "_blank", class: "button small secondary" do %>
+      <%= link_to export_iif_shipments_path(search: search_params), data: { turbo_stream: true }, class: "button small secondary" do %>
         <%= icon("dollar-sign") %> Export QuickBooks IIF
       <% end %>
       </div>
