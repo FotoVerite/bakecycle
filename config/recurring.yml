@@ -15,7 +15,13 @@ production:
     queue: operations
     schedule: every 5 minutes
   clear_solid_queue_finished_jobs:
+    # command: (not class:) recurring tasks default to Solid Queue's own
+    # "solid_queue_recurring" queue if no queue: is given -- neither of our
+    # worker groups in config/queue.yml listens to that queue, so without
+    # this line the job enqueues every hour and just sits "ready" forever,
+    # never claimed. Confirmed stuck for 1hr+ on staging before this fix.
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    queue: operations
     schedule: every hour at minute 12
   clear_solid_queue_failed_jobs:
     # None of our jobs configure retry_on/discard_on, so anything that lands
@@ -24,6 +30,7 @@ production:
     # clear_finished_in_batches above (which only ever touches successful
     # jobs), Solid Queue has no equivalent auto-prune for the failed side.
     command: "SolidQueue::FailedExecution.discard_all_in_batches(batch_size: 500)"
+    queue: operations
     schedule: every hour at minute 27
   purge_old_versions:
     class: PurgeOldVersionsJob
@@ -43,7 +50,13 @@ staging:
     queue: operations
     schedule: every 5 minutes
   clear_solid_queue_finished_jobs:
+    # command: (not class:) recurring tasks default to Solid Queue's own
+    # "solid_queue_recurring" queue if no queue: is given -- neither of our
+    # worker groups in config/queue.yml listens to that queue, so without
+    # this line the job enqueues every hour and just sits "ready" forever,
+    # never claimed. Confirmed stuck for 1hr+ on staging before this fix.
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    queue: operations
     schedule: every hour at minute 12
   clear_solid_queue_failed_jobs:
     # None of our jobs configure retry_on/discard_on, so anything that lands
@@ -52,6 +65,7 @@ staging:
     # clear_finished_in_batches above (which only ever touches successful
     # jobs), Solid Queue has no equivalent auto-prune for the failed side.
     command: "SolidQueue::FailedExecution.discard_all_in_batches(batch_size: 500)"
+    queue: operations
     schedule: every hour at minute 27
   purge_old_versions:
     class: PurgeOldVersionsJob
