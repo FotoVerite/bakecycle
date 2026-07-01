@@ -150,7 +150,7 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order = policy_scope(Order).find(params[:id])
+    @order = policy_scope(Order).includes(order_items: { product: :price_variants }).find(params[:id])
   end
 
   def set_order_form_data

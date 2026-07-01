@@ -27,7 +27,7 @@ class OrderDecorator < Draper::Decorator
   end
 
   def upcoming_shipments
-    object.shipments.upcoming(Time.zone.today).decorate
+    object.shipments.includes(:client).upcoming(Time.zone.today).decorate
   end
 
   def overridable_end_date
