@@ -70,13 +70,19 @@ class Bakery < ApplicationRecord
     return @_tempfile.path if @_tempfile
 
     @_tempfile = write_logo_to_tempfile(style)
-    @_tempfile.path
+    @_tempfile&.path
   end
 
   def write_logo_to_tempfile(style)
     tempfile = Tempfile.new("bakecycle-bakery-logo")
     logo.copy_to_local_file(style, tempfile.path)
     tempfile
+  rescue StandardError => e
+    # The S3 object the DB record points to can be missing or unreadable as an image
+    # (e.g. synced data referencing objects that only exist in another environment's
+    # bucket -- see db:sync_bakery_logos). Don't let a bad logo crash PDF generation.
+    Rails.logger.warn("Bakery##{id}: failed to load logo (style=#{style}): #{e.class}: #{e.message}")
+    nil
   end
 
   def before_kickoff_time?

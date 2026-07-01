@@ -6,6 +6,7 @@ class ProductsController < ApplicationController
   before_action :ensure_all_clients_price_variant, only: %i[edit]
   before_action :skip_policy_scope, only: %i[
     weekly_daily_report print_weekly_daily_report
+    print_delivery_product_projection
     pricing_report
     products_per_client_per_week
     print_products_per_client_per_week
@@ -116,6 +117,12 @@ class ProductsController < ApplicationController
     redirect_to ExporterJob.create(current_user, current_bakery, generator)
   end
 
+  def print_delivery_product_projection
+    authorize Product, :index?
+    generator = ProductDeliveryProjectionGenerator.new(current_bakery, date_query)
+    redirect_to ExporterJob.create(current_user, current_bakery, generator)
+  end
+
   def pricing_report
     authorize Product, :index?
     generator = ProductPricingGenerator.new(current_bakery)
@@ -156,6 +163,7 @@ class ProductsController < ApplicationController
       :public,
       :inactive,
       :lead_days_override,
+      :pieces_per_tray,
       price_variants_attributes: %i[id client_id quantity price _destroy]
     )
   end

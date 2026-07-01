@@ -13,12 +13,15 @@
         <div class="report-action-buttons">
           <%= button_tag "#{icon('file-text')} Daily Totals".html_safe, name: "type", value: "daily", class: "button search-button" %>
           <%= button_tag "#{icon('file-text')} Weekly Totals".html_safe, name: "type", value: "weekly", class: "button secondary search-button" %>
+          <%= button_tag "#{icon('package')} Delivery Product Projection".html_safe,
+            formaction: print_delivery_product_projection_products_path,
+            class: "button secondary search-button" %>
         </div>
       </div>
     <% end %>
     <div class="report-toolbar-note">
       <span>Product report</span>
-      Choose daily or weekly product totals for the selected date.
+      Choose daily, weekly, or delivery-date product projections for the selected date.
     </div>
   </div>
 

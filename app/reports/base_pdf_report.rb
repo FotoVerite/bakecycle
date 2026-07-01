@@ -53,7 +53,17 @@ class BasePdfReport < Prawn::Document
 
   def bakery_logo_display(bakery)
     bakery_logo_image = bakery.logo_local_file(:invoice)
-    return image bakery_logo_image, fit: [260, 60] if bakery_logo_image
+    if bakery_logo_image
+      begin
+        return image bakery_logo_image, fit: [260, 60]
+      rescue Prawn::Errors::UnsupportedImageType => e
+        # The downloaded file isn't a valid image -- e.g. the DB record points at an S3
+        # object that doesn't exist in this environment's bucket (see
+        # db:sync_bakery_logos), so the "image" is actually an S3 error response body.
+        # Fall through to the text fallback below instead of crashing the export job.
+        Rails.logger.warn("Bakery##{bakery.id}: logo file isn't a valid image: #{e.message}")
+      end
+    end
 
     text_box bakery.name.upcase, size: 60, overflow: :shrink_to_fit
   end

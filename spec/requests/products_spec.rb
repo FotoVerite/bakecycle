@@ -86,6 +86,27 @@ RSpec.describe "Products", type: :request do
       expect(flash[:notice]).to match(/You have updated/)
     end
 
+    it "updates product tray metadata" do
+      patch product_path(product), params: { product: { pieces_per_tray: 60 } }
+      expect(product.reload.pieces_per_tray).to eq(60)
+      expect(flash[:notice]).to match(/You have updated/)
+    end
+
+    it "starts the delivery product projection export" do
+      file_export = create(:file_export, bakery: bakery)
+
+      allow(ExporterJob).to receive(:create).and_return(file_export)
+
+      get print_delivery_product_projection_products_path(date: "2026-06-03")
+
+      expect(ExporterJob).to have_received(:create).with(
+        user,
+        bakery,
+        an_instance_of(ProductDeliveryProjectionGenerator)
+      )
+      expect(response).to redirect_to(file_export)
+    end
+
     it "soft-deletes an inactive product" do
       product.update!(inactive: true)
       delete product_path(product)

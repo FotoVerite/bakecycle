@@ -38,6 +38,7 @@ describe Product do
     expect(product).to respond_to(:weight)
     expect(product).to respond_to(:unit)
     expect(product).to respond_to(:over_bake)
+    expect(product).to respond_to(:pieces_per_tray)
     expect(product).to respond_to(:motherdough)
     expect(product).to respond_to(:inclusion)
     expect(product).to respond_to(:base_price)
@@ -57,6 +58,11 @@ describe Product do
     expect(product).to validate_presence_of(:weight)
     expect(product).to validate_presence_of(:unit)
     expect(product).to validate_presence_of(:over_bake)
+    expect(product).to allow_value(nil).for(:pieces_per_tray)
+    expect(product).to allow_value(60).for(:pieces_per_tray)
+    expect(product).to_not allow_value(0).for(:pieces_per_tray)
+    expect(product).to_not allow_value(-1).for(:pieces_per_tray)
+    expect(product).to_not allow_value(1.5).for(:pieces_per_tray)
   end
 
   describe "#destroy" do

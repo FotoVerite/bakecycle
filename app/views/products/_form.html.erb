@@ -38,15 +38,18 @@
         <%= f.input :unit, collection: product.units_select, as: :select, include_blank: false %>
       </div>
 
-      <div class="form-field form-span-4">
+      <div class="form-field form-span-3">
         <%= f.input :over_bake, label: "over bake %", as: :decimal %>
       </div>
-      <div class="form-field form-span-4">
+      <div class="form-field form-span-3">
         <%= f.label :total_lead_days %>
         <input disabled="true" type="text" value="<%= product.total_lead_days %>" />
       </div>
-      <div class="form-field form-span-4">
+      <div class="form-field form-span-3">
         <%= f.input :lead_days_override, label: "lead days override", as: :integer%>
+      </div>
+      <div class="form-field form-span-3">
+        <%= f.input :pieces_per_tray, label: "Pieces per tray", as: :integer %>
       </div>
 
       <div class="form-field form-span-12">

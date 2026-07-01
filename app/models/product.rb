@@ -23,6 +23,7 @@
 #  batch_recipe    :boolean          default(FALSE)
 #  removed         :boolean          default(FALSE)
 #  graph_data      :json
+#  pieces_per_tray :integer
 #
 
 class Product < ApplicationRecord
@@ -66,6 +67,7 @@ class Product < ApplicationRecord
   validates :over_bake, presence: true, numericality: true
   validates :base_price, presence: true, numericality: true
   validates :description, length: { maximum: 500 }
+  validates :pieces_per_tray, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validate :check_for_order_items
 
   before_validation :strip_name
