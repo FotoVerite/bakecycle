@@ -3,8 +3,16 @@
   item_class = "export-tray-item"
   item_class += " export-tray-item--enter" if variant == :enter
   item_class += " export-tray-item--flash" if variant == :flash
+  export_state =
+    if file_export.failed?
+      "failed"
+    elsif file_export.ready?
+      "ready"
+    else
+      "pending"
+    end
 %>
-<li id="tray_file_export_<%= file_export.id %>" class="<%= item_class %>">
+<li id="tray_file_export_<%= file_export.id %>" class="<%= item_class %>" data-export-state="<%= export_state %>">
   <% if file_export.failed? %>
     <%= link_to file_export_path(file_export), class: "export-tray-item-link export-tray-item-link--failed", data: { turbo: false } do %>
       <%= icon("triangle-alert", class: "export-tray-item-icon export-tray-item-icon--failed") %>
@@ -12,7 +20,7 @@
         <span class="export-tray-item-name">Export failed</span>
         <span class="export-tray-item-meta"><%= time_ago_in_words(file_export.created_at) %> ago</span>
       </span>
-      <%= icon("download", class: "export-tray-item-action") %>
+      <%= icon("info", class: "export-tray-item-action") %>
     <% end %>
   <% elsif file_export.ready? %>
     <%= link_to file_export_path(file_export), class: "export-tray-item-link", data: { turbo: false } do %>

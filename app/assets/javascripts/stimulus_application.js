@@ -18,6 +18,7 @@ import DiscountController from "./controllers/discount_controller"
 import ExportTrayController from "./controllers/export_tray_controller"
 import SyncDownloadController from "./controllers/sync_download_controller"
 import ExportTriggerController from "./controllers/export_trigger_controller"
+import DisclosureController from "./controllers/disclosure_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -39,5 +40,6 @@ application.register("discount", DiscountController)
 application.register("export-tray", ExportTrayController)
 application.register("sync-download", SyncDownloadController)
 application.register("export-trigger", ExportTriggerController)
+application.register("disclosure", DisclosureController)
 
 export { application }

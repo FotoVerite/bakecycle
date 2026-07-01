@@ -13,7 +13,7 @@ bundle exec rspec spec/models/bakery_spec.rb  # run one spec
 bundle exec rails db:migrate
 ```
 
-PostgreSQL and Redis must be running locally (e.g. via Homebrew services).
+PostgreSQL must be running locally (e.g. via Homebrew services). No Redis dependency anywhere in the app — Solid Queue and Solid Cable are both DB-backed, using the primary Postgres database.
 
 ## Verification policy — read before running specs/preview server
 
@@ -37,7 +37,8 @@ suite to "be sure."
 - **Ruby** 3.1.1 (arm64-darwin, native — not Docker)
 - **Rails** 7.1.6
 - **DB** PostgreSQL (local)
-- **Background jobs** Solid Queue (DB-backed, no Redis dependency). Redis is still used, but only for Action Cable (`config/cable.yml`).
+- **Background jobs** Solid Queue (DB-backed, no Redis dependency).
+- **Action Cable** Solid Cable (DB-backed, `config/cable.yml`) — no Redis dependency. All three environments (development/staging/production) use it; only `test` uses the plain `test` adapter.
 - **Asset pipeline** Sprockets + jsbundling-rails (JS via esbuild) + cssbundling-rails (CSS via Dart Sass). **Important:** the dev server serves the *built* files (`app/assets/builds/application.css`, `app/assets/builds/bakecycle.js`), not live-compiled source — see "Asset build gotcha" below.
 - **CSS** Foundation 5.5 (vendored — see below)
 - **JS** Stimulus + Turbo (`@hotwired/turbo`, `turbo-rails` gem). React/Redux fully removed (see migration plan below).
@@ -181,11 +182,16 @@ Common spec support files:
 Solid Queue (DB-backed via the `solid_queue` gem — no Redis dependency for jobs). Jobs live in `app/jobs/`.
 Worker config: `config/queue.yml`. Recurring/scheduled jobs: `config/recurring.yml` (per-environment, e.g. `production:`/`staging:` keys).
 
+**`config.active_job.queue_adapter` must be set in `config/application.rb`, not in `config/initializers/*`.** Something (a gem, an autoloaded job class) triggers ActiveJob's `on_load(:active_job)` hook before app initializers run, so setting it later is silently a no-op — every job would run on the `:async` in-process fallback adapter instead of Solid Queue, with no error. This was live and unnoticed until an unrelated live-broadcast bug (jobs finishing "for real" via `:async` while `solid_queue_jobs` sat unprocessed) surfaced it.
+
+**`bin/jobs` (Solid Queue's `Supervisor`) segfaults on at least one local dev machine (macOS arm64, Ruby 3.3.1, `pg` 1.6.3)** — `Supervisor` always forks a separate OS process per dispatcher/worker group, and forking with an already-open `pg` connection corrupts it (`[BUG] Segmentation fault` inside `pg/connection.rb:944 connect_start`). Not reproduced as a code bug, just a fork/native-extension interaction on that machine. `bin/jobs-dev` is a non-forking, thread-only alternative (`SolidQueue::Worker.new(...).start`, no `Supervisor`) for local dev/`foreman start`; `Procfile`/`Procfile.dev` both use it. Staging/production keep `bin/jobs` (a real `Supervisor`) since this hasn't reproduced there.
+
 Recurring jobs currently configured:
-- `clear_solid_queue_finished_jobs` — hourly, prunes Solid Queue's own job-history table.
+- `clear_solid_queue_finished_jobs` — hourly, prunes Solid Queue's own job-history table (successful jobs only — `SolidQueue::Job.clear_finished_in_batches` never touches failed ones).
+- `clear_solid_queue_failed_jobs` — hourly, discards everything in `solid_queue_failed_executions`. None of our jobs configure `retry_on`/`discard_on`, so anything landing there has already exhausted ActiveJob's default retry handling and won't be retried automatically — this is the failed-job equivalent of the line above, since Solid Queue has no built-in auto-prune for that side.
 - `purge_old_versions` — daily at 3am, runs `PurgeOldVersionsJob` (90-day retention on PaperTrail's `versions` table — see PaperTrail section below).
 
-Redis is still used, but only for Action Cable (`config/cable.yml`), not for job queuing.
+No Redis dependency anywhere — Action Cable uses Solid Cable (DB-backed, `config/cable.yml`), same primary Postgres database as everything else, no separate `connects_to`.
 
 ## PaperTrail (audit trail)
 

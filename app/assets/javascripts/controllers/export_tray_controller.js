@@ -1,18 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Passive unread-count badge for the header export tray. No proactive toast/
-// notification -- just a quiet nudge that something finished while the tray was
-// closed. In-memory only (resets on page load), no server-side read tracking.
+// Passive ready-download badge for the header export tray. No proactive toast/
+// notification -- just a quiet nudge that a download finished (or failed) while
+// the tray was closed. In-memory only (resets on page load), no server-side read
+// tracking.
 export default class extends Controller {
-  static targets = ["badge", "list"]
+  static targets = ["badge", "badgeLabel", "list"]
 
   connect() {
-    this.unreadCount = 0
-    // An export's row is prepended once (queued) then replaced in place as
-    // it changes state (ready/failed) -- track which ids we've already seen
-    // so a later replace of a known row doesn't get counted as a second
-    // "new" export arriving.
-    this.seenIds = new Set(Array.from(this.listTarget.children).map((li) => li.id))
+    this.readyCount = 0
+    this.readyIds = new Set(this.readyItems().map((li) => li.id))
     this.observer = new MutationObserver((mutations) => this.onMutations(mutations))
     this.observer.observe(this.listTarget, { childList: true, subtree: true })
   }
@@ -22,21 +19,22 @@ export default class extends Controller {
   }
 
   onMutations(mutations) {
-    let hasNewArrival = false
+    let hasNewReadyDownload = false
 
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
-        if (node.nodeType !== Node.ELEMENT_NODE || this.seenIds.has(node.id)) continue
+        if (node.nodeType !== Node.ELEMENT_NODE || !this.isReadyDownload(node) || this.readyIds.has(node.id)) continue
 
-        this.seenIds.add(node.id)
-        hasNewArrival = true
+        this.readyIds.add(node.id)
+        hasNewReadyDownload = true
       }
     }
 
-    if (!hasNewArrival || this.element.hasAttribute("open")) return
+    if (!hasNewReadyDownload || this.element.hasAttribute("open")) return
 
-    this.unreadCount += 1
-    this.badgeTarget.textContent = this.unreadCount
+    this.readyCount += 1
+    this.badgeTarget.textContent = this.readyCount
+    this.badgeLabelTarget.textContent = `${this.readyCount} ready ${this.readyCount === 1 ? "download" : "downloads"}`
     this.badgeTarget.hidden = false
 
     // Restart the pop animation even if the badge was already visible.
@@ -47,8 +45,17 @@ export default class extends Controller {
 
   toggled() {
     if (this.element.hasAttribute("open")) {
-      this.unreadCount = 0
+      this.readyCount = 0
       this.badgeTarget.hidden = true
+      this.badgeLabelTarget.textContent = "No ready downloads"
     }
+  }
+
+  readyItems() {
+    return Array.from(this.listTarget.children).filter((li) => this.isReadyDownload(li))
+  }
+
+  isReadyDownload(node) {
+    return ["ready", "failed"].includes(node.dataset?.exportState)
   }
 }

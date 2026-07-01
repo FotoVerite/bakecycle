@@ -1,8 +1,9 @@
 <% if current_bakery %>
-  <details class="export-tray" data-controller="export-tray" data-action="toggle->export-tray#toggled">
+  <details class="export-tray" data-controller="export-tray disclosure" data-action="toggle->export-tray#toggled">
     <summary aria-label="Recent exports" title="Recent exports">
-      <%= icon("download") %>
-      <span class="export-tray-badge" data-export-tray-target="badge" hidden>0</span>
+      <%= icon("inbox") %>
+      <span class="export-tray-badge" data-export-tray-target="badge" aria-live="polite" hidden>0</span>
+      <span class="show-for-sr" data-export-tray-target="badgeLabel">No ready downloads</span>
     </summary>
     <div class="export-tray-panel">
       <div class="export-tray-header">

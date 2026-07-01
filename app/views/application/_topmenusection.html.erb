@@ -30,7 +30,7 @@
 
         <%= render "export_tray" %>
 
-        <details class="account-menu">
+        <details class="account-menu" data-controller="disclosure">
           <summary>
             <span class="account-avatar"><%= current_user.name.first&.upcase %></span>
             <span class="account-identity">

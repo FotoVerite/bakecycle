@@ -1,6 +1,6 @@
 <% if PinnedActionRegistry.available?(action_key, current_user) %>
   <% pin = pinned_action_record(action_key) %>
-  <details class="pin-action-menu">
+  <details class="pin-action-menu" data-controller="disclosure">
     <summary aria-label="More actions" title="More actions">
       <%= icon("settings") %>
     </summary>
