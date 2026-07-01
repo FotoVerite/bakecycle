@@ -33,7 +33,10 @@ module ApplicationHelper
       element[key.to_s.dasherize] = value
     end
 
-    doc.to_html.html_safe
+    # Serialize just the <svg> node, not the whole parsed fragment -- lucide-static's
+    # source files include a leading license comment as a sibling node, which
+    # doc.to_html would otherwise leak into the rendered DOM on every icon use.
+    element.to_html.html_safe
   end
 
   def job_queue_table
