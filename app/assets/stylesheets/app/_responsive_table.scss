@@ -10,10 +10,15 @@ $bp-xlarge: 75em;
   &:hover {
     cursor: pointer;
   }
+
+  &:focus-visible {
+    outline: 2px solid $bc-shakespeare;
+    outline-offset: -2px;
+  }
 }
 
 .missing {
-  background:#F78984 !important;
+  background: $bc-missing-highlight !important;
 }
 
 .product-info-tooltip {
@@ -111,11 +116,14 @@ $bp-xlarge: 75em;
   align-items: center;
   border-radius: 50%;
   display: inline-flex;
-  height: 30px;
+  // 44px meets the touch-target minimum -- PRODUCT.md calls out production
+  // staff working these tables "with floury hands" on shared tablets, so this
+  // isn't a generic a11y nicety here, it's a stated design requirement.
+  height: 44px;
   justify-content: center;
   margin-left: 6px;
   transition: filter 100ms ease-out;
-  width: 30px;
+  width: 44px;
 
   .bc-icon {
     font-size: 1.15em;
@@ -130,8 +138,8 @@ $bp-xlarge: 75em;
   // Deliberately a different hue (teal) from --edit's blue, not just a
   // different shade, so the two read apart at a glance.
   &--create {
-    background: #dff1f0;
-    color: #1f6b66;
+    background: $bc-create-bg;
+    color: $bc-create-fg;
   }
 
   &--document {
@@ -140,13 +148,13 @@ $bp-xlarge: 75em;
   }
 
   &--fulfillment {
-    background: #e3eedb;
-    color: #4f6b3d;
+    background: $bc-fulfillment-bg;
+    color: $bc-fulfillment-fg;
   }
 
   &--financial {
-    background: #f8f1de;
-    color: #8a6d23;
+    background: $bc-financial-bg;
+    color: $bc-financial-fg;
   }
 
   &--destructive {

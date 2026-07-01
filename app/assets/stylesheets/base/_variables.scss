@@ -21,6 +21,17 @@ $bc-mercury: #e6e6e6; // TooGreyForMyTasteGrey
 $bc-wild-sand: #f5f5f5; // LigtherYouCanBarelyTellGrey
 $bc-white: #fff; // RegularOleWhite
 
+// table-action-icon variant colors (see CLAUDE.md's icon variant table) --
+// previously hardcoded inline in _responsive_table.scss.
+$bc-create-bg: #dff1f0; // teal tint -- --create variant
+$bc-create-fg: #1f6b66;
+$bc-fulfillment-bg: #e3eedb; // green tint -- --fulfillment variant
+$bc-fulfillment-fg: #4f6b3d;
+$bc-financial-bg: #f8f1de; // amber tint -- --financial variant
+$bc-financial-fg: #8a6d23;
+
+$bc-missing-highlight: #f78984; // "missing shipment" row highlight
+
 %bc-card {
   background: $bc-white;
   border: 1px solid $bc-border-grey;
