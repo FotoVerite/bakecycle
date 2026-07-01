@@ -59,6 +59,14 @@ button,
   &:focus {
     background-color: color.adjust($bc-shakespeare, $lightness: -10%);
   }
+
+  // Buttons only had the UA default focus ring (browser-dependent color/style,
+  // not brand-consistent) -- same outline pattern already used for
+  // .table-action-icon and .js-clickable-row.
+  &:focus-visible {
+    outline: 2px solid $bc-shakespeare;
+    outline-offset: 2px;
+  }
 }
 
 button.alert,
