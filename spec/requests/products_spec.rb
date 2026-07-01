@@ -130,17 +130,41 @@ RSpec.describe "Products", type: :request do
       expect(price_variant.price).to eq(4.25)
     end
 
-    it "starts the delivery product projection export" do
+    it "shows product report source choices" do
+      get product_totals_report_products_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("Export Product Totals")
+      expect(response.body).to include(%(name="end_date"))
+      expect(response.body).to include(%(value="#{(Time.zone.today + 6.days).strftime('%Y-%m-%d')}"))
+      expect(response.body).to include(">Day</button>")
+      expect(response.body).not_to include("Orders are for planning")
+      expect(response.body).to include(%(action="#{export_product_totals_products_path}"))
+      expect(response.body).to include("Use")
+      expect(response.body).to include("Orders")
+      expect(response.body).to include("Standing and temp orders for planning.")
+      expect(response.body).to include("Created shipments")
+      expect(response.body).to include("Invoices and shipments already generated.")
+    end
+
+    it "starts the product totals export" do
       file_export = create(:file_export, bakery: bakery)
 
       allow(ExporterJob).to receive(:create).and_return(file_export)
 
-      get print_delivery_product_projection_products_path(date: "2026-06-03")
+      get export_product_totals_products_path(
+        date: "2026-06-03",
+        end_date: "2026-06-09",
+        source: "generated_invoices"
+      )
 
       expect(ExporterJob).to have_received(:create).with(
         user,
         bakery,
-        an_instance_of(ProductDeliveryProjectionGenerator)
+        have_attributes(
+          end_date: Date.new(2026, 6, 9),
+          source: "generated_invoices"
+        )
       )
       expect(response).to redirect_to(file_export)
     end

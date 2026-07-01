@@ -7,8 +7,8 @@ class ProductsController < ApplicationController
   before_action :set_clients, only: %i[new edit create update]
   before_action :ensure_all_clients_price_variant, only: %i[edit]
   before_action :skip_policy_scope, only: %i[
-    weekly_daily_report print_weekly_daily_report
-    print_delivery_product_projection
+    product_totals_report
+    export_product_totals
     pricing_report
     products_per_client_per_week
     print_products_per_client_per_week
@@ -109,21 +109,20 @@ class ProductsController < ApplicationController
     @costing = CostingRecipeData.new(@product, 1)
   end
 
-  def weekly_daily_report
+  def product_totals_report
     authorize Product, :index?
     @date = date_query
+    @end_date = optional_parsed_date_param(:end_date) || (@date + 6.days)
   end
 
-  def print_weekly_daily_report
+  def export_product_totals
     authorize Product, :index?
-    @date = date_query
-    generator = ProductTotalsGenerator.new(current_bakery, date_query, params[:type])
-    create_export_and_respond(generator)
-  end
-
-  def print_delivery_product_projection
-    authorize Product, :index?
-    generator = ProductDeliveryProjectionGenerator.new(current_bakery, date_query)
+    generator = ProductTotalsDateRangeGenerator.new(
+      current_bakery,
+      date_query,
+      end_date: optional_parsed_date_param(:end_date),
+      source: params[:source]
+    )
     create_export_and_respond(generator)
   end
 

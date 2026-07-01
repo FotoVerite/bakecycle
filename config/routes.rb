@@ -45,9 +45,8 @@ Rails.application.routes.draw do
   resources :products do
     get "created_at", on: :collection
     get "updated_at", on: :collection
-    get "weekly_daily_report", on: :collection
-    get "print_weekly_daily_report", on: :collection
-    get "print_delivery_product_projection", on: :collection
+    get "product_totals_report", on: :collection
+    get "export_product_totals", on: :collection
     get "products_per_client_per_week", on: :collection
     get "print_products_per_client_per_week", on: :collection
     get "pricing_report", on: :collection

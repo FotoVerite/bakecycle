@@ -1,0 +1,67 @@
+<% provide(:title, "Generate Product Reports") %>
+
+<div class="report-page report-generator-page">
+  <%= render "shared/report_header",
+    title: "Product Reports",
+    date_text: @date.strftime("%A %b. %e, %Y"),
+    status: "Date range" %>
+
+  <div class="report-toolbar">
+    <%= simple_form_for "", url: export_product_totals_products_path, method: :get, html: { class: "report-print-form product-report-form", data: { turbo_stream: true, controller: "report-range" } } do |f| %>
+      <div class="report-range-controls">
+        <div class="report-date-span">
+          <%= f.input :date,
+            label: "Start",
+            input_html: {
+              value: @date.strftime("%Y-%m-%d"),
+              class: "js-datepicker",
+              name: :date,
+              data: { report_range_target: "start" }
+            },
+            required: false %>
+          <%= f.input :end_date,
+            label: "End",
+            input_html: {
+              value: @end_date.strftime("%Y-%m-%d"),
+              class: "js-datepicker",
+              name: :end_date,
+              data: { report_range_target: "end" }
+            },
+            required: false %>
+        </div>
+
+        <div class="report-range-presets" aria-label="Set date range">
+          <button type="button" class="button tiny secondary" data-days="0" data-action="report-range#setDays">Day</button>
+          <button type="button" class="button tiny secondary" data-days="6" data-action="report-range#setDays">Week</button>
+          <button type="button" class="button tiny secondary" data-days="9" data-action="report-range#setDays">10 days</button>
+          <button type="button" class="button tiny secondary" data-days="13" data-action="report-range#setDays">2 weeks</button>
+        </div>
+      </div>
+
+      <fieldset class="report-source-options">
+        <legend>Use</legend>
+        <label class="report-source-option" for="source_order_projection">
+          <%= radio_button_tag :source, "order_projection", true, id: "source_order_projection" %>
+          <span>
+            <strong>Orders</strong>
+            Standing and temp orders for planning.
+          </span>
+        </label>
+        <label class="report-source-option" for="source_generated_invoices">
+          <%= radio_button_tag :source, "generated_invoices", false, id: "source_generated_invoices" %>
+          <span>
+            <strong>Created shipments</strong>
+            Invoices and shipments already generated.
+          </span>
+        </label>
+      </fieldset>
+
+      <div class="report-action-buttons">
+        <%= button_tag "#{icon('download')} Export Product Totals".html_safe,
+          class: "button search-button" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>

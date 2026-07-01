@@ -227,19 +227,13 @@
   .report-toolbar {
     align-items: center;
     background: color.adjust($bc-shakespeare, $lightness: 42%);
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .report-header {
     min-height: 92px;
   }
 
-  // Stack the date field above the action buttons instead of splitting them
-  // into fixed-width/auto grid columns -- with 3 action buttons (this page has
-  // one more than the toolbar pattern was originally sized for), the auto
-  // column was too narrow and forced an ugly 2-line wrap that also threw off
-  // the date field's flex-end alignment. Stacking gives the buttons the full
-  // column width to lay out on one line.
   .report-date-form-with-actions {
     align-items: stretch;
     grid-template-columns: 1fr;
@@ -247,6 +241,116 @@
 
   .report-action-buttons {
     margin: 0;
+  }
+
+  .product-report-form {
+    display: grid;
+    gap: 14px;
+  }
+
+  .report-range-controls {
+    align-items: start;
+    display: grid;
+    gap: 8px;
+  }
+
+  .report-date-span {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(150px, 190px));
+
+    .input {
+      margin: 0;
+    }
+  }
+
+  .report-range-presets {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    .button {
+      height: 32px;
+      line-height: 1;
+      margin: 0;
+      min-height: 32px;
+      padding: 0 11px;
+    }
+  }
+
+  .report-source-options {
+    align-items: stretch;
+    border: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .report-source-options legend {
+    color: $bc-scorpion;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin: 0 0 7px;
+    padding: 0;
+    text-transform: uppercase;
+  }
+
+  .report-source-option {
+    align-items: center;
+    background: $bc-white;
+    border: 1px solid color.adjust($bc-shakespeare, $lightness: 25%);
+    border-radius: 4px;
+    color: $bc-scorpion;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    min-height: 52px;
+    padding: 8px 12px;
+    transition: background 160ms ease-out, color 160ms ease-out;
+
+    input[type='radio'] {
+      flex: 0 0 auto;
+      margin: 4px 0 0;
+    }
+
+    span {
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.28;
+    }
+
+    strong {
+      color: $bc-charcoal;
+      display: block;
+      font-size: 0.88rem;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    &:hover {
+      background: color.adjust($bc-shakespeare, $lightness: 41%);
+    }
+
+    &:has(input:checked) {
+      background: color.adjust($bc-shakespeare, $lightness: 38%);
+      border-color: color.adjust($bc-shakespeare, $lightness: -8%);
+      color: color.adjust($bc-shakespeare, $lightness: -24%);
+
+      strong {
+        color: color.adjust($bc-shakespeare, $lightness: -24%);
+      }
+    }
+
+    &:focus-within {
+      background: color.adjust($bc-shakespeare, $lightness: 39%);
+      outline: 2px solid color.adjust($bc-shakespeare, $lightness: -8%);
+      outline-offset: -2px;
+    }
   }
 
   .button {
@@ -540,6 +644,20 @@
     .report-date-range-form,
     .report-date-form-with-actions {
       display: block;
+    }
+
+    .report-date-span,
+    .report-range-controls {
+      display: block;
+    }
+
+    .report-range-presets,
+    .report-source-options {
+      margin-top: 10px;
+    }
+
+    .report-source-option {
+      width: 100%;
     }
   }
 }

@@ -19,6 +19,7 @@ import ExportTrayController from "./controllers/export_tray_controller"
 import SyncDownloadController from "./controllers/sync_download_controller"
 import ExportTriggerController from "./controllers/export_trigger_controller"
 import DisclosureController from "./controllers/disclosure_controller"
+import ReportRangeController from "./controllers/report_range_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -41,5 +42,6 @@ application.register("export-tray", ExportTrayController)
 application.register("sync-download", SyncDownloadController)
 application.register("export-trigger", ExportTriggerController)
 application.register("disclosure", DisclosureController)
+application.register("report-range", ReportRangeController)
 
 export { application }
