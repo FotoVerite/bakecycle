@@ -60,6 +60,20 @@
     border-color: color.adjust($bc-shakespeare, $lightness: 25%);
   }
 
+  // Header + toolbar read as one composed block instead of two stacked
+  // outlined boxes: the header card loses its bottom edge, the toolbar
+  // continues the same grey border, and the tinted zone is separated by
+  // a single hairline seam.
+  .report-header:has(+ .report-toolbar) {
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .report-header + .report-toolbar {
+    border-color: $bc-border-grey;
+    border-top: 1px solid color.adjust($bc-shakespeare, $lightness: 25%);
+  }
+
   .report-print-form {
     min-width: 0;
   }
@@ -222,21 +236,8 @@
 }
 
 .report-generator-page {
-  max-width: 960px;
-
-  .report-toolbar {
-    align-items: center;
-    background: color.adjust($bc-shakespeare, $lightness: 42%);
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .report-header {
     min-height: 92px;
-  }
-
-  .report-date-form-with-actions {
-    align-items: stretch;
-    grid-template-columns: 1fr;
   }
 
   .report-action-buttons {
@@ -337,12 +338,12 @@
     }
 
     &:has(input:checked) {
-      background: color.adjust($bc-shakespeare, $lightness: 38%);
-      border-color: color.adjust($bc-shakespeare, $lightness: -8%);
-      color: color.adjust($bc-shakespeare, $lightness: -24%);
+      background: color.adjust($bc-lima, $lightness: 38%);
+      border-color: color.adjust($bc-shakespeare, $lightness: -48%);
+      color: color.adjust($bc-limed-spruce, $lightness: -24%);
 
       strong {
-        color: color.adjust($bc-shakespeare, $lightness: -24%);
+        color: color.adjust($bc-limed-spruce, $lightness: -24%);
       }
     }
 
@@ -358,6 +359,16 @@
       margin-right: 6px;
     }
   }
+}
+
+// Reports index (/reports): a hairline rule under each section heading
+// groups the cards beneath it. Scoped under .index-page so the real
+// dashboard's h2s (same .dashboard wrapper, no .index-page shell) keep
+// their plain treatment.
+.index-page .dashboard h2 {
+  border-bottom: 1px solid $bc-border-grey;
+  margin: 1.1rem 0 0.9rem;
+  padding-bottom: 0.45rem;
 }
 
 .report-page.nightly-sign-off-page {
