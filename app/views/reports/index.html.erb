@@ -17,8 +17,8 @@
       <div class="large-4 medium-6 small-12 columns">
         <%= link_to weekly_daily_production_report_production_runs_path, class: "stats border" do %>
           <div class="left">
-            <span class="report-card-title">Daily/Weekly Totals</span>
-            <span class="report-card-copy">Production totals by day or week for a selected date.</span>
+            <span class="report-card-title">Production Totals</span>
+            <span class="report-card-copy">Daily or weekly production totals from a selected date.</span>
           </div>
           <%= icon("chart-bar", class: "right") %>
         <% end %>
@@ -26,8 +26,8 @@
       <div class="large-4 medium-6 small-12 columns">
         <%= link_to date_span_production_report_production_runs_path, class: "stats border" do %>
           <div class="left">
-            <span class="report-card-title">Date Range Total</span>
-            <span class="report-card-copy">Production totals across a start and end date.</span>
+            <span class="report-card-title">Production Date Range</span>
+            <span class="report-card-copy">Production totals across a custom start and end date.</span>
           </div>
           <%= icon("calendar-days", class: "right") %>
         <% end %>
@@ -49,8 +49,8 @@
       <div class="large-4 medium-6 small-12 columns">
         <%= link_to weekly_daily_report_clients_path, class: "stats border" do %>
           <div class="left">
-            <span class="report-card-title">Daily/Weekly Totals</span>
-            <span class="report-card-copy">Client order totals by day or week for a selected date.</span>
+            <span class="report-card-title">Client Totals</span>
+            <span class="report-card-copy">Daily or weekly client totals from a selected date.</span>
           </div>
           <%= icon("users", class: "right") %>
         <% end %>
@@ -67,8 +67,8 @@
       <div class="large-4 medium-6 small-12 columns">
         <%= link_to total_report_clients_path, class: "stats border" do %>
           <div class="left">
-            <span class="report-card-title">Totals</span>
-            <span class="report-card-copy">Client totals for a selected date range.</span>
+            <span class="report-card-title">Client Date Range</span>
+            <span class="report-card-copy">Client totals across a custom start and end date.</span>
           </div>
           <%= icon("chart-pie", class: "right") %>
         <% end %>
@@ -79,10 +79,10 @@
         <h2>Products</h2>
       </div>
       <div class="large-4 medium-6 small-12 columns">
-        <%= link_to weekly_daily_report_products_path, class: "stats border" do %>
+        <%= link_to product_totals_report_products_path, class: "stats border" do %>
           <div class="left">
-            <span class="report-card-title">Daily/Weekly Totals</span>
-            <span class="report-card-copy">Product totals and delivery-date tray projections.</span>
+            <span class="report-card-title">Product Totals</span>
+            <span class="report-card-copy">Product totals across a date range from orders or created shipments.</span>
           </div>
           <%= icon("chart-bar", class: "right") %>
         <% end %>
@@ -140,8 +140,8 @@
       <div class="large-4 medium-6 small-12 columns">
         <%= link_to total_sales_report_shipments_path, class: "stats border" do %>
           <div class="left">
-            <span class="report-card-title">Total Sales Report</span>
-            <span class="report-card-copy">Sales totals by invoice date range for revenue review.</span>
+            <span class="report-card-title">Total Sales</span>
+            <span class="report-card-copy">Sales totals across an invoice date range for revenue review.</span>
           </div>
           <%= icon("banknote", class: "right") %>
         <% end %>
