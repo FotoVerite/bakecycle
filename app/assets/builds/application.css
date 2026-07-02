@@ -8264,6 +8264,11 @@ span.negative {
   text-align: right;
   width: 9rem;
 }
+@media (min-width: 48em) {
+  .report-page .comparison-table tbody td:first-child, .report-page .product-title {
+    text-align: left;
+  }
+}
 .report-page .comparison-diff--short {
   color: #eb3232;
   font-weight: 700;

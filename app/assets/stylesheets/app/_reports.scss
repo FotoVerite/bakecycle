@@ -308,6 +308,16 @@
     width: 9rem;
   }
 
+  // Delivery Date is a <td> (not the row's th), so it inherits the
+  // responsive-table default of right-aligned data cells -- override for
+  // this table only, since it's a date label, not a numeric value. Product
+  // (th[scope="row"]) already lefts-aligns itself via that base component.
+  .comparison-table tbody td:first-child, .product-title {
+    @media (min-width: $bp-medium) {
+      text-align: left;
+    }
+  }
+
   .comparison-diff--short {
     color: $bc-alizarin-crimson;
     font-weight: 700;

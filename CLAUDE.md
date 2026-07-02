@@ -1,10 +1,10 @@
 # Bakecycle — Agent Context
 
-Bakery operations SaaS app. Rails + Stimulus/Turbo + PostgreSQL. (React was fully removed — see migration plan below.)
+Bakery operations SaaS app. Rails 8 + Stimulus/Turbo + PostgreSQL. React was fully removed.
 
 ## How to run
 
-Runs natively on Ruby 3.1.1 (arm64-darwin). No Docker required for development.
+Runs natively on Ruby 3.3.1 (arm64-darwin). No Docker required for development.
 
 ```bash
 bundle exec rails server          # start app
@@ -14,6 +14,10 @@ bundle exec rails db:migrate
 ```
 
 PostgreSQL must be running locally (e.g. via Homebrew services). No Redis dependency anywhere in the app — Solid Queue and Solid Cable are both DB-backed, using the primary Postgres database.
+
+## Dev preview login
+
+Browser-based verification hits the Devise sign-in wall; never reset a real user's password to get past it. A dedicated preview user exists in the dev DB: `impeccable-preview@example.com` / `PreviewPass123!` (all six `*_permission` columns set to `manage`, attached to the first bakery). If it's missing, recreate it via `rails runner` with those credentials. When verifying CSS values, prefer `preview_inspect`/computed styles over screenshots — the screenshot tool's scaling is unreliable.
 
 ## Verification policy — read before running specs/preview server
 
@@ -34,43 +38,23 @@ suite to "be sure."
 
 ## Stack
 
-- **Ruby** 3.1.1 (arm64-darwin, native — not Docker)
-- **Rails** 7.1.6
+- **Ruby** 3.3.1 (arm64-darwin, native — not Docker)
+- **Rails** 8.1.3
 - **DB** PostgreSQL (local)
 - **Background jobs** Solid Queue (DB-backed, no Redis dependency).
 - **Action Cable** Solid Cable (DB-backed, `config/cable.yml`) — no Redis dependency. All three environments (development/staging/production) use it; only `test` uses the plain `test` adapter.
-- **Asset pipeline** Sprockets + jsbundling-rails (JS via esbuild) + cssbundling-rails (CSS via Dart Sass). **Important:** the dev server serves the *built* files (`app/assets/builds/application.css`, `app/assets/builds/bakecycle.js`), not live-compiled source — see "Asset build gotcha" below.
+- **Asset pipeline** Propshaft + jsbundling-rails (JS via esbuild) + cssbundling-rails (CSS via Dart Sass). **Important:** the dev server serves the *built* files (`app/assets/builds/application.css`, `app/assets/builds/bakecycle.js`), not live-compiled source — see "Asset build gotcha" below.
 - **CSS** Foundation 5.5 (vendored — see below)
-- **JS** Stimulus + Turbo (`@hotwired/turbo`, `turbo-rails` gem). React/Redux fully removed (see migration plan below).
+- **JS** Stimulus + Turbo (`@hotwired/turbo`, `turbo-rails` gem). React/Redux fully removed.
 
-## Upgrade status (branch: `upgrade`)
+The multi-year upgrade (Rails 5.1→8.1, Ruby 2.5→3.3, React→Stimulus, Resque→Solid Queue) is **complete**; history lives in agent memory, not here. Two standing decisions survive it: **never migrate kt-paperclip→ActiveStorage** (kt-paperclip is actively maintained; deliberate choice), and **`stripe < 6` stays pinned** (don't bump without a dedicated audit).
 
-| Step | Status |
-|------|--------|
-| Rails 5.1 → 5.2 | ✅ done |
-| Foundation gem → vendored SCSS | ✅ done |
-| paperclip → kt-paperclip | ✅ done |
-| Ruby 2.5.1 → 3.1.1 | ✅ done |
-| Rails 5.2 → 6.1 | ✅ done |
-| active_model_serializers 0.9 → 0.10 | ✅ done (initializer rewritten) |
-| aws-sdk v1 removed | ✅ done (kt-paperclip handles S3 directly) |
-| Browserify → esbuild | ✅ done (jsbundling-rails + esbuild, 52 Jest tests) |
-| React 0.14 → 18 | ✅ done (RTK, no deprecated lifecycle methods) |
-| Rails 6.1 → 7.1 | ✅ done (running 7.1.6) |
-| Cucumber removed → RSpec request specs | ✅ done |
-| Paperclip → ActiveStorage | **not planned** — kt-paperclip is actively maintained; do not migrate |
-| React → Stimulus/Turbo | ✅ done — see migration plan below |
-| Resque → Solid Queue | ✅ done |
+## Framework gotchas
 
-## Rails 7.1 notes
-
-- Zeitwerk autoloader is active. Report subdirectory classes were moved to `app/reports/` flat.
-- `config/boot.rb` requires `"logger"` explicitly — Ruby 3.x no longer auto-requires it.
-- All `belongs_to` on nullable FK columns have `optional: true`.
-- AMS initializer at `config/initializers/active_model_serializers.rb` — uses 0.10.x API.
-- Turbo Drive is active app-wide (`@hotwired/turbo` + `turbo-rails`). All former `link_to method: :delete` views were migrated to `data: { turbo_method: :delete }`; the one `remote: true` view (`shipments/_double_shipment.html.erb`) was migrated to `data: { turbo_method:, turbo_confirm: }`.
-- **Devise + Turbo gotcha:** `config/initializers/devise.rb` sets `config.responder.error_status = :unprocessable_entity` and `config.responder.redirect_status = :see_other`. Without these, Devise's failure app (e.g. bad sign-in credentials) returns the form re-render with HTTP `200` — Turbo Drive then throws `"Form responses must redirect to another location"` in the browser console for every failed login. This is a known Devise 5 default (`error_status: :ok` for backwards compatibility); the installer's own Turbo-app template sets these two lines. **Do not remove them.**
-- **YAML safe-load gotcha:** Rails 7's `ActiveRecord.yaml_column_permitted_classes` defaults to `[Symbol]` only. Any YAML-serialized column holding `BigDecimal`/`Date`/`Time` (e.g. PaperTrail's `versions.object_changes`) will silently fail to deserialize — the exception is rescued and the column reads as `{}`/`nil` with no error raised. `config/initializers/paper_trail.rb` extends the permitted list. If you add another YAML-serialized column elsewhere, check this list first before assuming "no changes" means "nothing changed."
+- Zeitwerk is active; report classes live flat in `app/reports/`. `config/boot.rb` requires `"logger"` explicitly.
+- Turbo Drive is active app-wide; use `data: { turbo_method: :delete }`, never `link_to method:`.
+- **Devise + Turbo gotcha:** `config/initializers/devise.rb` sets `config.responder.error_status = :unprocessable_entity` and `config.responder.redirect_status = :see_other`. Without these, Devise's failure app returns form re-renders with HTTP `200` and Turbo throws `"Form responses must redirect to another location"` on every failed login. **Do not remove them.**
+- **YAML safe-load gotcha:** `ActiveRecord.yaml_column_permitted_classes` defaults to `[Symbol]` only. A YAML-serialized column holding `BigDecimal`/`Date`/`Time` (e.g. PaperTrail's `versions.object_changes`) silently deserializes to `{}`/`nil` — no error raised. `config/initializers/paper_trail.rb` extends the permitted list; check it before assuming "no changes" means "nothing changed."
 
 ## CSS: Foundation 5.5 (vendored)
 
@@ -157,8 +141,6 @@ Test framework: RSpec. Factories: FactoryBot (`spec/support/factory_girl.rb` is 
 Run all specs: `bundle exec rspec`
 Run one spec: `bundle exec rspec spec/models/bakery_spec.rb`
 
-Current state: **748 examples, 0 failures** (as of the PaperTrail/Turbo/icon-system fixes below).
-
 Common spec support files:
 - `spec/support/factory_girl.rb` — FactoryBot config
 - `spec/support/pundit.rb` — policy helpers
@@ -182,54 +164,31 @@ Common spec support files:
 Solid Queue (DB-backed via the `solid_queue` gem — no Redis dependency for jobs). Jobs live in `app/jobs/`.
 Worker config: `config/queue.yml`. Recurring/scheduled jobs: `config/recurring.yml` (per-environment, e.g. `production:`/`staging:` keys).
 
-**`config.active_job.queue_adapter` must be set in `config/application.rb`, not in `config/initializers/*`.** Something (a gem, an autoloaded job class) triggers ActiveJob's `on_load(:active_job)` hook before app initializers run, so setting it later is silently a no-op — every job would run on the `:async` in-process fallback adapter instead of Solid Queue, with no error. This was live and unnoticed until an unrelated live-broadcast bug (jobs finishing "for real" via `:async` while `solid_queue_jobs` sat unprocessed) surfaced it.
+**`config.active_job.queue_adapter` must be set in `config/application.rb`, not in `config/initializers/*`** — `on_load(:active_job)` fires before app initializers, so an initializer setting is silently a no-op and every job falls back to the in-process `:async` adapter with no error.
 
-**`bin/jobs` (Solid Queue's `Supervisor`) segfaults on at least one local dev machine (macOS arm64, Ruby 3.3.1, `pg` 1.6.3)** — `Supervisor` always forks a separate OS process per dispatcher/worker group, and forking with an already-open `pg` connection corrupts it (`[BUG] Segmentation fault` inside `pg/connection.rb:944 connect_start`). Not reproduced as a code bug, just a fork/native-extension interaction on that machine. `bin/jobs-dev` is a non-forking, thread-only alternative (`SolidQueue::Worker.new(...).start`, no `Supervisor`) for local dev/`foreman start`; `Procfile`/`Procfile.dev` both use it. Staging/production keep `bin/jobs` (a real `Supervisor`) since this hasn't reproduced there.
+**Never use `bin/jobs` locally — use `bin/jobs-dev`.** Solid Queue's forking `Supervisor` segfaults on this machine (forking with an open `pg` connection corrupts it). `bin/jobs-dev` is a non-forking thread-only worker; `Procfile`/`Procfile.dev` both use it. Staging/production keep `bin/jobs`.
 
-Recurring jobs currently configured:
-- `clear_solid_queue_finished_jobs` — hourly, prunes Solid Queue's own job-history table (successful jobs only — `SolidQueue::Job.clear_finished_in_batches` never touches failed ones).
-- `clear_solid_queue_failed_jobs` — hourly, discards everything in `solid_queue_failed_executions`. None of our jobs configure `retry_on`/`discard_on`, so anything landing there has already exhausted ActiveJob's default retry handling and won't be retried automatically — this is the failed-job equivalent of the line above, since Solid Queue has no built-in auto-prune for that side.
-- `purge_old_versions` — daily at 3am, runs `PurgeOldVersionsJob` (90-day retention on PaperTrail's `versions` table — see PaperTrail section below).
+**`command:`-based tasks in `config/recurring.yml` need an explicit `queue:`** — without one they enqueue to Solid Queue's internal `solid_queue_recurring` queue, which no worker group in `config/queue.yml` listens to, and sit `ready` forever.
 
-No Redis dependency anywhere — Action Cable uses Solid Cable (DB-backed, `config/cable.yml`), same primary Postgres database as everything else, no separate `connects_to`.
+Recurring jobs: `clear_solid_queue_finished_jobs` (hourly; successful-job history), `clear_solid_queue_failed_jobs` (hourly; no jobs configure `retry_on`, so failed executions never retry and must be pruned), `purge_old_versions` (daily 3am; 90-day PaperTrail retention), plus kickoff/digest jobs.
 
 ## PaperTrail (audit trail)
 
 Tracked models: `OrderItem`, `Product`, `PriceVariant`, `Recipe`, `RecipeItem`. Per-record history is viewable at `/products/:id/papertrail`, `/recipes/:id/papertrail`, `/orders/:id/papertrail` (controller actions + views named `papertrail`), rendered via the shared `shared/_papertrail_timeline` partial. Styling lives in `app/assets/stylesheets/app/_papertrail.scss`.
 
-**Retention:** `PurgeOldVersionsJob` runs daily, deleting `versions` rows older than 90 days in batches. One-off backlog cleanup task: `rake versions:purge_order_item_backlog` (batched `OrderItem`-only delete; was used once to clear a historical 64M-row/22GB backlog — see below). `versions.created_at` has an index to keep both queries off a full table scan.
+**Retention:** `PurgeOldVersionsJob` runs daily, deleting `versions` rows older than 90 days in batches (`versions.created_at` is indexed). One-off backlog task: `rake versions:purge_order_item_backlog`.
 
-**Why `OrderItem` has `on: %i[create update destroy]` instead of the gem default:** PaperTrail's default `on:` list includes `:touch`. `Product#queue_touch_order_items` (an `after_commit`) touches every order item belonging to a product whenever that product is saved, gated by `lead_days_relevant_change?` (only fires when `motherdough_id`/`inclusion_id`/`lead_days_override`/`total_lead_days` actually changed — *not* on every unrelated product edit). Before this fix, that callback combined with default touch-tracking generated a version row for every order item on every product save regardless of relevance, producing ~64.6M rows (99.8% of the table) of pure noise with empty `object_changes`. If you add `has_paper_trail` to a new model that gets `.touch`ed by another model's callback, consider whether `on:` should exclude `:touch` for the same reason.
+**`OrderItem` deliberately uses `on: %i[create update destroy]` (no `:touch`)** — `Product#queue_touch_order_items` touches every order item on relevant product saves; with default touch-tracking that once generated ~64M rows of empty-`object_changes` noise. If you add `has_paper_trail` to a model that gets `.touch`ed by another model's callback, exclude `:touch` for the same reason.
 
-**Don't assume "no changes shown" means PaperTrail is broken or that nothing changed** — check `ActiveRecord.yaml_column_permitted_classes` first (see the YAML safe-load gotcha under "Rails 7.1 notes"). This silently broke every papertrail view's change history for an unknown period after the Rails 7 upgrade.
+**Don't assume "no changes shown" means PaperTrail is broken** — check the YAML safe-load gotcha (Framework gotchas above) first.
 
-## React → Stimulus/Turbo migration plan
+## Known pain points
 
-**Fully complete** — `turbo-rails` + `stimulus-rails` are installed and active app-wide (see the Devise + Turbo gotcha under "Rails 7.1 notes" for a real incompatibility this surfaced). All `link_to method: :delete` and `remote: true` views were migrated to `data: { turbo_method: }` equivalents.
-
-### Migration order
-
-| Priority | Component(s) | Replace with | Status |
-|---|---|---|---|
-| 1 | `file-export-refresher.jsx` | Stimulus polling controller | ✅ done |
-| 2 | `client-map.jsx` + `client-marker.jsx` | Stimulus controller | ✅ done |
-| 3 | `product-price-form.jsx` + `product-price-fields.jsx` | Stimulus nested-form controller | ✅ done |
-| 4 | `clients-table.jsx` | Stimulus filter + server-side table | ✅ done |
-| 5 | `costing-form.jsx` + `costing-item-fields.jsx` | Stimulus filter controller | ✅ done |
-| 6 | `vendor-pricing-form.jsx` + `pricing-item-fields.jsx` | Stimulus filter controller | ✅ done |
-| 7 | `recipe-form.jsx` + `recipe-items-form.jsx` + `recipe-item-fields.jsx` | Stimulus nested-form + SortableJS | ✅ done |
-| 8 | `order-form.jsx` + Redux store | Stimulus `order-form` + `order-item` controllers | ✅ done |
-
-**Migration complete.** React, Redux, moment.js, react-datepicker, react-select, prop-types, lodash.* (order), and all related serializers/models have been removed. esbuild pipeline and Jest infrastructure remain but no tests exist yet.
-
-## Known pain points for future upgrade hops
-
-- `active_model_serializers 0.10` — API response shape should be verified in-browser; no spec coverage for JSON output.
-- `aws-sdk-s3` (via kt-paperclip) — file upload/download not covered by specs; verify S3 works in staging before any major changes. **Do not migrate to ActiveStorage** — kt-paperclip is actively maintained and this project is staying on it.
-- `stripe < 6` — pinned; don't bump without a dedicated audit of the Stripe integration.
-- **Production/staging `versions` table** — the 64M-row PaperTrail backlog (see PaperTrail section) was cleared locally; if staging/production weren't cleaned up in the same pass, they likely still have it. Check table size before assuming the fix has propagated everywhere.
-- `jquery-rails` — jQuery is still needed for jquery-timepicker and jquery-ui-sass-rails. Can be removed when those UI widgets are replaced with native or Stimulus equivalents.
-- `order-form.jsx` — migrated to Stimulus. Lead time validation runs client-side in `order_form_controller.js`. No server endpoint needed.
+- `active_model_serializers 0.10` — API response shape has no spec coverage; verify JSON in-browser after touching serializers.
+- `aws-sdk-s3` (via kt-paperclip) — uploads/downloads not covered by specs; verify S3 in staging before major changes.
+- **Staging/production `versions` table** — the 64M-row PaperTrail backlog was cleared locally; check table size on the servers before assuming it's gone there too.
+- `jquery-rails` — still needed for jquery-timepicker and jquery-ui-sass-rails; removable once those widgets get native/Stimulus replacements.
+- `config/deploy/production.rb` — `worker_service_units` still points at `resque.service`; needs the real Solid Queue systemd unit name before the next production deploy.
 
 ---
 
@@ -288,6 +247,6 @@ When adding a new table action, map it to the closest existing semantic bucket a
 | `$bc-scorpion` | `#5a5a5a` | Body text |
 | `$bc-off-white` | `#f2f3f4` | Page background |
 | `$bc-charcoal` | `#555` | Headings, table text |
-| `$bc-silver-chalice` | `#a0a0a0` | **Avoid for text** — only ~2.3:1 contrast on white/off-white, fails WCAG AA (4.5:1). Found and fixed in two places in 2026-06 (timestamps, struck-through values in papertrail timeline) by switching to `$bc-scorpion`. The avatar-initial pattern (`.account-avatar`, `.papertrail-avatar`) had the same problem with white text on a too-light `$bc-shakespeare` background (~2.3:1) — fixed by darkening the background to `color.adjust($bc-shakespeare, $lightness: -20%)` (~5:1). If you add a new white-on-color badge/avatar, check contrast before assuming the brand color at default lightness is safe for white text. |
+| `$bc-silver-chalice` | `#a0a0a0` | **Avoid for text** — ~2.3:1 on white/off-white, fails WCAG AA; use `$bc-scorpion`. Same trap: white text on `$bc-shakespeare` at default lightness is ~2.3:1 — darken the bg (existing avatars use `color.adjust(..., $lightness: -20%)`). Check contrast on any new white-on-color badge. |
 
 Font: **Open Sans** (300/400/600/700/800), self-hosted via `base/font_setup.scss`.
