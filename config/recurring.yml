@@ -35,6 +35,14 @@ production:
   purge_old_versions:
     class: PurgeOldVersionsJob
     schedule: every day at 3am
+  product_totals_snapshot:
+    class: ProductTotalsSnapshotJob
+    queue: operations
+    schedule: every day at 6:15am
+  prune_product_totals_snapshots:
+    class: PruneProductTotalsSnapshotsJob
+    queue: operations
+    schedule: every day at 3:30am
   product_graph_data_digest:
     class: ProductGraphDataDigestJob
     queue: operations
@@ -70,6 +78,14 @@ staging:
   purge_old_versions:
     class: PurgeOldVersionsJob
     schedule: every day at 3am
+  product_totals_snapshot:
+    class: ProductTotalsSnapshotJob
+    queue: operations
+    schedule: every day at 6:15am
+  prune_product_totals_snapshots:
+    class: PruneProductTotalsSnapshotsJob
+    queue: operations
+    schedule: every day at 3:30am
   product_graph_data_digest:
     class: ProductGraphDataDigestJob
     queue: operations
