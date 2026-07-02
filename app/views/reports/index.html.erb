@@ -114,6 +114,15 @@
           <%= icon("users", class: "right") %>
         <% end %>
       </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to product_totals_comparison_products_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Plan vs Created</span>
+            <span class="report-card-copy">Compare order totals, created shipments, and past snapshots.</span>
+          </div>
+          <%= icon("git-compare", class: "right") %>
+        <% end %>
+      </div>
     </div>
     <div class="row">
       <div class="small-12 columns">

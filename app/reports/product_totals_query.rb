@@ -40,16 +40,21 @@ class ProductTotalsQuery
       .map { |(delivery_date, product), quantity| [delivery_date, product, quantity] }
   end
 
+  # Aggregated in SQL on purpose: a 14-day range can hold >10k shipment_items,
+  # and materializing them (each with its wide denormalized shipment row)
+  # costs over a second of allocation + GC just to sum quantities.
   def invoice_totals
-    ShipmentItem
-      .joins(:shipment, :product)
+    sums = ShipmentItem
+      .joins(:shipment)
       .where(shipments: { bakery_id: @bakery.id, date: delivery_dates })
-      .includes(:product, :shipment)
-      .group_by { |item| [item.shipment.date, item.product] }
-      .sort_by { |(delivery_date, product), _items| [delivery_date, product.name] }
-      .map do |(delivery_date, product), items|
-        [delivery_date, product, items.sum(&:product_quantity)]
-      end
+      .group("shipments.date", :product_id)
+      .sum(:product_quantity)
+    products = Product.where(id: sums.keys.map(&:last).uniq).index_by(&:id)
+
+    sums.filter_map do |(delivery_date, product_id), quantity|
+      product = products[product_id]
+      [delivery_date, product, quantity] if product
+    end.sort_by { |delivery_date, product, _quantity| [delivery_date, product.name] }
   end
 
   def delivery_dates

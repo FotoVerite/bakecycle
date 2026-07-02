@@ -1,0 +1,100 @@
+<% provide(:title, "Plan vs Created") %>
+
+<%
+  daily_totals = @comparison.totals_by_date(@start_date..@end_date)
+  chart_labels = daily_totals.map { |date, _b, _c| date.strftime("%b %-d") }
+  baseline_series = daily_totals.map { |_date, baseline, _c| baseline }
+  compare_series = daily_totals.map { |_date, _b, compare| compare }
+  baseline_label = @source_options.find { |_label, value| value == @baseline_key }&.first || "Baseline"
+  compare_label = @source_options.find { |_label, value| value == @compare_key }&.first || "Compare"
+  visible_rows = @diff_only ? @comparison.differing_rows : @comparison.rows
+%>
+
+<div class="report-page report-generator-page">
+  <%= render "shared/report_header",
+    title: "Plan vs Created",
+    date_text: "#{@start_date.strftime('%A %b. %e, %Y')} to #{@end_date.strftime('%A %b. %e, %Y')}",
+    status: "Comparison" %>
+
+  <div class="report-toolbar">
+    <%= form_with url: product_totals_comparison_products_path, method: :get, class: "report-print-form" do %>
+      <div class="comparison-form">
+        <div class="comparison-field">
+          <label for="comparison_date">Start</label>
+          <input type="date" id="comparison_date" name="date" value="<%= @start_date.iso8601 %>">
+        </div>
+        <div class="comparison-field">
+          <label for="comparison_end_date">End</label>
+          <input type="date" id="comparison_end_date" name="end_date" value="<%= @end_date.iso8601 %>">
+        </div>
+        <div class="comparison-field">
+          <label for="comparison_baseline">Baseline</label>
+          <%= select_tag :baseline, options_for_select(@source_options, @baseline_key), id: "comparison_baseline" %>
+        </div>
+        <div class="comparison-field">
+          <label for="comparison_compare">Compare to</label>
+          <%= select_tag :compare, options_for_select(@source_options, @compare_key), id: "comparison_compare" %>
+        </div>
+        <label class="report-checkbox comparison-diff-toggle">
+          <input type="hidden" name="diff_only" value="0">
+          <%= check_box_tag :diff_only, "1", @diff_only %>
+          Only differences
+        </label>
+        <%= button_tag "#{icon('git-compare')} Compare".html_safe, class: "button search-button" %>
+      </div>
+    <% end %>
+    <div class="report-toolbar-note">
+      <span>Comparison</span>
+      Product totals per delivery date from each source; &Delta; is compare minus baseline.
+    </div>
+  </div>
+
+  <div class="comparison-chart-panel">
+    <div class="comparison-chart"
+         data-controller="comparison-chart"
+         data-comparison-chart-labels-value="<%= chart_labels.to_json %>"
+         data-comparison-chart-baseline-data-value="<%= baseline_series.to_json %>"
+         data-comparison-chart-compare-data-value="<%= compare_series.to_json %>"
+         data-comparison-chart-baseline-label-value="<%= baseline_label %>"
+         data-comparison-chart-compare-label-value="<%= compare_label %>">
+      <canvas data-comparison-chart-target="canvas"></canvas>
+    </div>
+  </div>
+
+  <% if visible_rows.any? %>
+    <table class="responsive-table report-table comparison-table">
+      <thead>
+        <tr>
+          <th scope="col">Delivery Date</th>
+          <th scope="col">Product</th>
+          <th scope="col" class="comparison-number"><%= baseline_label %></th>
+          <th scope="col" class="comparison-number"><%= compare_label %></th>
+          <th scope="col" class="comparison-number">&Delta;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% visible_rows.each do |row| %>
+          <tr>
+            <td data-title="Delivery Date"><%= row.delivery_date.strftime("%a %b %-d") %></td>
+            <th scope="row"><%= row.product_name %></th>
+            <td data-title="<%= baseline_label %>" class="comparison-number"><%= row.baseline_quantity %></td>
+            <td data-title="<%= compare_label %>" class="comparison-number"><%= row.compare_quantity %></td>
+            <td data-title="Difference" class="comparison-number <%= row.difference.negative? ? 'comparison-diff--short' : (row.difference.positive? ? 'comparison-diff--over' : 'comparison-diff--zero') %>">
+              <%= format("%+d", row.difference) if row.difference != 0 %><%= "0" if row.difference.zero? %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="comparison-empty">
+      <% if @diff_only && @comparison.rows.any? %>
+        <h2>No differences — the two sources match for this range.</h2>
+      <% else %>
+        <h2>Nothing to compare for this date range.</h2>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>

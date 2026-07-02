@@ -20,6 +20,7 @@ import SyncDownloadController from "./controllers/sync_download_controller"
 import ExportTriggerController from "./controllers/export_trigger_controller"
 import DisclosureController from "./controllers/disclosure_controller"
 import ReportRangeController from "./controllers/report_range_controller"
+import ComparisonChartController from "./controllers/comparison_chart_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -43,5 +44,6 @@ application.register("sync-download", SyncDownloadController)
 application.register("export-trigger", ExportTriggerController)
 application.register("disclosure", DisclosureController)
 application.register("report-range", ReportRangeController)
+application.register("comparison-chart", ComparisonChartController)
 
 export { application }

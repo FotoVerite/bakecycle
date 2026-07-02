@@ -147,6 +147,41 @@ RSpec.describe "Products", type: :request do
       expect(response.body).to include("Invoices and shipments already generated.")
     end
 
+    it "shows the plan vs created comparison" do
+      croissant = create(:product, bakery: bakery, name: "Croissant")
+      shipment = create(:shipment, bakery: bakery, date: Time.zone.today)
+      create(:shipment_item, bakery: bakery, shipment: shipment, product: croissant, product_quantity: 55)
+
+      get product_totals_comparison_products_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("Plan vs Created")
+      expect(response.body).to include("Croissant")
+      expect(response.body).to include("Only differences")
+    end
+
+    it "compares a snapshot as the baseline" do
+      croissant = create(:product, bakery: bakery, name: "Croissant")
+      order = create(:order, bakery: bakery, start_date: Time.zone.today, order_item_count: 0)
+      create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 40)
+      snapshot = ProductTotalsSnapshot.capture!(
+        bakery: bakery, start_date: Time.zone.today, end_date: Time.zone.today,
+        source: "order_projection", label: "nightly"
+      )
+
+      get product_totals_comparison_products_path(
+        date: Time.zone.today.iso8601,
+        end_date: Time.zone.today.iso8601,
+        baseline: "snapshot_#{snapshot.id}",
+        compare: "orders",
+        diff_only: "0"
+      )
+
+      expect(response).to be_successful
+      expect(response.body).to include("snapshot (orders)")
+      expect(response.body).to include("Croissant")
+    end
+
     it "starts the product totals export" do
       file_export = create(:file_export, bakery: bakery)
 

@@ -8,6 +8,7 @@ class ProductsController < ApplicationController
   before_action :ensure_all_clients_price_variant, only: %i[edit]
   before_action :skip_policy_scope, only: %i[
     product_totals_report
+    product_totals_comparison
     export_product_totals
     pricing_report
     products_per_client_per_week
@@ -115,6 +116,34 @@ class ProductsController < ApplicationController
     @end_date = optional_parsed_date_param(:end_date) || (@date + 6.days)
   end
 
+  def product_totals_comparison
+    authorize Product, :index?
+    @start_date = optional_parsed_date_param(:date) || Time.zone.today - 13.days
+    @end_date = optional_parsed_date_param(:end_date) || Time.zone.today
+    @end_date = @start_date if @end_date < @start_date
+    @end_date = [@end_date, @start_date + 61.days].min
+
+    @compare_key = params[:compare].presence || "shipments"
+    @diff_only = params.fetch(:diff_only, "1") == "1"
+
+    @available_snapshots = ProductTotalsSnapshot
+      .where(bakery: current_bakery)
+      .where("start_date <= ? AND end_date >= ?", @end_date, @start_date)
+      .order(created_at: :desc)
+      .limit(45)
+    # Default the baseline to the snapshot captured at the start of the range:
+    # "the plan as it stood that morning". It's also one indexed SELECT versus
+    # the live projection's per-day order walk (~5s on a real dataset).
+    default_snapshot = @available_snapshots.find { |snapshot| snapshot.start_date <= @start_date }
+    @baseline_key = params[:baseline].presence ||
+      (default_snapshot ? "snapshot_#{default_snapshot.id}" : "orders")
+    @source_options = comparison_source_options
+    @comparison = ProductTotalsComparison.new(
+      comparison_source(@baseline_key),
+      comparison_source(@compare_key)
+    )
+  end
+
   def export_product_totals
     authorize Product, :index?
     generator = ProductTotalsDateRangeGenerator.new(
@@ -178,5 +207,25 @@ class ProductsController < ApplicationController
 
   def date_query
     parsed_date_param(:date, :id)
+  end
+
+  def comparison_source(key)
+    case key
+    when "shipments"
+      ProductTotalsComparison.live(current_bakery, @start_date, @end_date, source: "generated_invoices")
+    when /\Asnapshot_(\d+)\z/
+      snapshot = ProductTotalsSnapshot.find_by(bakery: current_bakery, id: Regexp.last_match(1))
+      snapshot ? ProductTotalsComparison.from_snapshot(snapshot, @start_date, @end_date) : {}
+    else
+      ProductTotalsComparison.live(current_bakery, @start_date, @end_date, source: "order_projection")
+    end
+  end
+
+  def comparison_source_options
+    [["Current orders", "orders"], ["Created shipments", "shipments"]] +
+      @available_snapshots.map do |snapshot|
+        kind = snapshot.source == "generated_invoices" ? "shipments" : "orders"
+        ["#{snapshot.created_at.strftime('%b %-d, %Y')} snapshot (#{kind})", "snapshot_#{snapshot.id}"]
+      end
   end
 end

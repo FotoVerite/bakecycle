@@ -4,6 +4,10 @@ Rails.application.config.dartsass.builds = {
   "application.scss" => "application.css"
 }
 
+if Rails.env.development?
+  Rails.application.config.dartsass.build_options = ["--style=expanded", "--embed-sources"]
+end
+
 # @import is deprecated in Dart Sass 3.0; silenced until we migrate to @use/@forward
 Rails.application.config.dartsass.build_options << "--silence-deprecation=import"
 
