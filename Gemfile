@@ -4,9 +4,9 @@ source "https://rubygems.org"
 
 ruby "3.3.1"
 
+gem "aws-sdk-s3"
 gem "caxlsx"
 gem "caxlsx_rails"
-gem "aws-sdk-s3"
 gem "chronic"
 gem "dartsass-rails"
 gem "devise"
@@ -80,6 +80,7 @@ group :test, :development, :staging do
 end
 
 group :production, :staging, :test do
-  gem "newrelic_rpm"
   gem "puma"
+  gem "sentry-rails"
+  gem "sentry-ruby"
 end

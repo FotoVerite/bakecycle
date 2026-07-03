@@ -21,6 +21,20 @@ describe ProductTotalsDateRangeGenerator do
     expect(generator.filename).to eq("Created-Shipment-Product-Totals-2026-06-03-to-2026-06-09.xlsx")
   end
 
+  it "adds common and report-specific Sentry attributes" do
+    bakery = create(:bakery)
+    date = Date.new(2026, 6, 3)
+    generator = described_class.new(bakery, date, end_date: date + 6.days, source: "generated_invoices")
+
+    expect(generator.sentry_report_attributes).to include(
+      bakery_id: bakery.id,
+      date: "2026-06-03",
+      end_date: "2026-06-09",
+      date_count: 7,
+      source: "generated_invoices"
+    )
+  end
+
   it "finds a generator from its global id" do
     bakery = create(:bakery)
 

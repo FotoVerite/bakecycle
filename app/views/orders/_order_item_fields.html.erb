@@ -1,5 +1,4 @@
 <div class="nested-row form-grid order-item-grid"
-     data-controller="order-item"
      data-order-item-row="true"
      data-nested-row="true">
 
@@ -15,6 +14,7 @@
         class: "nested-field",
         required: true,
         data: {
+          controller: "tom-select",
           order_item_target: "product",
           action: "change->order-form#productChanged"
         } %>
