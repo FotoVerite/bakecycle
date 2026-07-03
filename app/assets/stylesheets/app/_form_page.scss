@@ -853,21 +853,24 @@
   height: 40px;
 }
 
-.price-variant-grid {
+.price-variant-grid,
+.bake-lead-day-variant-grid {
   select,
   input {
     height: 40px;
-  }
-
-  .nested-field-quantity,
-  .nested-field-price {
-    text-align: right;
   }
 
   .nested-row-actions .button {
     align-items: center;
     height: 40px;
     padding: 0 10px;
+  }
+}
+
+.price-variant-grid {
+  .nested-field-quantity,
+  .nested-field-price {
+    text-align: right;
   }
 }
 

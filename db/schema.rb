@@ -10,11 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_010000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_021500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
+
+  create_table "bake_lead_day_variants", force: :cascade do |t|
+    t.integer "bake_lead_days", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "product_id", null: false
+    t.integer "removed", default: 0
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_bake_lead_day_variants_on_client_id"
+    t.index ["product_id", "client_id"], name: "index_bake_lead_day_variants_on_product_id_and_client_id", unique: true
+    t.index ["product_id"], name: "index_bake_lead_day_variants_on_product_id"
+  end
 
   create_table "bakeries", id: :serial, force: :cascade do |t|
     t.string "address_city"
@@ -66,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_010000) do
     t.string "accounts_payable_contact_phone"
     t.boolean "active", null: false
     t.boolean "alert", default: false
+    t.integer "bake_channel", default: 0, null: false
     t.integer "bakery_id", null: false
     t.string "billing_address_city"
     t.string "billing_address_state"
@@ -281,6 +294,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_010000) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
+    t.integer "bake_lead_days", default: 1
     t.integer "bakery_id", null: false
     t.decimal "base_price", null: false
     t.boolean "batch_recipe", default: false
@@ -294,6 +308,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_010000) do
     t.string "legacy_id"
     t.integer "motherdough_id"
     t.string "name", null: false
+    t.boolean "on_pull_list", default: false, null: false
     t.decimal "over_bake", default: "0.0", null: false
     t.integer "pieces_per_tray"
     t.integer "product_type", null: false
@@ -646,6 +661,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_010000) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "bake_lead_day_variants", "clients"
+  add_foreign_key "bake_lead_day_variants", "products"
   add_foreign_key "bakeries", "plans"
   add_foreign_key "clients", "bakeries", name: "clients_bakery_id_fk"
   add_foreign_key "file_exports", "bakeries", on_delete: :cascade

@@ -48,7 +48,7 @@
     <%= link_to(updated_at_recipes_path, class: "stats border") do %>
         <div class="left">
           Recipes Updated Today
-          <h3><%= item_finder.recipes.updated_at_date.select {|r| r.versions.size > 1}.size %></h3>
+          <h3><%= item_finder.recipes.updated_at_date.includes(:versions).select {|r| r.versions.size > 1}.size %></h3>
         </div>
         <%= icon("clipboard-list", class: "right") %>
     <% end %>
@@ -69,7 +69,7 @@
     <%= link_to(updated_at_products_path, class: "stats border") do %>
         <div class="left">
           Products Updated Today
-          <h3><%= item_finder.products.updated_at_date.select {|r| r.versions.size > 1}.size %></h3>
+          <h3><%= item_finder.products.updated_at_date.includes(:versions).select {|r| r.versions.size > 1}.size %></h3>
         </div>
         <%= icon("package", class: "right") %>
     <% end %>

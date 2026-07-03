@@ -155,4 +155,19 @@ describe Client do
       expect(client.billing_term_days).to eq(7)
     end
   end
+
+  describe "#bake_channel" do
+    it "defaults to not_applicable" do
+      expect(build(:client).bake_channel).to eq("not_applicable")
+    end
+
+    it "accepts retail and wholesale" do
+      client = build(:client, bake_channel: "retail")
+      expect(client).to be_valid
+      expect(client.bake_channel).to eq("retail")
+
+      client.bake_channel = "wholesale"
+      expect(client).to be_valid
+    end
+  end
 end

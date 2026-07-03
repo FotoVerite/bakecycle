@@ -201,7 +201,10 @@ class ProductsController < ApplicationController
       :inactive,
       :lead_days_override,
       :pieces_per_tray,
-      price_variants_attributes: %i[id client_id quantity price _destroy]
+      :bake_lead_days,
+      :on_pull_list,
+      price_variants_attributes: %i[id client_id quantity price _destroy],
+      bake_lead_day_variants_attributes: %i[id client_id bake_lead_days _destroy]
     )
   end
 

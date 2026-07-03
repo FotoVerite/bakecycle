@@ -5274,17 +5274,23 @@ input[type=text] {
 }
 
 .price-variant-grid select,
-.price-variant-grid input {
+.price-variant-grid input,
+.bake-lead-day-variant-grid select,
+.bake-lead-day-variant-grid input {
   height: 40px;
 }
-.price-variant-grid .nested-field-quantity,
-.price-variant-grid .nested-field-price {
-  text-align: right;
-}
-.price-variant-grid .nested-row-actions .button, .price-variant-grid .nested-row-actions .registration .registration-button label, .registration .registration-button .price-variant-grid .nested-row-actions label {
+.price-variant-grid .nested-row-actions .button, .price-variant-grid .nested-row-actions .registration .registration-button label, .registration .registration-button .price-variant-grid .nested-row-actions label,
+.bake-lead-day-variant-grid .nested-row-actions .button,
+.bake-lead-day-variant-grid .nested-row-actions .registration .registration-button label,
+.registration .registration-button .bake-lead-day-variant-grid .nested-row-actions label {
   align-items: center;
   height: 40px;
   padding: 0 10px;
+}
+
+.price-variant-grid .nested-field-quantity,
+.price-variant-grid .nested-field-price {
+  text-align: right;
 }
 
 .nested-row-actions {

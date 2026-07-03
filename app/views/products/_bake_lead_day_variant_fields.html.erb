@@ -1,0 +1,25 @@
+<div class="nested-row" data-nested-row>
+  <%= v_form.hidden_field :id if v_form.object.persisted? %>
+  <div class="form-grid nested-row-grid bake-lead-day-variant-grid">
+    <div class="form-field form-span-8">
+      <%= v_form.select :client_id,
+            options_for_select(clients.map { |c| [c.name, c.id] }, v_form.object.client_id),
+            { include_blank: "Select Client" },
+            class: "nested-field" %>
+    </div>
+    <div class="form-field form-span-3">
+      <%= v_form.number_field :bake_lead_days, placeholder: "0", min: 0, step: 1, inputmode: "numeric", required: true, class: "nested-field" %>
+    </div>
+    <div class="form-field form-span-1 nested-row-actions">
+      <% if v_form.object.persisted? %>
+        <%= v_form.hidden_field :_destroy, value: "", data: { destroy_field: "" } %>
+        <button type="button" class="nested-btn-restore nested-icon-btn button tiny secondary" data-action="nested-form#restore" title="Restore override" aria-label="Restore override" hidden>
+          <%= icon("rotate-ccw") %>
+        </button>
+      <% end %>
+      <button type="button" class="nested-btn-remove nested-icon-btn button tiny secondary" data-action="nested-form#remove" title="Remove override" aria-label="Remove override">
+        <%= icon("trash-2") %>
+      </button>
+    </div>
+  </div>
+</div>

@@ -173,4 +173,48 @@ describe Product do
       product.async(:wohhh, :dude)
     end
   end
+
+  describe "#bake_lead_days_for" do
+    it "falls back to the product's own default when no client override exists" do
+      product = create(:product, bake_lead_days: 1)
+      client = create(:client, bakery: product.bakery)
+
+      expect(product.bake_lead_days_for(client)).to eq(1)
+    end
+
+    it "uses a client-specific override when one exists (the Baguette case)" do
+      product = create(:product, bake_lead_days: 1)
+      retail_client = create(:client, bakery: product.bakery)
+      wholesale_client = create(:client, bakery: product.bakery)
+      create(:bake_lead_day_variant, product: product, client: retail_client, bake_lead_days: 0)
+
+      expect(product.bake_lead_days_for(retail_client)).to eq(0)
+      expect(product.bake_lead_days_for(wholesale_client)).to eq(1)
+    end
+
+    it "ignores a removed override" do
+      product = create(:product, bake_lead_days: 1)
+      client = create(:client, bakery: product.bakery)
+      create(:bake_lead_day_variant, product: product, client: client, bake_lead_days: 0, removed: 1)
+
+      expect(product.bake_lead_days_for(client)).to eq(1)
+    end
+  end
+
+  describe "#trays_for" do
+    it "returns nil when the product isn't tray-tracked" do
+      product = build(:product, pieces_per_tray: nil)
+      expect(product.trays_for(40)).to be_nil
+    end
+
+    it "formats an exact multiple with no remainder" do
+      product = build(:product, pieces_per_tray: 20)
+      expect(product.trays_for(40)).to eq("2 trays")
+    end
+
+    it "formats a remainder" do
+      product = build(:product, pieces_per_tray: 20)
+      expect(product.trays_for(45)).to eq("2 trays + 5 pcs")
+    end
+  end
 end

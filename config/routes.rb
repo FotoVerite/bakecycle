@@ -123,6 +123,10 @@ Rails.application.routes.draw do
     get "print", on: :member
   end
 
+  resources :bake_lists, only: [:index] do
+    get "print", on: :collection
+  end
+
   resources :delivery_lists, only: [:index] do
     get "print", on: :member
     get "print_sorted", on: :member

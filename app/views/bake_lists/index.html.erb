@@ -1,0 +1,23 @@
+<% provide(:title, "Bake List") %>
+
+<div class="report-page report-generator-page">
+  <%= render "shared/report_header",
+    title: "Bake List",
+    date_text: @bake_date.strftime("%A %b. %e, %Y"),
+    status: "Production report" %>
+
+  <div class="report-toolbar">
+    <%= simple_form_for :bake_list, url: print_bake_lists_path, method: :get, html: { class: "report-print-form", data: { turbo_stream: true } } do |f| %>
+      <div class="report-date-form">
+        <%= f.input :date, input_html: { value: @bake_date.strftime("%Y-%m-%d"), class: "js-datepicker", name: :date }, required: false %>
+        <%= button_tag "#{icon('download')} Export Bake List".html_safe, class: "button search-button" %>
+      </div>
+    <% end %>
+    <div class="report-toolbar-note">
+      <span>Production report</span>
+      Builds the Retail, Wholesale, Pull/Prep, and Viennoiserie bake lists for this date.
+    </div>
+  </div>
+
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>

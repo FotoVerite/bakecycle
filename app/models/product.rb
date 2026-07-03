@@ -42,7 +42,12 @@ class Product < ApplicationRecord
   has_many :price_variants, -> { where(removed: false) }, dependent: :destroy, inverse_of: :product
   has_many :price_variants_with_removes, dependent: :destroy, class_name: "PriceVariant", inverse_of: :product
 
+  has_many :bake_lead_day_variants, -> { where(removed: false) }, dependent: :destroy, inverse_of: :product
+  has_many :bake_lead_day_variants_with_removes, dependent: :destroy, class_name: "BakeLeadDayVariant",
+    inverse_of: :product
+
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
+  accepts_nested_attributes_for :bake_lead_day_variants, allow_destroy: true, reject_if: :reject_bake_lead_day_variants?
 
   enum :product_type, {
     bread: 10,
@@ -68,6 +73,7 @@ class Product < ApplicationRecord
   validates :base_price, presence: true, numericality: true
   validates :description, length: { maximum: 500 }
   validates :pieces_per_tray, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :bake_lead_days, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validate :check_for_order_items
 
   before_validation :strip_name
@@ -122,8 +128,31 @@ class Product < ApplicationRecord
     attributes["quantity"].blank? && (attributes["price"] == "0.0" || attributes["price"].blank?)
   end
 
+  def reject_bake_lead_day_variants?(attributes)
+    attributes["client_id"].blank? && attributes["bake_lead_days"].blank?
+  end
+
   def price(quantity, client)
     lookup_price_variant(quantity, client) || base_price
+  end
+
+  # Effective bake lead time for this product when ordered by a given client
+  # -- 0 = baked morning of delivery, 1 = baked the day before, nil = pulled
+  # from storage rather than baked fresh. Falls back to the product's own
+  # default unless a client-specific BakeLeadDayVariant overrides it (same
+  # override pattern as #price/#lookup_price_variant, minus the
+  # quantity-tier dimension since bake timing doesn't vary by order size).
+  def bake_lead_days_for(client)
+    bake_lead_day_variants.find { |variant| variant.client_id == client.id }&.bake_lead_days || bake_lead_days
+  end
+
+  # "3 trays + 4 pcs"-style breakdown for a quantity, or nil when the
+  # product isn't tracked by tray (no pieces_per_tray set).
+  def trays_for(quantity)
+    return nil unless pieces_per_tray.present? && pieces_per_tray.positive?
+
+    full_trays, remainder = quantity.divmod(pieces_per_tray)
+    remainder.zero? ? "#{full_trays} trays" : "#{full_trays} trays + #{remainder} pcs"
   end
 
   def weight_with_unit

@@ -51,6 +51,9 @@
       <div class="form-field form-span-3">
         <%= f.input :pieces_per_tray, label: "Pieces per tray", as: :integer %>
       </div>
+      <div class="form-field form-span-3">
+        <%= f.input :bake_lead_days, label: "Bake lead days", hint: "0 = baked morning of delivery, 1 = baked the day before, blank = pulled from storage", as: :integer %>
+      </div>
 
       <div class="form-field form-span-12">
         <%= f.input :description, as: :text%>
@@ -71,6 +74,10 @@
         <label class="form-check">
           <%= f.input_field :public, as: :boolean, input_html: { id: 'public' } %>
           <span>Display on public site</span>
+        </label>
+        <label class="form-check">
+          <%= f.input_field :on_pull_list, as: :boolean, input_html: { id: 'on_pull_list' } %>
+          <span>On pull/prep list</span>
         </label>
       </div>
     </div>
@@ -100,6 +107,31 @@
     </template>
 
     <button type="button" class="button small nested-add-btn" data-action="nested-form#add">+ Add Price</button>
+  </fieldset>
+
+  <fieldset class="form-section" data-controller="nested-form">
+    <legend>Bake Lead Time Overrides</legend>
+
+    <div class="form-grid nested-col-headers bake-lead-day-variant-grid">
+      <div class="form-span-8 nested-col-label">Client</div>
+      <div class="form-span-3 nested-col-label">Bake Lead Days <abbr title="required">*</abbr></div>
+      <div class="form-span-1"></div>
+    </div>
+
+    <div data-nested-form-target="rows">
+      <% sorted_bake_lead_day_variants = @product.bake_lead_day_variants.sort_by { |v| v.client_name } %>
+      <%= f.simple_fields_for :bake_lead_day_variants, sorted_bake_lead_day_variants do |v_form| %>
+        <%= render "bake_lead_day_variant_fields", v_form: v_form, clients: @clients %>
+      <% end %>
+    </div>
+
+    <template data-nested-form-target="template">
+      <%= f.fields_for :bake_lead_day_variants, BakeLeadDayVariant.new, child_index: "NEW_RECORD" do |v_form| %>
+        <%= render "bake_lead_day_variant_fields", v_form: v_form, clients: @clients, is_template: true %>
+      <% end %>
+    </template>
+
+    <button type="button" class="button small nested-add-btn" data-action="nested-form#add">+ Add Override</button>
   </fieldset>
 
   <div class="form-actions">
