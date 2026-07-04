@@ -128,6 +128,74 @@ class Order < ApplicationRecord
   end
   # rubocop:enable Metrics/AbcSize
 
+  # Batched equivalent of `orders.reject(&:no_outstanding_shipments?)` for a
+  # whole scope. #missing_shipment_dates recomputes "is this the active order
+  # for (client_id, route_id) on date X" via a full-table DISTINCT-ON per date
+  # per order. This computes it once per date for all orders, then looks up in
+  # Ruby. Returns { order_id => [missing dates] }; absent order_id = no missing.
+  def self.missing_shipment_dates_for(orders, for_date_time: Time.zone.now)
+    orders = orders.to_a
+    return {} if orders.empty?
+
+    order_ids = orders.map(&:id)
+    today = for_date_time.to_date
+    date_range = today..(today + orders.map(&:total_lead_days).max.days)
+
+    day_sums = weekday_sums_by_order(order_ids)
+    active_ids_by_date = active_order_ids_by_date(orders, date_range)
+    shipment_dates_by_order = Shipment.where(order_id: order_ids, date: date_range)
+      .pluck(:order_id, :date)
+      .group_by(&:first)
+      .transform_values { |rows| rows.map(&:second).to_set }
+
+    orders.each_with_object({}) do |order, result|
+      last_date = (for_date_time + order.total_lead_days.days).to_date
+      dates = (today..last_date).select do |date|
+        next false if date == last_date && order.before_kickoff_time?
+        next false if day_sums.dig(order.id, date.strftime("%A").downcase).to_i.zero?
+        next false unless active_ids_by_date[date]&.include?(order.id)
+
+        !shipment_dates_by_order[order.id]&.include?(date)
+      end
+      result[order.id] = dates if dates.any?
+    end
+  end
+
+  # One query total: SUM all weekday columns for all orders at once.
+  # Returns { order_id => { "monday" => 5, "tuesday" => 10, ... } }
+  def self.weekday_sums_by_order(order_ids)
+    columns = OrderItem::DAYS_OF_WEEK
+    selects = [Arel.sql("order_id")] + columns.map { |day| Arel.sql("SUM(#{day})") }
+
+    OrderItem.where(order_id: order_ids, removed: false)
+      .group(:order_id)
+      .pluck(*selects)
+      .to_h do |row|
+        [row.first, columns.zip(row.drop(1)).to_h { |day, sum| [day.to_s, sum] }]
+      end
+  end
+  private_class_method :weekday_sums_by_order
+
+  # One query per unique date needed (not per order). Scoped to this batch's
+  # own client/route combos, so Postgres doesn't sort the entire orders table.
+  # Returns { date => Set[order_ids_active_on_that_date] }
+  def self.active_order_ids_by_date(orders, date_range)
+    client_ids = orders.map(&:client_id).uniq
+    route_ids = orders.map(&:route_id).uniq
+
+    date_range.index_with do |date|
+      sql = <<-SQL
+        SELECT DISTINCT ON (client_id, route_id) id
+        FROM orders
+        WHERE client_id IN (?) AND route_id IN (?)
+          AND start_date <= ? AND (end_date IS NULL OR end_date >= ?)
+        ORDER BY client_id, route_id, order_type DESC
+      SQL
+      find_by_sql([sql, client_ids, route_ids, date, date]).map(&:id).to_set
+    end
+  end
+  private_class_method :active_order_ids_by_date
+
   # sorts orders by their end date, putting open ended standing orders in for today
   def self.order_by_active
     order(Arel.sql("COALESCE(orders.end_date, now()) DESC"))

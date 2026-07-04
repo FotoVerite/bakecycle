@@ -33,13 +33,10 @@
               <td data-title="Bakery"><%= user.bakery_name %></td>
             <% end %>
             <td data-title="Action">
-              <%= link_to edit_user_path(user) do %>
-                <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit User"><%= icon("pencil") %></span>
-              <% end %>
+              <%= action_icon edit_user_path(user), icon_name: "pencil", label: "Edit User", variant: "edit" %>
               <% if user.invited_to_sign_up? %>
-                <%= link_to send_user_invitation_path(user), data: { turbo_method: :post } do %>
-                  <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Resend Confirmation Email"><%= icon("mail") %></span>
-                <% end %>
+                <%= action_icon send_user_invitation_path(user), icon_name: "mail", label: "Resend Confirmation Email", variant: "document",
+                      link_data: { turbo_method: :post } %>
               <% end %>
             </td>
           </tr>

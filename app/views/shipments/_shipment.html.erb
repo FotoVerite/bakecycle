@@ -4,32 +4,16 @@
   <td data-title="Client Name"><%= shipment.client_name %></td>
   <td data-title="Price"><%= shipment.price %></td>
   <td data-title="Actions">
-    <%= link_to edit_shipment_path(shipment) do %>
-      <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Invoice">
-        <%= icon("pencil") %>
-      </span>
-    <% end %>
-    <%= link_to invoice_shipment_path(shipment), data: { turbo_stream: true } do %>
-      <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Invoice">
-        <%= icon("file-text") %>
-      </span>
-    <% end %>
-    <%= link_to packing_slip_shipment_path(shipment),
-          data: { controller: "sync-download", action: "click->sync-download#start" } do %>
-      <span class="table-action-icon table-action-icon--fulfillment icon-link-tooltip" aria-label="Packing Slip" data-sync-download-target="icon">
-        <%= icon("clipboard-list") %>
-      </span>
-    <% end %>
-    <%= link_to invoice_iif_shipment_path(shipment),
-          data: { controller: "sync-download", action: "click->sync-download#start" } do %>
-      <span class="table-action-icon table-action-icon--financial icon-link-tooltip" aria-label="Quickbooks IIF" data-sync-download-target="icon">
-        <%= icon("dollar-sign") %>
-      </span>
-    <% end %>
-     <%= link_to invoice_csv_shipment_path(shipment), data: { turbo_stream: true } do %>
-      <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="CSV">
-        <%= icon("file-spreadsheet") %>
-      </span>
-    <% end %>
+    <%= action_icon edit_shipment_path(shipment), icon_name: "pencil", label: "Edit Invoice", variant: "edit" %>
+    <%= action_icon invoice_shipment_path(shipment), icon_name: "file-text", label: "Invoice", variant: "document",
+          link_data: { turbo_stream: true } %>
+    <%= action_icon packing_slip_shipment_path(shipment), icon_name: "clipboard-list", label: "Packing Slip", variant: "fulfillment",
+          link_data: { controller: "sync-download", action: "click->sync-download#start" },
+          span_data: { sync_download_target: "icon" } %>
+    <%= action_icon invoice_iif_shipment_path(shipment), icon_name: "dollar-sign", label: "Quickbooks IIF", variant: "financial",
+          link_data: { controller: "sync-download", action: "click->sync-download#start" },
+          span_data: { sync_download_target: "icon" } %>
+    <%= action_icon invoice_csv_shipment_path(shipment), icon_name: "file-spreadsheet", label: "CSV", variant: "document",
+          link_data: { turbo_stream: true } %>
   </td>
 </tr>

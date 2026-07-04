@@ -96,6 +96,15 @@ class Shipment < ApplicationRecord
     ClientPolicy
   end
 
+  # Shipments that share the same date/client/route -- almost always a
+  # double-billing mistake (same delivery invoiced twice).
+  def self.duplicate_invoices(bakery, date_range)
+    where(bakery_id: bakery, date: date_range)
+      .group_by { |shipment| [shipment.date, shipment.client_id, shipment.route_id] }
+      .select { |_key, shipments| shipments.size > 1 }
+      .values.flatten
+  end
+
   def self.weekly_subtotal(client_id, date)
     week = Week.new(date)
     search(

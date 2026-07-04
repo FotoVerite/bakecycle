@@ -28,15 +28,9 @@
             <th scope="row"><%= link_to vendor.name, edit_vendor_path(vendor) %></th>
             <% if policy(vendor).edit? %>
               <td data-title="Action">
-                 <%= link_to pricing_vendor_path(vendor) do %>
-                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Price Ingredients"><%= icon("pencil") %></span>
-                <% end %>
-                 <%= link_to buy_orders_vendor_path(vendor) do %>
-                  <span class="table-action-icon table-action-icon--financial icon-link-tooltip" aria-label="Buy Orders"><%= icon("database") %></span>
-                <% end %>
-                <%= link_to edit_vendor_path(vendor) do %>
-                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Vendor"><%= icon("pencil") %></span>
-                <% end %>
+                <%= action_icon pricing_vendor_path(vendor), icon_name: "pencil", label: "Price Ingredients", variant: "edit" %>
+                <%= action_icon buy_orders_vendor_path(vendor), icon_name: "database", label: "Buy Orders", variant: "financial" %>
+                <%= action_icon edit_vendor_path(vendor), icon_name: "pencil", label: "Edit Vendor", variant: "edit" %>
               </td>
             <% end %>
           </tr>

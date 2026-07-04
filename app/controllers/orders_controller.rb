@@ -25,16 +25,14 @@ class OrdersController < ApplicationController
       .includes(:client, :route)
       .order_by_active
       .paginate(page: params[:page])
-    # #no_outstanding_shipments? only touches order_items/shipments/total_lead_days,
-    # never client or route, and usually rejects most of the candidate set (most
-    # orders aren't missing a shipment) -- eager loading client/route before that
-    # filter wastes the preload on whatever gets rejected. Filter first, then
-    # eager-load client/route only for the orders that actually get rendered.
-    missing_shipment_ids = policy_scope(Order).production_date(Time.zone.today)
+    # Batch-compute missing shipment dates for efficiency (avoid N+1 on the
+    # Order.active DISTINCT-ON query). Filter first before eager-loading client/route
+    # since most orders aren't missing a shipment, so we avoid preloading for rejects.
+    candidates = policy_scope(Order).production_date(Time.zone.today)
       .search(search_form)
       .includes(:bakery)
-      .reject(&:no_outstanding_shipments?)
-      .map(&:id)
+    missing_dates = Order.missing_shipment_dates_for(candidates)
+    missing_shipment_ids = candidates.reject { |o| missing_dates[o.id].blank? }.map(&:id)
     @missing_shipments = Order.where(id: missing_shipment_ids).includes(:client, :route)
   end
 

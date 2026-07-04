@@ -450,4 +450,63 @@ describe Order do
       end
     end
   end
+
+  describe ".missing_shipment_dates_for" do
+    let(:bakery) { create(:bakery) }
+    let(:yesterday) { Time.zone.today - 1.day }
+    let(:today) { Time.zone.today }
+
+    it "returns empty hash if orders list is empty" do
+      expect(described_class.missing_shipment_dates_for([])).to eq({})
+    end
+
+    it "matches #missing_shipment_dates for single order with missing invoice" do
+      Timecop.freeze(Time.zone.now.change(hour: 15)) do
+        order = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
+          order_item_count: 1)
+        missing_via_instance = order.missing_shipment_dates
+        missing_via_batch = described_class.missing_shipment_dates_for([order])
+
+        expect(missing_via_batch[order.id]).to eq(missing_via_instance)
+      end
+    end
+
+    it "matches #missing_shipment_dates for multiple orders" do
+      Timecop.freeze(Time.zone.now.change(hour: 15)) do
+        order1 = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
+          order_item_count: 1)
+        order2 = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 2,
+          order_item_count: 1)
+
+        missing_via_batch = described_class.missing_shipment_dates_for([order1, order2])
+
+        expect(missing_via_batch[order1.id]).to eq(order1.missing_shipment_dates)
+        expect(missing_via_batch[order2.id]).to eq(order2.missing_shipment_dates)
+      end
+    end
+
+    it "returns empty hash entries for orders with no missing shipments" do
+      order = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
+        order_item_count: 1)
+      create(:shipment, date: today, order: order, bakery: bakery)
+      create(:shipment, date: today + 1.day, order: order, bakery: bakery)
+
+      missing_via_batch = described_class.missing_shipment_dates_for([order])
+
+      expect(missing_via_batch[order.id]).to be_nil
+    end
+
+    it "handles orders with no items for a given day" do
+      Timecop.freeze(Time.zone.now.change(hour: 15)) do
+        order = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
+          order_item_count: 1)
+        order.order_items.update_all(today.strftime("%A").downcase => 0)
+        create(:shipment, date: today + 1.day, order: order, bakery: bakery)
+
+        missing_via_batch = described_class.missing_shipment_dates_for([order])
+
+        expect(missing_via_batch[order.id]).to be_nil
+      end
+    end
+  end
 end

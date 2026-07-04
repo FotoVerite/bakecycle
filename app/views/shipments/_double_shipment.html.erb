@@ -6,10 +6,7 @@
   <td data-title="Price"><%= shipment.price %></td>
   <td data-title="Actions" class="duplicate-invoice-actions">
     <%= link_to "Review invoice", edit_shipment_path(shipment), class: "button tiny secondary" %>
-    <%= link_to shipment_path(shipment), data: { turbo_method: :delete, turbo_confirm: "Delete duplicate invoice #{shipment.invoice_number}? This cannot be undone." } do %>
-      <span class="table-action-icon table-action-icon--destructive icon-link-tooltip" aria-label="Delete Invoice">
-        <%= icon("file-x") %>
-      </span>
-    <% end %>
+    <%= action_icon shipment_path(shipment), icon_name: "file-x", label: "Delete Invoice", variant: "destructive",
+          link_data: { turbo_method: :delete, turbo_confirm: "Delete duplicate invoice #{shipment.invoice_number}? This cannot be undone." } %>
   </td>
 </tr>

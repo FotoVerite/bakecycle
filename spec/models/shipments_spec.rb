@@ -282,4 +282,38 @@ describe Shipment do
       end
     end
   end
+
+  describe ".duplicate_invoices" do
+    it "returns shipments sharing the same date/client/route" do
+      client = create(:client, bakery: bakery)
+      route = create(:route, bakery: bakery)
+      first = create(:shipment, bakery: bakery, client: client, route: route, date: today)
+      second = create(:shipment, bakery: bakery, client: client, route: route, date: today)
+      create(:shipment, bakery: bakery, client: client, route: route, date: tomorrow)
+
+      duplicates = described_class.duplicate_invoices(bakery, yesterday..tomorrow)
+
+      expect(duplicates).to contain_exactly(first, second)
+    end
+
+    it "returns an empty array when nothing is duplicated" do
+      create(:shipment, bakery: bakery, date: today)
+
+      duplicates = described_class.duplicate_invoices(bakery, yesterday..tomorrow)
+
+      expect(duplicates).to be_empty
+    end
+
+    it "scopes to the given bakery" do
+      other_bakery = create(:bakery)
+      client = create(:client, bakery: other_bakery)
+      route = create(:route, bakery: other_bakery)
+      create(:shipment, bakery: other_bakery, client: client, route: route, date: today)
+      create(:shipment, bakery: other_bakery, client: client, route: route, date: today)
+
+      duplicates = described_class.duplicate_invoices(bakery, yesterday..tomorrow)
+
+      expect(duplicates).to be_empty
+    end
+  end
 end

@@ -1,5 +1,16 @@
 <h1>Checklist For Production</h1>
 
+<% no_missing_items = @missing_items.nil? || @missing_items.try(:empty?) || !@production_run %>
+<% if @missing_shipments.empty? && @double_invoices.empty? && no_missing_items %>
+  <div class="index-empty-state">
+    <%= icon("circle-check") %>
+    <div>
+      <h2>All clear</h2>
+      <p>No missing invoices, duplicate invoices, or missing production items today.</p>
+    </div>
+  </div>
+<% end %>
+
 <% unless @missing_shipments.empty? %>
   <div class="overridable-orders panel callout radius">
     <h5>These <%= pluralize(@missing_shipments.count, 'order') %> are missing invoices.</h5>
@@ -47,7 +58,7 @@
   </div><% end %>
 
 
-<% unless (@missing_items.nil? || @missing_items.try(:empty?)) || !@production_run %>
+<% unless no_missing_items %>
   <div class="overridable-orders panel callout radius">
     <% grouped_items = @missing_items.group_by(&:product_name) %>
     <h5><%= pluralize(grouped_items.size, 'product') %> missing from this run</h5>

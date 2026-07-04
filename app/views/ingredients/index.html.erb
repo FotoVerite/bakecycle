@@ -30,9 +30,7 @@
             <th scope="row"><%= ingredient.ingredient_type %></th>
             <% if policy(ingredient).edit? %>
               <td data-title="Action">
-                <%= link_to edit_ingredient_path(ingredient) do %>
-                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Ingredient"><%= icon("pencil") %></span>
-                <% end %>
+                <%= action_icon edit_ingredient_path(ingredient), icon_name: "pencil", label: "Edit Ingredient", variant: "edit" %>
               </td>
             <% end %>
           </tr>

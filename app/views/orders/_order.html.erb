@@ -12,16 +12,10 @@
     <td data-title="By"><%= order.updated_at_whodunnit %></td>
   <% end %>
   <td data-title="Action">
-    <%= link_to edit_order_path(order) do %>
-      <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Order"><%= icon("pencil") %></span>
-    <% end %>
+    <%= action_icon edit_order_path(order), icon_name: "pencil", label: "Edit Order", variant: "edit" %>
     <% if show_updated_at_whodoneit %>
-      <%= link_to papertrail_order_path(order) do %>
-        <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Papertrail"><%= icon("history") %></span>
-      <% end %>
+      <%= action_icon papertrail_order_path(order), icon_name: "history", label: "Papertrail", variant: "document" %>
     <% end %>
-    <%= link_to copy_order_path(order) do %>
-      <span class="table-action-icon table-action-icon--create icon-link-tooltip" aria-label="Copy Order"><%= icon("copy") %></span>
-    <% end %>
+    <%= action_icon copy_order_path(order), icon_name: "copy", label: "Copy Order", variant: "create" %>
   </td>
 </tr>

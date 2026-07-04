@@ -25,9 +25,7 @@
             <th scope="row"><%= link_to bakery.name, edit_bakery_path(bakery) %></th>
             <th scope="row" title="<%= bakery.plan.name %>"><%= bakery.plan.display_name %></th>
             <td data-title="Action">
-              <%= link_to edit_bakery_path(bakery) do %>
-                <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Bakery"><%= icon("pencil") %></span>
-              <% end %>
+              <%= action_icon edit_bakery_path(bakery), icon_name: "pencil", label: "Edit Bakery", variant: "edit" %>
             </td>
           </tr>
         <% end %>

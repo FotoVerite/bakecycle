@@ -23,17 +23,12 @@
             <td data-title="Active"><%= product.inactive? ? "No" : "Yes" %></td>
             <% if policy(product).manage_permission? %>
               <td data-title="Action">
-                <%= link_to product_path(product), data: { turbo_frame: "_top" } do %>
-                  <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="View Product"><%= icon("eye") %></span>
-                <% end %>
-                <%= link_to edit_product_path(product), data: { turbo_frame: "_top" } do %>
-                  <span class="table-action-icon table-action-icon--edit icon-link-tooltip" aria-label="Edit Product">
-                    <%= icon("pencil") %>
-                  </span>
-                <% end %>
-                <%= link_to papertrail_product_path(product), data: { turbo_frame: "_top" } do %>
-                  <span class="table-action-icon table-action-icon--document icon-link-tooltip" aria-label="Papertrail"><%= icon("history") %></span>
-                <% end %>
+                <%= action_icon product_path(product), icon_name: "eye", label: "View Product", variant: "document",
+                      link_data: { turbo_frame: "_top" } %>
+                <%= action_icon edit_product_path(product), icon_name: "pencil", label: "Edit Product", variant: "edit",
+                      link_data: { turbo_frame: "_top" } %>
+                <%= action_icon papertrail_product_path(product), icon_name: "history", label: "Papertrail", variant: "document",
+                      link_data: { turbo_frame: "_top" } %>
               </td>
             <% end %>
           </tr>

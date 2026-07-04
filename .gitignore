@@ -40,3 +40,5 @@ screenshot_*.html
 # Ignore key files for decrypting credentials and more.
 /config/credentials/*.key
 
+/.agents/skills/improve-codebase-architecture
+.agents/skills/obsidian-vault/SKILL.md

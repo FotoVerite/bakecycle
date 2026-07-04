@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { awaitTurboResponse } from "../turbo_response_await"
 
 // Instant visual feedback for links that trigger a synchronous server-side
 // send_data download (packing slip PDF, Quickbooks IIF export) instead of the
@@ -17,11 +18,10 @@ export default class extends Controller {
   connect() {
     this.defaultIconHTML = this.hasIconTarget ? this.iconTarget.innerHTML : null
     this.defaultLabelText = this.hasLabelTarget ? this.labelTarget.textContent : null
-    this.handleResponse = this.handleResponse.bind(this)
   }
 
   disconnect() {
-    this.clearListeners()
+    this.cancelAwait?.()
   }
 
   start(event) {
@@ -40,27 +40,14 @@ export default class extends Controller {
       this.labelTarget.textContent = this.labelValue
     }
 
-    document.addEventListener("turbo:before-fetch-response", this.handleResponse, { once: true })
-    // Safety net: some responses never dispatch a Turbo fetch event for this
-    // click (aborted request, popup blocker, etc.) -- never leave it stuck.
-    this.resetTimeout = setTimeout(() => this.reset(), 8000)
-  }
-
-  handleResponse() {
-    this.reset()
+    this.cancelAwait = awaitTurboResponse(() => this.reset())
   }
 
   reset() {
-    this.clearListeners()
     this.element.classList.remove("is-loading")
     this.element.removeAttribute("aria-busy")
 
     if (this.hasIconTarget) this.iconTarget.innerHTML = this.defaultIconHTML
     if (this.hasLabelTarget) this.labelTarget.textContent = this.defaultLabelText
-  }
-
-  clearListeners() {
-    document.removeEventListener("turbo:before-fetch-response", this.handleResponse)
-    clearTimeout(this.resetTimeout)
   }
 }

@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { awaitTurboResponse } from "../turbo_response_await"
 
 // Universal "export started" acknowledgment for every async report/export
 // trigger (~30 link/button/form-submit call sites using data-turbo-stream).
@@ -39,25 +40,10 @@ export default class extends Controller {
 
     trigger.classList.add("is-starting")
 
-    const finish = () => {
-      this.clearPending(trigger)
+    awaitTurboResponse(() => {
       trigger.classList.remove("is-starting")
       trigger.classList.add("is-started")
-      trigger._exportTrayDoneTimeout = setTimeout(() => trigger.classList.remove("is-started"), 1400)
-    }
-
-    trigger._exportTrayResponseHandler = finish
-    document.addEventListener("turbo:before-fetch-response", finish, { once: true })
-    // Safety net: never leave the overlay stuck if the response never fires a
-    // matching event (aborted request, etc) -- cleared by whichever of these
-    // two paths runs first, so the other can never fire a second time later.
-    trigger._exportTrayTimeout = setTimeout(finish, 8000)
-  }
-
-  clearPending(trigger) {
-    if (trigger._exportTrayResponseHandler) {
-      document.removeEventListener("turbo:before-fetch-response", trigger._exportTrayResponseHandler)
-    }
-    clearTimeout(trigger._exportTrayTimeout)
+      setTimeout(() => trigger.classList.remove("is-started"), 1400)
+    })
   }
 }
