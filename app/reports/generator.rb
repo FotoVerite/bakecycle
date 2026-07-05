@@ -48,6 +48,7 @@ module Generator
         set_sentry_report_transaction_data(transaction, started_at: started_at)
         output = super()
         set_sentry_report_result_data(transaction, output: output, started_at: started_at)
+        capture_sentry_report_generated(output: output, started_at: started_at)
         return output
       end
 
@@ -57,6 +58,7 @@ module Generator
         set_sentry_report_data(span, started_at: started_at) if span
         output = super()
         set_sentry_report_result_data(span, output: output, started_at: started_at) if span
+        capture_sentry_report_generated(output: output, started_at: started_at)
       end
 
       output
@@ -131,6 +133,7 @@ module Generator
         set_sentry_report_data(transaction, started_at: started_at)
         output = yield
         set_sentry_report_result_data(transaction, output: output, started_at: started_at)
+        capture_sentry_report_generated(output: output, started_at: started_at)
       rescue Exception # rubocop:disable Lint/RescueException
         transaction.set_http_status(500) if transaction.respond_to?(:set_http_status)
         raise
@@ -139,6 +142,40 @@ module Generator
       end
 
       output
+    end
+
+    def capture_sentry_report_generated(output:, started_at:)
+      return unless Sentry.respond_to?(:capture_message)
+
+      Sentry.with_scope do |scope|
+        scope.set_level(:info) if scope.respond_to?(:set_level)
+        scope.set_tags(sentry_report_event_tags) if scope.respond_to?(:set_tags)
+        scope.set_extras(sentry_report_event_extras(output: output, started_at: started_at)) if scope.respond_to?(:set_extras)
+        Sentry.capture_message("Report generated")
+      end
+    rescue StandardError
+      nil
+    end
+
+    def sentry_report_event_tags
+      {
+        report: sentry_report_name.parameterize(separator: "_"),
+        generator: self.class.name,
+        source: sentry_report_value(:@source),
+        type: sentry_report_value(:@type)
+      }.reject { |_key, value| value.blank? }
+    end
+
+    def sentry_report_event_extras(output:, started_at:)
+      result_attributes = {
+        duration_ms: ((Time.current - started_at) * 1000).round(1),
+        output_bytes: output.respond_to?(:bytesize) ? output.bytesize : nil
+      }
+
+      sentry_base_report_attributes(started_at)
+        .merge(sentry_report_attributes)
+        .merge(result_attributes)
+        .reject { |_key, value| value.blank? }
     end
 
     def sentry_base_report_attributes(started_at)
