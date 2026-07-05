@@ -2,6 +2,11 @@
 
 Bakery operations SaaS app. Rails 8 + Stimulus/Turbo + PostgreSQL. React was fully removed.
 
+**Real-world usage note:** the app was built as multi-tenant SaaS (`Bakery` is the tenant root — see "Key models" below) and that architecture is still real and still matters for correctness. But in practice, **Bien Cuit — the bakery that commissioned/created the app — is effectively the only real tenant.** In the dev DB snapshot, Bien Cuit alone accounts for 76,237 of 76,580 total orders (99.6%) across 20 bakery records; the other 19 are legacy/test/demo accounts with single-digit-to-low-hundreds order counts. Practical implications:
+- Multi-tenant correctness bugs (e.g. a query that doesn't scope by `bakery_id`) are still real bugs worth fixing, but they will almost never show up as a *performance* problem in practice — Bien Cuit's own row count already dominates any query, so scoping by bakery rarely shrinks what gets scanned for the tenant that actually generates load.
+- Don't assume "there are many bakeries with meaningfully-sized datasets" when reasoning about scale — there is effectively one, and it's already the whole dataset.
+- Any specific-to-Bien-Cuit business rule you find hardcoded or asymmetric in the app (naming conventions, workflow assumptions) is more likely a deliberate reflection of the one real customer's process than a bug.
+
 ## How to run
 
 Runs natively on Ruby 3.3.1 (arm64-darwin). No Docker required for development.

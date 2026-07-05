@@ -29,8 +29,10 @@ class ProductTotalsQuery
   private
 
   def order_projection_totals
+    orders_by_date = active_orders_by_date
+
     delivery_dates.each_with_object(Hash.new(0)) do |delivery_date, totals|
-      active_orders_for(delivery_date).each do |order|
+      orders_by_date[delivery_date].each do |order|
         order.order_items.each do |item|
           quantity = item.quantity(delivery_date)
           totals[[delivery_date, item.product]] += quantity if quantity.positive?
@@ -61,11 +63,25 @@ class ProductTotalsQuery
     @start_date..@end_date
   end
 
-  def active_orders_for(delivery_date)
-    @bakery
-      .orders
-      .active(delivery_date)
+  # One query for the whole date range instead of one Order.active(date)
+  # DISTINCT-ON query per date (flagged by Sentry as an N+1: same query
+  # shape, once per date in the range, only the date bind param changing).
+  # Loads this bakery's orders overlapping the range once, then resolves
+  # which order wins each (client_id, route_id) pair per date in Ruby --
+  # same tie-break as Order.active (temporary beats standing).
+  def active_orders_by_date
+    candidates = @bakery.orders
+      .where("start_date <= :end_date AND (end_date IS NULL OR end_date >= :start_date)",
+        start_date: @start_date, end_date: @end_date)
       .includes(order_items: :product)
+      .group_by { |order| [order.client_id, order.route_id] }
+
+    delivery_dates.index_with do |date|
+      candidates.filter_map do |_pair, orders|
+        orders.select { |order| order.start_date <= date && (order.end_date.nil? || order.end_date >= date) }
+          .max_by(&:order_type)
+      end
+    end
   end
 
   def order_projection?
