@@ -57,12 +57,4 @@ class ProductTotalsDateRangeGenerator
   def generate
     ProductTotalsDateRangeXlsx.new(@bakery, @date, end_date: @end_date, source: source).generate
   end
-
-  def sentry_report_attributes
-    super.merge(
-      source: source,
-      date: @date.iso8601,
-      date_count: (@date.to_date..@end_date.to_date).count
-    )
-  end
 end

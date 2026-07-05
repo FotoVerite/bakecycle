@@ -84,3 +84,15 @@ group :production, :staging, :test do
   gem "sentry-rails"
   gem "sentry-ruby"
 end
+
+group :production, :staging do
+  # Deliberately NOT opentelemetry-instrumentation-all -- that auto-instruments
+  # every gem (Postgres, Redis, every HTTP call) and produces exactly the
+  # firehose we just stripped out of Sentry. Rack + ActionPack only: one span
+  # per request, tagged with route/controller/action/status. That answers
+  # "what parts of the app are people using" without drowning in DB spans.
+  gem "opentelemetry-sdk"
+  gem "opentelemetry-exporter-otlp"
+  gem "opentelemetry-instrumentation-rack"
+  gem "opentelemetry-instrumentation-action_pack"
+end

@@ -13,5 +13,7 @@ Sentry.init do |config|
 
   config.send_default_pii = false
 
-  config.traces_sample_rate = 1.0
+  # Error tracking only -- no performance tracing/spans. traces_sample_rate
+  # defaults to 0.0 (disabled) when unset; leave it unset rather than 0.0
+  # explicitly so it's clear this is a deliberate choice, not an oversight.
 end
