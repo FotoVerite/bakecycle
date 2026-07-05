@@ -2,14 +2,12 @@
 
 return unless defined?(OpenTelemetry)
 
-# Deliberately minimal, hand-picked instrumentation -- not
-# opentelemetry-instrumentation-all. Rack + ActionPack only, giving one span
-# per HTTP request tagged with route/controller/action/status/duration. That
-# alone answers "what parts of the app are people actually using" without
-# auto-instrumenting every DB query/gem call (the firehose Sentry's default
-# APM produced, which this deliberately replaces).
+# Honeycomb's model is query-first: wide events with full request context,
+# sliced/grouped ad hoc after the fact (BubbleUp), not a pre-curated set of
+# spans decided in advance. use_all auto-instruments every supported gem
+# present (Rack, ActionPack, ActiveRecord/pg, ActionView, Net::HTTP, etc.) so
+# that data is actually available to query later.
 OpenTelemetry::SDK.configure do |c|
   c.service_name = "bakecycle-#{Rails.env}"
-  c.use "OpenTelemetry::Instrumentation::Rack"
-  c.use "OpenTelemetry::Instrumentation::ActionPack"
+  c.use_all
 end

@@ -86,13 +86,12 @@ group :production, :staging, :test do
 end
 
 group :production, :staging do
-  # Deliberately NOT opentelemetry-instrumentation-all -- that auto-instruments
-  # every gem (Postgres, Redis, every HTTP call) and produces exactly the
-  # firehose we just stripped out of Sentry. Rack + ActionPack only: one span
-  # per request, tagged with route/controller/action/status. That answers
-  # "what parts of the app are people using" without drowning in DB spans.
+  # Honeycomb's model is query-first, not trace-first: wide events with full
+  # request context, queried/sliced ad hoc after the fact (BubbleUp), not a
+  # pre-curated set of "interesting" spans decided in advance. That only
+  # works if the data is actually wide, so use_all instead of hand-picking
+  # instrumentation libraries.
   gem "opentelemetry-sdk"
   gem "opentelemetry-exporter-otlp"
-  gem "opentelemetry-instrumentation-rack"
-  gem "opentelemetry-instrumentation-action_pack"
+  gem "opentelemetry-instrumentation-all"
 end
