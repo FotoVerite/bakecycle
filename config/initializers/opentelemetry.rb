@@ -22,9 +22,27 @@ module OpenTelemetryPollingSuppression
   def with_polling_volume(&block)
     OpenTelemetry::Common::Utilities.untraced { super(&block) }
   end
+
+  # Solid Queue's process heartbeat (SolidQueue::Processes::Registrable,
+  # mixed into every process type via Base) is a second, independent noise
+  # source -- a Concurrent::TimerTask firing every process_heartbeat_interval
+  # (60s default) per running process, unrelated to with_polling_volume.
+  # Measured via Honeycomb at ~20k spans/day, ~150x smaller than the poller
+  # noise above but the same "fixed timer, not real traffic" shape.
+  def heartbeat
+    OpenTelemetry::Common::Utilities.untraced { super }
+  end
 end
 
 SolidQueue::Processes::Poller.prepend(OpenTelemetryPollingSuppression)
+
+# Registrable is included into SolidQueue::Processes::Base (and so into every
+# process subclass -- Poller, Worker, Dispatcher, Supervisor) before this
+# initializer runs, but prepending onto the module here still takes effect
+# for those already-including classes: `include` keeps a live reference to
+# the module, so prepending into it afterwards still resolves ahead of it in
+# the ancestor chain. Confirmed via `rails runner` in RAILS_ENV=staging.
+SolidQueue::Processes::Registrable.prepend(OpenTelemetryPollingSuppression)
 
 require "action_cable/subscription_adapter/solid_cable"
 ActionCable::SubscriptionAdapter::SolidCable::Listener.prepend(OpenTelemetryPollingSuppression)
