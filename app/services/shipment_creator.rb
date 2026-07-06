@@ -66,13 +66,16 @@ class ShipmentCreator
       ShipmentItem.new(
         product: item.product,
         product_quantity: item.quantity(ship_date),
-        product_price: item.product_price
+        product_price: order.sample? ? 0 : item.product_price
       )
     end.compact
   end
 
+  # Sample orders are free tastings -- the invoice they generate must carry
+  # no charge at all, so the delivery fee is waived along with item cost.
   def delivery_fee
     return @_delivery_fee if @_delivery_fee
+    return @_delivery_fee = 0 if order.sample?
     return @_delivery_fee = 0 unless charge_precentage_fee? || charge_daily_fee? || charge_weekly_fee?
 
     @_delivery_fee = order.client_calculate_delivery_fee(shipment_items_subtotal)

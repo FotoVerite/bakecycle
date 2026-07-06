@@ -57,6 +57,14 @@
               <small>Overrides standing orders for one date.</small>
             </span>
           </label>
+          <label class="form-choice form-choice-card">
+            <%= f.radio_button :order_type, "sample",
+                data: { order_form_target: "orderType", action: "change->order-form#typeChanged" } %>
+            <span>
+              <strong>Sample</strong>
+              <small>Free tasting, invoiced separately.</small>
+            </span>
+          </label>
         </div>
       </div>
 
@@ -77,7 +85,7 @@
 
       <div class="form-field form-span-4"
            data-order-form-target="endDateField"
-           <%= "hidden" if order.temporary? %>>
+           <%= "hidden" if order.single_day_order? %>>
         <%= f.input :end_date, as: :string,
             input_html: {
               type: "date",

@@ -68,20 +68,29 @@ class ProductTotalsQuery
   # shape, once per date in the range, only the date bind param changing).
   # Loads this bakery's orders overlapping the range once, then resolves
   # which order wins each (client_id, route_id) pair per date in Ruby --
-  # same tie-break as Order.active (temporary beats standing).
+  # same tie-break as Order.active (temporary beats standing). Sample orders
+  # never compete for a (client_id, route_id) slot -- they're always additive
+  # alongside whatever standing/temporary order already owns it, so they're
+  # resolved individually instead of joining the tie-break groups.
   def active_orders_by_date
     candidates = @bakery.orders
       .where("start_date <= :end_date AND (end_date IS NULL OR end_date >= :start_date)",
         start_date: @start_date, end_date: @end_date)
       .includes(order_items: :product)
-      .group_by { |order| [order.client_id, order.route_id] }
+
+    sample_orders, standard_orders = candidates.partition(&:sample?)
+    standard_groups = standard_orders.group_by { |order| [order.client_id, order.route_id] }
 
     delivery_dates.index_with do |date|
-      candidates.filter_map do |_pair, orders|
-        orders.select { |order| order.start_date <= date && (order.end_date.nil? || order.end_date >= date) }
-          .max_by(&:order_type)
+      winners = standard_groups.filter_map do |_pair, orders|
+        orders.select { |order| order_active_on?(order, date) }.max_by(&:order_type)
       end
+      winners + sample_orders.select { |order| order_active_on?(order, date) }
     end
+  end
+
+  def order_active_on?(order, date)
+    order.start_date <= date && (order.end_date.nil? || order.end_date >= date)
   end
 
   def order_projection?

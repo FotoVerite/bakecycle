@@ -183,4 +183,22 @@ describe ShipmentCreator do
       expect(sunday_shipment.price).to eq(50)
     end
   end
+
+  describe "sample orders" do
+    it "zeroes out item price and delivery fee while keeping real quantity" do
+      client = create(:client, delivery_fee_option: 1, delivery_minimum: 1, delivery_fee: 25, bakery: bakery)
+      product = create(:product, base_price: 10, bakery: bakery)
+      order = create(:sample_order, start_date: today, end_date: today, client: client, bakery: bakery,
+                                    order_item_count: 1)
+      order.order_items.first.update!(product: product)
+
+      shipment = ShipmentCreator.new(order, today).create!
+
+      expect(shipment.delivery_fee).to eq(0)
+      expect(shipment.price).to eq(0)
+      shipment_item = shipment.shipment_items.first
+      expect(shipment_item.product_price).to eq(0)
+      expect(shipment_item.product_quantity).to be > 0
+    end
+  end
 end

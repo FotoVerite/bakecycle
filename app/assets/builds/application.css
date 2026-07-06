@@ -5085,7 +5085,7 @@ input[type=text] {
   align-items: stretch;
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(2, minmax(260px, 340px));
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
   min-height: 0;
 }
 
@@ -6061,6 +6061,9 @@ input[type=text] {
   }
   .form-summary-item {
     margin-bottom: 12px;
+  }
+  .form-choice-card-row {
+    grid-template-columns: 1fr;
   }
   .form-choice-card {
     width: 100%;

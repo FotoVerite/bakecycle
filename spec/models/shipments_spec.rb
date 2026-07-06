@@ -326,5 +326,83 @@ describe Shipment do
 
       expect(duplicates).to be_empty
     end
+
+    it "does not flag a sample order's invoice against a standing/temporary invoice on the same date/client/route" do
+      client = create(:client, bakery: bakery)
+      route = create(:route, bakery: bakery)
+      standing_order = create(:order, bakery: bakery, client: client, route: route, order_item_count: 0)
+      sample_order = create(:sample_order, bakery: bakery, client: client, route: route,
+                                           start_date: today, end_date: today, order_item_count: 0)
+      create(:shipment, bakery: bakery, client: client, route: route, date: today, order: standing_order)
+      create(:shipment, bakery: bakery, client: client, route: route, date: today, order: sample_order)
+
+      duplicates = described_class.duplicate_invoices(bakery, yesterday..tomorrow)
+
+      expect(duplicates).to be_empty
+    end
+
+    it "still flags duplicates linked to standing/temporary orders" do
+      client = create(:client, bakery: bakery)
+      route = create(:route, bakery: bakery)
+      standing_order = create(:order, bakery: bakery, client: client, route: route, order_item_count: 0)
+      temp_order = create(:temporary_order, bakery: bakery, client: client, route: route,
+                                            start_date: today, end_date: today, order_item_count: 0)
+      first = create(:shipment, bakery: bakery, client: client, route: route, date: today, order: standing_order)
+      second = create(:shipment, bakery: bakery, client: client, route: route, date: today, order: temp_order)
+
+      duplicates = described_class.duplicate_invoices(bakery, yesterday..tomorrow)
+
+      expect(duplicates).to contain_exactly(first, second)
+    end
+
+    it "picks out exactly the right shipments across a large batch mixing every case at once" do
+      # Client 1: real duplicate (standing + temporary, same date/client/route) -- flagged.
+      client_1 = create(:client, bakery: bakery)
+      route_1 = create(:route, bakery: bakery)
+      c1_standing = create(:order, bakery: bakery, client: client_1, route: route_1, order_item_count: 0)
+      c1_temp = create(:temporary_order, bakery: bakery, client: client_1, route: route_1,
+                                         start_date: today, end_date: today, order_item_count: 0)
+      c1_first = create(:shipment, bakery: bakery, client: client_1, route: route_1, date: today, order: c1_standing)
+      c1_second = create(:shipment, bakery: bakery, client: client_1, route: route_1, date: today, order: c1_temp)
+
+      # Client 2: standing + sample, same date/client/route -- NOT flagged.
+      client_2 = create(:client, bakery: bakery)
+      route_2 = create(:route, bakery: bakery)
+      c2_standing = create(:order, bakery: bakery, client: client_2, route: route_2, order_item_count: 0)
+      c2_sample = create(:sample_order, bakery: bakery, client: client_2, route: route_2,
+                                        start_date: today, end_date: today, order_item_count: 0)
+      create(:shipment, bakery: bakery, client: client_2, route: route_2, date: today, order: c2_standing)
+      create(:shipment, bakery: bakery, client: client_2, route: route_2, date: today, order: c2_sample)
+
+      # Client 3: two manually created shipments (no order at all) sharing date/route -- still flagged.
+      client_3 = create(:client, bakery: bakery)
+      route_3 = create(:route, bakery: bakery)
+      c3_first = create(:shipment, bakery: bakery, client: client_3, route: route_3, date: today, order: nil)
+      c3_second = create(:shipment, bakery: bakery, client: client_3, route: route_3, date: today, order: nil)
+
+      # Client 4: single standing shipment, no duplicate at all -- not flagged.
+      client_4 = create(:client, bakery: bakery)
+      route_4 = create(:route, bakery: bakery)
+      c4_standing = create(:order, bakery: bakery, client: client_4, route: route_4, order_item_count: 0)
+      create(:shipment, bakery: bakery, client: client_4, route: route_4, date: today, order: c4_standing)
+
+      # Client 5: two sample orders' invoices sharing the same invoice date/client/route (their own
+      # order routes differ, which is how two samples for one client on one day are actually allowed
+      # to coexist -- the invoices below are pinned to the same route_5 to test the duplicate check
+      # itself) -- not flagged, since samples are excluded from the pool entirely and can't flag
+      # each other either.
+      client_5 = create(:client, bakery: bakery)
+      route_5 = create(:route, bakery: bakery)
+      c5_sample_a = create(:sample_order, bakery: bakery, client: client_5,
+                                          start_date: today, end_date: today, order_item_count: 0)
+      c5_sample_b = create(:sample_order, bakery: bakery, client: client_5,
+                                          start_date: today, end_date: today, order_item_count: 0)
+      create(:shipment, bakery: bakery, client: client_5, route: route_5, date: today, order: c5_sample_a)
+      create(:shipment, bakery: bakery, client: client_5, route: route_5, date: today, order: c5_sample_b)
+
+      duplicates = described_class.duplicate_invoices(bakery, yesterday..tomorrow)
+
+      expect(duplicates).to contain_exactly(c1_first, c1_second, c3_first, c3_second)
+    end
   end
 end

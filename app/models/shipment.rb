@@ -97,9 +97,14 @@ class Shipment < ApplicationRecord
   end
 
   # Shipments that share the same date/client/route -- almost always a
-  # double-billing mistake (same delivery invoiced twice).
+  # double-billing mistake (same delivery invoiced twice). Sample-order
+  # invoices are deliberately allowed to duplicate a standing/temporary
+  # invoice's date/client/route, so they're excluded from this check entirely
+  # -- both as a flagged shipment and as a reason to flag another shipment.
   def self.duplicate_invoices(bakery, date_range)
     where(bakery_id: bakery, date: date_range)
+      .includes(:order)
+      .reject { |shipment| shipment.order&.sample? }
       .group_by { |shipment| [shipment.date, shipment.client_id, shipment.route_id] }
       .select { |_key, shipments| shipments.size > 1 }
       .values.flatten

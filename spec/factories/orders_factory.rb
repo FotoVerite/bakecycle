@@ -49,5 +49,10 @@ FactoryBot.define do
       order_type { "temporary" }
       end_date { nil }
     end
+
+    factory :sample_order do
+      order_type { "sample" }
+      end_date { nil }
+    end
   end
 end

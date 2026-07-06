@@ -56,8 +56,7 @@ export default class extends Controller {
   }
 
   updateView() {
-    const isTemporary = this.currentOrderType === "temporary"
-    this.endDateFieldTarget.hidden = isTemporary
+    this.endDateFieldTarget.hidden = this.isSingleDayOrder
     this.updateDayInputs()
     this.validate()
   }
@@ -65,6 +64,10 @@ export default class extends Controller {
   get currentOrderType() {
     const checked = this.orderTypeTargets.find(r => r.checked)
     return checked ? checked.value : ""
+  }
+
+  get isSingleDayOrder() {
+    return this.currentOrderType === "temporary" || this.currentOrderType === "sample"
   }
 
   // ─── Row helpers ──────────────────────────────────────────────────────────
@@ -130,11 +133,11 @@ export default class extends Controller {
   }
 
   updateDayInputs() {
-    const isTemporary = this.currentOrderType === "temporary"
+    const isSingleDayOrder = this.isSingleDayOrder
     const startDate = this.startDateTarget.value
 
     this.element.querySelectorAll("[data-order-item-day]").forEach(input => {
-      if (isTemporary && startDate) {
+      if (isSingleDayOrder && startDate) {
         const dayNum = parseInt(input.dataset.orderItemDay, 10)
         const d = new Date(startDate + "T00:00:00")
         const shouldDisable = d.getUTCDay() !== dayNum
@@ -411,7 +414,7 @@ export default class extends Controller {
   }
 
   validateEndDate() {
-    if (this.currentOrderType === "temporary") return null
+    if (this.isSingleDayOrder) return null
     const startDate = this.startDateTarget.value
     const endInput = this.endDateFieldTarget.querySelector("input[type='date']")
     if (!endInput || !startDate || !endInput.value) return null

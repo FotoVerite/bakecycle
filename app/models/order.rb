@@ -52,13 +52,13 @@ class Order < ApplicationRecord
     reject_if: proc { |attributes| attributes["product_id"].blank? }
   )
 
-  before_validation :set_end_date_to_start, if: :temporary?
+  before_validation :set_end_date_to_start, if: :single_day_order?
 
   validates :route_id, presence: true
   validates :client_id, presence: true
   validates :start_date, presence: true
   validate  :end_date_is_not_before_start_date
-  validates :order_type, presence: true, inclusion: %w[standing temporary]
+  validates :order_type, presence: true, inclusion: %w[standing temporary sample]
   validates :bakery, presence: true
   validates :discount, inclusion: 0..100, allow_nil: true
 
@@ -92,13 +92,28 @@ class Order < ApplicationRecord
     ClientPolicy
   end
 
+  # A "sample" order never competes for a (client_id, route_id) slot -- it's
+  # always additive alongside whatever standing/temporary order already owns
+  # that slot, even if it shares the same route. Partitioning sample orders
+  # by their own id (instead of client_id/route_id) keeps every sample order
+  # out of the DISTINCT ON collapse entirely.
+  ACTIVE_PARTITION_KEY_SQL = <<~SQL.squish.freeze
+    CASE WHEN order_type = 'sample'
+      THEN 'sample-' || id::text
+      ELSE 'std-' || client_id::text || '-' || COALESCE(route_id::text, 'null')
+    END
+  SQL
+
   def self.active(date)
     sql = <<-SQL
       orders.id in (
-        SELECT DISTINCT ON (client_id, route_id) id
-        FROM orders
-        WHERE start_date <= :date and (end_date IS NULL OR end_date >= :date)
-        ORDER BY client_id, route_id, order_type DESC
+        SELECT DISTINCT ON (partition_key) id
+        FROM (
+          SELECT id, order_type, #{ACTIVE_PARTITION_KEY_SQL} AS partition_key
+          FROM orders
+          WHERE start_date <= :date and (end_date IS NULL OR end_date >= :date)
+        ) ranked_orders
+        ORDER BY partition_key, order_type DESC
       )
     SQL
     where(sql, date: date)
@@ -186,11 +201,14 @@ class Order < ApplicationRecord
 
     date_range.index_with do |date|
       sql = <<-SQL
-        SELECT DISTINCT ON (client_id, route_id) id
-        FROM orders
-        WHERE client_id IN (?) AND route_id IN (?)
-          AND start_date <= ? AND (end_date IS NULL OR end_date >= ?)
-        ORDER BY client_id, route_id, order_type DESC
+        SELECT DISTINCT ON (partition_key) id
+        FROM (
+          SELECT id, order_type, #{ACTIVE_PARTITION_KEY_SQL} AS partition_key
+          FROM orders
+          WHERE client_id IN (?) AND route_id IN (?)
+            AND start_date <= ? AND (end_date IS NULL OR end_date >= ?)
+        ) ranked_orders
+        ORDER BY partition_key, order_type DESC
       SQL
       find_by_sql([sql, client_ids, route_ids, date, date]).map(&:id).to_set
     end
@@ -211,7 +229,7 @@ class Order < ApplicationRecord
   scope :still_in_use, lambda {
     today = Time.zone.today
     where(
-      "(order_type = 'temporary' AND start_date >= :today) OR " \
+      "(order_type IN ('temporary', 'sample') AND start_date >= :today) OR " \
       "(order_type = 'standing' AND (end_date IS NULL OR end_date >= :today))",
       today: today
     )
@@ -277,6 +295,14 @@ class Order < ApplicationRecord
     order_type == "standing"
   end
 
+  def sample?
+    order_type == "sample"
+  end
+
+  def single_day_order?
+    temporary? || sample?
+  end
+
   def daily_subtotal(date)
     order_items.reduce(0) do |sum, item|
       sum + item.daily_subtotal(date)
@@ -284,7 +310,7 @@ class Order < ApplicationRecord
   end
 
   def still_in_use
-    if temporary?
+    if single_day_order?
       start_date >= Time.zone.today
     elsif standing?
       end_date.blank? || end_date >= Time.zone.today

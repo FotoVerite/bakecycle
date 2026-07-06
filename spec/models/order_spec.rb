@@ -344,6 +344,117 @@ describe Order do
       client = order.client
       expect(client.orders.active(today)).to contain_exactly(order)
     end
+
+    it "always includes a sample order alongside a standing order sharing the same route" do
+      standing = create(:order, start_date: yesterday, order_item_count: 0)
+      sample = create(
+        :sample_order, start_date: today, end_date: today,
+        client: standing.client, route: standing.route, order_item_count: 0
+      )
+
+      expect(Order.active(today)).to contain_exactly(standing, sample)
+    end
+
+    it "includes a sample order alongside whichever of standing/temporary wins the tie-break" do
+      standing = create(:order, start_date: yesterday, order_item_count: 0)
+      temporary = create(
+        :temporary_order, start_date: today, end_date: today,
+        client: standing.client, route: standing.route, order_item_count: 0
+      )
+      sample = create(
+        :sample_order, start_date: today, end_date: today,
+        client: standing.client, route: standing.route, order_item_count: 0
+      )
+
+      expect(Order.active(today)).to contain_exactly(temporary, sample)
+    end
+
+    it "resolves a whole fleet of clients correctly, each with its own mix of order types" do
+      # Client A: standing only, no override, no sample -- baseline, must survive untouched.
+      client_a_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
+
+      # Client B: standing + a temporary override on the same route/date, no sample.
+      client_b_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
+      client_b_temp = create(
+        :temporary_order, bakery: bakery, start_date: today, end_date: today,
+        client: client_b_standing.client, route: client_b_standing.route, order_item_count: 0
+      )
+
+      # Client C: standing + a sample sharing the same route -- both must survive.
+      client_c_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
+      client_c_sample = create(
+        :sample_order, bakery: bakery, start_date: today, end_date: today,
+        client: client_c_standing.client, route: client_c_standing.route, order_item_count: 0
+      )
+
+      # Client D: standing + temporary override + sample, all on the same route/date --
+      # temporary wins the standing/temporary tie-break, sample rides alongside regardless.
+      client_d_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
+      client_d_temp = create(
+        :temporary_order, bakery: bakery, start_date: today, end_date: today,
+        client: client_d_standing.client, route: client_d_standing.route, order_item_count: 0
+      )
+      client_d_sample = create(
+        :sample_order, bakery: bakery, start_date: today, end_date: today,
+        client: client_d_standing.client, route: client_d_standing.route, order_item_count: 0
+      )
+
+      # Client E: two samples on two different routes, no standing/temporary at all.
+      client_e = create(:client, bakery: bakery)
+      client_e_sample_route_1 = create(
+        :sample_order, bakery: bakery, client: client_e, start_date: today, end_date: today, order_item_count: 0
+      )
+      client_e_sample_route_2 = create(
+        :sample_order, bakery: bakery, client: client_e, start_date: today, end_date: today, order_item_count: 0
+      )
+
+      # Client F: standing order that expired yesterday -- must not appear today at all.
+      create(:order, bakery: bakery, start_date: yesterday - 1.week, end_date: yesterday, order_item_count: 0)
+
+      expect(Order.active(today)).to contain_exactly(
+        client_a_standing,
+        client_b_temp,
+        client_c_standing, client_c_sample,
+        client_d_temp, client_d_sample,
+        client_e_sample_route_1, client_e_sample_route_2
+      )
+    end
+
+    it "never lets a null route_id collapse orders across different clients" do
+      client_x = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
+      client_y = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
+      client_x.update_column(:route_id, nil)
+      client_y.update_column(:route_id, nil)
+
+      expect(Order.active(today)).to contain_exactly(client_x, client_y)
+    end
+  end
+
+  describe "#still_in_use / .still_in_use" do
+    it "treats a sample order the same as a temporary order: in use only up to its (single) start date" do
+      future_sample = build_stubbed(:sample_order, start_date: tomorrow, end_date: tomorrow)
+      today_sample = build_stubbed(:sample_order, start_date: today, end_date: today)
+      past_sample = build_stubbed(:sample_order, start_date: yesterday, end_date: yesterday)
+
+      expect(future_sample.still_in_use).to be true
+      expect(today_sample.still_in_use).to be true
+      expect(past_sample.still_in_use).to be false
+    end
+
+    it "matches the scope to the instance method across a mixed fleet" do
+      standing_open = create(:order, start_date: yesterday, end_date: nil, order_item_count: 0)
+      standing_expired = create(:order, start_date: yesterday - 1.week, end_date: yesterday, order_item_count: 0)
+      temp_future = create(:temporary_order, start_date: tomorrow, end_date: tomorrow, order_item_count: 0)
+      temp_past = create(:temporary_order, start_date: yesterday, end_date: yesterday, order_item_count: 0)
+      sample_future = create(:sample_order, start_date: tomorrow, end_date: tomorrow, order_item_count: 0)
+      sample_past = create(:sample_order, start_date: yesterday, end_date: yesterday, order_item_count: 0)
+
+      all_orders = [standing_open, standing_expired, temp_future, temp_past, sample_future, sample_past]
+      expected_in_use = all_orders.select(&:still_in_use)
+
+      expect(Order.where(id: all_orders).still_in_use).to contain_exactly(*expected_in_use)
+      expect(expected_in_use).to contain_exactly(standing_open, temp_future, sample_future)
+    end
   end
 
   describe ".production_date" do
@@ -534,6 +645,31 @@ describe Order do
         expect(temporary).to be_persisted
         expect(missing_dates[standing.id]).to eq([Time.zone.today + 1.day])
         expect(missing_dates[standing.id]).to eq(standing.missing_shipment_dates)
+      end
+    end
+
+    it "agrees with #missing_shipment_dates for every order in a fleet mixing standing/temporary/sample "\
+       "on shared routes" do
+      Timecop.freeze(Time.zone.now.change(hour: 15)) do
+        standing = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
+          order_item_count: 1)
+        temporary = create(
+          :temporary_order, bakery: bakery, client: standing.client, route: standing.route,
+          start_date: today, end_date: today, force_total_lead_days: 1, order_item_count: 1
+        )
+        sample = create(
+          :sample_order, bakery: bakery, client: standing.client, route: standing.route,
+          start_date: today, end_date: today, force_total_lead_days: 1, order_item_count: 1
+        )
+        unrelated_standing = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
+          order_item_count: 1)
+
+        orders = [standing, temporary, sample, unrelated_standing]
+        missing_via_batch = described_class.missing_shipment_dates_for(orders)
+
+        orders.each do |order|
+          expect(missing_via_batch[order.id]).to eq(order.missing_shipment_dates), "mismatch for #{order.order_type}"
+        end
       end
     end
   end
