@@ -10,6 +10,19 @@ return unless defined?(OpenTelemetry)
 # "loop iteration -- unbounded, not interesting" case the otel-instrumentation
 # skill itself calls out; dropped here rather than filtered at query time so
 # it never costs ingest volume in the first place.
+#
+# The poller wraps its query in an explicit transaction, so each poll is
+# really 3 spans: BEGIN, the SELECT/EXECUTE, COMMIT. Only the SELECT/EXECUTE
+# span's db.statement mentions the polling table -- BEGIN/COMMIT spans just
+# say "BEGIN"/"COMMIT" and matched nothing, so they kept exporting at full
+# rate even after the query spans were filtered. Spans within one poll's
+# transaction share a trace_id, so we buffer a trace's spans until its
+# transaction closes (COMMIT/ROLLBACK) and then keep-or-drop the whole group
+# based on whether any span in it matched. Non-transactional spans (no
+# db.statement) flush immediately, so this only adds latency for spans that
+# are actually part of a DB transaction. MAX_PENDING_TRACES bounds memory in
+# case a transaction never closes (e.g. a dropped connection with no
+# ROLLBACK span) by flushing the oldest pending trace as-is.
 class PollingNoiseFilter
   NOISE_PATTERNS = [
     /solid_queue_ready_executions/,
@@ -18,8 +31,13 @@ class PollingNoiseFilter
     /solid_cable_messages/
   ].freeze
 
+  TRANSACTION_TERMINATORS = %w[COMMIT ROLLBACK].freeze
+  MAX_PENDING_TRACES = 1_000
+
   def initialize(next_processor)
     @next_processor = next_processor
+    @pending = {}
+    @mutex = Mutex.new
   end
 
   def on_start(span, parent_context)
@@ -28,13 +46,48 @@ class PollingNoiseFilter
 
   def on_finish(span)
     statement = span.attributes&.[]("db.statement")
-    return if statement && NOISE_PATTERNS.any? { |pattern| pattern.match?(statement) }
 
-    @next_processor.on_finish(span)
+    unless statement
+      @next_processor.on_finish(span)
+      return
+    end
+
+    groups_to_flush = []
+
+    @mutex.synchronize do
+      trace_id = span.context.trace_id
+      buffer = (@pending[trace_id] ||= [])
+      buffer << span
+
+      if TRANSACTION_TERMINATORS.include?(statement.to_s.strip.upcase)
+        @pending.delete(trace_id)
+        groups_to_flush << buffer
+      end
+
+      while @pending.size > MAX_PENDING_TRACES
+        _oldest_trace_id, oldest_buffer = @pending.shift
+        groups_to_flush << oldest_buffer
+      end
+    end
+
+    groups_to_flush.each { |group| flush(group) }
   end
 
   def force_flush(timeout: nil) = @next_processor.force_flush(timeout: timeout)
   def shutdown(timeout: nil) = @next_processor.shutdown(timeout: timeout)
+
+  private
+
+  def flush(spans)
+    return if spans.any? { |span| noise?(span) }
+
+    spans.each { |span| @next_processor.on_finish(span) }
+  end
+
+  def noise?(span)
+    statement = span.attributes&.[]("db.statement")
+    statement && NOISE_PATTERNS.any? { |pattern| pattern.match?(statement) }
+  end
 end
 
 # Honeycomb's model is query-first: wide events with full request context,
