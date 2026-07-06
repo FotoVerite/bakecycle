@@ -8,10 +8,14 @@
         <%= pv_form.hidden_field :client_id, value: '' %>
       <% else %>
         <%= pv_form.select :client_id,
-              options_for_select(clients.map { |c| [c.name, c.id] }, pv_form.object.client_id),
+              options_for_select(pv_form.object.client ? [[pv_form.object.client.name, pv_form.object.client_id]] : [], pv_form.object.client_id),
               { include_blank: 'Select Client' },
               class: 'nested-field',
-              data: { action: 'change->nested-form#syncClientSelects' } %>
+              data: {
+                controller: 'tom-select',
+                tom_select_options_source_value: '#product-clients-options',
+                action: 'change->nested-form#syncClientSelects tom-select:connect->nested-form#syncClientSelects'
+              } %>
       <% end %>
     </div>
     <div class="form-field form-span-2">

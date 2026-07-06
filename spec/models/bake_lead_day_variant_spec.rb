@@ -34,4 +34,17 @@ describe BakeLeadDayVariant do
     variant.destroy
     expect(BakeLeadDayVariant.unscoped.find(variant.id).removed).to eq(1)
   end
+
+  it "does not count a soft-removed override as a conflict (regression: a removed override blocked "\
+     "re-adding one for the same product/client forever)" do
+    product = create(:product)
+    client = create(:client, bakery: product.bakery)
+    removed = create(:bake_lead_day_variant, product: product, client: client)
+    removed.destroy
+    expect(removed.reload.removed).to eq(1)
+
+    replacement = build(:bake_lead_day_variant, product: product, client: client)
+
+    expect(replacement).to be_valid
+  end
 end

@@ -24,6 +24,7 @@ class PriceVariant < ApplicationRecord
   validates :price, numericality: true, unless: -> { price.blank? }
   validates :quantity, presence: true, uniqueness: {
     scope: %i[product_id client_id],
+    conditions: -> { where(removed: false) },
     message: "quantity already exists"
   }
   validates :quantity, numericality: true, unless: -> { quantity.blank? }

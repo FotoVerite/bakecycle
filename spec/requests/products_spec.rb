@@ -97,6 +97,25 @@ RSpec.describe "Products", type: :request do
       expect(response.body).to include(%(value="#{price_variant.id}"))
     end
 
+    it "offers active clients as override choices, plus any inactive client an existing override "\
+       "already references (so its select doesn't silently lose its value)" do
+      create(:client, bakery: bakery, name: "Active Client", active: true)
+      referenced_inactive_client = create(:client, bakery: bakery, name: "Referenced Inactive Client",
+                                                    active: false)
+      create(:client, bakery: bakery, name: "Unrelated Inactive Client", active: false)
+      create(:price_variant, product: product, client: referenced_inactive_client, quantity: 5)
+
+      get edit_product_path(product)
+
+      # The full client list is rendered once into the shared options cache (read by
+      # tom-select), not repeated inline per <select> -- see products/_form.html.erb.
+      clients_json = response.body[%r{id="product-clients-options">(.*?)</script>}m, 1]
+      client_names = JSON.parse(clients_json).pluck("text")
+
+      expect(client_names).to include("Active Client", "Referenced Inactive Client")
+      expect(client_names).to_not include("Unrelated Inactive Client")
+    end
+
     it "updates a product name" do
       patch product_path(product), params: { product: { name: "Almond Croissant" } }
       expect(product.reload.name).to eq("Almond Croissant")

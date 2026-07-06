@@ -1,0 +1,20 @@
+<div class="form-grid nested-col-headers bake-lead-day-variant-grid">
+  <div class="form-span-8 nested-col-label">Client</div>
+  <div class="form-span-3 nested-col-label">Bake Lead Days <abbr title="required">*</abbr></div>
+  <div class="form-span-1"></div>
+</div>
+
+<div data-nested-form-target="rows">
+  <% sorted_bake_lead_day_variants = @product.bake_lead_day_variants.sort_by { |v| v.client_name } %>
+  <%= f.simple_fields_for :bake_lead_day_variants, sorted_bake_lead_day_variants do |v_form| %>
+    <%= render "bake_lead_day_variant_fields", v_form: v_form, clients: @clients %>
+  <% end %>
+</div>
+
+<template data-nested-form-target="template">
+  <%= f.fields_for :bake_lead_day_variants, BakeLeadDayVariant.new, child_index: "NEW_RECORD" do |v_form| %>
+    <%= render "bake_lead_day_variant_fields", v_form: v_form, clients: @clients, is_template: true %>
+  <% end %>
+</template>
+
+<button type="button" class="button small nested-add-btn" data-action="nested-form#add">+ Add Override</button>

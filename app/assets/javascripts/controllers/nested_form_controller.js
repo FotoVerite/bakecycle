@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { sharedOptions } from "./tom_select_controller"
 
 export default class extends Controller {
   static targets = ["rows", "template"]
@@ -49,9 +50,40 @@ export default class extends Controller {
     const selected = new Set(selects.map(s => s.value).filter(v => v !== ""))
 
     selects.forEach(select => {
-      select.querySelectorAll("option").forEach(opt => {
-        opt.disabled = opt.value !== "" && opt.value !== select.value && selected.has(opt.value)
-      })
+      if (select.tomselect) {
+        this.syncTomSelectOptions(select, selected)
+      } else {
+        select.querySelectorAll("option").forEach(opt => {
+          opt.disabled = opt.value !== "" && opt.value !== select.value && selected.has(opt.value)
+        })
+      }
     })
+  }
+
+  // tom-select owns its own option list once initialized (it doesn't read back from the
+  // native <select>'s <option> tags), so "already picked in another row" has to be
+  // enforced by adding/removing entries from that instance's own list instead of toggling
+  // .disabled on DOM nodes that no longer exist. The master list to add back from is the
+  // same shared options-source cache tom_select_controller reads from, keyed off the same
+  // data attribute -- so this stays in sync with whatever that select was seeded from
+  // without needing its own copy of the data.
+  syncTomSelectOptions(select, selectedElsewhere) {
+    const ts = select.tomselect
+    const sourceSelector = select.dataset.tomSelectOptionsSourceValue
+    if (!sourceSelector) return
+
+    const ownValue = String(select.value)
+    sharedOptions(sourceSelector).forEach(option => {
+      const value = String(option.value)
+      const isTakenElsewhere = value !== ownValue && selectedElsewhere.has(value)
+      const isPresent = Object.prototype.hasOwnProperty.call(ts.options, value)
+
+      if (isTakenElsewhere && isPresent) {
+        ts.removeOption(value)
+      } else if (!isTakenElsewhere && !isPresent) {
+        ts.addOption(option)
+      }
+    })
+    ts.refreshOptions(false)
   }
 }

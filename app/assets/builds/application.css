@@ -5230,6 +5230,35 @@ input[type=text] {
   padding: 8px 10px;
 }
 
+.nested-section-summary {
+  align-items: center;
+  color: #5a5a5a;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.85rem;
+  font-weight: 600;
+  gap: 6px;
+  list-style: none;
+  margin-bottom: 10px;
+  padding: 4px 0;
+}
+.nested-section-summary::-webkit-details-marker {
+  display: none;
+}
+.nested-section-summary::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 0.8rem;
+  transition: transform 0.16s ease;
+}
+.nested-section-summary:hover, .nested-section-summary:focus {
+  color: #555;
+}
+
+.nested-section-disclosure[open] > .nested-section-summary::before {
+  transform: rotate(90deg);
+}
+
 .nested-col-headers {
   border-bottom: 2px solid #e1e1e1;
   margin-bottom: 2px;
@@ -5278,6 +5307,23 @@ input[type=text] {
 .bake-lead-day-variant-grid select,
 .bake-lead-day-variant-grid input {
   height: 40px;
+}
+.price-variant-grid .ts-wrapper,
+.bake-lead-day-variant-grid .ts-wrapper {
+  display: flex;
+  height: 40px;
+  min-height: 40px;
+}
+.price-variant-grid .ts-wrapper.single .ts-control,
+.price-variant-grid .ts-control,
+.bake-lead-day-variant-grid .ts-wrapper.single .ts-control,
+.bake-lead-day-variant-grid .ts-control {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  height: 40px;
+  min-height: 40px;
+  width: 100%;
 }
 .price-variant-grid .nested-row-actions .button, .price-variant-grid .nested-row-actions .registration .registration-button label, .registration .registration-button .price-variant-grid .nested-row-actions label,
 .bake-lead-day-variant-grid .nested-row-actions .button,

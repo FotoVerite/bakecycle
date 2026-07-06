@@ -1,0 +1,21 @@
+<div class="form-grid nested-col-headers price-variant-grid">
+  <div class="form-span-7 nested-col-label">Client</div>
+  <div class="form-span-2 nested-col-label">Min. Quantity <abbr title="required">*</abbr></div>
+  <div class="form-span-2 nested-col-label">Price <abbr title="required">*</abbr></div>
+  <div class="form-span-1"></div>
+</div>
+
+<div data-nested-form-target="rows">
+  <% sorted_variants = @product.price_variants.sort_by { |pv| [pv.client_id.nil? ? 0 : 1, pv.persisted? ? 0 : 1, pv.client_name, pv.quantity || 0] } %>
+  <%= f.simple_fields_for :price_variants, sorted_variants do |pv_form| %>
+    <%= render 'price_variant_fields', pv_form: pv_form, clients: @clients %>
+  <% end %>
+</div>
+
+<template data-nested-form-target="template">
+  <%= f.fields_for :price_variants, PriceVariant.new, child_index: "NEW_RECORD" do |pv_form| %>
+    <%= render 'price_variant_fields', pv_form: pv_form, clients: @clients, is_template: true %>
+  <% end %>
+</template>
+
+<button type="button" class="button small nested-add-btn" data-action="nested-form#add">+ Add Price</button>

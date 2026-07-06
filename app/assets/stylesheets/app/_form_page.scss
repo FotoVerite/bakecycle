@@ -806,6 +806,43 @@
   padding: 8px 10px;
 }
 
+// Collapses a long nested-attribute list (price variants, bake lead day overrides) behind
+// a native <details>/<summary> toggle -- same arrow mechanism as .index-alert-panel
+// (app/assets/stylesheets/app/_index.scss), minus its alert coloring, since this is a
+// neutral show/hide rather than a warning callout.
+.nested-section-summary {
+  align-items: center;
+  color: $bc-scorpion;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.85rem;
+  font-weight: 600;
+  gap: 6px;
+  list-style: none;
+  margin-bottom: 10px;
+  padding: 4px 0;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::before {
+    content: "▸";
+    display: inline-block;
+    font-size: 0.8rem;
+    transition: transform 0.16s ease;
+  }
+
+  &:hover,
+  &:focus {
+    color: $bc-charcoal;
+  }
+}
+
+.nested-section-disclosure[open] > .nested-section-summary::before {
+  transform: rotate(90deg);
+}
+
 // Nested attribute rows (price variants, recipe items, etc.)
 .nested-col-headers {
   border-bottom: 2px solid $bc-border-grey;
@@ -858,6 +895,26 @@
   select,
   input {
     height: 40px;
+  }
+
+  // tom-select hides the native <select> and renders its own .ts-wrapper/.ts-control in
+  // its place, so the plain `select { height: 40px }` above no longer reaches the visible
+  // control -- without this it falls back to tom-select's own (taller) default height and
+  // throws the row out of alignment with the quantity/price inputs beside it.
+  .ts-wrapper {
+    display: flex;
+    height: 40px;
+    min-height: 40px;
+  }
+
+  .ts-wrapper.single .ts-control,
+  .ts-control {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    height: 40px;
+    min-height: 40px;
+    width: 100%;
   }
 
   .nested-row-actions .button {

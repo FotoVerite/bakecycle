@@ -183,8 +183,24 @@ class ProductsController < ApplicationController
     @product = scope.find(params[:id])
   end
 
+  # Price/bake-lead-day override selects only need active clients as choices for new
+  # overrides, but an existing override can point at a client who's since gone inactive --
+  # dropping that client from the options would leave the select unable to match its own
+  # value, silently rebinding the override to blank ("All Clients") on next save. So the
+  # list is active clients plus whichever (possibly inactive) clients this product's
+  # existing overrides already reference.
   def set_clients
-    @clients = ItemFinder.new(current_user).clients.order(name: :asc)
+    active_clients = ItemFinder.new(current_user).clients.active.order(name: :asc).to_a
+    @clients = @product ? active_clients_plus_referenced(active_clients) : active_clients
+  end
+
+  def active_clients_plus_referenced(active_clients)
+    referenced_ids = @product.price_variants.where.not(client_id: nil).pluck(:client_id) +
+      @product.bake_lead_day_variants.pluck(:client_id)
+    missing_ids = referenced_ids.uniq - active_clients.map(&:id)
+    return active_clients if missing_ids.empty?
+
+    (active_clients + ItemFinder.new(current_user).clients.where(id: missing_ids)).sort_by(&:name)
   end
 
   def ensure_all_clients_price_variant

@@ -3,9 +3,14 @@
   <div class="form-grid nested-row-grid bake-lead-day-variant-grid">
     <div class="form-field form-span-8">
       <%= v_form.select :client_id,
-            options_for_select(clients.map { |c| [c.name, c.id] }, v_form.object.client_id),
+            options_for_select(v_form.object.client ? [[v_form.object.client.name, v_form.object.client_id]] : [], v_form.object.client_id),
             { include_blank: "Select Client" },
-            class: "nested-field" %>
+            class: "nested-field",
+            data: {
+              controller: "tom-select",
+              tom_select_options_source_value: "#product-clients-options",
+              action: "change->nested-form#syncClientSelects tom-select:connect->nested-form#syncClientSelects"
+            } %>
     </div>
     <div class="form-field form-span-3">
       <%= v_form.number_field :bake_lead_days, placeholder: "0", min: 0, step: 1, inputmode: "numeric", required: true, class: "nested-field" %>
