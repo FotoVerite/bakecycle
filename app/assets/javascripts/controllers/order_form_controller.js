@@ -96,7 +96,6 @@ export default class extends Controller {
         const d = new Date(startDate + "T00:00:00")
         const shouldDisable = d.getUTCDay() !== dayNum
         input.disabled = shouldDisable
-        if (shouldDisable) input.value = "0"
       } else {
         input.disabled = false
       }

@@ -303,7 +303,7 @@ describe("updateDayInputs", () => {
     expect(fri.disabled).toBe(true)   // Friday, not Tuesday
   })
 
-  it("zeroes out the value of disabled day inputs", async () => {
+  it("preserves the displayed value of disabled day inputs", async () => {
     const ctrl = await mount({
       orderType: "temporary",
       startDate: "2026-06-09",
@@ -312,7 +312,8 @@ describe("updateDayInputs", () => {
     ctrl.updateDayInputs()
 
     const input = document.querySelector("[data-order-item-day='0']")
-    expect(input.value).toBe("0")
+    expect(input.disabled).toBe(true)
+    expect(input.value).toBe("3")
   })
 
   it("enables all day inputs for standing orders", async () => {
