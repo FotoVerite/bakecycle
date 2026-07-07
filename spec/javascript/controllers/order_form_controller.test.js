@@ -327,6 +327,25 @@ describe("updateDayInputs", () => {
       expect(input.disabled).toBe(false)
     })
   })
+
+  it("locks newly added row day inputs after a temporary order date is selected", async () => {
+    const ctrl = await mount({
+      orderType: "temporary",
+      startDate: "2026-06-09",
+      dayInputs: [{ day: 0 }, { day: 2 }, { day: 5 }],
+    })
+
+    document.querySelectorAll("[data-order-item-day]").forEach(input => {
+      input.disabled = false
+    })
+
+    ctrl.rowChanged()
+
+    const [sun, tue, fri] = document.querySelectorAll("[data-order-item-day]")
+    expect(sun.disabled).toBe(true)
+    expect(tue.disabled).toBe(false)
+    expect(fri.disabled).toBe(true)
+  })
 })
 
 // ─── validate (DOM side-effects) ─────────────────────────────────────────────

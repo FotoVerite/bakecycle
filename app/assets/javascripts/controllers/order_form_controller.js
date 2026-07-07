@@ -29,12 +29,14 @@ export default class extends Controller {
 
   productChanged() {
     this.updateLeadDays()
+    this.updateDayInputs()
     this.syncDedup()
     this.validate()
   }
 
   rowChanged() {
     this.updateLeadDays()
+    this.updateDayInputs()
     this.syncDedup()
     this.validate()
   }

@@ -1120,6 +1120,14 @@
     text-align: right;
   }
 
+  input[data-order-item-day]:disabled {
+    background: $bc-wild-sand;
+    border-color: $bc-border-grey;
+    color: $bc-silver-chalice;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+
   select {
     height: 40px;
   }
