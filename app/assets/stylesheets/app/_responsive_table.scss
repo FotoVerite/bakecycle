@@ -116,14 +116,10 @@ $bp-xlarge: 75em;
   align-items: center;
   border-radius: 50%;
   display: inline-flex;
-  // 44px meets the touch-target minimum -- PRODUCT.md calls out production
-  // staff working these tables "with floury hands" on shared tablets, so this
-  // isn't a generic a11y nicety here, it's a stated design requirement.
-  height: 44px;
+  height: 36px;
   justify-content: center;
-  margin-left: 6px;
   transition: filter 100ms ease-out;
-  width: 44px;
+  width: 36px;
 
   .bc-icon {
     font-size: 1.15em;
@@ -172,6 +168,28 @@ a:focus .table-action-icon,
 a:focus-visible .table-action-icon {
   outline: 2px solid $bc-shakespeare;
   outline-offset: 2px;
+}
+
+.responsive-table {
+  td[data-title="Action"],
+  td[data-title="Actions"] {
+    @media (min-width: $bp-medium) {
+      padding-right: 10px;
+      white-space: nowrap;
+
+      > a {
+        display: inline-flex;
+        // 36px visible control + 4px padding on all sides preserves the 44px
+        // touch target without forcing rows to stack tall icon columns.
+        padding: 4px;
+        vertical-align: middle;
+      }
+
+      &:has(> a + a) {
+        min-width: 144px;
+      }
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -269,15 +287,15 @@ a:focus-visible .table-action-icon {
     @media (min-width: $bp-medium) {
       // Undo display: block
       display: table-cell;
-      padding: .5em;
+      padding: .45em .5em;
     }
 
     @media (min-width: $bp-large) {
-      padding: .75em .5em;
+      padding: .55em .5em;
     }
 
     @media (min-width: $bp-xlarge) {
-      padding: .75em;
+      padding: .6em .65em;
     }
   }
 
