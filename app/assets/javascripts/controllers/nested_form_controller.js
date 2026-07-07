@@ -35,11 +35,7 @@ export default class extends Controller {
     const row = event.currentTarget.closest("[data-nested-row]")
     const destroyInput = row.querySelector("[data-destroy-field]")
     if (destroyInput) {
-      destroyInput.value = "1"
-      row.classList.add("nested-row--destroyed")
-      row.querySelectorAll(".nested-field").forEach(el => { el.disabled = true })
-      row.querySelector(".nested-btn-remove").hidden = true
-      row.querySelector(".nested-btn-restore").hidden = false
+      this.markRowDestroyed(row, destroyInput)
     } else {
       row.remove()
     }
@@ -49,13 +45,24 @@ export default class extends Controller {
   restore(event) {
     event.preventDefault()
     const row = event.currentTarget.closest("[data-nested-row]")
-    const destroyInput = row.querySelector("[data-destroy-field]")
+    this.markRowRestored(row, row.querySelector("[data-destroy-field]"))
+    this.syncClientSelects()
+  }
+
+  markRowDestroyed(row, destroyInput) {
+    destroyInput.value = "1"
+    row.classList.add("nested-row--destroyed")
+    row.querySelectorAll(".nested-field").forEach(el => { el.disabled = true })
+    row.querySelector(".nested-btn-remove").hidden = true
+    row.querySelector(".nested-btn-restore").hidden = false
+  }
+
+  markRowRestored(row, destroyInput) {
     destroyInput.value = ""
     row.classList.remove("nested-row--destroyed")
     row.querySelectorAll(".nested-field").forEach(el => { el.disabled = false })
     row.querySelector(".nested-btn-remove").hidden = false
     row.querySelector(".nested-btn-restore").hidden = true
-    this.syncClientSelects()
   }
 
   // Each row's tom-select dispatches this on connect. For initial page load,
@@ -80,9 +87,7 @@ export default class extends Controller {
   }
 
   syncClientSelects() {
-    const activeRows = [...this.rowsTarget.querySelectorAll("[data-nested-row]")]
-      .filter(row => !row.classList.contains("nested-row--destroyed"))
-    const selects = activeRows.map(row => row.querySelector("select[name*='[client_id]']")).filter(Boolean)
+    const selects = this.getActiveSelects()
 
     selects.forEach((select, index) => {
       // Collect values from all OTHER rows (not this one)
@@ -101,6 +106,12 @@ export default class extends Controller {
         })
       }
     })
+  }
+
+  getActiveSelects() {
+    const activeRows = [...this.rowsTarget.querySelectorAll("[data-nested-row]")]
+      .filter(row => !row.classList.contains("nested-row--destroyed"))
+    return activeRows.map(row => row.querySelector("select[name*='[client_id]']")).filter(Boolean)
   }
 
   // tom-select owns its own option list once initialized (it doesn't read back from the
