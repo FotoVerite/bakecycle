@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_021500) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -122,6 +122,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_021500) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "wholesale_manager"
     t.index ["active"], name: "index_clients_on_active"
+    t.index ["bakery_id", "active", "engagement_status", "name"], name: "index_clients_on_bakery_active_status_name"
     t.index ["legacy_id", "bakery_id"], name: "index_clients_on_legacy_id_and_bakery_id", unique: true
     t.index ["name", "bakery_id"], name: "index_clients_on_name_and_bakery_id", unique: true
   end

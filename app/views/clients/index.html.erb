@@ -13,99 +13,64 @@
   </div>
 
   <div data-controller="filter-table">
-    <div class="index-toolbar bakecycle-form">
+    <%= form_with url: clients_path,
+                  method: :get,
+                  class: "index-toolbar bakecycle-form",
+                  data: {
+                    filter_table_target: "form",
+                    turbo_frame: "clients"
+                  } do %>
       <div class="index-filter index-filter-primary">
         <div class="input string optional">
           <label class="string optional">Client name</label>
           <input class="string optional"
                  placeholder="Search clients"
                  type="text"
+                 name="filter[name]"
+                 value="<%= @client_filter[:name] %>"
                  data-filter-table-target="nameInput"
-                 data-action="input->filter-table#filter keydown->filter-table#navigateIfOne" />
+                 data-action="input->filter-table#scheduleSubmit keydown->filter-table#navigateIfOne" />
         </div>
       </div>
       <div class="index-filter index-filter-medium">
         <div class="input string optional">
           <label class="string optional">Status</label>
-          <select data-filter-table-target="statusSelect"
+          <select name="filter[status]"
+                  data-filter-table-target="statusSelect"
                   data-action="change->filter-table#filter">
-            <option value="current" selected>Current</option>
-            <option value="lapsed">Lapsed</option>
-            <option value="prospective">Prospective</option>
-            <option value="any">Any</option>
+            <%= options_for_select([
+                  ["Current", "current"],
+                  ["Lapsed", "lapsed"],
+                  ["Prospective", "prospective"],
+                  ["Any", "any"]
+                ], @client_filter[:status]) %>
           </select>
         </div>
       </div>
       <div class="index-filter index-filter-small">
         <div class="input string optional">
           <label class="string optional">Active</label>
-          <select data-filter-table-target="activeSelect"
+          <select name="filter[active]"
+                  data-filter-table-target="activeSelect"
                   data-action="change->filter-table#filter">
-            <option value="true" selected>Yes</option>
-            <option value="false">No</option>
-            <option value="any">Any</option>
+            <%= options_for_select([
+                  ["Yes", "true"],
+                  ["No", "false"],
+                  ["Any", "any"]
+                ], @client_filter[:active]) %>
           </select>
         </div>
       </div>
       <div class="index-toolbar-actions">
         <a class="button small secondary"
            target="_blank"
-           href="<%= print_client_list_clients_path(type: 'true') %>"
+           href="<%= print_client_list_clients_path(type: @client_filter[:active]) %>"
            data-filter-table-target="exportLink">Export active clients</a>
       </div>
-    </div>
+    <% end %>
 
-    <div class="index-filter-feedback">
-      <div class="index-filter-results" role="status" aria-live="polite" aria-atomic="true">
-        <strong data-filter-table-target="resultCount"><%= @clients.size %> clients</strong>
-      </div>
-      <button type="button"
-              class="index-filter-reset"
-              data-filter-table-target="resetButton"
-              data-action="filter-table#reset">
-        <%= icon("rotate-ccw") %>
-        Reset filters
-      </button>
-    </div>
-
-    <div class="index-empty-state" data-filter-table-target="emptyState" hidden>
-      <%= icon("search") %>
-      <div>
-        <h2>No clients match these filters</h2>
-        <p>Try a different name, status, or active setting, or reset the filters above.</p>
-      </div>
-    </div>
-
-    <div class="index-table" data-filter-table-target="table">
-      <table class="responsive-table clients-index">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Active</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @clients.each do |client| %>
-            <tr class="js-clickable-row"
-                data-filter-table-target="row"
-                data-name="<%= client.name %>"
-                data-status="<%= client.engagement_status %>"
-                data-active="<%= client.active %>"
-                data-href="<%= client_path(client) %>">
-              <th scope="row"><a href="<%= client_path(client) %>"><%= client.name %></a></th>
-              <td data-title="Status"><%= client.engagement_status.capitalize %></td>
-              <td data-title="Active"><%= client.active? ? 'Yes' : 'No' %></td>
-              <td data-title="Actions">
-                <%= action_icon edit_client_path(client), icon_name: "pencil", label: "Edit Client", variant: "edit" %>
-                <%= action_icon client_path(client), icon_name: "eye", label: "View Client", variant: "document" %>
-                <%= action_icon new_order_path(client_id: client.id), icon_name: "file-plus", label: "Add Order For This Client", variant: "create" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <%= turbo_frame_tag "clients" do %>
+      <%= render partial: "clients/client_table", locals: { clients: @clients, client_filter: @client_filter } %>
+    <% end %>
   </div>
 </div>

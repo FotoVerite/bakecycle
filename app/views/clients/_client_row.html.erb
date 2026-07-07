@@ -1,0 +1,20 @@
+<tr class="js-clickable-row"
+    tabindex="0"
+    role="link"
+    data-filter-table-target="row"
+    data-name="<%= client.name %>"
+    data-status="<%= client.engagement_status %>"
+    data-active="<%= client.active %>"
+    data-href="<%= client_path(client) %>">
+  <th scope="row"><%= link_to client.name, client_path(client), data: { turbo_frame: "_top" } %></th>
+  <td data-title="Status"><%= client.engagement_status.capitalize %></td>
+  <td data-title="Active"><%= client.active? ? "Yes" : "No" %></td>
+  <td data-title="Actions">
+    <%= action_icon edit_client_path(client), icon_name: "pencil", label: "Edit Client", variant: "edit",
+          link_data: { turbo_frame: "_top" } %>
+    <%= action_icon client_path(client), icon_name: "eye", label: "View Client", variant: "document",
+          link_data: { turbo_frame: "_top" } %>
+    <%= action_icon new_order_path(client_id: client.id), icon_name: "file-plus", label: "Add Order For This Client", variant: "create",
+          link_data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

@@ -64,9 +64,46 @@ RSpec.describe "Clients", type: :request do
     it "lists clients" do
       get clients_path
       expect(response).to be_successful
+      expect(response.body).to include('turbo-frame id="clients"')
       expect(response.body).to include("Find clients by name, status, or active account state.")
       expect(response.body).to include("No clients match these filters")
       expect(response.body).to include("Reset filters")
+    end
+
+    it "defaults to active current clients" do
+      current_client = create(:client, bakery: bakery, name: "Active Current Cafe", active: true, engagement_status: "current")
+      inactive_client = create(:client, bakery: bakery, name: "Inactive Current Cafe", active: false, engagement_status: "current")
+      lapsed_client = create(:client, bakery: bakery, name: "Active Lapsed Cafe", active: true, engagement_status: "lapsed")
+
+      get clients_path
+
+      expect(response.body).to include(current_client.name)
+      expect(response.body).not_to include(inactive_client.name)
+      expect(response.body).not_to include(lapsed_client.name)
+    end
+
+    it "filters clients on the server" do
+      matching_client = create(:client, bakery: bakery, name: "Broad Street Market", active: false, engagement_status: "lapsed")
+      create(:client, bakery: bakery, name: "Broad Street Current", active: true, engagement_status: "current")
+      create(:client, bakery: bakery, name: "Another Lapsed Client", active: false, engagement_status: "lapsed")
+
+      get clients_path, params: { filter: { name: "brd", status: "lapsed", active: "false" } }
+
+      expect(response.body).to include(matching_client.name)
+      expect(response.body).not_to include("Broad Street Current")
+      expect(response.body).not_to include("Another Lapsed Client")
+    end
+
+    it "paginates the rendered client rows" do
+      original_per_page = Client.per_page
+      Client.per_page = 2
+      create_list(:client, 3, bakery: bakery, active: true, engagement_status: "current")
+
+      get clients_path
+
+      expect(response.body.scan(/data-filter-table-target="row"/).count).to eq(2)
+    ensure
+      Client.per_page = original_per_page
     end
 
     it "shows a client" do

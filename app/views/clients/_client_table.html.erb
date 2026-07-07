@@ -1,0 +1,40 @@
+<% default_filter = client_filter[:name].blank? && client_filter[:status] == "current" && client_filter[:active] == "true" %>
+
+<div class="index-filter-feedback">
+  <div class="index-filter-results" role="status" aria-live="polite" aria-atomic="true">
+    <strong data-filter-table-target="resultCount"><%= pluralize(number_with_delimiter(clients.total_entries), "client") %></strong>
+  </div>
+  <button type="button"
+          class="index-filter-reset"
+          data-filter-table-target="resetButton"
+          data-action="filter-table#reset"
+          <%= "disabled" if default_filter %>>
+    <%= icon("rotate-ccw") %>
+    Reset filters
+  </button>
+</div>
+
+<div class="index-empty-state" data-filter-table-target="emptyState" <%= "hidden" if clients.any? %>>
+  <%= icon("search") %>
+  <div>
+    <h2>No clients match these filters</h2>
+    <p>Try a different name, status, or active setting, or reset the filters above.</p>
+  </div>
+</div>
+
+<div class="index-table" data-filter-table-target="table" <%= "hidden" if clients.empty? %>>
+  <table class="responsive-table clients-index">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">Active</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "clients/client_row", collection: clients, as: :client %>
+    </tbody>
+  </table>
+  <%= will_paginate clients, params: { filter: client_filter } %>
+</div>

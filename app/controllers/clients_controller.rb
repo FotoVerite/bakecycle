@@ -16,8 +16,10 @@ class ClientsController < ApplicationController
 
   def index
     authorize Client
-    @clients = policy_scope(Client)
+    @client_filter = client_filter
+    @clients = filtered_clients
       .order_by_name
+      .paginate(page: params[:page])
   end
 
   def new
@@ -131,6 +133,36 @@ class ClientsController < ApplicationController
 
   def end_date
     parsed_date_param(:end_date, fallback: Time.zone.today + 1.day)
+  end
+
+  def filtered_clients
+    scope = policy_scope(Client)
+    scope = scope.where(active: @client_filter[:active] == "true") unless @client_filter[:active] == "any"
+    scope = scope.where(engagement_status: @client_filter[:status]) unless @client_filter[:status] == "any"
+    scope = scope.where(client_name_search_sql, client_name_search_pattern) if @client_filter[:name].present?
+    scope
+  end
+
+  def client_filter
+    permitted = params.fetch(:filter, ActionController::Parameters.new).permit(:name, :status, :active)
+    {
+      name: permitted[:name].to_s.strip,
+      status: client_filter_value(permitted[:status], Client.engagement_statuses.keys, "current"),
+      active: client_filter_value(permitted[:active], %w[true false any], "true")
+    }
+  end
+
+  def client_filter_value(value, allowed_values, default)
+    allowed_values.include?(value) ? value : default
+  end
+
+  def client_name_search_sql
+    "regexp_replace(lower(clients.name), '\\s+', '', 'g') LIKE ?"
+  end
+
+  def client_name_search_pattern
+    chars = ActiveRecord::Base.sanitize_sql_like(@client_filter[:name].downcase.delete(" ")).chars
+    "%#{chars.join('%')}%"
   end
 
   def set_client
