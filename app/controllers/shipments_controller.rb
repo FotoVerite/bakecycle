@@ -78,11 +78,12 @@ class ShipmentsController < ApplicationController
 
   def destroy
     authorize @shipment
+    client = @shipment.client
     @shipment.destroy!
     respond_to do |format|
       format.html do
         flash[:notice] = "You have deleted the invoice for #{@shipment.client_name}."
-        redirect_to shipments_path, status: :see_other
+        redirect_to client_path(client), status: :see_other
       end
       format.js
     end

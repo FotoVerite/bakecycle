@@ -55,7 +55,7 @@ RSpec.describe "Shipments", type: :system do
       accept_confirm { click_link "Delete" }
 
       expect(page).to have_content("You have deleted the invoice for #{client.name}")
-      expect(page).to have_current_path(shipments_path)
+      expect(page).to have_current_path(client_path(client))
     end
   end
 end

@@ -153,6 +153,13 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       expect(response).to be_successful
     end
 
+    it "links back to the invoice client on the edit page" do
+      get edit_shipment_path(shipment)
+
+      expect(response).to be_successful
+      expect(response.body).to include("href=\"#{client_path(client)}\"")
+    end
+
     it "updates a shipment" do
       patch shipment_path(shipment), params: { shipment: { note: "leave at door" } }
       expect(shipment.reload.note).to eq("leave at door")

@@ -11,7 +11,7 @@
     </div>
 
     <div class="form-header-actions order-action-bar">
-      <%= link_to orders_path, class: "button small secondary" do %>
+      <%= link_to client_path(order.client), class: "button small secondary" do %>
         <%= icon("arrow-left") %>
         <span>Back</span>
       <% end %>

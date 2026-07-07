@@ -91,9 +91,10 @@ class OrdersController < ApplicationController
 
   def destroy
     authorize @order
+    client = @order.client
     @order.destroy!
     flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client_name}."
-    redirect_to orders_path, status: :see_other
+    redirect_to client_path(client), status: :see_other
   end
 
   def future_invoices

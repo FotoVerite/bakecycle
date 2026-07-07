@@ -39,9 +39,12 @@ RSpec.describe "UJS delete links", type: :request do
   describe "shipment destroy (HTML)" do
     let(:shipment) { create(:shipment, bakery: bakery) }
 
-    it "deletes the shipment and redirects to invoices list" do
+    it "deletes the shipment and redirects to the client page" do
+      client = shipment.client
+
       delete "/invoices/#{shipment.id}"
-      expect(response).to redirect_to(shipments_path)
+
+      expect(response).to redirect_to(client_path(client))
       expect(Shipment.find_by(id: shipment.id)).to be_nil
     end
   end
@@ -104,9 +107,12 @@ RSpec.describe "UJS delete links", type: :request do
   describe "order destroy" do
     let(:order) { create(:order, bakery: bakery) }
 
-    it "deletes the order and redirects to orders list" do
+    it "deletes the order and redirects to the client page" do
+      client = order.client
+
       delete order_path(order)
-      expect(response).to redirect_to(orders_path)
+
+      expect(response).to redirect_to(client_path(client))
       expect(Order.find_by(id: order.id)).to be_nil
     end
   end

@@ -81,6 +81,13 @@ RSpec.describe "Orders", type: :request do
       expect(response).to be_successful
     end
 
+    it "links back to the order client on the edit page" do
+      get edit_order_path(order)
+
+      expect(response).to be_successful
+      expect(response.body).to include("href=\"#{client_path(client)}\"")
+    end
+
     it "updates an order note" do
       patch order_path(order), params: { order: { note: "Ring the bell" } }
       expect(order.reload.note).to eq("Ring the bell")
