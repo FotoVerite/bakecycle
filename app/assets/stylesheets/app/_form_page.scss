@@ -892,9 +892,15 @@
 
 .price-variant-grid,
 .bake-lead-day-variant-grid {
+  // margin: 0 kills Foundation's default 1rem bottom margin on inputs/buttons --
+  // with .nested-row-grid's align-items: center, that margin makes each input's
+  // outer box taller than the 40px tom-select wrapper beside it, floating the
+  // visible input ~8px above the select (same recipe as .recipe-item-grid).
   select,
   input {
+    box-sizing: border-box;
     height: 40px;
+    margin: 0;
   }
 
   // tom-select hides the native <select> and renders its own .ts-wrapper/.ts-control in
@@ -902,6 +908,7 @@
   // control -- without this it falls back to tom-select's own (taller) default height and
   // throws the row out of alignment with the quantity/price inputs beside it.
   .ts-wrapper {
+    align-items: center !important;
     display: flex;
     height: 40px;
     min-height: 40px;
@@ -909,7 +916,7 @@
 
   .ts-wrapper.single .ts-control,
   .ts-control {
-    align-items: center;
+    align-items: center !important;
     box-sizing: border-box;
     display: flex;
     height: 40px;
@@ -920,6 +927,7 @@
   .nested-row-actions .button {
     align-items: center;
     height: 40px;
+    margin: 0;
     padding: 0 10px;
   }
 }
@@ -1314,6 +1322,7 @@
   }
 
   .ts-wrapper {
+    align-items: center !important;
     display: flex;
     height: 40px;
     min-height: 40px;
@@ -1321,7 +1330,7 @@
 
   .ts-wrapper.single .ts-control,
   .ts-control {
-    align-items: center;
+    align-items: center !important;
     box-sizing: border-box;
     display: flex;
     height: 40px;

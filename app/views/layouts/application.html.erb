@@ -10,6 +10,12 @@
     <%= yield :head %>
     <%= csrf_meta_tags %>
     <%= action_cable_meta_tag %>
+    <% if otel_frontend_enabled? %>
+      <meta name="otel-environment" content="<%= Rails.env %>" />
+      <% if current_bakery %>
+        <meta name="otel-bakery-id" content="<%= current_bakery.id %>" />
+      <% end %>
+    <% end %>
   </head>
   <body ng-app="bakecycle" data-controller="export-trigger" data-action="click->export-trigger#click submit->export-trigger#submit">
     <div class="row full-width wrapper">

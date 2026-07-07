@@ -67,4 +67,11 @@ module ApplicationHelper
   def loading_indicator
     render "loading_indicator"
   end
+
+  # Gates browser RUM (app/assets/javascripts/otel_web.js) on the same env vars
+  # the backend's OpenTelemetry SDK uses, so local dev without OTEL configured
+  # doesn't spend every pageload posting spans to a proxy with nowhere to send them.
+  def otel_frontend_enabled?
+    ENV["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"].present? || ENV["OTEL_EXPORTER_OTLP_ENDPOINT"].present?
+  end
 end

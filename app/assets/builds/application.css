@@ -5306,10 +5306,13 @@ input[type=text] {
 .price-variant-grid input,
 .bake-lead-day-variant-grid select,
 .bake-lead-day-variant-grid input {
+  box-sizing: border-box;
   height: 40px;
+  margin: 0;
 }
 .price-variant-grid .ts-wrapper,
 .bake-lead-day-variant-grid .ts-wrapper {
+  align-items: center !important;
   display: flex;
   height: 40px;
   min-height: 40px;
@@ -5318,7 +5321,7 @@ input[type=text] {
 .price-variant-grid .ts-control,
 .bake-lead-day-variant-grid .ts-wrapper.single .ts-control,
 .bake-lead-day-variant-grid .ts-control {
-  align-items: center;
+  align-items: center !important;
   box-sizing: border-box;
   display: flex;
   height: 40px;
@@ -5331,6 +5334,7 @@ input[type=text] {
 .registration .registration-button .bake-lead-day-variant-grid .nested-row-actions label {
   align-items: center;
   height: 40px;
+  margin: 0;
   padding: 0 10px;
 }
 
@@ -5687,13 +5691,14 @@ input[type=text] {
   width: 100%;
 }
 .recipe-item-grid .ts-wrapper {
+  align-items: center !important;
   display: flex;
   height: 40px;
   min-height: 40px;
 }
 .recipe-item-grid .ts-wrapper.single .ts-control,
 .recipe-item-grid .ts-control {
-  align-items: center;
+  align-items: center !important;
   box-sizing: border-box;
   display: flex;
   height: 40px;

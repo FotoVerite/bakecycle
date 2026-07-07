@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
 
+  post "/otel/v1/traces", to: "otel_traces#create"
+
   root "landing_pages#index"
   devise_for :users, skip: [:invitations]
   devise_scope :user do

@@ -165,9 +165,13 @@ Style/OptionalBooleanParameter:
   Enabled: false
 
 # api/v1 controllers inherit from ApiController, not ApplicationController.
+# otel_traces_controller.rb deliberately skips ApplicationController too --
+# it's an unauthenticated telemetry beacon with no Devise session, Pundit
+# policy, or CSRF token to check.
 Rails/ApplicationController:
   Exclude:
     - "app/controllers/api/**/*"
+    - "app/controllers/otel_traces_controller.rb"
 
 # standing_orders is a scoped alias for orders; dependents handled by orders.
 Rails/HasManyOrHasOneDependent:

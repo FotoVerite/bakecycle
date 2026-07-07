@@ -6,10 +6,12 @@
     <legend>Product Information</legend>
 
     <div class="form-grid">
-      <div class="form-field form-span-12">
-        <label class="form-check">
+      <div class="form-field form-span-12 form-check-list-inline">
+        <label class="form-check form-switch-card">
           <%= f.input_field :inactive, as: :boolean, input_html: { id: 'inactive' } %>
-          <span>Inactive?</span>
+          <span>
+            <strong>Inactive?</strong>
+          </span>
         </label>
       </div>
 
@@ -66,18 +68,24 @@
         <%= f.input :inclusion_id, collection: product.inclusions, label_method: :name, value_method: :id,include_blank: 'Select One', as: :select %>
       </div>
 
-      <div class="form-field form-span-12 form-check-list">
-        <label class="form-check">
+      <div class="form-field form-span-12 form-check-list-inline">
+        <label class="form-check form-switch-card">
           <%= f.input_field :batch_recipe, as: :boolean, input_html: { id: 'batch_recipe' } %>
-          <span>Include Product on batch reports?</span>
+          <span>
+            <strong>Include Product on batch reports?</strong>
+          </span>
         </label>
-        <label class="form-check">
+        <label class="form-check form-switch-card">
           <%= f.input_field :public, as: :boolean, input_html: { id: 'public' } %>
-          <span>Display on public site</span>
+          <span>
+            <strong>Display on public site</strong>
+          </span>
         </label>
-        <label class="form-check">
+        <label class="form-check form-switch-card">
           <%= f.input_field :on_pull_list, as: :boolean, input_html: { id: 'on_pull_list' } %>
-          <span>On pull/prep list</span>
+          <span>
+            <strong>On pull/prep list</strong>
+          </span>
         </label>
       </div>
     </div>

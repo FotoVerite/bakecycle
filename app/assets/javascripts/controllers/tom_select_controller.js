@@ -54,7 +54,13 @@ export default class extends Controller {
     // with the full unfiltered list instead of having already-picked-elsewhere values
     // excluded. Announcing connect lets nested-form (or anything else that cares) re-sync
     // once this instance actually exists, via a plain data-action, no direct coupling.
-    this.dispatch("connect", { bubbles: true })
+    //
+    // Deferred a microtask because for dynamically inserted rows this connect() runs
+    // inside the same mutation-observer pass that hasn't yet reached the ancestor
+    // controller's action bindings for the new row -- dispatching synchronously here
+    // means no listener exists yet and the event is silently lost, leaving the new row
+    // unfiltered. One microtask later every observer in that pass has finished.
+    queueMicrotask(() => this.dispatch("connect", { bubbles: true }))
   }
 
   disconnect() {
