@@ -6,67 +6,83 @@ describe BakeListData do
   let(:bakery) { create(:bakery) }
   let(:bake_date) { Date.new(2026, 6, 3) } # a Wednesday
 
-  it "splits a retail client's item into the same-day section" do
-    retail_client = create(:client, bakery: bakery, bake_channel: "retail")
+  it "puts 0 bake lead day items on the retail bake" do
+    client = create(:client, bakery: bakery, name: "Smith")
     croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: retail_client, start_date: bake_date, order_item_count: 0)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 40)
 
     data = described_class.new(bakery, bake_date)
 
-    expect(data.retail_items).to eq([{ product: croissant, quantity: 40, trays: nil }])
+    expect(data.retail_items).to contain_exactly(
+      hash_including(product: croissant, quantity: 40, trays: nil, lead_days: 0, client_quantities: { client => 40 })
+    )
     expect(data.wholesale_items).to be_empty
   end
 
-  it "splits a wholesale client's item into the day-before section" do
-    wholesale_client = create(:client, bakery: bakery, bake_channel: "wholesale")
+  it "puts 1 bake lead day items on the wholesale bake" do
+    client = create(:client, bakery: bakery, name: "Wholesale Account")
     baguette = create(:product, bakery: bakery, name: "Baguette", bake_lead_days: 1)
-    order = create(:order, bakery: bakery, client: wholesale_client, start_date: bake_date + 1.day,
-      order_item_count: 0)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date + 1.day, order_item_count: 0)
     create(:order_item, bakery: bakery, order: order, product: baguette, daily_item_count: 0, thursday: 25)
 
     data = described_class.new(bakery, bake_date)
 
-    expect(data.wholesale_items).to eq([{ product: baguette, quantity: 25, trays: nil }])
+    expect(data.wholesale_items).to contain_exactly(
+      hash_including(product: baguette, quantity: 25, trays: nil, lead_days: 1, client_quantities: { client => 25 })
+    )
     expect(data.retail_items).to be_empty
   end
 
-  it "resolves the same product onto both sheets depending on the order's client (the Baguette case)" do
+  it "uses per-client bake lead day overrides to place the same product on different bakes" do
     baguette = create(:product, bakery: bakery, name: "Baguette", bake_lead_days: 1)
-    retail_client = create(:client, bakery: bakery, bake_channel: "retail")
-    wholesale_client = create(:client, bakery: bakery, bake_channel: "wholesale")
-    create(:bake_lead_day_variant, product: baguette, client: retail_client, bake_lead_days: 0)
+    smith = create(:client, bakery: bakery, name: "Smith")
+    restaurant = create(:client, bakery: bakery, name: "Restaurant")
+    create(:bake_lead_day_variant, product: baguette, client: smith, bake_lead_days: 0)
 
-    retail_order = create(:order, bakery: bakery, client: retail_client, start_date: bake_date, order_item_count: 0)
+    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: retail_order, product: baguette, daily_item_count: 0, wednesday: 10)
 
-    wholesale_order = create(:order, bakery: bakery, client: wholesale_client, start_date: bake_date + 1.day,
-      order_item_count: 0)
+    wholesale_order = create(
+      :order,
+      bakery: bakery,
+      client: restaurant,
+      start_date: bake_date + 1.day,
+      order_item_count: 0
+    )
     create(:order_item, bakery: bakery, order: wholesale_order, product: baguette, daily_item_count: 0, thursday: 30)
 
     data = described_class.new(bakery, bake_date)
 
-    expect(data.retail_items).to eq([{ product: baguette, quantity: 10, trays: nil }])
-    expect(data.wholesale_items).to eq([{ product: baguette, quantity: 30, trays: nil }])
+    expect(data.retail_items).to contain_exactly(
+      hash_including(product: baguette, quantity: 10, lead_days: 0, client_quantities: { smith => 10 })
+    )
+    expect(data.wholesale_items).to contain_exactly(
+      hash_including(product: baguette, quantity: 30, lead_days: 1, client_quantities: { restaurant => 30 })
+    )
   end
 
-  it "does not assume wholesale means exactly 1 lead day (channel and lead time are independent)" do
-    wholesale_client = create(:client, bakery: bakery, bake_channel: "wholesale")
-    croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 2)
-    order = create(:order, bakery: bakery, client: wholesale_client, start_date: bake_date + 2.days,
-      order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, friday: 18)
-
-    data = described_class.new(bakery, bake_date)
-
-    expect(data.wholesale_items).to eq([{ product: croissant, quantity: 18, trays: nil }])
-  end
-
-  it "excludes items from clients with no retail/wholesale bake_channel classification" do
-    unclassified_client = create(:client, bakery: bakery, bake_channel: "not_applicable")
+  it "aggregates multiple clients for the same retail bake product" do
+    smith = create(:client, bakery: bakery, name: "Smith")
+    franklin = create(:client, bakery: bakery, name: "Franklin")
     croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: unclassified_client, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 40)
+
+    smith_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: smith_order, product: croissant, daily_item_count: 0, wednesday: 12)
+    franklin_order = create(:order, bakery: bakery, client: franklin, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: franklin_order, product: croissant, daily_item_count: 0, wednesday: 8)
+
+    row = described_class.new(bakery, bake_date).retail_items.first
+
+    expect(row).to include(product: croissant, quantity: 20)
+    expect(row[:client_quantities]).to eq(smith => 12, franklin => 8)
+  end
+
+  it "omits zero-quantity bake rows" do
+    client = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0)
 
     data = described_class.new(bakery, bake_date)
 
@@ -74,11 +90,15 @@ describe BakeListData do
     expect(data.wholesale_items).to be_empty
   end
 
-  it "excludes pull/prep items (bake_lead_days nil) from retail and wholesale" do
-    retail_client = create(:client, bakery: bakery, bake_channel: "retail")
-    frozen_dough = create(:product, bakery: bakery, name: "Frozen Dough", bake_lead_days: nil)
-    order = create(:order, bakery: bakery, client: retail_client, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: frozen_dough, daily_item_count: 0, wednesday: 15)
+  it "excludes removed, inactive, and pull-list products from retail and wholesale bakes" do
+    client = create(:client, bakery: bakery)
+    removed = create(:product, bakery: bakery, name: "Removed", bake_lead_days: 0, removed: true)
+    inactive = create(:product, bakery: bakery, name: "Inactive", bake_lead_days: 0, inactive: true)
+    pull_list = create(:product, bakery: bakery, name: "Laminated Dough", bake_lead_days: 0, on_pull_list: true)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    [removed, inactive, pull_list].each do |product|
+      create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, wednesday: 10)
+    end
 
     data = described_class.new(bakery, bake_date)
 
@@ -86,29 +106,48 @@ describe BakeListData do
     expect(data.wholesale_items).to be_empty
   end
 
-  it "lists pull_list_items from Product#on_pull_list, computing same-day quantity" do
+  it "excludes removed order items" do
+    client = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 10)
+      .update_column(:removed, 1)
+
+    expect(described_class.new(bakery, bake_date).retail_items).to be_empty
+  end
+
+  it "lists pull_list_items from Product#on_pull_list, computing same-day quantity and omitting zeroes" do
     laminated = create(:product, bakery: bakery, name: "Laminated Dough", on_pull_list: true, pieces_per_tray: 5)
+    unused = create(:product, bakery: bakery, name: "Unused Dough", on_pull_list: true)
     order = create(:order, bakery: bakery, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: order, product: laminated, daily_item_count: 0, wednesday: 12)
+    create(:order_item, bakery: bakery, order: order, product: unused, daily_item_count: 0)
 
     data = described_class.new(bakery, bake_date)
 
     expect(data.pull_list_items).to eq([{ product: laminated, quantity: 12, trays: "2 trays + 2 pcs" }])
   end
 
-  it "cross-references retail and wholesale for viennoiserie_pick_items, filtered to vienoisserie" do
-    retail_client = create(:client, bakery: bakery, bake_channel: "retail")
-    wholesale_client = create(:client, bakery: bakery, bake_channel: "wholesale")
-    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie", bake_lead_days: 0)
-    baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 1)
-    retail_order = create(:order, bakery: bakery, client: retail_client, start_date: bake_date, order_item_count: 0)
+  it "combines retail and wholesale quantities for viennoiserie pick rows" do
+    smith = create(:client, bakery: bakery)
+    restaurant = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 1, pieces_per_tray: 20)
+    create(:bake_lead_day_variant, product: croissant, client: smith, bake_lead_days: 0)
+
+    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: retail_order, product: croissant, daily_item_count: 0, wednesday: 8)
-    wholesale_order = create(:order, bakery: bakery, client: wholesale_client, start_date: bake_date + 1.day,
-      order_item_count: 0)
-    create(:order_item, bakery: bakery, order: wholesale_order, product: baguette, daily_item_count: 0, thursday: 20)
+    wholesale_order = create(
+      :order,
+      bakery: bakery,
+      client: restaurant,
+      start_date: bake_date + 1.day,
+      order_item_count: 0
+    )
+    create(:order_item, bakery: bakery, order: wholesale_order, product: croissant, daily_item_count: 0, thursday: 22)
 
-    data = described_class.new(bakery, bake_date)
-
-    expect(data.viennoiserie_pick_items).to eq([{ product: croissant, quantity: 8, trays: nil }])
+    expect(described_class.new(bakery, bake_date).viennoiserie_pick_items).to eq(
+      [{ product: croissant, quantity: 30, retail_quantity: 8, wholesale_quantity: 22, tray_count: 20 }]
+    )
   end
 end

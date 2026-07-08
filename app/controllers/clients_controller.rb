@@ -177,7 +177,6 @@ class ClientsController < ApplicationController
       :billing_term,
       :group,
       :channel,
-      :bake_channel,
       :default_discount_type,
       :default_discount_value,
       :delivery_fee, :delivery_minimum,

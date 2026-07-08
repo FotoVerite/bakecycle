@@ -68,13 +68,6 @@ class Client < ApplicationRecord
 
   enum :engagement_status, { current: 0, lapsed: 1, prospective: 2 }
 
-  # Distinct from #channel (sales category -- Catering, Grocery, Hotel, etc.).
-  # This decides which BakeListData/BakeListXlsx section (Retail vs.
-  # Wholesale) an order's items land in -- it is NOT inferred from
-  # Product#bake_lead_days_for, since a client's channel and how many days
-  # ahead its items bake are independent facts.
-  enum :bake_channel, { not_applicable: 0, retail: 1, wholesale: 2 }
-
   enum :channel, {
     Catering: "Catering",
     Coffee: "Coffee",
@@ -121,10 +114,6 @@ class Client < ApplicationRecord
 
   def self.engagement_status_select
     engagement_statuses.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
-  end
-
-  def self.bake_channel_select
-    bake_channels.keys.map { |key| [key.humanize(capitalize: false).titleize, key] }
   end
 
   def self.discount_types_select

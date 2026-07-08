@@ -7,7 +7,7 @@
 
 <% client_section_fields = {
   "business" => %i[name official_company_name ein business_phone business_fax group engagement_status channel
-                   bake_channel active],
+                   active],
   "billing" => %i[billing_term print_invoice send_shipment_when_generated accounts_payable_contact_name
                   accounts_payable_contact_phone accounts_payable_contact_email billing_address_street_1
                   billing_address_street_2 billing_address_city billing_address_state billing_address_zipcode
@@ -68,9 +68,6 @@
       </div>
       <div class="form-field form-span-4">
         <%= f.input :channel, collection: Client.channels, as: :select, include_blank: "Select One" %>
-      </div>
-      <div class="form-field form-span-4">
-        <%= f.input :bake_channel, label: "Bake Channel", collection: Client.bake_channel_select, as: :select, include_blank: false %>
       </div>
       <div class="form-field form-field--switch-card form-span-4">
         <label class="form-check form-switch-card">

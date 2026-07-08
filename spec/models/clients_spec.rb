@@ -102,7 +102,8 @@ describe Client do
     client.default_discount_value = 101
 
     expect(client).to be_invalid
-    expect(client.errors[:default_discount_value]).to include("must be less than or equal to 100 for percentage discounts")
+    expect(client.errors[:default_discount_value])
+      .to include("must be less than or equal to 100 for percentage discounts")
   end
 
   describe "geocoding" do
@@ -153,21 +154,6 @@ describe Client do
 
       client.billing_term = "net_7"
       expect(client.billing_term_days).to eq(7)
-    end
-  end
-
-  describe "#bake_channel" do
-    it "defaults to not_applicable" do
-      expect(build(:client).bake_channel).to eq("not_applicable")
-    end
-
-    it "accepts retail and wholesale" do
-      client = build(:client, bake_channel: "retail")
-      expect(client).to be_valid
-      expect(client.bake_channel).to eq("retail")
-
-      client.bake_channel = "wholesale"
-      expect(client).to be_valid
     end
   end
 end
