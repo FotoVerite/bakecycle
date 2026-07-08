@@ -9,13 +9,27 @@
   height: 40px;
   text-align: center;
   letter-spacing: 1px;
-  transition: background-color 300ms ease-out;
-  transition: color 300ms ease-out;
+  // A single declaration -- two separate `transition:` lines here previously
+  // meant the second silently clobbered the first, so background-color never
+  // actually transitioned. 180ms/$bc-ease-out matches the felt "under 300ms,
+  // strong ease-out" guidance for UI feedback.
+  transition: background-color 180ms $bc-ease-out, color 180ms $bc-ease-out,
+    transform 100ms $bc-ease-out;
 
-  &:hover,
-  &:focus {
-    transition: background-color 300ms ease-out;
-    transition: color 300ms ease-out;
+  // Press feedback -- confirms the click landed before the destination page
+  // even starts loading.
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .default-btn {
+    transition: background-color 180ms $bc-ease-out, color 180ms $bc-ease-out;
+
+    &:active {
+      transform: none;
+    }
   }
 }
 
@@ -54,10 +68,17 @@
 button,
 .button {
   background-color: $bc-shakespeare;
+  transition: background-color 160ms $bc-ease-out, transform 100ms $bc-ease-out;
 
   &:hover,
   &:focus {
     background-color: color.adjust($bc-shakespeare, $lightness: -10%);
+  }
+
+  // Press feedback so buttons feel like they're listening, not just static
+  // color swaps on hover.
+  &:active {
+    transform: scale(0.97);
   }
 
   // Buttons only had the UA default focus ring (browser-dependent color/style,
@@ -107,6 +128,15 @@ a.is-loading {
 @media (prefers-reduced-motion: reduce) {
   .sync-download-spinner {
     animation: none;
+  }
+
+  button,
+  .button {
+    transition: background-color 160ms $bc-ease-out;
+
+    &:active {
+      transform: none;
+    }
   }
 }
 

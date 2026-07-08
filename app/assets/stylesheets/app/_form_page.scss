@@ -522,7 +522,7 @@
 }
 
 .discount-preview strong {
-  transition: opacity 150ms ease-out, transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 150ms $bc-ease-out, transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

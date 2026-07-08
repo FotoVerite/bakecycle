@@ -61,7 +61,7 @@
   min-height: 42px;
   padding: 8px 10px;
   position: relative;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms $bc-ease-out, color 150ms $bc-ease-out;
 
   &::before {
     background: transparent;
@@ -72,7 +72,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    transition: background-color 150ms ease-out, height 150ms ease-out;
+    transition: background-color 150ms $bc-ease-out, height 150ms $bc-ease-out;
     width: 3px;
   }
 
@@ -80,7 +80,7 @@
     color: $bc-silver-chalice;
     font-size: 1.2rem;
     text-align: center;
-    transition: color 150ms ease-out;
+    transition: color 150ms $bc-ease-out;
   }
 
   &:hover,
@@ -132,7 +132,7 @@
     grid-template-columns: 20px minmax(0, 1fr);
     min-height: 38px;
     padding: 7px 8px;
-    transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
+    transition: background-color 150ms $bc-ease-out, color 150ms $bc-ease-out, transform 150ms $bc-ease-out;
 
     .bc-icon {
       color: $bc-shakespeare;
@@ -191,7 +191,7 @@
   margin: -5px -7px;
   padding: 6px 8px;
   text-transform: uppercase;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms $bc-ease-out, color 150ms $bc-ease-out;
 
   .bc-icon {
     font-size: 0.78rem;
@@ -233,7 +233,7 @@
     padding: 8px 10px;
     position: relative;
     text-transform: uppercase;
-    transition: background-color 150ms ease-out, color 150ms ease-out;
+    transition: background-color 150ms $bc-ease-out, color 150ms $bc-ease-out;
 
     &::-webkit-details-marker {
       display: none;
@@ -248,7 +248,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      transition: background-color 150ms ease-out;
+      transition: background-color 150ms $bc-ease-out;
       width: 3px;
     }
 
@@ -293,7 +293,7 @@
     font-weight: 600;
     line-height: 1.3;
     padding: 5px 10px 5px 34px;
-    transition: color 150ms ease-out;
+    transition: color 150ms $bc-ease-out;
 
     &:hover,
     &:focus {

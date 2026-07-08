@@ -146,7 +146,7 @@
   font-size: 1rem;
   height: 34px;
   justify-content: center;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms $bc-ease-out, color 150ms $bc-ease-out;
   width: 34px;
 }
 
@@ -403,7 +403,7 @@
 // Details' content box is created fresh in the render tree each time [open]
 // flips display:none -> block, so this restarts on every open, not just once.
 .export-tray[open] .export-tray-panel {
-  animation: export-tray-reveal 160ms ease-out;
+  animation: export-tray-reveal 160ms $bc-ease-out;
 }
 
 .export-tray-header {
@@ -444,11 +444,11 @@
   }
 
   &--enter {
-    animation: export-tray-item-enter 220ms ease-out;
+    animation: export-tray-item-enter 220ms $bc-ease-out;
   }
 
   &--flash .export-tray-item-link {
-    animation: export-tray-item-flash 1400ms ease-out;
+    animation: export-tray-item-flash 1400ms $bc-ease-out;
   }
 }
 

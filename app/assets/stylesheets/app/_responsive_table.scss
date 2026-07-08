@@ -7,13 +7,22 @@ $bp-large: 62em;
 $bp-xlarge: 75em;
 
 .js-clickable-row {
+  transition: background-color 120ms $bc-ease-out;
+
   &:hover {
+    background-color: color.adjust($bc-shakespeare, $lightness: 40%);
     cursor: pointer;
   }
 
   &:focus-visible {
     outline: 2px solid $bc-shakespeare;
     outline-offset: -2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-clickable-row {
+    transition: none;
   }
 }
 
@@ -38,11 +47,10 @@ $bp-xlarge: 75em;
     }
 
     span {
-      display: none;
-
       @media (min-width: $bp-medium) {
-        display: inline;
-        position: absolute;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
       }
     }
 
@@ -58,6 +66,15 @@ $bp-xlarge: 75em;
     padding: 15px 12px;
     width: 250px;
     z-index: 10;
+
+    @media (min-width: $bp-medium) {
+      display: inline;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      transform: translateX(-4px);
+      transition: opacity 150ms $bc-ease-out, transform 150ms $bc-ease-out;
+    }
 
     &:after {
       border: solid transparent;
@@ -80,35 +97,60 @@ $bp-xlarge: 75em;
   position: relative;
   z-index: 1;
 
+  &:before {
+    @media (min-width: $bp-medium) {
+      border: solid;
+      border-color: $bc-charcoal transparent;
+      border-width: 0 6px 6px;
+      content: '';
+      left: 4%;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      transform: translateY(-4px);
+      transition: opacity 150ms $bc-ease-out, transform 150ms $bc-ease-out;
+      z-index: 99;
+    }
+  }
+
+  &:after {
+    @media (min-width: $bp-medium) {
+      background: $bc-charcoal;
+      color: $white;
+      content: attr(aria-label);
+      opacity: 0;
+      padding: 12px;
+      pointer-events: none;
+      position: absolute;
+      right: -40%;
+      top: calc(100% + 12px);
+      transform: translateY(-4px);
+      transition: opacity 150ms $bc-ease-out, transform 150ms $bc-ease-out;
+      width: 140px;
+      z-index: 98;
+    }
+  }
+
   &:hover {
     z-index: 100;
 
-    &:before {
-      @media (min-width: $bp-medium) {
-        border: solid;
-        border-color: $bc-charcoal transparent;
-        border-width: 0 6px 6px;
-        content: '';
-        left: 4%;
-        position: absolute;
-        top: calc(100% + 6px);
-        z-index: 99;
-      }
-    }
-
+    &:before,
     &:after {
       @media (min-width: $bp-medium) {
-        background: $bc-charcoal;
-        color: $white;
-        content: attr(aria-label);
-        padding: 12px;
-        position: absolute;
-        right: -40%;
-        top: calc(100% + 12px);
-        width: 140px;
-        z-index: 98;
+        opacity: 1;
+        transform: translateY(0);
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-info-tooltip span,
+  .icon-link-tooltip:before,
+  .icon-link-tooltip:after {
+    transform: none !important;
+    transition: opacity 150ms ease;
   }
 }
 
@@ -118,7 +160,7 @@ $bp-xlarge: 75em;
   display: inline-flex;
   height: 36px;
   justify-content: center;
-  transition: filter 100ms ease-out;
+  transition: filter 100ms $bc-ease-out, transform 100ms $bc-ease-out;
   width: 36px;
 
   .bc-icon {
@@ -162,6 +204,10 @@ $bp-xlarge: 75em;
   &:focus {
     filter: brightness(0.94);
   }
+
+  &:active {
+    transform: scale(0.92);
+  }
 }
 
 a:focus .table-action-icon,
@@ -195,6 +241,10 @@ a:focus-visible .table-action-icon {
 @media (prefers-reduced-motion: reduce) {
   .table-action-icon {
     transition: none;
+
+    &:active {
+      transform: none;
+    }
   }
 }
 
@@ -439,11 +489,11 @@ span.negative {
 
 .file-export-row {
   &--enter {
-    animation: file-export-row-enter 220ms ease-out;
+    animation: file-export-row-enter 220ms $bc-ease-out;
   }
 
   &--flash {
-    animation: file-export-row-flash 1400ms ease-out;
+    animation: file-export-row-flash 1400ms $bc-ease-out;
   }
 }
 

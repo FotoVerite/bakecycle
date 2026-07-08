@@ -3421,14 +3421,20 @@ button[disabled] {
   height: 40px;
   text-align: center;
   letter-spacing: 1px;
-  transition: background-color 300ms ease-out;
-  transition: color 300ms ease-out;
+  transition: background-color 180ms cubic-bezier(0.23, 1, 0.32, 1), color 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.default-btn:hover, .registration .join-cta-button:hover, .white-outline-btn:hover, .cta-btn:hover, .default-btn:focus, .registration .join-cta-button:focus, .white-outline-btn:focus, .cta-btn:focus {
-  transition: background-color 300ms ease-out;
-  transition: color 300ms ease-out;
+.default-btn:active, .registration .join-cta-button:active, .white-outline-btn:active, .cta-btn:active {
+  transform: scale(0.97);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .default-btn, .registration .join-cta-button, .white-outline-btn, .cta-btn {
+    transition: background-color 180ms cubic-bezier(0.23, 1, 0.32, 1), color 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .default-btn:active, .registration .join-cta-button:active, .white-outline-btn:active, .cta-btn:active {
+    transform: none;
+  }
+}
 .cta-btn {
   background-color: #55aad7;
   color: #fff;
@@ -3459,6 +3465,7 @@ button,
 .button,
 .registration .registration-button label {
   background-color: #55aad7;
+  transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1), transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 button:hover, button:focus,
 .button:hover,
@@ -3466,6 +3473,11 @@ button:hover, button:focus,
 .button:focus,
 .registration .registration-button label:focus {
   background-color: rgb(47.4285714286, 148.2142857143, 201.5714285714);
+}
+button:active,
+.button:active,
+.registration .registration-button label:active {
+  transform: scale(0.97);
 }
 button:focus-visible,
 .button:focus-visible,
@@ -3507,6 +3519,16 @@ a.is-loading {
 @media (prefers-reduced-motion: reduce) {
   .sync-download-spinner {
     animation: none;
+  }
+  button,
+  .button,
+  .registration .registration-button label {
+    transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  button:active,
+  .button:active,
+  .registration .registration-button label:active {
+    transform: none;
   }
 }
 .is-starting,
@@ -3657,12 +3679,28 @@ input[type=text] {
 }
 
 .alert-box {
+  animation: alert-box-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
   border-radius: 4px;
   font-weight: 600;
   margin-top: 20px;
   padding: 12px 42px 12px 16px;
 }
 
+@keyframes alert-box-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .alert-box {
+    animation: none;
+  }
+}
 .projection {
   font-size: 1.5rem;
 }
@@ -4145,6 +4183,7 @@ input[type=text] {
   grid-template-columns: 34px minmax(0, 1fr) auto;
   min-height: 68px;
   padding: 10px 16px;
+  transition: background-color 160ms ease;
 }
 .dashboard .daily-operation:nth-child(odd) {
   border-right: 1px solid #e1e1e1;
@@ -4209,6 +4248,7 @@ input[type=text] {
   grid-template-columns: 34px minmax(0, 1fr) 16px;
   min-height: 72px;
   padding: 12px 18px;
+  transition: background-color 160ms ease;
 }
 .dashboard .dashboard-pin:hover, .dashboard .dashboard-pin:focus {
   background: rgb(244.7625, 245.55, 246.3375);
@@ -4332,7 +4372,7 @@ input[type=text] {
   margin-top: 5px;
   margin-bottom: 16px;
   text-decoration: none;
-  transition: border-color 180ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out;
+  transition: border-color 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .dashboard .stats:hover, .dashboard .stats:focus {
   border-color: rgb(204.6, 204.6, 204.6);
@@ -4986,7 +5026,7 @@ input[type=text] {
 }
 
 .discount-preview strong {
-  transition: opacity 150ms ease-out, transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -7127,7 +7167,11 @@ select.inline {
     text-align: right;
   }
 }
+.js-clickable-row {
+  transition: background-color 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
 .js-clickable-row:hover {
+  background-color: rgb(250.1428571429, 252.5714285714, 253.8571428571);
   cursor: pointer;
 }
 .js-clickable-row:focus-visible {
@@ -7135,6 +7179,11 @@ select.inline {
   outline-offset: -2px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .js-clickable-row {
+    transition: none;
+  }
+}
 .missing {
   background: #f78984 !important;
 }
@@ -7155,13 +7204,11 @@ select.inline {
     cursor: help;
   }
 }
-.product-info-tooltip:hover span {
-  display: none;
-}
 @media (min-width: 48em) {
   .product-info-tooltip:hover span {
-    display: inline;
-    position: absolute;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
   }
 }
 .product-info-tooltip span {
@@ -7174,6 +7221,16 @@ select.inline {
   padding: 15px 12px;
   width: 250px;
   z-index: 10;
+}
+@media (min-width: 48em) {
+  .product-info-tooltip span {
+    display: inline;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateX(-4px);
+    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
 }
 .product-info-tooltip span:after {
   border: solid transparent;
@@ -7194,42 +7251,64 @@ select.inline {
   position: relative;
   z-index: 1;
 }
-.icon-link-tooltip:hover {
-  z-index: 100;
-}
 @media (min-width: 48em) {
-  .icon-link-tooltip:hover:before {
+  .icon-link-tooltip:before {
     border: solid;
     border-color: #555 transparent;
     border-width: 0 6px 6px;
     content: "";
     left: 4%;
+    opacity: 0;
+    pointer-events: none;
     position: absolute;
     top: calc(100% + 6px);
+    transform: translateY(-4px);
+    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
     z-index: 99;
   }
 }
 @media (min-width: 48em) {
-  .icon-link-tooltip:hover:after {
+  .icon-link-tooltip:after {
     background: #555;
     color: #ffffff;
     content: attr(aria-label);
+    opacity: 0;
     padding: 12px;
+    pointer-events: none;
     position: absolute;
     right: -40%;
     top: calc(100% + 12px);
+    transform: translateY(-4px);
+    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
     width: 140px;
     z-index: 98;
   }
 }
+.icon-link-tooltip:hover {
+  z-index: 100;
+}
+@media (min-width: 48em) {
+  .icon-link-tooltip:hover:before, .icon-link-tooltip:hover:after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+@media (prefers-reduced-motion: reduce) {
+  .product-info-tooltip span,
+  .icon-link-tooltip:before,
+  .icon-link-tooltip:after {
+    transform: none !important;
+    transition: opacity 150ms ease;
+  }
+}
 .table-action-icon {
   align-items: center;
   border-radius: 50%;
   display: inline-flex;
   height: 36px;
   justify-content: center;
-  transition: filter 100ms ease-out;
+  transition: filter 100ms cubic-bezier(0.23, 1, 0.32, 1), transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 36px;
 }
 .table-action-icon .bc-icon {
@@ -7262,6 +7341,9 @@ select.inline {
 .table-action-icon:hover, .table-action-icon:focus {
   filter: brightness(0.94);
 }
+.table-action-icon:active {
+  transform: scale(0.92);
+}
 
 a:focus .table-action-icon,
 a:focus-visible .table-action-icon {
@@ -7290,6 +7372,9 @@ a:focus-visible .table-action-icon {
 @media (prefers-reduced-motion: reduce) {
   .table-action-icon {
     transition: none;
+  }
+  .table-action-icon:active {
+    transform: none;
   }
 }
 * {
@@ -7520,10 +7605,10 @@ span.negative {
 }
 
 .file-export-row--enter {
-  animation: file-export-row-enter 220ms ease-out;
+  animation: file-export-row-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .file-export-row--flash {
-  animation: file-export-row-flash 1400ms ease-out;
+  animation: file-export-row-flash 1400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @keyframes file-export-row-enter {
@@ -7657,7 +7742,7 @@ span.negative {
   letter-spacing: 0.02em;
   padding: 4px 10px;
   text-transform: uppercase;
-  transition: background 100ms ease-out, border-color 100ms ease-out;
+  transition: background 100ms cubic-bezier(0.23, 1, 0.32, 1), border-color 100ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .cancellation-page .cancellation-select-all:hover {
   background: rgb(254.2714285714, 254.6357142857, 254.8285714286);
@@ -7692,7 +7777,7 @@ span.negative {
   margin: 0;
   padding: 9px 14px;
   text-align: left;
-  transition: background 100ms ease-out;
+  transition: background 100ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 100%;
 }
 .cancellation-page .cancellation-client-row:last-child {
@@ -7726,7 +7811,7 @@ span.negative {
   height: 18px;
   justify-content: center;
   line-height: 1;
-  transition: background 100ms ease-out, border-color 100ms ease-out;
+  transition: background 100ms cubic-bezier(0.23, 1, 0.32, 1), border-color 100ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 18px;
 }
 .cancellation-page .cancellation-client-name {
@@ -7793,7 +7878,7 @@ span.negative {
   justify-content: center;
   min-width: 22px;
   padding: 0 6px;
-  transition: background 150ms ease-out, color 150ms ease-out;
+  transition: background 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .cancellation-page .cancellation-cart.has-selection .cancellation-cart-count {
   background: #55aad7;
@@ -7859,7 +7944,7 @@ span.negative {
   justify-content: center;
   margin: 0;
   padding: 0;
-  transition: background 100ms ease-out, color 100ms ease-out;
+  transition: background 100ms cubic-bezier(0.23, 1, 0.32, 1), color 100ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 28px;
 }
 .cancellation-page .cancellation-cart-item-remove .bc-icon {
@@ -7919,7 +8004,7 @@ span.negative {
     flex-shrink: 0;
     height: 7px;
     transform: rotate(45deg);
-    transition: transform 200ms ease-out;
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
     width: 7px;
   }
   .cancellation-page .cancellation-cart-empty,
@@ -8439,7 +8524,7 @@ span.negative {
   margin: 0;
   min-height: 52px;
   padding: 8px 12px;
-  transition: background 160ms ease-out, color 160ms ease-out;
+  transition: background 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .report-generator-page .report-source-option input[type=radio] {
   flex: 0 0 auto;
@@ -8529,7 +8614,7 @@ span.negative {
   line-height: 1;
   min-width: 38px;
   text-decoration: none;
-  transition: background 160ms ease-out, color 160ms ease-out;
+  transition: background 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms cubic-bezier(0.23, 1, 0.32, 1);
   user-select: none;
 }
 .report-page.nightly-sign-off-page .sign-off-nav-arrow:hover, .report-page.nightly-sign-off-page .sign-off-nav-arrow:focus {
@@ -8887,7 +8972,7 @@ span.negative {
   min-height: 42px;
   padding: 8px 10px;
   position: relative;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .nav-primary-link::before {
   background: transparent;
@@ -8898,14 +8983,14 @@ span.negative {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  transition: background-color 150ms ease-out, height 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), height 150ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 3px;
 }
 .nav-primary-link .bc-icon {
   color: #a0a0a0;
   font-size: 1.2rem;
   text-align: center;
-  transition: color 150ms ease-out;
+  transition: color 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .nav-primary-link:hover, .nav-primary-link:focus {
   background: rgb(237.7571428571, 246.3785714286, 250.9428571429);
@@ -8950,7 +9035,7 @@ span.negative {
   grid-template-columns: 20px minmax(0, 1fr);
   min-height: 38px;
   padding: 7px 8px;
-  transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .nav-pins li a .bc-icon {
   color: #55aad7;
@@ -9002,7 +9087,7 @@ span.negative {
   margin: -5px -7px;
   padding: 6px 8px;
   text-transform: uppercase;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .nav-section-action .bc-icon {
   font-size: 0.78rem;
@@ -9040,7 +9125,7 @@ span.negative {
   padding: 8px 10px;
   position: relative;
   text-transform: uppercase;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .nav-group summary::-webkit-details-marker {
   display: none;
@@ -9054,7 +9139,7 @@ span.negative {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  transition: background-color 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 3px;
 }
 .nav-group summary:hover, .nav-group summary:focus {
@@ -9090,7 +9175,7 @@ span.negative {
   font-weight: 600;
   line-height: 1.3;
   padding: 5px 10px 5px 34px;
-  transition: color 150ms ease-out;
+  transition: color 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .nav-group li a:hover, .nav-group li a:focus {
   color: #55aad7;
@@ -9241,7 +9326,7 @@ span.negative {
   font-size: 1rem;
   height: 34px;
   justify-content: center;
-  transition: background-color 150ms ease-out, color 150ms ease-out;
+  transition: background-color 150ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms cubic-bezier(0.23, 1, 0.32, 1);
   width: 34px;
 }
 
@@ -9461,7 +9546,7 @@ span.negative {
 }
 
 .export-tray[open] .export-tray-panel {
-  animation: export-tray-reveal 160ms ease-out;
+  animation: export-tray-reveal 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .export-tray-header {
@@ -9498,10 +9583,10 @@ span.negative {
   border-top: 0;
 }
 .export-tray-item--enter {
-  animation: export-tray-item-enter 220ms ease-out;
+  animation: export-tray-item-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .export-tray-item--flash .export-tray-item-link {
-  animation: export-tray-item-flash 1400ms ease-out;
+  animation: export-tray-item-flash 1400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .export-tray-item-link {

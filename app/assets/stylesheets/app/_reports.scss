@@ -424,7 +424,7 @@
     margin: 0;
     min-height: 52px;
     padding: 8px 12px;
-    transition: background 160ms ease-out, color 160ms ease-out;
+    transition: background 160ms $bc-ease-out, color 160ms $bc-ease-out;
 
     input[type='radio'] {
       flex: 0 0 auto;
@@ -536,7 +536,7 @@
     line-height: 1;
     min-width: 38px;
     text-decoration: none;
-    transition: background 160ms ease-out, color 160ms ease-out;
+    transition: background 160ms $bc-ease-out, color 160ms $bc-ease-out;
     user-select: none;
 
     &:hover,

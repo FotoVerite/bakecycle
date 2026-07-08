@@ -95,7 +95,7 @@
     letter-spacing: 0.02em;
     padding: 4px 10px;
     text-transform: uppercase;
-    transition: background 100ms ease-out, border-color 100ms ease-out;
+    transition: background 100ms $bc-ease-out, border-color 100ms $bc-ease-out;
 
     &:hover {
       background: color.adjust($bc-shakespeare, $lightness: 41%);
@@ -135,7 +135,7 @@
     margin: 0;
     padding: 9px 14px;
     text-align: left;
-    transition: background 100ms ease-out;
+    transition: background 100ms $bc-ease-out;
     width: 100%;
 
     &:last-child {
@@ -176,7 +176,7 @@
     height: 18px;
     justify-content: center;
     line-height: 1;
-    transition: background 100ms ease-out, border-color 100ms ease-out;
+    transition: background 100ms $bc-ease-out, border-color 100ms $bc-ease-out;
     width: 18px;
   }
 
@@ -252,7 +252,7 @@
     justify-content: center;
     min-width: 22px;
     padding: 0 6px;
-    transition: background 150ms ease-out, color 150ms ease-out;
+    transition: background 150ms $bc-ease-out, color 150ms $bc-ease-out;
   }
 
   .cancellation-cart.has-selection .cancellation-cart-count {
@@ -325,7 +325,7 @@
     justify-content: center;
     margin: 0;
     padding: 0;
-    transition: background 100ms ease-out, color 100ms ease-out;
+    transition: background 100ms $bc-ease-out, color 100ms $bc-ease-out;
     width: 28px;
 
     .bc-icon {
@@ -400,7 +400,7 @@
       flex-shrink: 0;
       height: 7px;
       transform: rotate(45deg);
-      transition: transform 200ms ease-out;
+      transition: transform 200ms $bc-ease-out;
       width: 7px;
     }
 

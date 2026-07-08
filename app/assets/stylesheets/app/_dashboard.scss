@@ -80,6 +80,7 @@
     grid-template-columns: 34px minmax(0, 1fr) auto;
     min-height: 68px;
     padding: 10px 16px;
+    transition: background-color 160ms ease;
 
     &:nth-child(odd) {
       border-right: 1px solid $bc-border-grey;
@@ -157,6 +158,7 @@
     grid-template-columns: 34px minmax(0, 1fr) 16px;
     min-height: 72px;
     padding: 12px 18px;
+    transition: background-color 160ms ease;
 
     &:hover,
     &:focus {
@@ -307,7 +309,7 @@
     margin-top: 5px;
     margin-bottom: 16px;
     text-decoration: none;
-    transition: border-color 180ms ease-out, box-shadow 180ms ease-out, transform 180ms ease-out;
+    transition: border-color 180ms $bc-ease-out, box-shadow 180ms $bc-ease-out, transform 180ms $bc-ease-out;
 
     &:hover,
     &:focus {
