@@ -5,7 +5,12 @@
 # already established by SortedPackListXlsx. Blank check/count columns are
 # literal nil cells for staff to fill in by hand.
 class BakeListXlsx
-  delegate :retail_sections, :wholesale_sections, :retail_clients, to: :@data
+  delegate :retail_sections, :wholesale_sections, :retail_clients, :other_sections, to: :@data
+
+  # Wholesale Bread rows for these products get bolded/highlighted, flagging
+  # that the tray/piece breakdown for this item lives on the Vienn Pick
+  # sheet instead (confirmed with the client: highlight = tray-tracked).
+  ROULE_TOTAL_NAME = "ROULE TOTAL"
 
   def initialize(bakery, bake_date)
     @bakery = bakery
@@ -20,11 +25,13 @@ class BakeListXlsx
     report_styles = {
       title: styles.add_style(b: true, sz: 16, alignment: { horizontal: :center }),
       section: styles.add_style(bg_color: "B7B7B7", b: true, sz: 14, alignment: { horizontal: :center }),
-      header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center })
+      header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center }),
+      highlight: styles.add_style(bg_color: "FFF2CC", b: true)
     }
 
     add_retail_sheet(workbook, report_styles)
     add_wholesale_sheet(workbook, report_styles)
+    add_other_sheet(workbook, report_styles)
     add_viennoiserie_sheet(workbook, report_styles)
     add_pull_list_sheet(workbook, report_styles)
 
@@ -43,9 +50,11 @@ class BakeListXlsx
   end
 
   def wholesale_rows
-    wholesale_sections.flat_map do |section|
-      section[:rows].map { |row| [row[:product].name, row[:quantity], nil, nil] }
-    end
+    wholesale_sections.flat_map { |section| wholesale_section_rows(section).map { |row| row[:cells] } }
+  end
+
+  def other_rows
+    other_sections.flat_map { |section| section[:rows].map { |row| other_row_cells(row) } }
   end
 
   def pull_list_rows
@@ -77,9 +86,32 @@ class BakeListXlsx
   end
 
   def add_wholesale_sheet(workbook, styles)
-    config = { title: "WHOLESALE", headers: %w[Item Total MISSING EXTRA], sections: wholesale_sections }
-    add_sectioned_sheet(workbook, "Wholesale Bread", styles, config) do |row|
-      [row[:product].name, row[:quantity], nil, nil]
+    workbook.add_worksheet(name: "Wholesale Bread") do |sheet|
+      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Wholesale Bread"]
+      sheet.add_row ["WHOLESALE"], style: styles.fetch(:title)
+
+      wholesale_sections.each do |section|
+        sheet.add_row [section[:name]], style: styles.fetch(:section)
+        sheet.add_row %w[Item Total MISSING EXTRA], style: styles.fetch(:header)
+        wholesale_section_rows(section).each do |row|
+          sheet.add_row row[:cells], style: row[:highlighted] ? styles.fetch(:highlight) : nil
+        end
+      end
+      sheet.column_widths 36, 12, 14, 14
+    end
+  end
+
+  def add_other_sheet(workbook, styles)
+    headers = %w[Item Total] + retail_clients.map(&:name) + ["Retail", "Blue Bottle", "Wholesale"]
+    workbook.add_worksheet(name: "Quiche & Dessert") do |sheet|
+      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Quiche & Dessert"]
+
+      other_sections.each do |section|
+        sheet.add_row [section[:name]], style: styles.fetch(:section)
+        sheet.add_row headers, style: styles.fetch(:header)
+        section[:rows].each { |row| sheet.add_row other_row_cells(row) }
+      end
+      sheet.column_widths 36, 12, *Array.new(headers.length - 2, 14)
     end
   end
 
@@ -138,6 +170,33 @@ class BakeListXlsx
       pull_list_rows.each { |row| sheet.add_row row }
       sheet.column_widths 36, 12, 18, 14
     end
+  end
+
+  def wholesale_section_rows(section)
+    rows = section[:rows].map do |row|
+      { cells: [row[:product].name, row[:quantity], nil, nil], highlighted: tray_tracked?(row[:product]) }
+    end
+
+    roule_rows = section[:rows].select { |row| roule_product?(row[:product]) }
+    if roule_rows.size > 1
+      rows << { cells: [ROULE_TOTAL_NAME, roule_rows.sum { |row| row[:quantity] }, nil, nil], highlighted: true }
+    end
+    rows
+  end
+
+  def other_row_cells(row)
+    [row[:product].name, row[:quantity]] +
+      retail_clients.map { |client| row[:client_quantities][client].to_i } +
+      [row[:retail_quantity], row[:blue_bottle_quantity].zero? ? nil : row[:blue_bottle_quantity],
+       row[:wholesale_quantity]]
+  end
+
+  def tray_tracked?(product)
+    product.pieces_per_tray.present? && product.pieces_per_tray.positive?
+  end
+
+  def roule_product?(product)
+    product.name.match?(/\Aroule\b/i)
   end
 
   def tray_parts(product, quantity)

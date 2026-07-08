@@ -8,8 +8,14 @@ class BakeListData
   WHOLESALE_LEAD_DAYS = 1
   BAKE_LEAD_DAYS = [RETAIL_LEAD_DAYS, WHOLESALE_LEAD_DAYS].freeze
   PRODUCT_TYPE_LABELS = {
-    "vienoisserie" => "Viennoiserie"
+    "vienoisserie" => "Viennoiserie",
+    "tart_and_desert" => "Tart And Dessert",
+    "other" => "Pound Cake"
   }.freeze
+  # Bread, Cookie, and Viennoiserie get their own Retail/Wholesale bread
+  # sheets; everything else (Quiche, Sandwich, Tart & Dessert, Pound Cake...)
+  # is grouped onto a single combined sheet instead -- see #other_sections.
+  BREAD_SHEET_PRODUCT_TYPES = %w[bread cookie vienoisserie].freeze
 
   def initialize(bakery, bake_date)
     @bakery = bakery
@@ -25,15 +31,34 @@ class BakeListData
   end
 
   def retail_sections
-    @_retail_sections ||= sections_for(retail_items)
+    @_retail_sections ||= sections_for(retail_items.select { |row| bread_sheet_type?(row) })
   end
 
   def wholesale_sections
-    @_wholesale_sections ||= sections_for(wholesale_items)
+    @_wholesale_sections ||= sections_for(wholesale_items.select { |row| bread_sheet_type?(row) })
   end
 
   def retail_clients
     @_retail_clients ||= retail_items.flat_map { |row| row[:client_quantities].keys }.uniq.sort_by(&:name)
+  end
+
+  # Quiche, Sandwich, Tart & Dessert, Pound Cake, etc. -- combines each
+  # product's retail and wholesale bake quantities onto one row (unlike the
+  # Retail/Wholesale Bread sheets, which stay split across two sheets),
+  # since these categories are ordered by both the retail cafes and
+  # wholesale accounts on the same day.
+  def other_sections
+    @_other_sections ||= begin
+      grouped = other_rows.group_by { |row| row[:product].product_type }
+      sorted = grouped.sort_by { |product_type, _rows| Product.product_types.fetch(product_type) }
+      sorted.map do |product_type, rows|
+        {
+          name: PRODUCT_TYPE_LABELS.fetch(product_type, product_type.titleize),
+          product_type: product_type,
+          rows: rows.sort_by { |row| row[:product].name }
+        }
+      end
+    end
   end
 
   def pull_list_items
@@ -72,6 +97,42 @@ class BakeListData
   end
 
   private
+
+  def other_rows
+    rows_by_product = (retail_items + wholesale_items)
+      .reject { |row| bread_sheet_type?(row) }
+      .group_by { |row| row[:product] }
+
+    rows_by_product.filter_map do |product, rows|
+      retail_row = rows.find { |row| row[:lead_days] == RETAIL_LEAD_DAYS }
+      wholesale_row = rows.find { |row| row[:lead_days] == WHOLESALE_LEAD_DAYS }
+      retail_quantity = retail_row&.fetch(:quantity) || 0
+      wholesale_quantity = wholesale_row&.fetch(:quantity) || 0
+      quantity = retail_quantity + wholesale_quantity
+      next unless quantity.positive?
+
+      wholesale_client_quantities = wholesale_row&.fetch(:client_quantities) || {}
+      blue_bottle_quantity = wholesale_client_quantities.sum { |client, qty| blue_bottle_client?(client) ? qty : 0 }
+
+      {
+        product: product,
+        quantity: quantity,
+        retail_quantity: retail_quantity,
+        wholesale_quantity: wholesale_quantity,
+        blue_bottle_quantity: blue_bottle_quantity,
+        client_quantities: retail_row&.fetch(:client_quantities) || {}
+      }
+    end
+  end
+
+  def bread_sheet_type?(row)
+    BREAD_SHEET_PRODUCT_TYPES.include?(row[:product].product_type)
+  end
+
+  # Same "Blue Bottle" name match already used by NightlySignOffsController.
+  def blue_bottle_client?(client)
+    client.name.downcase.include?("blue bottle")
+  end
 
   def items_for(lead_days:)
     rows = bake_date_rows.select { |row| row[:lead_days] == lead_days }

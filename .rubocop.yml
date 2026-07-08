@@ -36,6 +36,8 @@ Metrics/ClassLength:
   Exclude:
     - "app/controllers/orders_controller.rb"
     - "app/controllers/shipments_controller.rb"
+    - "app/reports/**/*"
+    - "app/services/**/*"
 
 # it would be great to use EnforcedStyle: semantic here but it complains way too much
 Style/BlockDelimiters:

@@ -128,6 +128,45 @@ describe BakeListData do
     expect(data.pull_list_items).to eq([{ product: laminated, quantity: 12, trays: "2 trays + 2 pcs" }])
   end
 
+  it "combines retail and wholesale quantities for non-bread product types into other_sections" do
+    smith = create(:client, bakery: bakery, name: "Smith")
+    blue_bottle = create(:client, bakery: bakery, name: "Blue Bottle Coffee Nomad")
+    blondie = create(:product, bakery: bakery, name: "Blondie", product_type: "other", bake_lead_days: 1)
+    create(:bake_lead_day_variant, product: blondie, client: smith, bake_lead_days: 0)
+
+    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: retail_order, product: blondie, daily_item_count: 0, wednesday: 12)
+    wholesale_order = create(
+      :order,
+      bakery: bakery,
+      client: blue_bottle,
+      start_date: bake_date + 1.day,
+      order_item_count: 0
+    )
+    create(:order_item, bakery: bakery, order: wholesale_order, product: blondie, daily_item_count: 0, thursday: 82)
+
+    data = described_class.new(bakery, bake_date)
+
+    expect(data.retail_sections).to be_empty
+    expect(data.wholesale_sections).to be_empty
+    expect(data.other_sections).to contain_exactly(
+      hash_including(
+        name: "Pound Cake",
+        product_type: "other",
+        rows: contain_exactly(
+          hash_including(
+            product: blondie,
+            quantity: 94,
+            retail_quantity: 12,
+            wholesale_quantity: 82,
+            blue_bottle_quantity: 82,
+            client_quantities: { smith => 12 }
+          )
+        )
+      )
+    )
+  end
+
   it "combines retail and wholesale quantities for viennoiserie pick rows" do
     smith = create(:client, bakery: bakery)
     restaurant = create(:client, bakery: bakery)
