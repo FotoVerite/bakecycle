@@ -17,6 +17,21 @@ class BakeListData
   # is grouped onto a single combined sheet instead -- see #other_sections.
   BREAD_SHEET_PRODUCT_TYPES = %w[bread cookie vienoisserie].freeze
 
+  # All Roulé flavors share one untopped base pastry; on the Vienn Pick they
+  # collapse into a single "Roule" pick row (the plain base staff tray up),
+  # with the per-topping split living on the Retail/Wholesale Bake sheets
+  # instead. Deliberately anchored to the "Roule, <topping>" naming only --
+  # legacy "<flavor> Roule" names are treated as distinct products (confirmed
+  # with the client).
+  ROULE_NAME_PATTERN = /\Aroule\b/i
+  ROULE_ROW_NAME = "Roule"
+
+  # Pate Fermentee is a standing daily pre-ferment, not an order-driven item:
+  # the client tray-up is a fixed 8 trays every day in perpetuity. It has no
+  # Product record, so it's injected as a synthetic Vienn Pick row.
+  PATE_FERMENTEE_NAME = "Pate Fermentee"
+  PATE_FERMENTEE_TRAYS = 8
+
   def initialize(bakery, bake_date)
     @bakery = bakery
     @bake_date = bake_date.to_date
@@ -68,31 +83,82 @@ class BakeListData
     end
   end
 
+  # The Vienn Pick lists *every* active Viennoiserie product, showing zero when
+  # there are no orders that day (unlike the bake sheets, which only list what's
+  # actually ordered) -- the pick sheet doubles as a standing checklist. The
+  # Roulé family collapses into one "Roule" row, and Pate Fermentee is appended
+  # as a fixed synthetic prep row. Rows carry name/pieces_per_tray directly
+  # rather than a Product, so the synthetic rows fit the same shape.
   def viennoiserie_pick_items
     @_viennoiserie_pick_items ||= begin
-      rows_by_product = (retail_items + wholesale_items)
-        .select { |row| row[:product].vienoisserie? }
-        .group_by { |row| row[:product] }
+      retail_by_product = viennoiserie_quantities(retail_items)
+      wholesale_by_product = viennoiserie_quantities(wholesale_items)
 
-      rows = rows_by_product.map do |product, rows|
-        retail_quantity = rows.find { |row| row[:lead_days] == RETAIL_LEAD_DAYS }&.fetch(:quantity) || 0
-        wholesale_quantity = rows.find { |row| row[:lead_days] == WHOLESALE_LEAD_DAYS }&.fetch(:quantity) || 0
-        quantity = retail_quantity + wholesale_quantity
-        next unless quantity.positive?
+      products = Product.vienoisserie
+        .where(bakery: @bakery, removed: false, inactive: false, on_pull_list: false)
+        .order_by_name
+      roule_products, single_products = products.partition { |product| roule_product?(product) }
 
-        {
-          product: product,
-          quantity: quantity,
-          retail_quantity: retail_quantity,
-          wholesale_quantity: wholesale_quantity,
-          tray_count: product.pieces_per_tray
-        }
+      rows = single_products.map do |product|
+        vienn_pick_row(
+          name: product.name,
+          pieces_per_tray: product.pieces_per_tray,
+          retail_quantity: retail_by_product[product].to_i,
+          wholesale_quantity: wholesale_by_product[product].to_i
+        )
       end
-      rows.compact.sort_by { |row| row[:product].name }
+      rows << collapsed_roule_row(roule_products, retail_by_product, wholesale_by_product) if roule_products.any?
+      rows = rows.sort_by { |row| row[:name] }
+      # Pate Fermentee is a fixed daily prep, not a picked item -- pin it last,
+      # separate from the order-driven rows.
+      rows << pate_fermentee_row
+      rows
     end
   end
 
+  def roule_product?(product)
+    product.name.match?(ROULE_NAME_PATTERN)
+  end
+
   private
+
+  def viennoiserie_quantities(items)
+    items.each_with_object({}) do |row, memo|
+      memo[row[:product]] = row[:quantity] if row[:product].vienoisserie?
+    end
+  end
+
+  def vienn_pick_row(name:, pieces_per_tray:, retail_quantity:, wholesale_quantity:)
+    {
+      name: name,
+      pieces_per_tray: pieces_per_tray,
+      retail_quantity: retail_quantity,
+      wholesale_quantity: wholesale_quantity,
+      quantity: retail_quantity + wholesale_quantity
+    }
+  end
+
+  def collapsed_roule_row(roule_products, retail_by_product, wholesale_by_product)
+    vienn_pick_row(
+      name: ROULE_ROW_NAME,
+      # One shared base pastry -- use the family's tray count (they should agree;
+      # take the first present when sorted by name for a stable choice).
+      pieces_per_tray: roule_products.map(&:pieces_per_tray).compact.first,
+      retail_quantity: roule_products.sum { |product| retail_by_product[product].to_i },
+      wholesale_quantity: roule_products.sum { |product| wholesale_by_product[product].to_i }
+    )
+  end
+
+  def pate_fermentee_row
+    {
+      name: PATE_FERMENTEE_NAME,
+      pieces_per_tray: nil,
+      retail_quantity: 0,
+      wholesale_quantity: 0,
+      quantity: 0,
+      fixed_trays: PATE_FERMENTEE_TRAYS
+    }
+  end
 
   # One row per product with per-client quantities, retail and wholesale
   # bakes combined -- which clients map to which columns is the xlsx's

@@ -182,8 +182,52 @@ describe BakeListData do
     )
     create(:order_item, bakery: bakery, order: wholesale_order, product: croissant, daily_item_count: 0, thursday: 22)
 
-    expect(described_class.new(bakery, bake_date).viennoiserie_pick_items).to eq(
-      [{ product: croissant, quantity: 30, retail_quantity: 8, wholesale_quantity: 22, tray_count: 20 }]
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+    expect(pick).to include(
+      { name: "Croissant", pieces_per_tray: 20, quantity: 30, retail_quantity: 8, wholesale_quantity: 22 }
+    )
+  end
+
+  it "lists every active viennoiserie on the pick, showing zero when there are no orders" do
+    create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie", pieces_per_tray: 20)
+    # non-viennoiserie and inactive/removed products stay off the pick
+    create(:product, bakery: bakery, name: "Baguette", product_type: "bread")
+    create(:product, bakery: bakery, name: "Old Danish", product_type: "vienoisserie", inactive: true)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+    names = pick.map { |row| row[:name] }
+
+    expect(names).to include("Croissant")
+    expect(names).not_to include("Baguette", "Old Danish")
+    croissant_row = pick.find { |row| row[:name] == "Croissant" }
+    expect(croissant_row).to include(quantity: 0, retail_quantity: 0, wholesale_quantity: 0)
+  end
+
+  it "collapses the Roule family into a single pick row summing every flavor" do
+    client = create(:client, bakery: bakery)
+    cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
+                                bake_lead_days: 0, pieces_per_tray: 120)
+    everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
+                                  bake_lead_days: 0, pieces_per_tray: 120)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: order, product: cinnamon, daily_item_count: 0, wednesday: 10)
+    create(:order_item, bakery: bakery, order: order, product: everything, daily_item_count: 0, wednesday: 5)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+    names = pick.map { |row| row[:name] }
+
+    expect(names).to include("Roule")
+    expect(names).not_to include("Roule, Cinnamon", "Roule, Everything")
+    roule_row = pick.find { |row| row[:name] == "Roule" }
+    expect(roule_row).to include(pieces_per_tray: 120, quantity: 15, retail_quantity: 15, wholesale_quantity: 0)
+  end
+
+  it "appends a fixed 8-tray Pate Fermentee prep row" do
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+
+    expect(pick.last).to eq(
+      { name: "Pate Fermentee", pieces_per_tray: nil, retail_quantity: 0,
+        wholesale_quantity: 0, quantity: 0, fixed_trays: 8 }
     )
   end
 end

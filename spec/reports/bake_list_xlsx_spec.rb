@@ -59,22 +59,25 @@ describe BakeListXlsx do
 
     expect(report.pull_list_rows).to eq([["Frozen Dough", 6, nil, nil]])
     expect(report.viennoiserie_rows).to eq(
-      [["Croissant", 1, 10, 1, 2, nil, nil, 0, 8, nil, nil]]
+      [
+        ["Croissant", 1, 10, 1, 2, nil, nil, 0, 8, nil, nil],
+        ["Pate Fermentee", 8, nil, nil, nil, nil, nil, nil, nil, nil, nil]
+      ]
     )
   end
 
-  it "highlights tray-tracked products and adds a Roule subtotal on the wholesale sheet" do
-    tray_tracked = create(:product, bakery: bakery, name: "Ham & Brie Croissant", product_type: "vienoisserie",
-                                    bake_lead_days: 1, pieces_per_tray: 60)
-    not_tray_tracked = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
-                                        bake_lead_days: 1)
+  it "adds a Roule subtotal on the wholesale sheet" do
+    ham_brie = create(:product, bakery: bakery, name: "Ham & Brie Croissant", product_type: "vienoisserie",
+                                bake_lead_days: 1, pieces_per_tray: 60)
+    almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
+                              bake_lead_days: 1)
     roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
                                       bake_lead_days: 1)
     roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
                                         bake_lead_days: 1)
 
     order = create(:order, bakery: bakery, start_date: bake_date + 1.day, order_item_count: 0)
-    [[tray_tracked, 17], [not_tray_tracked, 5], [roule_cinnamon, 20], [roule_everything, 12]].each do |product, qty|
+    [[ham_brie, 17], [almond, 5], [roule_cinnamon, 20], [roule_everything, 12]].each do |product, qty|
       create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, thursday: qty)
     end
 
@@ -87,6 +90,29 @@ describe BakeListXlsx do
         ["Roule, Cinnamon", 20, nil, nil],
         ["Roule, Everything", 12, nil, nil],
         ["ROULE TOTAL", 32, nil, nil]
+      ]
+    )
+  end
+
+  it "collapses Roule flavors into one Vienn Pick row and appends a fixed Pate Fermentee tray row" do
+    roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
+                                      bake_lead_days: 1, pieces_per_tray: 120)
+    roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
+                                        bake_lead_days: 1, pieces_per_tray: 120)
+
+    order = create(:order, bakery: bakery, start_date: bake_date + 1.day, order_item_count: 0)
+    [[roule_cinnamon, 130], [roule_everything, 20]].each do |product, qty|
+      create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, thursday: qty)
+    end
+
+    report = described_class.new(bakery, bake_date)
+
+    # One "Roule" row (150 total = 1 tray of 120 + 30 pieces, all wholesale),
+    # then the fixed 8-tray Pate Fermentee prep row. No per-flavor rows.
+    expect(report.viennoiserie_rows).to eq(
+      [
+        ["Roule", 1, 30, 1, 30, nil, nil, 0, 0, nil, nil],
+        ["Pate Fermentee", 8, nil, nil, nil, nil, nil, nil, nil, nil, nil]
       ]
     )
   end

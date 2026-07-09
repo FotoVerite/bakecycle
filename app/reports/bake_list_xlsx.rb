@@ -7,9 +7,6 @@
 class BakeListXlsx
   delegate :retail_sections, :wholesale_sections, :other_sections, to: :@data
 
-  # Wholesale Bread rows for these products get bolded/highlighted, flagging
-  # that the tray/piece breakdown for this item lives on the Vienn Pick
-  # sheet instead (confirmed with the client: highlight = tray-tracked).
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
   # Smith/Franklin/GCM are fixed columns on both the Retail Bread and Quiche
@@ -24,7 +21,6 @@ class BakeListXlsx
   OTHER_SHEET_HEADERS = (%w[Item Total] + STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
 
   ZEBRA_BG = "F5F5F5"
-  HIGHLIGHT_BG = "FFF2CC"
 
   def initialize(bakery, bake_date)
     @bakery = bakery
@@ -61,7 +57,7 @@ class BakeListXlsx
   end
 
   def wholesale_rows
-    wholesale_sections.flat_map { |section| wholesale_section_rows(section).map { |row| row[:cells] } }
+    wholesale_sections.flat_map { |section| wholesale_section_rows(section) }
   end
 
   def other_rows
@@ -74,12 +70,18 @@ class BakeListXlsx
 
   def viennoiserie_rows
     @data.viennoiserie_pick_items.map do |row|
-      total_trays, total_pieces = tray_parts(row[:product], row[:quantity])
-      wholesale_trays, wholesale_pieces = tray_parts(row[:product], row[:wholesale_quantity])
-      retail_trays, retail_pieces = tray_parts(row[:product], row[:retail_quantity])
+      # Synthetic fixed-tray rows (e.g. Pate Fermentee) carry their tray count
+      # directly and have no retail/wholesale split to break down.
+      if row[:fixed_trays]
+        next [row[:name], row[:fixed_trays], nil, nil, nil, nil, nil, nil, nil, nil, nil]
+      end
+
+      total_trays, total_pieces = tray_parts(row[:pieces_per_tray], row[:quantity])
+      wholesale_trays, wholesale_pieces = tray_parts(row[:pieces_per_tray], row[:wholesale_quantity])
+      retail_trays, retail_pieces = tray_parts(row[:pieces_per_tray], row[:retail_quantity])
 
       [
-        row[:product].name,
+        row[:name],
         total_trays, total_pieces,
         wholesale_trays, wholesale_pieces, nil, nil,
         retail_trays, retail_pieces, nil, nil
@@ -105,9 +107,8 @@ class BakeListXlsx
         sheet.add_row [section[:name]], style: styles.fetch(:section)
         merge_row!(sheet, column_count)
         sheet.add_row %w[Item Total MISSING EXTRA], style: styles.fetch(:header)
-        wholesale_section_rows(section).each_with_index do |row, index|
-          background = row[:highlighted] ? HIGHLIGHT_BG : zebra_bg(index)
-          sheet.add_row row[:cells], style: row_style(column_count, background: background)
+        wholesale_section_rows(section).each_with_index do |cells, index|
+          sheet.add_row cells, style: row_style(column_count, background: zebra_bg(index))
         end
       end
       sheet.column_widths 36, 12, 14, 14
@@ -178,8 +179,8 @@ class BakeListXlsx
       sheet.add_row ["Tray Counts"], style: styles.fetch(:title)
       merge_row!(sheet, 2)
       sheet.add_row ["Item", "Qty per Tray"], style: styles.fetch(:header)
-      @data.viennoiserie_pick_items.select { |row| row[:tray_count].present? }.each_with_index do |row, index|
-        sheet.add_row [row[:product].name, row[:tray_count]], style: row_style(2, background: zebra_bg(index))
+      @data.viennoiserie_pick_items.select { |row| row[:pieces_per_tray].present? }.each_with_index do |row, index|
+        sheet.add_row [row[:name], row[:pieces_per_tray]], style: row_style(2, background: zebra_bg(index))
       end
       sheet.column_widths 36, 10, 10, 10, 10, 14, 14, 10, 10, 14, 14
     end
@@ -199,13 +200,11 @@ class BakeListXlsx
   end
 
   def wholesale_section_rows(section)
-    rows = section[:rows].map do |row|
-      { cells: [row[:product].name, row[:quantity], nil, nil], highlighted: tray_tracked?(row[:product]) }
-    end
+    rows = section[:rows].map { |row| [row[:product].name, row[:quantity], nil, nil] }
 
     roule_rows = section[:rows].select { |row| roule_product?(row[:product]) }
     if roule_rows.size > 1
-      rows << { cells: [ROULE_TOTAL_NAME, roule_rows.sum { |row| row[:quantity] }, nil, nil], highlighted: true }
+      rows << [ROULE_TOTAL_NAME, roule_rows.sum { |row| row[:quantity] }, nil, nil]
     end
     rows
   end
@@ -235,7 +234,7 @@ class BakeListXlsx
   end
 
   # Column A (the item name) stays left-aligned; every quantity column gets
-  # centered. background nil/ZEBRA_BG/HIGHLIGHT_BG picks the row tint.
+  # centered. background nil/ZEBRA_BG picks the row tint.
   # Cached since Axlsx styles are cheap to reuse but not free to create --
   # every data row would otherwise register two brand-new styles.
   def row_style(column_count, background: nil)
@@ -254,12 +253,8 @@ class BakeListXlsx
     index.odd? ? ZEBRA_BG : nil
   end
 
-  def tray_tracked?(product)
-    product.pieces_per_tray.present? && product.pieces_per_tray.positive?
-  end
-
   def roule_product?(product)
-    product.name.match?(/\Aroule\b/i)
+    @data.roule_product?(product)
   end
 
   # Merges the row just added into a single banner cell spanning column_count
@@ -275,10 +270,10 @@ class BakeListXlsx
     ("A".."ZZ").to_a[column_count - 1]
   end
 
-  def tray_parts(product, quantity)
-    return [nil, quantity] unless product.pieces_per_tray.present? && product.pieces_per_tray.positive?
+  def tray_parts(pieces_per_tray, quantity)
+    return [nil, quantity] unless pieces_per_tray.present? && pieces_per_tray.positive?
 
-    quantity.divmod(product.pieces_per_tray)
+    quantity.divmod(pieces_per_tray)
   end
 
   def create_output_string(page)
