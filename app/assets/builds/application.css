@@ -5545,6 +5545,12 @@ input[type=text] {
 .order-item-grid input[type=number] {
   height: 40px;
   text-align: right;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.order-item-grid input[type=number]::-webkit-inner-spin-button, .order-item-grid input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .order-item-grid input[data-order-item-day]:disabled {
   background: #f5f5f5;
@@ -5599,6 +5605,12 @@ input[type=text] {
 }
 .shipment-item-grid input[type=number] {
   text-align: right;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.shipment-item-grid input[type=number]::-webkit-inner-spin-button, .shipment-item-grid input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .shipment-item-grid .nested-row-actions {
   justify-content: flex-end;

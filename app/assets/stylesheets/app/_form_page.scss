@@ -1118,6 +1118,17 @@
   input[type='number'] {
     height: 40px;
     text-align: right;
+
+    // Remove the tiny spinner arrows — the cells are small and clicking them
+    // was causing accidental value changes. Enter values by typing only.
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 
   input[data-order-item-day]:disabled {
@@ -1181,6 +1192,17 @@
 
   input[type='number'] {
     text-align: right;
+
+    // Remove the tiny spinner arrows — the cells are small and clicking them
+    // was causing accidental value changes. Enter values by typing only.
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 
   .nested-row-actions {

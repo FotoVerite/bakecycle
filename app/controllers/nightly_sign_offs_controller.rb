@@ -12,7 +12,7 @@ class NightlySignOffsController < ApplicationController
     @blue_bottle          = shipments.select { |s| blue_bottle?(s.client_name) }
     @wholesale_sandwiches = shipments.select { |s| sandwich_and_tartine?(s) }
 
-    excluded_ids = (@blue_bottle + @wholesale_sandwiches).map(&:id).to_set
+    excluded_ids = @blue_bottle.map(&:id).to_set
     @all_clients = shipments.reject { |s| excluded_ids.include?(s.id) }
   end
 

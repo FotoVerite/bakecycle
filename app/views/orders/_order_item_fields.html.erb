@@ -35,7 +35,10 @@
           min: 0,
           step: 1,
           autocomplete: "off",
-          data: { order_item_day: day_num } %>
+          data: {
+            order_item_day: day_num,
+            action: "focus->order-form#selectContents"
+          } %>
     </div>
   <% end %>
 

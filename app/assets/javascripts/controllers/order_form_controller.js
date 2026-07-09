@@ -86,6 +86,14 @@ export default class extends Controller {
     })
   }
 
+  // Highlight a day cell's whole value on focus so typing replaces it, rather
+  // than dropping a caret. Deferred a frame so the click's own mouseup (which
+  // otherwise collapses the selection to a caret) doesn't undo it.
+  selectContents(event) {
+    const input = event.target
+    requestAnimationFrame(() => input.select())
+  }
+
   updateDayInputs() {
     const isTemporary = this.currentOrderType === "temporary"
     const startDate = this.startDateTarget.value

@@ -41,7 +41,8 @@
         disabled: production_locked,
         min: 0,
         step: 1,
-        autocomplete: "off" %>
+        autocomplete: "off",
+        data: { action: "focus->shipment-item#selectContents" } %>
   </div>
 
   <div class="form-field shipment-price-cell">
@@ -51,7 +52,10 @@
         min: 0,
         step: "0.01",
         autocomplete: "off",
-        data: { shipment_item_target: "price" } %>
+        data: {
+          shipment_item_target: "price",
+          action: "focus->shipment-item#selectContents"
+        } %>
   </div>
 
   <div class="shipment-item-readonly shipment-production-start-cell">

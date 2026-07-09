@@ -12,19 +12,34 @@ module ExportsReportable
 
   def create_export_and_respond(generator)
     file_export = ExporterJob.create(current_user, current_bakery, generator)
-    respond_to do |format|
-      format.html { redirect_to file_export }
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.prepend("export_tray_list", partial: "file_exports/tray_item", locals: { file_export: file_export, variant: :enter }),
-          turbo_stream.prepend("file_exports_list", partial: "file_exports/history_row", locals: { file_export: file_export, variant: :enter }),
-          *overflow_removal_streams(file_export)
-        ]
-      end
+
+    # Some trigger links carry a `.pdf`/`.xlsx`/`.csv` extension in the URL --
+    # either as a leftover from the old "open the file in a new tab" design or
+    # because the controller reads the export type from `params[:format]` (e.g.
+    # DailyTotalsController). That extension pins `request.format` to the binary
+    # type, so a plain `respond_to` with only `html`/`turbo_stream` blocks raises
+    # `ActionController::UnknownFormat` (406) for every one of those triggers.
+    # Key off Turbo's own hint instead -- Turbo adds the turbo-stream MIME to the
+    # Accept header on `data-turbo-stream` requests regardless of URL extension,
+    # while a plain browser hitting the link in a fresh tab still gets the
+    # full-page redirect fallback.
+    if turbo_stream_export_request?
+      render turbo_stream: [
+        turbo_stream.prepend("export_tray_list", partial: "file_exports/tray_item", locals: { file_export: file_export, variant: :enter }),
+        turbo_stream.prepend("file_exports_list", partial: "file_exports/history_row", locals: { file_export: file_export, variant: :enter }),
+        *overflow_removal_streams(file_export)
+      ]
+    else
+      redirect_to file_export
     end
   end
 
   private
+
+  def turbo_stream_export_request?
+    request.format.turbo_stream? ||
+      request.headers["Accept"].to_s.include?(Mime[:turbo_stream].to_s)
+  end
 
   # Prepending grows the tray/history lists past the 10-item display cap. Since
   # exports are never pruned from the DB (invoices must be retained), the cap is
