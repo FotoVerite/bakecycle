@@ -12,7 +12,7 @@
 </div>
 
 <template data-nested-form-target="template">
-  <%= f.fields_for :bake_lead_day_variants, BakeLeadDayVariant.new, child_index: "NEW_RECORD" do |v_form| %>
+  <%= f.fields_for :bake_lead_day_variants, BakeLeadDayVariant.new(bake_lead_days: 0), child_index: "NEW_RECORD" do |v_form| %>
     <%= render "bake_lead_day_variant_fields", v_form: v_form, clients: @clients, is_template: true %>
   <% end %>
 </template>

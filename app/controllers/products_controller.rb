@@ -179,7 +179,9 @@ class ProductsController < ApplicationController
     # show/orders/costing/destroy don't render price_variants -- eager loading them there
     # was flagged by Bullet as unnecessary. edit/update (which re-renders the edit form
     # on validation failure) and papertrail all render price_variants via _form.html.erb.
-    scope = scope.includes(price_variants: :client) if %w[edit update papertrail].include?(action_name)
+    if %w[edit update papertrail].include?(action_name)
+      scope = scope.includes(price_variants: :client, bake_lead_day_variants: :client)
+    end
     @product = scope.find(params[:id])
   end
 

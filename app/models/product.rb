@@ -129,7 +129,10 @@ class Product < ApplicationRecord
   end
 
   def reject_bake_lead_day_variants?(attributes)
-    attributes["client_id"].blank? && attributes["bake_lead_days"].blank?
+    # client_id is mandatory on BakeLeadDayVariant (unlike PriceVariant, there's no
+    # "all clients" case) -- a row with no client picked can never be valid regardless
+    # of what bake_lead_days holds, so that alone is enough to know it's an untouched row.
+    attributes["client_id"].blank?
   end
 
   def price(quantity, client)

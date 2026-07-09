@@ -13,7 +13,7 @@
             } %>
     </div>
     <div class="form-field form-span-3">
-      <%= v_form.number_field :bake_lead_days, placeholder: "0", min: 0, step: 1, inputmode: "numeric", required: true, class: "nested-field" %>
+      <%= v_form.number_field :bake_lead_days, min: 0, step: 1, inputmode: "numeric", required: true, class: "nested-field" %>
     </div>
     <div class="form-field form-span-1 nested-row-actions">
       <% if v_form.object.persisted? %>

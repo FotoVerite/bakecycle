@@ -149,6 +149,54 @@ RSpec.describe "Products", type: :request do
       expect(price_variant.price).to eq(4.25)
     end
 
+    it "adds a bake lead day override for a client without disturbing existing per-client " \
+       "price variants (reproduces product 26804's shape: one all-clients qty-1 variant " \
+       "plus 36 per-client qty-1 variants)" do
+      all_clients_variant = create(:price_variant, product: product, client: nil, quantity: 1, price: 0)
+      clients = create_list(:client, 36, bakery: bakery)
+      smith_st = clients.first
+      per_client_variants = clients.map do |c|
+        create(:price_variant, product: product, client: c, quantity: 1, price: 2.5)
+      end
+
+      # Simulate the real form: every currently-rendered price_variant row is resubmitted
+      # unchanged (Rails nested attributes re-sends the whole fields_for collection, not
+      # just what the user actually touched), plus one new bake_lead_day_variant.
+      price_variants_attributes = ([all_clients_variant] + per_client_variants).each_with_index.to_h do |pv, i|
+        [i.to_s, { id: pv.id, client_id: pv.client_id, quantity: pv.quantity, price: pv.price }]
+      end
+
+      patch product_path(product), params: {
+        product: {
+          price_variants_attributes: price_variants_attributes,
+          bake_lead_day_variants_attributes: {
+            "0" => { client_id: smith_st.id, bake_lead_days: 1 }
+          }
+        }
+      }
+
+      expect(product.errors.full_messages).to eq([])
+      expect(response).to redirect_to(edit_product_path(product))
+      expect(product.reload.bake_lead_day_variants.count).to eq(1)
+      expect(product.bake_lead_day_variants.first.client_id).to eq(smith_st.id)
+      expect(product.price_variants.where(client_id: nil).count).to eq(1)
+    end
+
+    it "silently drops an unused new bake lead day override row (no client picked) instead " \
+       "of erroring, even though the field now defaults to 0 rather than blank" do
+      patch product_path(product), params: {
+        product: {
+          bake_lead_day_variants_attributes: {
+            "0" => { client_id: "", bake_lead_days: "0" }
+          }
+        }
+      }
+
+      expect(product.errors.full_messages).to eq([])
+      expect(response).to redirect_to(edit_product_path(product))
+      expect(product.reload.bake_lead_day_variants.count).to eq(0)
+    end
+
     it "shows product report source choices" do
       get product_totals_report_products_path
 

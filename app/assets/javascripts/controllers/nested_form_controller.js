@@ -126,15 +126,22 @@ export default class extends Controller {
     const sourceSelector = select.dataset.tomSelectOptionsSourceValue
     if (!sourceSelector) return
 
+    const ownValue = ts.getValue()
+
     sharedOptions(sourceSelector).forEach(option => {
       const value = String(option.value)
-      const isTaken = selectedInOthers.has(value)
+      // Never strip this select's own current selection -- if another row also
+      // reports this value (e.g. a duplicate in-progress pick), that's the OTHER
+      // row's problem to resolve, not a reason to blank out this one.
+      const isTaken = selectedInOthers.has(value) && value !== ownValue
       const isPresent = Object.prototype.hasOwnProperty.call(ts.options, value)
 
       if (isTaken && isPresent) {
         ts.removeOption(value)
       } else if (!isTaken && !isPresent) {
-        ts.addOption(option)
+        // Clone -- see tom_select_controller.js for why shared option objects can't
+        // be handed to more than one TomSelect instance.
+        ts.addOption({ ...option })
       }
     })
     ts.refreshOptions(false)

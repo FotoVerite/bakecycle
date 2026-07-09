@@ -33,7 +33,11 @@ export default class extends Controller {
     // Selects that render their own distinct list (order items, recipes, search forms,
     // etc.) are unaffected -- they keep reading from their own <option> tags as before.
     if (this.hasOptionsSourceValue) {
-      options.options = sharedOptions(this.optionsSourceValue)
+      // Clone -- tom-select mutates the option objects it's given as part of managing
+      // its own instance state. Handing the same cached objects to multiple instances
+      // (one per row) lets one instance's internal bookkeeping corrupt another's,
+      // silently clearing an unrelated row's selection.
+      options.options = sharedOptions(this.optionsSourceValue).map(option => ({ ...option }))
     }
 
     if (this.element.multiple) {
