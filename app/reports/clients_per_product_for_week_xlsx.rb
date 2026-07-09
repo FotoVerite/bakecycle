@@ -64,10 +64,10 @@ class ClientsPerProductForWeekXlsx
     # Set Product Type Row
     hash.each do |key, product_hash|
       sheet.add_row [key], style: @header
-      sheet.merge_cells("A#{sheet.rows.last.index + 1}:I#{sheet.rows.last.index + 1}")
+      sheet.merge_cells("A#{sheet.rows.size}:I#{sheet.rows.size}")
       product_hash.each do |product_name, client_values|
         sheet.add_row [product_name], style: @header
-        sheet.merge_cells("A#{sheet.rows.last.index + 1}:I#{sheet.rows.last.index + 1}")
+        sheet.merge_cells("A#{sheet.rows.size}:I#{sheet.rows.size}")
         create_client_rows(client_values, sheet)
       end
       sheet.add_row [""]
@@ -76,7 +76,7 @@ class ClientsPerProductForWeekXlsx
   end
 
   def create_client_rows(client_values, sheet)
-    start = sheet.rows.last.index + 2
+    start = sheet.rows.size + 1
     client_values.each do |client, values|
       row = []
       row.push(client)
@@ -93,7 +93,7 @@ class ClientsPerProductForWeekXlsx
   end
 
   def create_end_row(sheet, start)
-    end_of = sheet.rows.last.index + 1
+    end_of = sheet.rows.size
     total_row = [nil]
     %w[B C D E F G H I].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")

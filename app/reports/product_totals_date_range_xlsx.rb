@@ -37,7 +37,7 @@ class ProductTotalsDateRangeXlsx
 
       grouped_rows.each do |group|
         sheet.add_row [group[:label]], style: group_style
-        sheet.merge_cells("A#{sheet.rows.last.index + 1}:#{last_column}#{sheet.rows.last.index + 1}")
+        sheet.merge_cells("A#{sheet.rows.size}:#{last_column}#{sheet.rows.size}")
         group[:rows].each { |row| sheet.add_row row }
         sheet.add_row group[:subtotal], style: subtotal_style
         sheet.add_row []

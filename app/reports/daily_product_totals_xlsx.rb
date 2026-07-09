@@ -72,14 +72,14 @@ class DailyProductTotalsXlsx
     # Set Product Type Row
     @products.each do |key, product_values|
       sheet.add_row [key], style: @header
-      sheet.merge_cells("A#{sheet.rows.last.index + 1}:C#{sheet.rows.last.index + 1}")
+      sheet.merge_cells("A#{sheet.rows.size}:C#{sheet.rows.size}")
       sheet.add_row ["", "", ""]
       create_product_rows(product_values, sheet)
     end
   end
 
   def create_product_rows(product_values, sheet)
-    start = sheet.rows.last.index + 2
+    start = sheet.rows.size + 1
     product_values.each do |key, value|
       row = [value["weight"]]
       row.push(key)
@@ -94,7 +94,7 @@ class DailyProductTotalsXlsx
   end
 
   def create_end_row(sheet, start)
-    end_of = sheet.rows.last.index + 1
+    end_of = sheet.rows.size
     total_row = [nil, nil]
     %w[C].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")

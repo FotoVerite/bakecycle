@@ -80,22 +80,22 @@ class WeeklyProductTotalsXlsx
   def add_rows(_hash, sheet, _total = 0)
     @products.each do |key, product_values|
       sheet.add_row [key], style: @header
-      sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
+      sheet.merge_cells("A#{sheet.rows.size}:J#{sheet.rows.size}")
       sheet.add_row ["", "", ""]
       create_product_rows(product_values, sheet)
     end
     sheet.add_row ["Total"], style: @header
-    sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
+    sheet.merge_cells("A#{sheet.rows.size}:J#{sheet.rows.size}")
     sheet.add_row ["", "", "", "", "", "", "", "", "", ""]
     # sheet.add_row ["", "", "", "", "", "", "", "", "", hash[client][:total]]
     sheet.add_row ["", "", "", "", "", "", "", "", "", ""]
   end
 
   def create_product_rows(product_values, sheet)
-    start = sheet.rows.last.index + 2
+    start = sheet.rows.size + 1
     product_values.each do |key, value|
       sheet.add_row [key], style: @product_style
-      sheet.merge_cells("A#{sheet.rows.last.index + 1}:J#{sheet.rows.last.index + 1}")
+      sheet.merge_cells("A#{sheet.rows.size}:J#{sheet.rows.size}")
       sheet.add_row(["", "", "", "", "", "", "", "", "", "", ""])
       value[:clients].each do |client, client_values|
         client_row = ["", client]
@@ -112,7 +112,7 @@ class WeeklyProductTotalsXlsx
   end
 
   def create_end_row(sheet, start)
-    end_of = sheet.rows.last.index + 1
+    end_of = sheet.rows.size
     total_row = [nil, nil]
     %w[C].each do |sum|
       total_row.push("=SUM(#{sum}#{start}:#{sum}#{end_of})")
