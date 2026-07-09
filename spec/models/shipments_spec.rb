@@ -166,10 +166,21 @@ describe Shipment do
   end
 
   describe ".search" do
-    it "delegates to the shipment searcher" do
+    it "delegates to the shipment searcher with the current relation" do
       terms = { client_id: 4 }
-      expect(ShipmentSearcher).to receive(:search).with(Shipment, terms)
+      expect(ShipmentSearcher).to receive(:search).with(a_kind_of(ActiveRecord::Relation), terms)
       Shipment.search(terms)
+    end
+
+    it "preserves a prior bakery scope instead of returning every bakery's shipments" do
+      mine = create(:shipment)
+      other = create(:shipment)
+      expect(mine.bakery_id).not_to eq(other.bakery_id)
+
+      result = Shipment.where(bakery_id: mine.bakery_id).search({})
+
+      expect(result).to contain_exactly(mine)
+      expect(result).not_to include(other)
     end
   end
 

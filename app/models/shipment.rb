@@ -89,7 +89,7 @@ class Shipment < ApplicationRecord
 
   delegate :after_kickoff_time?, :before_kickoff_time?, to: :bakery
 
-  scope :search, ->(terms) { ShipmentSearcher.search(Shipment, terms) }
+  scope :search, ->(terms) { ShipmentSearcher.search(all, terms) }
   scope :latest, ->(count) { order(date: :desc).limit(count) }
 
   def self.policy_class

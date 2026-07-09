@@ -176,5 +176,12 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       expect(response).to redirect_to(shipments_path)
       expect(flash[:alert]).to eq("That record no longer exists.")
     end
+
+    it "does not list another bakery's invoices on the index" do
+      other = create(:shipment, bakery: create(:bakery))
+      get shipments_path
+      expect(response.body).to include(edit_shipment_path(shipment))
+      expect(response.body).not_to include(edit_shipment_path(other))
+    end
   end
 end
