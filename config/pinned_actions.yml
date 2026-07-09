@@ -11,7 +11,7 @@ new_invoice:
   context: "Invoices"
   icon: "file-plus"
   route: new_shipment_path
-  permission: shipping_manage?
+  permission: client_manage?
 daily_recipes:
   label: "Daily Recipes"
   description: "Review or print recipe quantities for a production date."
