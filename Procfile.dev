@@ -1,4 +1,4 @@
 web: bundle exec rails server
-js: yarn build:watch
+js: npm run build:watch
 css: bundle exec rails dartsass:watch
 jobs: bin/jobs-dev
