@@ -5,25 +5,26 @@
 # already established by SortedPackListXlsx. Blank check/count columns are
 # literal nil cells for staff to fill in by hand.
 class BakeListXlsx
-  delegate :retail_sections, :wholesale_sections, :retail_clients, :other_sections, to: :@data
+  delegate :retail_sections, :wholesale_sections, :other_sections, to: :@data
 
   # Wholesale Bread rows for these products get bolded/highlighted, flagging
   # that the tray/piece breakdown for this item lives on the Vienn Pick
   # sheet instead (confirmed with the client: highlight = tray-tracked).
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
-  # Client names like "Bien Cuit - Franklin Ave Retail Bake" are too long to
-  # use as a column header without either wrapping or overflowing into the
-  # next column, so header cells get truncated to this length.
-  CLIENT_HEADER_LENGTH = 18
+  # Smith/Franklin/GCM are fixed columns on both the Retail Bread and Quiche
+  # & Dessert sheets, matched by client name rather than derived from that
+  # day's orders -- a store with no order that day still gets a 0, instead of
+  # its whole column disappearing (confirmed with the client).
+  STORE_COLUMNS = { "Smith" => /smith/i, "Franklin" => /franklin/i, "GCM" => /grand central/i }.freeze
 
-  # The Quiche & Dessert sheet always has these six columns (plus Item),
-  # matching the hand-made bake list. The three store columns match Bien Cuit
-  # clients by name -- store orders arrive on either bake lead, so they can't
-  # be derived from lead days. Retail = the three stores summed; Wholesale =
+  # The Quiche & Dessert sheet always has these eight columns, matching the
+  # hand-made bake list. Retail = the three stores summed; Wholesale =
   # everything else; Blue Bottle is a breakout within Wholesale.
-  OTHER_SHEET_HEADERS = ["Item", "Total", "Smith", "Franklin", "GCM", "Retail", "Blue Bottle", "Wholesale"].freeze
-  OTHER_SHEET_STORES = { "Smith" => /smith/i, "Franklin" => /franklin/i, "GCM" => /grand central/i }.freeze
+  OTHER_SHEET_HEADERS = (%w[Item Total] + STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
+
+  ZEBRA_BG = "F5F5F5"
+  HIGHLIGHT_BG = "FFF2CC"
 
   def initialize(bakery, bake_date)
     @bakery = bakery
@@ -35,11 +36,12 @@ class BakeListXlsx
     package = Axlsx::Package.new
     workbook = package.workbook
     styles = workbook.styles
+    @workbook_styles = styles
+    @row_style_cache = {}
     report_styles = {
       title: styles.add_style(b: true, sz: 16, alignment: { horizontal: :center }),
       section: styles.add_style(bg_color: "B7B7B7", b: true, sz: 14, alignment: { horizontal: :center }),
-      header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center }),
-      highlight: styles.add_style(bg_color: "FFF2CC", b: true)
+      header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center })
     }
 
     add_retail_sheet(workbook, report_styles)
@@ -55,11 +57,7 @@ class BakeListXlsx
   # testability convention: specs assert on these directly, never on parsed
   # xlsx bytes.
   def retail_rows
-    retail_sections.flat_map do |section|
-      section[:rows].map do |row|
-        [row[:product].name, row[:quantity]] + retail_clients.map { |client| row[:client_quantities][client].to_i }
-      end
-    end
+    retail_sections.flat_map { |section| section[:rows].map { |row| retail_row_cells(row) } }
   end
 
   def wholesale_rows
@@ -92,14 +90,8 @@ class BakeListXlsx
   private
 
   def add_retail_sheet(workbook, styles)
-    config = {
-      title: "RETAIL",
-      headers: %w[Item Total] + retail_clients.map { |client| client_header(client) },
-      sections: retail_sections
-    }
-    add_sectioned_sheet(workbook, "Retail Bread", styles, config) do |row|
-      [row[:product].name, row[:quantity]] + retail_clients.map { |client| row[:client_quantities][client].to_i }
-    end
+    config = { title: "RETAIL", headers: %w[Item Total] + STORE_COLUMNS.keys, sections: retail_sections }
+    add_sectioned_sheet(workbook, "Retail Bread", styles, config) { |row| retail_row_cells(row) }
   end
 
   def add_wholesale_sheet(workbook, styles)
@@ -113,8 +105,9 @@ class BakeListXlsx
         sheet.add_row [section[:name]], style: styles.fetch(:section)
         merge_row!(sheet, column_count)
         sheet.add_row %w[Item Total MISSING EXTRA], style: styles.fetch(:header)
-        wholesale_section_rows(section).each do |row|
-          sheet.add_row row[:cells], style: row[:highlighted] ? styles.fetch(:highlight) : nil
+        wholesale_section_rows(section).each_with_index do |row, index|
+          background = row[:highlighted] ? HIGHLIGHT_BG : zebra_bg(index)
+          sheet.add_row row[:cells], style: row_style(column_count, background: background)
         end
       end
       sheet.column_widths 36, 12, 14, 14
@@ -130,7 +123,9 @@ class BakeListXlsx
         sheet.add_row [section[:name]], style: styles.fetch(:section)
         merge_row!(sheet, column_count)
         sheet.add_row OTHER_SHEET_HEADERS, style: styles.fetch(:header)
-        section[:rows].each { |row| sheet.add_row other_row_cells(row) }
+        section[:rows].each_with_index do |row, index|
+          sheet.add_row other_row_cells(row), style: row_style(column_count, background: zebra_bg(index))
+        end
       end
       sheet.column_widths 36, 12, *Array.new(column_count - 2, 14)
     end
@@ -147,7 +142,9 @@ class BakeListXlsx
         sheet.add_row [section[:name]], style: styles.fetch(:section)
         merge_row!(sheet, column_count)
         sheet.add_row config.fetch(:headers), style: styles.fetch(:header)
-        section[:rows].each { |row| sheet.add_row yield(row) }
+        section[:rows].each_with_index do |row, index|
+          sheet.add_row yield(row), style: row_style(column_count, background: zebra_bg(index))
+        end
       end
       sheet.column_widths 36, 12, *Array.new(column_count - 2, 18)
     end
@@ -174,15 +171,15 @@ class BakeListXlsx
         "Tray", "Piece",
         "Count", "Initial"
       ], style: styles.fetch(:header)
-      viennoiserie_rows.each { |row| sheet.add_row row }
+      viennoiserie_rows.each_with_index do |row, index|
+        sheet.add_row row, style: row_style(11, background: zebra_bg(index))
+      end
       sheet.add_row []
       sheet.add_row ["Tray Counts"], style: styles.fetch(:title)
       merge_row!(sheet, 2)
       sheet.add_row ["Item", "Qty per Tray"], style: styles.fetch(:header)
-      @data.viennoiserie_pick_items.each do |row|
-        next if row[:tray_count].blank?
-
-        sheet.add_row [row[:product].name, row[:tray_count]]
+      @data.viennoiserie_pick_items.select { |row| row[:tray_count].present? }.each_with_index do |row, index|
+        sheet.add_row [row[:product].name, row[:tray_count]], style: row_style(2, background: zebra_bg(index))
       end
       sheet.column_widths 36, 10, 10, 10, 10, 14, 14, 10, 10, 14, 14
     end
@@ -194,7 +191,9 @@ class BakeListXlsx
       merge_row!(sheet, 4)
       sheet.add_row []
       sheet.add_row %w[Product Qty Trays Checked], style: styles.fetch(:header)
-      pull_list_rows.each { |row| sheet.add_row row }
+      pull_list_rows.each_with_index do |row, index|
+        sheet.add_row row, style: row_style(4, background: zebra_bg(index))
+      end
       sheet.column_widths 36, 12, 18, 14
     end
   end
@@ -211,13 +210,20 @@ class BakeListXlsx
     rows
   end
 
+  def retail_row_cells(row)
+    [row[:product].name, row[:quantity], *store_quantities(row)]
+  end
+
   def other_row_cells(row)
-    store_quantities = OTHER_SHEET_STORES.values.map { |pattern| store_quantity(row, pattern) }
-    retail = store_quantities.sum
+    retail = store_quantities(row).sum
     blue_bottle = quantity_matching(row) { |client| client.name.match?(/blue bottle/i) }
 
-    [row[:product].name, row[:quantity], *store_quantities,
+    [row[:product].name, row[:quantity], *store_quantities(row),
      retail, blue_bottle.zero? ? nil : blue_bottle, row[:quantity] - retail]
+  end
+
+  def store_quantities(row)
+    STORE_COLUMNS.values.map { |pattern| store_quantity(row, pattern) }
   end
 
   def store_quantity(row, pattern)
@@ -228,8 +234,24 @@ class BakeListXlsx
     row[:client_quantities].sum { |client, quantity| matcher.call(client) ? quantity : 0 }
   end
 
-  def client_header(client)
-    client.name.truncate(CLIENT_HEADER_LENGTH)
+  # Column A (the item name) stays left-aligned; every quantity column gets
+  # centered. background nil/ZEBRA_BG/HIGHLIGHT_BG picks the row tint.
+  # Cached since Axlsx styles are cheap to reuse but not free to create --
+  # every data row would otherwise register two brand-new styles.
+  def row_style(column_count, background: nil)
+    @row_style_cache[[column_count, background]] ||= begin
+      label_style = @workbook_styles.add_style(
+        alignment: { horizontal: :left }, **(background ? { bg_color: background } : {})
+      )
+      value_style = @workbook_styles.add_style(
+        alignment: { horizontal: :center }, **(background ? { bg_color: background } : {})
+      )
+      [label_style] + Array.new(column_count - 1, value_style)
+    end
+  end
+
+  def zebra_bg(index)
+    index.odd? ? ZEBRA_BG : nil
   end
 
   def tray_tracked?(product)

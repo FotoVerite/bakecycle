@@ -8,8 +8,8 @@ describe BakeListXlsx do
   let(:bake_date) { Date.new(2026, 6, 3) } # a Wednesday
 
   it "builds sectioned retail, wholesale, pull/prep, and viennoiserie pick rows" do
-    smith = create(:client, bakery: bakery, name: "Smith")
-    franklin = create(:client, bakery: bakery, name: "Franklin")
+    smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
+    franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
 
     baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
@@ -40,12 +40,12 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    expect(report.retail_clients.map(&:name)).to eq(%w[Franklin Smith])
     expect(report.retail_sections.map { |section| section[:name] }).to eq(%w[Bread Viennoiserie])
+    # Item, Total, Smith, Franklin, GCM
     expect(report.retail_rows).to eq(
       [
-        ["Baguette", 36, 12, 24],
-        ["Croissant", 8, 0, 8]
+        ["Baguette", 36, 24, 12, 0],
+        ["Croissant", 8, 8, 0, 0]
       ]
     )
 
@@ -115,20 +115,16 @@ describe BakeListXlsx do
     expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 18, 46, 82, 86]])
   end
 
-  it "truncates long client names in header cells instead of overflowing the column" do
-    long_name = "Bien Cuit - Franklin Ave Retail Bake"
-    client = create(:client, bakery: bakery, name: long_name)
+  it "shows a fixed Smith/Franklin/GCM zero instead of dropping a store's column on a quiet day" do
+    smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: order, product: baguette, daily_item_count: 0, wednesday: 12)
 
-    workbook = described_class.new(bakery, bake_date).generate
+    report = described_class.new(bakery, bake_date)
 
-    Zip::File.open_buffer(StringIO.new(workbook)) do |zip|
-      shared_strings = zip.read("xl/sharedStrings.xml")
-      expect(shared_strings).not_to include(long_name)
-      expect(shared_strings).to include(long_name.truncate(BakeListXlsx::CLIENT_HEADER_LENGTH))
-    end
+    # Franklin and GCM didn't order -- still present, as explicit 0s.
+    expect(report.retail_rows).to eq([["Baguette", 12, 12, 0, 0]])
   end
 
   it "generates a valid xlsx workbook" do

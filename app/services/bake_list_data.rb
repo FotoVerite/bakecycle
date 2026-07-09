@@ -38,10 +38,6 @@ class BakeListData
     @_wholesale_sections ||= sections_for(wholesale_items.select { |row| bread_sheet_type?(row) })
   end
 
-  def retail_clients
-    @_retail_clients ||= retail_items.flat_map { |row| row[:client_quantities].keys }.uniq.sort_by(&:name)
-  end
-
   # Quiche, Sandwich, Tart & Dessert, Pound Cake, etc. -- combines each
   # product's retail and wholesale bake quantities onto one row (unlike the
   # Retail/Wholesale Bread sheets, which stay split across two sheets),
