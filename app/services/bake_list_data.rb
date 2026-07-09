@@ -72,17 +72,6 @@ class BakeListData
     end
   end
 
-  def pull_list_items
-    @_pull_list_items ||= begin
-      products = Product.where(bakery: @bakery, on_pull_list: true, removed: false).order_by_name
-      rows = products.map do |product|
-        quantity = pull_list_order_items[product].to_a.sum { |item| item.quantity(@bake_date) }
-        { product: product, quantity: quantity, trays: product.trays_for(quantity) }
-      end
-      rows.select { |row| row[:quantity].positive? }
-    end
-  end
-
   # The Vienn Pick lists *every* active Viennoiserie product, showing zero when
   # there are no orders that day (unlike the bake sheets, which only list what's
   # actually ordered) -- the pick sheet doubles as a standing checklist. The
@@ -230,14 +219,5 @@ class BakeListData
 
   def bake_list_product?(product)
     product.present? && !product.removed? && !product.inactive? && !product.on_pull_list?
-  end
-
-  # Pull/prep items aren't baked fresh (no bake_lead_days to derive a
-  # delivery date from), so their quantity is read for the bake_date itself
-  # -- matching retail's "pulled fresh that morning" cadence.
-  def pull_list_order_items
-    @_pull_list_order_items ||= Order.active(@bake_date).where(bakery: @bakery).includes(order_items: :product)
-      .flat_map(&:order_items)
-      .group_by(&:product)
   end
 end

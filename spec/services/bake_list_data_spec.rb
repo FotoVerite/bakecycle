@@ -116,18 +116,6 @@ describe BakeListData do
     expect(described_class.new(bakery, bake_date).retail_items).to be_empty
   end
 
-  it "lists pull_list_items from Product#on_pull_list, computing same-day quantity and omitting zeroes" do
-    laminated = create(:product, bakery: bakery, name: "Laminated Dough", on_pull_list: true, pieces_per_tray: 5)
-    unused = create(:product, bakery: bakery, name: "Unused Dough", on_pull_list: true)
-    order = create(:order, bakery: bakery, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: laminated, daily_item_count: 0, wednesday: 12)
-    create(:order_item, bakery: bakery, order: order, product: unused, daily_item_count: 0)
-
-    data = described_class.new(bakery, bake_date)
-
-    expect(data.pull_list_items).to eq([{ product: laminated, quantity: 12, trays: "2 trays + 2 pcs" }])
-  end
-
   it "combines retail and wholesale quantities for non-bread product types into other_sections" do
     smith = create(:client, bakery: bakery, name: "Smith")
     blue_bottle = create(:client, bakery: bakery, name: "Blue Bottle Coffee Nomad")

@@ -1,19 +1,26 @@
 # frozen_string_literal: true
 
 # One workbook, reference-style sheets -- Retail Bread, Wholesale Bread,
-# Vienn Pick, and Pull/Prep List -- matching the multi-worksheet precedent
+# Quiche & Dessert, and Vienn Pick -- matching the multi-worksheet precedent
 # already established by SortedPackListXlsx. Blank check/count columns are
-# literal nil cells for staff to fill in by hand.
+# literal nil cells for staff to fill in by hand. (The Quiche & Dessert sheet
+# doubles as the pull/prep list, so there's no separate Pull/Prep sheet.)
 class BakeListXlsx
   delegate :retail_sections, :wholesale_sections, :other_sections, to: :@data
 
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
-  # Smith/Franklin/GCM are fixed columns on both the Retail Bread and Quiche
+  # Smith/Franklin are fixed store columns on both the Retail Bread and Quiche
   # & Dessert sheets, matched by client name rather than derived from that
   # day's orders -- a store with no order that day still gets a 0, instead of
   # its whole column disappearing (confirmed with the client).
-  STORE_COLUMNS = { "Smith" => /smith/i, "Franklin" => /franklin/i, "GCM" => /grand central/i }.freeze
+  #
+  # Grand Central ("Bien Cuit - Grand Central") is deliberately NOT a store
+  # column: it can't take retail-bake items, so it has no place on the Retail
+  # sheet, and on the Quiche & Dessert sheet its quantities must fall into the
+  # Wholesale total with every other wholesale account rather than being split
+  # out as a store (which previously subtracted them from Wholesale).
+  STORE_COLUMNS = { "Smith" => /smith/i, "Franklin" => /franklin/i }.freeze
 
   # The Quiche & Dessert sheet always has these eight columns, matching the
   # hand-made bake list. Retail = the three stores summed; Wholesale =
@@ -44,7 +51,6 @@ class BakeListXlsx
     add_wholesale_sheet(workbook, report_styles)
     add_other_sheet(workbook, report_styles)
     add_viennoiserie_sheet(workbook, report_styles)
-    add_pull_list_sheet(workbook, report_styles)
 
     create_output_string(package)
   end
@@ -62,10 +68,6 @@ class BakeListXlsx
 
   def other_rows
     other_sections.flat_map { |section| section[:rows].map { |row| other_row_cells(row) } }
-  end
-
-  def pull_list_rows
-    @data.pull_list_items.map { |row| [row[:product].name, row[:quantity], row[:trays], nil] }
   end
 
   def viennoiserie_rows
@@ -186,27 +188,24 @@ class BakeListXlsx
     end
   end
 
-  def add_pull_list_sheet(workbook, styles)
-    workbook.add_worksheet(name: "Pull-Prep List") do |sheet|
-      sheet.add_row ["Pull-Prep List", @bake_date.iso8601], style: styles.fetch(:title)
-      merge_row!(sheet, 4)
-      sheet.add_row []
-      sheet.add_row %w[Product Qty Trays Checked], style: styles.fetch(:header)
-      pull_list_rows.each_with_index do |row, index|
-        sheet.add_row row, style: row_style(4, background: zebra_bg(index))
-      end
-      sheet.column_widths 36, 12, 18, 14
-    end
-  end
-
   def wholesale_section_rows(section)
-    rows = section[:rows].map { |row| [row[:product].name, row[:quantity], nil, nil] }
+    rows = section[:rows].map { |row| [row[:product].name, wholesale_total(row), nil, nil] }
 
     roule_rows = section[:rows].select { |row| roule_product?(row[:product]) }
     if roule_rows.size > 1
-      rows << [ROULE_TOTAL_NAME, roule_rows.sum { |row| row[:quantity] }, nil, nil]
+      rows << [ROULE_TOTAL_NAME, roule_rows.sum { |row| wholesale_total(row) }, nil, nil]
     end
     rows
+  end
+
+  # The Wholesale Bake sheet's Total folds each product's overbake percentage in
+  # on top of the ordered quantity -- staff bake orders + overbake, so the Total
+  # column reflects the full amount actually baked (same orders + overbake math
+  # as OrderItemQuantities#total_quantity). Retail bakes are baked to order and
+  # keep an order-only total.
+  def wholesale_total(row)
+    quantity = row[:quantity]
+    quantity + (quantity * row[:product].over_bake / 100).ceil
   end
 
   def retail_row_cells(row)

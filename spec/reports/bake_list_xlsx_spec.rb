@@ -7,23 +7,21 @@ describe BakeListXlsx do
   let(:bakery) { create(:bakery) }
   let(:bake_date) { Date.new(2026, 6, 3) } # a Wednesday
 
-  it "builds sectioned retail, wholesale, pull/prep, and viennoiserie pick rows" do
+  it "builds sectioned retail, wholesale, and viennoiserie pick rows" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
 
     baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
     croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
-                                 bake_lead_days: 1, pieces_per_tray: 20)
+                                 bake_lead_days: 1, pieces_per_tray: 20, over_bake: 0)
     cookie = create(:product, bakery: bakery, name: "Chocolate Chip Cookie", product_type: "cookie",
-                              bake_lead_days: 1)
-    frozen_dough = create(:product, bakery: bakery, name: "Frozen Dough", on_pull_list: true, bake_lead_days: nil)
+                              bake_lead_days: 1, over_bake: 0)
     create(:bake_lead_day_variant, product: croissant, client: smith, bake_lead_days: 0)
 
     smith_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: smith_order, product: baguette, daily_item_count: 0, wednesday: 24)
     create(:order_item, bakery: bakery, order: smith_order, product: croissant, daily_item_count: 0, wednesday: 8)
-    create(:order_item, bakery: bakery, order: smith_order, product: frozen_dough, daily_item_count: 0, wednesday: 6)
 
     franklin_order = create(:order, bakery: bakery, client: franklin, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: franklin_order, product: baguette, daily_item_count: 0, wednesday: 12)
@@ -41,11 +39,11 @@ describe BakeListXlsx do
     report = described_class.new(bakery, bake_date)
 
     expect(report.retail_sections.map { |section| section[:name] }).to eq(%w[Bread Viennoiserie])
-    # Item, Total, Smith, Franklin, GCM
+    # Item, Total, Smith, Franklin (no Grand Central store column)
     expect(report.retail_rows).to eq(
       [
-        ["Baguette", 36, 24, 12, 0],
-        ["Croissant", 8, 8, 0, 0]
+        ["Baguette", 36, 24, 12],
+        ["Croissant", 8, 8, 0]
       ]
     )
 
@@ -57,7 +55,6 @@ describe BakeListXlsx do
       ]
     )
 
-    expect(report.pull_list_rows).to eq([["Frozen Dough", 6, nil, nil]])
     expect(report.viennoiserie_rows).to eq(
       [
         ["Croissant", 1, 10, 1, 2, nil, nil, 0, 8, nil, nil],
@@ -68,13 +65,13 @@ describe BakeListXlsx do
 
   it "adds a Roule subtotal on the wholesale sheet" do
     ham_brie = create(:product, bakery: bakery, name: "Ham & Brie Croissant", product_type: "vienoisserie",
-                                bake_lead_days: 1, pieces_per_tray: 60)
+                                bake_lead_days: 1, pieces_per_tray: 60, over_bake: 0)
     almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
-                              bake_lead_days: 1)
+                              bake_lead_days: 1, over_bake: 0)
     roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
-                                      bake_lead_days: 1)
+                                      bake_lead_days: 1, over_bake: 0)
     roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
-                                        bake_lead_days: 1)
+                                        bake_lead_days: 1, over_bake: 0)
 
     order = create(:order, bakery: bakery, start_date: bake_date + 1.day, order_item_count: 0)
     [[ham_brie, 17], [almond, 5], [roule_cinnamon, 20], [roule_everything, 12]].each do |product, qty|
@@ -117,7 +114,7 @@ describe BakeListXlsx do
     )
   end
 
-  it "builds other_rows with fixed Smith/Franklin/GCM/Retail/Blue Bottle/Wholesale columns" do
+  it "builds other_rows with fixed Smith/Franklin/Retail/Blue Bottle/Wholesale columns, Grand Central in wholesale" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     gcm = create(:client, bakery: bakery, name: "Bien Cuit - Grand Central")
@@ -137,11 +134,12 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    # Item, Total, Smith, Franklin, GCM, Retail (stores summed), Blue Bottle, Wholesale (total - retail)
-    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 18, 46, 82, 86]])
+    # Item, Total, Smith, Franklin, Retail (stores summed), Blue Bottle, Wholesale (total - retail).
+    # Grand Central (18) is no longer a store column, so it lands in Wholesale (18 + 82 + 4 = 104).
+    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 28, 82, 104]])
   end
 
-  it "shows a fixed Smith/Franklin/GCM zero instead of dropping a store's column on a quiet day" do
+  it "shows a fixed Smith/Franklin zero instead of dropping a store's column on a quiet day" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
     order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
@@ -149,8 +147,29 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    # Franklin and GCM didn't order -- still present, as explicit 0s.
-    expect(report.retail_rows).to eq([["Baguette", 12, 12, 0, 0]])
+    # Franklin didn't order -- still present, as an explicit 0.
+    expect(report.retail_rows).to eq([["Baguette", 12, 12, 0]])
+  end
+
+  it "folds each product's overbake into the wholesale sheet total but not the retail total" do
+    smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
+    restaurant = create(:client, bakery: bakery, name: "Restaurant")
+    # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant.
+    cookie = create(:product, bakery: bakery, name: "Cookie", product_type: "cookie",
+                              bake_lead_days: 1, over_bake: 25)
+    create(:bake_lead_day_variant, product: cookie, client: smith, bake_lead_days: 0)
+
+    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: retail_order, product: cookie, daily_item_count: 0, wednesday: 40)
+    wholesale_order = create(:order, bakery: bakery, client: restaurant, start_date: bake_date + 1.day,
+                                     order_item_count: 0)
+    create(:order_item, bakery: bakery, order: wholesale_order, product: cookie, daily_item_count: 0, thursday: 100)
+
+    report = described_class.new(bakery, bake_date)
+
+    # Wholesale: 100 ordered + ceil(100 * 25 / 100) = 125. Retail stays order-only.
+    expect(report.wholesale_rows).to eq([["Cookie", 125, nil, nil]])
+    expect(report.retail_rows).to eq([["Cookie", 40, 40, 0]])
   end
 
   it "generates a valid xlsx workbook" do
