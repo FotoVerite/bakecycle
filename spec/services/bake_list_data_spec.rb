@@ -157,10 +157,7 @@ describe BakeListData do
           hash_including(
             product: blondie,
             quantity: 94,
-            retail_quantity: 12,
-            wholesale_quantity: 82,
-            blue_bottle_quantity: 82,
-            client_quantities: { smith => 12 }
+            client_quantities: { smith => 12, blue_bottle => 82 }
           )
         )
       )

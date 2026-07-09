@@ -91,26 +91,44 @@ describe BakeListXlsx do
     )
   end
 
-  it "builds other_rows for non-bread product types with per-store and Blue Bottle/Wholesale columns" do
-    smith = create(:client, bakery: bakery, name: "Smith")
+  it "builds other_rows with fixed Smith/Franklin/GCM/Retail/Blue Bottle/Wholesale columns" do
+    smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
+    franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
+    gcm = create(:client, bakery: bakery, name: "Bien Cuit - Grand Central")
     blue_bottle = create(:client, bakery: bakery, name: "Blue Bottle Coffee Nomad")
+    restaurant = create(:client, bakery: bakery, name: "Some Restaurant")
     blondie = create(:product, bakery: bakery, name: "Blondie", product_type: "other", bake_lead_days: 1)
     create(:bake_lead_day_variant, product: blondie, client: smith, bake_lead_days: 0)
 
-    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: retail_order, product: blondie, daily_item_count: 0, wednesday: 12)
-    wholesale_order = create(
-      :order,
-      bakery: bakery,
-      client: blue_bottle,
-      start_date: bake_date + 1.day,
-      order_item_count: 0
-    )
-    create(:order_item, bakery: bakery, order: wholesale_order, product: blondie, daily_item_count: 0, thursday: 82)
+    quantities = { smith => 12, franklin => 16, gcm => 18, blue_bottle => 82, restaurant => 4 }
+    quantities.each do |client, quantity|
+      lead_days = client == smith ? 0 : 1
+      order = create(:order, bakery: bakery, client: client, start_date: bake_date + lead_days.days,
+                             order_item_count: 0)
+      day = lead_days.zero? ? :wednesday : :thursday
+      create(:order_item, bakery: bakery, order: order, product: blondie, daily_item_count: 0, day => quantity)
+    end
 
     report = described_class.new(bakery, bake_date)
 
-    expect(report.other_rows).to eq([["Blondie", 94, 12, 12, 82, 82]])
+    # Item, Total, Smith, Franklin, GCM, Retail (stores summed), Blue Bottle, Wholesale (total - retail)
+    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 18, 46, 82, 86]])
+  end
+
+  it "truncates long client names in header cells instead of overflowing the column" do
+    long_name = "Bien Cuit - Franklin Ave Retail Bake"
+    client = create(:client, bakery: bakery, name: long_name)
+    baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
+    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: order, product: baguette, daily_item_count: 0, wednesday: 12)
+
+    workbook = described_class.new(bakery, bake_date).generate
+
+    Zip::File.open_buffer(StringIO.new(workbook)) do |zip|
+      shared_strings = zip.read("xl/sharedStrings.xml")
+      expect(shared_strings).not_to include(long_name)
+      expect(shared_strings).to include(long_name.truncate(BakeListXlsx::CLIENT_HEADER_LENGTH))
+    end
   end
 
   it "generates a valid xlsx workbook" do

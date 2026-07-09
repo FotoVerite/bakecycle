@@ -12,6 +12,19 @@ class BakeListXlsx
   # sheet instead (confirmed with the client: highlight = tray-tracked).
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
+  # Client names like "Bien Cuit - Franklin Ave Retail Bake" are too long to
+  # use as a column header without either wrapping or overflowing into the
+  # next column, so header cells get truncated to this length.
+  CLIENT_HEADER_LENGTH = 18
+
+  # The Quiche & Dessert sheet always has these six columns (plus Item),
+  # matching the hand-made bake list. The three store columns match Bien Cuit
+  # clients by name -- store orders arrive on either bake lead, so they can't
+  # be derived from lead days. Retail = the three stores summed; Wholesale =
+  # everything else; Blue Bottle is a breakout within Wholesale.
+  OTHER_SHEET_HEADERS = ["Item", "Total", "Smith", "Franklin", "GCM", "Retail", "Blue Bottle", "Wholesale"].freeze
+  OTHER_SHEET_STORES = { "Smith" => /smith/i, "Franklin" => /franklin/i, "GCM" => /grand central/i }.freeze
+
   def initialize(bakery, bake_date)
     @bakery = bakery
     @bake_date = bake_date.to_date
@@ -79,19 +92,26 @@ class BakeListXlsx
   private
 
   def add_retail_sheet(workbook, styles)
-    config = { title: "RETAIL", headers: %w[Item Total] + retail_clients.map(&:name), sections: retail_sections }
+    config = {
+      title: "RETAIL",
+      headers: %w[Item Total] + retail_clients.map { |client| client_header(client) },
+      sections: retail_sections
+    }
     add_sectioned_sheet(workbook, "Retail Bread", styles, config) do |row|
       [row[:product].name, row[:quantity]] + retail_clients.map { |client| row[:client_quantities][client].to_i }
     end
   end
 
   def add_wholesale_sheet(workbook, styles)
+    column_count = 4
     workbook.add_worksheet(name: "Wholesale Bread") do |sheet|
       sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Wholesale Bread"]
       sheet.add_row ["WHOLESALE"], style: styles.fetch(:title)
+      merge_row!(sheet, column_count)
 
       wholesale_sections.each do |section|
         sheet.add_row [section[:name]], style: styles.fetch(:section)
+        merge_row!(sheet, column_count)
         sheet.add_row %w[Item Total MISSING EXTRA], style: styles.fetch(:header)
         wholesale_section_rows(section).each do |row|
           sheet.add_row row[:cells], style: row[:highlighted] ? styles.fetch(:highlight) : nil
@@ -102,30 +122,34 @@ class BakeListXlsx
   end
 
   def add_other_sheet(workbook, styles)
-    headers = %w[Item Total] + retail_clients.map(&:name) + ["Retail", "Blue Bottle", "Wholesale"]
+    column_count = OTHER_SHEET_HEADERS.length
     workbook.add_worksheet(name: "Quiche & Dessert") do |sheet|
       sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Quiche & Dessert"]
 
       other_sections.each do |section|
         sheet.add_row [section[:name]], style: styles.fetch(:section)
-        sheet.add_row headers, style: styles.fetch(:header)
+        merge_row!(sheet, column_count)
+        sheet.add_row OTHER_SHEET_HEADERS, style: styles.fetch(:header)
         section[:rows].each { |row| sheet.add_row other_row_cells(row) }
       end
-      sheet.column_widths 36, 12, *Array.new(headers.length - 2, 14)
+      sheet.column_widths 36, 12, *Array.new(column_count - 2, 14)
     end
   end
 
   def add_sectioned_sheet(workbook, sheet_name, styles, config)
+    column_count = config.fetch(:headers).length
     workbook.add_worksheet(name: sheet_name) do |sheet|
       sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, sheet_name]
       sheet.add_row [config.fetch(:title)], style: styles.fetch(:title)
+      merge_row!(sheet, column_count)
 
       config.fetch(:sections).each do |section|
         sheet.add_row [section[:name]], style: styles.fetch(:section)
+        merge_row!(sheet, column_count)
         sheet.add_row config.fetch(:headers), style: styles.fetch(:header)
         section[:rows].each { |row| sheet.add_row yield(row) }
       end
-      sheet.column_widths 36, 12, *Array.new(config.fetch(:headers).length - 2, 14)
+      sheet.column_widths 36, 12, *Array.new(column_count - 2, 18)
     end
   end
 
@@ -133,6 +157,7 @@ class BakeListXlsx
     workbook.add_worksheet(name: "Vienn Pick") do |sheet|
       sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Vienn Pick"]
       sheet.add_row ["Viennoiserie"], style: styles.fetch(:section)
+      merge_row!(sheet, 11)
       sheet.add_row [
         "Item",
         "Total", nil,
@@ -152,6 +177,7 @@ class BakeListXlsx
       viennoiserie_rows.each { |row| sheet.add_row row }
       sheet.add_row []
       sheet.add_row ["Tray Counts"], style: styles.fetch(:title)
+      merge_row!(sheet, 2)
       sheet.add_row ["Item", "Qty per Tray"], style: styles.fetch(:header)
       @data.viennoiserie_pick_items.each do |row|
         next if row[:tray_count].blank?
@@ -165,6 +191,7 @@ class BakeListXlsx
   def add_pull_list_sheet(workbook, styles)
     workbook.add_worksheet(name: "Pull-Prep List") do |sheet|
       sheet.add_row ["Pull-Prep List", @bake_date.iso8601], style: styles.fetch(:title)
+      merge_row!(sheet, 4)
       sheet.add_row []
       sheet.add_row %w[Product Qty Trays Checked], style: styles.fetch(:header)
       pull_list_rows.each { |row| sheet.add_row row }
@@ -185,10 +212,24 @@ class BakeListXlsx
   end
 
   def other_row_cells(row)
-    [row[:product].name, row[:quantity]] +
-      retail_clients.map { |client| row[:client_quantities][client].to_i } +
-      [row[:retail_quantity], row[:blue_bottle_quantity].zero? ? nil : row[:blue_bottle_quantity],
-       row[:wholesale_quantity]]
+    store_quantities = OTHER_SHEET_STORES.values.map { |pattern| store_quantity(row, pattern) }
+    retail = store_quantities.sum
+    blue_bottle = quantity_matching(row) { |client| client.name.match?(/blue bottle/i) }
+
+    [row[:product].name, row[:quantity], *store_quantities,
+     retail, blue_bottle.zero? ? nil : blue_bottle, row[:quantity] - retail]
+  end
+
+  def store_quantity(row, pattern)
+    quantity_matching(row) { |client| client.name.start_with?("Bien Cuit") && client.name.match?(pattern) }
+  end
+
+  def quantity_matching(row, &matcher)
+    row[:client_quantities].sum { |client, quantity| matcher.call(client) ? quantity : 0 }
+  end
+
+  def client_header(client)
+    client.name.truncate(CLIENT_HEADER_LENGTH)
   end
 
   def tray_tracked?(product)
@@ -197,6 +238,19 @@ class BakeListXlsx
 
   def roule_product?(product)
     product.name.match?(/\Aroule\b/i)
+  end
+
+  # Merges the row just added into a single banner cell spanning column_count
+  # columns -- e.g. so a section header's grey fill spans the full row
+  # instead of just column A. Must run immediately after the sheet.add_row
+  # it applies to.
+  def merge_row!(sheet, column_count)
+    row_number = sheet.rows.size
+    sheet.merge_cells("A#{row_number}:#{column_letter(column_count)}#{row_number}")
+  end
+
+  def column_letter(column_count)
+    ("A".."ZZ").to_a[column_count - 1]
   end
 
   def tray_parts(product, quantity)

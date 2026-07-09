@@ -98,40 +98,26 @@ class BakeListData
 
   private
 
+  # One row per product with per-client quantities, retail and wholesale
+  # bakes combined -- which clients map to which columns is the xlsx's
+  # concern, not ours.
   def other_rows
-    rows_by_product = (retail_items + wholesale_items)
-      .reject { |row| bread_sheet_type?(row) }
-      .group_by { |row| row[:product] }
+    @_other_rows ||= begin
+      grouped = (retail_items + wholesale_items)
+        .reject { |row| bread_sheet_type?(row) }
+        .group_by { |row| row[:product] }
 
-    rows_by_product.filter_map do |product, rows|
-      retail_row = rows.find { |row| row[:lead_days] == RETAIL_LEAD_DAYS }
-      wholesale_row = rows.find { |row| row[:lead_days] == WHOLESALE_LEAD_DAYS }
-      retail_quantity = retail_row&.fetch(:quantity) || 0
-      wholesale_quantity = wholesale_row&.fetch(:quantity) || 0
-      quantity = retail_quantity + wholesale_quantity
-      next unless quantity.positive?
-
-      wholesale_client_quantities = wholesale_row&.fetch(:client_quantities) || {}
-      blue_bottle_quantity = wholesale_client_quantities.sum { |client, qty| blue_bottle_client?(client) ? qty : 0 }
-
-      {
-        product: product,
-        quantity: quantity,
-        retail_quantity: retail_quantity,
-        wholesale_quantity: wholesale_quantity,
-        blue_bottle_quantity: blue_bottle_quantity,
-        client_quantities: retail_row&.fetch(:client_quantities) || {}
-      }
+      rows = grouped.map do |product, product_rows|
+        client_quantities = product_rows.map { |row| row[:client_quantities] }
+          .reduce({}) { |merged, quantities| merged.merge(quantities) { |_client, left, right| left + right } }
+        { product: product, quantity: product_rows.sum { |row| row[:quantity] }, client_quantities: client_quantities }
+      end
+      rows.sort_by { |row| row[:product].name }
     end
   end
 
   def bread_sheet_type?(row)
     BREAD_SHEET_PRODUCT_TYPES.include?(row[:product].product_type)
-  end
-
-  # Same "Blue Bottle" name match already used by NightlySignOffsController.
-  def blue_bottle_client?(client)
-    client.name.downcase.include?("blue bottle")
   end
 
   def items_for(lead_days:)
