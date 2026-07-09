@@ -28,6 +28,7 @@ class BakeListXlsx
   OTHER_SHEET_HEADERS = (%w[Item Total] + STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
 
   ZEBRA_BG = "F5F5F5"
+  CELL_BORDER = { style: :thin, color: "000000" }.freeze
 
   def initialize(bakery, bake_date)
     @bakery = bakery
@@ -42,9 +43,11 @@ class BakeListXlsx
     @workbook_styles = styles
     @row_style_cache = {}
     report_styles = {
-      title: styles.add_style(b: true, sz: 16, alignment: { horizontal: :center }),
-      section: styles.add_style(bg_color: "B7B7B7", b: true, sz: 14, alignment: { horizontal: :center }),
-      header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center })
+      title: styles.add_style(b: true, sz: 16, alignment: { horizontal: :center }, border: CELL_BORDER),
+      section: styles.add_style(bg_color: "B7B7B7", b: true, sz: 14, alignment: { horizontal: :center },
+                                 border: CELL_BORDER),
+      header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center },
+                                border: CELL_BORDER)
     }
 
     add_retail_sheet(workbook, report_styles)
@@ -239,10 +242,10 @@ class BakeListXlsx
   def row_style(column_count, background: nil)
     @row_style_cache[[column_count, background]] ||= begin
       label_style = @workbook_styles.add_style(
-        alignment: { horizontal: :left }, **(background ? { bg_color: background } : {})
+        alignment: { horizontal: :left }, border: CELL_BORDER, **(background ? { bg_color: background } : {})
       )
       value_style = @workbook_styles.add_style(
-        alignment: { horizontal: :center }, **(background ? { bg_color: background } : {})
+        alignment: { horizontal: :center }, border: CELL_BORDER, **(background ? { bg_color: background } : {})
       )
       [label_style] + Array.new(column_count - 1, value_style)
     end
