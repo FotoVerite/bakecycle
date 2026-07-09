@@ -19,16 +19,16 @@
       </div>
       <div class="report-action-buttons">
         <%= link_to "#{icon('file-text')} Print With Routes".html_safe,
-          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :pdf), data: { turbo_stream: true }, class: "button small"%>
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, type: "pdf"), data: { turbo_stream: true }, class: "button small"%>
 
         <%= link_to "#{icon('file-text')} Print Without Routes".html_safe,
-          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :pdf), data: { turbo_stream: true }, class: "button small secondary"%>
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, type: "pdf"), data: { turbo_stream: true }, class: "button small secondary"%>
 
         <%= link_to "#{icon('download')} Export With Routes".html_safe,
-          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, format: :xlsx), data: { turbo_stream: true }, class: "button small secondary" %>
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: true, type: "xlsx"), data: { turbo_stream: true }, class: "button small secondary" %>
 
         <%= link_to "#{icon('download')} Export Without Routes".html_safe,
-          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, format: :xlsx), data: { turbo_stream: true }, class: "button small secondary" %>
+          print_daily_total_path(@recipes.date.strftime("%Y-%m-%d"), show_routes: false, type: "xlsx"), data: { turbo_stream: true }, class: "button small secondary" %>
       </div>
     </div>
   <table class="responsive-table report-table">

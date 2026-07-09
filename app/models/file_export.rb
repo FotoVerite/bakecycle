@@ -6,6 +6,7 @@
 #
 #  id                :uuid             not null, primary key
 #  bakery_id         :integer          not null
+#  user_id           :integer
 #  file_file_name    :string
 #  file_content_type :string
 #  file_file_size    :integer
@@ -17,6 +18,9 @@
 
 class FileExport < ApplicationRecord
   belongs_to :bakery
+  # Optional only so pre-backfill legacy rows stay valid; every export created
+  # through ExporterJob.create carries the requesting user for per-person scoping.
+  belongs_to :user, optional: true
   has_attached_file :file,
                     s3_headers: { content_disposition: "attachment" },
                     use_timestamp: false,
@@ -53,11 +57,14 @@ class FileExport < ApplicationRecord
     end
   end
 
-  def self.broadcast_stream_for(bakery)
-    "file_exports:#{bakery.id}"
+  # Keyed per-user, not per-bakery: exports are private to the person who
+  # requested them, so live tray/history updates must only reach that user's
+  # subscription (otherwise one bakery's staff receive each other's export HTML).
+  def self.broadcast_stream_for(user)
+    "file_exports:user:#{user.id}"
   end
 
   def broadcast_stream
-    self.class.broadcast_stream_for(bakery)
+    self.class.broadcast_stream_for(user)
   end
 end

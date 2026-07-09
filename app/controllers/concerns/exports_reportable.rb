@@ -51,7 +51,7 @@ module ExportsReportable
   # against a 123k-row table. A single click can only ever push a handful of
   # rows past the cap, so this is bounded generously, not tightly.
   def overflow_removal_streams(file_export)
-    overflow = current_bakery.file_exports
+    overflow = current_user.file_exports
       .where.not(id: file_export.id)
       .order(created_at: :desc)
       .offset(9)

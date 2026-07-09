@@ -11,7 +11,7 @@
         <%= link_to "View all", file_exports_path, class: "export-tray-viewall", data: { turbo: false } %>
       </div>
       <ul id="export_tray_list" class="export-tray-list" data-export-tray-target="list">
-        <% current_bakery.file_exports.order(created_at: :desc).limit(10).each do |file_export| %>
+        <% current_user.file_exports.order(created_at: :desc).limit(10).each do |file_export| %>
           <%= render partial: "file_exports/tray_item", locals: { file_export: file_export } %>
         <% end %>
       </ul>

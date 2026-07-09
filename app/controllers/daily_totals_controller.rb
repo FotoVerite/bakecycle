@@ -10,7 +10,7 @@ class DailyTotalsController < ApplicationController
   end
 
   def print
-    generator = DailyTotalGenerator.new(current_bakery, date_query, params[:format] || "pdf", params[:show_routes])
+    generator = DailyTotalGenerator.new(current_bakery, date_query, params[:type] || "pdf", params[:show_routes])
     create_export_and_respond(generator)
   end
 

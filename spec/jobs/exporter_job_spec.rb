@@ -15,14 +15,14 @@ describe ExporterJob do
 
   describe "#perform" do
     it "generates the report and stores it on the export" do
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
       ExporterJob.new.perform(user, export, generator)
       export.reload
       expect(export.file).to be_present
     end
 
     it "creates a papertrail of the user" do
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
       ExporterJob.new.perform(user, export, generator)
       file_action = FileAction.last
       expect(file_action).to_not be_nil
@@ -33,7 +33,7 @@ describe ExporterJob do
     end
 
     it "is idempotent" do
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
       ExporterJob.new.perform(user, export, generator)
       export2 = FileExport.find(export.id)
       ExporterJob.new.perform(user, export2, generator)
@@ -42,7 +42,7 @@ describe ExporterJob do
     end
 
     it "creates a papertrail of the user viewing" do
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
       ExporterJob.new.perform(user, export, generator)
       export2 = FileExport.find(export.id)
       ExporterJob.new.perform(user, export2, generator)
@@ -55,9 +55,9 @@ describe ExporterJob do
     end
 
     it "broadcasts a turbo stream replace for the tray and history row targets" do
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
 
-      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(bakery)) do
+      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(user)) do
         ExporterJob.new.perform(user, export, generator)
       end
 
@@ -68,11 +68,11 @@ describe ExporterJob do
     end
 
     it "still broadcasts when generation fails and falls back to an error report" do
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
       failing_generator = instance_double(PackingSlipsGenerator, filename: "packing-slips", generate: nil)
       allow(failing_generator).to receive(:generate).and_raise(StandardError, "boom")
 
-      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(bakery)) do
+      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(user)) do
         ExporterJob.new.perform(user, export, failing_generator)
       end
 
@@ -85,12 +85,12 @@ describe ExporterJob do
       # perform's own rescue never runs here since ActiveJob raises trying to
       # resolve the corrupted GlobalID before perform is even called -- this
       # is what used to leave a FileExport stuck at "Generating..." forever.
-      export = FileExport.create!(bakery: bakery)
+      export = FileExport.create!(bakery: bakery, user: user)
       job = ExporterJob.new(user, export, generator)
       serialized = job.serialize
       serialized["arguments"][2]["_aj_globalid"] = "gid://bakecycle/PackingSlipsGenerator/nonexistent"
 
-      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(bakery)) do
+      streams = capture_turbo_stream_broadcasts(FileExport.broadcast_stream_for(user)) do
         ExporterJob.execute(serialized)
       end
 

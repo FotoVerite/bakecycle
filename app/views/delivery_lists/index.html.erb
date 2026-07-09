@@ -18,7 +18,7 @@
         <p class="projection">Delivery routes for this date</p>
       </div>
       <div class="report-action-buttons">
-        <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), format: :pdf, type: :pdf), data: { turbo_stream: true }, class: "button small" do %>
+        <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), type: :pdf), data: { turbo_stream: true }, class: "button small" do %>
           <%= icon("file-text") %> Print Delivery List
         <% end %>
         <%= link_to print_delivery_list_path(@recipes.date.strftime("%Y-%m-%d"), type: :xlsx), data: { turbo_stream: true }, class: "button small secondary" do %>

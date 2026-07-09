@@ -6,14 +6,16 @@ class FileExportPolicy < ApplicationPolicy
   end
 
   def show?
-    admin? || belongs_to_bakery?
+    admin? || record.user_id == user.id
   end
 
   class Scope < Scope
     def resolve
       return scope.all if admin?
 
-      scope.where(bakery_id: user.bakery_id)
+      # Exports are private to the person who requested them, not shared across
+      # the bakery. Scoping by user_id also transitively scopes by bakery.
+      scope.where(user_id: user.id)
     end
   end
 end

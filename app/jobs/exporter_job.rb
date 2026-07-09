@@ -12,7 +12,7 @@ class ExporterJob < ApplicationJob
   rescue_from StandardError, with: :record_unexpected_failure
 
   def self.create(user, bakery, generator)
-    FileExport.create!(bakery: bakery).tap do |file_export|
+    FileExport.create!(bakery: bakery, user: user).tap do |file_export|
       perform_later(user, file_export, generator)
     end
   end

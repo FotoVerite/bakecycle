@@ -4,7 +4,7 @@
   <td data-title="Product Count"><%= @run_item_counts.fetch(production_run.id, 0) %></td>
   <td data-title="Actions">
     <%= action_icon edit_production_run_path(production_run), icon_name: "pencil", label: "Edit Run", variant: "edit" %>
-    <%= action_icon print_production_run_path(production_run, format: :pdf), icon_name: "file-text", label: "Print Run", variant: "document",
+    <%= action_icon print_production_run_path(production_run), icon_name: "file-text", label: "Print Run", variant: "document",
           link_data: { turbo_stream: true } %>
   </td>
 </tr>

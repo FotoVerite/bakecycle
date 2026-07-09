@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_08_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_09_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -147,7 +147,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_08_000000) do
     t.string "file_fingerprint"
     t.datetime "file_updated_at", precision: nil
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "user_id"
     t.index ["bakery_id"], name: "index_file_exports_on_bakery_id"
+    t.index ["user_id"], name: "index_file_exports_on_user_id"
   end
 
   create_table "ingredient_prices_over_times", force: :cascade do |t|

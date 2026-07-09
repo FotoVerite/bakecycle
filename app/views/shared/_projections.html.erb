@@ -7,8 +7,7 @@
       <%= link_to(
         "#{icon('file-text')} Print Recipes".html_safe,
         print_projection_production_runs_path(
-          date: @date.strftime("%Y-%m-%d"),
-          format: :pdf
+          date: @date.strftime("%Y-%m-%d")
         ),
         data: { turbo_stream: true }, class: "button small"
       ) %>
@@ -24,8 +23,7 @@
         "#{icon('file-text')} Print Recipes".html_safe,
         print_batch_recipes_path(
           start_date: @projection.start_date.strftime("%Y-%m-%d"),
-          end_date: @projection.batch_end_date.strftime("%Y-%m-%d"),
-          format: :pdf
+          end_date: @projection.batch_end_date.strftime("%Y-%m-%d")
         ),
         data: { turbo_stream: true }, class: "button small"
       ) %>
