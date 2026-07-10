@@ -68,7 +68,10 @@ class DateSpanProductionRunTotalsXlsx
       sheet.add_row row
     end
     total_end_row = create_end_row(sheet, start)
-    sheet.add_row total_end_row
+    # escape_formulas: false -- axlsx defaults to treating a leading '=' as literal
+    # text (CSV-injection guard), so without this the SUM cells rendered the
+    # formula source itself instead of a computed total.
+    sheet.add_row total_end_row, escape_formulas: false
   end
 
   def create_end_row(sheet, start)
@@ -79,5 +82,4 @@ class DateSpanProductionRunTotalsXlsx
     end
     total_row
   end
-
 end
