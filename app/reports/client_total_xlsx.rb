@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ClientTotalXlsx
+  include XlsxReport
+
   def initialize(bakery, start_date, end_date)
     @bakery = bakery
     @start = start_date
@@ -42,10 +44,4 @@ class ClientTotalXlsx
     sheet.add_row ["Total: #{@total}"]
   end
 
-  def create_output_string(page)
-    outstrio = StringIO.new
-    page.use_shared_strings = true
-    outstrio.write(page.to_stream.read)
-    outstrio.string
-  end
 end

@@ -6,6 +6,8 @@
 # literal nil cells for staff to fill in by hand. (The Quiche & Dessert sheet
 # doubles as the pull/prep list, so there's no separate Pull/Prep sheet.)
 class BakeListXlsx
+  include XlsxReport
+
   delegate :retail_sections, :wholesale_sections, :other_sections, to: :@data
 
   ROULE_TOTAL_NAME = "ROULE TOTAL"
@@ -27,9 +29,6 @@ class BakeListXlsx
   # everything else; Blue Bottle is a breakout within Wholesale.
   OTHER_SHEET_HEADERS = (%w[Item Total] + STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
 
-  ZEBRA_BG = "F5F5F5"
-  CELL_BORDER = { style: :thin, color: "000000" }.freeze
-
   def initialize(bakery, bake_date)
     @bakery = bakery
     @bake_date = bake_date.to_date
@@ -41,13 +40,12 @@ class BakeListXlsx
     workbook = package.workbook
     styles = workbook.styles
     @workbook_styles = styles
-    @row_style_cache = {}
     report_styles = {
       title: styles.add_style(b: true, sz: 16, alignment: { horizontal: :center }, border: CELL_BORDER),
       section: styles.add_style(bg_color: "B7B7B7", b: true, sz: 14, alignment: { horizontal: :center },
-                                 border: CELL_BORDER),
+                                border: CELL_BORDER),
       header: styles.add_style(bg_color: "D9D9D9", b: true, alignment: { horizontal: :center },
-                                border: CELL_BORDER)
+                               border: CELL_BORDER)
     }
 
     add_retail_sheet(workbook, report_styles)
@@ -77,9 +75,7 @@ class BakeListXlsx
     @data.viennoiserie_pick_items.map do |row|
       # Synthetic fixed-tray rows (e.g. Pate Fermentee) carry their tray count
       # directly and have no retail/wholesale split to break down.
-      if row[:fixed_trays]
-        next [row[:name], row[:fixed_trays], nil, nil, nil, nil, nil, nil, nil, nil, nil]
-      end
+      next [row[:name], row[:fixed_trays], nil, nil, nil, nil, nil, nil, nil, nil, nil] if row[:fixed_trays]
 
       total_trays, total_pieces = tray_parts(row[:pieces_per_tray], row[:quantity])
       wholesale_trays, wholesale_pieces = tray_parts(row[:pieces_per_tray], row[:wholesale_quantity])
@@ -113,7 +109,7 @@ class BakeListXlsx
         merge_row!(sheet, column_count)
         sheet.add_row %w[Item Total MISSING EXTRA], style: styles.fetch(:header)
         wholesale_section_rows(section).each_with_index do |cells, index|
-          sheet.add_row cells, style: row_style(column_count, background: zebra_bg(index))
+          sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
         end
       end
       sheet.column_widths 36, 12, 14, 14
@@ -130,7 +126,8 @@ class BakeListXlsx
         merge_row!(sheet, column_count)
         sheet.add_row OTHER_SHEET_HEADERS, style: styles.fetch(:header)
         section[:rows].each_with_index do |row, index|
-          sheet.add_row other_row_cells(row), style: row_style(column_count, background: zebra_bg(index))
+          sheet.add_row other_row_cells(row),
+                        style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
         end
       end
       sheet.column_widths 36, 12, *Array.new(column_count - 2, 14)
@@ -149,7 +146,7 @@ class BakeListXlsx
         merge_row!(sheet, column_count)
         sheet.add_row config.fetch(:headers), style: styles.fetch(:header)
         section[:rows].each_with_index do |row, index|
-          sheet.add_row yield(row), style: row_style(column_count, background: zebra_bg(index))
+          sheet.add_row yield(row), style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
         end
       end
       sheet.column_widths 36, 12, *Array.new(column_count - 2, 18)
@@ -178,14 +175,15 @@ class BakeListXlsx
         "Count", "Initial"
       ], style: styles.fetch(:header)
       viennoiserie_rows.each_with_index do |row, index|
-        sheet.add_row row, style: row_style(11, background: zebra_bg(index))
+        sheet.add_row row, style: row_style(@workbook_styles, 11, background: zebra_bg(index))
       end
       sheet.add_row []
       sheet.add_row ["Tray Counts"], style: styles.fetch(:title)
       merge_row!(sheet, 2)
       sheet.add_row ["Item", "Qty per Tray"], style: styles.fetch(:header)
       @data.viennoiserie_pick_items.select { |row| row[:pieces_per_tray].present? }.each_with_index do |row, index|
-        sheet.add_row [row[:name], row[:pieces_per_tray]], style: row_style(2, background: zebra_bg(index))
+        sheet.add_row [row[:name], row[:pieces_per_tray]],
+                      style: row_style(@workbook_styles, 2, background: zebra_bg(index))
       end
       sheet.column_widths 36, 10, 10, 10, 10, 14, 14, 10, 10, 14, 14
     end
@@ -195,9 +193,7 @@ class BakeListXlsx
     rows = section[:rows].map { |row| [row[:product].name, wholesale_total(row), nil, nil] }
 
     roule_rows = section[:rows].select { |row| roule_product?(row[:product]) }
-    if roule_rows.size > 1
-      rows << [ROULE_TOTAL_NAME, roule_rows.sum { |row| wholesale_total(row) }, nil, nil]
-    end
+    rows << [ROULE_TOTAL_NAME, roule_rows.sum { |row| wholesale_total(row) }, nil, nil] if roule_rows.size > 1
     rows
   end
 
@@ -235,26 +231,6 @@ class BakeListXlsx
     row[:client_quantities].sum { |client, quantity| matcher.call(client) ? quantity : 0 }
   end
 
-  # Column A (the item name) stays left-aligned; every quantity column gets
-  # centered. background nil/ZEBRA_BG picks the row tint.
-  # Cached since Axlsx styles are cheap to reuse but not free to create --
-  # every data row would otherwise register two brand-new styles.
-  def row_style(column_count, background: nil)
-    @row_style_cache[[column_count, background]] ||= begin
-      label_style = @workbook_styles.add_style(
-        alignment: { horizontal: :left }, border: CELL_BORDER, **(background ? { bg_color: background } : {})
-      )
-      value_style = @workbook_styles.add_style(
-        alignment: { horizontal: :center }, border: CELL_BORDER, **(background ? { bg_color: background } : {})
-      )
-      [label_style] + Array.new(column_count - 1, value_style)
-    end
-  end
-
-  def zebra_bg(index)
-    index.odd? ? ZEBRA_BG : nil
-  end
-
   def roule_product?(product)
     @data.roule_product?(product)
   end
@@ -276,12 +252,5 @@ class BakeListXlsx
     return [nil, quantity] unless pieces_per_tray.present? && pieces_per_tray.positive?
 
     quantity.divmod(pieces_per_tray)
-  end
-
-  def create_output_string(page)
-    outstrio = StringIO.new
-    page.use_shared_strings = true
-    outstrio.write(page.to_stream.read)
-    outstrio.string
   end
 end

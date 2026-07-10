@@ -2,21 +2,12 @@
 
 class ClientListGenerator
   include Generator
-
-  def self.find(global_id)
-    bakery_id, type, = global_id.split("_")
-    bakery = Bakery.find(bakery_id)
-    new(bakery, type)
-  end
+  composite_id bakery: :bakery, type: :string
 
   def initialize(bakery, type)
     @bakery = bakery
     @type = type
     @date = Time.zone.today
-  end
-
-  def id
-    "#{@bakery.id}_#{@type}_#{@date.iso8601}#ClientList"
   end
 
   def filename

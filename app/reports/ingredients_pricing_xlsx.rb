@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class IngredientsPricingXlsx
+  include XlsxReport
+
   def initialize(bakery)
     @bakery = bakery
     @vendors = bakery.vendors.order("Name ASC")
@@ -37,10 +39,4 @@ class IngredientsPricingXlsx
     create_output_string(p)
   end
 
-  def create_output_string(page)
-    outstrio = StringIO.new
-    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(page.to_stream.read)
-    outstrio.string
-  end
 end

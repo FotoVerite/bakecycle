@@ -6,6 +6,7 @@
 # and ClientsPerProductForWeekXlsx, just with dates as the pivoted columns
 # instead of weekdays.
 class ProductTotalsDateRangeXlsx
+  include XlsxReport
   HORIZON_DAYS = 10
   DEFAULT_SOURCE = ProductTotalsQuery::DEFAULT_SOURCE
   SOURCES = ProductTotalsQuery::SOURCES
@@ -99,10 +100,4 @@ class ProductTotalsDateRangeXlsx
     ("A".."ZZ").to_a[offset_from_a]
   end
 
-  def create_output_string(page)
-    outstrio = StringIO.new
-    page.use_shared_strings = true
-    outstrio.write(page.to_stream.read)
-    outstrio.string
-  end
 end

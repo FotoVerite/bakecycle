@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DailyProductTotalsXlsx
+  include XlsxReport
+
   def initialize(bakery, date)
     @bakery = bakery
     @date = date
@@ -102,10 +104,4 @@ class DailyProductTotalsXlsx
     total_row
   end
 
-  def create_output_string(page)
-    outstrio = StringIO.new
-    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(page.to_stream.read)
-    outstrio.string
-  end
 end

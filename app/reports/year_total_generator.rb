@@ -2,20 +2,11 @@
 
 class YearTotalGenerator
   include Generator
-
-  def self.find(global_id)
-    bakery_id, year = global_id.split("_")
-    bakery = Bakery.find(bakery_id)
-    new(bakery, year)
-  end
+  composite_id bakery: :bakery, year: :string
 
   def initialize(bakery, year)
     @bakery = bakery
     @year = year
-  end
-
-  def id
-    "#{@bakery.id}_#{@year}"
   end
 
   def filename

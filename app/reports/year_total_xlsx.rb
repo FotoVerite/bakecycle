@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class YearTotalXlsx
+  include XlsxReport
+
   def initialize(bakery, year)
     @bakery = bakery
     @year = year
@@ -45,10 +47,4 @@ class YearTotalXlsx
     sheet.add_row ["Total: #{@total}"]
   end
 
-  def create_output_string(page)
-    outstrio = StringIO.new
-    page.use_shared_strings = true # Otherwise strings don't display in iWork Numbers
-    outstrio.write(page.to_stream.read)
-    outstrio.string
-  end
 end
