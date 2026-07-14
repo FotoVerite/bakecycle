@@ -81,6 +81,27 @@ RSpec.describe "Orders", type: :request do
       expect(response).to be_successful
     end
 
+    it "shows a retired product by name on an ended order" do
+      retired_product = create(:product, bakery: bakery, removed: true, inactive: true)
+      ended_order = create(
+        :order,
+        bakery: bakery,
+        client: client,
+        route: route,
+        start_date: 2.weeks.ago.to_date,
+        end_date: Time.zone.yesterday,
+        order_item_count: 0
+      )
+      create(:order_item, bakery: bakery, order: ended_order, product: retired_product)
+
+      get edit_order_path(ended_order)
+
+      expect(response).to be_successful
+      expect(response.body).to include(retired_product.name)
+      expect(response.body).to include("value=\"#{retired_product.id}\"")
+      expect(response.body).not_to match(/<option[^>]*value="#{retired_product.id}"/)
+    end
+
     it "links back to the order client on the edit page" do
       get edit_order_path(order)
 

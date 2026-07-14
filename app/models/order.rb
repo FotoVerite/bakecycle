@@ -290,4 +290,8 @@ class Order < ApplicationRecord
       end_date.blank? || end_date >= Time.zone.today
     end
   end
+
+  def ended?
+    end_date.present? && end_date < Time.zone.today
+  end
 end

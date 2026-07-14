@@ -7,18 +7,24 @@
     <%= oi.hidden_field :_destroy, value: "", data: { destroy_field: "" } %>
   <% end %>
 
-  <div class="form-field">
-    <%= oi.select :product_id,
-        options_for_select([["Select Product", ""]] + available_products, item.product_id),
-        {},
-        class: "nested-field",
-        required: true,
-        data: {
-          controller: "tom-select",
-          order_item_target: "product",
-          action: "change->order-form#productChanged"
-        } %>
-  </div>
+  <% unavailable_historical_product = historical_order && item.product_id.present? && available_products.none? { |(_, id, _)| id == item.product_id } %>
+  <% if unavailable_historical_product %>
+    <%= oi.hidden_field :product_id %>
+    <div class="order-item-readonly"><%= item.product.name %></div>
+  <% else %>
+    <div class="form-field">
+      <%= oi.select :product_id,
+          options_for_select([["Select Product", ""]] + available_products, item.product_id),
+          {},
+          class: "nested-field",
+          required: true,
+          data: {
+            controller: "tom-select",
+            order_item_target: "product",
+            action: "change->order-form#productChanged"
+          } %>
+    </div>
+  <% end %>
 
   <div class="order-item-readonly">
     <%= item.persisted? ? item.decorate.product_price_and_quantity : "" %>

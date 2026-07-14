@@ -5606,6 +5606,9 @@ input[type=text] {
   cursor: not-allowed;
   opacity: 1;
 }
+.order-item-grid input[data-order-item-day] {
+  text-align: center;
+}
 .order-item-grid select {
   height: 40px;
 }
