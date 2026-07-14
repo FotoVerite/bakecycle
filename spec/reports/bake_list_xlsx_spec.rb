@@ -91,6 +91,24 @@ describe BakeListXlsx do
     )
   end
 
+  it "adds a Roule subtotal on the retail sheet" do
+    cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
+                                bake_lead_days: 0)
+    everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
+                                  bake_lead_days: 0)
+    order = create(:order, bakery: bakery, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: order, product: cinnamon, daily_item_count: 0, wednesday: 20)
+    create(:order_item, bakery: bakery, order: order, product: everything, daily_item_count: 0, wednesday: 12)
+
+    expect(described_class.new(bakery, bake_date).retail_rows).to eq(
+      [
+        ["Roule, Cinnamon", 20, 0, 0],
+        ["Roule, Everything", 12, 0, 0],
+        ["ROULE TOTAL", 32, nil, nil]
+      ]
+    )
+  end
+
   it "collapses Roule flavors into one Vienn Pick row and appends a fixed Pate Fermentee tray row" do
     roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
                                       bake_lead_days: 1, pieces_per_tray: 120)
@@ -114,7 +132,7 @@ describe BakeListXlsx do
     )
   end
 
-  it "builds Pull Prep rows with fixed client columns and Grand Central in wholesale" do
+  it "breaks Grand Central out on Pull Prep while keeping it in wholesale" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     gcm = create(:client, bakery: bakery, name: "Bien Cuit - Grand Central")
@@ -128,17 +146,17 @@ describe BakeListXlsx do
         :order,
         bakery: bakery,
         client: client,
-        start_date: bake_date,
+        start_date: bake_date + 1.day,
         order_item_count: 0
       )
-      create(:order_item, bakery: bakery, order: order, product: blondie, daily_item_count: 0, wednesday: quantity)
+      create(:order_item, bakery: bakery, order: order, product: blondie, daily_item_count: 0, thursday: quantity)
     end
 
     report = described_class.new(bakery, bake_date)
 
-    # Item, Total, Smith, Franklin, Retail (stores summed), Blue Bottle, Wholesale (total - retail).
-    # Grand Central (18) is no longer a store column, so it lands in Wholesale (18 + 82 + 4 = 104).
-    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 28, 82, 104]])
+    # Item, Total, Smith, Franklin, Grand Central, Retail (Smith + Franklin),
+    # Blue Bottle, Wholesale (total - retail, including Grand Central).
+    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 18, 28, 82, 104]])
   end
 
   it "shows a fixed Smith/Franklin zero instead of dropping a store's column on a quiet day" do

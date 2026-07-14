@@ -53,10 +53,9 @@ class BakeListData
     @_wholesale_sections ||= sections_for(wholesale_items.select { |row| bread_sheet_type?(row) })
   end
 
-  # The Pull Prep list is its own operational list: it uses the products
-  # explicitly marked for pull/prep and the selected date's active orders.
-  # It intentionally does not use bake lead days, because those products are
-  # pulled/prepped for their delivery date rather than assigned to a bake.
+  # The Pull Prep list uses products explicitly marked for pull/prep, while
+  # following the same delivery-date/lead-time schedule as the bake sheets:
+  # lead-0 items are for the selected date and lead-1 items are for tomorrow.
   def pull_prep_sections
     @_pull_prep_sections ||= begin
       grouped = pull_prep_rows.group_by { |row| row[:product].product_type }
@@ -150,13 +149,15 @@ class BakeListData
 
   def pull_prep_rows
     @_pull_prep_rows ||= begin
-      items_by_product = pull_prep_order_items.group_by(&:product)
-      rows = items_by_product.filter_map do |product, items|
-        quantity = items.sum { |item| item.quantity(@bake_date) }
+      items_by_product = pull_prep_date_rows.group_by { |row| row[:item].product }
+      rows = items_by_product.filter_map do |product, date_rows|
+        quantity = date_rows.sum { |row| row[:item].quantity(row[:delivery_date]) }
         next unless quantity.positive?
 
-        client_quantities = items.group_by { |item| item.order.client }
-          .transform_values { |client_items| client_items.sum { |item| item.quantity(@bake_date) } }
+        client_quantities = date_rows.group_by { |row| row[:client] }
+          .transform_values do |client_rows|
+            client_rows.sum { |row| row[:item].quantity(row[:delivery_date]) }
+          end
         { product: product, quantity: quantity, client_quantities: client_quantities }
       end
       rows.sort_by { |row| row[:product].name }
@@ -217,12 +218,19 @@ class BakeListData
     product.present? && !product.removed? && !product.inactive? && !product.on_pull_list?
   end
 
-  def pull_prep_order_items
-    Order.active(@bake_date).where(bakery: @bakery).includes(order_items: :product).flat_map do |order|
-      order.order_items.select do |item|
-        product = item.product
-        product.present? && !product.removed? && !product.inactive? && product.on_pull_list?
+  def pull_prep_date_rows
+    @_pull_prep_date_rows ||= BAKE_LEAD_DAYS.flat_map do |lead|
+      delivery_date = @bake_date + lead.days
+      Order.active(delivery_date).where(bakery: @bakery).includes(:client, order_items: :product).flat_map do |order|
+        order.order_items
+          .select { |item| pull_prep_product?(item.product) }
+          .select { |item| item.product.bake_lead_days_for(order.client) == lead }
+          .map { |item| { item: item, client: order.client, delivery_date: delivery_date, lead_days: lead } }
       end
     end
+  end
+
+  def pull_prep_product?(product)
+    product.present? && !product.removed? && !product.inactive? && product.on_pull_list?
   end
 end

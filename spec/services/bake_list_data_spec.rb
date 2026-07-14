@@ -116,17 +116,20 @@ describe BakeListData do
     expect(described_class.new(bakery, bake_date).retail_items).to be_empty
   end
 
-  it "builds the pull prep list from marked products on the selected delivery date" do
+  it "builds the pull prep list from marked products using each product's bake lead time" do
     smith = create(:client, bakery: bakery, name: "Smith")
     blue_bottle = create(:client, bakery: bakery, name: "Blue Bottle Coffee Nomad")
-    quiche = create(:product, bakery: bakery, name: "Quiche Lorraine", product_type: "quiche", on_pull_list: true)
+    quiche = create(:product, bakery: bakery, name: "Quiche Lorraine", product_type: "quiche", on_pull_list: true,
+                              bake_lead_days: 1)
     unmarked = create(:product, bakery: bakery, name: "Unmarked Tart", product_type: "tart_and_desert")
+    create(:bake_lead_day_variant, product: quiche, client: smith, bake_lead_days: 0)
 
     retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
     create(:order_item, bakery: bakery, order: retail_order, product: quiche, daily_item_count: 0, wednesday: 12)
     create(:order_item, bakery: bakery, order: retail_order, product: unmarked, daily_item_count: 0, wednesday: 99)
-    wholesale_order = create(:order, bakery: bakery, client: blue_bottle, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: wholesale_order, product: quiche, daily_item_count: 0, wednesday: 82)
+    wholesale_order = create(:order, bakery: bakery, client: blue_bottle, start_date: bake_date + 1.day,
+                                     order_item_count: 0)
+    create(:order_item, bakery: bakery, order: wholesale_order, product: quiche, daily_item_count: 0, thursday: 82)
 
     data = described_class.new(bakery, bake_date)
 

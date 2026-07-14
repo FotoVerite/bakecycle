@@ -11,22 +11,17 @@ class BakeListXlsx
 
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
-  # Smith/Franklin are fixed store columns on both the Retail Bread and Pull
-  # Prep sheets, matched by client name rather than derived from that
+  # Smith/Franklin are fixed retail-store columns, matched by client name
+  # rather than derived from that
   # day's orders -- a store with no order that day still gets a 0, instead of
   # its whole column disappearing (confirmed with the client).
   #
-  # Grand Central ("Bien Cuit - Grand Central") is deliberately NOT a store
-  # column: it can't take retail-bake items, so it has no place on the Retail
-  # sheet, and on the Pull Prep sheet its quantities must fall into the
-  # Wholesale total with every other wholesale account rather than being split
-  # out as a store (which previously subtracted them from Wholesale).
   STORE_COLUMNS = { "Smith" => /smith/i, "Franklin" => /franklin/i }.freeze
 
-  # The Pull Prep sheet always has these eight columns, matching the
-  # hand-made bake list. Retail = the three stores summed; Wholesale =
-  # everything else; Blue Bottle is a breakout within Wholesale.
-  OTHER_SHEET_HEADERS = (%w[Item Total] + STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
+  # Grand Central is a Pull/Prep breakout like Blue Bottle: it remains part of
+  # Wholesale, while Retail continues to mean Smith + Franklin only.
+  PULL_PREP_STORE_COLUMNS = STORE_COLUMNS.merge("Grand Central" => /grand central/i).freeze
+  OTHER_SHEET_HEADERS = (%w[Item Total] + PULL_PREP_STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
 
   def initialize(bakery, bake_date)
     @bakery = bakery
@@ -59,7 +54,7 @@ class BakeListXlsx
   # testability convention: specs assert on these directly, never on parsed
   # xlsx bytes.
   def retail_rows
-    retail_sections.flat_map { |section| section[:rows].map { |row| retail_row_cells(row) } }
+    retail_sections.flat_map { |section| retail_section_rows(section) }
   end
 
   def wholesale_rows
@@ -92,8 +87,22 @@ class BakeListXlsx
   private
 
   def add_retail_sheet(workbook, styles)
-    config = { title: "RETAIL", headers: %w[Item Total] + STORE_COLUMNS.keys, sections: retail_sections }
-    add_sectioned_sheet(workbook, "Retail Bread", styles, config) { |row| retail_row_cells(row) }
+    column_count = STORE_COLUMNS.length + 2
+    workbook.add_worksheet(name: "Retail Bread") do |sheet|
+      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Retail Bread"]
+      sheet.add_row ["RETAIL"], style: styles.fetch(:title)
+      merge_row!(sheet, column_count)
+
+      retail_sections.each do |section|
+        sheet.add_row [section[:name]], style: styles.fetch(:section)
+        merge_row!(sheet, column_count)
+        sheet.add_row %w[Item Total] + STORE_COLUMNS.keys, style: styles.fetch(:header)
+        retail_section_rows(section).each_with_index do |cells, index|
+          sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
+        end
+      end
+      sheet.column_widths 36, 12, *Array.new(column_count - 2, 18)
+    end
   end
 
   def add_wholesale_sheet(workbook, styles)
@@ -196,6 +205,16 @@ class BakeListXlsx
     rows
   end
 
+  def retail_section_rows(section)
+    rows = section[:rows].map { |row| retail_row_cells(row) }
+
+    roule_rows = section[:rows].select { |row| roule_product?(row[:product]) }
+    if roule_rows.size > 1
+      rows << [ROULE_TOTAL_NAME, roule_rows.sum { |row| row[:quantity] }, *Array.new(STORE_COLUMNS.length)]
+    end
+    rows
+  end
+
   # The Wholesale Bake sheet's Total folds each product's overbake percentage in
   # on top of the ordered quantity -- staff bake orders + overbake, so the Total
   # column reflects the full amount actually baked (same orders + overbake math
@@ -212,9 +231,10 @@ class BakeListXlsx
 
   def other_row_cells(row)
     retail = store_quantities(row).sum
+    grand_central = pull_prep_store_quantity(row, PULL_PREP_STORE_COLUMNS.fetch("Grand Central"))
     blue_bottle = quantity_matching(row) { |client| client.name.match?(/blue bottle/i) }
 
-    [row[:product].name, row[:quantity], *store_quantities(row),
+    [row[:product].name, row[:quantity], *store_quantities(row), grand_central,
      retail, blue_bottle.zero? ? nil : blue_bottle, row[:quantity] - retail]
   end
 
@@ -224,6 +244,10 @@ class BakeListXlsx
 
   def store_quantity(row, pattern)
     quantity_matching(row) { |client| client.name.start_with?("Bien Cuit") && client.name.match?(pattern) }
+  end
+
+  def pull_prep_store_quantity(row, pattern)
+    store_quantity(row, pattern)
   end
 
   def quantity_matching(row, &matcher)
