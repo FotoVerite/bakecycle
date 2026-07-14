@@ -3,6 +3,80 @@
 require "rails_helper"
 
 describe ProductionRunPdf do
+  it "repeats a product category header when a long product summary continues onto another page" do
+    bakery = create(:bakery)
+    production_run = create(:production_run, bakery: bakery)
+
+    40.times do |index|
+      product = create(
+        :product,
+        bakery: bakery,
+        name: format("Long summary product %02d", index),
+        product_type: :bread,
+        weight: 100,
+        unit: :g
+      )
+      create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 1)
+    end
+
+    pages = PDF::Reader.new(StringIO.new(render_production_run(production_run))).pages.map(&:text)
+
+    expect(pages.size).to be >= 2
+    expect(pages.first).to include("Bread", "Qty", "Long summary product 00")
+    expect(pages.second).to include("Bread", "Qty", "Long summary product 39")
+  end
+
+  it "keeps long product and recipe names in the printable production packet" do
+    bakery = create(:bakery)
+    long_recipe_name = "Country sourdough with roasted garlic, rosemary, and sesame"
+    long_product_name = "Country sourdough sandwich loaf with roasted garlic and rosemary"
+    motherdough = create(:recipe_motherdough, bakery: bakery, name: long_recipe_name, mix_size: 1, mix_size_unit: :kg)
+    flour = create(:ingredient, bakery: bakery, name: "Strong Flour")
+    create(:recipe_item_ingredient, bakery: bakery, recipe: motherdough, inclusionable: flour, bakers_percentage: 100)
+    product = create(
+      :product,
+      bakery: bakery,
+      name: long_product_name,
+      product_type: :bread,
+      weight: 100,
+      unit: :g,
+      motherdough: motherdough
+    )
+    production_run = create(:production_run, bakery: bakery)
+    create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 1)
+
+    text = pdf_text(render_production_run(production_run))
+
+    expect(text.squish).to include(long_product_name, long_recipe_name)
+  end
+
+  it "groups preferments into a dedicated page when the bakery setting is enabled" do
+    bakery = create(:bakery, group_preferments: true)
+    run_date = Date.new(2026, 6, 2)
+    preferment = create(:recipe_preferment, bakery: bakery, name: "Levain Preferment", mix_size: 2, mix_size_unit: :kg)
+    preferment_flour = create(:ingredient, bakery: bakery, name: "Preferment Flour")
+    create(:recipe_item_ingredient, bakery: bakery, recipe: preferment, inclusionable: preferment_flour,
+                                    bakers_percentage: 100)
+    motherdough = create(:recipe_motherdough, bakery: bakery, name: "Country Dough", mix_size: 1, mix_size_unit: :kg)
+    create(:recipe_item_recipe, bakery: bakery, recipe: motherdough, inclusionable: preferment, bakers_percentage: 20)
+    product = create(
+      :product,
+      bakery: bakery,
+      name: "Country Loaf",
+      product_type: :bread,
+      weight: 100,
+      unit: :g,
+      motherdough: motherdough
+    )
+    production_run = create(:production_run, bakery: bakery, date: run_date)
+    create(:run_item, bakery: bakery, production_run: production_run, product: product, order_quantity: 1)
+
+    pages = PDF::Reader.new(StringIO.new(render_production_run(production_run))).pages.map(&:text)
+
+    expect(pages.last).to include("Preferments", "Levain Preferment", "Preferment Flour")
+    expect(pages.last).not_to include("Country Dough")
+  end
+
   it "renders the critical production run content into parseable PDF text" do
     bakery = create(:bakery, name: "Bakecycle Test Bakery")
     run_date = Date.new(2026, 6, 2)
@@ -84,5 +158,11 @@ describe ProductionRunPdf do
     pdf = ProductionRunPdf.new(projection_run_data)
 
     expect(pdf.render).to_not be_nil
+  end
+
+  private
+
+  def render_production_run(production_run)
+    ProductionRunPdf.new(ProductionRunData.new(production_run)).render
   end
 end
