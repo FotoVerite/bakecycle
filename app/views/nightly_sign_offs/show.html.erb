@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <%# Standard sections: Initials | Client | Boxes | Bags | Notes %>
+  <%# Standard sections: Packers | Client | Drivers | Boxes | Bags | Notes %>
   <% [
     ["All Clients", @all_clients,  "Client"],
     ["Blue Bottle", @blue_bottle,  "Blue Bottle"]
@@ -58,14 +58,15 @@
           <thead>
             <%# Print-only: combined title + date row replacing the screen h2 %>
             <tr class="sign-off-print-header">
-              <th colspan="5" class="print-section-title">
+              <th colspan="6" class="print-section-title">
                 <%= title %> &mdash; <%= formatted_date %>
                 <span class="print-section-count"><%= pluralize(shipments.size, "invoice") %></span>
               </th>
             </tr>
             <tr class="sign-off-col-headers">
-              <th class="col-initials" aria-label="Packer initials"></th>
+              <th class="col-packers">Packers</th>
               <th class="col-client"><%= col_label %></th>
+              <th class="col-drivers">Drivers</th>
               <th class="col-boxes">Boxes</th>
               <th class="col-bags">Bags</th>
               <th class="col-notes">Notes</th>
@@ -74,8 +75,9 @@
           <tbody>
             <% shipments.each do |shipment| %>
               <tr>
-                <td class="col-initials"><span class="initials-box"></span></td>
+                <td class="col-packers"><span class="initials-box" aria-label="Packer sign-off"></span></td>
                 <td class="col-client"><%= shipment.client_name %></td>
+                <td class="col-drivers"><span class="initials-box" aria-label="Driver sign-off"></span></td>
                 <td class="col-boxes"></td>
                 <td class="col-bags"></td>
                 <td class="col-notes"></td>
@@ -89,7 +91,7 @@
     </div>
   <% end %>
 
-  <%# Wholesale Sandwiches: Initials | Client | Cold Boxes | Notes (no Bags column) %>
+  <%# Wholesale Sandwiches: Packers | Client | Drivers | Cold Boxes | Notes (no Bags column) %>
   <div class="sign-off-section sign-off-section--sandwiches">
     <h2 class="sign-off-screen-header">
       <span>Wholesale Sandwiches</span>
@@ -99,14 +101,15 @@
       <table class="sign-off-table sign-off-table--sandwiches">
         <thead>
           <tr class="sign-off-print-header">
-            <th colspan="4" class="print-section-title">
+            <th colspan="5" class="print-section-title">
               Wholesale Sandwiches &mdash; <%= formatted_date %>
               <span class="print-section-count"><%= pluralize(@wholesale_sandwiches.size, "invoice") %></span>
             </th>
           </tr>
           <tr class="sign-off-col-headers">
-            <th class="col-initials" aria-label="Packer initials"></th>
+            <th class="col-packers">Packers</th>
             <th class="col-client">Client</th>
+            <th class="col-drivers">Drivers</th>
             <th class="col-boxes">Cold Boxes</th>
             <th class="col-notes">Notes</th>
           </tr>
@@ -114,8 +117,9 @@
         <tbody>
           <% @wholesale_sandwiches.each do |shipment| %>
             <tr>
-              <td class="col-initials"><span class="initials-box"></span></td>
+              <td class="col-packers"><span class="initials-box" aria-label="Packer sign-off"></span></td>
               <td class="col-client"><%= shipment.client_name %></td>
+              <td class="col-drivers"><span class="initials-box" aria-label="Driver sign-off"></span></td>
               <td class="col-boxes"></td>
               <td class="col-notes"></td>
             </tr>

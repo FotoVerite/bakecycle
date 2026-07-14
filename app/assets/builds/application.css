@@ -8837,9 +8837,12 @@ span.negative {
 .report-page.nightly-sign-off-page .sign-off-table tr:nth-child(even) td {
   background: #f3f3f3;
 }
-.report-page.nightly-sign-off-page .sign-off-table .col-initials {
+.report-page.nightly-sign-off-page .sign-off-table .col-packers,
+.report-page.nightly-sign-off-page .sign-off-table .col-drivers {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
   text-align: center;
-  width: 2.5rem;
+  width: 3.5rem;
 }
 .report-page.nightly-sign-off-page .sign-off-table .initials-box {
   border: 1.5px solid rgb(186.75, 186.75, 186.75);

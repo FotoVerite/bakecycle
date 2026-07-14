@@ -679,10 +679,13 @@
       background: $bc-verylightgrey;
     }
 
-    // Initials column — narrow box for packer to sign
-    .col-initials {
+    // Sign-off columns — one box each for packing and delivery handoff.
+    .col-packers,
+    .col-drivers {
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
       text-align: center;
-      width: 2.5rem;
+      width: 3.5rem;
     }
 
     .initials-box {
