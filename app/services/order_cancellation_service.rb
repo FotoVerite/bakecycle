@@ -52,21 +52,22 @@ class OrderCancellationService
                         message: "No standing order delivers on #{@date.strftime('%A')}s.")
     end
 
-    existing_temp = temp_order_for(client)
+    temporary_orders = standing.filter_map { |order| temp_order_for(client, route: order.route) }
 
-    if existing_temp
-      if zero_order?(existing_temp)
-        return Result.new(client: client, status: :already_cancelled,
-                          message: "Already has a cancellation for #{@date.strftime('%b %-d')}.")
-      elsif existing_temp.order_items.empty?
-        return Result.new(client: client, status: :needs_confirm,
-                          message: "Has an empty temporary order for #{@date.strftime('%b %-d')} " \
-                                   "— confirm to rebuild it as a zero-quantity cancellation.")
-      else
-        return Result.new(client: client, status: :needs_confirm,
-                          message: "Has a modified temporary order for #{@date.strftime('%b %-d')} " \
-                                   "— confirm to zero it out.")
-      end
+    if temporary_orders.size == standing.size && temporary_orders.all? { |order| zero_order?(order) }
+      return Result.new(client: client, status: :already_cancelled,
+                        message: "Already has a cancellation for #{@date.strftime('%b %-d')}.")
+    end
+
+    if temporary_orders.any? { |order| !zero_order?(order) }
+      message = if temporary_orders.any? { |order| order.order_items.empty? }
+                  "Has an empty temporary order for #{@date.strftime('%b %-d')} " \
+                    "— confirm to rebuild it as a zero-quantity cancellation."
+                else
+                  "Has a modified temporary order for #{@date.strftime('%b %-d')} " \
+                    "— confirm to zero it out."
+                end
+      return Result.new(client: client, status: :needs_confirm, message: message)
     end
 
     Result.new(client: client, status: :will_cancel,
@@ -74,9 +75,11 @@ class OrderCancellationService
   end
 
   def apply_cancellation(client, _result)
+    production_dates = production_dates_for(client)
     ActiveRecord::Base.transaction do
       create_zero_temp_orders(client)
       Shipment.where(bakery: @bakery, client: client, date: @date).destroy_all
+      reset_production_runs(production_dates)
     end
     Result.new(client: client, status: :cancelled, message: "Cancelled.")
   rescue StandardError => e
@@ -101,6 +104,18 @@ class OrderCancellationService
       end
       create_zero_items(existing_temp, standing)
     end
+  end
+
+  def production_dates_for(client)
+    Shipment.where(bakery: @bakery, client: client, date: @date)
+      .joins(:shipment_items)
+      .where.not(shipment_items: { production_run_id: nil })
+      .distinct
+      .pluck("shipment_items.production_start")
+  end
+
+  def reset_production_runs(dates)
+    dates.each { |date| ProductionRunService.new(@bakery, date).run }
   end
 
   def standing_orders_for(client)

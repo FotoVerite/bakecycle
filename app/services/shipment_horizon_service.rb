@@ -2,6 +2,7 @@
 
 class ShipmentHorizonService
   HORIZON_DAYS = 10
+  PotentialShipment = Struct.new(:order, :date, keyword_init: true)
 
   attr_reader :bakery, :run_time
 
@@ -11,9 +12,11 @@ class ShipmentHorizonService
   end
 
   def run
-    delivery_dates.each do |delivery_date|
-      active_orders_for(delivery_date).find_each do |order|
-        ShipmentCreator.new(order, delivery_date).create!
+    delivery_dates.flat_map do |delivery_date|
+      active_orders_for(delivery_date).filter_map do |order|
+        next unless order_has_quantity_for?(order, delivery_date)
+
+        PotentialShipment.new(order: order, date: delivery_date)
       end
     end
   end
@@ -30,5 +33,9 @@ class ShipmentHorizonService
       .orders
       .active(delivery_date)
       .includes(:client, :route, order_items: { product: :price_variants })
+  end
+
+  def order_has_quantity_for?(order, delivery_date)
+    order.order_items.any? { |item| item.quantity(delivery_date).positive? }
   end
 end

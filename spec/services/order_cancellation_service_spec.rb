@@ -66,6 +66,31 @@ describe OrderCancellationService do
       expect(service.preview.first.status).to eq(:needs_confirm)
     end
 
+    it "ignores a temporary order on an unrelated route" do
+      make_standing_order
+      other_route = create(:route, bakery: bakery)
+      create(:temporary_order, bakery: bakery, client: client, route: other_route, start_date: date)
+
+      expect(service.preview.first.status).to eq(:will_cancel)
+    end
+
+    it "cancels remaining routes when another route is already cancelled" do
+      make_standing_order
+      other_route = create(:route, bakery: bakery)
+      other_order = create(
+        :order,
+        bakery: bakery,
+        client: client,
+        route: other_route,
+        order_type: "standing",
+        start_date: date - 1.week
+      )
+      create(:order_item, order: other_order, bakery: bakery, monday: 5)
+      make_temp_order(zero_items: true)
+
+      expect(service.preview.first.status).to eq(:will_cancel)
+    end
+
     it "excludes Internal-channel clients even when explicitly requested" do
       internal = create(:client, bakery: bakery, channel: "Internal")
       make_standing_order(for_client: internal)
@@ -121,6 +146,21 @@ describe OrderCancellationService do
         service.cancel!
         result = service.cancel!.first
         expect(result.status).to eq(:already_cancelled)
+      end
+
+      it "resets production runs that contained the cancelled shipment items" do
+        order = Order.first
+        order_item = order.order_items.first
+        order_item.update!(product: create(:product, bakery: bakery, force_total_lead_days: 1))
+        shipment = ShipmentCreator.new(order, date).create!
+        production_date = shipment.shipment_items.first.production_start
+        production_run = ProductionRunService.new(bakery, production_date).tap(&:run).production_run
+
+        expect(production_run.run_items).to exist
+
+        service.cancel!
+
+        expect(production_run.reload.run_items).to be_empty
       end
     end
 

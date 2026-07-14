@@ -9,6 +9,15 @@ class ShipmentService
   end
 
   def run
-    ShipmentHorizonService.new(bakery, run_time).run
+    order_items_for_production.each do |item|
+      ship_date = run_time + item.total_lead_days.days
+      ShipmentCreator.new(item.order, ship_date).create!
+    end
+  end
+
+  private
+
+  def order_items_for_production
+    bakery.order_items.includes(:order).production_date(run_time)
   end
 end
