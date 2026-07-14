@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "clientRow", "nameFilter", "routeFilter", "count",
-    "cart", "cartList", "cartCount", "cartEmpty", "hiddenInputs", "submit"
+    "cart", "cartList", "cartCount", "cartEmpty", "hiddenInputs", "submit", "noteInput"
   ]
 
   connect() {
@@ -23,6 +23,9 @@ export default class extends Controller {
     url.searchParams.set("date", date)
     url.searchParams.delete("client_ids[]")
     this.selected.forEach((_client, id) => url.searchParams.append("client_ids[]", id))
+    if (this.hasNoteInputTarget && this.noteInputTarget.value) {
+      url.searchParams.set("note", this.noteInputTarget.value)
+    }
     window.location.href = url.toString()
   }
 

@@ -17,7 +17,8 @@
   }
 
   .cancellation-date-field,
-  .cancellation-filter-field {
+  .cancellation-filter-field,
+  .cancellation-note-field {
     label {
       color: $bc-scorpion;
       display: block;
@@ -40,6 +41,10 @@
       padding: 0 10px;
       width: 100%;
     }
+  }
+
+  .cancellation-note-field {
+    grid-column: 1 / -1;
   }
 
   .cancellation-filters {
@@ -458,6 +463,10 @@
       color: $bc-scorpion;
       margin: 0;
     }
+
+    .cancellation-note-summary {
+      margin: 0 0 8px;
+    }
   }
 
   .cancellation-group {
@@ -565,6 +574,11 @@
       font-size: 1.2rem;
       font-weight: 600;
       margin: 0 0 16px;
+    }
+
+    .cancellation-note-summary {
+      color: $bc-scorpion;
+      margin: -8px 0 16px;
     }
   }
 

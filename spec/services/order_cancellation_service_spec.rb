@@ -24,8 +24,8 @@ describe OrderCancellationService do
     temp.reload
   end
 
-  def service(client_ids = [client.id])
-    OrderCancellationService.new(bakery, client_ids, date)
+  def service(client_ids = [client.id], note: nil)
+    OrderCancellationService.new(bakery, client_ids, date, note: note)
   end
 
   # ── #preview ──────────────────────────────────────────────────────────
@@ -149,6 +149,24 @@ describe OrderCancellationService do
         expect(result.status).to eq(:already_cancelled)
       end
 
+      it "stores the given note on the new temporary order" do
+        service(note: "Holiday Closure").cancel!
+        temp = Order.temporary(date).where(client: client, bakery: bakery).first
+        expect(temp.note).to eq("Holiday Closure")
+      end
+
+      it "leaves the note blank when none is given" do
+        service.cancel!
+        temp = Order.temporary(date).where(client: client, bakery: bakery).first
+        expect(temp.note).to be_blank
+      end
+
+      it "treats a blank/whitespace-only note as absent" do
+        service(note: "   ").cancel!
+        temp = Order.temporary(date).where(client: client, bakery: bakery).first
+        expect(temp.note).to be_blank
+      end
+
       it "resets production runs that contained the cancelled shipment items" do
         order = Order.first
         order_item = order.order_items.first
@@ -213,6 +231,21 @@ describe OrderCancellationService do
       it "returns cancelled status" do
         result = service.cancel!(force_client_ids: [client.id]).first
         expect(result.status).to eq(:cancelled)
+      end
+
+      it "sets a note on the reused temp order when one is given" do
+        service(note: "Odeko Closed").cancel!(force_client_ids: [client.id])
+        temp = Order.temporary(date).where(client: client, bakery: bakery).first
+        expect(temp.note).to eq("Odeko Closed")
+      end
+
+      it "does not clear an existing note on the reused temp order when none is given" do
+        temp = Order.temporary(date).where(client: client, bakery: bakery).first
+        temp.update!(note: "Bien Cuit Closed")
+
+        service.cancel!(force_client_ids: [client.id])
+
+        expect(temp.reload.note).to eq("Bien Cuit Closed")
       end
     end
   end

@@ -12,6 +12,9 @@
     <%# ── Results ───────────────────────────────────────────────────── %>
     <div class="cancellation-results">
       <h2>Done — <%= @date.strftime("%A, %B %-d, %Y") %></h2>
+      <% if @note.present? %>
+        <p class="cancellation-note-summary"><strong>Reason:</strong> <%= @note %></p>
+      <% end %>
       <table class="cancellation-summary-table">
         <thead>
           <tr>
@@ -60,6 +63,9 @@
     <div class="cancellation-preview">
       <div class="cancellation-preview-header">
         <h2>Confirm cancellations for <%= @date.strftime("%A, %B %-d, %Y") %></h2>
+        <% if @note.present? %>
+          <p class="cancellation-note-summary"><strong>Reason:</strong> <%= @note %></p>
+        <% end %>
         <p>
           <strong><%= pluralize(will_cancel.size, "client") %></strong> will be cancelled.
           <% if needs_confirm.any? %>
@@ -77,6 +83,7 @@
       <%= form_tag cancellations_path, method: :post, class: "cancellation-confirm-form", data: { turbo: false } do %>
         <input type="hidden" name="step"  value="confirm">
         <input type="hidden" name="date"  value="<%= @date.strftime("%Y-%m-%d") %>">
+        <input type="hidden" name="note"  value="<%= @note %>">
         <% @client_ids.each do |id| %>
           <input type="hidden" name="client_ids[]" value="<%= id %>">
         <% end %>
@@ -160,7 +167,7 @@
         <% end %>
 
         <div class="cancellation-confirm-actions">
-          <%= link_to "Back", new_cancellation_path(date: @date.strftime("%Y-%m-%d"), client_ids: @client_ids), class: "button secondary" %>
+          <%= link_to "Back", new_cancellation_path(date: @date.strftime("%Y-%m-%d"), client_ids: @client_ids, note: @note), class: "button secondary" %>
           <% if will_cancel.any? || needs_confirm.any? %>
             <%= submit_tag "Confirm and cancel", class: "button alert", data: { disable_with: "Cancelling…" } %>
           <% end %>
@@ -181,6 +188,15 @@
                  value="<%= @date.strftime("%Y-%m-%d") %>"
                  class="cancellation-date-input"
                  data-action="change->cancellation-form#changeDate">
+        </div>
+
+        <div class="cancellation-note-field">
+          <label for="cancellation_note">Reason (optional)</label>
+          <input type="text" id="cancellation_note" name="note"
+                 value="<%= @note %>"
+                 placeholder="e.g. Holiday Closure, Odeko Closed"
+                 class="cancellation-note-input"
+                 data-cancellation-form-target="noteInput">
         </div>
 
         <div class="cancellation-filters">

@@ -178,6 +178,102 @@ namespace :db do
     puts "Done. Total time: %.1fs" % (Time.now - overall_started_at)
   end
 
+  desc "Sync staging data into dev, excluding the PaperTrail versions table"
+  task sync_from_staging: :environment do
+    local_db = ENV["DB_NAME_DEVELOPMENT"] || "bakecycle_development"
+
+    puts "This will OVERWRITE all data in '#{local_db}' (development) with a copy of " \
+         "staging (#{STAGING_DB}). The 'versions' table will be excluded (schema kept, no rows)."
+    unless ENV["FORCE"] == "1"
+      print "Type the target database name (#{local_db}) to confirm: "
+      confirmation = $stdin.gets&.chomp
+      raise "Aborted: confirmation did not match '#{local_db}'." unless confirmation == local_db
+    end
+
+    overall_started_at = Time.now
+
+    dump_cmd = [
+      "ssh", STAGING_SSH,
+      "pg_dump --no-owner --no-acl --verbose --exclude-table-data=versions -Fc #{STAGING_DB}"
+    ]
+
+    reset_schema_sql = "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
+    dev_config = ActiveRecord::Base.configurations.configs_for(env_name: "development", name: "primary")
+                                    .configuration_hash
+    restore_env = {}
+    conn_args = []
+    restore_env["PGPASSWORD"] = dev_config[:password].to_s if dev_config[:password].present?
+    conn_args += ["-h", dev_config[:host].to_s] if dev_config[:host].present?
+    conn_args += ["-p", dev_config[:port].to_s] if dev_config[:port].present?
+    conn_args += ["-U", dev_config[:username].to_s] if dev_config[:username].present?
+
+    # Staging runs Postgres 16 (Ubuntu); this laptop's linked `pg_restore` is 14, which
+    # can't read v16's custom-dump archive format ("unsupported version (1.15) in file
+    # header"). Use the unlinked postgresql@16 keg's pg_restore explicitly instead of
+    # switching the system-wide link (would affect the running v14 server/other tasks).
+    pg_restore_bin = "/opt/homebrew/opt/postgresql@16/bin/pg_restore"
+    pg_restore_bin = "pg_restore" unless File.executable?(pg_restore_bin)
+
+    reset_cmd = [restore_env, "psql", *conn_args, "-d", local_db, "-c", reset_schema_sql]
+    restore_cmd = [restore_env, pg_restore_bin, "--no-owner", "--no-acl", "--verbose", *conn_args, "-d", local_db]
+
+    with_elapsed_time("Resetting development schema") do
+      raise "Schema reset on development failed" unless system(*reset_cmd)
+    end
+
+    dump_status = restore_status = restore_stderr = nil
+    with_elapsed_time("Dumping from staging and restoring into development") do
+      dump_read, dump_write = IO.pipe
+      dump_pid = Process.spawn(*dump_cmd, out: dump_write)
+      dump_write.close
+
+      restore_err_read, restore_err_write = IO.pipe
+      restore_pid = Process.spawn(*restore_cmd, in: dump_read, err: restore_err_write)
+      dump_read.close
+      restore_err_write.close
+
+      restore_stderr = +""
+      stderr_thread = Thread.new do
+        restore_err_read.each_line do |line|
+          restore_stderr << line
+          puts "  [restore] #{line.chomp}" if line.start_with?("pg_restore:")
+        end
+      end
+
+      _, dump_status = Process.wait2(dump_pid)
+      _, restore_status = Process.wait2(restore_pid)
+      stderr_thread.join
+      restore_err_read.close
+    end
+
+    raise "pg_dump on staging failed (exit #{dump_status.exitstatus})" unless dump_status.success?
+
+    unless restore_status.success?
+      error_lines = restore_stderr.lines.grep(/^pg_restore: error:/)
+      fatal_lines = error_lines.reject do |line|
+        benign_restore_error?(line) || line.include?('schema "public" already exists')
+      end
+
+      unless fatal_lines.empty?
+        warn restore_stderr
+        raise "Restore into development failed (exit #{restore_status.exitstatus})"
+      end
+
+      puts "Restore into development completed with only known-benign warnings " \
+           "(already shown above as [restore] lines)."
+    end
+
+    puts "'#{local_db}' (development) now mirrors staging (versions table empty)."
+
+    with_elapsed_time("Running db:migrate against development") do
+      migrate_cmd = [{ "RAILS_ENV" => "development" }, "bin/rails", "db:migrate"]
+      raise "db:migrate against development failed" unless system(*migrate_cmd)
+    end
+
+    puts "Done. Total time: %.1fs" % (Time.now - overall_started_at)
+  end
+
   # Only the Bakery#logo attachment is copied -- NOT the whole S3 bucket, which also
   # holds every generated invoice/export PDF (FileExport). Pulling the entire bucket
   # would dump production's invoice history into staging for no reason. Both legs run

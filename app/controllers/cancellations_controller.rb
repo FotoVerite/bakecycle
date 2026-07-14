@@ -7,6 +7,7 @@ class CancellationsController < ApplicationController
     authorize Client, :new?
     @date                = parse_date(params[:date]) || Date.tomorrow
     @selected_client_ids = Array(params[:client_ids]).reject(&:blank?).map(&:to_i)
+    @note                = params[:note].to_s
     load_form_data
   end
 
@@ -15,6 +16,7 @@ class CancellationsController < ApplicationController
     @date                = parse_date(params[:date]) || Date.tomorrow
     client_ids           = Array(params[:client_ids]).reject(&:blank?).map(&:to_i)
     @selected_client_ids = client_ids
+    @note                = params[:note].to_s
     load_form_data
 
     if client_ids.empty?
@@ -57,7 +59,7 @@ class CancellationsController < ApplicationController
   end
 
   def assign_cancellation_result(client_ids)
-    service = OrderCancellationService.new(current_bakery, client_ids, @date)
+    service = OrderCancellationService.new(current_bakery, client_ids, @date, note: @note)
 
     if params[:step] == "confirm"
       force_ids = Array(params[:force_client_ids]).reject(&:blank?).map(&:to_i)

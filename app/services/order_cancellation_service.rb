@@ -5,11 +5,12 @@ class OrderCancellationService
 
   STATUSES = %i[will_cancel already_cancelled needs_confirm no_order cancelled skipped error].freeze
 
-  def initialize(bakery, client_ids, date)
+  def initialize(bakery, client_ids, date, note: nil)
     @bakery     = bakery
     @client_ids = Array(client_ids).map(&:to_i).uniq
     @date       = date
     @weekday    = date.strftime("%A").downcase
+    @note       = note.to_s.strip.presence
   end
 
   # Returns preview results without modifying any data.
@@ -90,22 +91,36 @@ class OrderCancellationService
     standing_orders_for(client).each do |standing|
       existing_temp = temp_order_for(client, route: standing.route)
       if existing_temp
-        existing_temp.update!(cancellation_override: true)
+        existing_temp.update!(cancellation_attributes)
         existing_temp.all_order_items.destroy_all
       else
         existing_temp = Order.create!(
-          bakery: @bakery,
-          client: client,
-          route: standing.route,
-          order_type: "temporary",
-          start_date: @date,
-          end_date: @date,
-          discount: standing.discount,
-          cancellation_override: true
+          cancellation_attributes.merge(
+            bakery: @bakery,
+            client: client,
+            route: standing.route,
+            order_type: "temporary",
+            start_date: @date,
+            end_date: @date,
+            discount: standing.discount
+          )
         )
       end
       create_zero_items(existing_temp, standing)
     end
+  end
+
+  # The reason (e.g. "Holiday Closure", "Odeko Closed") a bakery user typed in
+  # for this whole batch, if any -- stored on the note column of every
+  # zero-quantity temporary order the cancellation touches, so a later
+  # question about why a date was cancelled has an answer on the order
+  # itself. Omitted (rather than blanked to "") when not given, so
+  # re-cancelling an already-noted date without typing a new reason doesn't
+  # wipe the existing one.
+  def cancellation_attributes
+    attrs = { cancellation_override: true }
+    attrs[:note] = @note if @note
+    attrs
   end
 
   def production_dates_for(client)

@@ -99,6 +99,21 @@ RSpec.describe "Cancellations", type: :request do
         expect(temp.order_items.size).to eq(1)
         expect(temp.order_items.first.quantity(Date.parse(date))).to eq(0)
       end
+
+      it "stores the submitted note on the created temp order" do
+        route  = create(:route, bakery: bakery)
+        order  = create(:order, bakery: bakery, client: client, route: route,
+                                order_type: "standing", start_date: Date.tomorrow - 1.week)
+        create(:order_item, order: order, bakery: bakery)
+        order.reload
+
+        post cancellations_path, params: {
+          date: date, step: "confirm", client_ids: [client.id], note: "Holiday Closure"
+        }
+
+        temp = Order.temporary(date).where(client: client, bakery: bakery).first
+        expect(temp.note).to eq("Holiday Closure")
+      end
     end
   end
 end

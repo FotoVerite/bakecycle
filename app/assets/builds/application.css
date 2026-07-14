@@ -7769,7 +7769,8 @@ span.negative {
   }
 }
 .cancellation-page .cancellation-date-field label,
-.cancellation-page .cancellation-filter-field label {
+.cancellation-page .cancellation-filter-field label,
+.cancellation-page .cancellation-note-field label {
   color: #5a5a5a;
   display: block;
   font-size: 0.78rem;
@@ -7783,7 +7784,10 @@ span.negative {
 .cancellation-page .cancellation-date-field select,
 .cancellation-page .cancellation-filter-field input[type=date],
 .cancellation-page .cancellation-filter-field input[type=text],
-.cancellation-page .cancellation-filter-field select {
+.cancellation-page .cancellation-filter-field select,
+.cancellation-page .cancellation-note-field input[type=date],
+.cancellation-page .cancellation-note-field input[type=text],
+.cancellation-page .cancellation-note-field select {
   border-color: #e1e1e1;
   box-sizing: border-box;
   font-size: 0.95rem;
@@ -7792,6 +7796,9 @@ span.negative {
   min-height: 40px;
   padding: 0 10px;
   width: 100%;
+}
+.cancellation-page .cancellation-note-field {
+  grid-column: 1/-1;
 }
 .cancellation-page .cancellation-filters {
   display: grid;
@@ -8147,6 +8154,9 @@ span.negative {
   color: #5a5a5a;
   margin: 0;
 }
+.cancellation-page .cancellation-preview-header .cancellation-note-summary {
+  margin: 0 0 8px;
+}
 .cancellation-page .cancellation-group {
   margin-bottom: 20px;
 }
@@ -8233,6 +8243,10 @@ span.negative {
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 0 16px;
+}
+.cancellation-page .cancellation-results .cancellation-note-summary {
+  color: #5a5a5a;
+  margin: -8px 0 16px;
 }
 .cancellation-page .cancellation-result-row.cancellation-result--cancelled td:first-child {
   font-weight: 600;
