@@ -22,7 +22,7 @@
           } %>
     </div>
 
-    <div class="index-filter index-filter-select index-span-2">
+    <div class="index-filter index-filter-select index-filter-route">
       <%= f.input :route_id,
           collection: orders.available_routes,
           as: :select,
@@ -33,15 +33,23 @@
           } %>
     </div>
 
-    <div class="index-toolbar-actions index-span-2">
-      <%= f.submit "Search", class: "button small", name: nil %>
+    <div class="index-filter index-filter-status">
+      <%= f.input :status,
+          collection: [["All orders", ""], ["Cancellation overrides", "cancellation_override"]],
+          label: "Order status",
+          required: false,
+          include_blank: false %>
     </div>
 
-    <div class="index-filter index-filter-date index-span-2">
+    <div class="index-filter index-filter-date">
       <%= f.input :date,
           input_html: { class: "js-datepicker" },
           placeholder: "YYYY-MM-DD",
           required: false %>
+    </div>
+
+    <div class="index-toolbar-actions">
+      <%= f.submit "Search", class: "button small", name: nil %>
     </div>
   </div>
 <% end %>

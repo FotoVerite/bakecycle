@@ -90,42 +90,8 @@ export default class extends Controller {
   }
 
   _render() {
-    this.cartListTarget.innerHTML = ""
-    this.hiddenInputsTarget.innerHTML = ""
-
-    this.selected.forEach(client => {
-      const item = document.createElement("li")
-      item.className = "cancellation-cart-item"
-
-      const name = document.createElement("span")
-      name.className = "cancellation-cart-item-name"
-      name.textContent = client.name
-      item.appendChild(name)
-
-      if (client.route) {
-        const route = document.createElement("span")
-        route.className = "cancellation-cart-item-route"
-        route.textContent = client.route
-        item.appendChild(route)
-      }
-
-      const remove = document.createElement("button")
-      remove.type = "button"
-      remove.className = "cancellation-cart-item-remove"
-      remove.dataset.id = client.id
-      remove.dataset.action = "click->cancellation-form#removeFromCart"
-      remove.setAttribute("aria-label", `Remove ${client.name}`)
-      remove.innerHTML = '<span aria-hidden="true">&times;</span>'
-      item.appendChild(remove)
-
-      this.cartListTarget.appendChild(item)
-
-      const hidden = document.createElement("input")
-      hidden.type = "hidden"
-      hidden.name = "client_ids[]"
-      hidden.value = client.id
-      this.hiddenInputsTarget.appendChild(hidden)
-    })
+    this._syncCartItems()
+    this._syncHiddenInputs()
 
     const count = this.selected.size
     this.cartCountTarget.textContent = count
@@ -133,5 +99,65 @@ export default class extends Controller {
     this.cartListTarget.hidden = count === 0
     this.submitTarget.disabled = count === 0
     this.cartTarget.classList.toggle("has-selection", count > 0)
+  }
+
+  _syncCartItems() {
+    const selectedIds = new Set(this.selected.keys())
+
+    this.cartListTarget.querySelectorAll(".cancellation-cart-item").forEach(item => {
+      if (!selectedIds.has(item.dataset.id)) item.remove()
+    })
+
+    this.selected.forEach(client => {
+      let item = this.cartListTarget.querySelector(`.cancellation-cart-item[data-id="${client.id}"]`)
+
+      if (!item) {
+        item = this._buildCartItem(client)
+        this.cartListTarget.appendChild(item)
+      }
+    })
+  }
+
+  _syncHiddenInputs() {
+    const inputs = []
+
+    this.selected.forEach(client => {
+      const hidden = document.createElement("input")
+      hidden.type = "hidden"
+      hidden.name = "client_ids[]"
+      hidden.value = client.id
+      inputs.push(hidden)
+    })
+
+    this.hiddenInputsTarget.replaceChildren(...inputs)
+  }
+
+  _buildCartItem(client) {
+    const item = document.createElement("li")
+    item.className = "cancellation-cart-item"
+    item.dataset.id = client.id
+
+    const name = document.createElement("span")
+    name.className = "cancellation-cart-item-name"
+    name.textContent = client.name
+    item.appendChild(name)
+
+    if (client.route) {
+      const route = document.createElement("span")
+      route.className = "cancellation-cart-item-route"
+      route.textContent = client.route
+      item.appendChild(route)
+    }
+
+    const remove = document.createElement("button")
+    remove.type = "button"
+    remove.className = "cancellation-cart-item-remove"
+    remove.dataset.id = client.id
+    remove.dataset.action = "click->cancellation-form#removeFromCart"
+    remove.setAttribute("aria-label", `Remove ${client.name}`)
+    remove.innerHTML = '<span aria-hidden="true">&times;</span>'
+    item.appendChild(remove)
+
+    return item
   }
 }

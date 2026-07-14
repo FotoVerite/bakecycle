@@ -42,3 +42,4 @@ screenshot_*.html
 
 /.agents/skills/improve-codebase-architecture
 .agents/skills/obsidian-vault/SKILL.md
+/.agents/skills

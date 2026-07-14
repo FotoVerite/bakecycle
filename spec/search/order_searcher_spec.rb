@@ -42,4 +42,12 @@ describe OrderSearcher do
     terms = { product_id: order.order_items.first.product_id }
     expect(searcher.search(terms)).to contain_exactly(order)
   end
+
+  it "allows searching for cancellation overrides" do
+    cancellation_override = create(:temporary_order, cancellation_override: true)
+    create(:temporary_order)
+    create(:order)
+
+    expect(searcher.search(status: "cancellation_override")).to contain_exactly(cancellation_override)
+  end
 end

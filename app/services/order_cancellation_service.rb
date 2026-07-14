@@ -90,6 +90,7 @@ class OrderCancellationService
     standing_orders_for(client).each do |standing|
       existing_temp = temp_order_for(client, route: standing.route)
       if existing_temp
+        existing_temp.update!(cancellation_override: true)
         existing_temp.all_order_items.destroy_all
       else
         existing_temp = Order.create!(
@@ -99,7 +100,8 @@ class OrderCancellationService
           order_type: "temporary",
           start_date: @date,
           end_date: @date,
-          discount: standing.discount
+          discount: standing.discount,
+          cancellation_override: true
         )
       end
       create_zero_items(existing_temp, standing)

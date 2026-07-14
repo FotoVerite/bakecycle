@@ -124,6 +124,7 @@ describe OrderCancellationService do
         temp = Order.temporary(date).where(client: client, bakery: bakery).first
         expect(temp.order_items.size).to eq(1)
         expect(temp.order_items.first.quantity(date)).to eq(0)
+        expect(temp).to be_cancellation_override
       end
 
       it "destroys existing shipments for that client and date" do

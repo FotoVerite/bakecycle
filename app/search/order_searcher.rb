@@ -14,6 +14,7 @@ class OrderSearcher
     search_by_date(terms[:date])
     search_by_route(terms[:route_id])
     search_by_product(terms[:product_id])
+    search_by_status(terms[:status])
     @collection.all
   end
 
@@ -55,5 +56,11 @@ class OrderSearcher
     return if product_id.blank?
 
     @collection = @collection.joins(:order_items).where(order_items: { product_id: product_id })
+  end
+
+  def search_by_status(status)
+    return unless status == "cancellation_override"
+
+    @collection = @collection.where(cancellation_override: true)
   end
 end

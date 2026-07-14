@@ -159,9 +159,14 @@
       Warning, this order is being created without minimum lead days and will not be automatically invoiced.
     </p>
     <% unless order.new_record? %>
+      <% delete_confirmation = if order.cancellation_override?
+                                 "This will remove this cancellation for #{order.start_date.strftime('%b %-d')}. Continue?"
+                               else
+                                 "Are you sure?"
+                               end %>
       <%= link_to 'Delete', order_path(order),
           class: "button alert",
-          data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
+          data: { turbo_method: :delete, turbo_confirm: delete_confirmation } %>
     <% end %>
     <%= link_to "Back", order.persisted? ? client_path(order.client) : new_order_return_path, class: "button secondary" %>
   </div>

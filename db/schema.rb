@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_09_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_14_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -206,6 +206,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_09_000000) do
   create_table "orders", id: :serial, force: :cascade do |t|
     t.boolean "alert", default: false
     t.integer "bakery_id", null: false
+    t.boolean "cancellation_override", default: false, null: false
     t.integer "client_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.integer "created_by_user_id"

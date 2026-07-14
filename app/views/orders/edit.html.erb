@@ -30,6 +30,18 @@
     </div>
   </div>
 
+  <% if order.cancellation_override? %>
+    <section class="cancellation-override-notice" aria-labelledby="cancellation-override-title">
+      <div>
+        <p class="cancellation-override-notice-label">Cancellation override</p>
+        <h2 id="cancellation-override-title">
+          Scheduled delivery cancelled for <time datetime="<%= order.start_date.iso8601 %>"><%= order.start_date.strftime("%A, %b %-d") %></time>
+        </h2>
+      </div>
+      <span class="cancellation-override-badge">Temporary cancellation</span>
+    </section>
+  <% end %>
+
   <% unless order.no_outstanding_shipments? %>
     <div class="overridable-orders panel callout radius">
       <h5>This order is missing invoices for <%= pluralize(order.missing_shipment_dates.size, 'date') %></h5>

@@ -93,6 +93,94 @@ RSpec.describe "Orders", type: :request do
       expect(order.reload.note).to eq("Ring the bell")
       expect(flash[:notice]).to match(/You have updated/)
     end
+
+    it "deletes a marked cancellation override without creating a shipment or production run" do
+      delivery_date = Time.zone.today + 1.day
+      cancellation_client = create(:client, bakery: bakery)
+      product = create(:product, bakery: bakery)
+      standing = create(
+        :order,
+        bakery: bakery,
+        client: cancellation_client,
+        route: route,
+        start_date: Time.zone.today - 1.week,
+        order_item_count: 0
+      )
+      create(:order_item, bakery: bakery, order: standing, product: product, daily_item_count: 1)
+      cancellation = create(
+        :temporary_order,
+        bakery: bakery,
+        client: cancellation_client,
+        route: route,
+        start_date: delivery_date,
+        cancellation_override: true,
+        order_item_count: 0
+      )
+      create(:order_item, bakery: bakery, order: cancellation, product: product, daily_item_count: 0)
+
+      expect(ProductionRunService).not_to receive(:new)
+
+      expect {
+        delete order_path(cancellation)
+      }.not_to change(Shipment, :count)
+
+      expect(Order).not_to exist(cancellation.id)
+      expect(response).to redirect_to(client_path(cancellation_client))
+    end
+
+    it "does not restore a shipment when deleting an ordinary temporary order" do
+      delivery_date = Time.zone.today + 1.day
+      temporary = create(
+        :temporary_order,
+        bakery: bakery,
+        client: client,
+        route: route,
+        start_date: delivery_date,
+        order_item_count: 0
+      )
+
+      expect {
+        delete order_path(temporary)
+      }.not_to change(Shipment, :count)
+
+      expect(Order).not_to exist(temporary.id)
+      expect(response).to redirect_to(client_path(client))
+    end
+
+    it "identifies a cancellation override and explains that deleting it removes the cancellation" do
+      cancellation = create(
+        :temporary_order,
+        bakery: bakery,
+        client: client,
+        route: route,
+        start_date: Time.zone.today + 1.day,
+        cancellation_override: true
+      )
+
+      get edit_order_path(cancellation)
+
+      expect(response.body).to include("Scheduled delivery cancelled for")
+      expect(response.body).to include("remove this cancellation for")
+    end
+
+    it "identifies cancellation overrides and filters to them on the orders index" do
+      cancellation = create(
+        :temporary_order,
+        bakery: bakery,
+        client: create(:client, bakery: bakery),
+        route: route,
+        start_date: Time.zone.today + 1.day,
+        cancellation_override: true
+      )
+
+      get orders_path, params: { search: { status: "cancellation_override" } }
+
+      expect(response.body).to include("Cancellation overrides")
+      expect(response.body).to include("class=\"order-cancellation-status\"")
+      expect(response.body).to include("Cancellation</span>")
+      expect(response.body).to include("href=\"#{edit_order_path(cancellation)}\"")
+      expect(response.body).not_to include("href=\"#{edit_order_path(order)}\"")
+    end
   end
 
   describe "data scoping" do

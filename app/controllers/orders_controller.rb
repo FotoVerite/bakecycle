@@ -94,6 +94,7 @@ class OrdersController < ApplicationController
     client = @order.client
     @order.destroy!
     flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client_name}."
+
     redirect_to client_path(client), status: :see_other
   end
 

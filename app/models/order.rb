@@ -20,6 +20,7 @@
 #  created_by_user_id      :integer
 #  last_updated_by_user_id :integer
 #  alert                   :boolean          default(FALSE)
+#  cancellation_override   :boolean          default(FALSE), not null
 #
 
 class Order < ApplicationRecord
