@@ -177,6 +177,72 @@ The risk isn't "too many attributes," it's:
   "should this operation produce a trace at all," not "should this trace have
   fewer fields."
 
+## Attribute naming conventions
+
+Custom (non-semantic-convention) attribute keys are still few enough (6
+distinct keys, listed below) that this is one short section, not a separate
+schema doc —
+revisit that if the table below grows past ~a dozen entries, or if attributes
+start getting relied on by a Honeycomb dashboard/SLO/trigger (a silent rename
+would then break a saved query, not just a search).
+
+**Rule: `<entity>.<field>`**, where `<entity>` is the Rails model name,
+snake_case and singular (`production_run`, not `production-runs` or
+`ProductionRun`), and `<field>` matches the model's own column/method name
+where one exists (`id`, `item_count`). Pick the entity that's actually the
+subject of the attribute, not just whatever object happens to be in scope —
+e.g. `production_run.item_count` lives on the report span even though the
+code computing it is `ProductionRunGenerator`, because the count describes
+the production run, not the generator.
+
+**Exception: reserved cross-cutting keys.** A tiny second category exists for
+identifiers that should be filterable on *every* span regardless of what
+entity that span's own logic is about — currently just tenant identity.
+Instead of every emitter inventing its own entity-scoped foreign-key
+attribute (`file_export.bakery_id`, `production_run.bakery_id`, etc.), use the
+single reserved key below so a Honeycomb query can filter by tenant across
+unrelated span types, and across the frontend/backend boundary:
+
+| Reserved key | Type | Meaning |
+|---|---|---|
+| `bakery.id` | **string** | The current tenant. Always a string — the frontend can only ever read it out of an HTML `<meta>` tag, so the backend `.to_s`-coerces its (integer) `bakery_id` column to match. Sending it as an integer from one side and a string from the other would make an exact-match filter like `bakery.id = 5` silently miss whichever side didn't match. |
+
+**Caveat: span attributes don't inherit to child spans.** Unlike the
+frontend's `WebTracerProvider` *resource* attribute (set once, stamped onto
+every span the page produces automatically), a backend span attribute set via
+`add_attributes`/`in_span(attributes:)` only lives on that one span event —
+Honeycomb has no notion of a child span inheriting a parent's attributes.
+`bakery.id` is therefore set independently at each place it's needed, not
+once: `app/jobs/exporter_job.rb` (`tag_current_span`, on the ActiveJob
+`perform` span) and `app/reports/production_run_generator.rb`
+(`report_attributes`, on the `report.generate` span and its
+`production_run.build_data`/`production_run.render_pdf` children). A query
+scoped to one specific span type needs `bakery.id` set on *that* span type
+directly — being present somewhere else in the same trace doesn't help.
+Other generators that want tenant-filterable report spans need their own
+`report_attributes` entry for it; there's no shared default yet.
+
+Before adding a new entity-scoped attribute, check whether it's actually
+identifying the tenant rather than something specific to that entity — if so,
+it belongs under `bakery.id`, not a new `<entity>.bakery_id` key.
+
+### Current custom keys
+
+| Key | Entity namespace | Set in | Notes |
+|---|---|---|---|
+| `report.type` | `report` | `app/reports/generator.rb` (`Generator::Instrumentation`) | Report class name, e.g. `production_run`. Applies to every report generator via the shared concern. |
+| `production_run.id` | `production_run` | `app/reports/production_run_generator.rb` (`report_attributes`) | Merged onto the `report.generate` span by `Generator::Instrumentation`. |
+| `production_run.item_count` | `production_run` | `app/reports/production_run_generator.rb` (`report_attributes`) | Same mechanism — lets a slow trace be told apart from a large one. |
+| `file_export.id` | `file_export` | `app/jobs/exporter_job.rb` (`tag_current_span`) | |
+| `file_export.user_id` | `file_export` | `app/jobs/exporter_job.rb` (`tag_current_span`) | |
+| `bakery.id` | *(reserved, see above)* | `app/jobs/exporter_job.rb`, `app/reports/production_run_generator.rb`, `app/assets/javascripts/otel_web.js` | Shared tenant key, not entity-scoped. Set independently in each place per the inheritance caveat above. |
+
+Any generator can add more report-specific attributes the same way
+`ProductionRunGenerator` does: define a public `report_attributes` method
+returning a Hash, and `Generator::Instrumentation#generate` merges it onto
+the `report.generate` span automatically — no per-generator span-wrapping
+needed.
+
 ## Sources
 
 - [OTel Ruby discussion #1333 — `untraced` requires `ParentBased` sampler](https://github.com/open-telemetry/opentelemetry-ruby/discussions/1333)

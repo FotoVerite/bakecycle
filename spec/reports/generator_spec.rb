@@ -89,3 +89,48 @@ describe Generator::CompositeId do
     expect(VipListGenerator.find(vip_list.id).filename).to eq(vip_list.filename)
   end
 end
+
+describe Generator::Instrumentation do
+  # Generator::TRACER is a real (no-op) OpenTelemetry::Internal::ProxyTracer
+  # in every environment -- opentelemetry-api is loaded everywhere (Gemfile),
+  # even though the full SDK/exporter stay production/staging-only. Swapping
+  # in an instance_double still verifies against the real Tracer API surface.
+  # Classes below are named via stub_const, not left anonymous -- report.type
+  # is derived from self.class.name, which is nil (and would raise) on an
+  # unnamed Class.new.
+  let(:tracer) { instance_double(OpenTelemetry::Trace::Tracer) }
+
+  before { stub_const("Generator::TRACER", tracer) }
+
+  it "tags the span with just report.type when the generator has no report_attributes" do
+    test_class = stub_const("PlainTestGenerator", Class.new do
+      include Generator
+      def filename = "plain.pdf"
+      def generate = "ok"
+    end)
+
+    expect(tracer).to receive(:in_span)
+      .with("report.generate", attributes: { "report.type" => "plain_test" })
+      .and_yield
+
+    test_class.new.generate
+  end
+
+  it "merges the generator's report_attributes onto the span alongside report.type" do
+    test_class = stub_const("WidgetTestGenerator", Class.new do
+      include Generator
+      def filename = "widget.pdf"
+      def generate = "ok"
+      def report_attributes = { "widget.count" => 3, "bakery.id" => "42" }
+    end)
+
+    expect(tracer).to receive(:in_span)
+      .with(
+        "report.generate",
+        attributes: { "report.type" => "widget_test", "widget.count" => 3, "bakery.id" => "42" }
+      )
+      .and_yield
+
+    test_class.new.generate
+  end
+end

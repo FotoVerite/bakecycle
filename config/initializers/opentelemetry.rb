@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
-return unless defined?(OpenTelemetry)
+# Everything below (SDK.configure, Common::Utilities, the Solid
+# Queue/Cable polling suppression) needs the actual SDK, not just the API --
+# opentelemetry-api alone is now loaded in every environment (Gemfile,
+# "all environments" comment) so plain `defined?(OpenTelemetry)` is true in
+# test/development too, but opentelemetry-sdk itself stays production/staging
+# only. Guard on the SDK constant specifically or this raises on boot
+# anywhere the SDK isn't bundled.
+return unless defined?(OpenTelemetry::SDK)
 
 # Solid Queue's Worker/Dispatcher and Solid Cable's Listener each poll on a
 # fixed timer regardless of real traffic (confirmed via Honeycomb: ~99.98%

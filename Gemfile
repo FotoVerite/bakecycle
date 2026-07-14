@@ -21,6 +21,17 @@ gem "jsbundling-rails"
 gem "jwt"
 gem "kt-paperclip", "~> 7.0"
 gem "mission_control-jobs"
+# API-only, all environments -- OpenTelemetry's own API/SDK split: this gem is
+# just the interface (Tracer, Span, in_span) with a documented no-op fallback
+# when no SDK is registered, so it's safe and cheap everywhere. The actual
+# SDK/exporter/instrumentation-all (below, production+staging only) is what
+# turns calls into real exported spans. Already resolved as a transitive dep
+# of opentelemetry-sdk, so this doesn't change what's installed -- it just
+# lets defined?(OpenTelemetry) be true in test/development too, so the
+# report.generate/tag_current_span code paths run for real in specs instead
+# of always hitting their disabled-guard branch. See
+# docs/honeycomb-rails-pitfalls.md, "Attribute naming conventions."
+gem "opentelemetry-api"
 gem "paper_trail"
 gem "pg"
 gem "prawn"

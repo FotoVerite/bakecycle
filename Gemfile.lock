@@ -814,6 +814,7 @@ DEPENDENCIES
   kt-paperclip (~> 7.0)
   letter_opener
   mission_control-jobs
+  opentelemetry-api
   opentelemetry-exporter-otlp
   opentelemetry-instrumentation-all
   opentelemetry-sdk

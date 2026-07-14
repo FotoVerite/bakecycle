@@ -26,6 +26,7 @@ class ExporterJob < ApplicationJob
   end
 
   def create_file(user, file_export, generator)
+    tag_current_span(file_export)
     file = FakeFileIO.new(generator.filename, generator.generate)
     file_export.file = file
     file_export.file_content_type = generator.content_type if generator.respond_to?(:content_type)
@@ -39,8 +40,39 @@ class ExporterJob < ApplicationJob
 
   private
 
+  # Attributes on the ActiveJob span so a slow/failed export can be traced
+  # back to a specific bakery/export without grepping logs -- neither the
+  # job's own span nor the nested report.generate span carried tenant
+  # identity before this.
+  #
+  # `bakery.id` (not `file_export.bakery_id`) is deliberate -- it's the
+  # reserved cross-cutting tenant key (see docs/honeycomb-rails-pitfalls.md,
+  # "Attribute naming conventions") shared with the frontend RUM spans
+  # (app/assets/javascripts/otel_web.js), so traces from either side can be
+  # filtered by tenant on the same attribute name.
+  def tag_current_span(file_export)
+    return unless defined?(OpenTelemetry)
+
+    OpenTelemetry::Trace.current_span.add_attributes(
+      "file_export.id" => file_export.id,
+      # .to_s to match the frontend's type -- otel_web.js can only ever read
+      # this out of an HTML meta tag, so it's always a string there. Honeycomb
+      # stores a column's type per-event; sending an integer from the backend
+      # and a string from the frontend under the same key would make an exact
+      # filter like `bakery.id = 5` silently miss half the traces.
+      "bakery.id" => file_export.bakery_id.to_s,
+      "file_export.user_id" => file_export.user_id
+    )
+  end
+
+  # Previously this only surfaced via the OTel span's error status (nobody's
+  # watching Honeycomb for that) and the ErrorReport PDF telling the user to
+  # email support directly. Report to Sentry too so a Prawn/generator crash
+  # actually pages someone instead of requiring a user to notice and forward it.
   def mark_errored(file_export, exception)
     return if file_export.ready?
+
+    Sentry.capture_exception(exception) if defined?(Sentry)
 
     pdf = ErrorReport.new(exception).render
     file_export.file_content_type = "application/pdf"
@@ -51,7 +83,12 @@ class ExporterJob < ApplicationJob
 
   def record_unexpected_failure(exception)
     file_export = locate_file_export_from_raw_arguments
-    mark_errored(file_export, exception) if file_export
+    return mark_errored(file_export, exception) if file_export
+
+    # No FileExport to attach an error PDF to -- without this, a failure to
+    # even resolve the GlobalID args (the case this method exists for) was
+    # completely silent.
+    Sentry.capture_exception(exception) if defined?(Sentry)
   end
 
   # ActiveJob only assigns the public `arguments` reader *after* the whole

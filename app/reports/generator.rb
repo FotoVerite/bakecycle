@@ -22,14 +22,18 @@ module Generator
   # One attribute-tagged span per report generated -- which report type ran,
   # how long it took. That's the whole point: usage visibility ("what reports
   # do people actually run"), not a blow-by-blow of internal steps.
+  #
+  # A generator may optionally define a public `report_attributes` method
+  # returning a Hash of extra span attributes (e.g. item counts) -- useful for
+  # telling "this run is legitimately large" apart from "this got slower."
   module Instrumentation
     def generate
       return super unless Generator::TRACER
 
-      Generator::TRACER.in_span(
-        "report.generate",
-        attributes: { "report.type" => self.class.name.delete_suffix("Generator").underscore }
-      ) { super }
+      attributes = { "report.type" => self.class.name.delete_suffix("Generator").underscore }
+      attributes.merge!(report_attributes) if respond_to?(:report_attributes)
+
+      Generator::TRACER.in_span("report.generate", attributes: attributes) { super }
     end
   end
 
