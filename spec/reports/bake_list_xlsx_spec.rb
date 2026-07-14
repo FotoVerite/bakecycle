@@ -114,22 +114,24 @@ describe BakeListXlsx do
     )
   end
 
-  it "builds other_rows with fixed Smith/Franklin/Retail/Blue Bottle/Wholesale columns, Grand Central in wholesale" do
+  it "builds Pull Prep rows with fixed client columns and Grand Central in wholesale" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     gcm = create(:client, bakery: bakery, name: "Bien Cuit - Grand Central")
     blue_bottle = create(:client, bakery: bakery, name: "Blue Bottle Coffee Nomad")
     restaurant = create(:client, bakery: bakery, name: "Some Restaurant")
-    blondie = create(:product, bakery: bakery, name: "Blondie", product_type: "other", bake_lead_days: 1)
-    create(:bake_lead_day_variant, product: blondie, client: smith, bake_lead_days: 0)
+    blondie = create(:product, bakery: bakery, name: "Blondie", product_type: "other", on_pull_list: true)
 
     quantities = { smith => 12, franklin => 16, gcm => 18, blue_bottle => 82, restaurant => 4 }
     quantities.each do |client, quantity|
-      lead_days = client == smith ? 0 : 1
-      order = create(:order, bakery: bakery, client: client, start_date: bake_date + lead_days.days,
-                             order_item_count: 0)
-      day = lead_days.zero? ? :wednesday : :thursday
-      create(:order_item, bakery: bakery, order: order, product: blondie, daily_item_count: 0, day => quantity)
+      order = create(
+        :order,
+        bakery: bakery,
+        client: client,
+        start_date: bake_date,
+        order_item_count: 0
+      )
+      create(:order_item, bakery: bakery, order: order, product: blondie, daily_item_count: 0, wednesday: quantity)
     end
 
     report = described_class.new(bakery, bake_date)
@@ -184,7 +186,7 @@ describe BakeListXlsx do
       workbook_xml = zip.read("xl/workbook.xml")
       expect(workbook_xml).to include("Retail Bread")
       expect(workbook_xml).to include("Wholesale Bread")
-      expect(workbook_xml).to include("Quiche &amp; Dessert")
+      expect(workbook_xml).to include("Pull Prep")
       expect(workbook_xml).to include("Vienn Pick")
     end
   end

@@ -1,30 +1,29 @@
 # frozen_string_literal: true
 
 # One workbook, reference-style sheets -- Retail Bread, Wholesale Bread,
-# Quiche & Dessert, and Vienn Pick -- matching the multi-worksheet precedent
+# Pull Prep, and Vienn Pick -- matching the multi-worksheet precedent
 # already established by SortedPackListXlsx. Blank check/count columns are
-# literal nil cells for staff to fill in by hand. (The Quiche & Dessert sheet
-# doubles as the pull/prep list, so there's no separate Pull/Prep sheet.)
+# literal nil cells for staff to fill in by hand.
 class BakeListXlsx
   include XlsxReport
 
-  delegate :retail_sections, :wholesale_sections, :other_sections, to: :@data
+  delegate :retail_sections, :wholesale_sections, :pull_prep_sections, to: :@data
 
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
-  # Smith/Franklin are fixed store columns on both the Retail Bread and Quiche
-  # & Dessert sheets, matched by client name rather than derived from that
+  # Smith/Franklin are fixed store columns on both the Retail Bread and Pull
+  # Prep sheets, matched by client name rather than derived from that
   # day's orders -- a store with no order that day still gets a 0, instead of
   # its whole column disappearing (confirmed with the client).
   #
   # Grand Central ("Bien Cuit - Grand Central") is deliberately NOT a store
   # column: it can't take retail-bake items, so it has no place on the Retail
-  # sheet, and on the Quiche & Dessert sheet its quantities must fall into the
+  # sheet, and on the Pull Prep sheet its quantities must fall into the
   # Wholesale total with every other wholesale account rather than being split
   # out as a store (which previously subtracted them from Wholesale).
   STORE_COLUMNS = { "Smith" => /smith/i, "Franklin" => /franklin/i }.freeze
 
-  # The Quiche & Dessert sheet always has these eight columns, matching the
+  # The Pull Prep sheet always has these eight columns, matching the
   # hand-made bake list. Retail = the three stores summed; Wholesale =
   # everything else; Blue Bottle is a breakout within Wholesale.
   OTHER_SHEET_HEADERS = (%w[Item Total] + STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
@@ -68,7 +67,7 @@ class BakeListXlsx
   end
 
   def other_rows
-    other_sections.flat_map { |section| section[:rows].map { |row| other_row_cells(row) } }
+    pull_prep_sections.flat_map { |section| section[:rows].map { |row| other_row_cells(row) } }
   end
 
   def viennoiserie_rows
@@ -118,10 +117,10 @@ class BakeListXlsx
 
   def add_other_sheet(workbook, styles)
     column_count = OTHER_SHEET_HEADERS.length
-    workbook.add_worksheet(name: "Quiche & Dessert") do |sheet|
-      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Quiche & Dessert"]
+    workbook.add_worksheet(name: "Pull Prep") do |sheet|
+      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Pull Prep"]
 
-      other_sections.each do |section|
+      pull_prep_sections.each do |section|
         sheet.add_row [section[:name]], style: styles.fetch(:section)
         merge_row!(sheet, column_count)
         sheet.add_row OTHER_SHEET_HEADERS, style: styles.fetch(:header)

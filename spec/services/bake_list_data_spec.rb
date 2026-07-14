@@ -116,34 +116,29 @@ describe BakeListData do
     expect(described_class.new(bakery, bake_date).retail_items).to be_empty
   end
 
-  it "combines retail and wholesale quantities for non-bread product types into other_sections" do
+  it "builds the pull prep list from marked products on the selected delivery date" do
     smith = create(:client, bakery: bakery, name: "Smith")
     blue_bottle = create(:client, bakery: bakery, name: "Blue Bottle Coffee Nomad")
-    blondie = create(:product, bakery: bakery, name: "Blondie", product_type: "other", bake_lead_days: 1)
-    create(:bake_lead_day_variant, product: blondie, client: smith, bake_lead_days: 0)
+    quiche = create(:product, bakery: bakery, name: "Quiche Lorraine", product_type: "quiche", on_pull_list: true)
+    unmarked = create(:product, bakery: bakery, name: "Unmarked Tart", product_type: "tart_and_desert")
 
     retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: retail_order, product: blondie, daily_item_count: 0, wednesday: 12)
-    wholesale_order = create(
-      :order,
-      bakery: bakery,
-      client: blue_bottle,
-      start_date: bake_date + 1.day,
-      order_item_count: 0
-    )
-    create(:order_item, bakery: bakery, order: wholesale_order, product: blondie, daily_item_count: 0, thursday: 82)
+    create(:order_item, bakery: bakery, order: retail_order, product: quiche, daily_item_count: 0, wednesday: 12)
+    create(:order_item, bakery: bakery, order: retail_order, product: unmarked, daily_item_count: 0, wednesday: 99)
+    wholesale_order = create(:order, bakery: bakery, client: blue_bottle, start_date: bake_date, order_item_count: 0)
+    create(:order_item, bakery: bakery, order: wholesale_order, product: quiche, daily_item_count: 0, wednesday: 82)
 
     data = described_class.new(bakery, bake_date)
 
     expect(data.retail_sections).to be_empty
     expect(data.wholesale_sections).to be_empty
-    expect(data.other_sections).to contain_exactly(
+    expect(data.pull_prep_sections).to contain_exactly(
       hash_including(
-        name: "Pound Cake",
-        product_type: "other",
+        name: "Quiche",
+        product_type: "quiche",
         rows: contain_exactly(
           hash_including(
-            product: blondie,
+            product: quiche,
             quantity: 94,
             client_quantities: { smith => 12, blue_bottle => 82 }
           )

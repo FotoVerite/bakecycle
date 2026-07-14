@@ -53,14 +53,13 @@ class BakeListData
     @_wholesale_sections ||= sections_for(wholesale_items.select { |row| bread_sheet_type?(row) })
   end
 
-  # Quiche, Sandwich, Tart & Dessert, Pound Cake, etc. -- combines each
-  # product's retail and wholesale bake quantities onto one row (unlike the
-  # Retail/Wholesale Bread sheets, which stay split across two sheets),
-  # since these categories are ordered by both the retail cafes and
-  # wholesale accounts on the same day.
-  def other_sections
-    @_other_sections ||= begin
-      grouped = other_rows.group_by { |row| row[:product].product_type }
+  # The Pull Prep list is its own operational list: it uses the products
+  # explicitly marked for pull/prep and the selected date's active orders.
+  # It intentionally does not use bake lead days, because those products are
+  # pulled/prepped for their delivery date rather than assigned to a bake.
+  def pull_prep_sections
+    @_pull_prep_sections ||= begin
+      grouped = pull_prep_rows.group_by { |row| row[:product].product_type }
       sorted = grouped.sort_by { |product_type, _rows| Product.product_types.fetch(product_type) }
       sorted.map do |product_type, rows|
         {
@@ -149,19 +148,16 @@ class BakeListData
     }
   end
 
-  # One row per product with per-client quantities, retail and wholesale
-  # bakes combined -- which clients map to which columns is the xlsx's
-  # concern, not ours.
-  def other_rows
-    @_other_rows ||= begin
-      grouped = (retail_items + wholesale_items)
-        .reject { |row| bread_sheet_type?(row) }
-        .group_by { |row| row[:product] }
+  def pull_prep_rows
+    @_pull_prep_rows ||= begin
+      items_by_product = pull_prep_order_items.group_by(&:product)
+      rows = items_by_product.filter_map do |product, items|
+        quantity = items.sum { |item| item.quantity(@bake_date) }
+        next unless quantity.positive?
 
-      rows = grouped.map do |product, product_rows|
-        client_quantities = product_rows.map { |row| row[:client_quantities] }
-          .reduce({}) { |merged, quantities| merged.merge(quantities) { |_client, left, right| left + right } }
-        { product: product, quantity: product_rows.sum { |row| row[:quantity] }, client_quantities: client_quantities }
+        client_quantities = items.group_by { |item| item.order.client }
+          .transform_values { |client_items| client_items.sum { |item| item.quantity(@bake_date) } }
+        { product: product, quantity: quantity, client_quantities: client_quantities }
       end
       rows.sort_by { |row| row[:product].name }
     end
@@ -219,5 +215,14 @@ class BakeListData
 
   def bake_list_product?(product)
     product.present? && !product.removed? && !product.inactive? && !product.on_pull_list?
+  end
+
+  def pull_prep_order_items
+    Order.active(@bake_date).where(bakery: @bakery).includes(order_items: :product).flat_map do |order|
+      order.order_items.select do |item|
+        product = item.product
+        product.present? && !product.removed? && !product.inactive? && product.on_pull_list?
+      end
+    end
   end
 end
