@@ -171,7 +171,7 @@ describe BakeListXlsx do
     expect(report.retail_rows).to eq([["Baguette", 12, 12, 0]])
   end
 
-  it "folds each product's overbake into the wholesale sheet total but not the retail total" do
+  it "folds each product's overbake into the wholesale sheet total, sized against retail + wholesale combined" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
     # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant.
@@ -187,9 +187,24 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    # Wholesale: 100 ordered + ceil(100 * 25 / 100) = 125. Retail stays order-only.
-    expect(report.wholesale_rows).to eq([["Cookie", 125, nil, nil]])
+    # It's one bake batch across both sheets (100 wholesale + 40 retail = 140), so the
+    # margin covers the whole batch: ceil(140 * 25 / 100) = 35, added on top of the
+    # wholesale-only 100. Retail itself stays order-only, no margin of its own.
+    expect(report.wholesale_rows).to eq([["Cookie", 135, nil, nil]])
     expect(report.retail_rows).to eq([["Cookie", 40, 40, 0]])
+  end
+
+  it "sizes the overbake off wholesale alone when the product has no retail bake that day" do
+    restaurant = create(:client, bakery: bakery, name: "Restaurant")
+    cookie = create(:product, bakery: bakery, name: "Cookie", product_type: "cookie",
+                              bake_lead_days: 1, over_bake: 25)
+    wholesale_order = create(:order, bakery: bakery, client: restaurant, start_date: bake_date + 1.day,
+                                     order_item_count: 0)
+    create(:order_item, bakery: bakery, order: wholesale_order, product: cookie, daily_item_count: 0, thursday: 100)
+
+    report = described_class.new(bakery, bake_date)
+
+    expect(report.wholesale_rows).to eq([["Cookie", 125, nil, nil]])
   end
 
   it "generates a valid xlsx workbook" do

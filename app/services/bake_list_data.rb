@@ -107,6 +107,19 @@ class BakeListData
     product.name.match?(ROULE_NAME_PATTERN)
   end
 
+  # The retail-lead quantity for a product that also has a wholesale bake --
+  # used to fold retail volume into the Wholesale sheet's overbake percentage
+  # base (the actual bake batch size for an item split across both sheets is
+  # retail + wholesale combined, so the overbake margin should be sized
+  # against that combined total, not the wholesale slice alone). Zero when
+  # the product has no retail-lead orders that day.
+  def retail_quantity_for(product)
+    @_retail_quantity_by_product ||= retail_items.each_with_object({}) do |row, memo|
+      memo[row[:product]] = row[:quantity]
+    end
+    @_retail_quantity_by_product[product].to_i
+  end
+
   private
 
   def viennoiserie_quantities(items)
