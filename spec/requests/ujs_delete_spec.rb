@@ -2,9 +2,13 @@
 
 require "rails_helper"
 
-# These specs verify that the DELETE endpoints work correctly after switching from
-# jquery_ujs to rails-ujs. rails-ujs generates a form with _method=DELETE and
-# submits it; these specs confirm the Rails controller side handles those requests.
+# These specs verify that DELETE endpoints work correctly for Turbo's
+# data-turbo-method links, which submit a form with _method=DELETE much like
+# the rails-ujs mechanism these specs were originally written against.
+# (rails-ujs/jQuery are no longer loaded anywhere in the app -- Propshaft, the
+# app's only asset pipeline, doesn't process the Sprockets `//= require`
+# directives that used to pull them in -- so Turbo is the only thing actually
+# driving these links today.)
 RSpec.describe "UJS delete links", type: :request do
   let(:bakery) { create(:bakery) }
   let(:user) { create(:user, bakery: bakery) }
@@ -49,12 +53,18 @@ RSpec.describe "UJS delete links", type: :request do
     end
   end
 
-  describe "shipment destroy (JS — remote: true link)" do
+  # The duplicate-invoices panel's quick-delete icon requests this format
+  # explicitly (shipment_path(shipment, format: :turbo_stream)) so it can
+  # remove just that row in place instead of redirecting to the client page
+  # -- see ShipmentsController#destroy and shipments/destroy.turbo_stream.erb.
+  describe "shipment destroy (Turbo Stream)" do
     let(:shipment) { create(:shipment, bakery: bakery) }
 
-    it "deletes the shipment and returns JS response" do
-      delete "/invoices/#{shipment.id}", headers: { "Accept" => "text/javascript" }
+    it "deletes the shipment and returns a turbo-stream remove response" do
+      delete "/invoices/#{shipment.id}.turbo_stream"
       expect(response).to be_successful
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(response.body).to include("action=\"remove\"", "shipment-#{shipment.id}")
       expect(Shipment.find_by(id: shipment.id)).to be_nil
     end
   end

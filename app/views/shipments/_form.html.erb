@@ -85,7 +85,7 @@
   <div class="form-actions">
     <%= f.submit (f.object.new_record? ? "Create" : "Update"), class: "button", name: nil %>
     <% unless f.object.new_record? %>
-      <%= link_to 'Delete', shipment_path(f.object), class: "button alert",
+      <%= link_to 'Delete', shipment_path(f.object, format: :html), class: "button alert",
                                 data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
     <% end %>
   </div>

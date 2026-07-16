@@ -589,6 +589,21 @@
   transform: rotate(90deg);
 }
 
+// Applied by animated_turbo_stream_removals.js just before a Turbo Stream
+// "remove" action actually removes the element -- lets deleting a row (e.g.
+// from the duplicate-invoices list) fade out in place instead of vanishing
+// instantly.
+.turbo-stream-fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turbo-stream-fade-out {
+    transition: none;
+  }
+}
+
 .duplicate-invoice-actions {
   .button {
     margin: 0 8px 0 0;

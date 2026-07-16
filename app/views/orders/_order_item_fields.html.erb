@@ -26,11 +26,11 @@
     </div>
   <% end %>
 
-  <div class="order-item-readonly">
+  <div class="order-item-readonly" data-order-item-target="priceQuantity">
     <%= item.persisted? ? item.decorate.product_price_and_quantity : "" %>
   </div>
 
-  <div class="order-item-readonly">
+  <div class="order-item-readonly" data-order-item-target="totalPrice">
     <%= item.persisted? ? item.decorate.total_quantity_price_currency : "" %>
   </div>
 
@@ -43,7 +43,7 @@
           autocomplete: "off",
           data: {
             order_item_day: day_num,
-            action: "focus->order-form#selectContents"
+            action: "focus->order-form#selectContents input->order-form#rowChanged"
           } %>
     </div>
   <% end %>

@@ -66,6 +66,10 @@ class OrdersController < ApplicationController
   def edit
     authorize @order
     @updated = Order.find_by(id: params[:updated])
+    # Captured from the referer (the page the Edit link/row was clicked from) so
+    # Delete can send staff back to the orders/invoices index they were working
+    # through, instead of always bouncing to the client page -- see #destroy.
+    @return_to = safe_return_to(request.referer)
   end
 
   def updated_at
@@ -95,7 +99,7 @@ class OrdersController < ApplicationController
     @order.destroy!
     flash[:notice] = "You have deleted the #{@order.order_type} order for #{@order.client_name}."
 
-    redirect_to client_path(client), status: :see_other
+    redirect_to safe_return_to(params[:return_to]) || client_path(client), status: :see_other
   end
 
   def future_invoices
@@ -153,12 +157,46 @@ class OrdersController < ApplicationController
     @order = policy_scope(Order).includes(order_items: { product: :price_variants }).find(params[:id])
   end
 
+  # Only accepts a same-host path (never an absolute external URL) to avoid an
+  # open redirect via a tampered return_to param.
+  def safe_return_to(url)
+    return nil if url.blank?
+
+    uri = URI.parse(url)
+    return nil if uri.host.present? && uri.host != request.host
+    return nil if uri.path.blank?
+
+    uri.query.present? ? "#{uri.path}?#{uri.query}" : uri.path
+  rescue URI::InvalidURIError
+    nil
+  end
+
   def set_order_form_data
-    @available_products = item_finder.products.available.order(:name)
-      .map { |p| [p.name, p.id, { data: { lead_days: p.total_lead_days } }] }
+    products = item_finder.products.available.order(:name).includes(:price_variants)
+    @available_products = products.map { |p| [p.name, p.id, { data: { lead_days: p.total_lead_days } }] }
+    @product_prices = product_prices_json(products)
     @available_routes = item_finder.routes.active.order(:name)
     @available_clients = item_finder.clients.order(:name)
     @kickoff_time = current_user.bakery.kickoff_time.strftime("%H:%M")
+  end
+
+  # Every available product's base price plus its price-variant tiers, keyed
+  # by product id -- cheap enough to embed on the page wholesale (a few
+  # hundred products/variants, tens of KB) rather than round-tripping to the
+  # server on every product/client/quantity change. Lets the order-form JS
+  # mirror Product#lookup_price_variant's "tightest quantity tier at or below
+  # the ordered amount, client-specific override before the client-wide
+  # default" logic client-side, for both the live price display and the
+  # $30/day minimum warning.
+  def product_prices_json(products)
+    products.each_with_object({}) do |product, memo|
+      memo[product.id] = {
+        base: product.base_price.to_s,
+        variants: product.price_variants.map do |variant|
+          { client_id: variant.client_id, quantity: variant.quantity, price: variant.price.to_s }
+        end
+      }
+    end
   end
 
   def search_form

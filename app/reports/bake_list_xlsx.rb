@@ -166,6 +166,7 @@ class BakeListXlsx
       sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Vienn Pick"]
       sheet.add_row ["Viennoiserie"], style: styles.fetch(:section)
       merge_row!(sheet, 11)
+      group_header_row = sheet.rows.size + 1
       sheet.add_row [
         "Item",
         "Total", nil,
@@ -182,6 +183,7 @@ class BakeListXlsx
         "Tray", "Piece",
         "Count", "Initial"
       ], style: styles.fetch(:header)
+      merge_vienn_pick_headers!(sheet, group_header_row)
       viennoiserie_rows.each_with_index do |row, index|
         sheet.add_row row, style: row_style(@workbook_styles, 11, background: zebra_bg(index))
       end
@@ -193,7 +195,7 @@ class BakeListXlsx
         sheet.add_row [row[:name], row[:pieces_per_tray]],
                       style: row_style(@workbook_styles, 2, background: zebra_bg(index))
       end
-      sheet.column_widths 36, 10, 10, 10, 10, 14, 14, 10, 10, 14, 14
+      sheet.column_widths 36, 14, 10, 10, 10, 14, 14, 10, 10, 14, 14
     end
   end
 
@@ -265,6 +267,13 @@ class BakeListXlsx
   def merge_row!(sheet, column_count)
     row_number = sheet.rows.size
     sheet.merge_cells("A#{row_number}:#{column_letter(column_count)}#{row_number}")
+  end
+
+  def merge_vienn_pick_headers!(sheet, header_row)
+    sheet.merge_cells("A#{header_row}:A#{header_row + 1}")
+    %w[B:C D:E F:G H:I J:K].each do |columns|
+      sheet.merge_cells("#{columns.split(':').first}#{header_row}:#{columns.split(':').last}#{header_row}")
+    end
   end
 
   def column_letter(column_count)

@@ -25,35 +25,78 @@ function mockDate(fixedISOString) {
 // Minimal fixture HTML that covers every controller target.
 // rows: [{ productId, leadDays, selected, destroyed }]
 // dayInputs: [{ day, value }]  (data-order-item-day attributes)
+// rows: [{ productId, leadDays, selected, destroyed, dayValues: { [dayNum]: qty } }]
+// dayValues renders one data-order-item-day input per entry, inside that row
+// (so rowTotalQuantity/computeDailyTotals can find them via row.querySelectorAll).
 function buildFixture({
-  orderType  = "standing",
-  startDate  = "",
-  endDate    = "",
-  orderId    = 0,
-  kickoff    = "06:00",
-  rows       = [],
-  dayInputs  = [],
+  orderType     = "standing",
+  startDate     = "",
+  endDate       = "",
+  orderId       = 0,
+  clientId      = 0,
+  kickoff       = "06:00",
+  rows          = [],
+  dayInputs     = [],
+  productPrices = null,
+  withMinimumWarningTarget = false,
+  withPriceTargets = false,
+  withDailyTotalTargets = false,
+  withOrderTotalTarget = false,
 } = {}) {
-  const rowsHtml = rows.map(({ productId = "1", leadDays = 0, selected = true, destroyed = false }) => `
-    <div data-order-item-row${destroyed ? ' class="nested-row--destroyed"' : ""}>
-      <select data-order-item-target="product">
-        <option value="">Select...</option>
-        <option value="${productId}" data-lead-days="${leadDays}"${selected ? " selected" : ""}>
-          Product ${productId}
-        </option>
-      </select>
-    </div>
-  `).join("")
+  const rowsHtml = rows.map(({
+    productId = "1", leadDays = 0, selected = true, destroyed = false, dayValues = {},
+  }) => {
+    const rowDayHtml = Object.entries(dayValues).map(([day, value]) => `
+      <input data-order-item-day="${day}" type="number" value="${value}">
+    `).join("")
+    const priceTargetsHtml = withPriceTargets ? `
+      <span data-order-item-target="priceQuantity"></span>
+      <span data-order-item-target="totalPrice"></span>
+    ` : ""
+
+    return `
+      <div data-order-item-row${destroyed ? ' class="nested-row--destroyed"' : ""}>
+        <select data-order-item-target="product">
+          <option value="">Select...</option>
+          <option value="${productId}" data-lead-days="${leadDays}"${selected ? " selected" : ""}>
+            Product ${productId}
+          </option>
+        </select>
+        ${priceTargetsHtml}
+        ${rowDayHtml}
+      </div>
+    `
+  }).join("")
 
   const dayHtml = dayInputs.map(({ day, value = "1" }) => `
     <input data-order-item-day="${day}" type="number" value="${value}">
   `).join("")
+
+  const productPricesAttr = productPrices
+    ? `data-order-form-product-prices-value='${JSON.stringify(productPrices)}'`
+    : ""
+  const minimumWarningHtml = withMinimumWarningTarget
+    ? '<span data-order-form-target="minimumWarning" hidden></span>'
+    : ""
+  const dailyTotalsHtml = withDailyTotalTargets
+    ? [0, 1, 2, 3, 4, 5, 6].map(day => `
+        <div data-order-form-target="dailyTotal" data-day-total="${day}">
+          <span class="order-item-daily-total-value"></span>
+          <div data-order-form-target="dailyTotalTooltip" data-day-total-tooltip="${day}" hidden></div>
+        </div>
+      `).join("")
+    : ""
+  const orderTotalHtml = withOrderTotalTarget
+    ? '<span data-order-form-target="orderTotal"></span>'
+    : ""
 
   return `
     <div
       data-controller="order-form"
       data-order-form-kickoff-value="${kickoff}"
       data-order-form-order-id-value="${orderId}"
+      data-order-form-client-id-value="${clientId}"
+      ${productPricesAttr}
     >
       <label>
         <input type="radio" name="type" data-order-form-target="orderType"
@@ -78,6 +121,9 @@ function buildFixture({
 
       <span data-order-form-target="leadDaysDisplay">0</span>
       <span data-order-form-target="actionWarning" hidden></span>
+      ${minimumWarningHtml}
+      ${dailyTotalsHtml}
+      ${orderTotalHtml}
       <button data-order-form-target="submitBtn">Submit</button>
 
       ${rowsHtml}
@@ -393,5 +439,347 @@ describe("validate", () => {
     const warn = document.querySelector("[data-order-form-target='endDateWarning']")
     expect(warn.hidden).toBe(false)
     expect(warn.textContent).toMatch(/end date cannot be before/)
+  })
+})
+
+// ─── priceFor ─────────────────────────────────────────────────────────────────
+
+describe("priceFor", () => {
+  const productPrices = {
+    1: {
+      base: "2.00",
+      variants: [
+        { client_id: null, quantity: 10, price: "1.80" },
+        { client_id: null, quantity: 50, price: "1.50" },
+        { client_id: 7, quantity: 10, price: "1.60" },
+      ],
+    },
+  }
+
+  it("falls back to base price when no variant tier matches", async () => {
+    const ctrl = await mount({ productPrices })
+    expect(ctrl.priceFor("1", 5)).toBe(2.00)
+  })
+
+  it("uses the tightest client-wide tier at or below the quantity", async () => {
+    const ctrl = await mount({ productPrices })
+    expect(ctrl.priceFor("1", 10)).toBe(1.80)
+    expect(ctrl.priceFor("1", 49)).toBe(1.80)
+    expect(ctrl.priceFor("1", 50)).toBe(1.50)
+  })
+
+  it("prefers a client-specific override over the client-wide tier", async () => {
+    const ctrl = await mount({ productPrices, clientId: 7 })
+    expect(ctrl.priceFor("1", 10)).toBe(1.60)
+  })
+
+  it("ignores another client's override", async () => {
+    const ctrl = await mount({ productPrices, clientId: 99 })
+    expect(ctrl.priceFor("1", 10)).toBe(1.80)
+  })
+
+  it("returns null for an unknown product", async () => {
+    const ctrl = await mount({ productPrices })
+    expect(ctrl.priceFor("999", 10)).toBeNull()
+  })
+})
+
+// ─── priceFor: $0 entries treated as unpriced ────────────────────────────────
+
+describe("priceFor zero-price fallback", () => {
+  it("skips a $0 client-wide variant in favor of a non-zero base price", async () => {
+    const productPrices = {
+      1: {
+        base: "2.50",
+        variants: [{ client_id: null, quantity: 1, price: "0.0" }],
+      },
+    }
+    const ctrl = await mount({ productPrices })
+    expect(ctrl.priceFor("1", 22)).toBe(2.5)
+  })
+
+  it("skips a $0 tier even when a same-tier client-specific $0 duplicate exists", async () => {
+    const productPrices = {
+      1: {
+        base: "0.0",
+        variants: [
+          { client_id: null, quantity: 1, price: "0.0" },
+          { client_id: null, quantity: 1, price: "0.397" },
+        ],
+      },
+    }
+    const ctrl = await mount({ productPrices })
+    expect(ctrl.priceFor("1", 1)).toBe(0.397)
+  })
+
+  it("falls back to the highest non-zero variant anywhere when base is also $0", async () => {
+    const productPrices = {
+      1: {
+        base: "0.0",
+        variants: [
+          { client_id: 32982, quantity: 1, price: "0.397" },
+          { client_id: 33013, quantity: 1, price: "0.0" },
+        ],
+      },
+    }
+    const ctrl = await mount({ productPrices, clientId: 33013 })
+    expect(ctrl.priceFor("1", 1)).toBe(0.397)
+  })
+
+  it("returns 0 only when nothing anywhere is priced above $0", async () => {
+    const productPrices = {
+      1: { base: "0.0", variants: [{ client_id: null, quantity: 1, price: "0.0" }] },
+    }
+    const ctrl = await mount({ productPrices })
+    expect(ctrl.priceFor("1", 1)).toBe(0)
+  })
+})
+
+// ─── updateRowDisplays ──────────────────────────────────────────────────────────
+
+describe("updateRowDisplays", () => {
+  const productPrices = { 1: { base: "2.00", variants: [] } }
+
+  it("displays the computed price and quantity for a row with quantity entered", async () => {
+    const ctrl = await mount({
+      productPrices,
+      withPriceTargets: true,
+      rows: [{ productId: "1", dayValues: { 1: "3", 2: "4" } }],
+    })
+    ctrl.updateRowDisplays()
+
+    const row = document.querySelector("[data-order-item-row]")
+    expect(row.querySelector("[data-order-item-target='priceQuantity']").textContent).toBe("$2.00 @7pc")
+    expect(row.querySelector("[data-order-item-target='totalPrice']").textContent).toBe("$14.00")
+  })
+
+  it("leaves the row blank when no product is selected", async () => {
+    const ctrl = await mount({
+      productPrices,
+      withPriceTargets: true,
+      rows: [{ productId: "", selected: false, dayValues: { 1: "3" } }],
+    })
+    ctrl.updateRowDisplays()
+
+    const row = document.querySelector("[data-order-item-row]")
+    expect(row.querySelector("[data-order-item-target='priceQuantity']").textContent).toBe("")
+    expect(row.querySelector("[data-order-item-target='totalPrice']").textContent).toBe("")
+  })
+
+  it("leaves the row blank when quantity is zero", async () => {
+    const ctrl = await mount({
+      productPrices,
+      withPriceTargets: true,
+      rows: [{ productId: "1", dayValues: { 1: "0" } }],
+    })
+    ctrl.updateRowDisplays()
+
+    const row = document.querySelector("[data-order-item-row]")
+    expect(row.querySelector("[data-order-item-target='priceQuantity']").textContent).toBe("")
+  })
+})
+
+// ─── computeDailyBreakdown ────────────────────────────────────────────────────
+
+describe("computeDailyBreakdown", () => {
+  it("lists each day's per-product amounts using each row's weekly unit price", async () => {
+    const productPrices = {
+      1: { base: "2.00", variants: [] },
+      2: { base: "5.00", variants: [] },
+    }
+    const ctrl = await mount({
+      productPrices,
+      rows: [
+        { productId: "1", dayValues: { 1: "10", 2: "5" } },
+        { productId: "2", dayValues: { 1: "2" } },
+      ],
+    })
+
+    const breakdown = ctrl.computeDailyBreakdown()
+    expect(ctrl.sumAmounts(breakdown[1])).toBe(10 * 2.00 + 2 * 5.00)
+    expect(breakdown[1].map(item => item.name)).toEqual(["Product 1", "Product 2"])
+    expect(ctrl.sumAmounts(breakdown[2])).toBe(5 * 2.00)
+    expect(breakdown[3]).toEqual([])
+  })
+
+  it("ignores disabled day inputs", async () => {
+    const productPrices = { 1: { base: "2.00", variants: [] } }
+    const ctrl = await mount({
+      productPrices,
+      rows: [{ productId: "1", dayValues: { 1: "10" } }],
+    })
+    document.querySelector("[data-order-item-day='1']").disabled = true
+
+    expect(ctrl.computeDailyBreakdown()[1]).toEqual([])
+  })
+})
+
+// ─── checkMinimumOrderValue ───────────────────────────────────────────────────
+
+describe("checkMinimumOrderValue", () => {
+  const lowProductPrices = { 1: { base: "2.00", variants: [] } } // $2/unit
+
+  it("does nothing when there is no minimumWarning target", async () => {
+    const ctrl = await mount({ productPrices: lowProductPrices, rows: [{ productId: "1", dayValues: { 1: "5" } }] })
+    expect(() => ctrl.checkMinimumOrderValue()).not.toThrow()
+  })
+
+  it("stays hidden for an existing (persisted) order", async () => {
+    const ctrl = await mount({
+      orderId: 42,
+      withMinimumWarningTarget: true,
+      productPrices: lowProductPrices,
+      rows: [{ productId: "1", dayValues: { 1: "5" } }], // $10, under $30
+    })
+    ctrl.checkMinimumOrderValue()
+    const warn = document.querySelector("[data-order-form-target='minimumWarning']")
+    expect(warn.hidden).toBe(true)
+  })
+
+  it("warns on a new standing order when a day's total is under $30", async () => {
+    const ctrl = await mount({
+      withMinimumWarningTarget: true,
+      productPrices: lowProductPrices,
+      rows: [{ productId: "1", dayValues: { 1: "5" } }], // Monday: $10
+    })
+    ctrl.checkMinimumOrderValue()
+    const warn = document.querySelector("[data-order-form-target='minimumWarning']")
+    expect(warn.hidden).toBe(false)
+    expect(warn.textContent).toMatch(/Monday \(\$10\.00\)/)
+  })
+
+  it("does not warn on a day with no order at all", async () => {
+    const ctrl = await mount({
+      withMinimumWarningTarget: true,
+      productPrices: lowProductPrices,
+      rows: [{ productId: "1", dayValues: { 1: "20" } }], // Monday: $40, fine; other days: $0, not flagged
+    })
+    ctrl.checkMinimumOrderValue()
+    const warn = document.querySelector("[data-order-form-target='minimumWarning']")
+    expect(warn.hidden).toBe(true)
+  })
+
+  it("only checks the temporary order's single active day", async () => {
+    // 2026-06-09 is a Tuesday (day 2)
+    const ctrl = await mount({
+      orderType: "temporary",
+      startDate: "2026-06-09",
+      withMinimumWarningTarget: true,
+      productPrices: lowProductPrices,
+      rows: [{ productId: "1", dayValues: { 2: "5" } }], // Tuesday: $10, under $30
+    })
+    ctrl.checkMinimumOrderValue()
+    const warn = document.querySelector("[data-order-form-target='minimumWarning']")
+    expect(warn.hidden).toBe(false)
+    expect(warn.textContent).toMatch(/Tuesday/)
+  })
+
+  it("does not warn when the day's total meets the minimum", async () => {
+    const ctrl = await mount({
+      withMinimumWarningTarget: true,
+      productPrices: lowProductPrices,
+      rows: [{ productId: "1", dayValues: { 1: "15" } }], // Monday: $30
+    })
+    ctrl.checkMinimumOrderValue()
+    const warn = document.querySelector("[data-order-form-target='minimumWarning']")
+    expect(warn.hidden).toBe(true)
+  })
+})
+
+// ─── clientChanged ────────────────────────────────────────────────────────────
+
+describe("clientChanged", () => {
+  it("updates clientIdValue and refreshes pricing displays", async () => {
+    const productPrices = {
+      1: {
+        base: "2.00",
+        variants: [{ client_id: 7, quantity: 1, price: "1.00" }],
+      },
+    }
+    const ctrl = await mount({
+      productPrices,
+      withPriceTargets: true,
+      rows: [{ productId: "1", dayValues: { 1: "3" } }],
+    })
+
+    ctrl.clientChanged({ target: { value: "7" } })
+
+    expect(ctrl.clientIdValue).toBe(7)
+    const row = document.querySelector("[data-order-item-row]")
+    expect(row.querySelector("[data-order-item-target='priceQuantity']").textContent).toBe("$1.00 @3pc")
+  })
+})
+
+// ─── updateDailyTotalsDisplay ─────────────────────────────────────────────────
+
+describe("updateDailyTotalsDisplay", () => {
+  it("does nothing when there are no dailyTotal targets", async () => {
+    const ctrl = await mount({
+      productPrices: { 1: { base: "2.00", variants: [] } },
+      rows: [{ productId: "1", dayValues: { 1: "5" } }],
+    })
+    expect(() => ctrl.updateDailyTotalsDisplay()).not.toThrow()
+  })
+
+  it("displays each weekday's dollar total and $0.00 for days with nothing ordered", async () => {
+    const ctrl = await mount({
+      withDailyTotalTargets: true,
+      productPrices: { 1: { base: "2.00", variants: [] } },
+      rows: [{ productId: "1", dayValues: { 1: "10", 2: "5" } }],
+    })
+    ctrl.updateDailyTotalsDisplay()
+
+    const valueFor = day =>
+      document.querySelector(`[data-order-form-target='dailyTotal'][data-day-total="${day}"] .order-item-daily-total-value`).textContent
+    expect(valueFor(1)).toBe("$20.00")
+    expect(valueFor(2)).toBe("$10.00")
+    expect(valueFor(3)).toBe("$0.00")
+  })
+
+  it("populates the tooltip with a per-product breakdown and hides it when the day is empty", async () => {
+    const ctrl = await mount({
+      withDailyTotalTargets: true,
+      productPrices: {
+        1: { base: "2.00", variants: [] },
+        2: { base: "5.00", variants: [] },
+      },
+      rows: [
+        { productId: "1", dayValues: { 1: "10" } },
+        { productId: "2", dayValues: { 1: "2" } },
+      ],
+    })
+    ctrl.updateDailyTotalsDisplay()
+
+    const tooltipFor = day => document.querySelector(`[data-order-form-target='dailyTotalTooltip'][data-day-total-tooltip="${day}"]`)
+    const mondayTooltip = tooltipFor(1)
+    expect(mondayTooltip.hidden).toBe(false)
+    const rows = [...mondayTooltip.querySelectorAll(".order-item-daily-total-tooltip-row")].map(r => r.textContent)
+    expect(rows).toEqual(["Product 1$20.00", "Product 2$10.00"])
+
+    expect(tooltipFor(3).hidden).toBe(true)
+  })
+})
+
+// ─── updateGrandTotal ─────────────────────────────────────────────────────────
+
+describe("updateGrandTotal", () => {
+  it("does nothing when there is no orderTotal target", async () => {
+    const ctrl = await mount({
+      productPrices: { 1: { base: "2.00", variants: [] } },
+      rows: [{ productId: "1", dayValues: { 1: "5" } }],
+    })
+    expect(() => ctrl.updateGrandTotal()).not.toThrow()
+  })
+
+  it("sums every day's total into the whole-order total", async () => {
+    const ctrl = await mount({
+      withOrderTotalTarget: true,
+      productPrices: { 1: { base: "2.00", variants: [] } },
+      rows: [{ productId: "1", dayValues: { 1: "10", 2: "5", 5: "3" } }],
+    })
+    ctrl.updateGrandTotal()
+
+    const total = document.querySelector("[data-order-form-target='orderTotal']").textContent
+    expect(total).toBe("$36.00") // (10 + 5 + 3) * $2.00
   })
 })

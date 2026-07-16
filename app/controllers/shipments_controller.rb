@@ -85,7 +85,12 @@ class ShipmentsController < ApplicationController
         flash[:notice] = "You have deleted the invoice for #{@shipment.client_name}."
         redirect_to client_path(client), status: :see_other
       end
-      format.js
+      # Used by the duplicate-invoices panel on the Shipments index: staff work
+      # down the whole list deleting entries one at a time, so removing just
+      # that row in place (rather than a full-page redirect that bounces them
+      # to the deleted invoice's client page) lets them keep going without
+      # re-navigating back to the index after every delete.
+      format.turbo_stream
     end
   end
 

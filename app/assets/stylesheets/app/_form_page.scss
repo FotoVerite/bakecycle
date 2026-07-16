@@ -1163,7 +1163,12 @@
 
 // Order item rows
 .order-item-grid {
-  grid-template-columns: minmax(300px, 1fr) 110px 100px repeat(7, 52px) 48px;
+  // .form-grid's default 20px column-gap is sized for full-width form fields;
+  // against this grid's narrow 52px day-quantity columns it roughly doubles
+  // their effective width and is what was forcing the week down to ~4
+  // visible days before horizontal scroll kicked in (reported at 75% zoom).
+  column-gap: 10px;
+  grid-template-columns: minmax(260px, 1fr) 100px 90px repeat(7, 52px) 48px;
 
   input[type='number'] {
     height: 40px;
@@ -1216,6 +1221,106 @@
   display: flex;
   font-size: 0.85rem;
   min-height: 40px;
+}
+
+// Per-weekday total strip under the product rows -- deliberately quieter than
+// the row text above it (smaller size, lighter border-top instead of a full
+// row background) so it reads as a summary, not another data row, while
+// staying legible enough to explain at a glance which day(s) the $30/day
+// minimum warning is about. The whole-order total is the one figure here
+// that earns slightly more weight -- "quiet" isn't "everything the same
+// size", and it's the number most worth a staff member's eye landing on.
+.order-item-daily-totals {
+  align-items: baseline;
+  border-top: 1px solid $bc-border-grey;
+  color: $bc-scorpion;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  margin-top: 0;
+  padding-top: 5px;
+
+  > div {
+    text-align: center;
+  }
+}
+
+.order-item-daily-totals-label {
+  text-align: left !important;
+}
+
+.order-item-daily-totals-grand {
+  margin-left: -32px;
+  color: $bc-charcoal;
+  font-weight: 600;
+}
+
+// Individual day figure -- focusable (not just hoverable) so the breakdown
+// is reachable by keyboard, with a quiet dotted underline as the only hint
+// that it's interactive (no color, no icon, nothing louder than the numbers
+// around it).
+.order-item-daily-total {
+  cursor: default;
+  outline: none;
+  position: relative;
+
+  &:focus-visible .order-item-daily-total-value {
+    outline: 2px solid $bc-shakespeare;
+    outline-offset: 2px;
+  }
+}
+
+.order-item-daily-total-value {
+  border-bottom: 1px dotted $bc-lightgrey;
+}
+
+.order-item-daily-total-tooltip {
+  background: $bc-charcoal;
+  border-radius: 3px;
+  bottom: calc(100% + 8px);
+  color: $bc-white;
+  font-size: 0.72rem;
+  left: 50%;
+  min-width: 132px;
+  opacity: 0;
+  padding: 8px 10px;
+  pointer-events: none;
+  position: absolute;
+  text-align: left;
+  transform: translate(-50%, 4px);
+  transition: opacity 150ms $bc-ease-out, transform 150ms $bc-ease-out;
+  z-index: 10;
+
+  &:not([hidden]) {
+    display: block;
+  }
+
+  .order-item-daily-total:hover &,
+  .order-item-daily-total:focus-visible & {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.order-item-daily-total-tooltip-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  white-space: nowrap;
+
+  & + & {
+    margin-top: 3px;
+  }
+
+  span:last-child {
+    font-weight: 600;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .order-item-daily-total-tooltip {
+    transform: none;
+    transition: opacity 150ms ease;
+  }
 }
 
 // Shipment item rows

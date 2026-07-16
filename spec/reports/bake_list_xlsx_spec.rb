@@ -206,6 +206,11 @@ describe BakeListXlsx do
       expect(workbook_xml).to include("Wholesale Bread")
       expect(workbook_xml).to include("Pull Prep")
       expect(workbook_xml).to include("Vienn Pick")
+
+      vienn_pick_xml = zip.read("xl/worksheets/sheet4.xml")
+      expect(vienn_pick_xml).to include("ref='A3:A4'")
+      expect(vienn_pick_xml).to include("ref='B3:C3'", "ref='D3:E3'", "ref='F3:G3'", "ref='H3:I3'", "ref='J3:K3'")
+      expect(vienn_pick_xml).to include('width="14" min="2" max="2"')
     end
   end
 end

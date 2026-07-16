@@ -1,5 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
+const MINIMUM_ORDER_VALUE = 30
+const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+function formatCurrency(amount) {
+  return `$${amount.toFixed(2)}`
+}
+
 export default class extends Controller {
   static targets = [
     "orderType",
@@ -10,9 +17,12 @@ export default class extends Controller {
     "startDateWarning",
     "endDateWarning",
     "actionWarning",
+    "minimumWarning",
+    "dailyTotal",
+    "orderTotal",
     "submitBtn"
   ]
-  static values = { kickoff: String, orderId: Number }
+  static values = { kickoff: String, orderId: Number, clientId: Number, productPrices: Object }
 
   connect() {
     this.updateView()
@@ -27,6 +37,11 @@ export default class extends Controller {
     this.validate()
   }
 
+  clientChanged(event) {
+    this.clientIdValue = parseInt(event.target.value, 10) || 0
+    this.refreshPricing()
+  }
+
   productChanged() {
     this.updateLeadDays()
     this.updateDayInputs()
@@ -34,11 +49,10 @@ export default class extends Controller {
     this.validate()
   }
 
+  // A day-quantity input changed rather than the product itself, but the
+  // same downstream updates apply either way.
   rowChanged() {
-    this.updateLeadDays()
-    this.updateDayInputs()
-    this.syncDedup()
-    this.validate()
+    this.productChanged()
   }
 
   updateView() {
@@ -53,12 +67,35 @@ export default class extends Controller {
     return checked ? checked.value : ""
   }
 
+  // ─── Row helpers ──────────────────────────────────────────────────────────
+  // Shared across lead-day/dedup/pricing logic below, all of which need to
+  // walk the same live set of product rows.
+
+  activeRows() {
+    return [...this.element.querySelectorAll("[data-order-item-row]")]
+      .filter(row => !row.classList.contains("nested-row--destroyed"))
+  }
+
+  productSelectFor(row) {
+    return row.querySelector("[data-order-item-target='product']")
+  }
+
+  dayInputsFor(row) {
+    return [...row.querySelectorAll("[data-order-item-day]")]
+  }
+
+  quantityOf(input) {
+    return parseInt(input.value, 10) || 0
+  }
+
+  rowTotalQuantity(row) {
+    return this.dayInputsFor(row).reduce((sum, input) => sum + this.quantityOf(input), 0)
+  }
+
   getMaxLeadDays() {
-    const rows = [...this.element.querySelectorAll("[data-order-item-row]")]
-      .filter(r => !r.classList.contains("nested-row--destroyed"))
     let max = 0
-    rows.forEach(row => {
-      const select = row.querySelector("[data-order-item-target='product']")
+    this.activeRows().forEach(row => {
+      const select = this.productSelectFor(row)
       if (!select || !select.value) return
       const opt = select.options[select.selectedIndex]
       const ld = parseInt(opt?.dataset.leadDays || "0", 10)
@@ -73,10 +110,8 @@ export default class extends Controller {
   }
 
   syncDedup() {
-    const rows = [...this.element.querySelectorAll("[data-order-item-row]")]
-      .filter(r => !r.classList.contains("nested-row--destroyed"))
-    const selects = rows.map(r => r.querySelector("[data-order-item-target='product']")).filter(Boolean)
-    const selected = new Set(selects.map(s => s.value).filter(v => v !== ""))
+    const selects = this.activeRows().map(row => this.productSelectFor(row)).filter(Boolean)
+    const selected = new Set(selects.map(select => select.value).filter(value => value !== ""))
 
     selects.forEach(select => {
       select.querySelectorAll("option").forEach(opt => {
@@ -130,6 +165,196 @@ export default class extends Controller {
     } else {
       if (this.hasSubmitBtnTarget) this.submitBtnTarget.classList.remove("warning")
     }
+
+    this.refreshPricing()
+  }
+
+  // Recomputes every row's displayed price/quantity (previously blank until
+  // the order was saved and reloaded), the per-day total strip (with its
+  // per-product tooltip breakdown), the whole-order total, and the $30/day
+  // minimum warning -- all driven by the same productPricesValue cache
+  // embedded on the form (see OrdersController#product_prices_json) and the
+  // same per-day breakdown, computed once here and passed down so five
+  // different displays don't each re-walk every row. Called from every place
+  // validate() already runs so it stays in sync with lead-time/end-date
+  // validation.
+  refreshPricing() {
+    const breakdown = this.computeDailyBreakdown()
+    this.updateRowDisplays()
+    this.updateDailyTotalsDisplay(breakdown)
+    this.updateGrandTotal(breakdown)
+    this.checkMinimumOrderValue(breakdown)
+  }
+
+  // Small per-weekday total strip under the product rows -- lets staff see at
+  // a glance which day(s) the $30 minimum warning is actually complaining
+  // about, without having to add up the rows themselves. Each day's figure
+  // also carries a hover/focus tooltip listing that day's per-product
+  // amounts (a full always-visible breakdown wouldn't fit the 52px day
+  // columns) -- content is set here rather than in CSS since it's dynamic
+  // and needs one row per product, not a single string.
+  updateDailyTotalsDisplay(breakdown = this.computeDailyBreakdown()) {
+    if (!this.hasDailyTotalTarget) return
+
+    this.dailyTotalTargets.forEach(el => {
+      const day = el.dataset.dayTotal
+      const items = breakdown[day] || []
+      const valueEl = el.querySelector(".order-item-daily-total-value")
+      if (valueEl) valueEl.textContent = formatCurrency(this.sumAmounts(items))
+
+      const tooltip = el.querySelector("[data-order-form-target='dailyTotalTooltip']")
+      if (!tooltip) return
+
+      tooltip.innerHTML = ""
+      tooltip.hidden = items.length === 0
+      tooltip.append(...items.map(item => this.buildTooltipRow(item)))
+    })
+  }
+
+  buildTooltipRow(item) {
+    const row = document.createElement("div")
+    row.className = "order-item-daily-total-tooltip-row"
+
+    const name = document.createElement("span")
+    name.textContent = item.name
+    const amount = document.createElement("span")
+    amount.textContent = formatCurrency(item.amount)
+
+    row.append(name, amount)
+    return row
+  }
+
+  // The whole order's total across every day -- shown in the daily-totals
+  // strip's Total column, the same column the per-row totals above it sit in.
+  updateGrandTotal(breakdown = this.computeDailyBreakdown()) {
+    if (!this.hasOrderTotalTarget) return
+
+    this.orderTotalTarget.textContent = formatCurrency(this.sumAmounts(Object.values(breakdown).flat()))
+  }
+
+  // Mirrors Product#lookup_price_variant: the tightest quantity tier at or
+  // below the ordered amount, preferring a client-specific override over the
+  // client-wide (client_id: null) default, falling back to the product's
+  // base price when no tier matches.
+  //
+  // $0.00 entries are treated as "no real price configured" rather than a
+  // deliberately free item -- some products have a $0 variant/base price
+  // that's really just incomplete pricing data (e.g. a client-wide $0 tier
+  // sitting alongside real client-specific prices for everyone else). Letting
+  // that win would silently zero out the row's estimate -- and the $30/day
+  // minimum check along with it -- for an order that's actually priced. So
+  // $0 candidates are skipped in favor of the product's base price, and
+  // failing that, the highest non-zero price configured anywhere for the
+  // product (any client/tier), before finally accepting $0 as a last resort.
+  priceFor(productId, quantity) {
+    const product = this.productPricesValue[productId]
+    if (!product) return null
+
+    const clientId = this.clientIdValue || null
+    const scoped = (product.variants || [])
+      .filter(variant => (variant.client_id === null || variant.client_id === clientId) && parseFloat(variant.price) > 0)
+      .sort((a, b) => {
+        if (b.quantity !== a.quantity) return b.quantity - a.quantity
+        // Same tier -- prefer the client-specific override over the client-wide default.
+        return (a.client_id === null ? 1 : 0) - (b.client_id === null ? 1 : 0)
+      })
+
+    const matching = scoped.find(variant => variant.quantity <= quantity)
+    if (matching) return parseFloat(matching.price)
+
+    const base = parseFloat(product.base)
+    if (base > 0) return base
+
+    const anyNonZero = (product.variants || []).map(variant => parseFloat(variant.price)).filter(price => price > 0)
+    return anyNonZero.length ? Math.max(...anyNonZero) : 0
+  }
+
+  updateRowDisplays() {
+    this.activeRows().forEach(row => {
+      const priceQtyEl = row.querySelector("[data-order-item-target='priceQuantity']")
+      const totalEl = row.querySelector("[data-order-item-target='totalPrice']")
+      if (!priceQtyEl && !totalEl) return
+
+      const select = this.productSelectFor(row)
+      const totalQty = this.rowTotalQuantity(row)
+      const unitPrice = select && select.value && totalQty > 0 ? this.priceFor(select.value, totalQty) : null
+
+      if (priceQtyEl) priceQtyEl.textContent = unitPrice != null ? `${formatCurrency(unitPrice)} @${totalQty}pc` : ""
+      if (totalEl) totalEl.textContent = unitPrice != null ? formatCurrency(unitPrice * totalQty) : ""
+    })
+  }
+
+  // Per-weekday breakdown across every row -- each item's unit price is
+  // looked up once from its *weekly* total quantity (matching
+  // OrderItem#product_price/#total_quantity_price), then applied to that
+  // item's quantity on each individual day. Returns { [day]: [{name, amount}] }.
+  computeDailyBreakdown() {
+    const breakdown = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] }
+
+    this.activeRows().forEach(row => {
+      const select = this.productSelectFor(row)
+      if (!select || !select.value) return
+
+      const totalQty = this.rowTotalQuantity(row)
+      if (totalQty <= 0) return
+
+      const unitPrice = this.priceFor(select.value, totalQty)
+      if (unitPrice == null) return
+
+      const name = select.options[select.selectedIndex]?.textContent.trim() || "Item"
+
+      this.dayInputsFor(row).forEach(input => {
+        if (input.disabled) return
+        const qty = this.quantityOf(input)
+        if (qty <= 0) return
+        breakdown[input.dataset.orderItemDay].push({ name, amount: qty * unitPrice })
+      })
+    })
+
+    return breakdown
+  }
+
+  sumAmounts(items) {
+    return items.reduce((sum, item) => sum + item.amount, 0)
+  }
+
+  // Only for brand-new orders -- once an order exists, staff regularly
+  // approve below-minimum days on purpose (see original request), so
+  // re-flagging it forever on every edit would just be noise.
+  checkMinimumOrderValue(breakdown = this.computeDailyBreakdown()) {
+    if (!this.hasMinimumWarningTarget) return
+    if (this.orderIdValue) {
+      this.minimumWarningTarget.hidden = true
+      return
+    }
+
+    const totals = {}
+    Object.keys(breakdown).forEach(day => { totals[day] = this.sumAmounts(breakdown[day]) })
+    const isTemporary = this.currentOrderType === "temporary"
+
+    let relevantDays = [0, 1, 2, 3, 4, 5, 6]
+    if (isTemporary) {
+      const startDate = this.hasStartDateTarget ? this.startDateTarget.value : ""
+      if (!startDate) {
+        this.minimumWarningTarget.hidden = true
+        return
+      }
+      relevantDays = [new Date(`${startDate}T00:00:00`).getUTCDay()]
+    }
+
+    const lowDays = relevantDays
+      .filter(dayNum => totals[dayNum] > 0 && totals[dayNum] < MINIMUM_ORDER_VALUE)
+      .map(dayNum => `${DAY_NAMES[dayNum]} (${formatCurrency(totals[dayNum])})`)
+
+    if (lowDays.length === 0) {
+      this.minimumWarningTarget.hidden = true
+      return
+    }
+
+    this.minimumWarningTarget.textContent =
+      `Warning: this order totals under the $30 minimum on ${lowDays.join(", ")}. ` +
+      "You can still create it as-is if this is intentional."
+    this.minimumWarningTarget.hidden = false
   }
 
   clearFieldWarnings() {

@@ -5587,7 +5587,8 @@ input[type=text] {
 }
 
 .order-item-grid {
-  grid-template-columns: minmax(300px, 1fr) 110px 100px repeat(7, 52px) 48px;
+  column-gap: 10px;
+  grid-template-columns: minmax(260px, 1fr) 100px 90px repeat(7, 52px) 48px;
 }
 .order-item-grid input[type=number] {
   height: 40px;
@@ -5631,6 +5632,87 @@ input[type=text] {
   min-height: 40px;
 }
 
+.order-item-daily-totals {
+  align-items: baseline;
+  border-top: 1px solid #e1e1e1;
+  color: #5a5a5a;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  margin-top: 0;
+  padding-top: 5px;
+}
+.order-item-daily-totals > div {
+  text-align: center;
+}
+
+.order-item-daily-totals-label {
+  text-align: left !important;
+}
+
+.order-item-daily-totals-grand {
+  margin-left: -32px;
+  color: #555;
+  font-weight: 600;
+}
+
+.order-item-daily-total {
+  cursor: default;
+  outline: none;
+  position: relative;
+}
+.order-item-daily-total:focus-visible .order-item-daily-total-value {
+  outline: 2px solid #55aad7;
+  outline-offset: 2px;
+}
+
+.order-item-daily-total-value {
+  border-bottom: 1px dotted #dcdcdc;
+}
+
+.order-item-daily-total-tooltip {
+  background: #555;
+  border-radius: 3px;
+  bottom: calc(100% + 8px);
+  color: #fff;
+  font-size: 0.72rem;
+  left: 50%;
+  min-width: 132px;
+  opacity: 0;
+  padding: 8px 10px;
+  pointer-events: none;
+  position: absolute;
+  text-align: left;
+  transform: translate(-50%, 4px);
+  transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 10;
+}
+.order-item-daily-total-tooltip:not([hidden]) {
+  display: block;
+}
+.order-item-daily-total:hover .order-item-daily-total-tooltip, .order-item-daily-total:focus-visible .order-item-daily-total-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.order-item-daily-total-tooltip-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+.order-item-daily-total-tooltip-row + .order-item-daily-total-tooltip-row {
+  margin-top: 3px;
+}
+.order-item-daily-total-tooltip-row span:last-child {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .order-item-daily-total-tooltip {
+    transform: none;
+    transition: opacity 150ms ease;
+  }
+}
 .shipment-products-section {
   padding-bottom: 42px;
 }
@@ -6845,6 +6927,16 @@ select.inline {
   transform: rotate(90deg);
 }
 
+.turbo-stream-fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turbo-stream-fade-out {
+    transition: none;
+  }
+}
 .duplicate-invoice-actions .button, .duplicate-invoice-actions .registration .registration-button label, .registration .registration-button .duplicate-invoice-actions label {
   margin: 0 8px 0 0;
 }
