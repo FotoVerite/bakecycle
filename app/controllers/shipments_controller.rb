@@ -133,7 +133,7 @@ class ShipmentsController < ApplicationController
     pdf = PackingSlipsPdf.new([@shipment], current_bakery)
     pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
     expires_now
-    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "inline"
+    send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "attachment"
   end
 
   def invoice_csv
