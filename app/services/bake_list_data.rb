@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-# Computes the Bake List sections for a bakery and bake_date, reading live
-# order data directly -- never ProductionRun/RunItem, which the client
-# explicitly asked to keep untouched.
+# Computes the Bake List sections for a bakery and bake_date, reading from
+# Shipment/ShipmentItem -- shipments are the source of truth for a given day
+# (orders are the standing template; shipments and production runs get
+# corrected directly, often without the order being updated to match), so
+# this stays consistent with Daily Totals and the Production Run report,
+# which are both Shipment-derived.
 class BakeListData
   RETAIL_LEAD_DAYS = 0
   WHOLESALE_LEAD_DAYS = 1
@@ -164,12 +167,12 @@ class BakeListData
     @_pull_prep_rows ||= begin
       items_by_product = pull_prep_date_rows.group_by { |row| row[:item].product }
       rows = items_by_product.filter_map do |product, date_rows|
-        quantity = date_rows.sum { |row| row[:item].quantity(row[:delivery_date]) }
+        quantity = date_rows.sum { |row| row[:item].product_quantity }
         next unless quantity.positive?
 
         client_quantities = date_rows.group_by { |row| row[:client] }
           .transform_values do |client_rows|
-            client_rows.sum { |row| row[:item].quantity(row[:delivery_date]) }
+            client_rows.sum { |row| row[:item].product_quantity }
           end
         { product: product, quantity: quantity, client_quantities: client_quantities }
       end
@@ -185,11 +188,11 @@ class BakeListData
     rows = bake_date_rows.select { |row| row[:lead_days] == lead_days }
       .group_by { |row| row[:item].product }
       .map do |product, rows|
-        quantity = rows.sum { |row| row[:item].quantity(row[:delivery_date]) }
+        quantity = rows.sum { |row| row[:item].product_quantity }
         next unless quantity.positive?
 
         client_quantities = rows.group_by { |row| row[:client] }.transform_values do |client_rows|
-          client_rows.sum { |row| row[:item].quantity(row[:delivery_date]) }
+          client_rows.sum { |row| row[:item].product_quantity }
         end
 
         {
@@ -206,11 +209,12 @@ class BakeListData
   def bake_date_rows
     @_bake_date_rows ||= BAKE_LEAD_DAYS.flat_map do |lead|
       delivery_date = @bake_date + lead.days
-      Order.active(delivery_date).where(bakery: @bakery).includes(:client, order_items: :product).flat_map do |order|
-        order.order_items
+      Shipment.where(bakery: @bakery, date: delivery_date)
+        .includes(:client, shipment_items: :product).flat_map do |shipment|
+        shipment.shipment_items
           .select { |item| bake_list_product?(item.product) }
-          .select { |item| item.product.bake_lead_days_for(order.client) == lead }
-          .map { |item| { item: item, client: order.client, delivery_date: delivery_date, lead_days: lead } }
+          .select { |item| item.product.bake_lead_days_for(shipment.client) == lead }
+          .map { |item| { item: item, client: shipment.client, delivery_date: delivery_date, lead_days: lead } }
       end
     end
   end
@@ -234,11 +238,12 @@ class BakeListData
   def pull_prep_date_rows
     @_pull_prep_date_rows ||= BAKE_LEAD_DAYS.flat_map do |lead|
       delivery_date = @bake_date + lead.days
-      Order.active(delivery_date).where(bakery: @bakery).includes(:client, order_items: :product).flat_map do |order|
-        order.order_items
+      Shipment.where(bakery: @bakery, date: delivery_date)
+        .includes(:client, shipment_items: :product).flat_map do |shipment|
+        shipment.shipment_items
           .select { |item| pull_prep_product?(item.product) }
-          .select { |item| item.product.bake_lead_days_for(order.client) == lead }
-          .map { |item| { item: item, client: order.client, delivery_date: delivery_date, lead_days: lead } }
+          .select { |item| item.product.bake_lead_days_for(shipment.client) == lead }
+          .map { |item| { item: item, client: shipment.client, delivery_date: delivery_date, lead_days: lead } }
       end
     end
   end

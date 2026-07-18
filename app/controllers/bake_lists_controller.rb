@@ -17,6 +17,9 @@ class BakeListsController < ApplicationController
   private
 
   def date_query
-    parsed_date_param(:date, :id)
+    # Bake List is only ever generated for the next day's production, so
+    # default the picker to tomorrow rather than ApplicationController's
+    # usual today-fallback.
+    parsed_date_param(:date, :id, fallback: Time.zone.tomorrow)
   end
 end

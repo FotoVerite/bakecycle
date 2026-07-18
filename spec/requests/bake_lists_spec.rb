@@ -22,6 +22,11 @@ RSpec.describe "BakeLists", type: :request do
       expect(response.body).to include("Bake List")
     end
 
+    it "defaults the date picker to tomorrow, not today" do
+      get bake_lists_path
+      expect(response.body).to include(Time.zone.tomorrow.strftime("%Y-%m-%d"))
+    end
+
     it "starts the bake list export" do
       file_export = create(:file_export, bakery: bakery)
       allow(ExporterJob).to receive(:create).and_return(file_export)

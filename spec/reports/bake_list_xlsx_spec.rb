@@ -19,22 +19,16 @@ describe BakeListXlsx do
                               bake_lead_days: 1, over_bake: 0)
     create(:bake_lead_day_variant, product: croissant, client: smith, bake_lead_days: 0)
 
-    smith_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: smith_order, product: baguette, daily_item_count: 0, wednesday: 24)
-    create(:order_item, bakery: bakery, order: smith_order, product: croissant, daily_item_count: 0, wednesday: 8)
+    smith_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: smith_shipment, product: baguette, product_quantity: 24)
+    create(:shipment_item, shipment: smith_shipment, product: croissant, product_quantity: 8)
 
-    franklin_order = create(:order, bakery: bakery, client: franklin, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: franklin_order, product: baguette, daily_item_count: 0, wednesday: 12)
+    franklin_shipment = create(:shipment, bakery: bakery, client: franklin, date: bake_date)
+    create(:shipment_item, shipment: franklin_shipment, product: baguette, product_quantity: 12)
 
-    wholesale_order = create(
-      :order,
-      bakery: bakery,
-      client: restaurant,
-      start_date: bake_date + 1.day,
-      order_item_count: 0
-    )
-    create(:order_item, bakery: bakery, order: wholesale_order, product: croissant, daily_item_count: 0, thursday: 22)
-    create(:order_item, bakery: bakery, order: wholesale_order, product: cookie, daily_item_count: 0, thursday: 96)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: croissant, product_quantity: 22)
+    create(:shipment_item, shipment: wholesale_shipment, product: cookie, product_quantity: 96)
 
     report = described_class.new(bakery, bake_date)
 
@@ -73,9 +67,9 @@ describe BakeListXlsx do
     roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
                                         bake_lead_days: 1, over_bake: 0)
 
-    order = create(:order, bakery: bakery, start_date: bake_date + 1.day, order_item_count: 0)
+    shipment = create(:shipment, bakery: bakery, date: bake_date + 1.day)
     [[ham_brie, 17], [almond, 5], [roule_cinnamon, 20], [roule_everything, 12]].each do |product, qty|
-      create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, thursday: qty)
+      create(:shipment_item, shipment: shipment, product: product, product_quantity: qty)
     end
 
     report = described_class.new(bakery, bake_date)
@@ -96,9 +90,9 @@ describe BakeListXlsx do
                                 bake_lead_days: 0)
     everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
                                   bake_lead_days: 0)
-    order = create(:order, bakery: bakery, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: cinnamon, daily_item_count: 0, wednesday: 20)
-    create(:order_item, bakery: bakery, order: order, product: everything, daily_item_count: 0, wednesday: 12)
+    shipment = create(:shipment, bakery: bakery, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: cinnamon, product_quantity: 20)
+    create(:shipment_item, shipment: shipment, product: everything, product_quantity: 12)
 
     expect(described_class.new(bakery, bake_date).retail_rows).to eq(
       [
@@ -115,9 +109,9 @@ describe BakeListXlsx do
     roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
                                         bake_lead_days: 1, pieces_per_tray: 120)
 
-    order = create(:order, bakery: bakery, start_date: bake_date + 1.day, order_item_count: 0)
+    shipment = create(:shipment, bakery: bakery, date: bake_date + 1.day)
     [[roule_cinnamon, 130], [roule_everything, 20]].each do |product, qty|
-      create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, thursday: qty)
+      create(:shipment_item, shipment: shipment, product: product, product_quantity: qty)
     end
 
     report = described_class.new(bakery, bake_date)
@@ -142,14 +136,8 @@ describe BakeListXlsx do
 
     quantities = { smith => 12, franklin => 16, gcm => 18, blue_bottle => 82, restaurant => 4 }
     quantities.each do |client, quantity|
-      order = create(
-        :order,
-        bakery: bakery,
-        client: client,
-        start_date: bake_date + 1.day,
-        order_item_count: 0
-      )
-      create(:order_item, bakery: bakery, order: order, product: blondie, daily_item_count: 0, thursday: quantity)
+      shipment = create(:shipment, bakery: bakery, client: client, date: bake_date + 1.day)
+      create(:shipment_item, shipment: shipment, product: blondie, product_quantity: quantity)
     end
 
     report = described_class.new(bakery, bake_date)
@@ -162,8 +150,8 @@ describe BakeListXlsx do
   it "shows a fixed Smith/Franklin zero instead of dropping a store's column on a quiet day" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: baguette, daily_item_count: 0, wednesday: 12)
+    shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: baguette, product_quantity: 12)
 
     report = described_class.new(bakery, bake_date)
 
@@ -179,11 +167,10 @@ describe BakeListXlsx do
                               bake_lead_days: 1, over_bake: 25)
     create(:bake_lead_day_variant, product: cookie, client: smith, bake_lead_days: 0)
 
-    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: retail_order, product: cookie, daily_item_count: 0, wednesday: 40)
-    wholesale_order = create(:order, bakery: bakery, client: restaurant, start_date: bake_date + 1.day,
-                                     order_item_count: 0)
-    create(:order_item, bakery: bakery, order: wholesale_order, product: cookie, daily_item_count: 0, thursday: 100)
+    retail_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: retail_shipment, product: cookie, product_quantity: 40)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: cookie, product_quantity: 100)
 
     report = described_class.new(bakery, bake_date)
 
@@ -198,9 +185,8 @@ describe BakeListXlsx do
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
     cookie = create(:product, bakery: bakery, name: "Cookie", product_type: "cookie",
                               bake_lead_days: 1, over_bake: 25)
-    wholesale_order = create(:order, bakery: bakery, client: restaurant, start_date: bake_date + 1.day,
-                                     order_item_count: 0)
-    create(:order_item, bakery: bakery, order: wholesale_order, product: cookie, daily_item_count: 0, thursday: 100)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: cookie, product_quantity: 100)
 
     report = described_class.new(bakery, bake_date)
 

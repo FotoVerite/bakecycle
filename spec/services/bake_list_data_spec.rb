@@ -9,8 +9,8 @@ describe BakeListData do
   it "puts 0 bake lead day items on the retail bake" do
     client = create(:client, bakery: bakery, name: "Smith")
     croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 40)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 40)
 
     data = described_class.new(bakery, bake_date)
 
@@ -23,8 +23,8 @@ describe BakeListData do
   it "puts 1 bake lead day items on the wholesale bake" do
     client = create(:client, bakery: bakery, name: "Wholesale Account")
     baguette = create(:product, bakery: bakery, name: "Baguette", bake_lead_days: 1)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date + 1.day, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: baguette, daily_item_count: 0, thursday: 25)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date + 1.day)
+    create(:shipment_item, shipment: shipment, product: baguette, product_quantity: 25)
 
     data = described_class.new(bakery, bake_date)
 
@@ -40,17 +40,11 @@ describe BakeListData do
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
     create(:bake_lead_day_variant, product: baguette, client: smith, bake_lead_days: 0)
 
-    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: retail_order, product: baguette, daily_item_count: 0, wednesday: 10)
+    retail_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: retail_shipment, product: baguette, product_quantity: 10)
 
-    wholesale_order = create(
-      :order,
-      bakery: bakery,
-      client: restaurant,
-      start_date: bake_date + 1.day,
-      order_item_count: 0
-    )
-    create(:order_item, bakery: bakery, order: wholesale_order, product: baguette, daily_item_count: 0, thursday: 30)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: baguette, product_quantity: 30)
 
     data = described_class.new(bakery, bake_date)
 
@@ -67,10 +61,10 @@ describe BakeListData do
     franklin = create(:client, bakery: bakery, name: "Franklin")
     croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
 
-    smith_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: smith_order, product: croissant, daily_item_count: 0, wednesday: 12)
-    franklin_order = create(:order, bakery: bakery, client: franklin, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: franklin_order, product: croissant, daily_item_count: 0, wednesday: 8)
+    smith_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: smith_shipment, product: croissant, product_quantity: 12)
+    franklin_shipment = create(:shipment, bakery: bakery, client: franklin, date: bake_date)
+    create(:shipment_item, shipment: franklin_shipment, product: croissant, product_quantity: 8)
 
     row = described_class.new(bakery, bake_date).retail_items.first
 
@@ -81,8 +75,8 @@ describe BakeListData do
   it "omits zero-quantity bake rows" do
     client = create(:client, bakery: bakery)
     croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 0)
 
     data = described_class.new(bakery, bake_date)
 
@@ -95,25 +89,15 @@ describe BakeListData do
     removed = create(:product, bakery: bakery, name: "Removed", bake_lead_days: 0, removed: true)
     inactive = create(:product, bakery: bakery, name: "Inactive", bake_lead_days: 0, inactive: true)
     pull_list = create(:product, bakery: bakery, name: "Laminated Dough", bake_lead_days: 0, on_pull_list: true)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
     [removed, inactive, pull_list].each do |product|
-      create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, wednesday: 10)
+      create(:shipment_item, shipment: shipment, product: product, product_quantity: 10)
     end
 
     data = described_class.new(bakery, bake_date)
 
     expect(data.retail_items).to be_empty
     expect(data.wholesale_items).to be_empty
-  end
-
-  it "excludes removed order items" do
-    client = create(:client, bakery: bakery)
-    croissant = create(:product, bakery: bakery, name: "Croissant", bake_lead_days: 0)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 10)
-      .update_column(:removed, 1)
-
-    expect(described_class.new(bakery, bake_date).retail_items).to be_empty
   end
 
   it "builds the pull prep list from marked products using each product's bake lead time" do
@@ -124,12 +108,11 @@ describe BakeListData do
     unmarked = create(:product, bakery: bakery, name: "Unmarked Tart", product_type: "tart_and_desert")
     create(:bake_lead_day_variant, product: quiche, client: smith, bake_lead_days: 0)
 
-    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: retail_order, product: quiche, daily_item_count: 0, wednesday: 12)
-    create(:order_item, bakery: bakery, order: retail_order, product: unmarked, daily_item_count: 0, wednesday: 99)
-    wholesale_order = create(:order, bakery: bakery, client: blue_bottle, start_date: bake_date + 1.day,
-                                     order_item_count: 0)
-    create(:order_item, bakery: bakery, order: wholesale_order, product: quiche, daily_item_count: 0, thursday: 82)
+    retail_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: retail_shipment, product: quiche, product_quantity: 12)
+    create(:shipment_item, shipment: retail_shipment, product: unmarked, product_quantity: 99)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: blue_bottle, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: quiche, product_quantity: 82)
 
     data = described_class.new(bakery, bake_date)
 
@@ -157,16 +140,10 @@ describe BakeListData do
                                  bake_lead_days: 1, pieces_per_tray: 20)
     create(:bake_lead_day_variant, product: croissant, client: smith, bake_lead_days: 0)
 
-    retail_order = create(:order, bakery: bakery, client: smith, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: retail_order, product: croissant, daily_item_count: 0, wednesday: 8)
-    wholesale_order = create(
-      :order,
-      bakery: bakery,
-      client: restaurant,
-      start_date: bake_date + 1.day,
-      order_item_count: 0
-    )
-    create(:order_item, bakery: bakery, order: wholesale_order, product: croissant, daily_item_count: 0, thursday: 22)
+    retail_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: retail_shipment, product: croissant, product_quantity: 8)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: croissant, product_quantity: 22)
 
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
     expect(pick).to include(
@@ -195,9 +172,9 @@ describe BakeListData do
                                 bake_lead_days: 0, pieces_per_tray: 120)
     everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
                                   bake_lead_days: 0, pieces_per_tray: 120)
-    order = create(:order, bakery: bakery, client: client, start_date: bake_date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: cinnamon, daily_item_count: 0, wednesday: 10)
-    create(:order_item, bakery: bakery, order: order, product: everything, daily_item_count: 0, wednesday: 5)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: cinnamon, product_quantity: 10)
+    create(:shipment_item, shipment: shipment, product: everything, product_quantity: 5)
 
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
     names = pick.map { |row| row[:name] }
