@@ -126,6 +126,34 @@ describe BakeListXlsx do
     )
   end
 
+  it "collapses Croissant variants into one Vienn Pick row, but keeps them separate on Retail/Wholesale Bread" do
+    plain = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                             bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
+                              bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+
+    shipment = create(:shipment, bakery: bakery, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: plain, product_quantity: 24)
+    create(:shipment_item, shipment: shipment, product: almond, product_quantity: 6)
+
+    report = described_class.new(bakery, bake_date)
+
+    # Vienn Pick: one collapsed "Croissant" row (30 total = 1 tray of 20 + 10 pieces).
+    expect(report.viennoiserie_rows).to eq(
+      [
+        ["Croissant", 1, 10, 0, 0, nil, nil, 1, 10, nil, nil],
+        ["Pate Fermentee", 8, nil, nil, nil, nil, nil, nil, nil, nil, nil]
+      ]
+    )
+    # Retail Bread: still two distinct rows, per-variant.
+    expect(report.retail_rows).to eq(
+      [
+        ["Almond Croissant", 6, 0, 0],
+        ["Croissant", 24, 0, 0]
+      ]
+    )
+  end
+
   it "breaks Grand Central out on Pull Prep while keeping it in wholesale" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")

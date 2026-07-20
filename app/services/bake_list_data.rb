@@ -29,6 +29,15 @@ class BakeListData
   ROULE_NAME_PATTERN = /\Aroule\b/i
   ROULE_ROW_NAME = "Roule"
 
+  # Same idea as Roulé, mirrored the other direction: the croissant family is
+  # named "<filling> Croissant" (Almond Croissant, Chocolate Croissant, Ham &
+  # Brie Croissant...) rather than "Croissant, <filling>", so the pattern
+  # anchors on the end of the name instead of the start. Collapses into one
+  # "Croissant" pick row; per-variant detail still lives on the Retail/
+  # Wholesale Bake sheets.
+  CROISSANT_NAME_PATTERN = /\bcroissant\z/i
+  CROISSANT_ROW_NAME = "Croissant"
+
   # Pate Fermentee is a standing daily pre-ferment, not an order-driven item:
   # the client tray-up is a fixed 8 trays every day in perpetuity. It has no
   # Product record, so it's injected as a synthetic Vienn Pick row.
@@ -76,9 +85,10 @@ class BakeListData
   # The Vienn Pick lists *every* active Viennoiserie product, showing zero when
   # there are no orders that day (unlike the bake sheets, which only list what's
   # actually ordered) -- the pick sheet doubles as a standing checklist. The
-  # Roulé family collapses into one "Roule" row, and Pate Fermentee is appended
-  # as a fixed synthetic prep row. Rows carry name/pieces_per_tray directly
-  # rather than a Product, so the synthetic rows fit the same shape.
+  # Roulé and Croissant families each collapse into one row ("Roule",
+  # "Croissant"), and Pate Fermentee is appended as a fixed synthetic prep row.
+  # Rows carry name/pieces_per_tray directly rather than a Product, so the
+  # synthetic rows fit the same shape.
   def viennoiserie_pick_items
     @_viennoiserie_pick_items ||= begin
       retail_by_product = viennoiserie_quantities(retail_items)
@@ -87,7 +97,8 @@ class BakeListData
       products = Product.vienoisserie
         .where(bakery: @bakery, removed: false, inactive: false, on_pull_list: false)
         .order_by_name
-      roule_products, single_products = products.partition { |product| roule_product?(product) }
+      roule_products, remaining = products.partition { |product| roule_product?(product) }
+      croissant_products, single_products = remaining.partition { |product| croissant_product?(product) }
 
       rows = single_products.map do |product|
         vienn_pick_row(
@@ -97,7 +108,12 @@ class BakeListData
           wholesale_quantity: wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
         )
       end
-      rows << collapsed_roule_row(roule_products, retail_by_product, wholesale_by_product) if roule_products.any?
+      if roule_products.any?
+        rows << collapsed_family_row(ROULE_ROW_NAME, roule_products, retail_by_product, wholesale_by_product)
+      end
+      if croissant_products.any?
+        rows << collapsed_family_row(CROISSANT_ROW_NAME, croissant_products, retail_by_product, wholesale_by_product)
+      end
       rows = rows.sort_by { |row| row[:name] }
       # Pate Fermentee is a fixed daily prep, not a picked item -- pin it last,
       # separate from the order-driven rows.
@@ -108,6 +124,10 @@ class BakeListData
 
   def roule_product?(product)
     product.name.match?(ROULE_NAME_PATTERN)
+  end
+
+  def croissant_product?(product)
+    product.name.match?(CROISSANT_NAME_PATTERN)
   end
 
   # Same overbake rule as the Wholesale Bread sheet's Total column (see
@@ -153,17 +173,17 @@ class BakeListData
     }
   end
 
-  def collapsed_roule_row(roule_products, retail_by_product, wholesale_by_product)
+  def collapsed_family_row(name, products, retail_by_product, wholesale_by_product)
     vienn_pick_row(
-      name: ROULE_ROW_NAME,
+      name: name,
       # One shared base pastry -- use the family's tray count (they should agree;
       # take the first present when sorted by name for a stable choice).
-      pieces_per_tray: roule_products.map(&:pieces_per_tray).compact.first,
-      retail_quantity: roule_products.sum { |product| retail_by_product[product].to_i },
-      # Each flavor's own overbake is computed (and rounded) before summing
+      pieces_per_tray: products.map(&:pieces_per_tray).compact.first,
+      retail_quantity: products.sum { |product| retail_by_product[product].to_i },
+      # Each variant's own overbake is computed (and rounded) before summing
       # into the collapsed row, not derived from the family's combined total
-      # -- flavors can have different over_bake percentages.
-      wholesale_quantity: roule_products.sum do |product|
+      # -- variants can have different over_bake percentages.
+      wholesale_quantity: products.sum do |product|
         wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
       end
     )
