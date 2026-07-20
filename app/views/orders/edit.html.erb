@@ -42,6 +42,18 @@
     </section>
   <% end %>
 
+  <% if order.sample? %>
+    <section class="sample-order-notice" aria-labelledby="sample-order-title">
+      <div>
+        <p class="sample-order-notice-label">Sample order</p>
+        <h2 id="sample-order-title">
+          Free tasting for <time datetime="<%= order.start_date.iso8601 %>"><%= order.start_date.strftime("%A, %b %-d") %></time>
+        </h2>
+      </div>
+      <span class="sample-order-badge">No charge</span>
+    </section>
+  <% end %>
+
   <% unless order.no_outstanding_shipments? %>
     <div class="overridable-orders panel callout radius">
       <h5>This order is missing invoices for <%= pluralize(order.missing_shipment_dates.size, 'date') %></h5>

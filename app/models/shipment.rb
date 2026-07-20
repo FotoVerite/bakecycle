@@ -92,6 +92,17 @@ class Shipment < ApplicationRecord
   scope :search, ->(terms) { ShipmentSearcher.search(all, terms) }
   scope :latest, ->(count) { order(date: :desc).limit(count) }
 
+  # Billing-facing reports (revenue, invoice exports) must not treat
+  # sample-order shipments as real invoices -- they're deliberately free
+  # tastings. left_joins (not joins) + the explicit IS NULL branch is
+  # required: a plain `where.not(orders: { order_type: "sample" })` would
+  # also silently drop any shipment with no linked order at all, since SQL's
+  # `NULL != 'sample'` evaluates to NULL, not true, and WHERE discards NULL
+  # rows.
+  scope :non_sample, -> { left_joins(:order).where("orders.id IS NULL OR orders.order_type != 'sample'") }
+
+  delegate :sample?, to: :order, allow_nil: true
+
   def self.policy_class
     ClientPolicy
   end

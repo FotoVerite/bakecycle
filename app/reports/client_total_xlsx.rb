@@ -28,7 +28,7 @@ class ClientTotalXlsx
   def create_hash_clients
     hash = {}
     @clients.each do |client|
-      invoices = client.shipments.where("shipments.date BETWEEN ? AND ?", @start, @end)
+      invoices = client.shipments.where("shipments.date BETWEEN ? AND ?", @start, @end).non_sample
       invoice_total = invoices.to_a.sum(&:price)
       hash[client.name] = [client.name, invoices.count, invoice_total.to_s]
       @total += invoice_total

@@ -224,6 +224,10 @@ class Order < ApplicationRecord
     where(order_type: "temporary", start_date: date)
   end
 
+  def self.sample(date)
+    where(order_type: "sample", start_date: date)
+  end
+
   # SQL equivalent of #still_in_use, for scopes that need to filter/paginate in the
   # database instead of loading every row into Ruby to check still_in_use on each.
   scope :still_in_use, lambda {

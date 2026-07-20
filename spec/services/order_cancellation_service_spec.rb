@@ -139,6 +139,17 @@ describe OrderCancellationService do
           .not_to(change { Shipment.where(client: client).count })
       end
 
+      it "removes a coexisting sample order and its shipment on the same date -- a cancellation closes the day" do
+        sample_order = create(:sample_order, bakery: bakery, client: client, route: route, start_date: date)
+        sample_shipment = create(:shipment, bakery: bakery, client: client, route: route, date: date,
+                                            order: sample_order)
+
+        service.cancel!
+
+        expect { sample_shipment.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { sample_order.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
       it "returns cancelled status" do
         expect(service.cancel!.first.status).to eq(:cancelled)
       end

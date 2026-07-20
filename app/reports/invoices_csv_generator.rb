@@ -34,7 +34,7 @@ class InvoicesCsvGenerator
   end
 
   def invoices
-    @_invoices ||= bakery.shipments.search(search)
+    @_invoices ||= bakery.shipments.search(search).non_sample
   end
 
   def date

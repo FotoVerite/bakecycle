@@ -79,7 +79,14 @@ class OrderCancellationService
     production_dates = production_dates_for(client)
     ActiveRecord::Base.transaction do
       create_zero_temp_orders(client)
+      # A cancellation means the bakery is closed that date -- nothing is
+      # being delivered at all, so a same-day sample tasting is cancelled
+      # along with everything else, not preserved. Destroy its shipment here
+      # (before destroy_sample_orders below, which would otherwise just
+      # nullify it via Order's dependent: :nullify and leave an orphaned,
+      # order-less shipment sitting around).
       Shipment.where(bakery: @bakery, client: client, date: @date).destroy_all
+      destroy_sample_orders(client)
       reset_production_runs(production_dates)
     end
     Result.new(client: client, status: :cancelled, message: "Cancelled.")
@@ -108,6 +115,14 @@ class OrderCancellationService
       end
       create_zero_items(existing_temp, standing)
     end
+  end
+
+  # Unlike a standing order (zeroed via a temporary override so its future
+  # dates survive), a sample order has no recurrence to preserve -- it's
+  # always single-day (Order#single_day_order?), so cancelling its one date
+  # is cancelling the whole thing. Removed outright rather than zeroed.
+  def destroy_sample_orders(client)
+    Order.sample(@date).where(bakery: @bakery, client: client).destroy_all
   end
 
   # The reason (e.g. "Holiday Closure", "Odeko Closed") a bakery user typed in

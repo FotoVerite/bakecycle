@@ -405,4 +405,26 @@ describe Shipment do
       expect(duplicates).to contain_exactly(c1_first, c1_second, c3_first, c3_second)
     end
   end
+
+  describe ".non_sample" do
+    it "excludes shipments linked to a sample order" do
+      sample_order = create(:sample_order, bakery: bakery, order_item_count: 0)
+      create(:shipment, bakery: bakery, order: sample_order)
+
+      expect(described_class.non_sample).to be_empty
+    end
+
+    it "includes shipments linked to a standing or temporary order" do
+      standing_order = create(:order, bakery: bakery, order_item_count: 0)
+      standing_shipment = create(:shipment, bakery: bakery, order: standing_order)
+
+      expect(described_class.non_sample).to contain_exactly(standing_shipment)
+    end
+
+    it "includes shipments with no linked order at all" do
+      orderless = create(:shipment, bakery: bakery, order: nil)
+
+      expect(described_class.non_sample).to contain_exactly(orderless)
+    end
+  end
 end

@@ -1087,6 +1087,52 @@
   padding: 6px 8px;
 }
 
+// Same shape as .cancellation-override-notice, built on $bc-lima instead of
+// $bc-shakespeare so a sample (free, no-charge) order reads as visually
+// distinct from a cancellation at a glance.
+.sample-order-notice {
+  align-items: center;
+  background: color.adjust($bc-lima, $lightness: 40%);
+  border: 1px solid color.adjust($bc-lima, $lightness: 15%);
+  color: color.adjust($bc-lima, $lightness: -30%);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin: 0 0 14px;
+  padding: 16px 18px;
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    color: color.adjust($bc-lima, $lightness: -34%);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+}
+
+.sample-order-notice-label {
+  color: color.adjust($bc-lima, $lightness: -30%);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 5px !important;
+}
+
+.sample-order-badge {
+  background: $bc-white;
+  border: 1px solid color.adjust($bc-lima, $lightness: 10%);
+  color: color.adjust($bc-lima, $lightness: -34%);
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 6px 8px;
+}
+
 .order-action-bar {
   background: $bc-wild-sand;
   border: 1px solid $bc-border-grey;

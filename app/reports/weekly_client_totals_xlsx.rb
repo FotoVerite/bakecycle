@@ -7,7 +7,7 @@ class WeeklyClientTotalsXlsx
     @bakery = bakery
     @date = date
     date_range = (date..date + 6.days)
-    @shipments = Shipment.where(bakery: bakery, date: date_range).order("client_name ASC") || []
+    @shipments = Shipment.where(bakery: bakery, date: date_range).non_sample.order("client_name ASC")
     @weekday_order = date_range.map { |d| d.strftime("%A") }
     @weekday_order_with_date = date_range.map { |d| d.strftime("%A %m-%d") }
   end

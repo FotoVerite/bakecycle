@@ -29,6 +29,7 @@ class YearTotalXlsx
     @end_date = Time.zone.now.year == @year ? Time.zone.today : Date.parse("31-12-#{@year}")
     @clients.each do |client|
       invoices = client.shipments.where("shipments.date BETWEEN ? AND ?", Date.parse("1-1-#{@year}"), @end_date)
+        .non_sample
       invoice_total = invoices.to_a.sum(&:price)
       hash[client.name] = [client.name, invoices.count, invoice_total.to_s]
       @total += invoice_total

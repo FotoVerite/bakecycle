@@ -28,6 +28,18 @@ describe InvoicesIifGenerator do
     expect(generator.generate).to_not be_nil
   end
 
+  it "excludes sample-order shipments -- they're free tastings, not real invoices" do
+    unfiltered_generator = InvoicesIifGenerator.new(bakery, ShipmentSearchForm.new({}))
+    sample_order = create(:sample_order, bakery: bakery, order_item_count: 0)
+    create(:shipment, bakery: bakery, order: sample_order, client_name: "Sample Client Co")
+    create(:shipment, bakery: bakery, client_name: "Regular Client Co")
+
+    generated = unfiltered_generator.generate
+
+    expect(generated).to include("Regular Client Co")
+    expect(generated).not_to include("Sample Client Co")
+  end
+
   describe "global_id" do
     it "serializes and de-serializes" do
       expect(generator.id).to_not be_nil
