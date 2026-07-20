@@ -91,8 +91,8 @@ class BakeListData
   # synthetic rows fit the same shape.
   def viennoiserie_pick_items
     @_viennoiserie_pick_items ||= begin
-      retail_by_product = viennoiserie_quantities(retail_items)
-      wholesale_by_product = viennoiserie_quantities(wholesale_items)
+      retail_rows_by_product = viennoiserie_rows(retail_items)
+      wholesale_rows_by_product = viennoiserie_rows(wholesale_items)
 
       products = Product.vienoisserie
         .where(bakery: @bakery, removed: false, inactive: false, on_pull_list: false)
@@ -104,15 +104,15 @@ class BakeListData
         vienn_pick_row(
           name: product.name,
           pieces_per_tray: product.pieces_per_tray,
-          retail_quantity: retail_by_product[product].to_i,
-          wholesale_quantity: wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
+          retail_quantity: quantity_with_overbake(product, retail_rows_by_product[product]),
+          wholesale_quantity: quantity_with_overbake(product, wholesale_rows_by_product[product])
         )
       end
       if roule_products.any?
-        rows << collapsed_family_row(ROULE_ROW_NAME, roule_products, retail_by_product, wholesale_by_product)
+        rows << collapsed_family_row(ROULE_ROW_NAME, roule_products, retail_rows_by_product, wholesale_rows_by_product)
       end
       if croissant_products.any?
-        rows << collapsed_family_row(CROISSANT_ROW_NAME, croissant_products, retail_by_product, wholesale_by_product)
+        rows << collapsed_family_row(CROISSANT_ROW_NAME, croissant_products, retail_rows_by_product, wholesale_rows_by_product)
       end
       rows = rows.sort_by { |row| row[:name] }
       # Pate Fermentee is a fixed daily prep, not a picked item -- pin it last,
@@ -130,36 +130,52 @@ class BakeListData
     product.name.match?(CROISSANT_NAME_PATTERN)
   end
 
-  # Same overbake rule as the Wholesale Bread sheet's Total column (see
-  # BakeListXlsx#wholesale_total): the margin is sized against retail +
-  # wholesale combined -- one bake batch, split across two sheets -- but the
-  # extra units land only in the wholesale count, since retail is baked
-  # exactly to order.
-  def wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
-    retail_quantity = retail_by_product[product].to_i
-    wholesale_quantity = wholesale_by_product[product].to_i
-    combined_quantity = retail_quantity + wholesale_quantity
-    wholesale_quantity + (combined_quantity * product.over_bake / 100).ceil
+  # Overbake here must match Production Run / Daily Totals exactly for the
+  # same items, since staff rely on it to know how much spare stock genuinely
+  # exists (to patch a mistake, or pull for samples/tests) -- a second,
+  # independently-computed number is worse than useless if it can disagree.
+  # bake_lead_days is only used (via #items_for) to select *which* shipment
+  # items belong on this sheet; it does not stand in for the item's own
+  # production-run identity. Once those items have been picked up by kickoff
+  # (ShipmentItem#production_run_id set), the authoritative overbake for them
+  # already exists on RunItem -- read it from there instead of recomputing.
+  # Only fall back to estimating from order quantity when kickoff hasn't
+  # reached these items yet, so the sheet still shows a number instead of
+  # going blank.
+  #
+  # Retail and wholesale are each sized off their own quantity alone, not a
+  # combined total -- a retail-lead and wholesale-lead order for the same
+  # product are never the same physical batch (production_start is
+  # delivery_date - total_lead_days, and the two lead buckets' delivery
+  # dates are always a day apart), so retail overbake isn't a slice of
+  # wholesale's margin -- it's its own margin against its own quantity, same
+  # as wholesale's.
+  def quantity_with_overbake(product, row)
+    quantity = row ? row[:quantity] : 0
+    authoritative_overbake = run_item_overbake(product, row&.dig(:shipment_items))
+    return quantity + authoritative_overbake if authoritative_overbake
+
+    quantity + (quantity * product.over_bake / 100).ceil
   end
 
-  # The retail-lead quantity for a product that also has a wholesale bake --
-  # used to fold retail volume into the Wholesale sheet's overbake percentage
-  # base (the actual bake batch size for an item split across both sheets is
-  # retail + wholesale combined, so the overbake margin should be sized
-  # against that combined total, not the wholesale slice alone). Zero when
-  # the product has no retail-lead orders that day.
-  def retail_quantity_for(product)
-    @_retail_quantity_by_product ||= retail_items.each_with_object({}) do |row, memo|
-      memo[row[:product]] = row[:quantity]
-    end
-    @_retail_quantity_by_product[product].to_i
+  # Returns the summed RunItem#overbake_quantity across every production run
+  # these shipment items have already been assigned to, or nil if any of them
+  # haven't been picked up by kickoff yet (no production_run_id set) -- nil
+  # signals "not available yet," distinct from a real zero.
+  def run_item_overbake(product, shipment_items)
+    return nil if shipment_items.blank?
+
+    run_ids = shipment_items.map(&:production_run_id)
+    return nil if run_ids.any?(&:nil?)
+
+    RunItem.where(production_run_id: run_ids.uniq, product_id: product.id).sum(:overbake_quantity)
   end
 
   private
 
-  def viennoiserie_quantities(items)
+  def viennoiserie_rows(items)
     items.each_with_object({}) do |row, memo|
-      memo[row[:product]] = row[:quantity] if row[:product].vienoisserie?
+      memo[row[:product]] = row if row[:product].vienoisserie?
     end
   end
 
@@ -173,19 +189,17 @@ class BakeListData
     }
   end
 
-  def collapsed_family_row(name, products, retail_by_product, wholesale_by_product)
+  def collapsed_family_row(name, products, retail_rows_by_product, wholesale_rows_by_product)
     vienn_pick_row(
       name: name,
       # One shared base pastry -- use the family's tray count (they should agree;
       # take the first present when sorted by name for a stable choice).
       pieces_per_tray: products.map(&:pieces_per_tray).compact.first,
-      retail_quantity: products.sum { |product| retail_by_product[product].to_i },
       # Each variant's own overbake is computed (and rounded) before summing
       # into the collapsed row, not derived from the family's combined total
       # -- variants can have different over_bake percentages.
-      wholesale_quantity: products.sum do |product|
-        wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
-      end
+      retail_quantity: products.sum { |product| quantity_with_overbake(product, retail_rows_by_product[product]) },
+      wholesale_quantity: products.sum { |product| quantity_with_overbake(product, wholesale_rows_by_product[product]) }
     )
   end
 
@@ -237,7 +251,8 @@ class BakeListData
           quantity: quantity,
           trays: product.trays_for(quantity),
           lead_days: lead_days,
-          client_quantities: client_quantities
+          client_quantities: client_quantities,
+          shipment_items: rows.map { |row| row[:item] }
         }
       end
     rows.compact.sort_by { |row| row[:product].name }

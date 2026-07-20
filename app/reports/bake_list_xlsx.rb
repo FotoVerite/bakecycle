@@ -220,18 +220,19 @@ class BakeListXlsx
   # The Wholesale Bake sheet's Total folds each product's overbake percentage in
   # on top of the ordered quantity -- staff bake orders + overbake, so the Total
   # column reflects the full amount actually baked (same orders + overbake math
-  # as OrderItemQuantities#total_quantity). Retail bakes are baked to order and
-  # keep an order-only total.
+  # as OrderItemQuantities#total_quantity).
   #
-  # The overbake *percentage* is sized against retail + wholesale combined,
-  # not the wholesale quantity alone -- an item split across both sheets is
-  # still baked as one batch, so the margin needs to cover the whole batch.
-  # The extra units still land only in the Wholesale total, matching where
-  # the buffer stock actually sits (Retail is baked exactly to order).
+  # Sized against the wholesale quantity alone, not combined with retail -- a
+  # retail-lead and wholesale-lead order for the same product are baked on
+  # different physical days (production_start is a day apart between the two
+  # lead buckets), never the same batch, so wholesale's margin shouldn't be
+  # inflated by retail volume it doesn't share a batch with.
   def wholesale_total(row)
     quantity = row[:quantity]
-    combined_quantity = quantity + @data.retail_quantity_for(row[:product])
-    quantity + (combined_quantity * row[:product].over_bake / 100).ceil
+    authoritative_overbake = @data.run_item_overbake(row[:product], row[:shipment_items])
+    return quantity + authoritative_overbake if authoritative_overbake
+
+    quantity + (quantity * row[:product].over_bake / 100).ceil
   end
 
   def retail_row_cells(row)

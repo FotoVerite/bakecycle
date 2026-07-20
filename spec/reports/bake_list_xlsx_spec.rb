@@ -187,7 +187,7 @@ describe BakeListXlsx do
     expect(report.retail_rows).to eq([["Baguette", 12, 12, 0]])
   end
 
-  it "folds each product's overbake into the wholesale sheet total, sized against retail + wholesale combined" do
+  it "sizes each sheet's overbake off its own quantity, not a retail+wholesale combined total" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
     # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant.
@@ -202,10 +202,13 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    # It's one bake batch across both sheets (100 wholesale + 40 retail = 140), so the
-    # margin covers the whole batch: ceil(140 * 25 / 100) = 35, added on top of the
-    # wholesale-only 100. Retail itself stays order-only, no margin of its own.
-    expect(report.wholesale_rows).to eq([["Cookie", 135, nil, nil]])
+    # Retail-lead and wholesale-lead orders for the same product are baked on
+    # different physical days (their delivery dates are a day apart, and
+    # production_start is delivery_date - total_lead_days), so they're never
+    # the same batch: wholesale's margin is ceil(100 * 25 / 100) = 25, added
+    # on top of its own 100. The Wholesale Bake sheet's Total column carries
+    # overbake; the standalone Retail Bread sheet has no such column.
+    expect(report.wholesale_rows).to eq([["Cookie", 125, nil, nil]])
     expect(report.retail_rows).to eq([["Cookie", 40, 40, 0]])
   end
 

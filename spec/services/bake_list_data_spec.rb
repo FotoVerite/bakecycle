@@ -151,7 +151,7 @@ describe BakeListData do
     )
   end
 
-  it "folds overbake into the Vienn Pick's wholesale quantity, sized against retail + wholesale combined" do
+  it "sizes the Vienn Pick's overbake off each side's own quantity, not a retail+wholesale combined total" do
     smith = create(:client, bakery: bakery)
     restaurant = create(:client, bakery: bakery)
     # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant --
@@ -167,10 +167,12 @@ describe BakeListData do
 
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
 
-    # ceil(140 * 25 / 100) = 35, added on top of the wholesale-only 100 -- retail
-    # stays order-only, exactly like the Wholesale Bread sheet's overbake rule.
+    # Retail-lead and wholesale-lead orders for the same product are baked on
+    # different physical days, never the same batch -- each side gets its own
+    # margin against its own quantity: retail ceil(40 * 25 / 100) = 10 -> 50,
+    # wholesale ceil(100 * 25 / 100) = 25 -> 125.
     expect(pick).to include(
-      hash_including(name: "Croissant", retail_quantity: 40, wholesale_quantity: 135, quantity: 175)
+      hash_including(name: "Croissant", retail_quantity: 50, wholesale_quantity: 125, quantity: 175)
     )
   end
 
