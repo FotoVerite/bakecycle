@@ -137,7 +137,7 @@ describe BakeListData do
     smith = create(:client, bakery: bakery)
     restaurant = create(:client, bakery: bakery)
     croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
-                                 bake_lead_days: 1, pieces_per_tray: 20)
+                                 bake_lead_days: 1, pieces_per_tray: 20, over_bake: 0)
     create(:bake_lead_day_variant, product: croissant, client: smith, bake_lead_days: 0)
 
     retail_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
@@ -148,6 +148,31 @@ describe BakeListData do
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
     expect(pick).to include(
       { name: "Croissant", pieces_per_tray: 20, quantity: 30, retail_quantity: 8, wholesale_quantity: 22 }
+    )
+  end
+
+  it "sizes the Vienn Pick's overbake off each side's own quantity, not a retail+wholesale combined total" do
+    smith = create(:client, bakery: bakery)
+    restaurant = create(:client, bakery: bakery)
+    # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant --
+    # same fixture shape as BakeListXlsx's equivalent Wholesale Bread sheet spec.
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 1, over_bake: 25)
+    create(:bake_lead_day_variant, product: croissant, client: smith, bake_lead_days: 0)
+
+    retail_shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: retail_shipment, product: croissant, product_quantity: 40)
+    wholesale_shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: croissant, product_quantity: 100)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+
+    # Retail-lead and wholesale-lead orders for the same product are baked on
+    # different physical days, never the same batch -- each side gets its own
+    # margin against its own quantity: retail ceil(40 * 25 / 100) = 10 -> 50,
+    # wholesale ceil(100 * 25 / 100) = 25 -> 125.
+    expect(pick).to include(
+      hash_including(name: "Croissant", retail_quantity: 50, wholesale_quantity: 125, quantity: 175)
     )
   end
 
@@ -169,9 +194,9 @@ describe BakeListData do
   it "collapses the Roule family into a single pick row summing every flavor" do
     client = create(:client, bakery: bakery)
     cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
-                                bake_lead_days: 0, pieces_per_tray: 120)
+                                bake_lead_days: 0, pieces_per_tray: 120, over_bake: 0)
     everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
-                                  bake_lead_days: 0, pieces_per_tray: 120)
+                                  bake_lead_days: 0, pieces_per_tray: 120, over_bake: 0)
     shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
     create(:shipment_item, shipment: shipment, product: cinnamon, product_quantity: 10)
     create(:shipment_item, shipment: shipment, product: everything, product_quantity: 5)
@@ -183,6 +208,56 @@ describe BakeListData do
     expect(names).not_to include("Roule, Cinnamon", "Roule, Everything")
     roule_row = pick.find { |row| row[:name] == "Roule" }
     expect(roule_row).to include(pieces_per_tray: 120, quantity: 15, retail_quantity: 15, wholesale_quantity: 0)
+  end
+
+  it "sums each Roule flavor's own overbake before collapsing into the family row" do
+    client = create(:client, bakery: bakery)
+    # Different over_bake percentages per flavor -- the collapse must apply
+    # each one individually, not one blended rate against the family total.
+    cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
+                                bake_lead_days: 1, pieces_per_tray: 120, over_bake: 10)
+    everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
+                                  bake_lead_days: 1, pieces_per_tray: 120, over_bake: 50)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date + 1.day)
+    create(:shipment_item, shipment: shipment, product: cinnamon, product_quantity: 10)
+    create(:shipment_item, shipment: shipment, product: everything, product_quantity: 10)
+
+    roule_row = described_class.new(bakery, bake_date).viennoiserie_pick_items.find { |row| row[:name] == "Roule" }
+
+    # cinnamon: 10 + ceil(10 * 10/100) = 11; everything: 10 + ceil(10 * 50/100) = 15; sum = 26
+    expect(roule_row).to include(retail_quantity: 0, wholesale_quantity: 26, quantity: 26)
+  end
+
+  it "collapses the Croissant family into a single pick row summing every variant" do
+    client = create(:client, bakery: bakery)
+    plain = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                             bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
+                              bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    ham_brie = create(:product, bakery: bakery, name: "Ham & Brie Croissant", product_type: "vienoisserie",
+                                bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: plain, product_quantity: 10)
+    create(:shipment_item, shipment: shipment, product: almond, product_quantity: 5)
+    create(:shipment_item, shipment: shipment, product: ham_brie, product_quantity: 3)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+    names = pick.map { |row| row[:name] }
+
+    expect(names).to include("Croissant")
+    expect(names).not_to include("Almond Croissant", "Ham & Brie Croissant")
+    croissant_row = pick.find { |row| row[:name] == "Croissant" }
+    expect(croissant_row).to include(pieces_per_tray: 20, quantity: 18, retail_quantity: 18, wholesale_quantity: 0)
+  end
+
+  it "does not let the Croissant family swallow unrelated products, and keeps Roule separate from Croissant" do
+    create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie")
+    create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie")
+    create(:product, bakery: bakery, name: "Danish, Apple", product_type: "vienoisserie")
+
+    names = described_class.new(bakery, bake_date).viennoiserie_pick_items.map { |row| row[:name] }
+
+    expect(names).to include("Croissant", "Roule", "Danish, Apple")
   end
 
   it "appends a fixed 8-tray Pate Fermentee prep row" do

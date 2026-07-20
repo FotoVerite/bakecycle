@@ -105,9 +105,9 @@ describe BakeListXlsx do
 
   it "collapses Roule flavors into one Vienn Pick row and appends a fixed Pate Fermentee tray row" do
     roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
-                                      bake_lead_days: 1, pieces_per_tray: 120)
+                                      bake_lead_days: 1, pieces_per_tray: 120, over_bake: 0)
     roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
-                                        bake_lead_days: 1, pieces_per_tray: 120)
+                                        bake_lead_days: 1, pieces_per_tray: 120, over_bake: 0)
 
     shipment = create(:shipment, bakery: bakery, date: bake_date + 1.day)
     [[roule_cinnamon, 130], [roule_everything, 20]].each do |product, qty|
@@ -122,6 +122,34 @@ describe BakeListXlsx do
       [
         ["Roule", 1, 30, 1, 30, nil, nil, 0, 0, nil, nil],
         ["Pate Fermentee", 8, nil, nil, nil, nil, nil, nil, nil, nil, nil]
+      ]
+    )
+  end
+
+  it "collapses Croissant variants into one Vienn Pick row, but keeps them separate on Retail/Wholesale Bread" do
+    plain = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                             bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
+                              bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+
+    shipment = create(:shipment, bakery: bakery, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: plain, product_quantity: 24)
+    create(:shipment_item, shipment: shipment, product: almond, product_quantity: 6)
+
+    report = described_class.new(bakery, bake_date)
+
+    # Vienn Pick: one collapsed "Croissant" row (30 total = 1 tray of 20 + 10 pieces).
+    expect(report.viennoiserie_rows).to eq(
+      [
+        ["Croissant", 1, 10, 0, 0, nil, nil, 1, 10, nil, nil],
+        ["Pate Fermentee", 8, nil, nil, nil, nil, nil, nil, nil, nil, nil]
+      ]
+    )
+    # Retail Bread: still two distinct rows, per-variant.
+    expect(report.retail_rows).to eq(
+      [
+        ["Almond Croissant", 6, 0, 0],
+        ["Croissant", 24, 0, 0]
       ]
     )
   end
@@ -159,7 +187,7 @@ describe BakeListXlsx do
     expect(report.retail_rows).to eq([["Baguette", 12, 12, 0]])
   end
 
-  it "folds each product's overbake into the wholesale sheet total, sized against retail + wholesale combined" do
+  it "sizes each sheet's overbake off its own quantity, not a retail+wholesale combined total" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
     # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant.
@@ -174,10 +202,13 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    # It's one bake batch across both sheets (100 wholesale + 40 retail = 140), so the
-    # margin covers the whole batch: ceil(140 * 25 / 100) = 35, added on top of the
-    # wholesale-only 100. Retail itself stays order-only, no margin of its own.
-    expect(report.wholesale_rows).to eq([["Cookie", 135, nil, nil]])
+    # Retail-lead and wholesale-lead orders for the same product are baked on
+    # different physical days (their delivery dates are a day apart, and
+    # production_start is delivery_date - total_lead_days), so they're never
+    # the same batch: wholesale's margin is ceil(100 * 25 / 100) = 25, added
+    # on top of its own 100. The Wholesale Bake sheet's Total column carries
+    # overbake; the standalone Retail Bread sheet has no such column.
+    expect(report.wholesale_rows).to eq([["Cookie", 125, nil, nil]])
     expect(report.retail_rows).to eq([["Cookie", 40, 40, 0]])
   end
 
