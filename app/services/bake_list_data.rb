@@ -94,7 +94,7 @@ class BakeListData
           name: product.name,
           pieces_per_tray: product.pieces_per_tray,
           retail_quantity: retail_by_product[product].to_i,
-          wholesale_quantity: wholesale_by_product[product].to_i
+          wholesale_quantity: wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
         )
       end
       rows << collapsed_roule_row(roule_products, retail_by_product, wholesale_by_product) if roule_products.any?
@@ -108,6 +108,18 @@ class BakeListData
 
   def roule_product?(product)
     product.name.match?(ROULE_NAME_PATTERN)
+  end
+
+  # Same overbake rule as the Wholesale Bread sheet's Total column (see
+  # BakeListXlsx#wholesale_total): the margin is sized against retail +
+  # wholesale combined -- one bake batch, split across two sheets -- but the
+  # extra units land only in the wholesale count, since retail is baked
+  # exactly to order.
+  def wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
+    retail_quantity = retail_by_product[product].to_i
+    wholesale_quantity = wholesale_by_product[product].to_i
+    combined_quantity = retail_quantity + wholesale_quantity
+    wholesale_quantity + (combined_quantity * product.over_bake / 100).ceil
   end
 
   # The retail-lead quantity for a product that also has a wholesale bake --
@@ -148,7 +160,12 @@ class BakeListData
       # take the first present when sorted by name for a stable choice).
       pieces_per_tray: roule_products.map(&:pieces_per_tray).compact.first,
       retail_quantity: roule_products.sum { |product| retail_by_product[product].to_i },
-      wholesale_quantity: roule_products.sum { |product| wholesale_by_product[product].to_i }
+      # Each flavor's own overbake is computed (and rounded) before summing
+      # into the collapsed row, not derived from the family's combined total
+      # -- flavors can have different over_bake percentages.
+      wholesale_quantity: roule_products.sum do |product|
+        wholesale_quantity_with_overbake(product, retail_by_product, wholesale_by_product)
+      end
     )
   end
 

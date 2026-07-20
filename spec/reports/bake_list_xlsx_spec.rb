@@ -105,9 +105,9 @@ describe BakeListXlsx do
 
   it "collapses Roule flavors into one Vienn Pick row and appends a fixed Pate Fermentee tray row" do
     roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
-                                      bake_lead_days: 1, pieces_per_tray: 120)
+                                      bake_lead_days: 1, pieces_per_tray: 120, over_bake: 0)
     roule_everything = create(:product, bakery: bakery, name: "Roule, Everything", product_type: "vienoisserie",
-                                        bake_lead_days: 1, pieces_per_tray: 120)
+                                        bake_lead_days: 1, pieces_per_tray: 120, over_bake: 0)
 
     shipment = create(:shipment, bakery: bakery, date: bake_date + 1.day)
     [[roule_cinnamon, 130], [roule_everything, 20]].each do |product, qty|
