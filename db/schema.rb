@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_21_185230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -311,6 +311,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
     t.integer "motherdough_id"
     t.string "name", null: false
     t.boolean "on_pull_list", default: false, null: false
+    t.boolean "on_vienn_pick", default: false, null: false
     t.decimal "over_bake", default: "0.0", null: false
     t.integer "pieces_per_tray"
     t.integer "product_type", null: false

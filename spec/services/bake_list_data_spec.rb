@@ -176,7 +176,7 @@ describe BakeListData do
     )
   end
 
-  it "lists every active viennoiserie on the pick, showing zero when there are no orders" do
+  it "leaves items with nothing ordered off the pick, keeping only Pate Fermentee" do
     create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie", pieces_per_tray: 20)
     # non-viennoiserie and inactive/removed products stay off the pick
     create(:product, bakery: bakery, name: "Baguette", product_type: "bread")
@@ -185,10 +185,20 @@ describe BakeListData do
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
     names = pick.map { |row| row[:name] }
 
+    expect(names).to eq(["Pate Fermentee"])
+  end
+
+  it "lists an active viennoiserie once it has an order that day" do
+    client = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 pieces_per_tray: 20, bake_lead_days: 0, over_bake: 0)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 5)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+    names = pick.map { |row| row[:name] }
+
     expect(names).to include("Croissant")
-    expect(names).not_to include("Baguette", "Old Danish")
-    croissant_row = pick.find { |row| row[:name] == "Croissant" }
-    expect(croissant_row).to include(quantity: 0, retail_quantity: 0, wholesale_quantity: 0)
   end
 
   it "collapses the Roule family into a single pick row summing every flavor" do
@@ -250,10 +260,37 @@ describe BakeListData do
     expect(croissant_row).to include(pieces_per_tray: 20, quantity: 18, retail_quantity: 18, wholesale_quantity: 0)
   end
 
+  it "folds the plural-named base pastry 'Croissants for Almond Croissants' into the Croissant row too" do
+    client = create(:client, bakery: bakery)
+    plain = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                             bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    base_pastry = create(:product, bakery: bakery, name: "Croissants for Almond Croissants",
+                                   product_type: "vienoisserie", bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: plain, product_quantity: 10)
+    create(:shipment_item, shipment: shipment, product: base_pastry, product_quantity: 5)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+    names = pick.map { |row| row[:name] }
+
+    expect(names).to include("Croissant")
+    expect(names).not_to include("Croissants for Almond Croissants")
+    croissant_row = pick.find { |row| row[:name] == "Croissant" }
+    expect(croissant_row).to include(quantity: 15, retail_quantity: 15, wholesale_quantity: 0)
+  end
+
   it "does not let the Croissant family swallow unrelated products, and keeps Roule separate from Croissant" do
-    create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie")
-    create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie")
-    create(:product, bakery: bakery, name: "Danish, Apple", product_type: "vienoisserie")
+    client = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 0, over_bake: 0)
+    roule = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
+                             bake_lead_days: 0, over_bake: 0)
+    danish = create(:product, bakery: bakery, name: "Danish, Apple", product_type: "vienoisserie",
+                              bake_lead_days: 0, over_bake: 0)
+    shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 1)
+    create(:shipment_item, shipment: shipment, product: roule, product_quantity: 1)
+    create(:shipment_item, shipment: shipment, product: danish, product_quantity: 1)
 
     names = described_class.new(bakery, bake_date).viennoiserie_pick_items.map { |row| row[:name] }
 

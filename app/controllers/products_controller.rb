@@ -221,6 +221,7 @@ class ProductsController < ApplicationController
       :pieces_per_tray,
       :bake_lead_days,
       :on_pull_list,
+      :on_vienn_pick,
       price_variants_attributes: %i[id client_id quantity price _destroy],
       bake_lead_day_variants_attributes: %i[id client_id bake_lead_days _destroy]
     )

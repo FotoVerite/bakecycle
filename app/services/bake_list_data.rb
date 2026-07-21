@@ -34,8 +34,10 @@ class BakeListData
   # Brie Croissant...) rather than "Croissant, <filling>", so the pattern
   # anchors on the end of the name instead of the start. Collapses into one
   # "Croissant" pick row; per-variant detail still lives on the Retail/
-  # Wholesale Bake sheets.
-  CROISSANT_NAME_PATTERN = /\bcroissant\z/i
+  # Wholesale Bake sheets. Optional trailing "s" covers "Croissants for Almond
+  # Croissants" -- the plain base pastry used to assemble almond croissants,
+  # same relationship as Roule's untopped base.
+  CROISSANT_NAME_PATTERN = /\bcroissants?\z/i
   CROISSANT_ROW_NAME = "Croissant"
 
   # Pate Fermentee is a standing daily pre-ferment, not an order-driven item:
@@ -82,20 +84,24 @@ class BakeListData
     end
   end
 
-  # The Vienn Pick lists *every* active Viennoiserie product, showing zero when
-  # there are no orders that day (unlike the bake sheets, which only list what's
-  # actually ordered) -- the pick sheet doubles as a standing checklist. The
-  # Roulé and Croissant families each collapse into one row ("Roule",
-  # "Croissant"), and Pate Fermentee is appended as a fixed synthetic prep row.
-  # Rows carry name/pieces_per_tray directly rather than a Product, so the
-  # synthetic rows fit the same shape.
+  # The Vienn Pick lists every active product flagged Product#on_vienn_pick
+  # that has orders that day -- items with nothing ordered (zero retail and
+  # zero wholesale) are left off rather than shown as a zero row. Membership
+  # is an explicit per-product flag (set on the product form, next to Pull
+  # Prep), not inferred from product_type -- a product doesn't have to be
+  # Viennoiserie to show up here. The Roulé and Croissant families each
+  # collapse into one row ("Roule", "Croissant"), and Pate Fermentee is
+  # appended as a fixed synthetic prep row regardless of the order-driven
+  # rows, since it's a standing daily prep, not tied to orders. Rows carry
+  # name/pieces_per_tray directly rather than a Product, so the synthetic
+  # rows fit the same shape.
   def viennoiserie_pick_items
     @_viennoiserie_pick_items ||= begin
       retail_rows_by_product = viennoiserie_rows(retail_items)
       wholesale_rows_by_product = viennoiserie_rows(wholesale_items)
 
-      products = Product.vienoisserie
-        .where(bakery: @bakery, removed: false, inactive: false, on_pull_list: false)
+      products = Product
+        .where(bakery: @bakery, removed: false, inactive: false, on_vienn_pick: true)
         .order_by_name
       roule_products, remaining = products.partition { |product| roule_product?(product) }
       croissant_products, single_products = remaining.partition { |product| croissant_product?(product) }
@@ -114,9 +120,9 @@ class BakeListData
       if croissant_products.any?
         rows << collapsed_family_row(CROISSANT_ROW_NAME, croissant_products, retail_rows_by_product, wholesale_rows_by_product)
       end
-      rows = rows.sort_by { |row| row[:name] }
+      rows = rows.select { |row| row[:quantity].positive? }.sort_by { |row| row[:name] }
       # Pate Fermentee is a fixed daily prep, not a picked item -- pin it last,
-      # separate from the order-driven rows.
+      # separate from the order-driven rows, and unaffected by the zero filter.
       rows << pate_fermentee_row
       rows
     end
@@ -175,7 +181,7 @@ class BakeListData
 
   def viennoiserie_rows(items)
     items.each_with_object({}) do |row, memo|
-      memo[row[:product]] = row if row[:product].vienoisserie?
+      memo[row[:product]] = row if row[:product].on_vienn_pick?
     end
   end
 

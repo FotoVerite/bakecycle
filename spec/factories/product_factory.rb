@@ -35,6 +35,10 @@ FactoryBot.define do
     over_bake { Faker::Number.decimal(l_digits: 1, r_digits: 1) }
     base_price { Faker::Number.decimal(l_digits: 2) }
     bakery { create(:bakery) }
+    # Mirrors the on_vienn_pick backfill migration ran for existing data --
+    # keeps every existing vienoisserie-product spec on the Vienn Pick without
+    # having to set the flag explicitly everywhere.
+    on_vienn_pick { product_type == "vienoisserie" }
 
     transient do
       force_total_lead_days { 2 }
