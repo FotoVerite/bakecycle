@@ -238,14 +238,14 @@ describe BakeListData do
     expect(roule_row).to include(retail_quantity: 0, wholesale_quantity: 26, quantity: 26)
   end
 
-  it "collapses the Croissant family into a single pick row summing every variant" do
+  it "keeps Croissant variants as separate pick rows, each with its own tray size" do
     client = create(:client, bakery: bakery)
     plain = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
-                             bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+                             bake_lead_days: 0, pieces_per_tray: 60, over_bake: 0)
     almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
                               bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
     ham_brie = create(:product, bakery: bakery, name: "Ham & Brie Croissant", product_type: "vienoisserie",
-                                bake_lead_days: 0, pieces_per_tray: 20, over_bake: 0)
+                                bake_lead_days: 0, pieces_per_tray: 60, over_bake: 0)
     shipment = create(:shipment, bakery: bakery, client: client, date: bake_date)
     create(:shipment_item, shipment: shipment, product: plain, product_quantity: 10)
     create(:shipment_item, shipment: shipment, product: almond, product_quantity: 5)
@@ -254,10 +254,13 @@ describe BakeListData do
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
     names = pick.map { |row| row[:name] }
 
-    expect(names).to include("Croissant")
-    expect(names).not_to include("Almond Croissant", "Ham & Brie Croissant")
-    croissant_row = pick.find { |row| row[:name] == "Croissant" }
-    expect(croissant_row).to include(pieces_per_tray: 20, quantity: 18, retail_quantity: 18, wholesale_quantity: 0)
+    expect(names).to include("Croissant", "Almond Croissant", "Ham & Brie Croissant")
+    expect(pick.find { |row| row[:name] == "Croissant" })
+      .to include(pieces_per_tray: 60, quantity: 10, retail_quantity: 10)
+    expect(pick.find { |row| row[:name] == "Almond Croissant" })
+      .to include(pieces_per_tray: 20, quantity: 5, retail_quantity: 5)
+    expect(pick.find { |row| row[:name] == "Ham & Brie Croissant" })
+      .to include(pieces_per_tray: 60, quantity: 3, retail_quantity: 3)
   end
 
   it "folds the plural-named base pastry 'Croissants for Almond Croissants' into the Croissant row too" do

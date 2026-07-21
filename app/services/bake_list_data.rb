@@ -29,16 +29,19 @@ class BakeListData
   ROULE_NAME_PATTERN = /\Aroule\b/i
   ROULE_ROW_NAME = "Roule"
 
-  # Same idea as Roulé, mirrored the other direction: the croissant family is
-  # named "<filling> Croissant" (Almond Croissant, Chocolate Croissant, Ham &
-  # Brie Croissant...) rather than "Croissant, <filling>", so the pattern
-  # anchors on the end of the name instead of the start. Collapses into one
-  # "Croissant" pick row; per-variant detail still lives on the Retail/
-  # Wholesale Bake sheets. Optional trailing "s" covers "Croissants for Almond
-  # Croissants" -- the plain base pastry used to assemble almond croissants,
-  # same relationship as Roule's untopped base.
-  CROISSANT_NAME_PATTERN = /\bcroissants?\z/i
+  # Unlike Roulé, the "<filling> Croissant" products (Almond Croissant,
+  # Chocolate Croissant, Mini Croissant...) are genuinely different items with
+  # different tray sizes (confirmed with the client) -- they stay separate
+  # pick rows, not folded together. The exceptions are base-pastry products
+  # like "Croissants for Almond Croissants": the same plain croissant dough
+  # as the base "Croissant" row, just earmarked for a different use rather
+  # than a genuinely distinct product, so its count folds into Croissant's
+  # (using Croissant's own tray size). A list, not a single name, since more
+  # of these base-pastry variants can exist beyond the almond one.
   CROISSANT_ROW_NAME = "Croissant"
+  CROISSANT_EXTRA_NAMES = [
+    "Croissants for Almond Croissants"
+  ].freeze
 
   # Pate Fermentee is a standing daily pre-ferment, not an order-driven item:
   # the client tray-up is a fixed 8 trays every day in perpetuity. It has no
@@ -89,12 +92,14 @@ class BakeListData
   # zero wholesale) are left off rather than shown as a zero row. Membership
   # is an explicit per-product flag (set on the product form, next to Pull
   # Prep), not inferred from product_type -- a product doesn't have to be
-  # Viennoiserie to show up here. The Roulé and Croissant families each
-  # collapse into one row ("Roule", "Croissant"), and Pate Fermentee is
-  # appended as a fixed synthetic prep row regardless of the order-driven
-  # rows, since it's a standing daily prep, not tied to orders. Rows carry
-  # name/pieces_per_tray directly rather than a Product, so the synthetic
-  # rows fit the same shape.
+  # Viennoiserie to show up here. Roulé collapses into one "Roule" row (one
+  # shared base pastry, confirmed with the client); Croissant variants stay
+  # separate rows (different items, different tray sizes) except for
+  # "Croissants for Almond Croissants," which folds into the base "Croissant"
+  # row's count. Pate Fermentee is appended as a fixed synthetic prep row
+  # regardless of the order-driven rows, since it's a standing daily prep, not
+  # tied to orders. Rows carry name/pieces_per_tray directly rather than a
+  # Product, so the synthetic rows fit the same shape.
   def viennoiserie_pick_items
     @_viennoiserie_pick_items ||= begin
       retail_rows_by_product = viennoiserie_rows(retail_items)
@@ -104,7 +109,7 @@ class BakeListData
         .where(bakery: @bakery, removed: false, inactive: false, on_vienn_pick: true)
         .order_by_name
       roule_products, remaining = products.partition { |product| roule_product?(product) }
-      croissant_products, single_products = remaining.partition { |product| croissant_product?(product) }
+      extra_croissant_products, single_products = remaining.partition { |product| croissant_extra_product?(product) }
 
       rows = single_products.map do |product|
         vienn_pick_row(
@@ -117,9 +122,8 @@ class BakeListData
       if roule_products.any?
         rows << collapsed_family_row(ROULE_ROW_NAME, roule_products, retail_rows_by_product, wholesale_rows_by_product)
       end
-      if croissant_products.any?
-        rows << collapsed_family_row(CROISSANT_ROW_NAME, croissant_products, retail_rows_by_product, wholesale_rows_by_product)
-      end
+      fold_croissant_extras_into_base_row(rows, extra_croissant_products, retail_rows_by_product,
+                                          wholesale_rows_by_product)
       rows = rows.select { |row| row[:quantity].positive? }.sort_by { |row| row[:name] }
       # Pate Fermentee is a fixed daily prep, not a picked item -- pin it last,
       # separate from the order-driven rows, and unaffected by the zero filter.
@@ -132,8 +136,9 @@ class BakeListData
     product.name.match?(ROULE_NAME_PATTERN)
   end
 
-  def croissant_product?(product)
-    product.name.match?(CROISSANT_NAME_PATTERN)
+  def croissant_extra_product?(product)
+    name = product.name.strip
+    CROISSANT_EXTRA_NAMES.any? { |extra_name| name.casecmp?(extra_name) }
   end
 
   # Overbake here must match Production Run / Daily Totals exactly for the
@@ -207,6 +212,36 @@ class BakeListData
       retail_quantity: products.sum { |product| quantity_with_overbake(product, retail_rows_by_product[product]) },
       wholesale_quantity: products.sum { |product| quantity_with_overbake(product, wholesale_rows_by_product[product]) }
     )
+  end
+
+  # Adds "Croissants for Almond Croissants"' own quantity into the base
+  # "Croissant" row's count, in place -- keeping Croissant's own tray size
+  # rather than the extra product's, since it's the same base pastry. If
+  # there's no base Croissant row that day (no plain Croissant orders, or the
+  # product isn't flagged on_vienn_pick), the extra product still needs to be
+  # counted somewhere, so it falls back to its own row instead of silently
+  # dropping real order quantity.
+  def fold_croissant_extras_into_base_row(rows, extra_products, retail_rows_by_product, wholesale_rows_by_product)
+    return if extra_products.empty?
+
+    extra_retail = extra_products.sum { |product| quantity_with_overbake(product, retail_rows_by_product[product]) }
+    extra_wholesale = extra_products.sum { |product|
+      quantity_with_overbake(product, wholesale_rows_by_product[product])
+    }
+    base_row = rows.find { |row| row[:name].strip.casecmp?(CROISSANT_ROW_NAME) }
+
+    if base_row
+      base_row[:retail_quantity] += extra_retail
+      base_row[:wholesale_quantity] += extra_wholesale
+      base_row[:quantity] += extra_retail + extra_wholesale
+    else
+      rows << vienn_pick_row(
+        name: extra_products.first.name,
+        pieces_per_tray: extra_products.map(&:pieces_per_tray).compact.first,
+        retail_quantity: extra_retail,
+        wholesale_quantity: extra_wholesale
+      )
+    end
   end
 
   def pate_fermentee_row
