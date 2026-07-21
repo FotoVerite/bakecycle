@@ -18,17 +18,15 @@ class ProductsController < ApplicationController
 
   def index
     authorize Product
-    if params[:active] != "any"
-      @products = policy_scope(Product)
-        .where(removed: false, inactive: params[:active] || false)
-        .order_by_name
-        .paginate(page: params[:page])
+    @name_search = params[:name].to_s.strip
+    scope = policy_scope(Product)
+    scope = if params[:active] != "any"
+      scope.where(removed: false, inactive: params[:active] || false)
     else
-      @products = policy_scope(Product)
-        .where(removed: false)
-        .order_by_name
-        .paginate(page: params[:page])
+      scope.where(removed: false)
     end
+    scope = scope.where("products.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(@name_search)}%") if @name_search.present?
+    @products = scope.order_by_name.paginate(page: params[:page])
   end
 
   def new

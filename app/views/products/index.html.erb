@@ -13,6 +13,10 @@
   </div>
 
   <%= form_tag(products_path, method: :get, class: 'index-toolbar index-toolbar-compact bakecycle-form', data: { turbo_frame: "products" }) do %>
+    <div class="index-filter index-filter-primary">
+      <label>Name</label>
+      <%= text_field_tag :name, @name_search, placeholder: "Search products", class: 'js-field-live', autocomplete: 'off' %>
+    </div>
     <div class="index-filter index-filter-small">
       <label>Active</label>
       <%= select_tag :active, options_for_select([['Yes', false],['No', true],['Any', 'any']], params[:active] || false), class: 'js-field' %>
@@ -35,6 +39,17 @@
 
     var form = event.target.closest('form')
     if (form) form.requestSubmit()
+  })
+
+  var searchDebounceTimer
+  document.addEventListener('input', function(event) {
+    if (!event.target.matches('.js-field-live')) return
+
+    var form = event.target.closest('form')
+    if (!form) return
+
+    clearTimeout(searchDebounceTimer)
+    searchDebounceTimer = setTimeout(function() { form.requestSubmit() }, 250)
   })
 </script>
 <% end %>

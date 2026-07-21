@@ -57,6 +57,16 @@ RSpec.describe "Products", type: :request do
       expect(response).to be_successful
     end
 
+    it "filters by name" do
+      matching = create(:product, bakery: bakery, name: "Sourdough Boule")
+      create(:product, bakery: bakery, name: "Baguette")
+
+      get products_path, params: { name: "sourdough" }
+
+      expect(response.body).to include(matching.name)
+      expect(response.body).not_to include("Baguette")
+    end
+
     it "targets product table action links at the top frame" do
       get products_path
 
