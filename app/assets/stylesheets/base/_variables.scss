@@ -32,6 +32,8 @@ $bc-financial-fg: #8a6d23;
 
 $bc-missing-highlight: #f78984; // "missing shipment" row highlight
 
+$bc-amethyst: #9966cc; // sample-order notice/badge -- purple, distinct from cancellation's blue
+
 // Shared UI-interaction easing -- a stronger ease-out than the browser
 // default, so button/icon feedback reads as responsive rather than mushy.
 $bc-ease-out: cubic-bezier(0.23, 1, 0.32, 1);

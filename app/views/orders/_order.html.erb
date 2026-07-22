@@ -6,6 +6,8 @@
   <td data-title="Type">
     <% if order.cancellation_override? %>
       <span class="order-cancellation-status">Cancellation</span>
+    <% elsif order.sample? %>
+      <span class="order-sample-status">Sample</span>
     <% else %>
       <%= order.type %>
     <% end %>

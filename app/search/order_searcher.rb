@@ -14,11 +14,26 @@ class OrderSearcher
     search_by_date(terms[:date])
     search_by_route(terms[:route_id])
     search_by_product(terms[:product_id])
-    search_by_status(terms[:status])
+    search_by_order_type(terms[:order_type])
     @collection.all
   end
 
   private
+
+  # A single dropdown covers both order_type ("standing"/"temporary"/"sample")
+  # and the cancellation-override status -- they were two separate filters
+  # that confusingly overlapped (a temporary order can also be a cancellation
+  # override), so "cancellation_override" is just another value of the same
+  # field rather than its own filter.
+  def search_by_order_type(order_type)
+    return if order_type.blank?
+
+    if order_type == "cancellation_override"
+      @collection = @collection.where(cancellation_override: true)
+    else
+      @collection = @collection.where(order_type: order_type)
+    end
+  end
 
   def search_by_date(date)
     return if date.blank?
@@ -58,9 +73,4 @@ class OrderSearcher
     @collection = @collection.joins(:order_items).where(order_items: { product_id: product_id })
   end
 
-  def search_by_status(status)
-    return unless status == "cancellation_override"
-
-    @collection = @collection.where(cancellation_override: true)
-  end
 end

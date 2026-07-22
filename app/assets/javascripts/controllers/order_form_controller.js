@@ -20,6 +20,7 @@ export default class extends Controller {
     "minimumWarning",
     "dailyTotal",
     "orderTotal",
+    "dailyTotalsRow",
     "submitBtn"
   ]
   static values = { kickoff: String, orderId: Number, clientId: Number, productPrices: Object }
@@ -57,6 +58,7 @@ export default class extends Controller {
 
   updateView() {
     this.endDateFieldTarget.hidden = this.isSingleDayOrder
+    if (this.hasDailyTotalsRowTarget) this.dailyTotalsRowTarget.hidden = this.isSampleOrder
     this.updateDayInputs()
     this.validate()
   }
@@ -68,6 +70,13 @@ export default class extends Controller {
 
   get isSingleDayOrder() {
     return this.currentOrderType === "temporary" || this.currentOrderType === "sample"
+  }
+
+  // Sample orders are always free (see priceFor below), so a strip of $0.00
+  // totals per weekday is just noise -- hide it entirely rather than show
+  // every day zeroed out.
+  get isSampleOrder() {
+    return this.currentOrderType === "sample"
   }
 
   // ─── Row helpers ──────────────────────────────────────────────────────────
@@ -250,6 +259,8 @@ export default class extends Controller {
   // failing that, the highest non-zero price configured anywhere for the
   // product (any client/tier), before finally accepting $0 as a last resort.
   priceFor(productId, quantity) {
+    if (this.currentOrderType === "sample") return 0
+
     const product = this.productPricesValue[productId]
     if (!product) return null
 

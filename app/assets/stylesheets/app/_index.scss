@@ -231,7 +231,7 @@
   .index-filter-client { grid-column: 1; }
   .index-filter-product { grid-column: 2; }
   .index-filter-route { grid-column: 3; }
-  .index-filter-status { grid-column: 1; }
+  .index-filter-order-type { grid-column: 1; }
   .index-filter-date { grid-column: 2; }
   .index-toolbar-actions { grid-column: 3; }
 
@@ -244,20 +244,35 @@
   }
 }
 
-.order-index-table .order-cancellation-status {
+.order-index-table .order-cancellation-status,
+.order-index-table .order-sample-status {
   align-items: center;
-  color: color.adjust($bc-shakespeare, $lightness: -31%);
   display: inline-flex;
   font-weight: 700;
   gap: 7px;
   white-space: nowrap;
 
   &::before {
-    background: $bc-shakespeare;
     border-radius: 50%;
     content: "";
     height: 8px;
     width: 8px;
+  }
+}
+
+.order-index-table .order-cancellation-status {
+  color: color.adjust($bc-shakespeare, $lightness: -31%);
+
+  &::before {
+    background: $bc-shakespeare;
+  }
+}
+
+.order-index-table .order-sample-status {
+  color: color.adjust($bc-amethyst, $lightness: -31%);
+
+  &::before {
+    background: $bc-amethyst;
   }
 }
 

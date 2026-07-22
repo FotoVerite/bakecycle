@@ -48,6 +48,6 @@ describe OrderSearcher do
     create(:temporary_order)
     create(:order)
 
-    expect(searcher.search(status: "cancellation_override")).to contain_exactly(cancellation_override)
+    expect(searcher.search(order_type: "cancellation_override")).to contain_exactly(cancellation_override)
   end
 end

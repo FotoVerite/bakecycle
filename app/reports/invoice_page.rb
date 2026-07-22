@@ -136,10 +136,20 @@ class InvoicePage
         array[0],
         array[1],
         array[2],
-        array[3],
-        number_to_currency(array[4])
+        sample_order? ? number_to_currency(0) : array[3],
+        number_to_currency(sample_order? ? 0 : array[4])
       ]
     end
+  end
+
+  # Sample-order shipments are always free -- the invoice's grand total is
+  # already zeroed (see Shipment#price / ShipmentCreator), so the per-line
+  # "Price Each"/"Total" columns must be zeroed too. Otherwise a shipment
+  # whose items still carry their original (pre-zeroing) product_price would
+  # show real per-line prices next to a $0.00 total, which reads as a bug
+  # rather than the deliberate "sample orders are free" behavior.
+  def sample_order?
+    @shipment.sample?
   end
 
   def totals
