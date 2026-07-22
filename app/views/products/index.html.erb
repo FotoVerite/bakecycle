@@ -12,7 +12,7 @@
     <% end %>
   </div>
 
-  <%= form_tag(products_path, method: :get, class: 'index-toolbar index-toolbar-compact bakecycle-form', data: { turbo_frame: "products" }) do %>
+  <%= form_tag(products_path, method: :get, class: 'index-toolbar index-toolbar-products bakecycle-form', data: { turbo_frame: "products" }) do %>
     <div class="index-filter index-filter-primary">
       <label>Name</label>
       <%= text_field_tag :name, @name_search, placeholder: "Search products", class: 'js-field-live', autocomplete: 'off' %>

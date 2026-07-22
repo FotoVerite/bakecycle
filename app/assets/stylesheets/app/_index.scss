@@ -270,6 +270,11 @@
   justify-content: start;
 }
 
+.index-toolbar-products {
+  grid-template-columns: minmax(280px, 1fr) minmax(140px, 170px);
+  justify-content: start;
+}
+
 .index-filter {
   min-width: 0;
 }

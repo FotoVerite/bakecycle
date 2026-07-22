@@ -151,7 +151,7 @@ describe BakeListData do
     )
   end
 
-  it "sizes the Vienn Pick's overbake off each side's own quantity, not a retail+wholesale combined total" do
+  it "bakes retail to order and loads the whole day's overbake onto the wholesale bake" do
     smith = create(:client, bakery: bakery)
     restaurant = create(:client, bakery: bakery)
     # 25% overbake; retail via a Smith lead-0 override, wholesale via the restaurant --
@@ -167,13 +167,63 @@ describe BakeListData do
 
     pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
 
-    # Retail-lead and wholesale-lead orders for the same product are baked on
-    # different physical days, never the same batch -- each side gets its own
-    # margin against its own quantity: retail ceil(40 * 25 / 100) = 10 -> 50,
-    # wholesale ceil(100 * 25 / 100) = 25 -> 125.
+    # Retail is baked to order (40, no overbake). Overbake is a whole-day
+    # figure sized on the retail + wholesale grand total -- ceil(140 * 25 / 100)
+    # = 35 -- and all of it lands on the wholesale bake: 100 + 35 = 135.
     expect(pick).to include(
-      hash_including(name: "Croissant", retail_quantity: 50, wholesale_quantity: 125, quantity: 175)
+      hash_including(name: "Croissant", retail_quantity: 40, wholesale_quantity: 135, quantity: 175)
     )
+  end
+
+  it "adds the stored RunItem overbake to the wholesale bake once kickoff has run, instead of recomputing" do
+    restaurant = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 1, over_bake: 20)
+    shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    item = create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 100)
+
+    production_run = create(:production_run, bakery: bakery, date: bake_date)
+    item.update!(production_run: production_run)
+    # Deliberately not ceil(100 * 20 / 100) = 20 -- proves the stored value is
+    # read (matching Production Run / Daily Totals), not recomputed.
+    create(:run_item, bakery: bakery, product: croissant, production_run: production_run,
+                      order_quantity: 100, overbake_quantity: 8)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+
+    expect(pick).to include(hash_including(name: "Croissant", retail_quantity: 0, wholesale_quantity: 108))
+  end
+
+  # Reproduces the reported Almond Croissant bug (7/23 Bake List): the wholesale
+  # delivery's production run bakes on (delivery_date - total_lead_days), which
+  # can include shipment items from other delivery dates baking the same day,
+  # so RunItem#order_quantity is larger than this bake list's own wholesale
+  # row. The client wants the full authoritative run overbake on the wholesale
+  # bake regardless (matching Production Run), so the run overbake is added
+  # whole -- and retail carries none of it.
+  it "loads the full production-run overbake onto the wholesale bake even when the run covers more than this row" do
+    restaurant = create(:client, bakery: bakery)
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 1, over_bake: 20)
+    shipment = create(:shipment, bakery: bakery, client: restaurant, date: bake_date + 1.day)
+    item = create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 100)
+
+    production_run = create(:production_run, bakery: bakery, date: bake_date)
+    item.update!(production_run: production_run)
+    # A different delivery date's shipment items also bake on this same run for
+    # the same product, so the run's order_quantity (120) exceeds this bake
+    # list's own wholesale row (100).
+    other_date_shipment = create(:shipment, bakery: bakery, client: create(:client, bakery: bakery), date: bake_date + 3.days)
+    create(:shipment_item, shipment: other_date_shipment, product: croissant, product_quantity: 20,
+                           production_run: production_run)
+    create(:run_item, bakery: bakery, product: croissant, production_run: production_run,
+                      order_quantity: 120, overbake_quantity: 12)
+
+    pick = described_class.new(bakery, bake_date).viennoiserie_pick_items
+
+    # Wholesale bake = its own order (100) + the full authoritative run
+    # overbake (12) = 112. Retail carries none of it.
+    expect(pick).to include(hash_including(name: "Croissant", retail_quantity: 0, wholesale_quantity: 112))
   end
 
   it "leaves items with nothing ordered off the pick, keeping only Pate Fermentee" do

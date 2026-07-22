@@ -115,8 +115,8 @@ class BakeListData
         vienn_pick_row(
           name: product.name,
           pieces_per_tray: product.pieces_per_tray,
-          retail_quantity: quantity_with_overbake(product, retail_rows_by_product[product]),
-          wholesale_quantity: quantity_with_overbake(product, wholesale_rows_by_product[product])
+          retail_quantity: retail_bake_total(product, retail_rows_by_product[product]),
+          wholesale_quantity: wholesale_bake_total(product, wholesale_rows_by_product[product])
         )
       end
       if roule_products.any?
@@ -141,38 +141,49 @@ class BakeListData
     CROISSANT_EXTRA_NAMES.any? { |extra_name| name.casecmp?(extra_name) }
   end
 
-  # Overbake here must match Production Run / Daily Totals exactly for the
-  # same items, since staff rely on it to know how much spare stock genuinely
-  # exists (to patch a mistake, or pull for samples/tests) -- a second,
-  # independently-computed number is worse than useless if it can disagree.
-  # bake_lead_days is only used (via #items_for) to select *which* shipment
-  # items belong on this sheet; it does not stand in for the item's own
-  # production-run identity. Once those items have been picked up by kickoff
-  # (ShipmentItem#production_run_id set), the authoritative overbake for them
-  # already exists on RunItem -- read it from there instead of recomputing.
-  # Only fall back to estimating from order quantity when kickoff hasn't
-  # reached these items yet, so the sheet still shows a number instead of
-  # going blank.
-  #
-  # Retail and wholesale are each sized off their own quantity alone, not a
-  # combined total -- a retail-lead and wholesale-lead order for the same
-  # product are never the same physical batch (production_start is
-  # delivery_date - total_lead_days, and the two lead buckets' delivery
-  # dates are always a day apart), so retail overbake isn't a slice of
-  # wholesale's margin -- it's its own margin against its own quantity, same
-  # as wholesale's.
-  def quantity_with_overbake(product, row)
-    quantity = row ? row[:quantity] : 0
-    authoritative_overbake = run_item_overbake(product, row&.dig(:shipment_items))
-    return quantity + authoritative_overbake if authoritative_overbake
-
-    quantity + (quantity * product.over_bake / 100).ceil
+  # Retail bake = order exactly. Retail is baked to order with no overbake
+  # buffer of its own; the whole day's overbake is carried by the wholesale
+  # bake instead (confirmed with the client -- the Retail Bread sheet shows
+  # order-only totals, the Wholesale Bread sheet carries the overbake).
+  def retail_bake_total(_product, retail_row)
+    retail_row ? retail_row[:quantity] : 0
   end
 
-  # Returns the summed RunItem#overbake_quantity across every production run
-  # these shipment items have already been assigned to, or nil if any of them
-  # haven't been picked up by kickoff yet (no production_run_id set) -- nil
-  # signals "not available yet," distinct from a real zero.
+  # Wholesale bake = its own order quantity plus the entire day's overbake for
+  # this product. Since retail carries none, all of the overbake lands here.
+  def wholesale_bake_total(product, wholesale_row)
+    wholesale_quantity = wholesale_row ? wholesale_row[:quantity] : 0
+    wholesale_quantity + day_overbake(product, wholesale_row)
+  end
+
+  private
+
+  # The overbake for a product on this bake day, all of which goes to the
+  # wholesale bake. It must match Production Run / Daily Totals exactly, since
+  # staff rely on it to know how much spare stock genuinely exists (to patch a
+  # mistake, or pull for samples/tests) -- a second, independently-computed
+  # number is worse than useless if it can disagree.
+  #
+  # Overbake is a whole-day figure: Production Run/Daily Totals size it against
+  # the grand total (all invoices for the day) and store it on RunItem. Once
+  # kickoff has built that run, read RunItem#overbake_quantity for the
+  # wholesale delivery's run(s) directly, so all three documents agree by
+  # construction (this is where the client's 11 comes from -- the real run's
+  # ceil(order * over_bake%), not a re-derivation off the bake list's own
+  # subtotal). Before kickoff (future dates, no run yet), fall back to the
+  # same formula the quantifier uses, sized on the retail + wholesale grand
+  # total so it still reflects the whole day, not the wholesale slice alone.
+  def day_overbake(product, wholesale_row)
+    run_overbake = run_item_overbake(product, wholesale_row&.dig(:shipment_items))
+    return run_overbake if run_overbake
+
+    grand_total = retail_quantity_for(product) + (wholesale_row ? wholesale_row[:quantity] : 0)
+    (grand_total * product.over_bake / 100).ceil
+  end
+
+  # Summed RunItem#overbake_quantity across the production run(s) these
+  # shipment items belong to, or nil when kickoff hasn't built them yet (no
+  # production_run_id) so there is no authoritative number to defer to.
   def run_item_overbake(product, shipment_items)
     return nil if shipment_items.blank?
 
@@ -182,7 +193,15 @@ class BakeListData
     RunItem.where(production_run_id: run_ids.uniq, product_id: product.id).sum(:overbake_quantity)
   end
 
-  private
+  # This product's raw retail order quantity for the day (no overbake), used
+  # only to size the pre-kickoff grand-total overbake fallback. Zero when the
+  # product has no retail-lead orders that day.
+  def retail_quantity_for(product)
+    @_retail_quantity_by_product ||= retail_items.each_with_object({}) do |row, memo|
+      memo[row[:product]] = row[:quantity]
+    end
+    @_retail_quantity_by_product[product].to_i
+  end
 
   def viennoiserie_rows(items)
     items.each_with_object({}) do |row, memo|
@@ -206,11 +225,11 @@ class BakeListData
       # One shared base pastry -- use the family's tray count (they should agree;
       # take the first present when sorted by name for a stable choice).
       pieces_per_tray: products.map(&:pieces_per_tray).compact.first,
-      # Each variant's own overbake is computed (and rounded) before summing
-      # into the collapsed row, not derived from the family's combined total
-      # -- variants can have different over_bake percentages.
-      retail_quantity: products.sum { |product| quantity_with_overbake(product, retail_rows_by_product[product]) },
-      wholesale_quantity: products.sum { |product| quantity_with_overbake(product, wholesale_rows_by_product[product]) }
+      # Each variant's retail (order-only) and wholesale (order + its own
+      # overbake) totals are summed into the collapsed row -- variants can have
+      # different over_bake percentages, so each is figured before summing.
+      retail_quantity: products.sum { |product| retail_bake_total(product, retail_rows_by_product[product]) },
+      wholesale_quantity: products.sum { |product| wholesale_bake_total(product, wholesale_rows_by_product[product]) }
     )
   end
 
@@ -224,9 +243,9 @@ class BakeListData
   def fold_croissant_extras_into_base_row(rows, extra_products, retail_rows_by_product, wholesale_rows_by_product)
     return if extra_products.empty?
 
-    extra_retail = extra_products.sum { |product| quantity_with_overbake(product, retail_rows_by_product[product]) }
+    extra_retail = extra_products.sum { |product| retail_bake_total(product, retail_rows_by_product[product]) }
     extra_wholesale = extra_products.sum { |product|
-      quantity_with_overbake(product, wholesale_rows_by_product[product])
+      wholesale_bake_total(product, wholesale_rows_by_product[product])
     }
     base_row = rows.find { |row| row[:name].strip.casecmp?(CROISSANT_ROW_NAME) }
 
