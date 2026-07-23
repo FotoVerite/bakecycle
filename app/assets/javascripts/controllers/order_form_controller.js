@@ -23,7 +23,7 @@ export default class extends Controller {
     "dailyTotalsRow",
     "submitBtn"
   ]
-  static values = { kickoff: String, orderId: Number, clientId: Number, productPrices: Object }
+  static values = { kickoff: String, orderId: Number, clientId: Number, hasShipment: Boolean, productPrices: Object }
 
   connect() {
     this.updateView()
@@ -392,10 +392,18 @@ export default class extends Controller {
     this.actionWarningTarget.hidden = false
   }
 
+  // Standing orders are always skipped once persisted -- they recur forever,
+  // so "was there enough lead time as of today" only ever mattered at
+  // creation. Temporary/sample orders are single-day, so the same is true
+  // the moment a shipment/invoice has actually been created for them: the
+  // date math below can't tell that a staff member already resolved this via
+  // "Create these invoices" (app/views/orders/edit.html.erb's missing-
+  // invoices banner), so hasShipmentValue (server-rendered) short-circuits it
+  // once that's happened, regardless of order type.
   validateLeadTime() {
     const orderId = this.orderIdValue
     const orderType = this.currentOrderType
-    if (orderId && orderType === "standing") return null
+    if (orderId && (orderType === "standing" || this.hasShipmentValue)) return null
 
     const startDate = this.startDateTarget.value
     if (!startDate || !this.kickoffValue) return null
