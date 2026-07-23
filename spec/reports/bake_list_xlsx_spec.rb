@@ -12,7 +12,8 @@ describe BakeListXlsx do
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     restaurant = create(:client, bakery: bakery, name: "Restaurant")
 
-    baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0)
+    baguette = create(:product, bakery: bakery, name: "Baguette", product_type: "bread", bake_lead_days: 0,
+                                over_bake: 0)
     croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
                                  bake_lead_days: 1, pieces_per_tray: 20, over_bake: 0)
     cookie = create(:product, bakery: bakery, name: "Chocolate Chip Cookie", product_type: "cookie",
@@ -231,6 +232,26 @@ describe BakeListXlsx do
     # order-only (40, no overbake column).
     expect(report.wholesale_rows).to eq([["Cookie", 135, nil, nil]])
     expect(report.retail_rows).to eq([["Cookie", 40, 40, 0]])
+  end
+
+  # Reproduces the reported bug: a product with a retail bake and no wholesale
+  # orders that day was missing from the Wholesale Bread sheet entirely, even
+  # though its overbake (carried wholly by wholesale) still showed on Vienn
+  # Pick's totals and wholesale tray counts.
+  it "still shows the overbake on the Wholesale Bread sheet when a product has no wholesale orders that day" do
+    smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 0, over_bake: 25)
+
+    shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 40)
+
+    report = described_class.new(bakery, bake_date)
+
+    # ceil(40 * 25 / 100) = 10, all of it landing on the Wholesale Bread
+    # sheet even though there's no wholesale order at all.
+    expect(report.wholesale_rows).to eq([["Croissant", 10, nil, nil]])
+    expect(report.retail_rows).to eq([["Croissant", 40, 40, 0]])
   end
 
   it "sizes the overbake off wholesale alone when the product has no retail bake that day" do

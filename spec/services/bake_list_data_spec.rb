@@ -226,6 +226,64 @@ describe BakeListData do
     expect(pick).to include(hash_including(name: "Croissant", retail_quantity: 0, wholesale_quantity: 112))
   end
 
+  # Reproduces the reported bug: a bread-sheet product with retail orders but
+  # no wholesale orders that day was missing from the Wholesale Bread sheet
+  # entirely, even though its overbake (carried wholly by wholesale) still
+  # showed on Vienn Pick, which walks every active on_vienn_pick product
+  # rather than only ones with an existing wholesale row.
+  it "still carries the day's overbake onto the Wholesale Bread sheet for a retail-only product" do
+    smith = create(:client, bakery: bakery, name: "Smith")
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 0, over_bake: 25)
+
+    shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 40)
+
+    data = described_class.new(bakery, bake_date)
+
+    expect(data.wholesale_items).to be_empty
+    # ceil(40 * 25 / 100) = 10, all of it landing on the wholesale bake.
+    expect(data.wholesale_sections).to contain_exactly(
+      hash_including(
+        rows: contain_exactly(hash_including(product: croissant, quantity: 0))
+      )
+    )
+    xlsx = BakeListXlsx.new(bakery, bake_date)
+    expect(xlsx.wholesale_rows).to contain_exactly(["Croissant", 10, nil, nil])
+  end
+
+  it "uses the authoritative RunItem overbake for a retail-only product's Wholesale Bread row once kickoff has run" do
+    smith = create(:client, bakery: bakery, name: "Smith")
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 0, over_bake: 25)
+
+    shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 40)
+
+    production_run = create(:production_run, bakery: bakery, date: bake_date)
+    # Deliberately not ceil(40 * 25 / 100) = 10 -- proves the stored value is
+    # read (matching Production Run / Daily Totals), not recomputed.
+    create(:run_item, bakery: bakery, product: croissant, production_run: production_run,
+                      order_quantity: 40, overbake_quantity: 7)
+
+    xlsx = BakeListXlsx.new(bakery, bake_date)
+
+    expect(xlsx.wholesale_rows).to contain_exactly(["Croissant", 7, nil, nil])
+  end
+
+  it "does not add a Wholesale Bread row for a retail-only product with no overbake" do
+    smith = create(:client, bakery: bakery, name: "Smith")
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie",
+                                 bake_lead_days: 0, over_bake: 0)
+
+    shipment = create(:shipment, bakery: bakery, client: smith, date: bake_date)
+    create(:shipment_item, shipment: shipment, product: croissant, product_quantity: 40)
+
+    data = described_class.new(bakery, bake_date)
+
+    expect(data.wholesale_sections).to be_empty
+  end
+
   it "leaves items with nothing ordered off the pick, keeping only Pate Fermentee" do
     create(:product, bakery: bakery, name: "Croissant", product_type: "vienoisserie", pieces_per_tray: 20)
     # non-viennoiserie and inactive/removed products stay off the pick

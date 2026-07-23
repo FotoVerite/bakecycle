@@ -67,7 +67,7 @@ class BakeListData
   end
 
   def wholesale_sections
-    @_wholesale_sections ||= sections_for(wholesale_items.select { |row| bread_sheet_type?(row) })
+    @_wholesale_sections ||= sections_for(wholesale_bread_sheet_rows)
   end
 
   # The Pull Prep list uses products explicitly marked for pull/prep, while
@@ -158,6 +158,30 @@ class BakeListData
 
   private
 
+  # Wholesale carries the whole day's overbake for every bread-sheet product
+  # (see #wholesale_bake_total), so a product with retail orders but zero
+  # wholesale orders that day still needs a row on the Wholesale Bread sheet
+  # -- otherwise its overbake silently disappears from Wholesale even though
+  # Vienn Pick (which walks every active on_vienn_pick product rather than
+  # only ones with an existing wholesale row) keeps showing it. Only
+  # injected when there's real overbake to show, mirroring the zero-row
+  # omission used elsewhere (retail_items, viennoiserie_pick_items).
+  def wholesale_bread_sheet_rows
+    existing = wholesale_items.select { |row| bread_sheet_type?(row) }
+    covered_products = existing.map { |row| row[:product] }.to_set
+    overbake_only = retail_items
+      .select { |row| bread_sheet_type?(row) && !covered_products.include?(row[:product]) }
+      .filter_map { |row| overbake_only_wholesale_row(row[:product]) }
+    (existing + overbake_only).sort_by { |row| row[:product].name }
+  end
+
+  def overbake_only_wholesale_row(product)
+    row = { quantity: 0, shipment_items: [] }
+    return unless day_overbake(product, row).positive?
+
+    row.merge(product: product, trays: product.trays_for(0), lead_days: WHOLESALE_LEAD_DAYS, client_quantities: {})
+  end
+
   # The overbake for a product on this bake day, all of which goes to the
   # wholesale bake. It must match Production Run / Daily Totals exactly, since
   # staff rely on it to know how much spare stock genuinely exists (to patch a
@@ -174,8 +198,22 @@ class BakeListData
   # same formula the quantifier uses, sized on the retail + wholesale grand
   # total so it still reflects the whole day, not the wholesale slice alone.
   def day_overbake(product, wholesale_row)
-    run_overbake = run_item_overbake(product, wholesale_row&.dig(:shipment_items))
+    shipment_items = wholesale_row&.dig(:shipment_items)
+    run_overbake = run_item_overbake(product, shipment_items)
     return run_overbake if run_overbake
+
+    # No wholesale shipment items of its own to derive a production_run_id
+    # from (a retail-only product's synthetic overbake row) -- fall back to
+    # looking the run up directly by (bakery, bake_date) instead. This is
+    # only a fallback, never overriding the shipment_items-based lookup
+    # above, since ProductionRunService creates exactly one ProductionRun
+    # per bakery/date, so it's unambiguous without needing to assume a
+    # retail item's production_start lines up with the wholesale delivery's
+    # (it needn't -- they can have different total_lead_days).
+    if shipment_items.blank?
+      run_overbake = production_run_overbake(product)
+      return run_overbake if run_overbake
+    end
 
     grand_total = retail_quantity_for(product) + (wholesale_row ? wholesale_row[:quantity] : 0)
     (grand_total * product.over_bake / 100).ceil
@@ -191,6 +229,13 @@ class BakeListData
     return nil if run_ids.any?(&:nil?)
 
     RunItem.where(production_run_id: run_ids.uniq, product_id: product.id).sum(:overbake_quantity)
+  end
+
+  def production_run_overbake(product)
+    run = ProductionRun.find_by(bakery: @bakery, date: @bake_date)
+    return nil unless run
+
+    RunItem.find_by(production_run: run, product: product)&.overbake_quantity
   end
 
   # This product's raw retail order quantity for the day (no overbake), used
@@ -319,16 +364,7 @@ class BakeListData
   end
 
   def bake_date_rows
-    @_bake_date_rows ||= BAKE_LEAD_DAYS.flat_map do |lead|
-      delivery_date = @bake_date + lead.days
-      Shipment.where(bakery: @bakery, date: delivery_date)
-        .includes(:client, shipment_items: :product).flat_map do |shipment|
-        shipment.shipment_items
-          .select { |item| bake_list_product?(item.product) }
-          .select { |item| item.product.bake_lead_days_for(shipment.client) == lead }
-          .map { |item| { item: item, client: shipment.client, delivery_date: delivery_date, lead_days: lead } }
-      end
-    end
+    @_bake_date_rows ||= date_rows_matching { |product| bake_list_product?(product) }
   end
 
   def sections_for(items)
@@ -348,19 +384,26 @@ class BakeListData
   end
 
   def pull_prep_date_rows
-    @_pull_prep_date_rows ||= BAKE_LEAD_DAYS.flat_map do |lead|
-      delivery_date = @bake_date + lead.days
-      Shipment.where(bakery: @bakery, date: delivery_date)
-        .includes(:client, shipment_items: :product).flat_map do |shipment|
-        shipment.shipment_items
-          .select { |item| pull_prep_product?(item.product) }
-          .select { |item| item.product.bake_lead_days_for(shipment.client) == lead }
-          .map { |item| { item: item, client: shipment.client, delivery_date: delivery_date, lead_days: lead } }
-      end
-    end
+    @_pull_prep_date_rows ||= date_rows_matching { |product| pull_prep_product?(product) }
   end
 
   def pull_prep_product?(product)
     product.present? && !product.removed? && !product.inactive? && product.on_pull_list?
+  end
+
+  # Shared by #bake_date_rows and #pull_prep_date_rows -- both walk the same
+  # lead-day/delivery-date schedule and shipment includes, differing only in
+  # which items they keep.
+  def date_rows_matching(&product_filter)
+    BAKE_LEAD_DAYS.flat_map do |lead|
+      delivery_date = @bake_date + lead.days
+      Shipment.where(bakery: @bakery, date: delivery_date)
+        .includes(:client, shipment_items: :product).flat_map do |shipment|
+        shipment.shipment_items
+          .select { |item| product_filter.call(item.product) }
+          .select { |item| item.product.bake_lead_days_for(shipment.client) == lead }
+          .map { |item| { item: item, client: shipment.client, delivery_date: delivery_date, lead_days: lead } }
+      end
+    end
   end
 end
