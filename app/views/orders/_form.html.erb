@@ -5,7 +5,6 @@
     order_form_kickoff_value: @kickoff_time,
     order_form_order_id_value: order.id.to_i,
     order_form_client_id_value: order.client_id.to_i,
-    order_form_has_shipment_value: order.shipments.exists?,
     order_form_product_prices_value: @product_prices.to_json
   }
 } do |f| %>
