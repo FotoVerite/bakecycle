@@ -24,10 +24,10 @@
         <%= render 'topmenusection' %>
         <div class="row">
           <%= render 'nav' if render_nav? %>
-          <div class="<%= class_for_main_content %>">
+          <main id="main-content" class="<%= class_for_main_content %>">
             <%= render 'flash_messages' %>
             <%= yield %>
-          </div>
+          </main>
         </div>
       </div>
     </div>

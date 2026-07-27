@@ -20,6 +20,7 @@ import ExportTriggerController from "./controllers/export_trigger_controller"
 import DisclosureController from "./controllers/disclosure_controller"
 import ReportRangeController from "./controllers/report_range_controller"
 import ComparisonChartController from "./controllers/comparison_chart_controller"
+import ProductionRunItemsController from "./controllers/production_run_items_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -43,5 +44,6 @@ application.register("export-trigger", ExportTriggerController)
 application.register("disclosure", DisclosureController)
 application.register("report-range", ReportRangeController)
 application.register("comparison-chart", ComparisonChartController)
+application.register("production-run-items", ProductionRunItemsController)
 
 export { application }

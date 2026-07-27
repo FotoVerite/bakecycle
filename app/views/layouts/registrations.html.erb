@@ -10,10 +10,10 @@
   </head>
 
   <body class="registration-body">
-    <div>
+    <main id="main-content">
       <%= render 'flash_messages' %>
       <%= yield %>
-    </div>
+    </main>
     <%= javascript_include_tag "application" %>
     <%= render "tracking" %>
   </body>

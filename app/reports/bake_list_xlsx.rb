@@ -11,6 +11,16 @@ class BakeListXlsx
 
   ROULE_TOTAL_NAME = "ROULE TOTAL"
 
+  # BOH trays Almond Croissant and Chocolate Almond Croissant by a different
+  # count when proofing (Pull) than when they go in the oven (Bake), to save
+  # proofing space -- so both bread sheets get a small extra section at the
+  # bottom converting each item's own Total column into tray counts at both
+  # sizes. Deliberately just these two named items, not every product with a
+  # pieces_per_tray (confirmed with the client).
+  TRAY_COUNT_ITEMS = ["Almond Croissant", "Chocolate Almond Croissant"].freeze
+  PULL_TRAY_SIZE = 20
+  BAKE_TRAY_SIZE = 15
+
   # Smith/Franklin are fixed retail-store columns, matched by client name
   # rather than derived from that
   # day's orders -- a store with no order that day still gets a 0, instead of
@@ -65,6 +75,14 @@ class BakeListXlsx
     pull_prep_sections.flat_map { |section| section[:rows].map { |row| other_row_cells(row) } }
   end
 
+  def retail_tray_count_rows
+    tray_count_rows(retail_totals_by_name)
+  end
+
+  def wholesale_tray_count_rows
+    tray_count_rows(wholesale_totals_by_name)
+  end
+
   def viennoiserie_rows
     @data.viennoiserie_pick_items.map do |row|
       # Synthetic fixed-tray rows (e.g. Pate Fermentee) carry their tray count
@@ -101,6 +119,7 @@ class BakeListXlsx
           sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
         end
       end
+      add_tray_count_section(sheet, styles, column_count, retail_tray_count_rows)
       sheet.column_widths 36, 12, *Array.new(column_count - 2, 18)
     end
   end
@@ -120,6 +139,7 @@ class BakeListXlsx
           sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
         end
       end
+      add_tray_count_section(sheet, styles, column_count, wholesale_tray_count_rows)
       sheet.column_widths 36, 12, 14, 14
     end
   end
@@ -197,6 +217,36 @@ class BakeListXlsx
       end
       sheet.column_widths 36, 14, 10, 10, 10, 14, 14, 10, 10, 14, 14
     end
+  end
+
+  def add_tray_count_section(sheet, styles, column_count, rows)
+    sheet.add_row []
+    sheet.add_row ["TRAY COUNTS", "PULL", "BAKE"], style: styles.fetch(:header)
+    rows.each_with_index do |cells, index|
+      sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
+    end
+  end
+
+  # Pull = proofing tray count (20/tray, to save proofing space), Bake = oven
+  # tray count (15/tray) -- both rounded up, since a partial tray still needs
+  # a whole tray (confirmed with the client). Items not present on the sheet
+  # that day still get a row, at 0/0, matching the always-show-both-items
+  # instruction.
+  def tray_count_rows(totals_by_name)
+    TRAY_COUNT_ITEMS.map do |name|
+      total = totals_by_name.fetch(name, 0)
+      [name, (total.to_f / PULL_TRAY_SIZE).ceil, (total.to_f / BAKE_TRAY_SIZE).ceil]
+    end
+  end
+
+  def retail_totals_by_name
+    retail_sections.flat_map { |section| section[:rows] }
+      .each_with_object({}) { |row, memo| memo[row[:product].name] = row[:quantity] }
+  end
+
+  def wholesale_totals_by_name
+    wholesale_sections.flat_map { |section| section[:rows] }
+      .each_with_object({}) { |row, memo| memo[row[:product].name] = wholesale_total(row) }
   end
 
   def wholesale_section_rows(section)

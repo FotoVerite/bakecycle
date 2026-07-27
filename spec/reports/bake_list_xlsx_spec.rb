@@ -104,6 +104,38 @@ describe BakeListXlsx do
     )
   end
 
+  it "adds a Tray Counts section to the Retail and Wholesale sheets for Almond Croissant and Chocolate Almond Croissant" do
+    almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
+                              bake_lead_days: 0, over_bake: 0)
+    choc_almond = create(:product, bakery: bakery, name: "Chocolate Almond Croissant", product_type: "vienoisserie",
+                                   bake_lead_days: 1, over_bake: 0)
+
+    retail_shipment = create(:shipment, bakery: bakery, date: bake_date)
+    create(:shipment_item, shipment: retail_shipment, product: almond, product_quantity: 24)
+
+    wholesale_shipment = create(:shipment, bakery: bakery, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: choc_almond, product_quantity: 13)
+
+    report = described_class.new(bakery, bake_date)
+
+    # Almond Croissant: 24 retail, 0 wholesale that day -- Pull rounds 24/20
+    # up to 2, Bake rounds 24/15 up to 2. Chocolate Almond Croissant: 0
+    # retail, 13 wholesale -- Pull rounds 13/20 up to 1, Bake rounds 13/15 up
+    # to 1. Both items always appear, even at 0.
+    expect(report.retail_tray_count_rows).to eq(
+      [
+        ["Almond Croissant", 2, 2],
+        ["Chocolate Almond Croissant", 0, 0]
+      ]
+    )
+    expect(report.wholesale_tray_count_rows).to eq(
+      [
+        ["Almond Croissant", 0, 0],
+        ["Chocolate Almond Croissant", 1, 1]
+      ]
+    )
+  end
+
   it "collapses Roule flavors into one Vienn Pick row and appends a fixed Pate Fermentee tray row" do
     roule_cinnamon = create(:product, bakery: bakery, name: "Roule, Cinnamon", product_type: "vienoisserie",
                                       bake_lead_days: 1, pieces_per_tray: 120, over_bake: 0)

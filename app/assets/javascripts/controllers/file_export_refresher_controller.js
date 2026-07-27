@@ -8,6 +8,7 @@ export default class extends Controller {
   static targets = ["message", "status"]
 
   connect() {
+    this.disconnected = false
     this.startTime = Date.now()
     this.errorCount = 0
     this.messageTarget.textContent = this.loadingMessageValue
@@ -15,7 +16,9 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.disconnected = true
     clearTimeout(this.timeout)
+    this.abortController?.abort()
   }
 
   stop(message) {
@@ -23,12 +26,17 @@ export default class extends Controller {
   }
 
   poll() {
+    if (this.disconnected) return
     if (Date.now() - this.startTime >= TIMEOUT_MS) {
       this.stop("Report generation timed out after 5 minutes. Please try again.")
       return
     }
 
-    fetch(this.selfUrlValue, { headers: { Accept: "application/json" } })
+    this.abortController = new AbortController()
+    fetch(this.selfUrlValue, {
+      headers: { Accept: "application/json" },
+      signal: this.abortController.signal
+    })
       .then(r => {
         if (r.status === 404) {
           this.stop("This report is no longer available.")
@@ -48,7 +56,7 @@ export default class extends Controller {
         return r.json()
       })
       .then(data => {
-        if (!data) return
+        if (!data || this.disconnected) return
         const export_ = data.fileExport || data
         if (export_["ready?"]) {
           window.location.replace(export_.links.file)
@@ -56,7 +64,8 @@ export default class extends Controller {
           this.timeout = setTimeout(() => this.poll(), 1000)
         }
       })
-      .catch(() => {
+      .catch(error => {
+        if (error.name === "AbortError" || this.disconnected) return
         this.errorCount++
         if (this.errorCount >= MAX_ERRORS) {
           this.stop("Unable to reach the server. Please try again.")

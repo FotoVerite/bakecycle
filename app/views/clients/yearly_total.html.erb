@@ -8,9 +8,9 @@ p {
 }
 
 </style>
-<h1 style="font-size:12px;text-align:center;">Bakecycle Sales Report<h1>
+<h1 style="font-size:12px;text-align:center;">Bakecycle Sales Report</h1>
 <p style="border:none;margin-bottom:24px;">Jan. 2020–Dec. 2020 | Bien Cuit Wholesale</p>
-<h2 style="margin-bottom:48px;"><%=@start_date.strftime("%A %B %e, %Y")%> - <%=@end_date.strftime("%A %B %e, %Y")%> <h2>
+<h2 style="margin-bottom:48px;"><%=@start_date.strftime("%A %B %e, %Y")%> - <%=@end_date.strftime("%A %B %e, %Y")%></h2>
 <h3>Clients</h3>
 <% @total = 0 %>
  <% @clients.each do |client| %>

@@ -35,14 +35,14 @@
 
 .cta-btn {
   @extend .default-btn;
-  background-color: $bc-shakespeare;
+  background-color: $bc-shakespeare-strong;
   color: $bc-white;
   font-size: 12px;
   padding: 0 50px;
 
   &:hover,
   &:focus {
-    background-color: color.adjust($bc-shakespeare, $lightness: -5%);
+    background-color: color.adjust($bc-shakespeare-strong, $lightness: -5%);
     color: $bc-white;
   }
 }
@@ -67,12 +67,13 @@
 
 button,
 .button {
-  background-color: $bc-shakespeare;
+  background-color: $bc-shakespeare-strong;
+  color: $bc-white;
   transition: background-color 160ms $bc-ease-out, transform 100ms $bc-ease-out;
 
   &:hover,
   &:focus {
-    background-color: color.adjust($bc-shakespeare, $lightness: -10%);
+    background-color: color.adjust($bc-shakespeare-strong, $lightness: -10%);
   }
 
   // Press feedback so buttons feel like they're listening, not just static
