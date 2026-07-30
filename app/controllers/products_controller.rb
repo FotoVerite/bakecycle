@@ -154,7 +154,7 @@ class ProductsController < ApplicationController
     @query = ProductProjectionsQuery.new(current_bakery, @start_date, @end_date, category_buffers: @category_buffers)
     @category_summary = @query.category_summary
 
-    rows = @query.rows.select { |row| row.baseline.positive? || row.quantity.positive? }
+    rows = @query.rows.select { |row| row.baseline.positive? || row.quantity.positive? || row.confirmed_quantity.positive? }
 
     # One row per product, dates as columns -- the flat (date, product) list this
     # is built from was unreadable at 600+ rows for a single week. Search/category

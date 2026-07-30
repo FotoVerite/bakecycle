@@ -8589,6 +8589,28 @@ span.negative {
   margin-bottom: 0.25rem;
   text-transform: uppercase;
 }
+.report-page .report-toolbar-note .projections-legend {
+  color: #5a5a5a;
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  margin: 4px 0 0;
+  text-transform: none;
+}
+.report-page .report-toolbar-note .projections-legend .projections-legend-item {
+  display: inline;
+  font-weight: 700;
+  letter-spacing: normal;
+  margin: 0;
+  text-transform: none;
+}
+.report-page .report-toolbar-note .projections-legend .projections-short {
+  color: #eb3232;
+}
+.report-page .report-toolbar-note .projections-legend .projections-covered {
+  color: #4f6b3d;
+}
 .report-page .report-actions {
   align-items: center;
   display: flex;
@@ -8907,6 +8929,51 @@ span.negative {
 }
 .report-page thead .projections-weekend {
   color: rgb(35.7714285714, 111.7857142857, 152.0285714286);
+}
+.report-page tbody .projections-short {
+  color: #eb3232;
+  font-weight: 700;
+}
+.report-page tbody .projections-covered {
+  color: #4f6b3d;
+}
+.report-page .projections-cell {
+  line-height: 1.25;
+  position: relative;
+  white-space: nowrap;
+}
+.report-page .projections-cell[aria-label]::after {
+  background: #323c46;
+  border-radius: 4px;
+  bottom: 100%;
+  color: #fff;
+  content: attr(aria-label);
+  font-size: 0.72rem;
+  font-weight: 400;
+  left: 50%;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  opacity: 0;
+  padding: 6px 10px;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%);
+  transition: opacity 80ms cubic-bezier(0.23, 1, 0.32, 1);
+  white-space: normal;
+  width: 190px;
+  z-index: 20;
+}
+.report-page .projections-cell[aria-label]:hover::after {
+  opacity: 1;
+}
+.report-page .projections-confirmed {
+  display: block;
+}
+.report-page .projections-gap {
+  display: block;
+  font-size: 0.72em;
+  font-weight: 700;
+  opacity: 0.8;
 }
 .report-page .comparison-empty {
   color: #5a5a5a;

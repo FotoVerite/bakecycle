@@ -35,7 +35,21 @@ class ProductProjectionsQuery
     Product.product_types.keys - EXCLUDED_CATEGORIES
   end
 
-  Row = Struct.new(:date, :product, :baseline, :seasonal_change, :buffer_percent, :quantity, keyword_init: true)
+  Row = Struct.new(
+    :date, :product, :baseline, :seasonal_change, :buffer_percent, :quantity, :confirmed_quantity,
+    keyword_init: true
+  ) do
+    # Whether the confirmed order total for this date is enough to cover what
+    # history says to expect -- the actionable question this report exists to
+    # answer, e.g. "do we need to bake more than what's currently ordered?"
+    def short?
+      confirmed_quantity < quantity
+    end
+
+    def gap
+      quantity - confirmed_quantity
+    end
+  end
 
   def initialize(bakery, start_date, end_date, category_buffers: {})
     @bakery = bakery
@@ -56,7 +70,8 @@ class ProductProjectionsQuery
         quantity = (baseline * (1 + seasonal_change) * (1 + (buffer_percent / 100.0))).round
 
         Row.new(date: date, product: product, baseline: baseline, seasonal_change: seasonal_change,
-          buffer_percent: buffer_percent, quantity: quantity)
+          buffer_percent: buffer_percent, quantity: quantity,
+          confirmed_quantity: confirmed[[date, product.id]] || 0)
       end
     end.sort_by { |row| [row.date, row.product.name] }
   end
@@ -102,6 +117,17 @@ class ProductProjectionsQuery
   # invoice source) for every date either the 4-week baseline or the
   # year-over-year seasonal comparison could need, keyed by [date, product_id].
   # One query for the whole report instead of one per date/product.
+  # Real confirmed orders (standing + temporary) for the report's own date
+  # range -- what production would already cover if it only baked to what's
+  # on the books today. This is the number the projection needs to be
+  # compared against; a projection with nothing to anchor it to is just a
+  # forecast floating with no way to tell if it means "you're covered" or
+  # "you're about to run short."
+  def confirmed
+    @confirmed ||= ProductTotalsQuery.new(@bakery, @start_date, @end_date, source: "order_projection")
+      .totals.each_with_object({}) { |(date, product, qty), h| h[[date, product.id]] = qty }
+  end
+
   def history
     @history ||= begin
       lookback_start = @start_date - ((LOOKBACK_OCCURRENCES * 7) + 6).days

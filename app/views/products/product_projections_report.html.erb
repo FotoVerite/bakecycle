@@ -19,10 +19,6 @@
         </div>
         <%= button_tag "#{icon('chart-bar')} Generate Projections".html_safe, class: "button search-button" %>
       </div>
-      <div class="report-toolbar-note">
-        <span>Product Projections</span>
-        4-week median &times; seasonal trend &times; buffer.
-      </div>
     </div>
 
     <details class="projections-categories">
@@ -113,9 +109,14 @@
                   <% (@start_date..@end_date).each do |date| %>
                     <% row = by_date[date] %>
                     <td data-title="<%= date.strftime('%a %-m/%-d') %>"
-                      class="comparison-number <%= 'projections-weekend' if date.saturday? || date.sunday? %>"
-                      <% if row %>title="4-wk median <%= number_with_precision(row.baseline, precision: row.baseline == row.baseline.to_i ? 0 : 1) %> &middot; seasonal <%= format('%+.1f%%', row.seasonal_change * 100) %> &middot; buffer +<%= number_with_precision(row.buffer_percent, precision: row.buffer_percent == row.buffer_percent.to_i ? 0 : 1) %>%"<% end %>>
-                      <%= row ? row.quantity : "&ndash;".html_safe %>
+                      class="comparison-number projections-cell <%= 'projections-weekend' if date.saturday? || date.sunday? %> <%= row ? (row.short? ? 'projections-short' : 'projections-covered') : '' %>"
+                      <% if row %>aria-label="<%= number_with_precision(row.baseline, precision: row.baseline == row.baseline.to_i ? 0 : 1) %> median &rarr; <%= format('%+.1f%%', row.seasonal_change * 100) %> seasonal &rarr; +<%= number_with_precision(row.buffer_percent, precision: row.buffer_percent == row.buffer_percent.to_i ? 0 : 1) %>% buffer &rarr; <%= row.quantity %> expected"<% end %>>
+                      <% if row %>
+                        <span class="projections-confirmed"><%= row.confirmed_quantity %></span>
+                        <span class="projections-gap"><%= row.short? ? "&minus;#{row.gap.abs}".html_safe : "+#{row.gap.abs}" %></span>
+                      <% else %>
+                        &ndash;
+                      <% end %>
                     </td>
                   <% end %>
                 </tr>

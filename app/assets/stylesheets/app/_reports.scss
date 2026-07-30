@@ -156,6 +156,34 @@
       margin-bottom: 0.25rem;
       text-transform: uppercase;
     }
+
+    // Overrides the generic `span` eyebrow-label styling above -- this is
+    // inline legend copy, not another section label.
+    .projections-legend {
+      color: $bc-scorpion;
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: normal;
+      margin: 4px 0 0;
+      text-transform: none;
+
+      .projections-legend-item {
+        display: inline;
+        font-weight: 700;
+        letter-spacing: normal;
+        margin: 0;
+        text-transform: none;
+      }
+
+      .projections-short {
+        color: $bc-alizarin-crimson;
+      }
+
+      .projections-covered {
+        color: $bc-fulfillment-fg;
+      }
+    }
   }
 
   .report-actions {
@@ -570,6 +598,68 @@
 
   thead .projections-weekend {
     color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+
+  // Confirmed orders vs. expected demand -- the actionable read of each
+  // cell. Text color only (matches .comparison-diff--short/--over
+  // elsewhere in this file), not a background wash, so the weekend tint
+  // above can still combine with it without turning into a color clash.
+  tbody .projections-short {
+    color: $bc-alizarin-crimson;
+    font-weight: 700;
+  }
+
+  tbody .projections-covered {
+    color: $bc-fulfillment-fg;
+  }
+
+  // The gap (how far off, not just which direction) is what actually makes
+  // a cell scannable -- a color alone can't tell "short by 1" from "short
+  // by 90" apart without hovering every cell in the table.
+  // Plain CSS tooltip -- same content-in-attr pattern as .icon-link-tooltip
+  // elsewhere in the app. A native `title` attribute has a browser-fixed
+  // ~1s hover delay with no way to shorten it; this appears in 80ms.
+  .projections-cell {
+    line-height: 1.25;
+    position: relative;
+    white-space: nowrap;
+
+    &[aria-label]::after {
+      background: $bc-limed-spruce;
+      border-radius: 4px;
+      bottom: 100%;
+      color: $bc-white;
+      content: attr(aria-label);
+      font-size: 0.72rem;
+      font-weight: 400;
+      left: 50%;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      opacity: 0;
+      padding: 6px 10px;
+      pointer-events: none;
+      position: absolute;
+      transform: translateX(-50%);
+      transition: opacity 80ms $bc-ease-out;
+      white-space: normal;
+      width: 190px;
+      z-index: 20;
+    }
+
+    &[aria-label]:hover::after {
+      opacity: 1;
+    }
+  }
+
+  .projections-confirmed {
+    display: block;
+  }
+
+  .projections-gap {
+    display: block;
+    font-size: 0.72em;
+    font-weight: 700;
+    opacity: 0.8;
   }
 
   .comparison-empty {
