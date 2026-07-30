@@ -3405,7 +3405,7 @@ button[disabled] {
   text-align: right !important;
 }
 
-.papertrail-section, .report-page.nightly-sign-off-page .sign-off-date-nav, .report-page .comparison-empty, .report-page .comparison-chart-panel, .report-page .button.secondary, .report-page .registration .registration-button label.secondary, .registration .registration-button .report-page label.secondary, .report-page .registration .button.registration-button-group, .report-page .registration .registration-button label.registration-button-group, .registration .report-page .button.registration-button-group, .registration .report-page .registration-button label.registration-button-group, .registration .registration-button .report-page label.registration-button-group, .report-page .report-header,
+.papertrail-section, .report-page.nightly-sign-off-page .sign-off-date-nav, .report-page .comparison-empty, .report-page .projections-filter-bar, .report-page .projections-categories, .report-page .comparison-chart-panel, .report-page .button.secondary, .report-page .registration .registration-button label.secondary, .registration .registration-button .report-page label.secondary, .report-page .registration .button.registration-button-group, .report-page .registration .registration-button label.registration-button-group, .registration .report-page .button.registration-button-group, .registration .report-page .registration-button label.registration-button-group, .registration .registration-button .report-page label.registration-button-group, .report-page .report-header,
 .report-page .report-toolbar,
 .report-page .report-actions, .cancellation-page .cancellation-results, .cancellation-page .cancellation-preview, .cancellation-page .cancellation-cart, .cancellation-page .cancellation-available, .cancellation-page .cancellation-toolbar, .responsive-table, .pinned-action-move, .pinned-action-remove, .pinned-actions-section, .index-alert-panel, .index-actions, .index-empty-state, .index-filter-feedback, .index-page .index-header, .upcoming-invoices-panel, .nested-icon-btn, .form-section, .form-page .form-header, .dashboard .dashboard-charts .dashboard-chart-reset, .dashboard .dashboard-charts > div, .dashboard .dashboard-workspace, .dashboard .dashboard-header, .client-detail-section, .client-summary-item {
   background: #fff;
@@ -3436,13 +3436,13 @@ button[disabled] {
   }
 }
 .cta-btn {
-  background-color: #55aad7;
+  background-color: #287da9;
   color: #fff;
   font-size: 12px;
   padding: 0 50px;
 }
 .cta-btn:hover, .cta-btn:focus {
-  background-color: rgb(64.3571428571, 159.6785714286, 210.1428571429);
+  background-color: rgb(35.1196172249, 109.7488038278, 148.3803827751);
   color: #fff;
 }
 
@@ -3464,7 +3464,8 @@ button[disabled] {
 button,
 .button,
 .registration .registration-button label {
-  background-color: #55aad7;
+  background-color: #287da9;
+  color: #fff;
   transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1), transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 button:hover, button:focus,
@@ -3472,7 +3473,7 @@ button:hover, button:focus,
 .registration .registration-button label:hover,
 .button:focus,
 .registration .registration-button label:focus {
-  background-color: rgb(47.4285714286, 148.2142857143, 201.5714285714);
+  background-color: rgb(30.2392344498, 94.4976076555, 127.7607655502);
 }
 button:active,
 .button:active,
@@ -7136,6 +7137,13 @@ select.inline {
     -webkit-transform: scale(1);
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .loading-indicator div {
+    -webkit-animation: none;
+    animation: none;
+    opacity: 0.65;
+  }
+}
 .map-container {
   height: 350px;
   width: 100%;
@@ -8717,6 +8725,189 @@ span.negative {
 .report-page .comparison-diff--zero {
   color: #5a5a5a;
 }
+.report-page .projections-categories {
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+}
+.report-page .projections-categories[open] summary {
+  margin-bottom: 4px;
+}
+.report-page .projections-categories summary {
+  color: #555;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  list-style: none;
+}
+.report-page .projections-categories summary::-webkit-details-marker {
+  display: none;
+}
+.report-page .projections-categories summary::before {
+  color: rgb(47.4285714286, 148.2142857143, 201.5714285714);
+  content: "▸";
+  display: inline-block;
+  margin-right: 8px;
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.report-page .projections-categories summary:focus-visible {
+  outline: 2px solid rgb(51.9714285714, 153.4857142857, 207.2285714286);
+  outline-offset: 2px;
+}
+.report-page .projections-categories[open] summary::before {
+  transform: rotate(90deg);
+}
+.report-page .projections-categories-note {
+  color: #5a5a5a;
+  font-size: 0.82rem;
+  margin: 4px 0 16px;
+  max-width: 62ch;
+}
+.report-page .projections-category-table th[scope=col] {
+  color: #5a5a5a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding-bottom: 8px;
+  text-transform: uppercase;
+}
+.report-page .projections-category-table th[scope=row] {
+  color: #555;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.report-page .projections-category-table tbody td,
+.report-page .projections-category-table tbody th {
+  padding-bottom: 0.55rem;
+  padding-top: 0.55rem;
+}
+.report-page .projections-category-table .comparison-number {
+  width: 8rem;
+}
+.report-page .projections-seasonal {
+  color: #5a5a5a;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.report-page .projections-change--up {
+  color: #4f6b3d;
+}
+.report-page .projections-change--down {
+  color: #eb3232;
+}
+.report-page .projections-buffer-input {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  display: inline-flex;
+  padding: 0 10px;
+}
+.report-page .projections-buffer-input input {
+  appearance: textfield;
+  -moz-appearance: textfield;
+  border: 0;
+  box-shadow: none;
+  font-size: 0.9rem;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  text-align: right;
+  width: 4.5rem;
+}
+.report-page .projections-buffer-input input::-webkit-outer-spin-button, .report-page .projections-buffer-input input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+.report-page .projections-buffer-input span {
+  color: #5a5a5a;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+.report-page .projections-filter-bar {
+  align-items: flex-end;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 16px 20px;
+}
+.report-page .projections-filter-bar input[type=search],
+.report-page .projections-filter-bar select {
+  border: 1px solid #e1e1e1;
+  box-shadow: inset 0 1px 2px rgba(50, 60, 70, 0.04);
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  height: 38px;
+  margin: 0;
+  padding: 0 10px;
+}
+.report-page .projections-search-field input {
+  min-width: 220px;
+}
+.report-page .projections-result-count {
+  color: #5a5a5a;
+  font-size: 0.82rem;
+  margin: 0 0 9px auto;
+}
+.report-page .projections-result-count strong {
+  color: #555;
+}
+.report-page .projections-print-btn {
+  align-items: center;
+  display: inline-flex;
+  height: 38px;
+  line-height: 1;
+  margin: 0;
+}
+.report-page .projections-print-btn .bc-icon {
+  margin-right: 6px;
+}
+.report-page .projections-print-title {
+  display: none;
+}
+.report-page .projections-table-card {
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  overflow: hidden;
+  padding: 0;
+}
+.report-page .projections-table-card .projections-no-match {
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+}
+.report-page .projections-table-scroll {
+  max-height: 72vh;
+  overflow: auto;
+}
+.report-page .projections-table thead th {
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.report-page .projections-table thead th.comparison-number {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  width: 3.6rem;
+}
+.report-page .projections-table tbody th[scope=row] {
+  background: #fff;
+  left: 0;
+  position: sticky;
+}
+.report-page .projections-table tbody tr:nth-child(even) th[scope=row] {
+  background: #f3f3f3;
+}
+.report-page .projections-weekend {
+  background: hsl(200.7692307692, 61.9047619048%, 101.8235294118%);
+}
+.report-page thead .projections-weekend {
+  color: rgb(35.7714285714, 111.7857142857, 152.0285714286);
+}
 .report-page .comparison-empty {
   color: #5a5a5a;
   margin-bottom: 16px;
@@ -9184,6 +9375,38 @@ span.negative {
   .content-bg,
   .wrapper {
     padding: 0 !important;
+  }
+  .report-page.projections-page .report-header,
+  .report-page.projections-page .projections-form,
+  .report-page.projections-page .projections-filter-bar,
+  .report-page.projections-page .report-back-link {
+    display: none !important;
+  }
+  .report-page.projections-page .projections-print-title {
+    display: block;
+    font-size: 14pt;
+    margin: 0 0 0.5rem;
+  }
+  .report-page.projections-page .projections-table-card {
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+  }
+  .report-page.projections-page .projections-table-scroll {
+    max-height: none;
+    overflow: visible;
+  }
+  .report-page.projections-page .projections-table {
+    font-size: 9pt;
+  }
+  .report-page.projections-page .projections-table thead th {
+    position: static;
+  }
+  .report-page.projections-page .projections-table tbody th[scope=row] {
+    position: static;
+  }
+  .report-page.projections-page .projections-table tbody tr {
+    page-break-inside: avoid;
   }
 }
 .side-column {

@@ -1,0 +1,141 @@
+<% provide(:title, "Product Projections") %>
+
+<div class="report-page report-generator-page projections-page">
+  <%= render "shared/report_header",
+    title: "Product Projections",
+    date_text: "#{@start_date.strftime('%A %b. %e, %Y')} to #{@end_date.strftime('%A %b. %e, %Y')}",
+    status: "Projection" %>
+
+  <%= form_with url: product_projections_report_products_path, method: :get, class: "report-print-form projections-form" do %>
+    <div class="report-toolbar projections-toolbar">
+      <div class="comparison-form">
+        <div class="comparison-field">
+          <label for="projections_date">Start</label>
+          <input type="date" id="projections_date" name="date" value="<%= @start_date.iso8601 %>">
+        </div>
+        <div class="comparison-field">
+          <label for="projections_end_date">End</label>
+          <input type="date" id="projections_end_date" name="end_date" value="<%= @end_date.iso8601 %>">
+        </div>
+        <%= button_tag "#{icon('chart-bar')} Generate Projections".html_safe, class: "button search-button" %>
+      </div>
+      <div class="report-toolbar-note">
+        <span>Product Projections</span>
+        4-week median &times; seasonal trend &times; buffer.
+      </div>
+    </div>
+
+    <details class="projections-categories">
+      <summary>Category adjustments</summary>
+      <p class="projections-categories-note">
+        Seasonal: this week vs. last week, one year ago. Buffer: your call, defaults to 10%.
+      </p>
+      <table class="responsive-table projections-category-table">
+        <thead>
+          <tr>
+            <th scope="col">Category</th>
+            <th scope="col" class="comparison-number">Seasonal</th>
+            <th scope="col" class="comparison-number">Buffer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% ProductProjectionsQuery.chooser_categories.sort.each do |category| %>
+            <% change = @category_summary[category] || 0.0 %>
+            <tr>
+              <th scope="row" data-title="Category"><%= category.humanize %></th>
+              <td data-title="Seasonal" class="comparison-number">
+                <span class="projections-seasonal <%= change.negative? ? 'projections-change--down' : (change.positive? ? 'projections-change--up' : '') %>">
+                  <%= format("%+.1f%%", change * 100) %>
+                </span>
+              </td>
+              <td data-title="Buffer" class="comparison-number">
+                <div class="projections-buffer-input">
+                  <input type="number" step="0.1" min="0"
+                    id="buffer_<%= category %>"
+                    name="category_buffers[<%= category %>]"
+                    aria-label="Buffer percent for #{category.humanize}"
+                    value="<%= @category_buffers[category] || ProductProjectionsQuery::DEFAULT_BUFFER_PERCENT %>">
+                  <span>%</span>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </details>
+  <% end %>
+
+  <div data-controller="projections-table-filter">
+    <div class="projections-filter-bar">
+      <div class="comparison-field projections-search-field">
+        <label for="projections_q">Search</label>
+        <input type="search" id="projections_q" placeholder="e.g. Croissant"
+          data-projections-table-filter-target="searchInput"
+          data-action="input->projections-table-filter#filter">
+      </div>
+      <div class="comparison-field">
+        <label for="projections_category">Category</label>
+        <%= select_tag :projections_category,
+          options_for_select([["All categories", ""]] + ProductProjectionsQuery.chooser_categories.sort.map { |c| [c.humanize, c] }),
+          id: "projections_category",
+          data: { projections_table_filter_target: "categorySelect", action: "change->projections-table-filter#filter" } %>
+      </div>
+      <p class="projections-result-count">
+        Showing <strong data-projections-table-filter-target="resultCount"><%= @grouped_rows.size %></strong> of <%= @grouped_rows.size %> products
+      </p>
+      <button class="button small secondary projections-print-btn" onclick="window.print(); return false;" type="button">
+        <%= icon("printer") %> Print
+      </button>
+    </div>
+
+    <% if @grouped_rows.any? %>
+      <div class="card projections-table-card">
+        <h1 class="projections-print-title">
+          Product Projections &mdash; <%= @start_date.strftime("%b %-d") %>&ndash;<%= @end_date.strftime("%b %-d, %Y") %>
+        </h1>
+        <div class="table-scroll projections-table-scroll">
+          <table class="responsive-table report-table projections-table">
+            <thead>
+              <tr>
+                <th scope="col" class="product-title">Product</th>
+                <th scope="col">Category</th>
+                <% (@start_date..@end_date).each do |date| %>
+                  <th scope="col" class="comparison-number <%= 'projections-weekend' if date.saturday? || date.sunday? %>">
+                    <%= date.strftime("%a") %><br><%= date.strftime("%-m/%-d") %>
+                  </th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% @grouped_rows.each do |product, by_date| %>
+                <tr data-projections-table-filter-target="row"
+                  data-product-name="<%= product.name.downcase %>"
+                  data-category="<%= product.product_type %>">
+                  <th scope="row"><%= product.name %></th>
+                  <td data-title="Category"><%= product.product_type.humanize %></td>
+                  <% (@start_date..@end_date).each do |date| %>
+                    <% row = by_date[date] %>
+                    <td data-title="<%= date.strftime('%a %-m/%-d') %>"
+                      class="comparison-number <%= 'projections-weekend' if date.saturday? || date.sunday? %>"
+                      <% if row %>title="4-wk median <%= number_with_precision(row.baseline, precision: row.baseline == row.baseline.to_i ? 0 : 1) %> &middot; seasonal <%= format('%+.1f%%', row.seasonal_change * 100) %> &middot; buffer +<%= number_with_precision(row.buffer_percent, precision: row.buffer_percent == row.buffer_percent.to_i ? 0 : 1) %>%"<% end %>>
+                      <%= row ? row.quantity : "&ndash;".html_safe %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="comparison-empty projections-no-match" data-projections-table-filter-target="emptyState" hidden>
+          <h2>No products match this search.</h2>
+        </div>
+      </div>
+    <% else %>
+      <div class="comparison-empty">
+        <h2>No delivery history to project from for this date range.</h2>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>

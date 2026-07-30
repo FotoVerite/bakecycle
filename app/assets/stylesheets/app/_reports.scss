@@ -332,6 +332,246 @@
     color: $bc-scorpion;
   }
 
+  // Product Projections
+  //
+  // Structure: toolbar (date range) -> category adjustments (seasonal % read,
+  // buffer % editable, one row per category, no duplication between the two)
+  // -> filter bar (search + category scope) -> results, one row per PRODUCT
+  // with dates as columns. The original layout repeated all 10 categories
+  // twice (a buffer grid, then a summary grid) and listed one row per
+  // (date, product) pair -- 600+ rows for a single week. Pivoting to
+  // product-as-row/date-as-column and merging the two category lists into
+  // one table cuts both problems at the structural level instead of masking
+  // them with more filtering alone.
+  .projections-categories {
+    @extend %bc-card;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 18px 20px;
+
+    &[open] summary {
+      margin-bottom: 4px;
+    }
+
+    summary {
+      color: $bc-charcoal;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      list-style: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        color: color.adjust($bc-shakespeare, $lightness: -10%);
+        content: "\25B8";
+        display: inline-block;
+        margin-right: 8px;
+        transition: transform 120ms $bc-ease-out;
+      }
+
+      &:focus-visible {
+        outline: 2px solid color.adjust($bc-shakespeare, $lightness: -8%);
+        outline-offset: 2px;
+      }
+    }
+
+    &[open] summary::before {
+      transform: rotate(90deg);
+    }
+  }
+
+  .projections-categories-note {
+    color: $bc-scorpion;
+    font-size: 0.82rem;
+    margin: 4px 0 16px;
+    max-width: 62ch;
+  }
+
+  .projections-category-table {
+    th[scope="col"] {
+      color: $bc-scorpion;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    th[scope="row"] {
+      color: $bc-charcoal;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    tbody td,
+    tbody th {
+      padding-bottom: 0.55rem;
+      padding-top: 0.55rem;
+    }
+
+    .comparison-number {
+      width: 8rem;
+    }
+  }
+
+  .projections-seasonal {
+    color: $bc-scorpion;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .projections-change--up {
+    color: $bc-fulfillment-fg;
+  }
+
+  .projections-change--down {
+    color: $bc-alizarin-crimson;
+  }
+
+  // Buffer % inputs: plain type=number for numeric keyboards/validation, but
+  // the native up/down spinner is fiddly at this size -- hidden here only,
+  // not globally, since other numeric fields in the app may want it.
+  .projections-buffer-input {
+    align-items: center;
+    background: $bc-white;
+    border: 1px solid $bc-border-grey;
+    border-radius: 4px;
+    display: inline-flex;
+    padding: 0 10px;
+
+    input {
+      appearance: textfield;
+      -moz-appearance: textfield;
+      border: 0;
+      box-shadow: none;
+      font-size: 0.9rem;
+      height: 34px;
+      margin: 0;
+      padding: 0;
+      text-align: right;
+      width: 4.5rem;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        appearance: none;
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    span {
+      color: $bc-scorpion;
+      font-size: 0.85rem;
+      margin-left: 4px;
+    }
+  }
+
+  .projections-filter-bar {
+    @extend %bc-card;
+    align-items: flex-end;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 16px 20px;
+
+    input[type="search"],
+    select {
+      border: 1px solid $bc-border-grey;
+      box-shadow: inset 0 1px 2px rgba(50, 60, 70, 0.04);
+      box-sizing: border-box;
+      font-size: 0.9rem;
+      height: 38px;
+      margin: 0;
+      padding: 0 10px;
+    }
+  }
+
+  .projections-search-field input {
+    min-width: 220px;
+  }
+
+  .projections-result-count {
+    color: $bc-scorpion;
+    font-size: 0.82rem;
+    margin: 0 0 9px auto;
+
+    strong {
+      color: $bc-charcoal;
+    }
+  }
+
+  .projections-print-btn {
+    align-items: center;
+    display: inline-flex;
+    height: 38px;
+    line-height: 1;
+    margin: 0;
+
+    .bc-icon {
+      margin-right: 6px;
+    }
+  }
+
+  .projections-print-title {
+    display: none;
+  }
+
+  .projections-table-card {
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    overflow: hidden;
+    padding: 0;
+
+    .projections-no-match {
+      border: 0;
+      box-shadow: none;
+      margin: 0;
+    }
+  }
+
+  .projections-table-scroll {
+    max-height: 72vh;
+    overflow: auto;
+  }
+
+  .projections-table {
+    thead th {
+      background: $bc-white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    thead th.comparison-number {
+      font-size: 0.72rem;
+      line-height: 1.35;
+      width: 3.6rem;
+    }
+
+    tbody th[scope="row"] {
+      background: $bc-white;
+      left: 0;
+      position: sticky;
+    }
+
+    tbody tr:nth-child(even) th[scope="row"] {
+      background: $bc-verylightgrey;
+    }
+  }
+
+  .projections-weekend {
+    background: color.adjust($bc-shakespeare, $lightness: 43%);
+  }
+
+  thead .projections-weekend {
+    color: color.adjust($bc-shakespeare, $lightness: -22%);
+  }
+
   .comparison-empty {
     @extend %bc-card;
     color: $bc-scorpion;
@@ -911,5 +1151,49 @@
   .content-bg,
   .wrapper {
     padding: 0 !important;
+  }
+
+  // Product Projections: print the product table only -- nothing else on
+  // the page is meaningful on paper (date pickers, buffer inputs, search).
+  .report-page.projections-page {
+    .report-header,
+    .projections-form,
+    .projections-filter-bar,
+    .report-back-link {
+      display: none !important;
+    }
+
+    .projections-print-title {
+      display: block;
+      font-size: 14pt;
+      margin: 0 0 0.5rem;
+    }
+
+    .projections-table-card {
+      border: 0;
+      box-shadow: none;
+      margin: 0;
+    }
+
+    .projections-table-scroll {
+      max-height: none;
+      overflow: visible;
+    }
+
+    .projections-table {
+      font-size: 9pt;
+
+      thead th {
+        position: static;
+      }
+
+      tbody th[scope="row"] {
+        position: static;
+      }
+
+      tbody tr {
+        page-break-inside: avoid;
+      }
+    }
   }
 }

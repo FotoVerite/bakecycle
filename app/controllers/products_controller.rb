@@ -9,6 +9,7 @@ class ProductsController < ApplicationController
   before_action :skip_policy_scope, only: %i[
     product_totals_report
     product_totals_comparison
+    product_projections_report
     export_product_totals
     pricing_report
     products_per_client_per_week
@@ -142,6 +143,28 @@ class ProductsController < ApplicationController
     )
   end
 
+  def product_projections_report
+    authorize Product, :index?
+    @start_date = optional_parsed_date_param(:date) || Time.zone.today.next_week
+    @end_date = optional_parsed_date_param(:end_date) || (@start_date + 6.days)
+    @end_date = @start_date if @end_date < @start_date
+    @end_date = [@end_date, @start_date + 34.days].min
+
+    @category_buffers = category_buffer_params
+    @query = ProductProjectionsQuery.new(current_bakery, @start_date, @end_date, category_buffers: @category_buffers)
+    @category_summary = @query.category_summary
+
+    rows = @query.rows.select { |row| row.baseline.positive? || row.quantity.positive? }
+
+    # One row per product, dates as columns -- the flat (date, product) list this
+    # is built from was unreadable at 600+ rows for a single week. Search/category
+    # scoping happens client-side (projections-table-filter) against this full set,
+    # not here -- it's a display narrowing, not a different calculation.
+    @grouped_rows = rows.group_by(&:product)
+      .transform_values { |product_rows| product_rows.index_by(&:date) }
+      .sort_by { |product, _by_date| [product.product_type, product.name] }
+  end
+
   def export_product_totals
     authorize Product, :index?
     generator = ProductTotalsDateRangeGenerator.new(
@@ -227,6 +250,13 @@ class ProductsController < ApplicationController
 
   def date_query
     parsed_date_param(:date, :id)
+  end
+
+  def category_buffer_params
+    permitted = params.permit(category_buffers: ProductProjectionsQuery.chooser_categories)[:category_buffers]
+    return {} unless permitted
+
+    permitted.to_h.select { |_category, value| value.present? }
   end
 
   def comparison_source(key)

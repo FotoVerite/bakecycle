@@ -97,6 +97,15 @@
         <% end %>
       </div>
       <div class="large-4 medium-6 small-12 columns">
+        <%= link_to product_projections_report_products_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Product Projections</span>
+            <span class="report-card-copy">Projected totals from recent history, seasonal trend, and a category buffer.</span>
+          </div>
+          <%= icon("chart-bar", class: "right") %>
+        <% end %>
+      </div>
+      <div class="large-4 medium-6 small-12 columns">
         <%= link_to print_pricing_vendors_path, data: { turbo_stream: true }, class: "stats border" do %>
           <div class="left">
             <span class="report-card-title">Ingredient Pricing</span>

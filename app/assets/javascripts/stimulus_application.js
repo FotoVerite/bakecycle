@@ -21,6 +21,7 @@ import DisclosureController from "./controllers/disclosure_controller"
 import ReportRangeController from "./controllers/report_range_controller"
 import ComparisonChartController from "./controllers/comparison_chart_controller"
 import ProductionRunItemsController from "./controllers/production_run_items_controller"
+import ProjectionsTableFilterController from "./controllers/projections_table_filter_controller"
 
 const application = Application.start()
 application.register("file-export-refresher", FileExportRefresherController)
@@ -45,5 +46,6 @@ application.register("disclosure", DisclosureController)
 application.register("report-range", ReportRangeController)
 application.register("comparison-chart", ComparisonChartController)
 application.register("production-run-items", ProductionRunItemsController)
+application.register("projections-table-filter", ProjectionsTableFilterController)
 
 export { application }

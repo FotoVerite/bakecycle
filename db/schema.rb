@@ -13,6 +13,7 @@
 ActiveRecord::Schema[8.1].define(version: 2026_07_21_185230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "bake_lead_day_variants", force: :cascade do |t|

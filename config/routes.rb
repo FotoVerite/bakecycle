@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     get "updated_at", on: :collection
     get "product_totals_report", on: :collection
     get "product_totals_comparison", on: :collection
+    get "product_projections_report", on: :collection
     get "export_product_totals", on: :collection
     get "products_per_client_per_week", on: :collection
     get "print_products_per_client_per_week", on: :collection
