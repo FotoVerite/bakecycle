@@ -1180,18 +1180,52 @@
       overflow: visible;
     }
 
+    // .responsive-table's mobile/card layout is gated on (min-width: 48em)
+    // with no `screen` qualifier, so it applies to print too -- the printed
+    // page box is narrower than that, so force the table layout back on.
     .projections-table {
       font-size: 9pt;
+
+      thead {
+        clip: auto;
+        height: auto;
+        overflow: visible;
+        position: relative;
+        width: auto;
+      }
 
       thead th {
         position: static;
       }
 
+      tbody {
+        display: table-row-group;
+      }
+
+      tr {
+        display: table-row;
+      }
+
+      th,
+      td {
+        display: table-cell;
+      }
+
       tbody th[scope="row"] {
+        background-color: transparent;
+        color: $bc-charcoal;
         position: static;
+        text-align: left;
+      }
+
+      tbody td[data-title]::before {
+        content: none;
       }
 
       tbody tr {
+        border: 0;
+        border-bottom: 1px solid $bc-border-grey;
+        margin-bottom: 0;
         page-break-inside: avoid;
       }
     }

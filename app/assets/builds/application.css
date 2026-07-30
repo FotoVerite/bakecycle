@@ -9399,13 +9399,39 @@ span.negative {
   .report-page.projections-page .projections-table {
     font-size: 9pt;
   }
+  .report-page.projections-page .projections-table thead {
+    clip: auto;
+    height: auto;
+    overflow: visible;
+    position: relative;
+    width: auto;
+  }
   .report-page.projections-page .projections-table thead th {
     position: static;
   }
+  .report-page.projections-page .projections-table tbody {
+    display: table-row-group;
+  }
+  .report-page.projections-page .projections-table tr {
+    display: table-row;
+  }
+  .report-page.projections-page .projections-table th,
+  .report-page.projections-page .projections-table td {
+    display: table-cell;
+  }
   .report-page.projections-page .projections-table tbody th[scope=row] {
+    background-color: transparent;
+    color: #555;
     position: static;
+    text-align: left;
+  }
+  .report-page.projections-page .projections-table tbody td[data-title]::before {
+    content: none;
   }
   .report-page.projections-page .projections-table tbody tr {
+    border: 0;
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 0;
     page-break-inside: avoid;
   }
 }
