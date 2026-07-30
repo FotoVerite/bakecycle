@@ -5,6 +5,7 @@ class ClientsController < ApplicationController
 
   before_action :set_client, only: %i[show edit update destroy]
   before_action :skip_policy_scope, only: %i[
+    client_food_cost_report
     print_client_list
     print_total_report
     print_vip_list
@@ -73,6 +74,36 @@ class ClientsController < ApplicationController
     @end_date = end_date
   end
 
+  def client_food_cost_report
+    authorize Route, :print?
+    @start_date = start_date
+    @end_date = end_date
+    @client_ids = filter_param_ids(:client_ids)
+    @product_ids = filter_param_ids(:product_ids)
+
+    @available_clients = ItemFinder.new(current_user).clients.order_by_name
+    @available_products = ItemFinder.new(current_user).products.order_by_name
+
+    @selected_client = @available_clients.find { |client| client.id.to_s == @client_ids.first } if @client_ids&.size == 1
+    @selected_product = @available_products.find { |product| product.id.to_s == @product_ids.first } if @selected_client && @product_ids&.size == 1
+
+    @query = ClientFoodCostQuery.new(current_bakery, @start_date, @end_date,
+      client_ids: @client_ids, product_ids: @selected_client ? @product_ids : nil)
+
+    # Three drill levels: everyone -> one client's items -> one item's dates.
+    # A flat (client, item, date) grid was the first cut and was unusable at
+    # scale -- 181 clients open at once, each with 100+ rows. This keeps each
+    # screen to what a person actually scans: ~180 client rows, or ~10-30
+    # item rows for one client, or ~30 date rows for one item.
+    if @selected_client && @selected_product
+      @daily_rows = @query.daily_rows
+    elsif @selected_client
+      @item_totals = @query.item_totals
+    else
+      @client_summaries = @query.client_summaries
+    end
+  end
+
   def print_total_report
     authorize Route, :print?
     @start_date = start_date
@@ -133,6 +164,10 @@ class ClientsController < ApplicationController
 
   def end_date
     parsed_date_param(:end_date, fallback: Time.zone.today + 1.day)
+  end
+
+  def filter_param_ids(key)
+    Array(params[key]).reject(&:blank?).presence
   end
 
   def filtered_clients

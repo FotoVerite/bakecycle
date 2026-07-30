@@ -17,7 +17,7 @@ export default class extends Controller {
     let visible = 0
 
     this.rowTargets.forEach((row) => {
-      const matchesName = !query || row.dataset.productName.includes(query)
+      const matchesName = !query || row.dataset.searchText.includes(query)
       const matchesCategory = !category || row.dataset.category === category
       const show = matchesName && matchesCategory
       row.hidden = !show

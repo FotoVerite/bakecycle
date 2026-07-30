@@ -8919,6 +8919,71 @@ span.negative {
   font-weight: 600;
   margin: 0;
 }
+.report-page .client-totals-select-field {
+  min-width: 220px;
+}
+.report-page .client-totals-select-field .ts-wrapper {
+  min-width: 220px;
+}
+.report-page .client-totals-breadcrumb {
+  align-items: center;
+  color: #5a5a5a;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+.report-page .client-totals-breadcrumb a {
+  color: rgb(39.6571428571, 123.9285714286, 168.5428571429);
+  font-weight: 600;
+  text-decoration: none;
+}
+.report-page .client-totals-breadcrumb a:hover {
+  text-decoration: underline;
+}
+.report-page .client-totals-breadcrumb-sep {
+  color: #dcdcdc;
+}
+.report-page .client-totals-breadcrumb-current {
+  color: #555;
+  font-weight: 700;
+}
+.report-page .client-totals-print-title {
+  display: none;
+}
+.report-page .client-totals-table th[scope=row] a {
+  color: rgb(39.6571428571, 123.9285714286, 168.5428571429);
+  font-weight: 700;
+  text-decoration: none;
+}
+.report-page .client-totals-table th[scope=row] a::after {
+  color: #dcdcdc;
+  content: "›";
+  display: inline-block;
+  margin-left: 5px;
+  opacity: 0;
+  transform: translateX(-2px);
+  transition: opacity 120ms cubic-bezier(0.23, 1, 0.32, 1), transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.report-page .client-totals-table th[scope=row] a:hover, .report-page .client-totals-table th[scope=row] a:focus-visible {
+  text-decoration: underline;
+}
+.report-page .client-totals-table th[scope=row] a:hover::after, .report-page .client-totals-table th[scope=row] a:focus-visible::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+.report-page .client-totals-table tfoot td,
+.report-page .client-totals-table tfoot th {
+  background: #f3f3f3;
+  border-top: 2px solid #e1e1e1;
+  color: #555;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+.report-page .client-totals-table tfoot .foot-label {
+  text-align: left;
+}
 
 .report-generator-page .report-header {
   min-height: 92px;
@@ -9433,6 +9498,70 @@ span.negative {
     border-bottom: 1px solid #e1e1e1;
     margin-bottom: 0;
     page-break-inside: avoid;
+  }
+  .report-page.client-totals-page .report-header,
+  .report-page.client-totals-page .report-print-form,
+  .report-page.client-totals-page .projections-filter-bar,
+  .report-page.client-totals-page .report-back-link {
+    display: none !important;
+  }
+  .report-page.client-totals-page .client-totals-print-title {
+    display: block;
+    font-size: 14pt;
+    margin: 0 0 0.5rem;
+  }
+  .report-page.client-totals-page .client-totals-breadcrumb {
+    font-size: 11pt;
+    margin-bottom: 0.75rem;
+  }
+  .report-page.client-totals-page .client-totals-breadcrumb a {
+    color: #555;
+    text-decoration: none;
+  }
+  .report-page.client-totals-page .projections-table-card {
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+  }
+  .report-page.client-totals-page .client-totals-table {
+    font-size: 8.5pt;
+  }
+  .report-page.client-totals-page .client-totals-table thead {
+    clip: auto;
+    height: auto;
+    overflow: visible;
+    position: relative;
+    width: auto;
+  }
+  .report-page.client-totals-page .client-totals-table thead th {
+    position: static;
+  }
+  .report-page.client-totals-page .client-totals-table tbody {
+    display: table-row-group;
+  }
+  .report-page.client-totals-page .client-totals-table tr {
+    display: table-row;
+  }
+  .report-page.client-totals-page .client-totals-table th,
+  .report-page.client-totals-page .client-totals-table td {
+    display: table-cell;
+  }
+  .report-page.client-totals-page .client-totals-table tr[hidden] {
+    display: table-row !important;
+  }
+  .report-page.client-totals-page .client-totals-table tbody th[scope=row] {
+    background-color: transparent;
+    color: #555;
+    position: static;
+    text-align: left;
+  }
+  .report-page.client-totals-page .client-totals-table tbody td[data-title]::before {
+    content: none;
+  }
+  .report-page.client-totals-page .client-totals-table tbody tr {
+    border: 0;
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 0;
   }
 }
 .side-column {

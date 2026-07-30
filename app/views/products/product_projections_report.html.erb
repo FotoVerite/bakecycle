@@ -109,7 +109,7 @@
             <tbody>
               <% @grouped_rows.each do |product, by_date| %>
                 <tr data-projections-table-filter-target="row"
-                  data-product-name="<%= product.name.downcase %>"
+                  data-search-text="<%= product.name.downcase %>"
                   data-category="<%= product.product_type %>">
                   <th scope="row"><%= product.name %></th>
                   <td data-title="Category"><%= product.product_type.humanize %></td>

@@ -585,6 +585,96 @@
       margin: 0;
     }
   }
+
+  // Client Food Cost -- a drill-down (all clients -> one client's items ->
+  // one item's dates) instead of a flat per-(client,item,date) table, which
+  // was unusable at scale (181 clients open at once, each 100+ rows). Each
+  // level is a single plain table sized to what a person actually scans.
+  .client-totals-select-field {
+    min-width: 220px;
+
+    .ts-wrapper {
+      min-width: 220px;
+    }
+  }
+
+  .client-totals-breadcrumb {
+    align-items: center;
+    color: $bc-scorpion;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    gap: 8px;
+    margin: 0 0 14px;
+
+    a {
+      color: color.adjust($bc-shakespeare, $lightness: -18%);
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .client-totals-breadcrumb-sep {
+    color: $bc-lightgrey;
+  }
+
+  .client-totals-breadcrumb-current {
+    color: $bc-charcoal;
+    font-weight: 700;
+  }
+
+  .client-totals-print-title {
+    display: none;
+  }
+
+  .client-totals-table {
+    // Drill-down links: same blue as the breadcrumb (not the inherited
+    // charcoal body-text color every other <a> in the app gets from
+    // base/main.scss) so it actually reads as clickable, plus a chevron
+    // that only shows itself on hover/focus -- present but not shouting.
+    th[scope="row"] a {
+      color: color.adjust($bc-shakespeare, $lightness: -18%);
+      font-weight: 700;
+      text-decoration: none;
+
+      &::after {
+        color: $bc-lightgrey;
+        content: "\203A";
+        display: inline-block;
+        margin-left: 5px;
+        opacity: 0;
+        transform: translateX(-2px);
+        transition: opacity 120ms $bc-ease-out, transform 120ms $bc-ease-out;
+      }
+
+      &:hover,
+      &:focus-visible {
+        text-decoration: underline;
+
+        &::after {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    }
+
+    tfoot td,
+    tfoot th {
+      background: $bc-verylightgrey;
+      border-top: 2px solid $bc-border-grey;
+      color: $bc-charcoal;
+      font-weight: 700;
+      padding: 10px 16px;
+    }
+
+    tfoot .foot-label {
+      text-align: left;
+    }
+  }
 }
 
 .report-generator-page {
@@ -1227,6 +1317,91 @@
         border-bottom: 1px solid $bc-border-grey;
         margin-bottom: 0;
         page-break-inside: avoid;
+      }
+    }
+  }
+
+  // Client Food Cost: print the current drill level's table only. Any row
+  // left hidden by the on-screen search filter still prints, since a
+  // generated report should print everything it was generated for, not
+  // whatever was left visible in a transient client-side filter.
+  .report-page.client-totals-page {
+    .report-header,
+    .report-print-form,
+    .projections-filter-bar,
+    .report-back-link {
+      display: none !important;
+    }
+
+    .client-totals-print-title {
+      display: block;
+      font-size: 14pt;
+      margin: 0 0 0.5rem;
+    }
+
+    .client-totals-breadcrumb {
+      font-size: 11pt;
+      margin-bottom: 0.75rem;
+
+      a {
+        color: $bc-charcoal;
+        text-decoration: none;
+      }
+    }
+
+    .projections-table-card {
+      border: 0;
+      box-shadow: none;
+      margin: 0;
+    }
+
+    .client-totals-table {
+      font-size: 8.5pt;
+
+      thead {
+        clip: auto;
+        height: auto;
+        overflow: visible;
+        position: relative;
+        width: auto;
+      }
+
+      thead th {
+        position: static;
+      }
+
+      tbody {
+        display: table-row-group;
+      }
+
+      tr {
+        display: table-row;
+      }
+
+      th,
+      td {
+        display: table-cell;
+      }
+
+      tr[hidden] {
+        display: table-row !important;
+      }
+
+      tbody th[scope="row"] {
+        background-color: transparent;
+        color: $bc-charcoal;
+        position: static;
+        text-align: left;
+      }
+
+      tbody td[data-title]::before {
+        content: none;
+      }
+
+      tbody tr {
+        border: 0;
+        border-bottom: 1px solid $bc-border-grey;
+        margin-bottom: 0;
       }
     }
   }

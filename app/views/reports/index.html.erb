@@ -82,6 +82,15 @@
           <%= icon("chart-pie", class: "right") %>
         <% end %>
       </div>
+      <div class="large-4 medium-6 small-12 columns">
+        <%= link_to client_food_cost_report_clients_path, class: "stats border" do %>
+          <div class="left">
+            <span class="report-card-title">Client Food Cost</span>
+            <span class="report-card-copy">Quantity, price, and food cost per item, by client and date.</span>
+          </div>
+          <%= icon("chart-bar", class: "right") %>
+        <% end %>
+      </div>
     </div>
     <div class="row">
       <div class="small-12 columns">

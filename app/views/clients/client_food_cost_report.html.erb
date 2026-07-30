@@ -1,0 +1,258 @@
+<% provide(:title, "Client Food Cost") %>
+
+<div class="report-page report-generator-page client-totals-page">
+  <%= render "shared/report_header",
+    title: "Client Food Cost",
+    date_text: "#{@start_date.strftime('%A %b. %e, %Y')} to #{@end_date.strftime('%A %b. %e, %Y')}",
+    status: "Food cost" %>
+
+  <h1 class="client-totals-print-title">
+    Client Food Cost &mdash; <%= @start_date.strftime("%b %-d") %>&ndash;<%= @end_date.strftime("%b %-d, %Y") %><%
+      if @selected_client %> &middot; <%= @selected_client.name %><% end %><%
+      if @selected_product %> &middot; <%= @selected_product.name %><% end %>
+  </h1>
+
+  <%= simple_form_for "", url: client_food_cost_report_clients_path, method: :get, html: { class: "report-print-form" } do |f| %>
+    <div class="report-toolbar client-totals-toolbar">
+      <div class="comparison-form">
+        <div class="comparison-field">
+          <label for="ct_start_date">Start</label>
+          <input type="date" id="ct_start_date" name="start_date" value="<%= @start_date.iso8601 %>">
+        </div>
+        <div class="comparison-field">
+          <label for="ct_end_date">End</label>
+          <input type="date" id="ct_end_date" name="end_date" value="<%= @end_date.iso8601 %>">
+        </div>
+        <div class="comparison-field client-totals-select-field">
+          <%= f.input :client_ids,
+            label: "Clients",
+            collection: @available_clients,
+            label_method: :name, value_method: :id,
+            selected: @client_ids,
+            include_blank: false,
+            as: :select,
+            required: false,
+            input_html: { multiple: true, name: "client_ids[]", data: { controller: "tom-select", placeholder: "All invoiced clients" } } %>
+        </div>
+        <div class="comparison-field client-totals-select-field">
+          <%= f.input :product_ids,
+            label: "Items",
+            collection: @available_products,
+            label_method: :name, value_method: :id,
+            selected: @product_ids,
+            include_blank: false,
+            as: :select,
+            required: false,
+            input_html: { multiple: true, name: "product_ids[]", data: { controller: "tom-select", placeholder: "All invoiced items" } } %>
+        </div>
+        <%= button_tag "#{icon('chart-bar')} Generate".html_safe, class: "button search-button" %>
+      </div>
+      <div class="report-toolbar-note">
+        <span>Client Food Cost</span>
+        Click a client for its items, an item for its dates.
+      </div>
+    </div>
+  <% end %>
+
+  <% if @selected_client %>
+    <nav class="client-totals-breadcrumb">
+      <%= link_to "All Clients", client_food_cost_report_clients_path(start_date: @start_date, end_date: @end_date) %>
+      <span class="client-totals-breadcrumb-sep">/</span>
+      <% if @selected_product %>
+        <%= link_to @selected_client.name, client_food_cost_report_clients_path(start_date: @start_date, end_date: @end_date, client_ids: [@selected_client.id]) %>
+        <span class="client-totals-breadcrumb-sep">/</span>
+        <span class="client-totals-breadcrumb-current"><%= @selected_product.name %></span>
+      <% else %>
+        <span class="client-totals-breadcrumb-current"><%= @selected_client.name %></span>
+      <% end %>
+    </nav>
+  <% end %>
+
+  <div data-controller="projections-table-filter">
+    <% if @daily_rows %>
+      <% total_price = @daily_rows.sum(&:total_price); total_food_cost = @daily_rows.sum(&:total_food_cost) %>
+      <div class="projections-filter-bar">
+        <p class="projections-result-count">
+          <%= @daily_rows.size %> dates &middot; <%= number_with_delimiter(@daily_rows.sum(&:quantity)) %> units &middot;
+          <%= number_to_currency(total_price) %> &middot; <%= number_to_currency(total_food_cost) %> food cost &middot;
+          <%= number_with_precision(total_price.positive? ? total_food_cost / total_price * 100 : 0, precision: 1) %>% FC
+        </p>
+        <button class="button small secondary projections-print-btn" onclick="window.print(); return false;" type="button">
+          <%= icon("printer") %> Print
+        </button>
+      </div>
+
+      <% if @daily_rows.any? %>
+        <div class="card projections-table-card">
+          <div class="table-scroll">
+            <table class="responsive-table report-table client-totals-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="product-title">Date</th>
+                  <th scope="col" class="comparison-number">Qty</th>
+                  <th scope="col" class="comparison-number">Unit Price</th>
+                  <th scope="col" class="comparison-number">Total Price</th>
+                  <th scope="col" class="comparison-number">Food Cost</th>
+                  <th scope="col" class="comparison-number">Total Food Cost</th>
+                  <th scope="col" class="comparison-number">Food Cost %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @daily_rows.each do |row| %>
+                  <tr>
+                    <th scope="row"><%= row.date.strftime("%A %-m/%-d") %></th>
+                    <td data-title="Qty" class="comparison-number"><%= row.quantity %></td>
+                    <td data-title="Unit Price" class="comparison-number"><%= number_to_currency(row.unit_price) %></td>
+                    <td data-title="Total Price" class="comparison-number"><%= number_to_currency(row.total_price) %></td>
+                    <td data-title="Food Cost" class="comparison-number"><%= number_to_currency(row.food_cost) %></td>
+                    <td data-title="Total Food Cost" class="comparison-number"><%= number_to_currency(row.total_food_cost) %></td>
+                    <td data-title="Food Cost %" class="comparison-number"><%= number_with_precision(row.food_cost_percent, precision: 1) %>%</td>
+                  </tr>
+                <% end %>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td class="foot-label">Total</td>
+                  <td class="comparison-number"><%= number_with_delimiter(@daily_rows.sum(&:quantity)) %></td>
+                  <td></td>
+                  <td class="comparison-number"><%= number_to_currency(total_price) %></td>
+                  <td></td>
+                  <td class="comparison-number"><%= number_to_currency(total_food_cost) %></td>
+                  <td class="comparison-number"><%= number_with_precision(total_price.positive? ? total_food_cost / total_price * 100 : 0, precision: 1) %>%</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      <% else %>
+        <div class="comparison-empty"><h2>Nothing invoiced for this item in this date range.</h2></div>
+      <% end %>
+
+    <% elsif @item_totals %>
+      <% total_price = @item_totals.sum(&:total_price); total_food_cost = @item_totals.sum(&:total_food_cost) %>
+      <div class="projections-filter-bar">
+        <div class="comparison-field projections-search-field">
+          <label for="ct_q">Search items</label>
+          <input type="search" id="ct_q" placeholder="e.g. Croissant"
+            data-projections-table-filter-target="searchInput"
+            data-action="input->projections-table-filter#filter">
+        </div>
+        <p class="projections-result-count">
+          Showing <strong data-projections-table-filter-target="resultCount"><%= @item_totals.size %></strong> of <%= @item_totals.size %> items
+          &middot; <%= number_to_currency(total_price) %> &middot; <%= number_to_currency(total_food_cost) %> food cost &middot;
+          <%= number_with_precision(total_price.positive? ? total_food_cost / total_price * 100 : 0, precision: 1) %>% FC
+        </p>
+        <button class="button small secondary projections-print-btn" onclick="window.print(); return false;" type="button">
+          <%= icon("printer") %> Print
+        </button>
+      </div>
+
+      <% if @item_totals.any? %>
+        <div class="card projections-table-card">
+          <div class="table-scroll">
+            <table class="responsive-table report-table client-totals-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="product-title">Item</th>
+                  <th scope="col" class="comparison-number">Qty</th>
+                  <th scope="col" class="comparison-number">Unit Price</th>
+                  <th scope="col" class="comparison-number">Total Price</th>
+                  <th scope="col" class="comparison-number">Food Cost</th>
+                  <th scope="col" class="comparison-number">Total Food Cost</th>
+                  <th scope="col" class="comparison-number">Food Cost %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @item_totals.each do |item| %>
+                  <tr data-projections-table-filter-target="row" data-search-text="<%= item.product.name.downcase %>">
+                    <th scope="row">
+                      <%= link_to item.product.name, client_food_cost_report_clients_path(start_date: @start_date, end_date: @end_date, client_ids: [@selected_client.id], product_ids: [item.product.id]) %>
+                    </th>
+                    <td data-title="Qty" class="comparison-number"><%= item.quantity %></td>
+                    <td data-title="Unit Price" class="comparison-number"><%= number_to_currency(item.unit_price) %></td>
+                    <td data-title="Total Price" class="comparison-number"><%= number_to_currency(item.total_price) %></td>
+                    <td data-title="Food Cost" class="comparison-number"><%= number_to_currency(item.food_cost) %></td>
+                    <td data-title="Total Food Cost" class="comparison-number"><%= number_to_currency(item.total_food_cost) %></td>
+                    <td data-title="Food Cost %" class="comparison-number"><%= number_with_precision(item.food_cost_percent, precision: 1) %>%</td>
+                  </tr>
+                <% end %>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td class="foot-label">Client total</td>
+                  <td class="comparison-number"><%= number_with_delimiter(@item_totals.sum(&:quantity)) %></td>
+                  <td></td>
+                  <td class="comparison-number"><%= number_to_currency(total_price) %></td>
+                  <td></td>
+                  <td class="comparison-number"><%= number_to_currency(total_food_cost) %></td>
+                  <td class="comparison-number"><%= number_with_precision(total_price.positive? ? total_food_cost / total_price * 100 : 0, precision: 1) %>%</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="comparison-empty client-totals-no-match" data-projections-table-filter-target="emptyState" hidden>
+            <h2>No items match this search.</h2>
+          </div>
+        </div>
+      <% else %>
+        <div class="comparison-empty"><h2>Nothing invoiced for this client in this date range.</h2></div>
+      <% end %>
+
+    <% else %>
+      <div class="projections-filter-bar">
+        <div class="comparison-field projections-search-field">
+          <label for="ct_q">Search clients</label>
+          <input type="search" id="ct_q" placeholder="Client name"
+            data-projections-table-filter-target="searchInput"
+            data-action="input->projections-table-filter#filter">
+        </div>
+        <p class="projections-result-count">
+          Showing <strong data-projections-table-filter-target="resultCount"><%= @client_summaries.size %></strong> of <%= @client_summaries.size %> clients
+        </p>
+        <button class="button small secondary projections-print-btn" onclick="window.print(); return false;" type="button">
+          <%= icon("printer") %> Print
+        </button>
+      </div>
+
+      <% if @client_summaries.any? %>
+        <div class="card projections-table-card">
+          <div class="table-scroll">
+            <table class="responsive-table report-table client-totals-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="product-title">Client</th>
+                  <th scope="col" class="comparison-number">Items</th>
+                  <th scope="col" class="comparison-number">Qty</th>
+                  <th scope="col" class="comparison-number">Total Price</th>
+                  <th scope="col" class="comparison-number">Total Food Cost</th>
+                  <th scope="col" class="comparison-number">Food Cost %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @client_summaries.each do |summary| %>
+                  <tr data-projections-table-filter-target="row" data-search-text="<%= summary.client.name.downcase %>">
+                    <th scope="row">
+                      <%= link_to summary.client.name, client_food_cost_report_clients_path(start_date: @start_date, end_date: @end_date, client_ids: [summary.client.id]) %>
+                    </th>
+                    <td data-title="Items" class="comparison-number"><%= summary.item_count %></td>
+                    <td data-title="Qty" class="comparison-number"><%= number_with_delimiter(summary.quantity) %></td>
+                    <td data-title="Total Price" class="comparison-number"><%= number_to_currency(summary.total_price) %></td>
+                    <td data-title="Total Food Cost" class="comparison-number"><%= number_to_currency(summary.total_food_cost) %></td>
+                    <td data-title="Food Cost %" class="comparison-number"><%= number_with_precision(summary.food_cost_percent, precision: 1) %>%</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div class="comparison-empty client-totals-no-match" data-projections-table-filter-target="emptyState" hidden>
+            <h2>No clients match this search.</h2>
+          </div>
+        </div>
+      <% else %>
+        <div class="comparison-empty"><h2>Nothing invoiced for this date range.</h2></div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= link_to "Back to Reports", reports_path, class: "button small secondary report-back-link" %>
+</div>
