@@ -1,13 +1,7 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="112" fill="#3f7ea6"/>
-  <path d="M104 312
-           C104 205, 168 128, 256 128
-           C344 128, 408 205, 408 312
-           C408 312, 408 356, 360 356
-           L152 356
-           C104 356, 104 312, 104 312
-           Z"
-        fill="#faf3e6"/>
-  <path d="M212 180 L182 288" stroke="#3f7ea6" stroke-width="22" stroke-linecap="round"/>
-  <path d="M300 180 L330 288" stroke="#3f7ea6" stroke-width="22" stroke-linecap="round"/>
+  <title>Bakecycle</title>
+  <rect width="512" height="512" rx="112" fill="#287da9"/>
+  <path d="M112 340V282C112 209 164 160 232 160H280C348 160 400 209 400 282V340C400 362 382 380 360 380H152C130 380 112 362 112 340Z" fill="#f7f1e5"/>
+  <path d="M211 210L176 286M286 210L251 286" fill="none" stroke="#287da9" stroke-linecap="round" stroke-width="24"/>
+  <path d="M311 254L337 280L389 216" fill="none" stroke="#c6933d" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/>
 </svg>
