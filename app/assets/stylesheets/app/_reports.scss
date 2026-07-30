@@ -662,13 +662,17 @@
       }
     }
 
+    // Same left/right padding as the body cells (only bold/background/border
+    // are new) -- a footer-only horizontal padding here misaligns the
+    // right edge of these numbers against the rows above it.
     tfoot td,
     tfoot th {
       background: $bc-verylightgrey;
       border-top: 2px solid $bc-border-grey;
       color: $bc-charcoal;
       font-weight: 700;
-      padding: 10px 16px;
+      padding-bottom: 10px;
+      padding-top: 10px;
     }
 
     tfoot .foot-label {

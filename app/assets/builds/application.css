@@ -8979,7 +8979,8 @@ span.negative {
   border-top: 2px solid #e1e1e1;
   color: #555;
   font-weight: 700;
-  padding: 10px 16px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 .report-page .client-totals-table tfoot .foot-label {
   text-align: left;
