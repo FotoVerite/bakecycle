@@ -71,9 +71,12 @@ RSpec.describe "Clients", type: :request do
     end
 
     it "defaults to active current clients" do
-      current_client = create(:client, bakery: bakery, name: "Active Current Cafe", active: true, engagement_status: "current")
-      inactive_client = create(:client, bakery: bakery, name: "Inactive Current Cafe", active: false, engagement_status: "current")
-      lapsed_client = create(:client, bakery: bakery, name: "Active Lapsed Cafe", active: true, engagement_status: "lapsed")
+      current_client = create(:client, bakery: bakery, name: "Active Current Cafe", active: true,
+                                       engagement_status: "current")
+      inactive_client = create(:client, bakery: bakery, name: "Inactive Current Cafe", active: false,
+                                        engagement_status: "current")
+      lapsed_client = create(:client, bakery: bakery, name: "Active Lapsed Cafe", active: true,
+                                      engagement_status: "lapsed")
 
       get clients_path
 
@@ -83,7 +86,8 @@ RSpec.describe "Clients", type: :request do
     end
 
     it "filters clients on the server" do
-      matching_client = create(:client, bakery: bakery, name: "Broad Street Market", active: false, engagement_status: "lapsed")
+      matching_client = create(:client, bakery: bakery, name: "Broad Street Market", active: false,
+                                        engagement_status: "lapsed")
       create(:client, bakery: bakery, name: "Broad Street Current", active: true, engagement_status: "current")
       create(:client, bakery: bakery, name: "Another Lapsed Client", active: false, engagement_status: "lapsed")
 

@@ -25,8 +25,10 @@ module ExportsReportable
     # full-page redirect fallback.
     if turbo_stream_export_request?
       render turbo_stream: [
-        turbo_stream.prepend("export_tray_list", partial: "file_exports/tray_item", locals: { file_export: file_export, variant: :enter }),
-        turbo_stream.prepend("file_exports_list", partial: "file_exports/history_row", locals: { file_export: file_export, variant: :enter }),
+        turbo_stream.prepend("export_tray_list", partial: "file_exports/tray_item",
+                                                 locals: { file_export: file_export, variant: :enter }),
+        turbo_stream.prepend("file_exports_list", partial: "file_exports/history_row",
+                                                  locals: { file_export: file_export, variant: :enter }),
         *overflow_removal_streams(file_export)
       ]
     else

@@ -75,7 +75,7 @@ class ProductTotalsQuery
   def active_orders_by_date
     candidates = @bakery.orders
       .where("start_date <= :end_date AND (end_date IS NULL OR end_date >= :start_date)",
-        start_date: @start_date, end_date: @end_date)
+             start_date: @start_date, end_date: @end_date)
       .includes(order_items: :product)
 
     sample_orders, standard_orders = candidates.partition(&:sample?)

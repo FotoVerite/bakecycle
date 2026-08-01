@@ -99,5 +99,4 @@ class ProductTotalsDateRangeXlsx
   def column_letter(offset_from_a)
     ("A".."ZZ").to_a[offset_from_a]
   end
-
 end

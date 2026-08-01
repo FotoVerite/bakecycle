@@ -349,7 +349,7 @@ describe Order do
       standing = create(:order, start_date: yesterday, order_item_count: 0)
       sample = create(
         :sample_order, start_date: today, end_date: today,
-        client: standing.client, route: standing.route, order_item_count: 0
+                       client: standing.client, route: standing.route, order_item_count: 0
       )
 
       expect(Order.active(today)).to contain_exactly(standing, sample)
@@ -359,11 +359,11 @@ describe Order do
       standing = create(:order, start_date: yesterday, order_item_count: 0)
       temporary = create(
         :temporary_order, start_date: today, end_date: today,
-        client: standing.client, route: standing.route, order_item_count: 0
+                          client: standing.client, route: standing.route, order_item_count: 0
       )
       sample = create(
         :sample_order, start_date: today, end_date: today,
-        client: standing.client, route: standing.route, order_item_count: 0
+                       client: standing.client, route: standing.route, order_item_count: 0
       )
 
       expect(Order.active(today)).to contain_exactly(temporary, sample)
@@ -377,14 +377,14 @@ describe Order do
       client_b_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
       client_b_temp = create(
         :temporary_order, bakery: bakery, start_date: today, end_date: today,
-        client: client_b_standing.client, route: client_b_standing.route, order_item_count: 0
+                          client: client_b_standing.client, route: client_b_standing.route, order_item_count: 0
       )
 
       # Client C: standing + a sample sharing the same route -- both must survive.
       client_c_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
       client_c_sample = create(
         :sample_order, bakery: bakery, start_date: today, end_date: today,
-        client: client_c_standing.client, route: client_c_standing.route, order_item_count: 0
+                       client: client_c_standing.client, route: client_c_standing.route, order_item_count: 0
       )
 
       # Client D: standing + temporary override + sample, all on the same route/date --
@@ -392,11 +392,11 @@ describe Order do
       client_d_standing = create(:order, bakery: bakery, start_date: yesterday, order_item_count: 0)
       client_d_temp = create(
         :temporary_order, bakery: bakery, start_date: today, end_date: today,
-        client: client_d_standing.client, route: client_d_standing.route, order_item_count: 0
+                          client: client_d_standing.client, route: client_d_standing.route, order_item_count: 0
       )
       client_d_sample = create(
         :sample_order, bakery: bakery, start_date: today, end_date: today,
-        client: client_d_standing.client, route: client_d_standing.route, order_item_count: 0
+                       client: client_d_standing.client, route: client_d_standing.route, order_item_count: 0
       )
 
       # Client E: two samples on two different routes, no standing/temporary at all.
@@ -652,17 +652,17 @@ describe Order do
        "on shared routes" do
       Timecop.freeze(Time.zone.now.change(hour: 15)) do
         standing = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
-          order_item_count: 1)
+                                  order_item_count: 1)
         temporary = create(
           :temporary_order, bakery: bakery, client: standing.client, route: standing.route,
-          start_date: today, end_date: today, force_total_lead_days: 1, order_item_count: 1
+                            start_date: today, end_date: today, force_total_lead_days: 1, order_item_count: 1
         )
         sample = create(
           :sample_order, bakery: bakery, client: standing.client, route: standing.route,
-          start_date: today, end_date: today, force_total_lead_days: 1, order_item_count: 1
+                         start_date: today, end_date: today, force_total_lead_days: 1, order_item_count: 1
         )
         unrelated_standing = create(:order, bakery: bakery, start_date: yesterday, force_total_lead_days: 1,
-          order_item_count: 1)
+                                            order_item_count: 1)
 
         orders = [standing, temporary, sample, unrelated_standing]
         missing_via_batch = described_class.missing_shipment_dates_for(orders)

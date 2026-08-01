@@ -11,10 +11,10 @@ class ProductTotalsSnapshot < ApplicationRecord
 
   belongs_to :bakery
   has_many :rows,
-    class_name: "ProductTotalsSnapshotRow",
-    foreign_key: :snapshot_id,
-    inverse_of: :snapshot,
-    dependent: :delete_all
+           class_name: "ProductTotalsSnapshotRow",
+           foreign_key: :snapshot_id,
+           inverse_of: :snapshot,
+           dependent: :delete_all
 
   validates :source, inclusion: { in: ProductTotalsQuery::SOURCES }
   validates :label, presence: true

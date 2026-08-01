@@ -32,5 +32,4 @@ class SortedDeliveryListXlsx
       sheet.add_row [s.client_name, s.route_name]
     end
   end
-
 end

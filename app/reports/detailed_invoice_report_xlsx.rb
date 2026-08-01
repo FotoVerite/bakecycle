@@ -80,5 +80,4 @@ class DetailedInvoiceReportXlsx
     end
     hash
   end
-
 end

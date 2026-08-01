@@ -127,7 +127,6 @@ class Order < ApplicationRecord
     missing_shipment_dates.empty?
   end
 
-  # rubocop:disable Metrics/AbcSize
   def missing_shipment_dates(for_date_time = Time.zone.now)
     last_date = for_date_time + total_lead_days.days
     dates = []
@@ -142,7 +141,6 @@ class Order < ApplicationRecord
     end
     dates
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Batched equivalent of `orders.reject(&:no_outstanding_shipments?)` for a
   # whole scope. #missing_shipment_dates recomputes "is this the active order

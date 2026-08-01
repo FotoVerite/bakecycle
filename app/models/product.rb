@@ -44,7 +44,7 @@ class Product < ApplicationRecord
 
   has_many :bake_lead_day_variants, -> { where(removed: false) }, dependent: :destroy, inverse_of: :product
   has_many :bake_lead_day_variants_with_removes, dependent: :destroy, class_name: "BakeLeadDayVariant",
-    inverse_of: :product
+                                                 inverse_of: :product
 
   accepts_nested_attributes_for :price_variants, allow_destroy: true, reject_if: :reject_price_variants?
   accepts_nested_attributes_for :bake_lead_day_variants, allow_destroy: true, reject_if: :reject_bake_lead_day_variants?
@@ -190,8 +190,8 @@ class Product < ApplicationRecord
   # of the slowdown on products with thousands of orders.
   def orders_in_use
     Order.where(id: OrderItem.where(product_id: id).select(:order_id))
-         .merge(Order.still_in_use)
-         .includes(:client, :route)
+      .merge(Order.still_in_use)
+      .includes(:client, :route)
   end
 
   def price_varient_info(client_id)

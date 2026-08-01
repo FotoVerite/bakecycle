@@ -11,7 +11,12 @@ RSpec.describe ClientsMailer, type: :mailer do
 
     before do
       # Stub PDF generation — InvoicesPdf depends on full bakery data and is slow
-      allow_any_instance_of(InvoicePdfGenerator).to receive(:generate).and_return("fake pdf content")
+      generator = instance_double(
+        InvoicePdfGenerator,
+        filename: "invoice-#{shipment.invoice_number}.pdf",
+        generate: "fake pdf content"
+      )
+      allow(InvoicePdfGenerator).to receive(:new).with(bakery, shipment).and_return(generator)
     end
 
     it "sends to the client's accounts payable email" do

@@ -39,9 +39,9 @@ class CancellationsController < ApplicationController
   def load_form_data
     @routes       = current_bakery.routes.where(active: true).order(:name)
     @clients      = current_bakery.clients
-                                   .where.not(channel: "Internal")
-                                   .where(id: client_ids_with_orders_on(@date))
-                                   .order(:name)
+      .where.not(channel: "Internal")
+      .where(id: client_ids_with_orders_on(@date))
+      .order(:name)
     @client_route = build_client_route_map
   end
 

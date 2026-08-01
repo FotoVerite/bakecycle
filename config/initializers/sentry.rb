@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 return unless defined?(Sentry)
 
 Sentry.init do |config|

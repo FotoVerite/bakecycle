@@ -27,5 +27,4 @@ class ProductPricingXlsx
       sheet.add_row [p.name, p.sku, p.cog, p.base_price]
     end
   end
-
 end

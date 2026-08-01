@@ -105,5 +105,4 @@ class ClientsPerProductForWeekXlsx
     end
     total_row
   end
-
 end

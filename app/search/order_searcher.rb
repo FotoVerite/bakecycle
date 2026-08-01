@@ -72,5 +72,4 @@ class OrderSearcher
 
     @collection = @collection.joins(:order_items).where(order_items: { product_id: product_id })
   end
-
 end

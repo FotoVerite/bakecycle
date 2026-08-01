@@ -22,9 +22,9 @@ describe ProductTotalsComparison do
 
     rows = comparison.rows.map { |r| [r.product_name, r.baseline_quantity, r.compare_quantity, r.difference] }
     expect(rows).to eq([
-      ["Baguette", 12, 0, -12],
-      ["Croissant", 100, 90, -10]
-    ])
+                         ["Baguette", 12, 0, -12],
+                         ["Croissant", 100, 90, -10]
+                       ])
     expect(comparison.differing_rows.size).to eq(2)
   end
 
@@ -76,8 +76,8 @@ describe ProductTotalsComparison do
     )
 
     expect(comparison.totals_by_date(date..(date + 1.day))).to eq([
-      [date, 40, 0],
-      [date + 1.day, 0, 0]
-    ])
+                                                                    [date, 40, 0],
+                                                                    [date + 1.day, 0, 0]
+                                                                  ])
   end
 end

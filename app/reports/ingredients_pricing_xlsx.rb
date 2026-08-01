@@ -38,5 +38,4 @@ class IngredientsPricingXlsx
     end
     create_output_string(p)
   end
-
 end

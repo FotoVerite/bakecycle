@@ -62,5 +62,4 @@ class ClientListXlsx
       ]
     end
   end
-
 end

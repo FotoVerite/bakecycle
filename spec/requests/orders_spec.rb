@@ -194,7 +194,7 @@ RSpec.describe "Orders", type: :request do
         cancellation_override: true
       )
 
-      get orders_path, params: { search: { status: "cancellation_override" } }
+      get orders_path, params: { search: { order_type: "cancellation_override" } }
 
       expect(response.body).to include("Cancellation overrides")
       expect(response.body).to include("class=\"order-cancellation-status\"")

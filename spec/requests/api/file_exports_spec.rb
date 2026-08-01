@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Api::FileExports", type: :request do
   let(:bakery)      { create(:bakery) }
   let(:user)        { create(:user, bakery: bakery) }
-  let(:file_export) { create(:file_export, bakery: bakery) }
+  let(:file_export) { create(:file_export, bakery: bakery, user: user) }
 
   describe "GET /api/file_exports/:id" do
     it "redirects to sign in when unauthenticated" do
@@ -30,7 +30,7 @@ RSpec.describe "Api::FileExports", type: :request do
       end
 
       it "returns JSON with ready true and a file URL when generated" do
-        file_export_with_file = create(:file_export, :with_file, bakery: bakery)
+        file_export_with_file = create(:file_export, :with_file, bakery: bakery, user: user)
 
         get api_file_export_path(file_export_with_file)
 

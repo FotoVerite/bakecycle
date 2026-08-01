@@ -47,5 +47,4 @@ class YearTotalXlsx
     sheet.add_row []
     sheet.add_row ["Total: #{@total}"]
   end
-
 end

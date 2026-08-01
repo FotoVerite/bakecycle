@@ -22,11 +22,14 @@ class ProductsController < ApplicationController
     @name_search = params[:name].to_s.strip
     scope = policy_scope(Product)
     scope = if params[:active] != "any"
-      scope.where(removed: false, inactive: params[:active] || false)
-    else
-      scope.where(removed: false)
+              scope.where(removed: false, inactive: params[:active] || false)
+            else
+              scope.where(removed: false)
+            end
+    if @name_search.present?
+      scope = scope.where("products.name ILIKE ?",
+                          "%#{ActiveRecord::Base.sanitize_sql_like(@name_search)}%")
     end
-    scope = scope.where("products.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(@name_search)}%") if @name_search.present?
     @products = scope.order_by_name.paginate(page: params[:page])
   end
 
@@ -154,7 +157,9 @@ class ProductsController < ApplicationController
     @query = ProductProjectionsQuery.new(current_bakery, @start_date, @end_date, category_buffers: @category_buffers)
     @category_summary = @query.category_summary
 
-    rows = @query.rows.select { |row| row.baseline.positive? || row.quantity.positive? || row.confirmed_quantity.positive? }
+    rows = @query.rows.select { |row|
+      row.baseline.positive? || row.quantity.positive? || row.confirmed_quantity.positive?
+    }
 
     # One row per product, dates as columns -- the flat (date, product) list this
     # is built from was unreadable at 600+ rows for a single week. Search/category

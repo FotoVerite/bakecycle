@@ -213,7 +213,8 @@ describe BakeListData do
     # A different delivery date's shipment items also bake on this same run for
     # the same product, so the run's order_quantity (120) exceeds this bake
     # list's own wholesale row (100).
-    other_date_shipment = create(:shipment, bakery: bakery, client: create(:client, bakery: bakery), date: bake_date + 3.days)
+    other_date_shipment = create(:shipment, bakery: bakery, client: create(:client, bakery: bakery),
+                                            date: bake_date + 3.days)
     create(:shipment_item, shipment: other_date_shipment, product: croissant, product_quantity: 20,
                            production_run: production_run)
     create(:run_item, bakery: bakery, product: croissant, production_run: production_run,

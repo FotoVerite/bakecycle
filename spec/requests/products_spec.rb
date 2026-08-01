@@ -70,9 +70,9 @@ RSpec.describe "Products", type: :request do
     it "targets product table action links at the top frame" do
       get products_path
 
-      expect(response.body).to match(/<a[^>]+data-turbo-frame="_top"[^>]+href="\/products\/#{product.id}"/)
-      expect(response.body).to match(/<a[^>]+data-turbo-frame="_top"[^>]+href="\/products\/#{product.id}\/edit"/)
-      expect(response.body).to match(/<a[^>]+data-turbo-frame="_top"[^>]+href="\/products\/#{product.id}\/papertrail"/)
+      expect(response.body).to match(%r{<a[^>]+data-turbo-frame="_top"[^>]+href="/products/#{product.id}"})
+      expect(response.body).to match(%r{<a[^>]+data-turbo-frame="_top"[^>]+href="/products/#{product.id}/edit"})
+      expect(response.body).to match(%r{<a[^>]+data-turbo-frame="_top"[^>]+href="/products/#{product.id}/papertrail"})
     end
 
     it "shows a product" do
@@ -111,7 +111,7 @@ RSpec.describe "Products", type: :request do
        "already references (so its select doesn't silently lose its value)" do
       create(:client, bakery: bakery, name: "Active Client", active: true)
       referenced_inactive_client = create(:client, bakery: bakery, name: "Referenced Inactive Client",
-                                                    active: false)
+                                                   active: false)
       create(:client, bakery: bakery, name: "Unrelated Inactive Client", active: false)
       create(:price_variant, product: product, client: referenced_inactive_client, quantity: 5)
 

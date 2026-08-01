@@ -12,7 +12,7 @@ describe ProductTotalsQuery do
       product = create(:product, bakery: bakery, name: "Croissant")
       order = create(:order, bakery: bakery, start_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, wednesday: 10,
-        thursday: 12)
+                          thursday: 12)
 
       totals = described_class.new(bakery, start_date, end_date).totals
 
@@ -25,11 +25,11 @@ describe ProductTotalsQuery do
       product = create(:product, bakery: bakery, name: "Baguette")
 
       standing = create(:order, bakery: bakery, client: client, route: route, order_type: "standing",
-        start_date: start_date - 7.days, order_item_count: 0)
+                                start_date: start_date - 7.days, order_item_count: 0)
       create(:order_item, bakery: bakery, order: standing, product: product, daily_item_count: 0, wednesday: 5)
 
       temporary = create(:order, bakery: bakery, client: client, route: route, order_type: "temporary",
-        start_date: start_date, end_date: start_date, order_item_count: 0)
+                                 start_date: start_date, end_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: temporary, product: product, daily_item_count: 0, wednesday: 40)
 
       totals = described_class.new(bakery, start_date, start_date).totals
@@ -44,12 +44,12 @@ describe ProductTotalsQuery do
       sample_product = create(:product, bakery: bakery, name: "Sourdough Sample")
 
       standing = create(:order, bakery: bakery, client: client, route: route, order_type: "standing",
-        start_date: start_date - 7.days, order_item_count: 0)
+                                start_date: start_date - 7.days, order_item_count: 0)
       create(:order_item, bakery: bakery, order: standing, product: standing_product, daily_item_count: 0,
-        wednesday: 5)
+                          wednesday: 5)
 
       sample = create(:sample_order, bakery: bakery, client: client, route: route,
-        start_date: start_date, end_date: start_date, order_item_count: 0)
+                                     start_date: start_date, end_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: sample, product: sample_product, daily_item_count: 0, wednesday: 1)
 
       totals = described_class.new(bakery, start_date, start_date).totals
@@ -61,7 +61,7 @@ describe ProductTotalsQuery do
       product = create(:product, bakery: bakery, name: "Danish")
       order = create(:order, bakery: bakery, start_date: start_date, end_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: order, product: product, daily_item_count: 0, wednesday: 10,
-        thursday: 10)
+                          thursday: 10)
 
       totals = described_class.new(bakery, start_date, end_date).totals
 
@@ -73,7 +73,7 @@ describe ProductTotalsQuery do
       other_product = create(:product, bakery: other_bakery, name: "Other Bakery Product")
       other_order = create(:order, bakery: other_bakery, start_date: start_date, order_item_count: 0)
       create(:order_item, bakery: other_bakery, order: other_order, product: other_product, daily_item_count: 0,
-        wednesday: 99)
+                          wednesday: 99)
 
       totals = described_class.new(bakery, start_date, end_date).totals
 
@@ -85,23 +85,23 @@ describe ProductTotalsQuery do
 
       # Client 1: standing + sample of the SAME product on the same route -- quantities should sum.
       c1_standing = create(:order, bakery: bakery, order_type: "standing",
-        start_date: start_date - 7.days, order_item_count: 0)
+                                   start_date: start_date - 7.days, order_item_count: 0)
       create(:order_item, bakery: bakery, order: c1_standing, product: product, daily_item_count: 0, wednesday: 5)
       c1_sample = create(:sample_order, bakery: bakery, client: c1_standing.client, route: c1_standing.route,
-        start_date: start_date, end_date: start_date, order_item_count: 0)
+                                        start_date: start_date, end_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: c1_sample, product: product, daily_item_count: 0, wednesday: 2)
 
       # Client 2: standing overridden by temporary (no sample) -- only temporary's quantity counts.
       c2_standing = create(:order, bakery: bakery, order_type: "standing",
-        start_date: start_date - 7.days, order_item_count: 0)
+                                   start_date: start_date - 7.days, order_item_count: 0)
       create(:order_item, bakery: bakery, order: c2_standing, product: product, daily_item_count: 0, wednesday: 100)
       c2_temp = create(:temporary_order, bakery: bakery, client: c2_standing.client, route: c2_standing.route,
-        start_date: start_date, end_date: start_date, order_item_count: 0)
+                                         start_date: start_date, end_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: c2_temp, product: product, daily_item_count: 0, wednesday: 3)
 
       # Client 3: sample only, no standing/temporary at all.
       c3_sample = create(:sample_order, bakery: bakery, start_date: start_date, end_date: start_date,
-        order_item_count: 0)
+                                        order_item_count: 0)
       create(:order_item, bakery: bakery, order: c3_sample, product: product, daily_item_count: 0, wednesday: 1)
 
       totals = described_class.new(bakery, start_date, start_date).totals
@@ -118,11 +118,11 @@ describe ProductTotalsQuery do
       sample_product = create(:product, bakery: bakery, name: "Sourdough Sample", base_price: 25)
 
       standing = create(:order, bakery: bakery, client: client, route: route, start_date: start_date,
-        order_item_count: 0)
+                                order_item_count: 0)
       create(:order_item, bakery: bakery, order: standing, product: standing_product, daily_item_count: 0,
-        wednesday: 4)
+                          wednesday: 4)
       sample = create(:sample_order, bakery: bakery, client: client, route: route,
-        start_date: start_date, end_date: start_date, order_item_count: 0)
+                                     start_date: start_date, end_date: start_date, order_item_count: 0)
       create(:order_item, bakery: bakery, order: sample, product: sample_product, daily_item_count: 0, wednesday: 3)
 
       ShipmentCreator.new(standing, start_date).create!

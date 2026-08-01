@@ -54,10 +54,10 @@ namespace :db do
   end
 
   def with_elapsed_time(label)
-    started_at = Time.now
+    started_at = Time.zone.now
     puts "--- #{label} ---"
     yield
-    puts "--- #{label} done (%.1fs) ---" % (Time.now - started_at)
+    puts format("--- #{label} done (%.1fs) ---", Time.zone.now - started_at)
   end
 
   desc "Sync production data into dev or staging, excluding the PaperTrail versions table (TARGET=development|staging)"
@@ -77,7 +77,7 @@ namespace :db do
       raise "Aborted: confirmation did not match '#{local_db}'." unless confirmation == local_db
     end
 
-    overall_started_at = Time.now
+    overall_started_at = Time.zone.now
 
     # --verbose makes both ends print one line per object (table/index/sequence/etc.)
     # as they're processed, instead of sitting silent for the whole transfer.
@@ -96,7 +96,7 @@ namespace :db do
       restore_cmd = ["ssh", STAGING_SSH, "pg_restore --no-owner --no-acl --verbose -d #{STAGING_DB}"]
     else
       dev_config = ActiveRecord::Base.configurations.configs_for(env_name: "development", name: "primary")
-                                      .configuration_hash
+        .configuration_hash
       restore_env["PGPASSWORD"] = dev_config[:password].to_s if dev_config[:password].present?
       conn_args += ["-h", dev_config[:host].to_s] if dev_config[:host].present?
       conn_args += ["-p", dev_config[:port].to_s] if dev_config[:port].present?
@@ -166,7 +166,8 @@ namespace :db do
     with_elapsed_time("Running db:migrate against #{target}") do
       migrate_cmd =
         if target == "staging"
-          ["ssh", STAGING_SSH, "#{STAGING_SHELL_SETUP} && cd #{STAGING_RELEASE_PATH} && RAILS_ENV=staging bin/rails db:migrate"]
+          ["ssh", STAGING_SSH,
+           "#{STAGING_SHELL_SETUP} && cd #{STAGING_RELEASE_PATH} && RAILS_ENV=staging bin/rails db:migrate"]
         else
           [{ "RAILS_ENV" => "development" }, "bin/rails", "db:migrate"]
         end
@@ -175,7 +176,7 @@ namespace :db do
 
     Rake::Task["db:sync_bakery_logos"].invoke if target == "staging"
 
-    puts "Done. Total time: %.1fs" % (Time.now - overall_started_at)
+    puts format("Done. Total time: %.1fs", Time.zone.now - overall_started_at)
   end
 
   desc "Sync staging data into dev, excluding the PaperTrail versions table"
@@ -190,7 +191,7 @@ namespace :db do
       raise "Aborted: confirmation did not match '#{local_db}'." unless confirmation == local_db
     end
 
-    overall_started_at = Time.now
+    overall_started_at = Time.zone.now
 
     dump_cmd = [
       "ssh", STAGING_SSH,
@@ -200,7 +201,7 @@ namespace :db do
     reset_schema_sql = "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 
     dev_config = ActiveRecord::Base.configurations.configs_for(env_name: "development", name: "primary")
-                                    .configuration_hash
+      .configuration_hash
     restore_env = {}
     conn_args = []
     restore_env["PGPASSWORD"] = dev_config[:password].to_s if dev_config[:password].present?
@@ -271,7 +272,7 @@ namespace :db do
       raise "db:migrate against development failed" unless system(*migrate_cmd)
     end
 
-    puts "Done. Total time: %.1fs" % (Time.now - overall_started_at)
+    puts format("Done. Total time: %.1fs", Time.zone.now - overall_started_at)
   end
 
   # Only the Bakery#logo attachment is copied -- NOT the whole S3 bucket, which also
@@ -348,7 +349,8 @@ namespace :db do
         "ssh", "-p", PRODUCTION_SSH_PORT.to_s, PRODUCTION_SSH,
         "cd /var/www/bakecycle_production/current && RAILS_ENV=production bin/rails runner -"
       ]
-      raise "Logo export from production failed" unless system(*export_cmd, in: export_script_file.path, out: logo_dump.path)
+      raise "Logo export from production failed" unless system(*export_cmd, in: export_script_file.path,
+                                                                            out: logo_dump.path)
 
       # The import script needs stdin free for the binary logo payload, so (unlike the
       # export side) it can't be fed to `bin/rails runner -` itself -- that form reads
@@ -362,7 +364,8 @@ namespace :db do
         puts "Importing bakery logos into staging..."
         import_cmd = [
           "ssh", STAGING_SSH,
-          "#{STAGING_SHELL_SETUP} && cd #{STAGING_RELEASE_PATH} && RAILS_ENV=staging bin/rails runner #{remote_script_path}"
+          "#{STAGING_SHELL_SETUP} && cd #{STAGING_RELEASE_PATH} && " \
+            "RAILS_ENV=staging bin/rails runner #{remote_script_path}"
         ]
         raise "Logo import into staging failed" unless system(*import_cmd, in: logo_dump.path)
       ensure

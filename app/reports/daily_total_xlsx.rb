@@ -50,5 +50,4 @@ class DailyTotalXlsx
       sheet.add_row data
     end
   end
-
 end

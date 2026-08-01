@@ -12,7 +12,8 @@ describe ProductTotalsDateRangeXlsx do
     cookie = create(:product, bakery: bakery, name: "Chocolate Chip", product_type: "cookie")
 
     order = create(:order, bakery: bakery, start_date: date, order_item_count: 0)
-    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 300, thursday: 100)
+    create(:order_item, bakery: bakery, order: order, product: croissant, daily_item_count: 0, wednesday: 300,
+                        thursday: 100)
     create(:order_item, bakery: bakery, order: order, product: baguette, daily_item_count: 0, wednesday: 12)
     create(:order_item, bakery: bakery, order: order, product: cookie, daily_item_count: 0, wednesday: 40)
 
@@ -20,20 +21,20 @@ describe ProductTotalsDateRangeXlsx do
 
     expect(report.header_row).to eq(["Product", "6/3/26", "6/4/26", "Grand Total"])
     expect(report.grouped_rows).to eq([
-      {
-        label: "Bread",
-        rows: [
-          ["Baguette", 12, 0, 12],
-          ["Croissant", 300, 100, 400]
-        ],
-        subtotal: ["Subtotal", 312, 100, 412]
-      },
-      {
-        label: "Cookie",
-        rows: [["Chocolate Chip", 40, 0, 40]],
-        subtotal: ["Subtotal", 40, 0, 40]
-      }
-    ])
+                                        {
+                                          label: "Bread",
+                                          rows: [
+                                            ["Baguette", 12, 0, 12],
+                                            ["Croissant", 300, 100, 400]
+                                          ],
+                                          subtotal: ["Subtotal", 312, 100, 412]
+                                        },
+                                        {
+                                          label: "Cookie",
+                                          rows: [["Chocolate Chip", 40, 0, 40]],
+                                          subtotal: ["Subtotal", 40, 0, 40]
+                                        }
+                                      ])
   end
 
   it "orders product type groups by the model's own enum order, not alphabetically" do

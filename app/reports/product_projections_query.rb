@@ -70,8 +70,8 @@ class ProductProjectionsQuery
         quantity = (baseline * (1 + seasonal_change) * (1 + (buffer_percent / 100.0))).round
 
         Row.new(date: date, product: product, baseline: baseline, seasonal_change: seasonal_change,
-          buffer_percent: buffer_percent, quantity: quantity,
-          confirmed_quantity: confirmed[[date, product.id]] || 0)
+                buffer_percent: buffer_percent, quantity: quantity,
+                confirmed_quantity: confirmed[[date, product.id]] || 0)
       end
     end.sort_by { |row| [row.date, row.product.name] }
   end

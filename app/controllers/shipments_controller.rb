@@ -20,7 +20,8 @@ class ShipmentsController < ApplicationController
     searched_scope = scope_with_search
     @shipments = searched_scope.paginate(page: params[:page])
     @search_active = search_params.present? && search_params.to_h.values.flatten.any?(&:present?)
-    @double_invoices = Shipment.duplicate_invoices(current_bakery, (Time.zone.today - 2.days)..(Time.zone.today + 7.days))
+    @double_invoices = Shipment.duplicate_invoices(current_bakery,
+                                                   (Time.zone.today - 2.days)..(Time.zone.today + 7.days))
     if @double_invoices.any?
       ActiveRecord::Associations::Preloader.new(
         records: @double_invoices,

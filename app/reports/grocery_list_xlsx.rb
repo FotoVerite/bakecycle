@@ -51,5 +51,4 @@ class GroceryListXlsx
       sheet.add_row [key, weights[key]]
     end
   end
-
 end

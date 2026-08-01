@@ -57,5 +57,4 @@ class PackListXlsx
       sheet.add_row ["Total: #{product_array[1]['total']}"]
     end
   end
-
 end

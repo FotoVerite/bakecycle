@@ -87,5 +87,4 @@ class DailyProductionRunTotalsXlsx
     end
     total_row
   end
-
 end

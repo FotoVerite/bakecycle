@@ -106,5 +106,4 @@ class DailyProductTotalsXlsx
     end
     total_row
   end
-
 end

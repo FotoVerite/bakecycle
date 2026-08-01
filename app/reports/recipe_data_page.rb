@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
-
 class RecipeDataPage
   extend Forwardable
   include WeightDisplayer
@@ -282,5 +280,3 @@ class RecipeDataPage
     ]
   end
 end
-
-# rubocop:enable Metrics/ClassLength

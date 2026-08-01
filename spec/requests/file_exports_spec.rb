@@ -21,7 +21,7 @@ RSpec.describe "FileExports", type: :request do
       end
 
       it "lists only the current bakery's exports" do
-        mine = create(:file_export, :with_file, bakery: bakery)
+        mine = create(:file_export, :with_file, bakery: bakery, user: user)
         other = create(:file_export, :with_file, bakery: create(:bakery))
 
         get file_exports_path
@@ -31,7 +31,9 @@ RSpec.describe "FileExports", type: :request do
       end
 
       it "shows at most the 10 most recently created exports" do
-        exports = Array.new(11) { |i| create(:file_export, :with_file, bakery: bakery, created_at: i.days.ago) }
+        exports = Array.new(11) do |i|
+          create(:file_export, :with_file, bakery: bakery, user: user, created_at: i.days.ago)
+        end
         oldest = exports.min_by(&:created_at)
 
         get file_exports_path

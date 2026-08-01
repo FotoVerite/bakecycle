@@ -26,7 +26,7 @@ class BakeLeadDayVariant < ApplicationRecord
   belongs_to :client
 
   validates :bake_lead_days, presence: true,
-    numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+                             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :client_id, uniqueness: { scope: :product_id, conditions: -> { where(removed: false) } }
 
   def client_name

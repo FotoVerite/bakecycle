@@ -22,9 +22,9 @@ module ApplicationHelper
   def action_icon(path, icon_name:, label:, variant:, link_data: {}, span_data: {}, link_options: {})
     link_to path, **link_options, data: link_data do
       content_tag(:span, icon(icon_name),
-        class: "table-action-icon table-action-icon--#{variant} icon-link-tooltip",
-        "aria-label": label,
-        data: span_data)
+                  class: "table-action-icon table-action-icon--#{variant} icon-link-tooltip",
+                  "aria-label": label,
+                  data: span_data)
     end
   end
 

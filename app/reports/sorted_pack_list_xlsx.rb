@@ -62,5 +62,4 @@ class SortedPackListXlsx
       sheet.add_row []
     end
   end
-
 end

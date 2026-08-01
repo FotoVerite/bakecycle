@@ -33,9 +33,9 @@ describe ProductTotalsSnapshot do
         [row.delivery_date, row.product_name, row.quantity]
       end
       expect(rows).to eq([
-        [date, "Baguette", 12],
-        [date, "Croissant", 522]
-      ])
+                           [date, "Baguette", 12],
+                           [date, "Croissant", 522]
+                         ])
     end
 
     it "captures created shipments when the source is generated_invoices" do

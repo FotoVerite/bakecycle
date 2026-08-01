@@ -104,7 +104,7 @@ describe BakeListXlsx do
     )
   end
 
-  it "adds a Tray Counts section to the Retail and Wholesale sheets for Almond Croissant and Chocolate Almond Croissant" do
+  it "adds Tray Counts for almond and chocolate almond croissants to Retail and Wholesale sheets" do
     almond = create(:product, bakery: bakery, name: "Almond Croissant", product_type: "vienoisserie",
                               bake_lead_days: 0, over_bake: 0)
     choc_almond = create(:product, bakery: bakery, name: "Chocolate Almond Croissant", product_type: "vienoisserie",

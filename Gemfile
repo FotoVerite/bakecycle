@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.3.1"
+ruby "4.0.6"
 
 gem "aws-sdk-s3"
 gem "caxlsx"
@@ -102,7 +102,7 @@ group :production, :staging do
   # pre-curated set of "interesting" spans decided in advance. That only
   # works if the data is actually wide, so use_all instead of hand-picking
   # instrumentation libraries.
-  gem "opentelemetry-sdk"
   gem "opentelemetry-exporter-otlp"
   gem "opentelemetry-instrumentation-all"
+  gem "opentelemetry-sdk"
 end

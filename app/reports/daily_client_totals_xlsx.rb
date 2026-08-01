@@ -110,5 +110,4 @@ class DailyClientTotalsXlsx
     end
     total_row
   end
-
 end

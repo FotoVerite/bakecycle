@@ -84,11 +84,19 @@ class ClientsController < ApplicationController
     @available_clients = ItemFinder.new(current_user).clients.order_by_name
     @available_products = ItemFinder.new(current_user).products.order_by_name
 
-    @selected_client = @available_clients.find { |client| client.id.to_s == @client_ids.first } if @client_ids&.size == 1
-    @selected_product = @available_products.find { |product| product.id.to_s == @product_ids.first } if @selected_client && @product_ids&.size == 1
+    if @client_ids&.size == 1
+      @selected_client = @available_clients.find { |client|
+        client.id.to_s == @client_ids.first
+      }
+    end
+    if @selected_client && @product_ids&.size == 1
+      @selected_product = @available_products.find { |product|
+        product.id.to_s == @product_ids.first
+      }
+    end
 
     @query = ClientFoodCostQuery.new(current_bakery, @start_date, @end_date,
-      client_ids: @client_ids, product_ids: @selected_client ? @product_ids : nil)
+                                     client_ids: @client_ids, product_ids: @selected_client ? @product_ids : nil)
 
     # Three drill levels: everyone -> one client's items -> one item's dates.
     # A flat (client, item, date) grid was the first cut and was unusable at
