@@ -15,7 +15,9 @@ set :puma_service_unit, "bakecycle-staging-puma.service"
 set :worker_service_units, %w[bakecycle-staging-solid-queue.service]
 set :workers, "*" => 2
 
-append :linked_files, "config/credentials/staging.key"
+append :linked_files,
+       "config/credentials/staging.yml.enc",
+       "config/credentials/staging.key"
 
 # Simple Role Syntax
 # ==================

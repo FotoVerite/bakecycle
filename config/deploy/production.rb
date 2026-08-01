@@ -6,6 +6,10 @@ set :branch, "master"
 set :ssh_options, forward_agent: true, port: 21500
 set :worker_service_units, %w[resque.service]
 
+append :linked_files,
+       "config/credentials/production.yml.enc",
+       "config/credentials/production.key"
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary

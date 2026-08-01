@@ -106,3 +106,5 @@ group :production, :staging do
   gem "opentelemetry-instrumentation-all"
   gem "opentelemetry-sdk"
 end
+
+gem "ostruct", "~> 0.6.3"

@@ -812,6 +812,7 @@ DEPENDENCIES
   opentelemetry-exporter-otlp
   opentelemetry-instrumentation-all
   opentelemetry-sdk
+  ostruct (~> 0.6.3)
   paper_trail
   pdf-reader
   pg

@@ -12,6 +12,10 @@ set :default_env, {
   path: "/home/deploy/.local/share/mise/shims:/home/deploy/.local/bin:/usr/local/bin:/usr/bin:/bin"
 }
 
+append :linked_files,
+       "config/credentials/production.yml.enc",
+       "config/credentials/production.key"
+
 role :app, %w[deploy@96.126.110.82]
 role :web, %w[deploy@96.126.110.82]
 role :db, %w[deploy@96.126.110.82]
