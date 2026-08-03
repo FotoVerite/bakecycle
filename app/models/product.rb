@@ -232,9 +232,14 @@ class Product < ApplicationRecord
     inclusion.total_bakers_percentage
   end
 
+  # The all-clients ($0) row the product form prefills is a placeholder, not a
+  # price -- it matches every client that has no variant of their own, and
+  # because 0 is truthy in Ruby it beat the `|| base_price` fallback in #price.
+  # A client-specific $0 is left alone: that one is deliberate.
   def lookup_price_variant(quantity, client)
     matching = price_variants
       .select { |variant| variant.client_id.nil? || variant.client_id == client.id }
+      .reject { |variant| variant.client_id.nil? && variant.price.to_f.zero? }
       .sort_by { |variant| -variant.quantity }
       .detect { |variant| variant.quantity <= quantity }
     matching&.price

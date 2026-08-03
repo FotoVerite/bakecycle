@@ -152,6 +152,29 @@ describe Product do
       expect(product.price(50, client_2)).to eq(2)
       expect(product.price(50, client_1)).to eq(2)
     end
+
+    it "ignores the $0 all-clients placeholder and falls back to the base price" do
+      create(:price_variant, product: product, client: nil, price: 0, quantity: 1)
+
+      expect(product.price(1, client_1)).to eq(10)
+      expect(product.price(50, client_2)).to eq(10)
+    end
+
+    it "honors a deliberate $0 price for a specific client" do
+      create(:price_variant, product: product, client: nil, price: 0, quantity: 1)
+      create(:price_variant, product: product, client: client_1, price: 0, quantity: 1)
+
+      expect(product.price(1, client_1)).to eq(0)
+      expect(product.price(1, client_2)).to eq(10)
+    end
+
+    it "still uses a real all-clients tier alongside the $0 placeholder" do
+      create(:price_variant, product: product, client: nil, price: 0, quantity: 1)
+      create(:price_variant, product: product, client: nil, price: 6, quantity: 20)
+
+      expect(product.price(19, client_1)).to eq(10)
+      expect(product.price(20, client_1)).to eq(6)
+    end
   end
 
   describe "after touch" do

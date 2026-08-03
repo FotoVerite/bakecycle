@@ -4,20 +4,20 @@
     {
       "name": "Rails server",
       "runtimeExecutable": "/usr/bin/perl",
-      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='3.3.1'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/3.3.1/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/rails','server','-P','/Volumes/Work-Play/rails/bakecycle/tmp/pids/preview.pid'"],
+      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='4.0.6'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/4.0.6/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/rails','server','-P','/Volumes/Work-Play/rails/bakecycle/tmp/pids/preview.pid'"],
       "port": 3001,
       "autoPort": true
     },
     {
       "name": "Solid Queue worker",
       "runtimeExecutable": "/usr/bin/perl",
-      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='3.3.1'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/3.3.1/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/jobs'"],
+      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='4.0.6'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/4.0.6/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/jobs'"],
       "port": null
     },
     {
       "name": "Dart Sass watch",
       "runtimeExecutable": "/usr/bin/perl",
-      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='3.3.1'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/3.3.1/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/rails','dartsass:watch'"],
+      "runtimeArgs": ["-e", "$ENV{BUNDLE_GEMFILE}='/Volumes/Work-Play/rails/bakecycle/Gemfile'; $ENV{RBENV_VERSION}='4.0.6'; chdir '/Volumes/Work-Play/rails/bakecycle' or die \"chdir: $!\"; exec '/Users/matthewbergman/.rbenv/versions/4.0.6/bin/ruby','/Volumes/Work-Play/rails/bakecycle/bin/rails','dartsass:watch'"],
       "port": null
     }
   ]
