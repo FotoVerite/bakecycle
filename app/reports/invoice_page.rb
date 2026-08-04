@@ -170,12 +170,20 @@ class InvoicePage
   end
 
   def note
-    notes_data if @shipment.note.present?
+    notes_data if note_text.present?
   end
 
   def notes_data
     text "Notes", style: :bold
-    text @shipment.note
+    text note_text
     move_down 15
+  end
+
+  # Sample orders bill at $0 by design (ShipmentCreator#shipment_items), so the
+  # invoice needs to say why rather than looking like a pricing bug. Appended
+  # after whatever staff already wrote in Special Notes, never replacing it --
+  # and it's the whole Notes section when there's no note of their own.
+  def note_text
+    [@shipment.note.presence, ("SAMPLE ORDER" if @shipment.sample?)].compact.join("\n")
   end
 end

@@ -86,6 +86,37 @@ describe ShipmentCreator do
     end
   end
 
+  describe "sample orders" do
+    it "keeps the delivery fee waived when the invoice is later edited" do
+      client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)
+      product = create(:product, base_price: 10, bakery: bakery)
+      order = create(:order, start_date: today, client: client, bakery: bakery, daily_item_count: 1,
+                             order_item_count: 1, order_type: "sample")
+      order.order_items.first.update!(product: product)
+
+      shipment = ShipmentCreator.new(order, today).create!
+      expect(shipment.delivery_fee).to eq(0)
+
+      shipment.update!(note: "Tasting for the buyer")
+
+      expect(shipment.reload.delivery_fee).to eq(0)
+      expect(shipment.price).to eq(0)
+    end
+
+    it "still charges a non-sample order's fee on update" do
+      client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)
+      product = create(:product, base_price: 10, bakery: bakery)
+      order = create(:order, start_date: today, client: client, bakery: bakery, daily_item_count: 1,
+                             order_item_count: 1)
+      order.order_items.first.update!(product: product)
+
+      shipment = ShipmentCreator.new(order, today).create!
+      shipment.update!(note: "Leave at door")
+
+      expect(shipment.reload.delivery_fee).to eq(25)
+    end
+  end
+
   describe "daily delivery fees" do
     it "does not charge fee if there is no order" do
       client = create(:client, delivery_fee_option: 1, delivery_minimum: 100, delivery_fee: 25, bakery: bakery)

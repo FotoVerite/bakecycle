@@ -74,6 +74,48 @@ describe InvoicesPdf do
     expect(text).to include("PO-9988")
   end
 
+  it "flags a sample order's invoice, keeping the note staff already wrote" do
+    bakery = create(:bakery)
+    route = create(:route, bakery: bakery)
+    client = create(:client, bakery: bakery)
+    order = create(:order, bakery: bakery, client: client, route: route, order_type: "sample")
+    shipment = create(:shipment, bakery: bakery, route: route, client: client, order: order,
+                                 note: "Leave by the back door")
+    create(:shipment_item, bakery: bakery, shipment: shipment)
+
+    text = pdf_text(InvoicesPdf.new(bakery, Shipment.where(id: shipment.id)).render)
+
+    expect(text).to include("Leave by the back door")
+    expect(text).to include("SAMPLE ORDER")
+  end
+
+  it "flags a sample order's invoice that has no note of its own" do
+    bakery = create(:bakery)
+    route = create(:route, bakery: bakery)
+    client = create(:client, bakery: bakery)
+    order = create(:order, bakery: bakery, client: client, route: route, order_type: "sample")
+    shipment = create(:shipment, bakery: bakery, route: route, client: client, order: order, note: nil)
+    create(:shipment_item, bakery: bakery, shipment: shipment)
+
+    text = pdf_text(InvoicesPdf.new(bakery, Shipment.where(id: shipment.id)).render)
+
+    expect(text).to include("Notes")
+    expect(text).to include("SAMPLE ORDER")
+  end
+
+  it "does not flag an invoice from a non-sample order" do
+    bakery = create(:bakery)
+    route = create(:route, bakery: bakery)
+    client = create(:client, bakery: bakery)
+    order = create(:order, bakery: bakery, client: client, route: route, order_type: "standing")
+    shipment = create(:shipment, bakery: bakery, route: route, client: client, order: order, note: nil)
+    create(:shipment_item, bakery: bakery, shipment: shipment)
+
+    text = pdf_text(InvoicesPdf.new(bakery, Shipment.where(id: shipment.id)).render)
+
+    expect(text).to_not include("SAMPLE ORDER")
+  end
+
   it "renders multiple shipments without error" do
     bakery = create(:bakery)
     create_list(:shipment, 2, bakery: bakery)

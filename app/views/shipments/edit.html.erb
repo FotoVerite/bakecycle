@@ -28,5 +28,14 @@
     </div>
   </div>
 
+  <% if shipment.sample? %>
+    <section class="sample-order-notice" aria-labelledby="sample-invoice-title">
+      <div>
+        <h2 id="sample-invoice-title">Sample order</h2>
+      </div>
+      <span class="sample-order-badge">No charge</span>
+    </section>
+  <% end %>
+
   <%= render "form"%>
 </div>

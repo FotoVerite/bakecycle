@@ -160,6 +160,25 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       expect(response.body).to include("href=\"#{client_path(client)}\"")
     end
 
+    it "banners an invoice generated from a sample order" do
+      order = create(:order, bakery: bakery, client: client, route: route, order_type: "sample")
+      sample_shipment = create(:shipment, bakery: bakery, client: client, route: route, order: order)
+
+      get edit_shipment_path(sample_shipment)
+
+      expect(response).to be_successful
+      expect(response.body).to include("sample-order-notice")
+      expect(response.body).to include("Sample order")
+      expect(response.body).to include("No charge")
+    end
+
+    it "does not banner an invoice with no sample order behind it" do
+      get edit_shipment_path(shipment)
+
+      expect(response).to be_successful
+      expect(response.body).to_not include("sample-order-notice")
+    end
+
     it "updates a shipment" do
       patch shipment_path(shipment), params: { shipment: { note: "leave at door" } }
       expect(shipment.reload.note).to eq("leave at door")

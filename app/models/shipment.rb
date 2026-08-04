@@ -214,6 +214,10 @@ class Shipment < ApplicationRecord
   end
 
   def check_delivery_fee?
+    # Sample orders are free tastings -- ShipmentCreator waives the fee at
+    # creation, and this runs on every update, so without the same guard the
+    # fee reappeared the first time anyone edited a sample invoice.
+    return self.delivery_fee = 0 if sample?
     return self.delivery_fee = 0 unless charge_precentage_fee? || charge_daily_fee? || charge_weekly_fee?
 
     self.delivery_fee = order.client_calculate_delivery_fee(subtotal)
