@@ -172,6 +172,49 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       expect(response.body).to include("No charge")
     end
 
+    it "hides the whole prices section on a sample order's invoice" do
+      order = create(:order, bakery: bakery, client: client, route: route, order_type: "sample")
+      sample_shipment = create(:shipment, bakery: bakery, client: client, route: route, order: order)
+
+      get edit_shipment_path(sample_shipment)
+
+      expect(response).to be_successful
+      expect(response.body).to_not include("discount-panel")
+      expect(response.body).to_not include("Sub-total:")
+      expect(response.body).to_not include("Total Price:")
+    end
+
+    it "shows the prices section on a normal invoice" do
+      get edit_shipment_path(shipment)
+
+      expect(response).to be_successful
+      expect(response.body).to include("discount-panel")
+      expect(response.body).to include("Total Price:")
+    end
+
+    it "renders a readonly $0 price on every line of a sample order's invoice" do
+      product = create(:product, bakery: bakery, base_price: 12)
+      order = create(:order, bakery: bakery, client: client, route: route, order_type: "sample")
+      sample_shipment = create(:shipment, bakery: bakery, client: client, route: route, order: order)
+      create(:shipment_item, bakery: bakery, shipment: sample_shipment, product: product, product_price: 0)
+
+      get edit_shipment_path(sample_shipment)
+
+      expect(response).to be_successful
+      price_input = response.body[/<input[^>]*product_price_input[^>]*>/]
+      expect(price_input).to include('readonly="readonly"')
+      expect(price_input).to include('value="0"')
+    end
+
+    it "keeps prices editable on a normal invoice" do
+      create(:shipment_item, bakery: bakery, shipment: shipment)
+
+      get edit_shipment_path(shipment)
+
+      expect(response).to be_successful
+      expect(response.body[/<input[^>]*product_price_input[^>]*>/]).to_not include("readonly")
+    end
+
     it "does not banner an invoice with no sample order behind it" do
       get edit_shipment_path(shipment)
 

@@ -42,33 +42,37 @@
       <% end %>
     </div>
   </fieldset>
-  <fieldset class="form-section">
-    <legend>Prices</legend>
-    <%= render "shared/discount_fields",
-               form: f,
-               type_method: :discount_type,
-               value_method: :discount_value,
-               title: "Invoice discount",
-               description: "Adjust this invoice only. Percentage discounts are calculated from the subtotal.",
-               preview_label: "Discount applied",
-               preview_value: shipment.discount_amount,
-               preview_note: "Subtotal is the discount base.",
-               discount_base_amount: shipment.object.discount_base_amount %>
-    <div class="form-summary-grid">
-      <div class="form-summary-item">
-        <p><strong>Sub-total:</strong> <%= shipment.subtotal %></p>
+  <%# A sample invoice is $0 across the board -- discount, subtotal, fee and
+      total are all zero by definition, so the whole section is noise. %>
+  <% unless shipment.sample? %>
+    <fieldset class="form-section">
+      <legend>Prices</legend>
+      <%= render "shared/discount_fields",
+                 form: f,
+                 type_method: :discount_type,
+                 value_method: :discount_value,
+                 title: "Invoice discount",
+                 description: "Adjust this invoice only. Percentage discounts are calculated from the subtotal.",
+                 preview_label: "Discount applied",
+                 preview_value: shipment.discount_amount,
+                 preview_note: "Subtotal is the discount base.",
+                 discount_base_amount: shipment.object.discount_base_amount %>
+      <div class="form-summary-grid">
+        <div class="form-summary-item">
+          <p><strong>Sub-total:</strong> <%= shipment.subtotal %></p>
+        </div>
+        <div class="form-summary-item">
+          <p><strong>Delivery Fee:</strong> <%= shipment.delivery_fee %></p>
+        </div>
+        <div class="form-summary-item">
+          <p><strong>Discount:</strong> <%= shipment.discount_amount %></p>
+        </div>
+        <div class="form-summary-item">
+          <p><strong>Total Price:</strong> <%= shipment.price %></p>
+        </div>
       </div>
-      <div class="form-summary-item">
-        <p><strong>Delivery Fee:</strong> <%= shipment.delivery_fee %></p>
-      </div>
-      <div class="form-summary-item">
-        <p><strong>Discount:</strong> <%= shipment.discount_amount %></p>
-      </div>
-      <div class="form-summary-item">
-        <p><strong>Total Price:</strong> <%= shipment.price %></p>
-      </div>
-    </div>
-  </fieldset>
+    </fieldset>
+  <% end %>
   <fieldset class="form-section shipment-products-section" data-controller="nested-form">
     <legend>Products</legend>
     <div class="nested-col-headers form-grid nested-row-grid shipment-item-grid">

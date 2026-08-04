@@ -5,6 +5,7 @@
    end %>
 <% product_type = f.object.respond_to?(:product_type) ? f.object.product_type : f.object.product_product_type.to_s.humanize(capitalize: false).titleize %>
 <% production_locked = f.object.production_run_id.present? %>
+<% sample = shipment.sample? %>
 
 <div class="nested-row form-grid nested-row-grid shipment-item-grid"
      data-controller="shipment-item"
@@ -46,9 +47,12 @@
   </div>
 
   <div class="form-field shipment-price-cell">
+    <%# Sample orders are free tastings -- every line is a flat $0 that staff
+        can't edit, rather than a price they could accidentally reintroduce. %>
     <%= f.number_field :product_price,
         class: "nested-field product_price_input",
-        value: f.object.respond_to?(:float_product_price) ? f.object.float_product_price : f.object.product_price,
+        value: sample ? 0 : (f.object.respond_to?(:float_product_price) ? f.object.float_product_price : f.object.product_price),
+        readonly: sample,
         min: 0,
         step: "0.01",
         autocomplete: "off",
