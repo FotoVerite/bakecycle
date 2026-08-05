@@ -1,0 +1,9 @@
+Hi <%= @shipment.client_primary_contact_name.presence || @shipment.client_name %>,
+
+Attached is your invoice from <%= @shipment.bakery.name %> for the delivery on <%= @shipment.date.strftime("%B %-d, %Y") %>.
+
+Invoice #<%= @shipment.invoice_number %>
+Amount due: <%= number_to_currency(@shipment.price) %>
+Payment due: <%= @shipment.payment_due_date.strftime("%B %-d, %Y") %>
+
+Please let us know if you have any questions.

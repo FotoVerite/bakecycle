@@ -62,7 +62,14 @@ class Shipment < ApplicationRecord
   before_validation :set_payment_due_date
   before_validation :apply_client_default_discount, on: :create
   before_create :set_sequence_number
-  after_create :increment_client_sequence, :send_to_contact
+  after_create :increment_client_sequence
+  # ShipmentCreator (auto-generated shipments) saves shipment_items in
+  # separate statements *after* the shipment itself is created, so an
+  # after_create callback would see zero items and email a blank invoice.
+  # after_commit waits for the whole creating transaction -- shipment plus
+  # its items -- to land before sending, matching the after_commit pattern
+  # already used elsewhere in this file's touch-propagation callbacks.
+  after_create_commit :send_to_contact
   before_update :check_delivery_fee?
   before_update :cache_price
 
@@ -259,6 +266,7 @@ class Shipment < ApplicationRecord
 
   def send_to_contact
     nil unless client.accounts_payable_contact_email && client.send_shipment_when_generated
+
     # ClientsMailer.send_invoice(self).deliver_now
   end
 
