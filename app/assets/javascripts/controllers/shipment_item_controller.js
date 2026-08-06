@@ -7,10 +7,6 @@ export default class extends Controller {
     productTypes: Object,
   }
 
-  connect() {
-    this.productChanged()
-  }
-
   // Highlight a number cell's whole value on focus so typing replaces it,
   // rather than dropping a caret. Deferred a frame so the click's own mouseup
   // (which otherwise collapses the selection to a caret) doesn't undo it.
