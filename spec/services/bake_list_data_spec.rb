@@ -194,6 +194,41 @@ describe BakeListData do
     expect(pick).to include(hash_including(name: "Croissant", retail_quantity: 0, wholesale_quantity: 108))
   end
 
+  # Reproduces the reported Miche bug (8/7 Bake List showing 87 vs Daily
+  # Totals/Production Run showing 89): kickoff links each shipment item to a
+  # production run individually as runs are built, not all at once, so it's
+  # normal for some of a day's items to already carry a production_run_id
+  # while others don't yet. The bug bailed out of the whole authoritative
+  # RunItem overbake lookup just because ONE item was still unlinked, falling
+  # back to the cruder percentage-of-grand-total estimate instead of the real
+  # value the other (already-linked) item's run already has -- even though
+  # Daily Totals (ProductCounter) reads that same real run's overbake fine,
+  # since Rails' `where(production_run_id: [...])` already drops nils from an
+  # IN clause on its own.
+  it "still uses the authoritative RunItem overbake when only some of a product's shipment items are linked to a production run" do
+    miche = create(:product, bakery: bakery, name: "Miche", product_type: "bread",
+                             bake_lead_days: 1, over_bake: 5)
+    linked_shipment = create(:shipment, bakery: bakery, client: create(:client, bakery: bakery),
+                                        date: bake_date + 1.day)
+    linked_item = create(:shipment_item, shipment: linked_shipment, product: miche, product_quantity: 60)
+    unlinked_shipment = create(:shipment, bakery: bakery, client: create(:client, bakery: bakery),
+                                          date: bake_date + 1.day)
+    create(:shipment_item, shipment: unlinked_shipment, product: miche, product_quantity: 22)
+
+    production_run = create(:production_run, bakery: bakery, date: bake_date)
+    linked_item.update!(production_run: production_run)
+    # Deliberately not ceil(82 * 5 / 100) = 5 -- proves the stored value is
+    # read (matching Production Run / Daily Totals), not recomputed off the
+    # fallback formula just because the second item has no production_run yet.
+    create(:run_item, bakery: bakery, product: miche, production_run: production_run,
+                      order_quantity: 82, overbake_quantity: 7)
+
+    wholesale_row = described_class.new(bakery, bake_date).wholesale_sections
+      .flat_map { |section| section[:rows] }.find { |row| row[:product] == miche }
+
+    expect(described_class.new(bakery, bake_date).wholesale_bake_total(miche, wholesale_row)).to eq(89)
+  end
+
   # Reproduces the reported Almond Croissant bug (7/23 Bake List): the wholesale
   # delivery's production run bakes on (delivery_date - total_lead_days), which
   # can include shipment items from other delivery dates baking the same day,

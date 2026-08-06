@@ -220,15 +220,26 @@ class BakeListData
   end
 
   # Summed RunItem#overbake_quantity across the production run(s) these
-  # shipment items belong to, or nil when kickoff hasn't built them yet (no
-  # production_run_id) so there is no authoritative number to defer to.
+  # shipment items belong to, or nil when NONE of them have a production_run_id
+  # yet (kickoff hasn't built any of them) so there is no authoritative number
+  # to defer to at all. A day's shipment_items don't all get a production_run_id
+  # at the same instant -- kickoff links them as runs are built -- so it's
+  # normal for some items to already be linked while others aren't yet.
+  # Bailing out entirely just because one item is still unlinked (the previous
+  # behavior) discarded a real, authoritative RunItem figure in favor of the
+  # cruder percentage-of-grand-total fallback below, which is exactly why the
+  # Bake List and Daily Totals/Production Run reports could disagree even
+  # though both are ultimately reading the same production run -- Daily Totals
+  # (ProductCounter#overbake_by_order_count) doesn't have this problem because
+  # Rails' `where(production_run_id: [...])` already drops nils from an IN
+  # clause on its own rather than being poisoned by them.
   def run_item_overbake(product, shipment_items)
     return nil if shipment_items.blank?
 
-    run_ids = shipment_items.map(&:production_run_id)
-    return nil if run_ids.any?(&:nil?)
+    run_ids = shipment_items.filter_map(&:production_run_id).uniq
+    return nil if run_ids.empty?
 
-    RunItem.where(production_run_id: run_ids.uniq, product_id: product.id).sum(:overbake_quantity)
+    RunItem.where(production_run_id: run_ids, product_id: product.id).sum(:overbake_quantity)
   end
 
   def production_run_overbake(product)
