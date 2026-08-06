@@ -98,6 +98,15 @@ RSpec.describe "Products", type: :request do
       expect(response).to be_successful
     end
 
+    it "shows papertrail for an all-clients price variant" do
+      create(:price_variant, product: product, client: nil, quantity: 1, price: 3.25)
+
+      get papertrail_product_path(product)
+
+      expect(response).to be_successful
+      expect(response.body).to include("All Clients")
+    end
+
     it "renders persisted price variant ids on the edit form" do
       price_variant = create(:price_variant, product: product, client: nil)
 

@@ -31,7 +31,7 @@
     <% @product.price_variants_with_removes.includes(:client).order("updated_at DESC").each do |item| %>
       <div class="papertrail-group">
         <div class="papertrail-group-heading">
-          <h3><%= item.client.name %></h3>
+          <h3><%= item.client&.name || "All Clients" %></h3>
           <% if item.removed.to_i != 0 %>
             <span class="papertrail-removed-badge">Removed</span>
           <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_21_185230) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_05_221500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -263,7 +263,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_185230) do
     t.integer "shipped"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["bakery_id"], name: "index_product_graph_data_on_bakery_id"
+    t.index ["product_id", "date"], name: "index_product_graph_data_on_product_and_date", unique: true
     t.index ["product_id"], name: "index_product_graph_data_on_product_id"
+  end
+
+  create_table "product_graph_monthly_data", force: :cascade do |t|
+    t.decimal "amount", default: "0.0", null: false
+    t.bigint "bakery_id", null: false
+    t.datetime "created_at", null: false
+    t.date "month", null: false
+    t.bigint "product_id", null: false
+    t.integer "shipment_count", default: 0, null: false
+    t.integer "shipped", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["bakery_id"], name: "index_product_graph_monthly_data_on_bakery_id"
+    t.index ["product_id", "month"], name: "index_product_graph_monthly_data_on_product_and_month", unique: true
+    t.index ["product_id"], name: "index_product_graph_monthly_data_on_product_id"
   end
 
   create_table "product_totals_snapshot_rows", force: :cascade do |t|
@@ -678,6 +693,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_185230) do
   add_foreign_key "orders", "routes", name: "orders_route_id_fk"
   add_foreign_key "price_variants", "clients", on_delete: :cascade
   add_foreign_key "price_variants", "products", name: "price_varients_product_id_fk", on_delete: :cascade
+  add_foreign_key "product_graph_monthly_data", "bakeries"
+  add_foreign_key "product_graph_monthly_data", "products"
   add_foreign_key "product_totals_snapshot_rows", "product_totals_snapshots", column: "snapshot_id"
   add_foreign_key "product_totals_snapshots", "bakeries"
   add_foreign_key "production_runs", "bakeries", name: "production_runs_bakery_id_fk"
