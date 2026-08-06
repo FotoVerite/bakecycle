@@ -126,7 +126,9 @@ export default class extends Controller {
     const sourceSelector = select.dataset.tomSelectOptionsSourceValue
     if (!sourceSelector) return
 
-    const ownValue = ts.getValue()
+    // Read the underlying native <select>'s value, not ts.getValue() -- on
+    // initial page load to seed
+    const ownValue = select.value
 
     sharedOptions(sourceSelector).forEach(option => {
       const value = String(option.value)
