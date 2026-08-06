@@ -18,7 +18,7 @@ function buildFixture() {
         <div data-nested-row>
           <select name="a[0][client_id]" data-controller="tom-select"
                   data-tom-select-options-source-value="#clients-options"
-                  data-action="change->nested-form#syncClientSelects tom-select:connect->nested-form#handleTomSelectConnect">
+                  data-action="tom-select:connect->nested-form#handleTomSelectConnect">
             <option value="">Select Client</option>
             <option value="33036" selected>Client A</option>
           </select>
@@ -28,7 +28,7 @@ function buildFixture() {
         <div data-nested-row>
           <select name="a[NEW_RECORD][client_id]" data-controller="tom-select"
                   data-tom-select-options-source-value="#clients-options"
-                  data-action="change->nested-form#syncClientSelects tom-select:connect->nested-form#handleTomSelectConnect">
+                  data-action="tom-select:connect->nested-form#handleTomSelectConnect">
             <option value="">Select Client</option>
           </select>
         </div>
@@ -42,7 +42,7 @@ function buildFixture() {
         <div data-nested-row>
           <select name="b[NEW_RECORD][client_id]" data-controller="tom-select"
                   data-tom-select-options-source-value="#clients-options"
-                  data-action="change->nested-form#syncClientSelects tom-select:connect->nested-form#handleTomSelectConnect">
+                  data-action="tom-select:connect->nested-form#handleTomSelectConnect">
             <option value="">Select Client</option>
           </select>
         </div>
