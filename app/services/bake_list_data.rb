@@ -176,7 +176,7 @@ class BakeListData
   end
 
   def overbake_only_wholesale_row(product)
-    row = { quantity: 0, shipment_items: [] }
+    row = { quantity: 0 }
     return unless day_overbake(product, row).positive?
 
     row.merge(product: product, trays: product.trays_for(0), lead_days: WHOLESALE_LEAD_DAYS, client_quantities: {})
@@ -198,11 +198,21 @@ class BakeListData
   # same formula the quantifier uses, sized on the retail + wholesale grand
   # total so it still reflects the whole day, not the wholesale slice alone.
   def day_overbake(product, wholesale_row)
-    shipment_items = wholesale_row&.dig(:shipment_items)
+    # Pull every shipment item for this product on the wholesale delivery's
+    # actual ship date, not just wholesale_row's own (lead=1-only) items --
+    # a retail-lead-0 order (e.g. Smith/Franklin) can ship on that same date
+    # under a *different* bake_date's retail view, riding a separate
+    # production run with its own overbake. Daily Totals sums overbake
+    # across every run touching that ship date regardless of lead time
+    # (ProductCounter#overbake_by_order_count); scoping to wholesale_row's
+    # items only was missing that other run's overbake entirely.
+    ship_date = @bake_date + WHOLESALE_LEAD_DAYS
+    shipment_items = ShipmentItem.joins(:shipment)
+      .where(product_id: product.id, shipments: { bakery_id: @bakery.id, date: ship_date })
     run_overbake = run_item_overbake(product, shipment_items)
     return run_overbake if run_overbake
 
-    # No wholesale shipment items of its own to derive a production_run_id
+    # No shipment items on that ship date to derive a production_run_id
     # from (a retail-only product's synthetic overbake row) -- fall back to
     # looking the run up directly by (bakery, bake_date) instead. This is
     # only a fallback, never overriding the shipment_items-based lookup
