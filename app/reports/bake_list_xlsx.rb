@@ -28,8 +28,10 @@ class BakeListXlsx
   #
   STORE_COLUMNS = { "Smith" => /smith/i, "Franklin" => /franklin/i }.freeze
 
-  # Grand Central is a Pull/Prep breakout like Blue Bottle: it remains part of
-  # Wholesale, while Retail continues to mean Smith + Franklin only.
+  # Grand Central is a retail-style pickup point like Smith/Franklin -- Pull
+  # Prep's Retail column is Smith + Franklin + Grand Central, and Wholesale is
+  # whatever's left of the Total after that (confirmed against the client's
+  # corrected 8/8 Bake List).
   PULL_PREP_STORE_COLUMNS = STORE_COLUMNS.merge("Grand Central" => /grand central/i).freeze
   OTHER_SHEET_HEADERS = (%w[Item Total] + PULL_PREP_STORE_COLUMNS.keys + ["Retail", "Blue Bottle", "Wholesale"]).freeze
 
@@ -280,9 +282,14 @@ class BakeListXlsx
     [row[:product].name, row[:quantity], *store_quantities(row)]
   end
 
+  # Retail = Smith + Franklin + Grand Central (all three retail-style pickup
+  # points), Wholesale = whatever's left of the Total after that -- confirmed
+  # against the client's corrected 8/8 Bake List (every row matched exactly).
+  # Previously Retail only summed Smith + Franklin, so Grand Central's volume
+  # silently fell into Wholesale instead.
   def other_row_cells(row)
-    retail = store_quantities(row).sum
     grand_central = pull_prep_store_quantity(row, PULL_PREP_STORE_COLUMNS.fetch("Grand Central"))
+    retail = store_quantities(row).sum + grand_central
     blue_bottle = quantity_matching(row) { |client| client.name.match?(/blue bottle/i) }
 
     [row[:product].name, row[:quantity], *store_quantities(row), grand_central,

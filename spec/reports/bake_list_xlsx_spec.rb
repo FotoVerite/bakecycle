@@ -210,7 +210,7 @@ describe BakeListXlsx do
     )
   end
 
-  it "breaks Grand Central out on Pull Prep while keeping it in wholesale" do
+  it "folds Grand Central into Retail on Pull Prep, not Wholesale" do
     smith = create(:client, bakery: bakery, name: "Bien Cuit - Smith Street")
     franklin = create(:client, bakery: bakery, name: "Bien Cuit - Franklin")
     gcm = create(:client, bakery: bakery, name: "Bien Cuit - Grand Central")
@@ -226,9 +226,9 @@ describe BakeListXlsx do
 
     report = described_class.new(bakery, bake_date)
 
-    # Item, Total, Smith, Franklin, Grand Central, Retail (Smith + Franklin),
-    # Blue Bottle, Wholesale (total - retail, including Grand Central).
-    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 18, 28, 82, 104]])
+    # Item, Total, Smith, Franklin, Grand Central, Retail (Smith + Franklin +
+    # Grand Central), Blue Bottle, Wholesale (total - retail).
+    expect(report.other_rows).to eq([["Blondie", 132, 12, 16, 18, 46, 82, 86]])
   end
 
   it "shows a fixed Smith/Franklin zero instead of dropping a store's column on a quiet day" do
