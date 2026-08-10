@@ -190,7 +190,7 @@ class ClientsController < ApplicationController
     permitted = params.fetch(:filter, ActionController::Parameters.new).permit(:name, :status, :active)
     {
       name: permitted[:name].to_s.strip,
-      status: client_filter_value(permitted[:status], Client.engagement_statuses.keys, "current"),
+      status: client_filter_value(permitted[:status], Client.engagement_statuses.keys + %w[any], "current"),
       active: client_filter_value(permitted[:active], %w[true false any], "true")
     }
   end

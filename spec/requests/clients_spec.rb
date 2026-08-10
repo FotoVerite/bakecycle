@@ -98,6 +98,21 @@ RSpec.describe "Clients", type: :request do
       expect(response.body).not_to include("Another Lapsed Client")
     end
 
+    it "shows every status, including prospective, when status filter is 'any'" do
+      current_client = create(:client, bakery: bakery, name: "Any Filter Current", active: true,
+                                       engagement_status: "current")
+      lapsed_client = create(:client, bakery: bakery, name: "Any Filter Lapsed", active: true,
+                                      engagement_status: "lapsed")
+      prospective_client = create(:client, bakery: bakery, name: "Any Filter Prospective", active: true,
+                                           engagement_status: "prospective")
+
+      get clients_path, params: { filter: { status: "any" } }
+
+      expect(response.body).to include(current_client.name)
+      expect(response.body).to include(lapsed_client.name)
+      expect(response.body).to include(prospective_client.name)
+    end
+
     it "paginates the rendered client rows" do
       original_per_page = Client.per_page
       Client.per_page = 2

@@ -6,7 +6,7 @@ class DailyClientTotalsXlsx
   def initialize(bakery, date)
     @bakery = bakery
     @date = date
-    @shipments = Shipment.where(bakery: bakery, date: date).non_sample.order("client_name ASC")
+    @shipments = Shipment.where(bakery: bakery, date: date).order("client_name ASC")
   end
 
   def generate
