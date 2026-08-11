@@ -36,6 +36,7 @@ beforeEach(async () => {
 afterEach(() => {
   application.stop()
   document.body.innerHTML = ""
+  jest.restoreAllMocks()
 })
 
 it("does not badge newly queued exports", async () => {
@@ -74,4 +75,47 @@ it("clears the ready badge when opened", async () => {
 
   expect(badge.hidden).toBe(true)
   expect(badgeLabel.textContent).toBe("No ready downloads")
+})
+
+it("downloads the export that was just requested once it becomes ready", async () => {
+  const click = jest.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+  list.insertAdjacentHTML("afterbegin", '<li id="tray_file_export_2" data-export-state="pending" data-auto-download="true"></li>')
+  await nextTick()
+
+  document.querySelector("#tray_file_export_2").outerHTML = `
+    <li id="tray_file_export_2" data-export-state="ready">
+      <a class="export-tray-item-link" href="/file_exports/2">Download</a>
+    </li>
+  `
+  await nextTick()
+
+  expect(click).toHaveBeenCalledTimes(1)
+  expect(click.mock.instances[0].href).toContain("/file_exports/2")
+})
+
+it("does not download exports that were not requested in this page session", async () => {
+  const click = jest.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+  list.insertAdjacentHTML("afterbegin", `
+    <li id="tray_file_export_2" data-export-state="ready">
+      <a class="export-tray-item-link" href="/file_exports/2">Download</a>
+    </li>
+  `)
+  await nextTick()
+
+  expect(click).not.toHaveBeenCalled()
+})
+
+it("does not auto-download a failed requested export", async () => {
+  const click = jest.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+  list.insertAdjacentHTML("afterbegin", '<li id="tray_file_export_2" data-export-state="pending" data-auto-download="true"></li>')
+  await nextTick()
+
+  document.querySelector("#tray_file_export_2").outerHTML = `
+    <li id="tray_file_export_2" data-export-state="failed">
+      <a class="export-tray-item-link" href="/file_exports/2">Details</a>
+    </li>
+  `
+  await nextTick()
+
+  expect(click).not.toHaveBeenCalled()
 })

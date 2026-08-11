@@ -12,7 +12,10 @@
       "pending"
     end
 %>
-<li id="tray_file_export_<%= file_export.id %>" class="<%= item_class %>" data-export-state="<%= export_state %>">
+<li id="tray_file_export_<%= file_export.id %>"
+    class="<%= item_class %>"
+    data-export-state="<%= export_state %>"
+    <% if local_assigns[:auto_download] %>data-auto-download="true"<% end %>>
   <% if file_export.failed? %>
     <%= link_to file_export_path(file_export), class: "export-tray-item-link export-tray-item-link--failed", data: { turbo: false } do %>
       <%= icon("triangle-alert", class: "export-tray-item-icon export-tray-item-icon--failed") %>
@@ -35,7 +38,7 @@
     <span class="export-tray-item-link export-tray-item-link--pending">
       <span class="file-export-spinner" aria-hidden="true"></span>
       <span class="export-tray-item-body">
-        <span class="export-tray-item-name">Generating&hellip;</span>
+        <span class="export-tray-item-name">Generating &mdash; will download when ready&hellip;</span>
         <span class="export-tray-item-meta">Started <%= time_ago_in_words(file_export.created_at) %> ago</span>
       </span>
     </span>
