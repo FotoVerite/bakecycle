@@ -125,7 +125,7 @@ class BakeListXlsx
                       style: [nil, *Array.new(column_count, styles.fetch(:header))]
         retail_section_rows(section).each_with_index do |cells, index|
           sheet.add_row [nil, *cells],
-                        style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
+                        style: [checkbox_style, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
         end
       end
       add_tray_count_section(sheet, styles, column_count, retail_tray_count_rows)
@@ -147,7 +147,7 @@ class BakeListXlsx
                       style: [nil, *Array.new(column_count, styles.fetch(:header))]
         wholesale_section_rows(section).each_with_index do |cells, index|
           sheet.add_row [nil, *cells],
-                        style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
+                        style: [checkbox_style, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
         end
       end
       add_tray_count_section(sheet, styles, column_count, wholesale_tray_count_rows)
@@ -166,7 +166,7 @@ class BakeListXlsx
         sheet.add_row [nil, *OTHER_SHEET_HEADERS], style: [nil, *Array.new(column_count, styles.fetch(:header))]
         section[:rows].each_with_index do |row, index|
           sheet.add_row [nil, *other_row_cells(row)],
-                        style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
+                        style: [checkbox_style, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
         end
       end
       sheet.column_widths 6.5, 36, 12, *Array.new(column_count - 2, 14)
@@ -235,8 +235,16 @@ class BakeListXlsx
     sheet.add_row [nil, "TRAY COUNTS", "PULL", "BAKE"], style: [nil, *Array.new(3, styles.fetch(:header))]
     rows.each_with_index do |cells, index|
       sheet.add_row [nil, *cells],
-                    style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
+                    style: [checkbox_style, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
     end
+  end
+
+  # A bordered-but-blank cell in the leading column of every line-item row
+  # (not header/section/title rows) -- staff use it as a hand-check box.
+  # Confirmed against the client's own annotated 8/21 Bake List: only real
+  # item rows get the box, section/header/title banners stay borderless.
+  def checkbox_style
+    @checkbox_style ||= @workbook_styles.add_style(border: CELL_BORDER)
   end
 
   # Pull = proofing tray count (20/tray, to save proofing space), Bake = oven
