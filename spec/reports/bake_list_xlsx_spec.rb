@@ -321,4 +321,36 @@ describe BakeListXlsx do
       expect(vienn_pick_xml).to include('width="14" min="2" max="2"')
     end
   end
+
+  it "leaves a blank leading column on Retail Bread, Wholesale Bread, and Pull Prep, and renames " \
+     "Wholesale's Missing/Extra headers to Count/Difference" do
+    croissant = create(:product, bakery: bakery, name: "Croissant", product_type: "bread", bake_lead_days: 1,
+                                 over_bake: 0)
+    wholesale_shipment = create(:shipment, bakery: bakery, date: bake_date + 1.day)
+    create(:shipment_item, shipment: wholesale_shipment, product: croissant, product_quantity: 10)
+
+    workbook = described_class.new(bakery, bake_date).generate
+
+    Zip::File.open_buffer(StringIO.new(workbook)) do |zip|
+      shared_strings = zip.read("xl/sharedStrings.xml")
+      expect(shared_strings).to include(">COUNT<")
+      expect(shared_strings).to include(">DIFFERENCE<")
+      expect(shared_strings).not_to include(">MISSING<")
+      expect(shared_strings).not_to include(">EXTRA<")
+
+      # column A is header-content-free (banner merges -- title row, section
+      # headers -- start at B, not A) on the three sheets that got the new
+      # blank leading column, while Vienn Pick (sheet4) keeps its own
+      # A3:A4/A-anchored merges untouched.
+      %w[sheet1.xml sheet2.xml sheet3.xml].each do |sheet_file|
+        sheet_xml = zip.read("xl/worksheets/#{sheet_file}")
+        expect(sheet_xml).not_to match(/ref='A\d+:/)
+      end
+
+      # Wholesale Bread (sheet2) is guaranteed to have a section from the
+      # fixture above -- assert its banner actually merges from B onward.
+      wholesale_xml = zip.read("xl/worksheets/sheet2.xml")
+      expect(wholesale_xml).to match(/ref='B\d+:[A-Z]+\d+'/)
+    end
+  end
 end

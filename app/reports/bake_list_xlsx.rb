@@ -106,61 +106,70 @@ class BakeListXlsx
 
   private
 
+  # Retail Bread, Wholesale Bread, and Pull Prep all carry a blank leading
+  # column (unstyled, no border/fill) to the left of "Item" -- staff use it
+  # to hand-check items off as they're pulled. Confirmed against the
+  # client's own annotated 8/21 Bake List. Vienn Pick is intentionally
+  # unchanged; it wasn't part of this request.
   def add_retail_sheet(workbook, styles)
     column_count = STORE_COLUMNS.length + 2
     workbook.add_worksheet(name: "Retail Bread") do |sheet|
-      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Retail Bread"]
-      sheet.add_row ["RETAIL"], style: styles.fetch(:title)
-      merge_row!(sheet, column_count)
+      sheet.add_row [nil, "Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Retail Bread"]
+      sheet.add_row [nil, "RETAIL"], style: [nil, styles.fetch(:title)]
+      merge_row!(sheet, column_count, start_column: "B")
 
       retail_sections.each do |section|
-        sheet.add_row [section[:name]], style: styles.fetch(:section)
-        merge_row!(sheet, column_count)
-        sheet.add_row %w[Item Total] + STORE_COLUMNS.keys, style: styles.fetch(:header)
+        sheet.add_row [nil, section[:name]], style: [nil, styles.fetch(:section)]
+        merge_row!(sheet, column_count, start_column: "B")
+        sheet.add_row [nil, *(%w[Item Total] + STORE_COLUMNS.keys)],
+                      style: [nil, *Array.new(column_count, styles.fetch(:header))]
         retail_section_rows(section).each_with_index do |cells, index|
-          sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
+          sheet.add_row [nil, *cells],
+                        style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
         end
       end
       add_tray_count_section(sheet, styles, column_count, retail_tray_count_rows)
-      sheet.column_widths 36, 12, *Array.new(column_count - 2, 18)
+      sheet.column_widths 5.33, 36, 12, *Array.new(column_count - 2, 18)
     end
   end
 
   def add_wholesale_sheet(workbook, styles)
     column_count = 4
     workbook.add_worksheet(name: "Wholesale Bread") do |sheet|
-      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Wholesale Bread"]
-      sheet.add_row ["WHOLESALE"], style: styles.fetch(:title)
-      merge_row!(sheet, column_count)
+      sheet.add_row [nil, "Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Wholesale Bread"]
+      sheet.add_row [nil, "WHOLESALE"], style: [nil, styles.fetch(:title)]
+      merge_row!(sheet, column_count, start_column: "B")
 
       wholesale_sections.each do |section|
-        sheet.add_row [section[:name]], style: styles.fetch(:section)
-        merge_row!(sheet, column_count)
-        sheet.add_row %w[Item Total MISSING EXTRA], style: styles.fetch(:header)
+        sheet.add_row [nil, section[:name]], style: [nil, styles.fetch(:section)]
+        merge_row!(sheet, column_count, start_column: "B")
+        sheet.add_row [nil, "Item", "Total", "COUNT", "DIFFERENCE"],
+                      style: [nil, *Array.new(column_count, styles.fetch(:header))]
         wholesale_section_rows(section).each_with_index do |cells, index|
-          sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
+          sheet.add_row [nil, *cells],
+                        style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
         end
       end
       add_tray_count_section(sheet, styles, column_count, wholesale_tray_count_rows)
-      sheet.column_widths 36, 12, 14, 14
+      sheet.column_widths 6.5, 36, 12, 14
     end
   end
 
   def add_other_sheet(workbook, styles)
     column_count = OTHER_SHEET_HEADERS.length
     workbook.add_worksheet(name: "Pull Prep") do |sheet|
-      sheet.add_row ["Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Pull Prep"]
+      sheet.add_row [nil, "Bake List #{@bake_date.strftime('%A, %-m/%-d')}", nil, nil, "Pull Prep"]
 
       pull_prep_sections.each do |section|
-        sheet.add_row [section[:name]], style: styles.fetch(:section)
-        merge_row!(sheet, column_count)
-        sheet.add_row OTHER_SHEET_HEADERS, style: styles.fetch(:header)
+        sheet.add_row [nil, section[:name]], style: [nil, styles.fetch(:section)]
+        merge_row!(sheet, column_count, start_column: "B")
+        sheet.add_row [nil, *OTHER_SHEET_HEADERS], style: [nil, *Array.new(column_count, styles.fetch(:header))]
         section[:rows].each_with_index do |row, index|
-          sheet.add_row other_row_cells(row),
-                        style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
+          sheet.add_row [nil, *other_row_cells(row)],
+                        style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
         end
       end
-      sheet.column_widths 36, 12, *Array.new(column_count - 2, 14)
+      sheet.column_widths 6.5, 36, 12, *Array.new(column_count - 2, 14)
     end
   end
 
@@ -223,9 +232,10 @@ class BakeListXlsx
 
   def add_tray_count_section(sheet, styles, column_count, rows)
     sheet.add_row []
-    sheet.add_row ["TRAY COUNTS", "PULL", "BAKE"], style: styles.fetch(:header)
+    sheet.add_row [nil, "TRAY COUNTS", "PULL", "BAKE"], style: [nil, *Array.new(3, styles.fetch(:header))]
     rows.each_with_index do |cells, index|
-      sheet.add_row cells, style: row_style(@workbook_styles, column_count, background: zebra_bg(index))
+      sheet.add_row [nil, *cells],
+                    style: [nil, *row_style(@workbook_styles, column_count, background: zebra_bg(index))]
     end
   end
 
@@ -320,9 +330,11 @@ class BakeListXlsx
   # columns -- e.g. so a section header's grey fill spans the full row
   # instead of just column A. Must run immediately after the sheet.add_row
   # it applies to.
-  def merge_row!(sheet, column_count)
+  def merge_row!(sheet, column_count, start_column: "A")
     row_number = sheet.rows.size
-    sheet.merge_cells("A#{row_number}:#{column_letter(column_count)}#{row_number}")
+    start_index = ("A".."ZZ").to_a.index(start_column) + 1
+    end_letter = column_letter(start_index + column_count - 1)
+    sheet.merge_cells("#{start_column}#{row_number}:#{end_letter}#{row_number}")
   end
 
   def merge_vienn_pick_headers!(sheet, header_row)
