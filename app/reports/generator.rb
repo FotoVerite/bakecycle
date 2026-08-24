@@ -3,6 +3,10 @@
 module Generator
   TRACER = defined?(OpenTelemetry) ? OpenTelemetry.tracer_provider.tracer("bakecycle-reports") : nil
 
+  def self.client_filename(client_name, filename)
+    "#{client_name.to_s.parameterize(preserve_case: true)}-#{filename}"
+  end
+
   def self.included(base)
     base.include GlobalID::Identification
     base.prepend Instrumentation

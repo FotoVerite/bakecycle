@@ -15,7 +15,7 @@ class OrderGenerator
   delegate :id, to: :@order
 
   def filename
-    "Order-#{@order.id}.pdf"
+    Generator.client_filename(@order.client.name, "Order-#{@order.id}.pdf")
   end
 
   def generate

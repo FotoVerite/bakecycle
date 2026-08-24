@@ -6,7 +6,7 @@ RSpec.describe "Shipments (Invoices)", type: :request do
   let(:bakery)    { create(:bakery) }
   let(:user)      { create(:user, bakery: bakery) }
   let(:route)     { create(:route, bakery: bakery) }
-  let(:client)    { create(:client, bakery: bakery) }
+  let(:client)    { create(:client, bakery: bakery, name: "Jane's Café & Market") }
   let!(:shipment) { create(:shipment, bakery: bakery, client: client, route: route) }
 
   describe "unauthenticated" do
@@ -46,6 +46,26 @@ RSpec.describe "Shipments (Invoices)", type: :request do
 
   describe "manage permission" do
     before { sign_in user }
+
+    it "prepends the client name to an individual packing slip filename" do
+      allow_any_instance_of(PackingSlipsPdf).to receive(:render).and_return("pdf")
+
+      get packing_slip_shipment_path(shipment)
+
+      expect(response.headers["Content-Disposition"]).to include(
+        "Jane-s-Cafe-Market-#{bakery.name.parameterize}-Packing-Slip-#{shipment.invoice_number}.pdf"
+      )
+    end
+
+    it "prepends the client name to an individual QuickBooks filename" do
+      allow_any_instance_of(InvoicesIif).to receive(:generate).and_return("iif")
+
+      get invoice_iif_shipment_path(shipment)
+
+      expect(response.headers["Content-Disposition"]).to include(
+        "Jane-s-Cafe-Market-bakecycle-quickbook-export.iif"
+      )
+    end
 
     it "lists shipments" do
       get shipments_path

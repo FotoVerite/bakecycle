@@ -20,7 +20,10 @@ class InvoiceCsvGenerator
   end
 
   def filename
-    "#{bakery_file_name}-Invoice-#{@invoice.invoice_number}.csv"
+    Generator.client_filename(
+      invoice.client_name,
+      "#{bakery_file_name}-Invoice-#{invoice.invoice_number}.csv"
+    )
   end
 
   def generate

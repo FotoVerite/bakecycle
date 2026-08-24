@@ -132,7 +132,10 @@ class ShipmentsController < ApplicationController
   def packing_slip
     authorize @shipment, :show?
     pdf = PackingSlipsPdf.new([@shipment], current_bakery)
-    pdf_name = "#{current_bakery.name}-#{@shipment.client_name}-#{@shipment.invoice_number}.pdf"
+    pdf_name = Generator.client_filename(
+      @shipment.client_name,
+      "#{current_bakery.name.parameterize}-Packing-Slip-#{@shipment.invoice_number}.pdf"
+    )
     expires_now
     send_data pdf.render, filename: pdf_name, type: "application/pdf", disposition: "attachment"
   end
@@ -165,7 +168,8 @@ class ShipmentsController < ApplicationController
     authorize @shipment, :show?
     quickbooks_iif = InvoicesIif.new(Shipment.where(id: @shipment))
     expires_now
-    send_data quickbooks_iif.generate, content_type: "text/plain", filename: "bakecycle-quickbook-export.iif"
+    filename = Generator.client_filename(@shipment.client_name, "bakecycle-quickbook-export.iif")
+    send_data quickbooks_iif.generate, content_type: "text/plain", filename: filename
   end
 
   private

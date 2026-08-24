@@ -4,7 +4,8 @@ require "rails_helper"
 
 describe InvoicePdfGenerator do
   let(:bakery) { create(:bakery) }
-  let(:shipment) { create(:shipment, bakery: bakery) }
+  let(:client) { create(:client, bakery: bakery, name: "Jane's Café & Market") }
+  let(:shipment) { create(:shipment, bakery: bakery, client: client) }
   let(:generator) { InvoicePdfGenerator.new(bakery, shipment) }
 
   it "produces a file and a filename" do
@@ -12,6 +13,12 @@ describe InvoicePdfGenerator do
     expect(generator.filename).to match(/Invoice.*\.pdf/)
     expect_any_instance_of(InvoicesPdf).to receive(:render).and_call_original
     expect(generator.generate).to_not be_nil
+  end
+
+  it "prepends the client name to the filename" do
+    expect(generator.filename).to eq(
+      "Jane-s-Cafe-Market-#{bakery.name.parameterize}-Invoice-#{shipment.invoice_number}.pdf"
+    )
   end
 
   it "produces a file and filename when there are no shipments" do
