@@ -20,7 +20,11 @@ class InvoicesIifGenerator
   end
 
   def filename
-    "#{bakery_file_name}-QuickBooks#{date}.iif"
+    Generator.client_filename_for(
+      records: invoices,
+      clients: bakery.clients,
+      filename: "#{bakery_file_name}-QuickBooks#{date}.iif"
+    )
   end
 
   def content_type

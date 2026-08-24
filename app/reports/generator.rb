@@ -2,9 +2,27 @@
 
 module Generator
   TRACER = defined?(OpenTelemetry) ? OpenTelemetry.tracer_provider.tracer("bakecycle-reports") : nil
+  MAX_FILENAME_BYTES = 200
 
   def self.client_filename(client_name, filename)
-    "#{client_name.to_s.parameterize(preserve_case: true)}-#{filename}"
+    client_name = ActiveStorage::Filename.new(client_name.to_s).sanitized
+    return filename if client_name.blank?
+
+    separator = " - "
+    available_bytes = MAX_FILENAME_BYTES - separator.bytesize - filename.bytesize
+    return filename.truncate_bytes(MAX_FILENAME_BYTES, omission: "") unless available_bytes.positive?
+
+    client_name = client_name.truncate_bytes(available_bytes, omission: "").rstrip
+    "#{client_name}#{separator}#{filename}"
+  end
+
+  def self.client_filename_for(records:, clients:, filename:)
+    client_ids = records.reorder(nil).distinct.limit(2).pluck(:client_id)
+    return filename unless client_ids.one?
+
+    client_name = clients.where(id: client_ids.first).pick(:name)
+    client_name ||= records.reorder(nil).where(client_id: client_ids.first).pick(:client_name)
+    client_filename(client_name, filename)
   end
 
   def self.included(base)
