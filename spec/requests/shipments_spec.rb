@@ -101,7 +101,7 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       get packing_slip_shipment_path(shipment)
 
       expect(response.headers["Content-Disposition"]).to include(
-        "Jane%27s%20Caf%C3%A9%20&%20Market%20-%20#{bakery.name.parameterize}-" \
+        "Jane%27s-Caf%C3%A9-&-Market-#{bakery.name.parameterize}-" \
         "Packing-Slip-#{shipment.invoice_number}.pdf"
       )
     end
@@ -112,7 +112,7 @@ RSpec.describe "Shipments (Invoices)", type: :request do
       get invoice_iif_shipment_path(shipment)
 
       expect(response.headers["Content-Disposition"]).to include(
-        "Jane%27s%20Caf%C3%A9%20&%20Market%20-%20bakecycle-quickbook-export.iif"
+        "Jane%27s-Caf%C3%A9-&-Market-bakecycle-quickbook-export.iif"
       )
     end
 

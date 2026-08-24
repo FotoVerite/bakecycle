@@ -37,7 +37,7 @@ describe InvoicesIifGenerator do
     )
 
     expect(described_class.new(bakery, client_search).filename).to eq(
-      "Frisson Espresso - 47th - bien-cuit-QuickBooks-2026-08-17-to-2026-08-22.iif"
+      "Frisson-Espresso-47th-bien-cuit-QuickBooks-2026-08-17-to-2026-08-22.iif"
     )
   end
 

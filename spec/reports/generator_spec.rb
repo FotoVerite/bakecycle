@@ -4,23 +4,23 @@ require "rails_helper"
 
 describe Generator do
   describe ".client_filename" do
-    it "preserves the client name's capitalization, spaces, punctuation, and accents" do
+    it "preserves capitalization, punctuation, and accents while hyphenating spaces" do
       filename = described_class.client_filename("Jane's Café & Market", "bien-cuit-Invoices.pdf")
 
-      expect(filename).to eq("Jane's Café & Market - bien-cuit-Invoices.pdf")
+      expect(filename).to eq("Jane's-Café-&-Market-bien-cuit-Invoices.pdf")
     end
 
     it "replaces characters that are invalid in cross-platform filenames" do
       filename = described_class.client_filename('East/West: Bakery*? "VIP"', "Invoices.pdf")
 
-      expect(filename).to eq("East-West- Bakery-- -VIP- - Invoices.pdf")
+      expect(filename).to eq("East-West-Bakery-VIP-Invoices.pdf")
     end
 
     it "limits the complete filename to 200 bytes without splitting a Unicode character" do
       filename = described_class.client_filename("é" * 200, "bien-cuit-Invoices-2026-08-17-to-2026-08-22.pdf")
 
       expect(filename.bytesize).to be <= 200
-      expect(filename).to end_with(" - bien-cuit-Invoices-2026-08-17-to-2026-08-22.pdf")
+      expect(filename).to end_with("-bien-cuit-Invoices-2026-08-17-to-2026-08-22.pdf")
       expect(filename).to be_valid_encoding
     end
   end

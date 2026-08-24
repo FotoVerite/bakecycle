@@ -17,7 +17,7 @@ describe InvoicePdfGenerator do
 
   it "prepends the client name to the filename" do
     expect(generator.filename).to eq(
-      "Jane's Café & Market - #{bakery.name.parameterize}-Invoice-#{shipment.invoice_number}.pdf"
+      "Jane's-Café-&-Market-#{bakery.name.parameterize}-Invoice-#{shipment.invoice_number}.pdf"
     )
   end
 

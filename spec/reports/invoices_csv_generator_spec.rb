@@ -30,7 +30,7 @@ describe InvoicesCsvGenerator do
     )
 
     expect(described_class.new(bakery, client_search).filename).to eq(
-      "Frisson Espresso - 47th - bien-cuit-Invoices-2026-08-17-to-2026-08-22.csv"
+      "Frisson-Espresso-47th-bien-cuit-Invoices-2026-08-17-to-2026-08-22.csv"
     )
   end
 

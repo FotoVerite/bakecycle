@@ -5,10 +5,15 @@ module Generator
   MAX_FILENAME_BYTES = 200
 
   def self.client_filename(client_name, filename)
-    client_name = ActiveStorage::Filename.new(client_name.to_s).sanitized
+    client_name = ActiveStorage::Filename.new(client_name.to_s)
+      .sanitized
+      .gsub(/\s+/, "-")
+      .gsub(/-+/, "-")
+      .delete_prefix("-")
+      .delete_suffix("-")
     return filename if client_name.blank?
 
-    separator = " - "
+    separator = "-"
     available_bytes = MAX_FILENAME_BYTES - separator.bytesize - filename.bytesize
     return filename.truncate_bytes(MAX_FILENAME_BYTES, omission: "") unless available_bytes.positive?
 
