@@ -47,6 +47,54 @@ RSpec.describe "Shipments (Invoices)", type: :request do
   describe "manage permission" do
     before { sign_in user }
 
+    describe "batch export limit" do
+      before do
+        allow_any_instance_of(ShipmentsController)
+          .to receive(:batch_export_invoice_count)
+          .and_return(1_001)
+      end
+
+      %i[export_pdf export_csv export_iif].each do |export_action|
+        it "shows an error box for an oversized #{export_action.to_s.humanize.downcase} request" do
+          expect(ExporterJob).not_to receive(:create)
+
+          get public_send("#{export_action}_shipments_path"),
+              headers: { "Accept" => Mime[:turbo_stream].to_s }
+
+          expect(response).to be_successful
+          expect(response.media_type).to eq(Mime[:turbo_stream].to_s)
+          expect(response.body).to include('target="flash_messages"')
+          expect(response.body).to include(
+            "This export contains 1,001 invoices. Narrow the filters to 1,000 or fewer and try again."
+          )
+        end
+      end
+
+      it "redirects with the same error for a non-Turbo request" do
+        expect(ExporterJob).not_to receive(:create)
+
+        get export_pdf_shipments_path
+
+        expect(response).to redirect_to(shipments_path)
+        expect(flash[:alert]).to eq(
+          "This export contains 1,001 invoices. Narrow the filters to 1,000 or fewer and try again."
+        )
+      end
+    end
+
+    it "allows a batch export when exactly 1,000 invoices match" do
+      allow_any_instance_of(ShipmentsController)
+        .to receive(:batch_export_invoice_count)
+        .and_return(1_000)
+      file_export = create(:file_export, bakery: bakery, user: user)
+      allow(ExporterJob).to receive(:create).and_return(file_export)
+
+      get export_pdf_shipments_path
+
+      expect(ExporterJob).to have_received(:create)
+      expect(response).to redirect_to(file_export)
+    end
+
     it "prepends the client name to an individual packing slip filename" do
       allow_any_instance_of(PackingSlipsPdf).to receive(:render).and_return("pdf")
 

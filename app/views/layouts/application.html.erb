@@ -27,7 +27,9 @@
         <div class="row">
           <%= render 'nav' if render_nav? %>
           <main id="main-content" class="<%= class_for_main_content %>">
-            <%= render 'flash_messages' %>
+            <div id="flash_messages">
+              <%= render 'flash_messages' %>
+            </div>
             <%= yield %>
           </main>
         </div>

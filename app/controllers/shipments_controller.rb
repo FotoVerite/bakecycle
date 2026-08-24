@@ -3,7 +3,10 @@
 class ShipmentsController < ApplicationController
   include ExportsReportable
 
+  MAX_BATCH_EXPORT_INVOICES = 1_000
+
   before_action :load_shipment, only: %i[edit update destroy invoice packing_slip invoice_iif invoice_csv]
+  before_action :enforce_batch_export_limit, only: %i[export_csv export_iif export_pdf]
   after_action :skip_policy_scope,
                only: %i[
                  detailed_invoice_report
@@ -184,6 +187,37 @@ class ShipmentsController < ApplicationController
 
   def scope_with_search
     policy_scope(Shipment).search(search_form).includes(:shipment_items, :client)
+  end
+
+  def batch_export_invoice_count
+    @_batch_export_invoice_count ||= policy_scope(Shipment)
+      .search(search_form)
+      .non_sample
+      .reorder(nil)
+      .distinct
+      .count(:id)
+  end
+
+  def enforce_batch_export_limit
+    authorize Shipment, :index?
+    return if batch_export_invoice_count <= MAX_BATCH_EXPORT_INVOICES
+
+    respond_to do |format|
+      format.turbo_stream do
+        flash.now[:alert] = batch_export_limit_message
+        render turbo_stream: turbo_stream.replace("flash_messages", partial: "application/flash_messages")
+      end
+      format.any do
+        redirect_to shipments_path(search: search_params),
+                    status: :see_other,
+                    alert: batch_export_limit_message
+      end
+    end
+  end
+
+  def batch_export_limit_message
+    "This export contains #{helpers.number_with_delimiter(batch_export_invoice_count)} invoices. " \
+      "Narrow the filters to #{helpers.number_with_delimiter(MAX_BATCH_EXPORT_INVOICES)} or fewer and try again."
   end
 
   def search_params
