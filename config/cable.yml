@@ -1,17 +1,40 @@
-development:
+# `reconnect_attempts` is load-bearing, not tuning. Solid Cable's listener runs
+# as a single `solid_cable_listener` thread inside Puma that polls
+# solid_cable_messages; every broadcast reaches browsers only through it.
+# On an ActiveRecord connection error the thread retries `reconnect_attempts`
+# times and then *exits permanently* -- it is never respawned for the life of
+# the process (see
+# solid_cable/lib/action_cable/subscription_adapter/solid_cable.rb: the
+# `rescue *CONNECTION_ERRORS; retry if retry_connecting?` in Listener#initialize).
+#
+# The gem default is `1`, and an Integer is expanded to `Array.new(n, 0)` --
+# i.e. exactly one retry with *zero* backoff. Any Postgres blip longer than a
+# few milliseconds therefore kills live updates process-wide until Puma is
+# restarted, with no error surfaced to users: websockets still connect and
+# subscribe fine (that path needs no DB), jobs still run, rows still land in
+# solid_cable_messages -- they're just never read, so Turbo Streams silently
+# stop arriving. This happened in production on 2026-08-26: an
+# unattended-upgrades openssl update restarted Postgres at 06:56, the listener
+# burned its single retry instantly, and export "Generating..." rows stayed
+# stuck for every user for the rest of the day.
+#
+# An explicit Array is used (not an Integer) because only the Array form
+# carries per-attempt sleep durations. ~68s of total budget comfortably covers
+# a service restart. `reconnect_attempt` resets to 0 after any successful poll.
+default: &default
   adapter: solid_cable
   polling_interval: 0.1.seconds
   message_retention: 1.day
+  reconnect_attempts: [0.5, 1, 2, 5, 10, 20, 30]
+
+development:
+  <<: *default
 
 test:
   adapter: test
 
 staging:
-  adapter: solid_cable
-  polling_interval: 0.1.seconds
-  message_retention: 1.day
+  <<: *default
 
 production:
-  adapter: solid_cable
-  polling_interval: 0.1.seconds
-  message_retention: 1.day
+  <<: *default
