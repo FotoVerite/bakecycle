@@ -4,5 +4,6 @@ import './stimulus_application';
 import './date_fields';
 import './time_fields';
 import './clickable_row';
+import './number_field_scroll';
 import './animated_turbo_stream_removals';
 import './stripe_registration';
