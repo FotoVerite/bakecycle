@@ -5,14 +5,24 @@ import TomSelect from "tom-select"
 // selects on the page point at it -- see optionsSource below. Exported so
 // nested_form_controller can filter the same master list per-row (already-selected
 // elsewhere) without re-parsing it itself.
-const sharedOptionsCache = new Map()
+//
+// Keyed on the <script> NODE, not on the selector string: this module outlives any one
+// page under Turbo Drive, so a selector key served the first product's client list to
+// every product edited after it in the same visit. Each list is the active clients plus
+// only the inactive clients THAT product references, so a stale list still looked
+// plausible while missing the inactive clients of the product actually on screen --
+// their rows found no matching option, blanked, and saved client_id "", turning a
+// per-client price into an All Clients price.
+const sharedOptionsCache = new WeakMap()
 
 export function sharedOptions(sourceSelector) {
-  if (!sharedOptionsCache.has(sourceSelector)) {
-    const el = document.querySelector(sourceSelector)
-    sharedOptionsCache.set(sourceSelector, el ? JSON.parse(el.textContent) : [])
+  const el = document.querySelector(sourceSelector)
+  if (!el) return []
+
+  if (!sharedOptionsCache.has(el)) {
+    sharedOptionsCache.set(el, JSON.parse(el.textContent))
   }
-  return sharedOptionsCache.get(sourceSelector)
+  return sharedOptionsCache.get(el)
 }
 
 export default class extends Controller {
