@@ -70,15 +70,7 @@ class ExporterJob < ApplicationJob
   # email support directly. Report to Sentry too so a Prawn/generator crash
   # actually pages someone instead of requiring a user to notice and forward it.
   def mark_errored(file_export, exception)
-    return if file_export.ready?
-
-    Sentry.capture_exception(exception) if defined?(Sentry)
-
-    pdf = ErrorReport.new(exception).render
-    file_export.file_content_type = "application/pdf"
-    file_export.file = FakeFileIO.new("export-error.pdf", pdf)
-    file_export.save!
-    broadcast_export_update(file_export)
+    file_export.mark_failed!(exception)
   end
 
   def record_unexpected_failure(exception)
@@ -109,22 +101,7 @@ class ExporterJob < ApplicationJob
     nil
   end
 
-  # Broadcast twice: once for the header tray's row, once for the /file_exports
-  # history page's row. Turbo silently no-ops a replace targeting a DOM id that
-  # isn't present on the current page, so this is safe even though only one of
-  # the two targets exists on any given page.
   def broadcast_export_update(file_export)
-    Turbo::StreamsChannel.broadcast_replace_to(
-      file_export.broadcast_stream,
-      target: "tray_file_export_#{file_export.id}",
-      partial: "file_exports/tray_item",
-      locals: { file_export: file_export, variant: :flash }
-    )
-    Turbo::StreamsChannel.broadcast_replace_to(
-      file_export.broadcast_stream,
-      target: "file_export_#{file_export.id}",
-      partial: "file_exports/history_row",
-      locals: { file_export: file_export, variant: :flash }
-    )
+    file_export.broadcast_update
   end
 end

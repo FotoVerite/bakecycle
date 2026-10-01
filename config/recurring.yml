@@ -32,6 +32,14 @@ production:
     command: "SolidQueue::FailedExecution.discard_all_in_batches(batch_size: 500)"
     queue: operations
     schedule: every hour at minute 27
+  sweep_stalled_exports:
+    # Marks FileExports whose job was killed externally (supervisor restart)
+    # as failed -- ExporterJob's own rescues never run for those. Must stay
+    # ahead of nothing in particular, but runs off the :12/:27 cleanup minutes
+    # so the three hourly maintenance tasks don't contend.
+    class: SweepStalledExportsJob
+    queue: operations
+    schedule: every hour at minute 42
   purge_old_versions:
     class: PurgeOldVersionsJob
     schedule: every day at 3am
@@ -75,6 +83,14 @@ staging:
     command: "SolidQueue::FailedExecution.discard_all_in_batches(batch_size: 500)"
     queue: operations
     schedule: every hour at minute 27
+  sweep_stalled_exports:
+    # Marks FileExports whose job was killed externally (supervisor restart)
+    # as failed -- ExporterJob's own rescues never run for those. Must stay
+    # ahead of nothing in particular, but runs off the :12/:27 cleanup minutes
+    # so the three hourly maintenance tasks don't contend.
+    class: SweepStalledExportsJob
+    queue: operations
+    schedule: every hour at minute 42
   purge_old_versions:
     class: PurgeOldVersionsJob
     schedule: every day at 3am

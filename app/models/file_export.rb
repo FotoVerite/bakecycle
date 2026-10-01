@@ -67,4 +67,38 @@ class FileExport < ApplicationRecord
   def broadcast_stream
     self.class.broadcast_stream_for(user)
   end
+
+  # Attach the standard error-report PDF and tell the tray/history rows to
+  # re-render. Lives here rather than on ExporterJob because two different
+  # callers need it: the job's own rescue (a generator that raised in-process)
+  # and SweepStalledExportsJob (a job killed *externally* -- e.g. a supervisor
+  # restart failing its claimed executions -- which never gets to run any
+  # rescue at all, and so used to strand the row at "Generating..." forever).
+  def mark_failed!(exception)
+    return false if ready?
+
+    Sentry.capture_exception(exception) if defined?(Sentry)
+
+    self.file_content_type = "application/pdf"
+    self.file = FakeFileIO.new("export-error.pdf", ErrorReport.new(exception).render)
+    save!
+    broadcast_update
+    true
+  end
+
+  # Broadcast twice: once for the header tray's row, once for the /file_exports
+  # history page's row. Turbo silently no-ops a replace targeting a DOM id that
+  # isn't present on the current page, so this is safe even though only one of
+  # the two targets exists on any given page.
+  def broadcast_update
+    { "tray_file_export_#{id}" => "file_exports/tray_item",
+      "file_export_#{id}" => "file_exports/history_row" }.each do |target, partial|
+      Turbo::StreamsChannel.broadcast_replace_to(
+        broadcast_stream,
+        target: target,
+        partial: partial,
+        locals: { file_export: self, variant: :flash }
+      )
+    end
+  end
 end
