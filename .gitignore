@@ -43,3 +43,11 @@ screenshot_*.html
 /.agents/skills/improve-codebase-architecture
 .agents/skills/obsidian-vault/SKILL.md
 /.agents/skills
+
+# This project standardizes on npm (npm-shrinkwrap.json). Running `yarn`/`pnpm` here
+# recreates their lockfiles, and jsbundling-rails picks its package manager by sniffing
+# for one -- a stray yarn.lock silently switches assets:precompile over to yarn and
+# breaks the deploy (see lib/tasks/jsbundling.rake). Ignored so they can't be committed.
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
