@@ -24,7 +24,7 @@
     <td>
       <% unless f.object.from_shipment? %>
         <%= f.hidden_field :_destroy, value: false %>
-        <%= link_to 'X', '', data:{ remove: true }, class: "button alert postfix" %>
+        <%= button_tag 'X', type: 'button', data: { action: 'production-run-items#remove' }, class: 'button alert postfix' %>
       <% end %>
     </td>
   <% else %>

@@ -1,10 +1,14 @@
 <td>
-  <%= f.input :product_id, collection: production_run.available_products, input_html: { class: 'new_run_item_product_id', id: "production_run_run_items_attributes_${ID}_product_id", name: "production_run[run_items_attributes][${ID}][product_id]" } %>
+  <%= f.input :product_id, collection: production_run.available_products, input_html: { class: 'new_run_item_product_id' } %>
 </td>
 <td>-</td>
 <td>-</td>
 <td>-</td>
 <td>
-  <%= f.input :overbake_quantity, input_html: { class: 'new_run_item_overbake_quantity', id: "production_run_run_items_attributes_${ID}_overbake_quantity", name: "production_run[run_items_attributes][${ID}][overbake_quantity]" } %>
+  <%= f.input :overbake_quantity, input_html: { class: 'new_run_item_overbake_quantity' } %>
 </td>
-
+<% if policy(@production_run).update? %>
+  <td>
+    <%= button_tag 'X', type: 'button', data: { action: 'production-run-items#remove' }, class: 'button alert postfix' %>
+  </td>
+<% end %>

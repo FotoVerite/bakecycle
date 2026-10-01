@@ -4,17 +4,17 @@ export default class extends Controller {
   static targets = ["rows", "template"]
 
   connect() {
-    this.template = this.templateTarget.outerHTML.replace(
-      ' data-production-run-items-target="template"',
-      ""
-    )
-    this.templateTarget.remove()
+    if (!this.rowsTarget.querySelector("tr")) this.appendRow()
   }
 
   add(event) {
     event.preventDefault()
-    const id = `${Date.now()}${Math.floor(Math.random() * 1000)}`
-    this.rowsTarget.insertAdjacentHTML("beforeend", this.template.replaceAll("${ID}", id))
+    this.appendRow()
+  }
+
+  appendRow() {
+    this.nextId = Math.max(Date.now(), (this.nextId || 0) + 1)
+    this.rowsTarget.insertAdjacentHTML("beforeend", this.templateTarget.innerHTML.replaceAll("${ID}", this.nextId))
   }
 
   remove(event) {

@@ -1,4 +1,4 @@
-<div data-controller="NestedItemCtrl">
+<div data-controller="production-run-items">
   <table class="responsive-table recent-shipment">
     <thead>
       <tr>
@@ -13,19 +13,24 @@
       </tr>
     </thead>
 
-    <tbody>
+    <tbody data-production-run-items-target="rows">
       <%= f.simple_fields_for :run_items, @production_run.run_items.order_by_product_type_and_name do |builder| %>
           <%= render 'run_item_fields', f: builder %>
       <% end %>
-      <tr data-repeat>
-        <%= f.simple_fields_for :run_items, @production_run.run_items.build do |builder| %>
-           <%= render 'new_run_item_fields', f: builder %>
-        <% end %>
-      </tr>
     </tbody>
   </table>
 
+  <template data-production-run-items-target="template">
+    <tr class="fields">
+      <%= f.simple_fields_for :run_items, @production_run.run_items.build, child_index: '${ID}' do |builder| %>
+        <%= render 'new_run_item_fields', f: builder %>
+      <% end %>
+    </tr>
+  </template>
+
   <% if policy(@production_run).update? %>
-    <%= link_to('Add Product', '', data:{ add: true }, class: "button") if f.object.persisted? || params[:action] == 'test_projection' %>
+    <% if f.object.persisted? || params[:action] == 'test_projection' %>
+      <%= button_tag 'Add Product', type: 'button', data: { action: 'production-run-items#add' }, class: 'button' %>
+    <% end %>
   <% end %>
 </div>

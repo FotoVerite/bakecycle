@@ -80,6 +80,19 @@ RSpec.describe "Production runs", type: :request do
       expect(response).to be_successful
     end
 
+    it "wires the test production run form to the row controller" do
+      get test_projection_production_runs_path
+
+      expect(response).to be_successful
+      form = Nokogiri::HTML(response.body).at_css('form[action="/production_runs/print_test_projection"]')
+      expect(form.at_css('[data-controller="production-run-items"]')).to be_present
+      expect(form.at_css('tbody[data-production-run-items-target="rows"]')).to be_present
+      template = form.at_css('template[data-production-run-items-target="template"]')
+      expect(template.at_css('select')['name']).to eq('production_run[run_items_attributes][${ID}][product_id]')
+      expect(template.at_css('label')['for']).to eq(template.at_css('select')['id'])
+      expect(form.at_css('button[data-action="production-run-items#add"]')['type']).to eq('button')
+    end
+
     it "updates run items on a production run" do
       patch production_run_path(production_run), params: { production_run: { run_items_attributes: [] } }
       expect(response).to be_redirect
