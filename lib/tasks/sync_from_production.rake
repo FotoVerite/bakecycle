@@ -15,15 +15,8 @@ require "tempfile"
 # --exclude-table-data so dev/staging never end up with the multi-GB audit-trail
 # backlog described in CLAUDE.md.
 namespace :db do
-  PRODUCTION_SSH = "deploy@97.107.141.39"
-  PRODUCTION_SSH_PORT = 21500
+  PRODUCTION_SSH = "deploy@96.126.110.82"
   PRODUCTION_DB = "bakecycle_production"
-
-  # Pre-cutover host (see config/deploy/production.rb) -- same db name, deploy
-  # already owns it directly (confirmed via `psql -l`), so unlike old production
-  # this needs no port override and no sudo for pg_dump.
-  NEW_PRODUCTION_SSH = "deploy@96.126.110.82"
-  NEW_PRODUCTION_DB = "bakecycle_production"
 
   STAGING_SSH = "deploy@23.239.9.198"
   STAGING_DB = "bakecycle_staging"
@@ -67,26 +60,20 @@ namespace :db do
   end
 
   desc "Sync production data into dev or staging, excluding the PaperTrail versions table " \
-       "(TARGET=development|staging, SOURCE=production|new_production, default SOURCE=production)"
+       "(TARGET=development|staging)"
   task sync_from_production: :environment do
     target = ENV["TARGET"]
     unless %w[development staging].include?(target)
-      raise "Usage: TARGET=development|staging [SOURCE=production|new_production] rails db:sync_from_production"
+      raise "Usage: TARGET=development|staging rails db:sync_from_production"
     end
 
-    source = ENV["SOURCE"] || "production"
-    unless %w[production new_production].include?(source)
-      raise "Usage: TARGET=development|staging [SOURCE=production|new_production] rails db:sync_from_production"
-    end
-
-    source_ssh = source == "new_production" ? NEW_PRODUCTION_SSH : PRODUCTION_SSH
-    source_db = source == "new_production" ? NEW_PRODUCTION_DB : PRODUCTION_DB
-    source_ssh_port = source == "new_production" ? nil : PRODUCTION_SSH_PORT
+    source_ssh = PRODUCTION_SSH
+    source_db = PRODUCTION_DB
 
     local_db = target == "staging" ? STAGING_DB : (ENV["DB_NAME_DEVELOPMENT"] || "bakecycle_development")
 
     puts "This will OVERWRITE all data in '#{local_db}' (#{target}) with a copy of " \
-         "#{source} (#{source_db}). The 'versions' table will be excluded (schema kept, no rows)."
+         "production (#{source_db}). The 'versions' table will be excluded (schema kept, no rows)."
     unless ENV["FORCE"] == "1"
       print "Type the target database name (#{local_db}) to confirm: "
       confirmation = $stdin.gets&.chomp
@@ -98,7 +85,7 @@ namespace :db do
     # --verbose makes both ends print one line per object (table/index/sequence/etc.)
     # as they're processed, instead of sitting silent for the whole transfer.
     dump_cmd = [
-      "ssh", *(source_ssh_port ? ["-p", source_ssh_port.to_s] : []), source_ssh,
+      "ssh", source_ssh,
       "pg_dump --no-owner --no-acl --verbose --exclude-table-data=versions -Fc #{source_db}"
     ]
 
@@ -118,15 +105,12 @@ namespace :db do
       conn_args += ["-p", dev_config[:port].to_s] if dev_config[:port].present?
       conn_args += ["-U", dev_config[:username].to_s] if dev_config[:username].present?
 
-      # New production runs Postgres 16 (Ubuntu); this laptop's linked `pg_restore` is 14,
-      # which can't read v16's custom-dump archive format ("unsupported version (1.15) in
-      # file header") -- same issue as sync_from_staging below. Old production is on an
-      # older Postgres compatible with the linked binary, so only new_production needs this.
-      pg_restore_bin = "pg_restore"
-      if source == "new_production"
-        v16_pg_restore = "/opt/homebrew/opt/postgresql@16/bin/pg_restore"
-        pg_restore_bin = v16_pg_restore if File.executable?(v16_pg_restore)
-      end
+      # Production runs Postgres 16 (Ubuntu); this laptop's linked `pg_restore` is 14, which
+      # can't read v16's custom-dump archive format ("unsupported version (1.15) in file
+      # header") -- same issue as sync_from_staging below. Use the unlinked postgresql@16
+      # keg explicitly rather than switching the system-wide link.
+      v16_pg_restore = "/opt/homebrew/opt/postgresql@16/bin/pg_restore"
+      pg_restore_bin = File.executable?(v16_pg_restore) ? v16_pg_restore : "pg_restore"
 
       reset_cmd = [restore_env, "psql", *conn_args, "-d", local_db, "-c", reset_schema_sql]
       restore_cmd = [restore_env, pg_restore_bin, "--no-owner", "--no-acl", "--verbose", *conn_args, "-d", local_db]
@@ -170,7 +154,7 @@ namespace :db do
       restore_err_read.close
     end
 
-    raise "pg_dump on #{source} failed (exit #{dump_status.exitstatus})" unless dump_status.success?
+    raise "pg_dump on production failed (exit #{dump_status.exitstatus})" unless dump_status.success?
 
     unless restore_status.success?
       error_lines = restore_stderr.lines.grep(/^pg_restore: error:/)
@@ -187,7 +171,7 @@ namespace :db do
            "(already shown above as [restore] lines)."
     end
 
-    puts "'#{local_db}' (#{target}) now mirrors #{source} (versions table empty)."
+    puts "'#{local_db}' (#{target}) now mirrors production (versions table empty)."
 
     with_elapsed_time("Running db:migrate against #{target}") do
       migrate_cmd =
@@ -372,8 +356,8 @@ namespace :db do
     begin
       puts "Exporting bakery logos from production..."
       export_cmd = [
-        "ssh", "-p", PRODUCTION_SSH_PORT.to_s, PRODUCTION_SSH,
-        "cd /var/www/bakecycle_production/current && RAILS_ENV=production bin/rails runner -"
+        "ssh", PRODUCTION_SSH,
+        "cd /var/www/bakecycle_next_production/current && RAILS_ENV=production bin/rails runner -"
       ]
       raise "Logo export from production failed" unless system(*export_cmd, in: export_script_file.path,
                                                                             out: logo_dump.path)

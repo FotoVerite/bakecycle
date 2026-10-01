@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-# Pre-cutover deployment target for the new production host. The existing
-# `production` stage remains pointed at the live server until migration.
+# Live production. The pre-cutover Linode (97.107.141.39, SSH port 21500) was
+# retired in Aug 2026 -- this host has served all traffic since ~2026-08-14 and
+# is the only production database. Nothing should reference the old box.
 set :deploy_to, "/var/www/bakecycle_next_production"
 set :user, "deploy"
 set :branch, "production"
